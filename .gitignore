@@ -11,3 +11,15 @@ pubspec.lock
 # Directory created by dartdoc
 # If you don't generate documentation locally you can remove this line.
 doc/api/
+
+.idea/
+*.iml
+.metadata
+lib/generated
+android/
+ios/
+res/
+backoffice-web/node_modules
+backoffice-web/out-tsc
+
+android/app

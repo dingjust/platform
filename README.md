@@ -1,2 +1,2 @@
 # platform
-定制加云平台
+Hybris Commerce Platform (Flutter Implementation)
