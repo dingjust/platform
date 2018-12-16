@@ -21,5 +21,3 @@ ios/
 res/
 backoffice-web/node_modules
 backoffice-web/out-tsc
-
-android/app
