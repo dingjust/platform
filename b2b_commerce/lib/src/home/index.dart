@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
@@ -24,10 +23,6 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         children: [
           HomeBannerSection(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: HotProductsSection(),
-          )
         ],
       ),
     );
@@ -47,30 +42,6 @@ class HomeBannerSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Carousel(items, 240.00);
-  }
-}
-
-// 热销产品
-class HotProductsSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StaggeredGridView.countBuilder(
-      shrinkWrap: true,
-      crossAxisCount: 4,
-      itemCount: 4,
-      itemBuilder: (BuildContext context, int index) => Container(
-            color: Colors.green,
-            child: Center(
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text('$index'),
-              ),
-            ),
-          ),
-      staggeredTileBuilder: (int index) => StaggeredTile.count(2, index.isEven ? 2 : 1),
-      mainAxisSpacing: 4.0,
-      crossAxisSpacing: 4.0,
-    );
+    return Carousel(items, 240);
   }
 }

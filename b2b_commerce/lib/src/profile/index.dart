@@ -1,116 +1,155 @@
 import 'package:flutter/material.dart';
 
+import './settings.dart';
+
 class ProfileHomePage extends StatefulWidget {
-  static const String routeName = '/contacts';
+  static const String ROUTE_SETTINGS = '/settings';
 
   @override
-  ProfileHomePageState createState() => ProfileHomePageState();
+  _ProfileHomePageState createState() => _ProfileHomePageState();
 }
 
-class ProfileHomePageState extends State<ProfileHomePage> {
+class _ProfileHomePageState extends State<ProfileHomePage> {
   static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final double _appBarHeight = 256.0;
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> menus = <Widget>[
-      _Menu(
-        icon: Icons.shop_two,
-        children: <Widget>[
-          _MenuItem(
-            onPressed: () {
-              _scaffoldKey.currentState.showSnackBar(
-                const SnackBar(
-                  content: Text('TODO：打开需求订单列表页面'),
-                ),
-              );
-            },
-            title: '需求订单',
-          ),
-          Divider(),
-          _MenuItem(
-            onPressed: () {
-              _scaffoldKey.currentState.showSnackBar(
-                const SnackBar(
-                  content: Text('TODO：打开销售订单列表页面'),
-                ),
-              );
-            },
-            title: '销售订单',
-          ),
-          Divider(),
-          _MenuItem(
-            onPressed: () {
-              _scaffoldKey.currentState.showSnackBar(
-                const SnackBar(
-                  content: Text('TODO：打开生产订单列表页面'),
-                ),
-              );
-            },
-            title: '生产订单',
-          ),
-        ],
+      Card(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('我的账户'),
+              leading: const Icon(Icons.settings),
+            ),
+          ],
+        ),
       ),
-      _Menu(
-        icon: Icons.settings,
-        children: <Widget>[
-          _MenuItem(
-            onPressed: () {
-              _scaffoldKey.currentState.showSnackBar(
-                const SnackBar(
-                  content: Text('TODO: 员工管理'),
-                ),
-              );
-            },
-            title: '员工管理',
-          ),
-          Divider(),
-          _MenuItem(
-            onPressed: () {
-              _scaffoldKey.currentState.showSnackBar(
-                const SnackBar(
-                  content: Text('TODO：会员管理'),
-                ),
-              );
-            },
-            title: '会员管理',
-          ),
-          Divider(),
-          _MenuItem(
-            onPressed: () {
-              _scaffoldKey.currentState.showSnackBar(
-                const SnackBar(
-                  content: Text('TODO：商品管理'),
-                ),
-              );
-            },
-            title: '商品管理',
-          ),
-          Divider(),
-          _MenuItem(
-            onPressed: () {
-              _scaffoldKey.currentState.showSnackBar(
-                const SnackBar(
-                  content: Text('TODO：库存管理'),
-                ),
-              );
-            },
-            title: '库存管理',
-          ),
-          Divider(),
-          _MenuItem(
-            onPressed: () {
-              _scaffoldKey.currentState.showSnackBar(
-                const SnackBar(
-                  content: Text('TODO：关于我们'),
-                ),
-              );
-            },
-            title: '关于我们',
-          ),
-          Divider(),
-        ],
+      Card(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('需求订单'),
+              leading: const Icon(Icons.shopping_basket),
+            ),
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('销售订单'),
+              leading: const Icon(Icons.shopping_basket),
+            ),
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('生产订单'),
+              leading: const Icon(Icons.shopping_basket),
+            ),
+          ],
+        ),
       ),
+      Card(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('商品管理'),
+              leading: const Icon(Icons.shopping_basket),
+            ),
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('库存管理'),
+              leading: const Icon(Icons.shopping_basket),
+            ),
+          ],
+        ),
+      ),
+      Card(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('认证信息'),
+              leading: const Icon(Icons.settings),
+            ),
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('员工管理'),
+              leading: const Icon(Icons.shopping_basket),
+            ),
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('会员管理'),
+              leading: const Icon(Icons.shopping_basket),
+            ),
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('地址管理'),
+              leading: const Icon(Icons.settings),
+            ),
+            ListTile(
+              trailing: IconButton(
+                icon: Icon(Icons.chevron_right),
+                onPressed: null,
+              ),
+              title: const Text('发票管理'),
+              leading: const Icon(Icons.settings),
+            ),
+          ],
+        ),
+      ),
+      Card(
+        child: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileSettingsPage()),
+                );
+              },
+              child: ListTile(
+                trailing: IconButton(
+                  icon: Icon(Icons.chevron_right),
+                  onPressed: null,
+                ),
+                title: const Text('设置'),
+                leading: const Icon(Icons.settings),
+              ),
+            ),
+          ],
+        ),
+      )
     ];
 
     return Scaffold(
@@ -160,75 +199,6 @@ class ProfileHomePageState extends State<ProfileHomePage> {
             delegate: SliverChildListDelegate(menus),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _Menu extends StatelessWidget {
-  const _Menu({Key key, this.icon, this.children}) : super(key: key);
-
-  final IconData icon;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: themeData.dividerColor))),
-      child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.subhead,
-        child: SafeArea(
-          top: false,
-          bottom: false,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                  padding: const EdgeInsets.symmetric(vertical: 24.0),
-                  width: 72.0,
-                  child: Icon(icon, color: themeData.primaryColor)),
-              Expanded(child: Column(children: children))
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MenuItem extends StatelessWidget {
-  _MenuItem({Key key, this.title, this.onPressed})
-      : assert(title.length > 1),
-        super(key: key);
-
-  final String title;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-
-    final List<Widget> rowChildren = <Widget>[
-      Expanded(
-        child: Text(title),
-      )
-    ];
-
-    rowChildren.add(SizedBox(
-      width: 72.0,
-      child: IconButton(
-        icon: Icon(Icons.chevron_right),
-        color: themeData.primaryColor,
-        onPressed: onPressed,
-      ),
-    ));
-
-    return MergeSemantics(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: rowChildren,
       ),
     );
   }
