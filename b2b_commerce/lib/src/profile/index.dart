@@ -19,111 +19,13 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
       Card(
         child: Column(
           children: <Widget>[
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('我的账户'),
+                leading: const Icon(Icons.settings),
               ),
-              title: const Text('我的账户'),
-              leading: const Icon(Icons.settings),
-            ),
-          ],
-        ),
-      ),
-      Card(
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('需求订单'),
-              leading: const Icon(Icons.shopping_basket),
-            ),
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('销售订单'),
-              leading: const Icon(Icons.shopping_basket),
-            ),
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('生产订单'),
-              leading: const Icon(Icons.shopping_basket),
-            ),
-          ],
-        ),
-      ),
-      Card(
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('商品管理'),
-              leading: const Icon(Icons.shopping_basket),
-            ),
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('库存管理'),
-              leading: const Icon(Icons.shopping_basket),
-            ),
-          ],
-        ),
-      ),
-      Card(
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('认证信息'),
-              leading: const Icon(Icons.settings),
-            ),
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('员工管理'),
-              leading: const Icon(Icons.shopping_basket),
-            ),
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('会员管理'),
-              leading: const Icon(Icons.shopping_basket),
-            ),
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('地址管理'),
-              leading: const Icon(Icons.settings),
-            ),
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(Icons.chevron_right),
-                onPressed: null,
-              ),
-              title: const Text('发票管理'),
-              leading: const Icon(Icons.settings),
             ),
           ],
         ),
@@ -132,17 +34,112 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
         child: Column(
           children: <Widget>[
             InkWell(
-              onTap: (){
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('需求订单'),
+                leading: const Icon(Icons.shopping_basket),
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('销售订单'),
+                leading: const Icon(Icons.shopping_basket),
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('生产订单'),
+                leading: const Icon(Icons.shopping_basket),
+              ),
+            ),
+          ],
+        ),
+      ),
+      Card(
+        child: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('商品管理'),
+                leading: const Icon(Icons.shopping_basket),
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('库存管理'),
+                leading: const Icon(Icons.shopping_basket),
+              ),
+            ),
+          ],
+        ),
+      ),
+      Card(
+        child: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('认证信息'),
+                leading: const Icon(Icons.settings),
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('员工管理'),
+                leading: const Icon(Icons.shopping_basket),
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('会员管理'),
+                leading: const Icon(Icons.shopping_basket),
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('地址管理'),
+                leading: const Icon(Icons.settings),
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('发票管理'),
+                leading: const Icon(Icons.settings),
+              ),
+            ),
+          ],
+        ),
+      ),
+      Card(
+        child: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ProfileSettingsPage()),
                 );
               },
               child: ListTile(
-                trailing: IconButton(
-                  icon: Icon(Icons.chevron_right),
-                  onPressed: null,
-                ),
+                trailing: Icon(Icons.chevron_right),
                 title: const Text('设置'),
                 leading: const Icon(Icons.settings),
               ),
