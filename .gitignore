@@ -15,6 +15,7 @@ doc/api/
 .idea/
 *.iml
 .metadata
+.flutter-plugins
 lib/generated
 android/
 ios/
