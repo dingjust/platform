@@ -77,18 +77,12 @@ class AppActions extends StatelessWidget {
 class AppProtocols extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         FlatButton(
           textColor: Colors.lightBlueAccent,
           child: Text('衣加衣软件许可及使用协议'),
-          onPressed: () {},
-        ),
-        Text('和'),
-        FlatButton(
-          textColor: Colors.lightBlueAccent,
-          child: Text('衣加衣隐私保护指引'),
           onPressed: () {},
         ),
       ],

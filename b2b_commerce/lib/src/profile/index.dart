@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './settings.dart';
+import 'address.dart';
 
 class ProfileHomePage extends StatefulWidget {
   static const String ROUTE_SETTINGS = '/settings';
@@ -110,7 +111,12 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddressPage()),
+                );
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('地址管理'),
@@ -118,7 +124,9 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('发票管理'),
