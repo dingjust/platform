@@ -2,6 +2,8 @@ import 'package:b2b_commerce/src/common/routes.dart';
 import 'package:flutter/material.dart';
 
 import './settings.dart';
+import './auth_info.dart';
+import './employee/employeePage.dart';
 import 'address.dart';
 
 class ProfileHomePage extends StatefulWidget {
@@ -108,7 +110,12 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
         child: Column(
           children: <Widget>[
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => (AuthenticationInfoPage())),
+                );
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('认证信息'),
@@ -117,7 +124,10 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
             ),
             InkWell(
               onTap: () {
-                Navigator.pushNamed(context, Routes.ROUTE_EMPLOYEES);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileEmployeePage()),
+                );
               },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
