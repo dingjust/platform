@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'member/memberEditorPage.dart';
 
 class TabbedAppBarSample extends StatelessWidget {
   @override
@@ -27,19 +28,31 @@ class TabbedAppBarSample extends StatelessWidget {
           body: new TabBarView(
             children: choices.map((Choice choice) {
               return new Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.fromLTRB(8.0,20.0,8.0,8.0),
                   child: new ListView(
                     children: <Widget>[
                       new ListTile(
-                        leading: Image.network(
-                          'http://jspang.com/static//myimg/blogtouxiang.jpg',
-                          width: 80.0,
-                          height: 80.0,
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              'http://jspang.com/static//myimg/blogtouxiang.jpg',
+                          ),
+                          radius: 30.0,
                         ),
-                        title: Text('小勇 会员等级A 13198765432'),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('小勇 13198765432'),
+                            Text('会员等级A')
+                          ],
+                        ),
                         trailing: IconButton(
                           icon: Icon(Icons.more_horiz),
-                          onPressed: (){},
+                          onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MemberEditor()),
+                            );
+                          },
                         ),
                       ),
                     ],
