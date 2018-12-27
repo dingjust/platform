@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'address/address_detail.dart';
+import 'package:models/models.dart';
 
-import 'package:models/';
+import 'address/address_detail.dart';
 
 class AddressPage extends StatelessWidget {
   List<AddressModel> items = <AddressModel>[];
