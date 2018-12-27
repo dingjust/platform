@@ -4,6 +4,8 @@ import 'package:models/models.dart';
 
 import 'user_group.dart';
 
+part 'member.g.dart';
+
 /// 会员
 @JsonSerializable()
 class MembershipModel extends ItemModel {

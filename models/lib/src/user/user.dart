@@ -20,6 +20,7 @@ class UserModel extends PrincipalModel {
 }
 
 /// 客户
+@JsonSerializable()
 class CustomerModel extends UserModel {
   CustomerModel();
 
@@ -29,6 +30,7 @@ class CustomerModel extends UserModel {
 }
 
 /// B2B客户
+@JsonSerializable()
 class B2BCustomerModel extends UserModel {
   bool active;
   B2BUnitModel defaultB2BUnit;
