@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../common/routes.dart';
 import 'my_addresses.dart';
 import 'my_company.dart';
-import 'my_employees.dart';
+import 'package:b2b_commerce/src/business/employees.dart';
 import 'my_settings.dart';
 
 class ProfileHomePage extends StatefulWidget {
@@ -120,19 +120,6 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('认证信息'),
                 leading: const Icon(Icons.settings),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyEmployeesPage()),
-                );
-              },
-              child: ListTile(
-                trailing: Icon(Icons.chevron_right),
-                title: const Text('员工管理'),
-                leading: const Icon(Icons.shopping_basket),
               ),
             ),
             InkWell(
