@@ -15,9 +15,21 @@ class _BusinessPageState extends State<BusinessPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('生意'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.chat),
+            onPressed: null,
+          )
+        ],
       ),
       body: ListView(
         children: <Widget>[
+          TextField(
+            decoration: InputDecoration(
+              hintText: "搜索商品",
+              prefixIcon: Icon(Icons.search),
+            ),
+          ),
           BusinessStatisticsSection(),
           Menu('我的待办', <MenuItem>[
             MenuItem(Icons.call, '报价管理', Routes.ROUTE_QUOTES),
