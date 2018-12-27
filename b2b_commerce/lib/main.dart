@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
       HomePage(),
       ForumHomePage(),
       BusinessPage(),
-      ProfileHomePage(),
+      MyHomePage(),
     ];
 
     return MaterialApp(
