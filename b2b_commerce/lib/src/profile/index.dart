@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/routes.dart';
 import 'package:flutter/material.dart';
 
 import './settings.dart';
@@ -36,7 +37,9 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
         child: Column(
           children: <Widget>[
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, Routes.ROUTE_REQUIREMENT_ORDERS);
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('需求订单'),
@@ -44,7 +47,9 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, Routes.ROUTE_SALES_ORDERS);
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('销售订单'),
@@ -52,7 +57,19 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, Routes.ROUTE_PURCHASE_ORDERS);
+              },
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                title: const Text('采购订单'),
+                leading: const Icon(Icons.shopping_basket),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, Routes.ROUTE_PRODUCTION_ORDERS);
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('生产订单'),
@@ -66,7 +83,9 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
         child: Column(
           children: <Widget>[
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, Routes.ROUTE_PRODUCTS);
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('商品管理'),
@@ -74,7 +93,9 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, Routes.ROUTE_PRODUCT_STOCKS);
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('库存管理'),
@@ -101,7 +122,9 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, Routes.ROUTE_EMPLOYEES);
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('员工管理'),
@@ -109,7 +132,9 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, Routes.ROUTE_MEMBERSHIPS);
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('会员管理'),
@@ -117,7 +142,12 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                /*Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddressPage()),
+                );*/
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('地址管理'),
