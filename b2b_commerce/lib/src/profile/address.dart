@@ -49,65 +49,46 @@ class AddressPage extends StatelessWidget {
   }
 
   Widget _buildRow(String name, String telephone, bool isDefaultAddress) {
-    if (isDefaultAddress) {
-      return Row(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(right: 22.0),
-            child: Column(
-              children: <Widget>[
-                Text(name),
-              ],
+    List<Container> containers = <Container>[
+      Container(
+        padding: EdgeInsets.only(right: 22.0),
+        child: Column(
+          children: <Widget>[
+            Text(name),
+          ],
+        ),
+      ),
+      Container(
+        padding: EdgeInsets.only(right: 22.0),
+        child: Column(
+          children: <Widget>[
+            Text(
+              telephone,
+              style: TextStyle(fontSize: 11, color: Colors.grey),
             ),
+          ],
+        ),
+      ),
+    ];
+
+    if(isDefaultAddress){
+      containers.add(
+        Container(
+          padding: EdgeInsets.all(0),
+          child: Column(
+            children: <Widget>[
+              Text(
+                "默认地址",
+                style: TextStyle(fontSize: 11, color: Colors.grey),
+              ),
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.only(right: 22.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  telephone,
-                  style: TextStyle(fontSize: 11, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "默认地址",
-                  style: TextStyle(fontSize: 11, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    } else {
-      return Row(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 22.0),
-            child: Column(
-              children: <Widget>[
-                Text(name),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 22.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  telephone,
-                  style: TextStyle(fontSize: 11, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       );
     }
+
+    return Row(
+      children: containers
+    );
   }
 }

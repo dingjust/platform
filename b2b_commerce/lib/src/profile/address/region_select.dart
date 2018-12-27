@@ -10,7 +10,7 @@ class RegionSelectPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
               icon: Icon(
-                Icons.search,
+                Icons.done,
                 color: Colors.white,
               ),
               onPressed: () {})
