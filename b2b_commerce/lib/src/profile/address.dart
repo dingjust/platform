@@ -1,13 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-
-import 'address/address_detail.dart';
+import 'address/address_form.dart';
 
 class AddressPage extends StatelessWidget {
-  List<AddressModel> items = <AddressModel>[];
+  final List<AddressModel> addresses = <AddressModel>[
+    AddressModel(
+      fullname: "华安",
+      cellphone: "13660339514",
+      region: RegionModel(name: "广东省"),
+      city: CityModel(name: "广州市"),
+      cityDistrict: DistrictModel(name: "海珠区"),
+      line1: "云顶同创汇A01",
+      defaultAddress: true,
+    ),
+    AddressModel(
+      fullname: "秋香",
+      cellphone: "15902090000",
+      region: RegionModel(name: "广东省"),
+      city: CityModel(name: "广州市"),
+      cityDistrict: DistrictModel(name: "黄埔区"),
+      line1: "云顶同创汇C01",
+      defaultAddress: false,
+    ),
+    AddressModel(
+      fullname: "梁非凡",
+      cellphone: "15902090000",
+      region: RegionModel(name: "湖南省"),
+      city: CityModel(name: "株洲市"),
+      cityDistrict: DistrictModel(name: "株洲区"),
+      line1: "云顶同创汇F01",
+      defaultAddress: false,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
+    List<ListTile> tiles = this.addresses.map((address) {
+      return ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddressFormPage(address),
+            ),
+          );
+        },
+        title: _buildRow(
+          address.fullname,
+          address.cellphone,
+          address.defaultAddress,
+        ),
+        subtitle: Text(address.region.name +
+            address.city.name +
+            address.cityDistrict.name +
+            address.line1),
+        trailing: Icon(Icons.chevron_right),
+      );
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -16,40 +65,16 @@ class AddressPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddressDetailPage(false)));
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddressFormPage(null)),
+              );
             },
           )
         ],
       ),
-      body: ListView(
-        children: <Widget>[
-          ListTile(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddressDetailPage(true)));
-            },
-            title: _buildRow("张三", "13660339641", true),
-            subtitle: Text("广东省广州市海珠区云顶同创汇"),
-            trailing: Icon(Icons.chevron_right),
-          ),
-          ListTile(
-            title: _buildRow("里斯", "13660339641", false),
-            subtitle: Text("广东省广州市天河区"),
-            trailing: Icon(Icons.chevron_right),
-          ),
-          ListTile(
-            title: _buildRow("万物", "13660339641", false),
-            subtitle: Text("广东省广州市番禺区"),
-            trailing: Icon(Icons.chevron_right),
-          ),
-          ListTile(
-            title: _buildRow("六六", "13660339641", false),
-            subtitle: Text("广东省广州市海珠区"),
-            trailing: Icon(Icons.chevron_right),
-          )
-        ],
-      ),
+      body: ListView(children: tiles),
     );
   }
 
@@ -76,7 +101,7 @@ class AddressPage extends StatelessWidget {
       ),
     ];
 
-    if(isDefaultAddress){
+    if (isDefaultAddress) {
       containers.add(
         Container(
           padding: EdgeInsets.all(0),
@@ -92,8 +117,6 @@ class AddressPage extends StatelessWidget {
       );
     }
 
-    return Row(
-      children: containers
-    );
+    return Row(children: containers);
   }
 }

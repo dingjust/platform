@@ -1,8 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 
 class CityDistrictSelectPage extends StatelessWidget {
+  String code;
+
+  CityDistrictSelectPage(this.code);
+
+  final List<DistrictModel> districts = <DistrictModel>[
+    DistrictModel(
+      code: "D001",
+      name:"天河区",
+    ),
+    DistrictModel(
+      code: "D001",
+      name:"海珠区",
+    ),
+    DistrictModel(
+      code: "D001",
+      name:"番禺区",
+    ),
+    DistrictModel(
+      code: "D001",
+      name:"黄埔区",
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    List<ListTile> tiles = districts.map((district){
+      return ListTile(
+        onTap: (){
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+        title: Text(district.name),
+        trailing: Icon(Icons.chevron_right),
+      );
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -19,18 +55,7 @@ class CityDistrictSelectPage extends StatelessWidget {
         ],
       ),
       body: ListView(
-        children: <Widget>[
-          ListTile(
-            title: Text("天河区"),
-          ),
-          ListTile(
-            title: Text("黄埔区"),
-          ),
-          ListTile(
-            title: Text("海珠区"),
-            selected: true,
-          )
-        ],
+        children: tiles,
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/common/routes.dart';
 import 'package:flutter/material.dart';
 
 import './settings.dart';
+import 'address.dart';
 
 class ProfileHomePage extends StatefulWidget {
   static const String ROUTE_SETTINGS = '/settings';
@@ -136,10 +137,10 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
             ),
             InkWell(
               onTap: () {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AddressPage()),
-                );*/
+                );
               },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
