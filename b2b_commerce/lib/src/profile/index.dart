@@ -2,6 +2,8 @@ import 'package:b2b_commerce/src/common/routes.dart';
 import 'package:flutter/material.dart';
 
 import './settings.dart';
+import './auth_info.dart';
+
 
 class ProfileHomePage extends StatefulWidget {
   static const String ROUTE_SETTINGS = '/settings';
@@ -107,7 +109,12 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
         child: Column(
           children: <Widget>[
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => (AuthenticationInfoPage())),
+                );
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('认证信息'),
