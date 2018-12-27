@@ -1,9 +1,7 @@
 import 'package:b2b_commerce/src/common/routes.dart';
-import 'package:b2b_commerce/src/profile/address.dart';
 import 'package:flutter/material.dart';
 
 import './settings.dart';
-import 'address.dart';
 
 class ProfileHomePage extends StatefulWidget {
   static const String ROUTE_SETTINGS = '/settings';
