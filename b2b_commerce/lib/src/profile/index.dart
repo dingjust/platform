@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import './settings.dart';
 import './auth_info.dart';
-
+import './employee/employeePage.dart';
 
 class ProfileHomePage extends StatefulWidget {
   static const String ROUTE_SETTINGS = '/settings';
@@ -123,7 +123,10 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
             ),
             InkWell(
               onTap: () {
-                Navigator.pushNamed(context, Routes.ROUTE_EMPLOYEES);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileEmployeePage()),
+                );
               },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
