@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'address_select.dart';
 
 class AddressDetailPage extends StatefulWidget {
   bool isCreateOnly;
 
-  AddressDetailPage(this.isCreateOnly);
+  AddressModel address;
+
+  AddressDetailPage({AddressModel address}) {
+    address == null ? isCreateOnly = true
+  }
 
   @override
   AddressDetailState createState() => AddressDetailState();
 }
 
 class AddressDetailState extends State<AddressDetailPage> {
-  bool _isDefault = false;
+  final bool _isDefault = false;
 
   @override
   Widget build(BuildContext context) {

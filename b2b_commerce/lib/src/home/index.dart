@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('衣加衣首页1'),
+        title: Text('衣加衣首页'),
         leading: new IconButton(
           tooltip: '搜索',
           icon: Icon(Icons.search),
