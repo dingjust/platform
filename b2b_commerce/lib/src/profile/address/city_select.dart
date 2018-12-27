@@ -13,7 +13,9 @@ class CitySelectPage extends StatelessWidget {
                 Icons.done,
                 color: Colors.white,
               ),
-              onPressed: () {})
+              onPressed: () {
+                Navigator.pop(context);
+              })
         ],
       ),
       body: ListView(

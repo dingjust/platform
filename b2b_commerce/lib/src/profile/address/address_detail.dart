@@ -85,7 +85,9 @@ class AddressDetailState extends State<AddressDetailPage> {
               Icons.done,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           )
         ],
       ),

@@ -14,6 +14,9 @@ class AddressSelectPage extends StatelessWidget{
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.done,color: Colors.white,),
+            onPressed: (){
+              Navigator.pop(context);
+            },
           )
         ],
       ),
