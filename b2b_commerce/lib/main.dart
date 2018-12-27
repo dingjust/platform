@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'src/business/index.dart';
-import 'src/common/routes.dart';
+import 'src/common/app_routes.dart';
 import 'src/community/index.dart';
 import 'src/home/index.dart';
 import 'src/my/index.dart';
@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
-      routes: Routes.allRoutes,
+      routes: AppRoutes.allRoutes,
     );
   }
 }

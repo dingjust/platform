@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../common/routes.dart';
+import '../common/app_routes.dart';
 import 'my_addresses.dart';
 import 'my_company.dart';
 import 'my_settings.dart';
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.ROUTE_REQUIREMENT_ORDERS);
+                  Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
                 },
                 child: ListTile(
                   trailing: Icon(Icons.chevron_right),
@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.ROUTE_SALES_ORDERS);
+                  Navigator.pushNamed(context, AppRoutes.ROUTE_SALES_ORDERS);
                 },
                 child: ListTile(
                   trailing: Icon(Icons.chevron_right),
@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.ROUTE_PURCHASE_ORDERS);
+                  Navigator.pushNamed(context, AppRoutes.ROUTE_PURCHASE_ORDERS);
                 },
                 child: ListTile(
                   trailing: Icon(Icons.chevron_right),
@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.ROUTE_PRODUCTION_ORDERS);
+                  Navigator.pushNamed(context, AppRoutes.ROUTE_PRODUCTION_ORDERS);
                 },
                 child: ListTile(
                   trailing: Icon(Icons.chevron_right),
@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: <Widget>[
               InkWell(
-                onTap: () => Navigator.pushNamed(context, Routes.ROUTE_PRODUCTS),
+                onTap: () => Navigator.pushNamed(context, AppRoutes.ROUTE_PRODUCTS),
                 child: ListTile(
                   trailing: Icon(Icons.chevron_right),
                   title: const Text('商品管理'),
@@ -102,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.ROUTE_PRODUCT_STOCKS);
+                  Navigator.pushNamed(context, AppRoutes.ROUTE_PRODUCT_STOCKS);
                 },
                 child: ListTile(
                   trailing: Icon(Icons.chevron_right),
@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.ROUTE_MEMBERSHIPS);
+                  Navigator.pushNamed(context, AppRoutes.ROUTE_MEMBERSHIPS);
                 },
                 child: ListTile(
                   trailing: Icon(Icons.chevron_right),
