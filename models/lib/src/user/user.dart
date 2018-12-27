@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 import 'package:models/models.dart';
 
 import 'user_group.dart';
@@ -76,8 +77,9 @@ class RegionModel extends ItemModel {
 class CityModel extends ItemModel {
   String code;
   String name;
+  RegionModel region;
 
-  CityModel({this.code, this.name});
+  CityModel({@required this.code, @required this.name, this.region});
 
   factory CityModel.fromJson(Map<String, dynamic> json) => _$CityModelFromJson(json);
 
@@ -89,8 +91,9 @@ class CityModel extends ItemModel {
 class DistrictModel extends ItemModel {
   String code;
   String name;
+  CityModel city;
 
-  DistrictModel({this.code, this.name});
+  DistrictModel({@required this.code, @required this.name, this.city});
 
   factory DistrictModel.fromJson(Map<String, dynamic> json) => _$DistrictModelFromJson(json);
 
