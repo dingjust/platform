@@ -11,6 +11,9 @@ class AddressPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddressDetailPage(false)));
+            },
           )
         ],
       ),
@@ -19,7 +22,7 @@ class AddressPage extends StatelessWidget {
           ListTile(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddressDetailPage()));
+                  MaterialPageRoute(builder: (context) => AddressDetailPage(true)));
             },
             title: _buildRow("张三", "13660339641", true),
             subtitle: Text("广东省广州市海珠区云顶同创汇"),
