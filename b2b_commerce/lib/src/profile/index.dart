@@ -1,9 +1,9 @@
 import 'package:b2b_commerce/src/common/routes.dart';
 import 'package:flutter/material.dart';
 
-import './settings.dart';
 import './auth_info.dart';
 import './employee/employeePage.dart';
+import './settings.dart';
 import 'address.dart';
 
 class ProfileHomePage extends StatefulWidget {
@@ -202,8 +202,11 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
                 icon: const Icon(Icons.create),
                 tooltip: 'Edit',
                 onPressed: () {
-                  _scaffoldKey.currentState
-                      .showSnackBar(const SnackBar(content: Text("Editing isn't supported in this screen.")));
+                  _scaffoldKey.currentState.showSnackBar(
+                    const SnackBar(
+                      content: Text('Editing isn\'t supported in this screen.'),
+                    ),
+                  );
                 },
               ),
             ],

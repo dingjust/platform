@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
 import 'address/address_form.dart';
 
 class AddressPage extends StatelessWidget {
   final List<AddressModel> addresses = <AddressModel>[
     AddressModel(
-      fullname: "华安",
-      cellphone: "13660339514",
-      region: RegionModel(name: "广东省"),
-      city: CityModel(name: "广州市"),
-      cityDistrict: DistrictModel(name: "海珠区"),
-      line1: "云顶同创汇A01",
+      fullname: '华安',
+      cellphone: '13660339514',
+      region: RegionModel(name: '广东省'),
+      city: CityModel(code: 'CN-01-01', name: '广州市'),
+      cityDistrict: DistrictModel(code: 'CN-01-01', name: '海珠区'),
+      line1: '云顶同创汇A01',
       defaultAddress: true,
     ),
     AddressModel(
-      fullname: "秋香",
-      cellphone: "15902090000",
-      region: RegionModel(name: "广东省"),
-      city: CityModel(name: "广州市"),
-      cityDistrict: DistrictModel(name: "黄埔区"),
-      line1: "云顶同创汇C01",
+      fullname: '秋香',
+      cellphone: '15902090000',
+      region: RegionModel(name: '广东省'),
+      city: CityModel(code: 'CN-01-01', name: '广州市'),
+      cityDistrict: DistrictModel(code: 'CN-01-01', name: '黄埔区'),
+      line1: '云顶同创汇C01',
       defaultAddress: false,
     ),
     AddressModel(
-      fullname: "梁非凡",
-      cellphone: "15902090000",
-      region: RegionModel(name: "湖南省"),
-      city: CityModel(name: "株洲市"),
-      cityDistrict: DistrictModel(name: "株洲区"),
-      line1: "云顶同创汇F01",
+      fullname: '梁非凡',
+      cellphone: '15902090000',
+      region: RegionModel(name: '湖南省'),
+      city: CityModel(code: 'CN-01-01', name: '株洲市'),
+      cityDistrict: DistrictModel(code: 'CN-01-01', name: '株洲区'),
+      line1: '云顶同创汇F01',
       defaultAddress: false,
     ),
   ];
@@ -50,10 +51,7 @@ class AddressPage extends StatelessWidget {
           address.cellphone,
           address.defaultAddress,
         ),
-        subtitle: Text(address.region.name +
-            address.city.name +
-            address.cityDistrict.name +
-            address.line1),
+        subtitle: Text(address.details),
         trailing: Icon(Icons.chevron_right),
       );
     }).toList();
@@ -61,7 +59,7 @@ class AddressPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("地址管理"),
+        title: Text('地址管理'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
@@ -108,7 +106,7 @@ class AddressPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                "默认地址",
+                '默认地址',
                 style: TextStyle(fontSize: 11, color: Colors.grey),
               ),
             ],

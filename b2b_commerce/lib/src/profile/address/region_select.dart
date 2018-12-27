@@ -4,11 +4,11 @@ import 'city_select.dart';
 
 class RegionSelectPage extends StatelessWidget {
   final List<RegionModel> regions = <RegionModel>[
-    RegionModel(isocode: "R001", name: "广东省"),
-    RegionModel(isocode: "R002", name: "广西省"),
-    RegionModel(isocode: "R003", name: "湖南省"),
-    RegionModel(isocode: "R004", name: "湖北省"),
-    RegionModel(isocode: "R005", name: "黑龙江省"),
+    RegionModel(isocode: 'R001', name: '广东省'),
+    RegionModel(isocode: 'R002', name: '广西省'),
+    RegionModel(isocode: 'R003', name: '湖南省'),
+    RegionModel(isocode: 'R004', name: '湖北省'),
+    RegionModel(isocode: 'R005', name: '黑龙江省'),
   ];
 
   @override
@@ -31,7 +31,7 @@ class RegionSelectPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("选择省"),
+        title: Text('选择省'),
         actions: <Widget>[
           IconButton(
               icon: Icon(

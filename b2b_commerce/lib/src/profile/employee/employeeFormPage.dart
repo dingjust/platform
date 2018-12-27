@@ -20,7 +20,7 @@ class _SwitchRouteState extends State<ProfileEmployeeFormPage> {
 
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text("修改"),
+          title: new Text('修改'),
           actions: <Widget>[
             IconButton(
               icon: Icon(
@@ -40,7 +40,7 @@ class _SwitchRouteState extends State<ProfileEmployeeFormPage> {
   //ListView的CheckBox
   getList() {
     var ruleList = ['Admin', 'CEO', 'CTO'];
-    var selectedRule="";
+    var selectedRule='';
     Iterable<Widget> listTitles = ruleList.map((String item) {
       return new ListTile(
           isThreeLine: true,

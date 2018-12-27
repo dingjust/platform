@@ -71,48 +71,48 @@ class _AuthenticationInfoFormPageState
                               autofocus: false,
                               controller: _nameController,
                               decoration: InputDecoration(
-                                  labelText: "联系人",
-                                  hintText: "请输入",
+                                  labelText: '联系人',
+                                  hintText: '请输入',
                                   border: InputBorder.none),
                               // 校验用户名
                               validator: (v) {
-                                return v.trim().length > 0 ? null : "用户名不能为空";
+                                return v.trim().length > 0 ? null : '用户名不能为空';
                               }),
                           TextFormField(
                               autofocus: false,
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
-                                  labelText: "联系人手机",
-                                  hintText: "请输入",
+                                  labelText: '联系人手机',
+                                  hintText: '请输入',
                                   border: InputBorder.none),
                               // 校验用户名
                               validator: (v) {
-                                return v.trim().length > 0 ? null : "手机号不能为空";
+                                return v.trim().length > 0 ? null : '手机号不能为空';
                               }),
                           TextFormField(
                             autofocus: false,
                             controller: _telPhoneController,
                             keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
-                                labelText: "座机号码",
-                                hintText: "请输入",
+                                labelText: '座机号码',
+                                hintText: '请输入',
                                 border: InputBorder.none),
                           ),
                           TextFormField(
                             autofocus: false,
                             controller: _brandController,
                             decoration: InputDecoration(
-                                labelText: "品牌",
-                                hintText: "请输入",
+                                labelText: '品牌',
+                                hintText: '请输入',
                                 border: InputBorder.none),
                           ),
                           TextFormField(
                             autofocus: false,
                             controller: _cooBrandController,
                             decoration: InputDecoration(
-                                labelText: "合作品牌",
-                                hintText: "请输入",
+                                labelText: '合作品牌',
+                                hintText: '请输入',
                                 border: InputBorder.none),
                           ),
                         ],
@@ -188,8 +188,8 @@ class _AuthenticationInfoFormPageState
                             autofocus: false,
                             controller: _companyNameController,
                             decoration: InputDecoration(
-                                labelText: "公司名称",
-                                hintText: "请输入",
+                                labelText: '公司名称',
+                                hintText: '请输入',
                                 border: InputBorder.none),
                           ),
                         ],

@@ -31,7 +31,7 @@ class AddressFormState extends State<AddressFormPage> {
           widget.address.city.name +
           widget.address.cityDistrict.name;
     } else {
-      province = "请选择省市区";
+      province = '请选择省市区';
     }
 
     List<Widget> widgets = <Widget>[
@@ -39,23 +39,23 @@ class AddressFormState extends State<AddressFormPage> {
         initialValue: widget.address?.fullname,
         //controller: _fullnameController,
         decoration: InputDecoration(
-          labelText: "联系人",
-          icon: Icon(Icons.person),
+          labelText: '联系人',
+          prefixIcon: Icon(Icons.person),
         ),
 //        validator: (v){
-//          return v.trim().length >0 ? null : "联系人不能为空";
+//          return v.trim().length >0 ? null : '联系人不能为空';
 //        },
       ),
       TextFormField(
         initialValue: widget.address?.cellphone,
         //controller: _cellphoneController,
         decoration: InputDecoration(
-          labelText: "联系号码",
-          icon: Icon(Icons.phone),
+          labelText: '联系号码',
+          prefixIcon: Icon(Icons.phone),
         ),
 //        validator: (v){
 //          print(v);
-//          return v.trim().length >0 ? null : "联系人不能为空";
+//          return v.trim().length >0 ? null : '联系人不能为空';
 //        },
       ),
       ListTile(
@@ -67,7 +67,7 @@ class AddressFormState extends State<AddressFormPage> {
           );
         },
         title: Text(
-          "省市区",
+          '省市区',
           style: TextStyle(fontSize: 12, color: Colors.grey[700]),
         ),
         subtitle: Text(
@@ -79,12 +79,12 @@ class AddressFormState extends State<AddressFormPage> {
       TextFormField(
         initialValue: widget.address?.line1,
         decoration: InputDecoration(
-          labelText: "详细地址",
-          hintText: "道路、门牌号、小区、楼栋号、单元室等",
+          labelText: '详细地址',
+          hintText: '道路、门牌号、小区、楼栋号、单元室等',
         ),
       ),
       ListTile(
-        title: Text("设为默认地址"),
+        title: Text('设为默认地址'),
         contentPadding: EdgeInsets.symmetric(horizontal: 0),
         trailing: Switch(
             value: _isDefault,
@@ -102,7 +102,7 @@ class AddressFormState extends State<AddressFormPage> {
         ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 0),
           title: RaisedButton(
-            child: Text("删除地址"),
+            child: Text('删除地址'),
             color: Colors.red,
             onPressed: () {},
           ),
@@ -113,7 +113,7 @@ class AddressFormState extends State<AddressFormPage> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("编辑地址"),
+          title: Text('编辑地址'),
           actions: <Widget>[
             IconButton(
               icon: Icon(

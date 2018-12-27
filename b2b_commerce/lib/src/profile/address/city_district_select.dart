@@ -8,20 +8,20 @@ class CityDistrictSelectPage extends StatelessWidget {
 
   final List<DistrictModel> districts = <DistrictModel>[
     DistrictModel(
-      code: "D001",
-      name:"天河区",
+      code: 'D001',
+      name:'天河区',
     ),
     DistrictModel(
-      code: "D001",
-      name:"海珠区",
+      code: 'D001',
+      name:'海珠区',
     ),
     DistrictModel(
-      code: "D001",
-      name:"番禺区",
+      code: 'D001',
+      name:'番禺区',
     ),
     DistrictModel(
-      code: "D001",
-      name:"黄埔区",
+      code: 'D001',
+      name:'黄埔区',
     ),
   ];
 
@@ -42,7 +42,7 @@ class CityDistrictSelectPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("选择区"),
+        title: Text('选择区'),
         actions: <Widget>[
           IconButton(
               icon: Icon(

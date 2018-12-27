@@ -70,19 +70,19 @@ class BottomNavigation extends StatelessWidget {
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
       icon: const Icon(Icons.home),
-      title: const Text("首页"),
+      title: const Text('首页'),
     ),
     BottomNavigationBarItem(
       icon: const Icon(Icons.forum),
-      title: const Text("广场"),
+      title: const Text('广场'),
     ),
     BottomNavigationBarItem(
       icon: const Icon(Icons.shopping_cart),
-      title: const Text("生意"),
+      title: const Text('生意'),
     ),
     BottomNavigationBarItem(
       icon: const Icon(Icons.account_box),
-      title: const Text("我的"),
+      title: const Text('我的'),
     )
   ];
 

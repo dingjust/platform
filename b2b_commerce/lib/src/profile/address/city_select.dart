@@ -9,25 +9,25 @@ class CitySelectPage extends StatelessWidget {
 
   List<CityModel> citys = <CityModel>[
     CityModel(
-      code: "C001",
-      name: "广州市",
-      region: RegionModel(isocode: "R001"),
+      code: 'C001',
+      name: '广州市',
+      region: RegionModel(isocode: 'R001'),
     ),
     CityModel(
-      code: "C001",
-      name: "中山市",
+      code: 'C001',
+      name: '中山市',
     ),
     CityModel(
-      code: "C001",
-      name: "佛山市",
+      code: 'C001',
+      name: '佛山市',
     ),
     CityModel(
-      code: "C001",
-      name: "清远市",
+      code: 'C001',
+      name: '清远市',
     ),
     CityModel(
-      code: "C001",
-      name: "湛江市",
+      code: 'C001',
+      name: '湛江市',
     ),
 
   ];
@@ -52,7 +52,7 @@ class CitySelectPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("选择市"),
+        title: Text('选择市'),
         actions: <Widget>[
           IconButton(
               icon: Icon(

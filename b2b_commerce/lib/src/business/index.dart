@@ -26,7 +26,7 @@ class _BusinessPageState extends State<BusinessPage> {
         children: <Widget>[
           TextField(
             decoration: InputDecoration(
-              hintText: "搜索商品",
+              hintText: '搜索商品',
               prefixIcon: Icon(Icons.search),
             ),
           ),

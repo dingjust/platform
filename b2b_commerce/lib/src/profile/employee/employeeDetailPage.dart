@@ -16,7 +16,7 @@ class ProfileEmployeeDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text(isCreate == true ? "添加" : "详细信息"),
+          title: new Text(isCreate == true ? '添加' : '详细信息'),
           actions: isCreate == true ? <Widget>[
             IconButton(
               icon: Icon(
@@ -67,8 +67,8 @@ class ProfileEmployeeDetailPage extends StatelessWidget {
               trailing:isCreate == true ?
               TextField(
                 decoration: InputDecoration(
-                    labelText: "姓名",
-                    hintText: "请输入姓名",
+                    labelText: '姓名',
+                    hintText: '请输入姓名',
                 ),
                 obscureText: true,
               ):
@@ -93,8 +93,8 @@ class ProfileEmployeeDetailPage extends StatelessWidget {
               trailing:isCreate == true ?
               TextField(
                 decoration: InputDecoration(
-                  labelText: "手机",
-                  hintText: "请输入手机",
+                  labelText: '手机',
+                  hintText: '请输入手机',
                 ),
                 obscureText: true,
                  keyboardType: TextInputType.phone,
