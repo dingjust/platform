@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './settings.dart';
 import 'address.dart';
+import 'member.dart';
 
 class ProfileHomePage extends StatefulWidget {
   static const String ROUTE_SETTINGS = '/settings';
@@ -103,7 +104,12 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TabbedAppBarSample()),
+                );
+              },
               child: ListTile(
                 trailing: Icon(Icons.chevron_right),
                 title: const Text('会员管理'),
