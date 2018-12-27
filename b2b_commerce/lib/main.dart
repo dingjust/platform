@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'src/cart/index.dart';
+import 'src/business/index.dart';
+import 'src/common/routes.dart';
 import 'src/community/index.dart';
 import 'src/home/index.dart';
 import 'src/profile/index.dart';
@@ -30,8 +31,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     _modules = <Widget>[
       HomePage(),
-      ShoppingCartPage(),
       ForumHomePage(),
+      BusinessPage(),
       ProfileHomePage(),
     ];
 
@@ -54,6 +55,7 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
+      routes: Routes.allRoutes,
     );
   }
 }
@@ -67,15 +69,15 @@ class BottomNavigation extends StatelessWidget {
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
       icon: const Icon(Icons.home),
-      title: const Text("主页"),
-    ),
-    BottomNavigationBarItem(
-      icon: const Icon(Icons.shopping_cart),
-      title: const Text("购物车"),
+      title: const Text("首页"),
     ),
     BottomNavigationBarItem(
       icon: const Icon(Icons.forum),
-      title: const Text("社区"),
+      title: const Text("广场"),
+    ),
+    BottomNavigationBarItem(
+      icon: const Icon(Icons.shopping_cart),
+      title: const Text("生意"),
     ),
     BottomNavigationBarItem(
       icon: const Icon(Icons.account_box),
