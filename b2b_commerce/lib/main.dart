@@ -5,7 +5,7 @@ import 'src/business/index.dart';
 import 'src/common/routes.dart';
 import 'src/community/index.dart';
 import 'src/home/index.dart';
-import 'src/profile/index.dart';
+import 'src/my/index.dart';
 
 void main() {
   debugInstrumentationEnabled = true;

@@ -1,10 +1,10 @@
-import 'package:b2b_commerce/src/common/routes.dart';
 import 'package:flutter/material.dart';
 
+import './address.dart';
 import './auth_info.dart';
 import './employee/employeePage.dart';
 import './settings.dart';
-import 'address.dart';
+import '../common/routes.dart';
 
 class ProfileHomePage extends StatefulWidget {
   static const String ROUTE_SETTINGS = '/settings';
