@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
     _modules = <Widget>[
       HomePage(),
       ForumHomePage(),
-      BusinessPage(),
+      BusinessHomePage(),
       MyHomePage(),
     ];
 
