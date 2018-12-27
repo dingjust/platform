@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class RegionSelectPage extends StatelessWidget {
+class CitySelectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,22 +10,24 @@ class RegionSelectPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
               icon: Icon(
-                Icons.search,
+                Icons.done,
                 color: Colors.white,
               ),
-              onPressed: () {})
+              onPressed: () {
+                Navigator.pop(context);
+              })
         ],
       ),
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Text("湖南省"),
+            title: Text("深圳市"),
           ),
           ListTile(
-            title: Text("安徽省"),
+            title: Text("汕头市"),
           ),
           ListTile(
-            title: Text("广东省"),
+            title: Text("广州市"),
             selected: true,
           )
         ],

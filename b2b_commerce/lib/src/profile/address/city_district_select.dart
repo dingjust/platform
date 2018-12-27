@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
 
-class RegionSelectPage extends StatelessWidget {
+class CityDistrictSelectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("选择省"),
+        title: Text("选择区"),
         actions: <Widget>[
           IconButton(
               icon: Icon(
-                Icons.search,
+                Icons.done,
                 color: Colors.white,
               ),
-              onPressed: () {})
+              onPressed: () {
+                Navigator.pop(context);
+              })
         ],
       ),
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Text("湖南省"),
+            title: Text("天河区"),
           ),
           ListTile(
-            title: Text("安徽省"),
+            title: Text("黄埔区"),
           ),
           ListTile(
-            title: Text("广东省"),
+            title: Text("海珠区"),
             selected: true,
           )
         ],
