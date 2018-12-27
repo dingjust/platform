@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'address/address_detail.dart';
 
+import 'package:models/';
+
 class AddressPage extends StatelessWidget {
+  List<AddressModel> items = <AddressModel>[];
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
