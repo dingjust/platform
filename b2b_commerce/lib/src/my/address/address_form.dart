@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
 import 'region_select.dart';
 
 class AddressFormPage extends StatefulWidget {
@@ -27,9 +28,7 @@ class AddressFormState extends State<AddressFormPage> {
   Widget build(BuildContext context) {
     String province = null;
     if (widget?.address != null) {
-      province = widget.address.region.name +
-          widget.address.city.name +
-          widget.address.cityDistrict.name;
+      province = widget.address.regionCityAndDistrict;
     } else {
       province = '请选择省市区';
     }
@@ -122,7 +121,7 @@ class AddressFormState extends State<AddressFormPage> {
               ),
               onPressed: () {
                 print((_addressForm.currentState as FormState).validate());
-                if((_addressForm.currentState as FormState).validate() != null){
+                if ((_addressForm.currentState as FormState).validate() != null) {
                   Navigator.pop(context);
                 }
               },

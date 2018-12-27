@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
 import 'city_district_select.dart';
 
 class CitySelectPage extends StatelessWidget {
@@ -29,7 +30,6 @@ class CitySelectPage extends StatelessWidget {
       code: 'C001',
       name: '湛江市',
     ),
-
   ];
 
   @override
@@ -55,13 +55,14 @@ class CitySelectPage extends StatelessWidget {
         title: Text('选择市'),
         actions: <Widget>[
           IconButton(
-              icon: Icon(
-                Icons.done,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              })
+            icon: Icon(
+              Icons.done,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
         ],
       ),
       body: ListView(

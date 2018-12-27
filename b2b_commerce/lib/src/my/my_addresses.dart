@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 
 import 'address/address_form.dart';
 
-class AddressPage extends StatelessWidget {
+class MyAddressesPage extends StatelessWidget {
   final List<AddressModel> addresses = <AddressModel>[
     AddressModel(
       fullname: '华安',

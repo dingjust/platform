@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import './address.dart';
-import './auth_info.dart';
-import './employee/employeePage.dart';
-import './settings.dart';
 import '../common/routes.dart';
+import 'my_addresses.dart';
+import 'my_company.dart';
+import 'my_employees.dart';
+import 'my_settings.dart';
 
 class ProfileHomePage extends StatefulWidget {
   static const String ROUTE_SETTINGS = '/settings';
@@ -113,7 +113,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => (AuthenticationInfoPage())),
+                  MaterialPageRoute(builder: (context) => (MyCompanyPage())),
                 );
               },
               child: ListTile(
@@ -126,7 +126,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileEmployeePage()),
+                  MaterialPageRoute(builder: (context) => MyEmployeesPage()),
                 );
               },
               child: ListTile(
@@ -149,7 +149,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddressPage()),
+                  MaterialPageRoute(builder: (context) => MyAddressesPage()),
                 );
               },
               child: ListTile(
@@ -176,7 +176,7 @@ class _ProfileHomePageState extends State<ProfileHomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileSettingsPage()),
+                  MaterialPageRoute(builder: (context) => MySettingsPage()),
                 );
               },
               child: ListTile(

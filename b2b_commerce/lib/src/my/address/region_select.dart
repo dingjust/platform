@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
 import 'city_select.dart';
 
 class RegionSelectPage extends StatelessWidget {
@@ -34,13 +35,14 @@ class RegionSelectPage extends StatelessWidget {
         title: Text('选择省'),
         actions: <Widget>[
           IconButton(
-              icon: Icon(
-                Icons.done,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              })
+            icon: Icon(
+              Icons.done,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
         ],
       ),
       body: ListView(

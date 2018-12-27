@@ -1,5 +1,5 @@
+import 'package:b2b_commerce/src/my/employee/employee_details.dart';
 import 'package:flutter/material.dart';
-import './employeeDetailPage.dart';
 
 const List employeeName = ['Mr.Zhang', 'Mr.Li', 'Mr.Chen'];
 const List employeePhone = ['1311111111', '1322222222', '1333333333'];
@@ -8,20 +8,20 @@ const List employeePic = [
   'http://www.ffpic.com/files/2014/0829/14061323317269/ffpic140613479723yw23.png',
   'http://www.ffpic.com/files/2014/0829/14061323317269/ffpic1406134724815034.png'
 ];
-const List employeeRule = ['Admin','CEO','CTO'];
+const List employeeRule = ['Admin', 'CEO', 'CTO'];
 
 List<Widget> _list = new List();
 
-class ProfileEmployeePage extends StatefulWidget {
+class MyEmployeesPage extends StatefulWidget {
   @override
-  _ProfileEmployeePageState createState() => _ProfileEmployeePageState();
+  _MyEmployeesPageState createState() => _MyEmployeesPageState();
 }
 
-class _ProfileEmployeePageState extends State<ProfileEmployeePage> {
+class _MyEmployeesPageState extends State<MyEmployeesPage> {
   @override
   Widget build(BuildContext context) {
     for (int i = 0; i < employeeName.length; i++) {
-      _list.add(buildListData(context, employeeName[i], employeePhone[i],employeePic[i],employeeRule[i]));
+      _list.add(buildListData(context, employeeName[i], employeePhone[i], employeePic[i], employeeRule[i]));
     }
 //    var divideList = ListTile.divideTiles(context: context, tiles: _list).toList();
     return new Scaffold(
@@ -34,13 +34,13 @@ class _ProfileEmployeePageState extends State<ProfileEmployeePage> {
               color: Colors.white,
               textDirection: TextDirection.rtl,
             ),
-            onPressed: (){
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ProfileEmployeeDetailPage(
-                      isCreate: true,
-                    )
+                  builder: (context) => EmployeeDetailsPage(
+                        isCreate: true,
+                      ),
                 ),
               );
             },
@@ -65,7 +65,7 @@ class _ProfileEmployeePageState extends State<ProfileEmployeePage> {
                       child: new Column(
                         children: <Widget>[
                           buildListData(
-                              context, employeeName[item], employeePhone[item],employeePic[item],employeeRule[item]),
+                              context, employeeName[item], employeePhone[item], employeePic[item], employeeRule[item]),
                           new Divider()
                         ],
                       ),
@@ -80,7 +80,7 @@ class _ProfileEmployeePageState extends State<ProfileEmployeePage> {
   }
 }
 
-Widget buildListData(BuildContext context, String strItem, String phoneItem,String picItem,String ruleItem) {
+Widget buildListData(BuildContext context, String strItem, String phoneItem, String picItem, String ruleItem) {
   return new ListTile(
     isThreeLine: false,
     title: new Text(
@@ -96,14 +96,14 @@ Widget buildListData(BuildContext context, String strItem, String phoneItem,Stri
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ProfileEmployeeDetailPage(
-                  name: strItem,
-                  phone: phoneItem,
-                  pic:picItem,
-                  rule:ruleItem
-                )),
+          builder: (context) => EmployeeDetailsPage(
+                name: strItem,
+                phone: phoneItem,
+                pic: picItem,
+                rule: ruleItem,
+              ),
+        ),
       );
     },
   );
 }
-

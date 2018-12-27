@@ -63,6 +63,8 @@ class AddressModel extends ItemModel {
     this.defaultAddress = false,
   });
 
+  String get regionCityAndDistrict => region.name + city.name + cityDistrict.name;
+
   String get details => (region.name + city.name + cityDistrict.name + line1);
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => _$AddressModelFromJson(json);

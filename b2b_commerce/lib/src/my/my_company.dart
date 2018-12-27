@@ -1,11 +1,12 @@
+import 'package:b2b_commerce/src/my/company/my_company_form.dart';
 import 'package:flutter/material.dart';
-import './autho_info_form.dart';
 
-class AuthenticationInfoPage extends StatefulWidget {
-  _AuthenticationInfoPageState createState() => _AuthenticationInfoPageState();
+/// 认证信息
+class MyCompanyPage extends StatefulWidget {
+  _MyCompanyPageState createState() => _MyCompanyPageState();
 }
 
-class _AuthenticationInfoPageState extends State<AuthenticationInfoPage> {
+class _MyCompanyPageState extends State<MyCompanyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,8 +20,7 @@ class _AuthenticationInfoPageState extends State<AuthenticationInfoPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => AuthenticationInfoFormPage()),
+                MaterialPageRoute(builder: (context) => MyCompanyFormPage()),
               );
             },
           ),
@@ -86,18 +86,9 @@ class _AuthenticationInfoPageState extends State<AuthenticationInfoPage> {
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     decoration: BoxDecoration(
                         border: Border(
-                            top: BorderSide(
-                                width: 0.5,
-                                color: Colors.black45,
-                                style: BorderStyle.solid),
-                            bottom: BorderSide(
-                                width: 0.5,
-                                color: Colors.black45,
-                                style: BorderStyle.solid),
-                            right: BorderSide(
-                                width: 0.5,
-                                color: Colors.black45,
-                                style: BorderStyle.solid))),
+                            top: BorderSide(width: 0.5, color: Colors.black45, style: BorderStyle.solid),
+                            bottom: BorderSide(width: 0.5, color: Colors.black45, style: BorderStyle.solid),
+                            right: BorderSide(width: 0.5, color: Colors.black45, style: BorderStyle.solid))),
                     child: Column(
                       children: <Widget>[
                         InfoBlock(
@@ -130,14 +121,8 @@ class _AuthenticationInfoPageState extends State<AuthenticationInfoPage> {
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     decoration: BoxDecoration(
                         border: Border(
-                      top: BorderSide(
-                          width: 0.5,
-                          color: Colors.black45,
-                          style: BorderStyle.solid),
-                      bottom: BorderSide(
-                          width: 0.5,
-                          color: Colors.black45,
-                          style: BorderStyle.solid),
+                      top: BorderSide(width: 0.5, color: Colors.black45, style: BorderStyle.solid),
+                      bottom: BorderSide(width: 0.5, color: Colors.black45, style: BorderStyle.solid),
                     )),
                     child: Column(
                       children: <Widget>[
