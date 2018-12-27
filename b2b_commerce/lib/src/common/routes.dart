@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../business/employees.dart';
+import '../business/member_requests.dart';
 import '../business/memberships.dart';
 import '../business/product_stocks.dart';
 import '../business/production_orders.dart';
@@ -15,6 +16,7 @@ import '../business/suppliers.dart';
 class Routes {
   static const ROUTE_EMPLOYEES = '/business/employees';
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
+  static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
   static const ROUTE_PRODUCT_STOCKS = '/business/product_stocks';
   static const ROUTE_PRODUCTION_ORDERS = '/business/production_orders';
   static const ROUTE_PRODUCTS = '/business/products';
@@ -28,6 +30,7 @@ class Routes {
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     Routes.ROUTE_EMPLOYEES: (context) => EmployeesPage(),
     Routes.ROUTE_MEMBERSHIPS: (context) => MembershipsPage(),
+    Routes.ROUTE_MEMBER_REQUESTS: (context) => MemberRequestsPage(),
     Routes.ROUTE_PRODUCT_STOCKS: (context) => ProductStocksPage(),
     Routes.ROUTE_PRODUCTION_ORDERS: (context) => ProductionOrdersPage(),
     Routes.ROUTE_PRODUCTS: (context) => ProductsPage(),
