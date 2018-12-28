@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'employees/employee_details.dart';
+import 'employees/employee_form.dart';
 
 const List employeeName = ['Mr.Zhang', 'Mr.Li', 'Mr.Chen'];
 const List employeePhone = ['1311111111', '1322222222', '1333333333'];
@@ -39,7 +39,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EmployeeDetailsPage(
+                  builder: (context) => EmployeeFormPage(
                         isCreate: true,
                       ),
                 ),
@@ -97,7 +97,7 @@ Widget buildListData(BuildContext context, String strItem, String phoneItem, Str
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => EmployeeDetailsPage(
+          builder: (context) => EmployeeFormPage(
                 name: strItem,
                 phone: phoneItem,
                 pic: picItem,
