@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class CityDistrictSelectPage extends StatelessWidget {
-  String code;
+ final CityModel city;
 
-  CityDistrictSelectPage(this.code);
+  CityDistrictSelectPage({@required this.city});
 
   final List<DistrictModel> districts = <DistrictModel>[
     DistrictModel(
@@ -28,11 +28,10 @@ class CityDistrictSelectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<ListTile> tiles = districts.map((district){
+      List result = [district];
       return ListTile(
         onTap: (){
-          Navigator.pop(context);
-          Navigator.pop(context);
-          Navigator.pop(context);
+          Navigator.pop(context,result);
         },
         title: Text(district.name),
         trailing: Icon(Icons.chevron_right),

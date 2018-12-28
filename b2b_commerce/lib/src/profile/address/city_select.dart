@@ -3,9 +3,9 @@ import 'package:models/models.dart';
 import 'city_district_select.dart';
 
 class CitySelectPage extends StatelessWidget {
-  String code;
+  RegionModel region;
 
-  CitySelectPage(this.code);
+  CitySelectPage({@required this.region});
 
   List<CityModel> citys = <CityModel>[
     CityModel(
@@ -16,33 +16,44 @@ class CitySelectPage extends StatelessWidget {
     CityModel(
       code: "C001",
       name: "中山市",
+      region: RegionModel(isocode: "R001"),
     ),
     CityModel(
       code: "C001",
-      name: "佛山市",
+      name: "桂林市",
+      region: RegionModel(isocode: "R002"),
     ),
     CityModel(
       code: "C001",
-      name: "清远市",
+      name: "株洲市",
+      region: RegionModel(isocode: "R003"),
     ),
     CityModel(
       code: "C001",
       name: "湛江市",
+      region: RegionModel(isocode: "R001"),
     ),
-
   ];
+
+  _selectDistrict(BuildContext context, CityModel city) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CityDistrictSelectPage(city: city),
+      ),
+    ) as List;
+
+    result.add(city);
+
+    Navigator.pop(context, result);
+  }
 
   @override
   Widget build(BuildContext context) {
     List<ListTile> tiles = citys.map((city) {
       return ListTile(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CityDistrictSelectPage(city.code),
-            ),
-          );
+          _selectDistrict(context,city);
         },
         title: Text(city.name),
         trailing: Icon(Icons.chevron_right),

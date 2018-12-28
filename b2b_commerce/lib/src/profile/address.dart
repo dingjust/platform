@@ -41,7 +41,7 @@ class AddressPage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddressFormPage(address),
+              builder: (context) => AddressFormPage(address: address),
             ),
           );
         },
@@ -68,7 +68,7 @@ class AddressPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddressFormPage(null)),
+                MaterialPageRoute(builder: (context) => AddressFormPage()),
               );
             },
           )
