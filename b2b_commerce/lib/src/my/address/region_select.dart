@@ -12,17 +12,25 @@ class RegionSelectPage extends StatelessWidget {
     RegionModel(isocode: 'R005', name: '黑龙江省'),
   ];
 
+  _selectCity(BuildContext context,RegionModel region) async{
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CitySelectPage(region:region),
+      ),
+    ) as List;
+
+    result.add(region);
+
+    Navigator.pop(context,result);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<ListTile> tiles = regions.map((region) {
       return ListTile(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CitySelectPage(region.isocode),
-            ),
-          );
+          _selectCity(context,region);
         },
         title: Text(region.name),
         trailing: Icon(Icons.chevron_right),
@@ -33,17 +41,6 @@ class RegionSelectPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text('选择省'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.done,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
       ),
       body: ListView(
         children: tiles,
