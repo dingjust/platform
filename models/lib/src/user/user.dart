@@ -33,7 +33,7 @@ class CustomerModel extends UserModel {
 
 /// B2B客户
 @JsonSerializable()
-class B2BCustomerModel extends UserModel {
+class B2BCustomerModel extends CustomerModel {
   bool active;
   B2BUnitModel defaultB2BUnit;
 
