@@ -16,7 +16,7 @@ class RegionSelectPage extends StatelessWidget {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CitySelectPage(region: region),
+        builder: (context) => CitySelectPage(region),
       ),
     ) as List;
 

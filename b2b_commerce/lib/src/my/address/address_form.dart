@@ -4,33 +4,34 @@ import 'package:models/models.dart';
 import 'region_select.dart';
 
 class AddressFormPage extends StatefulWidget {
-  final AddressModel address;
+  AddressFormPage({this.address}) : newlyCreated = address == null;
 
-  AddressFormPage({this.address});
+  final AddressModel address;
+  final bool newlyCreated;
 
   @override
   AddressFormState createState() => AddressFormState();
 }
 
 class AddressFormState extends State<AddressFormPage> {
-  bool _isDefault;
+  bool _defaultAddress;
   GlobalKey _addressForm = new GlobalKey<FormState>();
   TextEditingController _fullnameController;
   TextEditingController _cellphoneController;
   TextEditingController _line1Controller;
-  String province;
+  String regionCityAndDistrict;
 
   @override
   void initState() {
-    // TODO: implement initState
-    _isDefault = widget.address?.defaultAddress ?? false;
+    super.initState();
+    _defaultAddress = widget.address?.defaultAddress ?? false;
     _fullnameController = TextEditingController(text: widget.address?.fullname);
     _cellphoneController = TextEditingController(text: widget.address?.cellphone);
     _line1Controller = TextEditingController(text: widget.address?.line1);
-    province = widget?.address != null ? widget.address.regionCityAndDistrict : "请选择省市区";
+    regionCityAndDistrict = !widget.newlyCreated ? widget.address.regionCityAndDistrict : "请选择省市区";
   }
 
-  _selectProvince(BuildContext context) async {
+  _selectRegionCityAndDistrict(BuildContext context) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => RegionSelectPage()),
@@ -40,7 +41,7 @@ class AddressFormState extends State<AddressFormPage> {
     CityModel cityModel = result[1];
     DistrictModel districtModel = result[0];
 
-    province = regionModel.name + cityModel.name + districtModel.name;
+    regionCityAndDistrict = regionModel.name + cityModel.name + districtModel.name;
   }
 
   @override
@@ -64,20 +65,21 @@ class AddressFormState extends State<AddressFormPage> {
         ),
         validator: (v) {
           print(v);
-          return v.trim().length > 0 ? null : "联系人不能为空";
+          return v.trim().length > 0 ? null : "联系号码不能为空";
         },
+        keyboardType: TextInputType.phone,
       ),
       ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 0),
         onTap: () {
-          _selectProvince(context);
+          _selectRegionCityAndDistrict(context);
         },
         title: Text(
           '省市区',
           style: TextStyle(fontSize: 12, color: Colors.grey[700]),
         ),
         subtitle: Text(
-          province,
+          regionCityAndDistrict,
           style: TextStyle(color: Colors.black),
         ),
         trailing: Icon(Icons.chevron_right),
@@ -93,13 +95,14 @@ class AddressFormState extends State<AddressFormPage> {
         title: Text('设为默认地址'),
         contentPadding: EdgeInsets.symmetric(horizontal: 0),
         trailing: Switch(
-            value: _isDefault,
-            activeColor: Colors.pink,
-            onChanged: (bool val) {
-              setState(() {
-                _isDefault = val;
-              });
-            }),
+          value: _defaultAddress,
+          activeColor: Colors.pink,
+          onChanged: (bool val) {
+            setState(() {
+              _defaultAddress = val;
+            });
+          },
+        ),
       ),
     ];
 
@@ -117,36 +120,37 @@ class AddressFormState extends State<AddressFormPage> {
     }
 
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("编辑地址"),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.done,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                print((_addressForm.currentState as FormState).validate());
-                if ((_addressForm.currentState as FormState).validate() != null) {
-                  Navigator.pop(context);
-                }
-              },
-            )
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-          child: Form(
-            key: _addressForm,
-            autovalidate: true,
-            //使用ScrollView包装一下，否则键盘弹出时会报错空间溢出
-            child: new SingleChildScrollView(
-              child: Column(
-                children: widgets,
-              ),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("编辑地址"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.done,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              print((_addressForm.currentState as FormState).validate());
+              if ((_addressForm.currentState as FormState).validate() != null) {
+                Navigator.pop(context);
+              }
+            },
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+        child: Form(
+          key: _addressForm,
+          autovalidate: true,
+          //使用ScrollView包装一下，否则键盘弹出时会报错空间溢出
+          child: new SingleChildScrollView(
+            child: Column(
+              children: widgets,
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
