@@ -36,6 +36,6 @@ class ApparelProductSearchDelegate extends SearchDelegate<ApparelProductModel> {
   @override
   Widget buildSuggestions(BuildContext context) {
     // TODO: 输入提示信息
-    return Container(child: Text(query));
+    return Container(child: Text(''));
   }
 }
