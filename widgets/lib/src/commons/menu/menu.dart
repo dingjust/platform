@@ -13,7 +13,7 @@ class Menu extends StatelessWidget {
     }).toList();
 
     return Container(
-      padding: const EdgeInsets.only(top: 5, bottom: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Container(
         child: Column(
           children: columns,

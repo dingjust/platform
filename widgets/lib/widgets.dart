@@ -9,3 +9,4 @@ export 'src/commons/menu/menu.dart';
 export 'src/commons/progress/progress_indicator.dart';
 export 'src/commons/snakebar/snake_bar.dart';
 export 'src/commons/splash/splash.dart';
+export 'src/report/site_statistics_section.dart';
