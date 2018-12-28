@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/members/membership_form.dart';
 import 'package:b2b_commerce/src/common/app_enums.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -50,7 +51,7 @@ class MembershipsPage extends StatelessWidget {
           children: <Widget>[
             Menu('', <MenuItem>[
               MenuItem(
-                Icons.mode_edit,
+                Icons.phone,
                 '会员审核',
                 AppRoutes.ROUTE_MEMBER_REQUESTS,
               )

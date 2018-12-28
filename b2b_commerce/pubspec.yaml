@@ -53,6 +53,27 @@ flutter:
   assets:
     - packages/assets/temp/lake.jpg
     - packages/assets/temp/login_logo.png
+    - packages/assets/temp/business/check_report.png
+    - packages/assets/temp/business/address_manage.png
+    - packages/assets/temp/business/cart.png
+    - packages/assets/temp/business/certicate_info.png
+    - packages/assets/temp/business/clothes_manage.png
+    - packages/assets/temp/business/customer_audit.png
+    - packages/assets/temp/business/customer_service.png
+    - packages/assets/temp/business/employee_manage.png
+    - packages/assets/temp/business/inventory_manage.png
+    - packages/assets/temp/business/invoice_manage.png
+    - packages/assets/temp/business/member_manage.png
+    - packages/assets/temp/business/my_account.png
+    - packages/assets/temp/business/my_collection.png
+    - packages/assets/temp/business/order_matter.png
+    - packages/assets/temp/business/price_manage.png
+    - packages/assets/temp/business/product_manage.png
+    - packages/assets/temp/business/purchase_order.png
+    - packages/assets/temp/business/requirement_order.png
+    - packages/assets/temp/business/sale_order.png
+    - packages/assets/temp/business/setting.png
+    - packages/assets/temp/business/supplier_manage.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
