@@ -25,12 +25,9 @@ class AddressFormState extends State<AddressFormPage> {
     // TODO: implement initState
     _isDefault = widget.address?.defaultAddress ?? false;
     _fullnameController = TextEditingController(text: widget.address?.fullname);
-    _cellphoneController =
-        TextEditingController(text: widget.address?.cellphone);
+    _cellphoneController = TextEditingController(text: widget.address?.cellphone);
     _line1Controller = TextEditingController(text: widget.address?.line1);
-    province = widget?.address != null
-        ? widget.address.regionCityAndDistrict
-        : "请选择省市区";
+    province = widget?.address != null ? widget.address.regionCityAndDistrict : "请选择省市区";
   }
 
   _selectProvince(BuildContext context) async {
@@ -43,7 +40,7 @@ class AddressFormState extends State<AddressFormPage> {
     CityModel cityModel = result[1];
     DistrictModel districtModel = result[0];
 
-    province = regionModel.name+cityModel.name+districtModel.name;
+    province = regionModel.name + cityModel.name + districtModel.name;
   }
 
   @override
@@ -131,8 +128,7 @@ class AddressFormState extends State<AddressFormPage> {
               ),
               onPressed: () {
                 print((_addressForm.currentState as FormState).validate());
-                if ((_addressForm.currentState as FormState).validate() !=
-                    null) {
+                if ((_addressForm.currentState as FormState).validate() != null) {
                   Navigator.pop(context);
                 }
               },

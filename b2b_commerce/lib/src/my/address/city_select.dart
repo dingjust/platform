@@ -49,7 +49,7 @@ class CitySelectPage extends StatelessWidget {
     List<ListTile> tiles = citys.map((city) {
       return ListTile(
         onTap: () {
-          _selectDistrict(context,city);
+          _selectDistrict(context, city);
         },
         title: Text(city.name),
         trailing: Icon(Icons.chevron_right),

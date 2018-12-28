@@ -20,9 +20,9 @@ class EmployeeFormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text(isCreate == true ? '添加' : '详细信息'),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(isCreate == true ? '添加' : '详细信息'),
           actions: isCreate == true
               ? <Widget>[
                   IconButton(
@@ -41,10 +41,10 @@ class EmployeeFormPage extends StatelessWidget {
         body: ListView(
           padding: EdgeInsets.all(20.0),
           children: <Widget>[
-            new ListTile(
-              title: new Text(
+            ListTile(
+              title: Text(
                 '头像',
-                style: new TextStyle(
+                style: TextStyle(
                   color: Colors.black54,
                   fontSize: 16.0,
                 ),
@@ -67,9 +67,9 @@ class EmployeeFormPage extends StatelessWidget {
             ListTile(
               title: isCreate == true
                   ? null
-                  : new Text(
+                  : Text(
                       '姓名',
-                      style: new TextStyle(
+                      style: TextStyle(
                         color: Colors.black54,
                         fontSize: 16.0,
                       ),
@@ -82,9 +82,9 @@ class EmployeeFormPage extends StatelessWidget {
                       ),
                       obscureText: true,
                     )
-                  : new Text(
+                  : Text(
                       '$name',
-                      style: new TextStyle(
+                      style: TextStyle(
                         color: Colors.black54,
                         fontSize: 20.0,
                       ),
@@ -94,9 +94,9 @@ class EmployeeFormPage extends StatelessWidget {
             ListTile(
               title: isCreate == true
                   ? null
-                  : new Text(
+                  : Text(
                       '手机',
-                      style: new TextStyle(
+                      style: TextStyle(
                         color: Colors.black54,
                         fontSize: 16.0,
                       ),
@@ -110,9 +110,9 @@ class EmployeeFormPage extends StatelessWidget {
                       obscureText: true,
                       keyboardType: TextInputType.phone,
                     )
-                  : new Text(
+                  : Text(
                       '$phone',
-                      style: new TextStyle(
+                      style: TextStyle(
                         color: Colors.black54,
                         fontSize: 20.0,
                       ),
@@ -120,18 +120,18 @@ class EmployeeFormPage extends StatelessWidget {
               onTap: () {},
             ),
             ListTile(
-              title: new Text(
+              title: Text(
                 '角色',
-                style: new TextStyle(
+                style: TextStyle(
                   color: Colors.black54,
                   fontSize: 16.0,
                 ),
               ),
               trailing: isCreate == true
                   ? Icon(Icons.chevron_right)
-                  : new Text(
+                  : Text(
                       '$rule',
-                      style: new TextStyle(
+                      style: TextStyle(
                         color: Colors.black54,
                         fontSize: 20.0,
                       ),
