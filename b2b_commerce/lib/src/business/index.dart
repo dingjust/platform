@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 import '../common/app_routes.dart';
+import 'search/apparel_product_search.dart';
 
 /// 生意
 class BusinessHomePage extends StatefulWidget {
@@ -18,10 +20,10 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () {},
+            onPressed: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
           ),
           IconButton(
-            icon: Icon(Icons.chat),
+            icon: Icon(Icons.message),
             onPressed: () {},
           )
         ],
@@ -30,7 +32,11 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
         color: Colors.grey[200],
         child: ListView(
           children: <Widget>[
-            BusinessStatisticsSection(),
+            SiteStatisticsSection(<SiteStatisticsModel>[
+              SiteStatisticsModel('今日销售', '561件'),
+              SiteStatisticsModel('今日销量', '2500.00元'),
+              SiteStatisticsModel('在架商品', '15款')
+            ]),
             Menu('我的待办', <MenuItem>[
               MenuItem(Icons.call, '报价管理', AppRoutes.ROUTE_QUOTES),
               MenuItem(Icons.call, '会员审核', AppRoutes.ROUTE_MEMBER_REQUESTS),
@@ -54,48 +60,6 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
             ]),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// 生意统计
-class BusinessStatisticsSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    Column buildButtonColumn(String label, String amount) {
-      Color color = Theme.of(context).primaryColor;
-
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(label),
-          Container(
-            margin: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              amount,
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.w400,
-                color: color,
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(24.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          buildButtonColumn('今日销售', '561件'),
-          buildButtonColumn('今日销量', '2500.00元'),
-          buildButtonColumn('在架商品', '15款'),
-        ],
       ),
     );
   }
