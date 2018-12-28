@@ -41,17 +41,6 @@ class RegionSelectPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text('选择省'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.done,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
       ),
       body: ListView(
         children: tiles,

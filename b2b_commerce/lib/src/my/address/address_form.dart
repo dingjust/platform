@@ -29,9 +29,7 @@ class AddressFormState extends State<AddressFormPage> {
         TextEditingController(text: widget.address?.cellphone);
     _line1Controller = TextEditingController(text: widget.address?.line1);
     province = widget?.address != null
-        ? widget.address.region.name +
-            widget.address.city.name +
-            widget.address.cityDistrict.name
+        ? widget.address.regionCityAndDistrict
         : "请选择省市区";
   }
 
