@@ -12,6 +12,14 @@ import '../business/requirement_orders.dart';
 import '../business/sales_orders.dart';
 import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
+import '../my/my_account.dart';
+import '../my/my_addresses.dart';
+import '../my/my_cart.dart';
+import '../my/my_client_services.dart';
+import '../my/my_collections.dart';
+import '../my/my_company.dart';
+import '../my/my_invoices.dart';
+import '../my/my_settings.dart';
 
 class AppRoutes {
   static const ROUTE_EMPLOYEES = '/business/employees';
@@ -26,6 +34,14 @@ class AppRoutes {
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
   static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
+  static const ROUTE_MY_ACCOUNT = '/my/my_account';
+  static const ROUTE_MY_COMPANY = '/my/my_company';
+  static const ROUTE_MY_ADDRESSES = '/my/my_addresses';
+  static const ROUTE_MY_CART = '/my/my_cart';
+  static const ROUTE_MY_INVOICES = '/my/my_invoices';
+  static const ROUTE_MY_COLLECTIONS = '/my/my_collections';
+  static const ROUTE_MY_CLIENT_SERVICES = '/my/my_client_services';
+  static const ROUTE_MY_SETTINGS = '/my/my_settings';
 
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -40,5 +56,13 @@ class AppRoutes {
     ROUTE_SALES_ORDERS: (context) => SalesOrdersPage(),
     ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),
+    ROUTE_MY_ACCOUNT: (context) => MyAccountPage(),
+    ROUTE_MY_COMPANY: (context) => MyCompanyPage(),
+    ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
+    ROUTE_MY_CART: (context) => MyCartPage(),
+    ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
+    ROUTE_MY_COLLECTIONS: (context) => MyCollectionsPage(),
+    ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),
+    ROUTE_MY_SETTINGS: (context) => MySettingsPage()
   };
 }

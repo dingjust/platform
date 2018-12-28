@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:widgets/widgets.dart';
 
 import '../common/app_routes.dart';
-import 'my_addresses.dart';
-import 'my_company.dart';
-import 'my_settings.dart';
 
 class MyHomePage extends StatefulWidget {
   static const String ROUTE_SETTINGS = '/settings';
@@ -19,179 +17,24 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> menus = <Widget>[
-      Container(
-        padding: const EdgeInsets.only(top: 5, bottom: 5),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              InkWell(
-                onTap: () {},
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('我的账户'),
-                  leading: const Icon(Icons.settings),
-                ),
-              ),
-            ],
-          ),
-          color: Colors.white,
-        ),
-      ),
-      Container(
-        padding: const EdgeInsets.only(top: 5, bottom: 5),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
-                },
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('需求订单'),
-                  leading: const Icon(Icons.shopping_basket),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.ROUTE_SALES_ORDERS);
-                },
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('销售订单'),
-                  leading: const Icon(Icons.shopping_basket),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.ROUTE_PURCHASE_ORDERS);
-                },
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('采购订单'),
-                  leading: const Icon(Icons.shopping_basket),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.ROUTE_PRODUCTION_ORDERS);
-                },
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('生产订单'),
-                  leading: const Icon(Icons.shopping_basket),
-                ),
-              ),
-            ],
-          ),
-          color: Colors.white,
-        ),
-      ),
-      Container(
-        padding: const EdgeInsets.only(top: 5, bottom: 5),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              InkWell(
-                onTap: () => Navigator.pushNamed(context, AppRoutes.ROUTE_PRODUCTS),
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('商品管理'),
-                  leading: const Icon(Icons.shopping_basket),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.ROUTE_PRODUCT_STOCKS);
-                },
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('库存管理'),
-                  leading: const Icon(Icons.shopping_basket),
-                ),
-              ),
-            ],
-          ),
-          color: Colors.white,
-        ),
-      ),
-      Container(
-        padding: const EdgeInsets.only(top: 5, bottom: 5),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => (MyCompanyPage())),
-                  );
-                },
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('认证信息'),
-                  leading: const Icon(Icons.settings),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.ROUTE_MEMBERSHIPS);
-                },
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('会员管理'),
-                  leading: const Icon(Icons.shopping_basket),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyAddressesPage()),
-                  );
-                },
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('地址管理'),
-                  leading: const Icon(Icons.settings),
-                ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('发票管理'),
-                  leading: const Icon(Icons.settings),
-                ),
-              ),
-            ],
-          ),
-          color: Colors.white,
-        ),
-      ),
-      Container(
-        padding: const EdgeInsets.only(top: 5, bottom: 5),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MySettingsPage()),
-                  );
-                },
-                child: ListTile(
-                  trailing: Icon(Icons.chevron_right),
-                  title: const Text('设置'),
-                  leading: const Icon(Icons.settings),
-                ),
-              ),
-            ],
-          ),
-          color: Colors.white,
-        ),
-      )
+      Menu('', <MenuItem>[
+        MenuItem(Icons.account_box, '我的账户', AppRoutes.ROUTE_MY_ACCOUNT),
+        MenuItem(Icons.business, '认证信息', AppRoutes.ROUTE_MY_COMPANY),
+      ]),
+      Menu('', <MenuItem>[
+        MenuItem(Icons.location_city, '地址管理', AppRoutes.ROUTE_MY_ADDRESSES),
+        MenuItem(Icons.shopping_cart, '购物车', AppRoutes.ROUTE_MY_CART),
+      ]),
+      Menu('', <MenuItem>[
+        MenuItem(Icons.collections, '发票管理', AppRoutes.ROUTE_MY_INVOICES),
+        MenuItem(Icons.collections, '我的收藏', AppRoutes.ROUTE_MY_COLLECTIONS),
+      ]),
+      Menu('', <MenuItem>[
+        MenuItem(Icons.call, '联系客服', AppRoutes.ROUTE_MY_CLIENT_SERVICES),
+      ]),
+      Menu('', <MenuItem>[
+        MenuItem(Icons.settings, '设置', AppRoutes.ROUTE_MY_SETTINGS),
+      ]),
     ];
 
     return Scaffold(
