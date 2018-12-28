@@ -3,9 +3,9 @@ import 'package:models/models.dart';
 import 'city_district_select.dart';
 
 class CitySelectPage extends StatelessWidget {
-  String code;
+  final RegionModel region;
 
-  CitySelectPage(this.code);
+  CitySelectPage({@required this.region});
 
   List<CityModel> citys = <CityModel>[
     CityModel(
@@ -30,6 +30,19 @@ class CitySelectPage extends StatelessWidget {
       name: '湛江市',
     ),
   ];
+
+  _selectDistrict(BuildContext context, CityModel city) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CityDistrictSelectPage(city: city),
+      ),
+    ) as List;
+
+    result.add(city);
+
+    Navigator.pop(context, result);
+  }
 
   @override
   Widget build(BuildContext context) {
