@@ -24,6 +24,7 @@ class _MyCompanyFormPageState extends State<MyCompanyFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    //上传图片行
     List<Widget> _papersWidgetList = _papersImages
         .map((file) => Container(
               width: 60.0,
