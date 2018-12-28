@@ -1,5 +1,15 @@
 import 'package:models/models.dart';
 
 class AppEnums {
-  static const MemberRatings = {MemberRating.A: 'A', MemberRating.B: 'B', MemberRating.C: 'C'};
+  static const MemberRatingList = <EnumModel>[
+    const EnumModel('A', 'A'),
+    const EnumModel('B', 'B'),
+    const EnumModel('C', 'C'),
+  ];
+
+  static const Map<dynamic, EnumModel> MemberRatings = {
+    MemberRating.A: const EnumModel('A', 'A'),
+    MemberRating.B: const EnumModel('B', 'B'),
+    MemberRating.C: const EnumModel('C', 'C'),
+  };
 }

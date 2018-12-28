@@ -5,6 +5,7 @@ export 'src/commons/button/button.dart';
 export 'src/commons/carousel/carousel.dart';
 export 'src/commons/chat/chat.dart';
 export 'src/commons/divider/divider.dart';
+export 'src/commons/menu/enum_select.dart';
 export 'src/commons/menu/menu.dart';
 export 'src/commons/progress/progress_indicator.dart';
 export 'src/commons/snakebar/snake_bar.dart';

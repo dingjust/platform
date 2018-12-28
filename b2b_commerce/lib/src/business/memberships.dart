@@ -33,6 +33,7 @@ class MembershipsPage extends StatelessWidget {
     List<MembershipItem> _items = items.map((item) {
       return MembershipItem(item);
     }).toList();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -41,7 +42,12 @@ class MembershipsPage extends StatelessWidget {
           IconButton(
             // action button
             icon: Icon(Icons.person_add),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MembershipForm(null)),
+              );
+            },
           ),
         ],
       ),
@@ -88,7 +94,7 @@ class MembershipItem extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => MembershipForm()),
+              MaterialPageRoute(builder: (context) => MembershipForm(item)),
             );
           },
           leading: CircleAvatar(
@@ -103,7 +109,7 @@ class MembershipItem extends StatelessWidget {
             children: <Widget>[
               Text('${item.customer.name} ${item.customer.mobileNumber}'),
               Text(
-                '会员等级：' + AppEnums.MemberRatings[item.level],
+                '会员等级：' + AppEnums.MemberRatings[item.level].name,
               )
             ],
           ),
