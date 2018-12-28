@@ -1,14 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 import 'package:models/models.dart';
 
 part 'principal.g.dart';
 
 @JsonSerializable()
 class PrincipalModel extends ItemModel {
+  String profilePicture;
   String uid;
   String name;
 
-  PrincipalModel({this.uid});
+  PrincipalModel({this.profilePicture, @required this.uid, this.name});
 
   factory PrincipalModel.fromJson(Map<String, dynamic> json) => _$PrincipalModelFromJson(json);
 
