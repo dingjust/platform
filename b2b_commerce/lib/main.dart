@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'src/business/index.dart';
-import 'src/common/routes.dart';
+import 'src/common/app_routes.dart';
 import 'src/community/index.dart';
 import 'src/home/index.dart';
-import 'src/profile/index.dart';
+import 'src/my/index.dart';
 
 void main() {
   debugInstrumentationEnabled = true;
@@ -32,8 +32,8 @@ class _MyAppState extends State<MyApp> {
     _modules = <Widget>[
       HomePage(),
       ForumHomePage(),
-      BusinessPage(),
-      ProfileHomePage(),
+      BusinessHomePage(),
+      MyHomePage(),
     ];
 
     return MaterialApp(
@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
-      routes: Routes.allRoutes,
+      routes: AppRoutes.allRoutes,
     );
   }
 }
@@ -70,19 +70,19 @@ class BottomNavigation extends StatelessWidget {
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
       icon: const Icon(Icons.home),
-      title: const Text("首页"),
+      title: const Text('首页'),
     ),
     BottomNavigationBarItem(
       icon: const Icon(Icons.forum),
-      title: const Text("广场"),
+      title: const Text('广场'),
     ),
     BottomNavigationBarItem(
       icon: const Icon(Icons.shopping_cart),
-      title: const Text("生意"),
+      title: const Text('生意'),
     ),
     BottomNavigationBarItem(
       icon: const Icon(Icons.account_box),
-      title: const Text("我的"),
+      title: const Text('我的'),
     )
   ];
 

@@ -51,10 +51,21 @@ class AddressModel extends ItemModel {
   CityModel city;
   DistrictModel cityDistrict;
   String line1;
-  String line2;
   bool defaultAddress;
 
-  AddressModel({this.fullname, this.cellphone, this.region, this.city, this.cityDistrict, this.line1, this.line2,this.defaultAddress});
+  AddressModel({
+    @required this.fullname,
+    @required this.cellphone,
+    @required this.region,
+    @required this.city,
+    @required this.cityDistrict,
+    @required this.line1,
+    this.defaultAddress = false,
+  });
+
+  String get regionCityAndDistrict => region.name + city.name + cityDistrict.name;
+
+  String get details => (region.name + city.name + cityDistrict.name + line1);
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => _$AddressModelFromJson(json);
 

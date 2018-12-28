@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
 import 'region_select.dart';
 
 class AddressFormPage extends StatefulWidget {
@@ -53,8 +54,8 @@ class AddressFormState extends State<AddressFormPage> {
       TextFormField(
         controller: _fullnameController,
         decoration: InputDecoration(
-          labelText: "联系人",
-          icon: Icon(Icons.person),
+          labelText: '联系人',
+          prefixIcon: Icon(Icons.person),
         ),
         validator: (v) {
           return v.trim().length > 0 ? null : "联系人不能为空";
@@ -63,8 +64,8 @@ class AddressFormState extends State<AddressFormPage> {
       TextFormField(
         controller: _cellphoneController,
         decoration: InputDecoration(
-          labelText: "联系号码",
-          icon: Icon(Icons.phone),
+          labelText: '联系号码',
+          prefixIcon: Icon(Icons.phone),
         ),
         validator: (v) {
           print(v);
@@ -77,7 +78,7 @@ class AddressFormState extends State<AddressFormPage> {
           _selectProvince(context);
         },
         title: Text(
-          "省市区",
+          '省市区',
           style: TextStyle(fontSize: 12, color: Colors.grey[700]),
         ),
         subtitle: Text(
@@ -89,12 +90,12 @@ class AddressFormState extends State<AddressFormPage> {
       TextFormField(
         controller: _line1Controller,
         decoration: InputDecoration(
-          labelText: "详细地址",
-          hintText: "道路、门牌号、小区、楼栋号、单元室等",
+          labelText: '详细地址',
+          hintText: '道路、门牌号、小区、楼栋号、单元室等',
         ),
       ),
       ListTile(
-        title: Text("设为默认地址"),
+        title: Text('设为默认地址'),
         contentPadding: EdgeInsets.symmetric(horizontal: 0),
         trailing: Switch(
             value: _isDefault,
@@ -112,7 +113,7 @@ class AddressFormState extends State<AddressFormPage> {
         ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 0),
           title: RaisedButton(
-            child: Text("删除地址"),
+            child: Text('删除地址'),
             color: Colors.red,
             onPressed: () {},
           ),

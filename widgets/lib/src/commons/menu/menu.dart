@@ -12,17 +12,13 @@ class Menu extends StatelessWidget {
       return MenuItem(item.icon, item.title, item.routeTo);
     }).toList();
 
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(title),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: columns,
-          ),
-        ],
+    return Container(
+      padding: const EdgeInsets.only(top: 5, bottom: 5),
+      child: Container(
+        child: Column(
+          children: columns,
+        ),
+        color: Colors.white,
       ),
     );
   }
@@ -37,31 +33,12 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = Theme.of(context).primaryColor;
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, routeTo);
-      },
-      child: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color),
-            Container(
-              margin: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w400,
-                  color: color,
-                ),
-              ),
-            ),
-          ],
-        ),
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, routeTo),
+      child: ListTile(
+        trailing: Icon(Icons.chevron_right),
+        title: Text(title),
+        leading: Icon(icon),
       ),
     );
   }

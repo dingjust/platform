@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'memberEditorPage.dart';
+
+import 'members/membership_form.dart';
 
 class MembershipsPage extends StatelessWidget {
   @override
@@ -11,9 +12,10 @@ class MembershipsPage extends StatelessWidget {
           centerTitle: true,
           title: Text('会员管理'),
           actions: <Widget>[
-            new IconButton( // action button
+            new IconButton(
+              // action button
               icon: Icon(Icons.person_add),
-              onPressed: (){},
+              onPressed: () {},
             ),
           ],
           bottom: new TabBar(
@@ -28,7 +30,7 @@ class MembershipsPage extends StatelessWidget {
         body: new TabBarView(
           children: choices.map((Choice choice) {
             return new Padding(
-                padding: const EdgeInsets.fromLTRB(8.0,20.0,8.0,8.0),
+                padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 8.0),
                 child: new ListView(
                   children: <Widget>[
                     new ListTile(
@@ -40,24 +42,20 @@ class MembershipsPage extends StatelessWidget {
                       ),
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('小勇 13198765432'),
-                          Text('会员等级A')
-                        ],
+                        children: <Widget>[Text('小勇 13198765432'), Text('会员等级A')],
                       ),
                       trailing: IconButton(
                         icon: Icon(Icons.more_horiz),
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => MemberEditor()),
+                            MaterialPageRoute(builder: (context) => MembershipForm()),
                           );
                         },
                       ),
                     ),
                   ],
-                )
-            );
+                ));
           }).toList(),
         ),
       ),
@@ -66,7 +64,8 @@ class MembershipsPage extends StatelessWidget {
 }
 
 class Choice {
-  const Choice({ this.title, this.icon });
+  const Choice({this.title, this.icon});
+
   final String title;
   final IconData icon;
 }

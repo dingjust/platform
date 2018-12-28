@@ -34,14 +34,14 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<WidgetsLocali
   List<Locale> get supportedLocales {
     return const <Locale>[
 
-      const Locale("en", ""),
+      const Locale('en', ''),
 
     ];
   }
 
   LocaleResolutionCallback resolution({Locale fallback}) {
     return (Locale locale, Iterable<Locale> supported) {
-      final Locale languageLocale = new Locale(locale.languageCode, "");
+      final Locale languageLocale = new Locale(locale.languageCode, '');
       if (supported.contains(locale))
         return locale;
       else if (supported.contains(languageLocale))
@@ -58,7 +58,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<WidgetsLocali
     final String lang = getLang(locale);
     switch (lang) {
 
-      case "en":
+      case 'en':
         return new SynchronousFuture<WidgetsLocalizations>(const en());
 
       default:

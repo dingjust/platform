@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class AuthenticationInfoFormPage extends StatefulWidget {
-  _AuthenticationInfoFormPageState createState() =>
-      _AuthenticationInfoFormPageState();
+class MyCompanyFormPage extends StatefulWidget {
+  _MyCompanyFormPageState createState() => _MyCompanyFormPageState();
 }
 
-class _AuthenticationInfoFormPageState
-    extends State<AuthenticationInfoFormPage> {
+class _MyCompanyFormPageState extends State<MyCompanyFormPage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _telPhoneController = TextEditingController();
@@ -70,50 +68,36 @@ class _AuthenticationInfoFormPageState
                           TextFormField(
                               autofocus: false,
                               controller: _nameController,
-                              decoration: InputDecoration(
-                                  labelText: "联系人",
-                                  hintText: "请输入",
-                                  border: InputBorder.none),
+                              decoration: InputDecoration(labelText: '联系人', hintText: '请输入', border: InputBorder.none),
                               // 校验用户名
                               validator: (v) {
-                                return v.trim().length > 0 ? null : "用户名不能为空";
+                                return v.trim().length > 0 ? null : '用户名不能为空';
                               }),
                           TextFormField(
                               autofocus: false,
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
-                              decoration: InputDecoration(
-                                  labelText: "联系人手机",
-                                  hintText: "请输入",
-                                  border: InputBorder.none),
+                              decoration:
+                                  InputDecoration(labelText: '联系人手机', hintText: '请输入', border: InputBorder.none),
                               // 校验用户名
                               validator: (v) {
-                                return v.trim().length > 0 ? null : "手机号不能为空";
+                                return v.trim().length > 0 ? null : '手机号不能为空';
                               }),
                           TextFormField(
                             autofocus: false,
                             controller: _telPhoneController,
                             keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                                labelText: "座机号码",
-                                hintText: "请输入",
-                                border: InputBorder.none),
+                            decoration: InputDecoration(labelText: '座机号码', hintText: '请输入', border: InputBorder.none),
                           ),
                           TextFormField(
                             autofocus: false,
                             controller: _brandController,
-                            decoration: InputDecoration(
-                                labelText: "品牌",
-                                hintText: "请输入",
-                                border: InputBorder.none),
+                            decoration: InputDecoration(labelText: '品牌', hintText: '请输入', border: InputBorder.none),
                           ),
                           TextFormField(
                             autofocus: false,
                             controller: _cooBrandController,
-                            decoration: InputDecoration(
-                                labelText: "合作品牌",
-                                hintText: "请输入",
-                                border: InputBorder.none),
+                            decoration: InputDecoration(labelText: '合作品牌', hintText: '请输入', border: InputBorder.none),
                           ),
                         ],
                       ),
@@ -187,10 +171,7 @@ class _AuthenticationInfoFormPageState
                           TextFormField(
                             autofocus: false,
                             controller: _companyNameController,
-                            decoration: InputDecoration(
-                                labelText: "公司名称",
-                                hintText: "请输入",
-                                border: InputBorder.none),
+                            decoration: InputDecoration(labelText: '公司名称', hintText: '请输入', border: InputBorder.none),
                           ),
                         ],
                       ),
@@ -252,6 +233,7 @@ class _AuthenticationInfoFormPageState
 
 class InputRow extends StatelessWidget {
   InputRow(this.child);
+
   Widget child;
 
   @override
@@ -260,16 +242,13 @@ class InputRow extends StatelessWidget {
       child: child,
       decoration: BoxDecoration(
           // 下滑线浅灰色，宽度1像素
-          border:
-              Border(bottom: BorderSide(color: Colors.grey[300], width: 1.0))),
+          border: Border(bottom: BorderSide(color: Colors.grey[300], width: 1.0))),
     );
   }
 }
 
 class RegisterDateWell extends StatelessWidget {
-  const RegisterDateWell(
-      {Key key, this.title, this.selectedDate, this.selectDate})
-      : super(key: key);
+  const RegisterDateWell({Key key, this.title, this.selectedDate, this.selectDate}) : super(key: key);
 
   final String title;
   final DateTime selectedDate;
@@ -277,10 +256,7 @@ class RegisterDateWell extends StatelessWidget {
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+        context: context, initialDate: selectedDate, firstDate: DateTime(2015, 8), lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) selectDate(picked);
   }
 

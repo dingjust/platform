@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import './about.dart';
+import 'settings/about.dart';
 
-class ProfileSettingsPage extends StatefulWidget {
+class MySettingsPage extends StatefulWidget {
   static const String ROUTE_ABOUT = '/about';
 
   @override
-  _ProfileSettingsPageState createState() => _ProfileSettingsPageState();
+  _MySettingsPageState createState() => _MySettingsPageState();
 }
 
-class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
+class _MySettingsPageState extends State<MySettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

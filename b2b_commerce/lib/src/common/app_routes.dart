@@ -13,7 +13,7 @@ import '../business/sales_orders.dart';
 import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
 
-class Routes {
+class AppRoutes {
   static const ROUTE_EMPLOYEES = '/business/employees';
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
   static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
@@ -28,17 +28,17 @@ class Routes {
   static const ROUTE_SUPPLIERS = '/business/suppliers';
 
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
-    Routes.ROUTE_EMPLOYEES: (context) => EmployeesPage(),
-    Routes.ROUTE_MEMBERSHIPS: (context) => MembershipsPage(),
-    Routes.ROUTE_MEMBER_REQUESTS: (context) => MemberRequestsPage(),
-    Routes.ROUTE_PRODUCT_STOCKS: (context) => ProductStocksPage(),
-    Routes.ROUTE_PRODUCTION_ORDERS: (context) => ProductionOrdersPage(),
-    Routes.ROUTE_PRODUCTS: (context) => ProductsPage(),
-    Routes.ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
-    Routes.ROUTE_QUOTES: (context) => QuotesPage(),
-    Routes.ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
-    Routes.ROUTE_SALES_ORDERS: (context) => SalesOrdersPage(),
-    Routes.ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
-    Routes.ROUTE_SUPPLIERS: (context) => SuppliersPage(),
+    ROUTE_EMPLOYEES: (context) => EmployeesPage(),
+    ROUTE_MEMBERSHIPS: (context) => MembershipsPage(),
+    ROUTE_MEMBER_REQUESTS: (context) => MemberRequestsPage(),
+    ROUTE_PRODUCT_STOCKS: (context) => ProductStocksPage(),
+    ROUTE_PRODUCTION_ORDERS: (context) => ProductionOrdersPage(),
+    ROUTE_PRODUCTS: (context) => ProductsPage(),
+    ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
+    ROUTE_QUOTES: (context) => QuotesPage(),
+    ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
+    ROUTE_SALES_ORDERS: (context) => SalesOrdersPage(),
+    ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
+    ROUTE_SUPPLIERS: (context) => SuppliersPage(),
   };
 }
