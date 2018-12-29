@@ -1,6 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:models/models.dart';
 
+part 'invoice.g.dart';
+
 /// 发票抬头
 @JsonSerializable()
 class InvoiceTitleModel extends ItemModel {
@@ -28,15 +30,20 @@ class InvoiceTitleModel extends ItemModel {
   /// 所有人
   PrincipalModel owner;
 
-  InvoiceTitleModel(
-      {this.company,
-      this.taxNumber,
-      this.address,
-      this.phone,
-      this.bankOfDeposit,
-      this.bankAccount,
-      this.defaultTitle = false,
-      this.owner});
+  InvoiceTitleModel({
+    this.company,
+    this.taxNumber,
+    this.address,
+    this.phone,
+    this.bankOfDeposit,
+    this.bankAccount,
+    this.defaultTitle = false,
+    this.owner,
+  });
+
+  factory InvoiceTitleModel.fromJson(Map<String, dynamic> json) => _$InvoiceTitleModelFromJson(json);
+
+  static Map<String, dynamic> toJson(InvoiceTitleModel model) => _$InvoiceTitleModelToJson(model);
 }
 
 /// 开票信息
@@ -84,6 +91,10 @@ class TaxInvoiceModel extends ItemModel {
     this.amount,
     this.billingDate,
   });
+
+  factory TaxInvoiceModel.fromJson(Map<String, dynamic> json) => _$TaxInvoiceModelFromJson(json);
+
+  static Map<String, dynamic> toJson(TaxInvoiceModel model) => _$TaxInvoiceModelToJson(model);
 }
 
 /// 开票类别
