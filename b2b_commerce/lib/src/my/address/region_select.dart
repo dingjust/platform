@@ -12,17 +12,17 @@ class RegionSelectPage extends StatelessWidget {
     RegionModel(isocode: 'R005', name: '黑龙江省'),
   ];
 
-  _selectCity(BuildContext context,RegionModel region) async{
+  _selectCity(BuildContext context, RegionModel region) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CitySelectPage(region:region),
+        builder: (context) => CitySelectPage(region),
       ),
     ) as List;
 
     result.add(region);
 
-    Navigator.pop(context,result);
+    Navigator.pop(context, result);
   }
 
   @override
@@ -30,7 +30,7 @@ class RegionSelectPage extends StatelessWidget {
     List<ListTile> tiles = regions.map((region) {
       return ListTile(
         onTap: () {
-          _selectCity(context,region);
+          _selectCity(context, region);
         },
         title: Text(region.name),
         trailing: Icon(Icons.chevron_right),

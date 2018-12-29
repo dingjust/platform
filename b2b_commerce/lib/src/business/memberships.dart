@@ -1,76 +1,125 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
+import '../common/app_enums.dart';
+import '../common/app_routes.dart';
 import 'members/membership_form.dart';
+import 'search/membership_search.dart';
 
 class MembershipsPage extends StatelessWidget {
+  final List<MembershipModel> items = <MembershipModel>[
+    MembershipModel.fromJson({
+      'customer': {
+        'profilePicture': 'http://jspang.com/static/myimg/blogtouxiang.jpg',
+        'uid': 'c00000001',
+        'name': '小勇',
+        'mobileNumber': '13198765432'
+      },
+      'level': 'A'
+    }),
+    MembershipModel.fromJson({
+      'customer': {
+        'profilePicture': 'http://jspang.com/static/myimg/blogtouxiang.jpg',
+        'uid': 'c00000001',
+        'name': '小勇',
+        'mobileNumber': '13198765432'
+      },
+      'level': 'B'
+    })
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return new DefaultTabController(
-      length: choices.length,
-      child: new Scaffold(
-        appBar: new AppBar(
-          centerTitle: true,
-          title: Text('会员管理'),
-          actions: <Widget>[
-            new IconButton(
-              // action button
-              icon: Icon(Icons.person_add),
-              onPressed: () {},
+    List<MembershipItem> _items = items.map((item) {
+      return MembershipItem(item);
+    }).toList();
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('会员管理'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => showSearch(context: context, delegate: MembershipSearchDelegate()),
+          ),
+        ],
+      ),
+      body: Container(
+        color: Colors.grey[200],
+        child: Column(
+          children: <Widget>[
+            Menu('', <MenuItem>[
+              MenuItem(
+                Icons.phone,
+                '会员审核',
+                AppRoutes.ROUTE_MEMBER_REQUESTS,
+              )
+            ]),
+            SizedBox(
+              height: 5,
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: _items.length,
+              itemBuilder: (context, index) {
+                return _items[index];
+              },
             ),
           ],
-          bottom: new TabBar(
-            isScrollable: true,
-            tabs: choices.map((Choice choice) {
-              return new Tab(
-                text: choice.title,
-              );
-            }).toList(),
-          ),
         ),
-        body: new TabBarView(
-          children: choices.map((Choice choice) {
-            return new Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 8.0),
-                child: new ListView(
-                  children: <Widget>[
-                    new ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          'http://jspang.com/static//myimg/blogtouxiang.jpg',
-                        ),
-                        radius: 30.0,
-                      ),
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[Text('小勇 13198765432'), Text('会员等级A')],
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(Icons.more_horiz),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MembershipForm()),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ));
-          }).toList(),
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MembershipForm(null)),
+          );
+        },
       ),
     );
   }
 }
 
-class Choice {
-  const Choice({this.title, this.icon});
+class MembershipItem extends StatelessWidget {
+  MembershipItem(this.item);
 
-  final String title;
-  final IconData icon;
+  final MembershipModel item;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 90,
+      child: Card(
+        margin: EdgeInsets.all(0),
+        child: ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MembershipForm(item)),
+            );
+          },
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(
+              item.customer.profilePicture,
+            ),
+            radius: 30.0,
+          ),
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('${item.customer.name} ${item.customer.mobileNumber}'),
+              Text(
+                '会员等级：' + AppEnums.MemberRatings[item.level].name,
+              )
+            ],
+          ),
+          trailing: Icon(Icons.more_horiz),
+        ),
+      ),
+    );
+  }
 }
-
-const List<Choice> choices = const <Choice>[
-  const Choice(title: '会员信息', icon: Icons.directions_car),
-  const Choice(title: '会员审核', icon: Icons.directions_bike),
-];

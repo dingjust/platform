@@ -11,8 +11,9 @@ part 'member.g.dart';
 class MembershipModel extends ItemModel {
   CustomerModel customer;
   CompanyModel company;
+  MemberRating level;
 
-  MembershipModel({@required this.customer, @required this.company});
+  MembershipModel({@required this.customer, @required this.company, this.level = MemberRating.C});
 
   factory MembershipModel.fromJson(Map<String, dynamic> json) => _$MembershipModelFromJson(json);
 
@@ -31,3 +32,6 @@ class MemberRequestModel extends ItemModel {
 
   static Map<String, dynamic> toJson(MemberRequestModel model) => _$MemberRequestModelToJson(model);
 }
+
+/// 会员等级
+enum MemberRating { A, B, C }

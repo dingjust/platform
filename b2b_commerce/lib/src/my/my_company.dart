@@ -29,21 +29,22 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
       body: ListView(
         children: <Widget>[
           Container(
-              padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 20),
-              child: Column(
-                children: <Widget>[
-                  Image.asset(
-                    'temp/login_logo.png',
-                    package: 'assets',
-                    width: 60.0,
-                    height: 60.0,
-                  ),
-                  Text(
-                    '宁波衣加衣供应链有限公司',
-                    style: TextStyle(fontSize: 18.0),
-                  )
-                ],
-              )),
+            padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 20),
+            child: Column(
+              children: <Widget>[
+                Image.asset(
+                  'temp/login_logo.png',
+                  package: 'assets',
+                  width: 60.0,
+                  height: 60.0,
+                ),
+                Text(
+                  '宁波衣加衣供应链有限公司',
+                  style: TextStyle(fontSize: 18.0),
+                )
+              ],
+            ),
+          ),
           InfoRow('联系人：', '旷小勇', null, '拨打'),
           InfoRow(
               '联系手机：',

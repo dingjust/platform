@@ -23,9 +23,9 @@ class OrderModel extends AbstractOrderModel {
 
 @JsonSerializable()
 class AbstractOrderEntryModel extends ItemModel {
-  final int entryNumber;
-  final ProductModel product;
-  final OrderModel order;
+  int entryNumber;
+  ProductModel product;
+  OrderModel order;
   double basePrice;
   int quantity;
   double totalPrice;

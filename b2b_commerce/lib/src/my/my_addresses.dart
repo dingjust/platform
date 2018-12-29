@@ -60,19 +60,17 @@ class MyAddressesPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text('地址管理'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddressFormPage()),
-              );
-            },
-          )
-        ],
       ),
       body: ListView(children: tiles),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddressFormPage()),
+          );
+        },
+      ),
     );
   }
 

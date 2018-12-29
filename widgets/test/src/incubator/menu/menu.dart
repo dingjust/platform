@@ -1,5 +1,51 @@
 import 'package:flutter/material.dart';
 
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  List<MenuItem> list = [
+    MenuItem(Icons.phone, '报价管理', null),
+    MenuItem(MyIcons.bool, '报价管理', null),
+    MenuItem(Icons.phone, '报价管理', null),
+    MenuItem(MyIcons.bool, '报价管理', null)
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+          child: ListView(
+        children: <Widget>[Menu('我的代办', list), Menu('订单管理', list)],
+      )),
+      backgroundColor: Colors.grey[200],
+    );
+  }
+}
+
 class Menu extends StatelessWidget {
   final String title;
   final List<MenuItem> items;
@@ -17,11 +63,17 @@ class Menu extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(title),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: columns,
+          Container(
+            padding: EdgeInsets.fromLTRB(10.0, 5.0, 0, 5.0),
+            child: Text(title, style: TextStyle(fontSize: 16.0)),
           ),
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: columns,
+            ),
+          )
         ],
       ),
     );
@@ -54,9 +106,8 @@ class MenuItem extends StatelessWidget {
               child: Text(
                 title,
                 style: TextStyle(
-                  fontSize: 12.0,
+                  fontSize: 15.0,
                   fontWeight: FontWeight.w400,
-                  color: color,
                 ),
               ),
             ),
@@ -65,4 +116,13 @@ class MenuItem extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class MyIcons{
+  static const IconData bool = const IconData(
+      0xe611, 
+      fontFamily: 'myIcon', 
+      matchTextDirection: true
+  );
 }

@@ -22,7 +22,9 @@ class UserModel extends PrincipalModel {
 /// 客户
 @JsonSerializable()
 class CustomerModel extends UserModel {
-  CustomerModel();
+  String mobileNumber;
+
+  CustomerModel({@required this.mobileNumber});
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) => _$CustomerModelFromJson(json);
 
@@ -31,7 +33,7 @@ class CustomerModel extends UserModel {
 
 /// B2B客户
 @JsonSerializable()
-class B2BCustomerModel extends UserModel {
+class B2BCustomerModel extends CustomerModel {
   bool active;
   B2BUnitModel defaultB2BUnit;
 

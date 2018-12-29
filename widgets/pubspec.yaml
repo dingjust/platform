@@ -40,6 +40,10 @@ flutter:
   # To add assets to your package, add an assets section, like this:
   assets:
     - images/logo.png
+  fonts:
+    - family: myIcon
+      fonts:
+      - asset: fonts/iconfont.ttf
   #
   # For details regarding assets in packages, see
   # https://flutter.io/assets-and-images/#from-packages

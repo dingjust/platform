@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 
 import 'employees/employee_form.dart';
-
-const List employeeName = ['Mr.Zhang', 'Mr.Li', 'Mr.Chen'];
-const List employeePhone = ['1311111111', '1322222222', '1333333333'];
-const List employeePic = [
-  'http://www.ffpic.com/files/2014/0829/14061323317269/ffpic1406134712250x10.png',
-  'http://www.ffpic.com/files/2014/0829/14061323317269/ffpic140613479723yw23.png',
-  'http://www.ffpic.com/files/2014/0829/14061323317269/ffpic1406134724815034.png'
-];
-const List employeeRule = ['Admin', 'CEO', 'CTO'];
-
-List<Widget> _list = new List();
+import 'search/employee_search.dart';
 
 class EmployeesPage extends StatefulWidget {
   @override
@@ -19,92 +10,86 @@ class EmployeesPage extends StatefulWidget {
 }
 
 class _EmployeesPageState extends State<EmployeesPage> {
+  final List<B2BCustomerModel> items = <B2BCustomerModel>[
+    B2BCustomerModel.fromJson({'uid': 'zhan', 'name': '湛红波', 'mobileNumber': '13556179554'}),
+    B2BCustomerModel.fromJson({'uid': 'zhan1', 'name': '湛红波1', 'mobileNumber': '13556179554'})
+  ];
+
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < employeeName.length; i++) {
-      _list.add(buildListData(context, employeeName[i], employeePhone[i], employeePic[i], employeeRule[i]));
-    }
-//    var divideList = ListTile.divideTiles(context: context, tiles: _list).toList();
+    List<EmployeeItem> _items = items.map((item) {
+      return EmployeeItem(item);
+    }).toList();
+
     return new Scaffold(
       appBar: AppBar(
         title: const Text('员工管理'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
-              Icons.add,
-              color: Colors.white,
-              textDirection: TextDirection.rtl,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EmployeeFormPage(
-                        isCreate: true,
-                      ),
-                ),
-              );
-            },
-          )
+            icon: Icon(Icons.search),
+            onPressed: () => showSearch(context: context, delegate: EmployeeSearchDelegate()),
+          ),
         ],
       ),
-      body: new Scrollbar(
-        // ListView.builder 方式
-        child: new ListView.builder(
-            itemCount: employeeName.length,
-            itemBuilder: (context, item) {
-              return new Row(children: <Widget>[
-                new CircleAvatar(
-                  child: new Image.network(
-                    employeePic[item],
-                  ),
-                  radius: 30.0,
-                ),
-                new Expanded(
-                  child: new Column(children: <Widget>[
-                    new Container(
-                      child: new Column(
-                        children: <Widget>[
-                          buildListData(
-                              context, employeeName[item], employeePhone[item], employeePic[item], employeeRule[item]),
-                          new Divider()
-                        ],
-                      ),
-                    )
-                  ]),
-                  flex: 4,
-                )
-              ]);
-            }),
+      body: Container(
+        color: Colors.grey[200],
+        child: Column(
+          children: <Widget>[
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: _items.length,
+              itemBuilder: (context, index) {
+                return _items[index];
+              },
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EmployeeFormPage(null),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-Widget buildListData(BuildContext context, String strItem, String phoneItem, String picItem, String ruleItem) {
-  return new ListTile(
-    isThreeLine: false,
-    title: new Text(
-      strItem,
-      style: new TextStyle(
-        color: Colors.black54,
-        fontSize: 20.0,
-      ),
-    ),
-    subtitle: new Text(phoneItem),
-    trailing: new Icon(Icons.keyboard_arrow_right),
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EmployeeFormPage(
-                name: strItem,
-                phone: phoneItem,
-                pic: picItem,
-                rule: ruleItem,
+class EmployeeItem extends StatelessWidget {
+  EmployeeItem(this.item);
+
+  final B2BCustomerModel item;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 75,
+      child: Card(
+        child: ListTile(
+          title: Text(
+            item.name,
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 20.0,
+            ),
+          ),
+          subtitle: Text(item.mobileNumber),
+          trailing: Icon(Icons.keyboard_arrow_right),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EmployeeFormPage(item),
               ),
+            );
+          },
         ),
-      );
-    },
-  );
+      ),
+    );
+  }
 }
