@@ -1,26 +1,14 @@
 import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
-import '../common/app_routes.dart';
 import 'products/apparel_product_form.dart';
 import 'search/apparel_product_search.dart';
 
-class ProductsPage extends StatelessWidget {
+class OffTheShelfProductsPage extends StatelessWidget {
   final List<ApparelProductModel> items = <ApparelProductModel>[
-    ApparelProductModel.fromJson({
-      'code': 'C0001',
-      'name': '样衣1',
-      'price': 100.00,
-      'skuID': 'SKU0001',
-    }),
-    ApparelProductModel.fromJson({
-      'code': 'C0002',
-      'name': '样衣2',
-      'price': 100.00,
-      'skuID': 'SKU0002',
-    }),
+    ApparelProductModel.fromJson({'code': '', 'name': '', 'price': 100, 'skuID': ''}),
+    ApparelProductModel.fromJson({'code': '', 'name': '', 'price': 100, 'skuID': ''}),
   ];
 
   @override
@@ -32,7 +20,7 @@ class ProductsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('商品管理'),
+        title: Text('下架商品'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
@@ -44,16 +32,6 @@ class ProductsPage extends StatelessWidget {
         color: Colors.grey[200],
         child: Column(
           children: <Widget>[
-            Menu('', <MenuItem>[
-              MenuItem(
-                Icons.shopping_basket,
-                '下架商品',
-                AppRoutes.ROUTE_PRODUCTS_OFF_THE_SHELF,
-              )
-            ]),
-            SizedBox(
-              height: 5,
-            ),
             ListView.builder(
               shrinkWrap: true,
               itemCount: _items.length,

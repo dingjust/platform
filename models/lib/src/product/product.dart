@@ -7,12 +7,12 @@ part 'product.g.dart';
 /// 产品
 @JsonSerializable()
 class ProductModel extends ItemModel {
-  final String code;
-  final String name;
-  final double price;
-  final List<VariantProductModel> variants;
+  String code;
+  String name;
+  double price;
+  List<VariantProductModel> variants;
 
-  ProductModel({@required this.code, this.name, this.price = 0.0, this.variants});
+  ProductModel({this.code, this.name, this.price = 0.0, this.variants});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
 
@@ -22,7 +22,7 @@ class ProductModel extends ItemModel {
 /// 变式产品
 @JsonSerializable()
 class VariantProductModel extends ProductModel {
-  final String baseProduct;
+  String baseProduct;
 
   VariantProductModel({this.baseProduct});
 
@@ -33,7 +33,7 @@ class VariantProductModel extends ProductModel {
 
 @JsonSerializable()
 class ApparelProductModel extends ProductModel {
-  final String skuID;
+  String skuID;
 
   ApparelProductModel({this.skuID});
 
@@ -79,7 +79,7 @@ class FabricProductModel extends ProductModel {
 
 @JsonSerializable()
 class FabricStyleVariantProductModel extends VariantProductModel {
-  final ColorModel color;
+  ColorModel color;
 
   FabricStyleVariantProductModel({this.color});
 
