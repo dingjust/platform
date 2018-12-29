@@ -7,7 +7,7 @@ import '../common/app_routes.dart';
 import 'products/apparel_product_form.dart';
 import 'search/apparel_product_search.dart';
 
-class ProductsPage extends StatelessWidget {
+class ApparelProductsPage extends StatelessWidget {
   final List<ApparelProductModel> items = <ApparelProductModel>[
     ApparelProductModel.fromJson({
       'code': 'C0001',

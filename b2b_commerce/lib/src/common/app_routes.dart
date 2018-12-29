@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../business/apparel_product_stock_adjust_history.dart';
+import '../business/apparel_product_stocks.dart';
+import '../business/apparel_products.dart';
+import '../business/apparel_products_off_the_shelf.dart';
 import '../business/employees.dart';
 import '../business/member_requests.dart';
 import '../business/memberships.dart';
-import '../business/product_stock_adjust_history.dart';
-import '../business/product_stocks.dart';
 import '../business/production_orders.dart';
-import '../business/products.dart';
-import '../business/products_off_the_shelf.dart';
 import '../business/purchase_orders.dart';
 import '../business/quotes.dart';
 import '../business/requirement_orders.dart';
@@ -51,15 +51,15 @@ class AppRoutes {
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
     ROUTE_MEMBERSHIPS: (context) => MembershipsPage(),
     ROUTE_MEMBER_REQUESTS: (context) => MemberRequestsPage(),
-    ROUTE_PRODUCT_STOCKS: (context) => ProductStocksPage(),
+    ROUTE_PRODUCT_STOCKS: (context) => ApparelProductStocksPage(),
+    ROUTE_PRODUCTS: (context) => ApparelProductsPage(),
+    ROUTE_PRODUCTS_OFF_THE_SHELF: (context) => OffTheShelfApparelProductsPage(),
+    ROUTE_PRODUCT_STOCK_ADJUST_HISTORY: (context) => ApparelProductStockAdjustHistoryPage(),
     ROUTE_PRODUCTION_ORDERS: (context) => ProductionOrdersPage(),
-    ROUTE_PRODUCTS: (context) => ProductsPage(),
-    ROUTE_PRODUCTS_OFF_THE_SHELF: (context) => OffTheShelfProductsPage(),
-    ROUTE_PRODUCT_STOCK_ADJUST_HISTORY: (context) => ProductStockAdjustHistoryPage(),
     ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
-    ROUTE_QUOTES: (context) => QuotesPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_SALES_ORDERS: (context) => SalesOrdersPage(),
+    ROUTE_QUOTES: (context) => QuotesPage(),
     ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),
     ROUTE_MY_ACCOUNT: (context) => MyAccountPage(),
