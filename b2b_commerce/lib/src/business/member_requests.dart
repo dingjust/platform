@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
+import 'search/member_request_search.dart';
+
 /// 会员审核
 class MemberRequestsPage extends StatelessWidget {
   final List<MemberRequestModel> items = <MemberRequestModel>[
@@ -36,20 +38,8 @@ class MemberRequestsPage extends StatelessWidget {
         title: Text('会员审核'),
         actions: <Widget>[
           IconButton(
-            // action button
-            icon: Icon(Icons.check),
-            tooltip: '通过',
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          IconButton(
-            // action button
-            icon: Icon(Icons.cancel),
-            tooltip: '不通过',
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            icon: Icon(Icons.search),
+            onPressed: () => showSearch(context: context, delegate: MemberRequestSearchDelegate()),
           ),
         ],
       ),
@@ -63,6 +53,26 @@ class MemberRequestsPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 return _items[index];
               },
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: RaisedButton(
+                textColor: Theme.of(context).primaryColor,
+                onPressed: () {},
+                child: Text('通过'),
+              ),
+            ),
+            Expanded(
+              child: RaisedButton(
+                textColor: Theme.of(context).primaryColor,
+                onPressed: () {},
+                child: Text('不通过'),
+              ),
             ),
           ],
         ),
