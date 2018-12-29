@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../business/employees.dart';
 import '../business/member_requests.dart';
 import '../business/memberships.dart';
+import '../business/product_stock_adjust_history.dart';
 import '../business/product_stocks.dart';
 import '../business/production_orders.dart';
 import '../business/products.dart';
@@ -27,6 +28,7 @@ class AppRoutes {
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
   static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
   static const ROUTE_PRODUCT_STOCKS = '/business/product_stocks';
+  static const ROUTE_PRODUCT_STOCK_ADJUST_HISTORY = '/business/product_stock_adjust_history';
   static const ROUTE_PRODUCTION_ORDERS = '/business/production_orders';
   static const ROUTE_PRODUCTS = '/business/products';
   static const ROUTE_PRODUCTS_OFF_THE_SHELF = '/business/products_off_the_shelf';
@@ -53,6 +55,7 @@ class AppRoutes {
     ROUTE_PRODUCTION_ORDERS: (context) => ProductionOrdersPage(),
     ROUTE_PRODUCTS: (context) => ProductsPage(),
     ROUTE_PRODUCTS_OFF_THE_SHELF: (context) => OffTheShelfProductsPage(),
+    ROUTE_PRODUCT_STOCK_ADJUST_HISTORY: (context) => ProductStockAdjustHistoryPage(),
     ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
     ROUTE_QUOTES: (context) => QuotesPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),

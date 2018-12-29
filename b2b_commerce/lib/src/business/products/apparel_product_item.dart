@@ -24,7 +24,7 @@ class ApparelProductItem extends StatelessWidget {
                   Wrap(
                     children: <Widget>[Text('${item.name}')],
                   ),
-                  Text('供应商商品编号：${item.skuID} '),
+                  Text('货号：${item.skuID} '),
                   Text('￥${item.price}'),
                   Row(
                     children: <Widget>[
