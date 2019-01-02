@@ -81,7 +81,7 @@ class HttpManager {
     return _instance;
   }
 
-  static Future<Response<T>> get<T>(
+  Future<Response<T>> get<T>(
     String path, {
     BuildContext context,
     data,
@@ -92,7 +92,7 @@ class HttpManager {
     return instance.get(path, data: data, options: options, cancelToken: cancelToken);
   }
 
-  static Future<Response<T>> post<T>(
+  Future<Response<T>> post<T>(
     String path, {
     BuildContext context,
     data,
@@ -103,7 +103,7 @@ class HttpManager {
     return instance.post(path, data: data, options: options, cancelToken: cancelToken);
   }
 
-  static Future<Response<T>> put<T>(
+  Future<Response<T>> put<T>(
     String path, {
     BuildContext context,
     data,
@@ -114,7 +114,7 @@ class HttpManager {
     return instance.put(path, data: data, options: options, cancelToken: cancelToken);
   }
 
-  static Future<Response<T>> delete<T>(
+  Future<Response<T>> delete<T>(
     String path, {
     BuildContext context,
     data,
@@ -156,3 +156,5 @@ class HttpManager {
     }
   }
 }
+
+var httpManager = new HttpManager();
