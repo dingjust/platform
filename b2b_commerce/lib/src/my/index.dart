@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   tooltip: 'Edit',
                   onPressed: () {
                     // http test
-                    httpManager.get('/apparel-zh/users/13234', context: context).then((response) {});
+                    http$.get('/apparel-zh/users/13234', context: context).then((response) {});
 //                    _scaffoldKey.currentState.showSnackBar(
 //                      const SnackBar(
 //                        content: Text('Editing isn\'t supported in this screen.'),

@@ -127,12 +127,12 @@ class HttpManager {
 
   static _setContext(BuildContext context) {
     if (context != null) {
-      _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = context;
+      instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = context;
     }
   }
 
   static _clearContext() {
-    _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = null;
+    instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = null;
   }
 
   ///清除授权
@@ -157,4 +157,4 @@ class HttpManager {
   }
 }
 
-var httpManager = new HttpManager();
+var http$ = new HttpManager();

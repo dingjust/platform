@@ -51,7 +51,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_SETTINGS = '/my/my_settings';
 
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
-    ROUTE_LOGIN: (context) => LoginPage(),
+    ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
     ROUTE_MEMBERSHIPS: (context) => MembershipsPage(),
     ROUTE_MEMBER_REQUESTS: (context) => MemberRequestsPage(),
