@@ -37,7 +37,6 @@ class HttpManager {
 
         // 在请求被发送之前做一些事情
         options.headers['Authorization'] = getAuthorization();
-        _instance.options.extra = options.extra;
         return options; //continue
         // 如果你想完成请求并返回一些自定义数据，可以返回一个`Response`对象或返回`dio.resolve(data)`。
         // 这样请求将会被终止，上层then会被调用，then中返回的数据将是你的自定义数据data.
@@ -52,6 +51,8 @@ class HttpManager {
             print('返回结果: ' + response.toString());
           }
         }
+
+        _clearContext();
 
         // 在返回响应数据之前做一些预处理
         return response; // continue
@@ -71,11 +72,67 @@ class HttpManager {
           return null;
         }
 
+        _clearContext();
+
         return e; //continue
       };
     }
 
     return _instance;
+  }
+
+  static Future<Response<T>> get<T>(
+    String path, {
+    BuildContext context,
+    data,
+    Options options,
+    CancelToken cancelToken,
+  }) {
+    _setContext(context);
+    return instance.get(path, data: data, options: options, cancelToken: cancelToken);
+  }
+
+  static Future<Response<T>> post<T>(
+    String path, {
+    BuildContext context,
+    data,
+    Options options,
+    CancelToken cancelToken,
+  }) {
+    _setContext(context);
+    return instance.post(path, data: data, options: options, cancelToken: cancelToken);
+  }
+
+  static Future<Response<T>> put<T>(
+    String path, {
+    BuildContext context,
+    data,
+    Options options,
+    CancelToken cancelToken,
+  }) {
+    _setContext(context);
+    return instance.put(path, data: data, options: options, cancelToken: cancelToken);
+  }
+
+  static Future<Response<T>> delete<T>(
+    String path, {
+    BuildContext context,
+    data,
+    Options options,
+    CancelToken cancelToken,
+  }) {
+    _setContext(context);
+    return instance.delete(path, data: data, options: options, cancelToken: cancelToken);
+  }
+
+  static _setContext(BuildContext context) {
+    if (context != null) {
+      _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = context;
+    }
+  }
+
+  static _clearContext() {
+    _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = null;
   }
 
   ///清除授权

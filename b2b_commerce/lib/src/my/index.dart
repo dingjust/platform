@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/common/app_constants.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -54,14 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: const Icon(Icons.create),
                   tooltip: 'Edit',
                   onPressed: () {
-                    HttpManager.instance
-                        .get(
-                          '/apparel-zh/users/13234',
-                          options: Options(
-                            extra: {AppConstants.currentContextKey: context},
-                          ),
-                        )
-                        .then((response) {});
+                    // http test
+                    HttpManager.get('/apparel-zh/users/13234', context: context).then((response) {});
 //                    _scaffoldKey.currentState.showSnackBar(
 //                      const SnackBar(
 //                        content: Text('Editing isn\'t supported in this screen.'),
