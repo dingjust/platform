@@ -1,10 +1,11 @@
-import 'package:b2b_commerce/src/business/members/membership_form.dart';
-import 'package:b2b_commerce/src/common/app_enums.dart';
-import 'package:b2b_commerce/src/common/app_image.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+
+import '../common/app_enums.dart';
+import '../common/app_routes.dart';
+import 'members/membership_form.dart';
+import 'search/membership_search.dart';
 
 class MembershipsPage extends StatelessWidget {
   final List<MembershipModel> items = <MembershipModel>[
@@ -40,14 +41,8 @@ class MembershipsPage extends StatelessWidget {
         title: Text('会员管理'),
         actions: <Widget>[
           IconButton(
-            // action button
-            icon: Icon(Icons.person_add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MembershipForm(null)),
-              );
-            },
+            icon: Icon(Icons.search),
+            onPressed: () => showSearch(context: context, delegate: MembershipSearchDelegate()),
           ),
         ],
       ),
@@ -74,6 +69,15 @@ class MembershipsPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MembershipForm(null)),
+          );
+        },
       ),
     );
   }

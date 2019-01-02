@@ -15,7 +15,7 @@ class AddressFormPage extends StatefulWidget {
 
 class AddressFormState extends State<AddressFormPage> {
   bool _defaultAddress;
-  GlobalKey _addressForm = new GlobalKey<FormState>();
+  GlobalKey _addressForm = GlobalKey<FormState>();
   TextEditingController _fullnameController;
   TextEditingController _cellphoneController;
   TextEditingController _line1Controller;
@@ -127,7 +127,6 @@ class AddressFormState extends State<AddressFormPage> {
           IconButton(
             icon: Icon(
               Icons.done,
-              color: Colors.white,
             ),
             onPressed: () {
               print((_addressForm.currentState as FormState).validate());

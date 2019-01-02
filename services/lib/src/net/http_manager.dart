@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 /// HTTP请求
 class HttpManager {
@@ -14,11 +17,17 @@ class HttpManager {
   static Dio _getInstance() {
     if (_instance == null) {
       Options options = Options(
-        baseUrl: AppConfig.BASE_URL,
+        baseUrl: GlobalConfigs.BASE_URL,
         connectTimeout: 5000,
         receiveTimeout: 10000,
       );
       _instance = Dio(options);
+      _instance.onHttpClientCreate = (HttpClient client) {
+        // 忽略证书
+        HttpClient httpClient = new HttpClient()
+          ..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+        return httpClient;
+      };
 
       _instance.interceptor.request.onSend = (Options options) async {
         var connectivityResult = await Connectivity().checkConnectivity();
@@ -37,11 +46,13 @@ class HttpManager {
       };
 
       _instance.interceptor.response.onSuccess = (Response response) {
-        if (AppConfig.DEBUG) {
+        if (GlobalConfigs.DEBUG) {
           if (response != null) {
-            print('返回参数: ' + response.toString());
+            print('返回结果: ' + response.toString());
           }
         }
+
+        _clearContext();
 
         // 在返回响应数据之前做一些预处理
         return response; // continue
@@ -49,9 +60,19 @@ class HttpManager {
 
       _instance.interceptor.response.onError = (DioError e) {
         // 当请求失败时做一些预处理
-        if (AppConfig.DEBUG) {
+        if (GlobalConfigs.DEBUG) {
           print(e.toString());
         }
+
+        // unauthorized
+        if (e.response != null && e.response.statusCode == 401) {
+          BuildContext currentContext = _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY];
+          assert(currentContext != null);
+          Navigator.pushNamed(currentContext, GlobalRoutes.ROUTE_LOGIN);
+          return null;
+        }
+
+        _clearContext();
 
         return e; //continue
       };
@@ -60,16 +81,70 @@ class HttpManager {
     return _instance;
   }
 
+  Future<Response<T>> get<T>(
+    String path, {
+    BuildContext context,
+    data,
+    Options options,
+    CancelToken cancelToken,
+  }) {
+    _setContext(context);
+    return instance.get(path, data: data, options: options, cancelToken: cancelToken);
+  }
+
+  Future<Response<T>> post<T>(
+    String path, {
+    BuildContext context,
+    data,
+    Options options,
+    CancelToken cancelToken,
+  }) {
+    _setContext(context);
+    return instance.post(path, data: data, options: options, cancelToken: cancelToken);
+  }
+
+  Future<Response<T>> put<T>(
+    String path, {
+    BuildContext context,
+    data,
+    Options options,
+    CancelToken cancelToken,
+  }) {
+    _setContext(context);
+    return instance.put(path, data: data, options: options, cancelToken: cancelToken);
+  }
+
+  Future<Response<T>> delete<T>(
+    String path, {
+    BuildContext context,
+    data,
+    Options options,
+    CancelToken cancelToken,
+  }) {
+    _setContext(context);
+    return instance.delete(path, data: data, options: options, cancelToken: cancelToken);
+  }
+
+  static _setContext(BuildContext context) {
+    if (context != null) {
+      instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = context;
+    }
+  }
+
+  static _clearContext() {
+    instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = null;
+  }
+
   ///清除授权
   static clearAuthorization() {
-    LocalStorage.remove(AppConfig.ACCESS_TOKEN_KEY);
+    LocalStorage.remove(GlobalConfigs.ACCESS_TOKEN_KEY);
   }
 
   ///获取授权token
   static getAuthorization() async {
-    String token = await LocalStorage.get(AppConfig.ACCESS_TOKEN_KEY);
+    String token = await LocalStorage.get(GlobalConfigs.ACCESS_TOKEN_KEY);
     if (token == null) {
-      String basic = await LocalStorage.get(AppConfig.BASIC_AUTH_TOKEN_KEY);
+      String basic = await LocalStorage.get(GlobalConfigs.BASIC_AUTH_TOKEN_KEY);
       if (basic == null) {
         // 提示输入账号密码
       } else {
@@ -81,3 +156,5 @@ class HttpManager {
     }
   }
 }
+
+var http$ = new HttpManager();

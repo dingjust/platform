@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import '../common/app_routes.dart';
@@ -51,11 +52,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: const Icon(Icons.create),
                   tooltip: 'Edit',
                   onPressed: () {
-                    _scaffoldKey.currentState.showSnackBar(
-                      const SnackBar(
-                        content: Text('Editing isn\'t supported in this screen.'),
-                      ),
-                    );
+                    // http test
+                    http$.get('/apparel-zh/users/13234', context: context).then((response) {});
+//                    _scaffoldKey.currentState.showSnackBar(
+//                      const SnackBar(
+//                        content: Text('Editing isn\'t supported in this screen.'),
+//                      ),
+//                    );
                   },
                 ),
               ],

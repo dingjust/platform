@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 import 'employees/employee_form.dart';
+import 'search/employee_search.dart';
 
 class EmployeesPage extends StatefulWidget {
   @override
@@ -25,19 +26,9 @@ class _EmployeesPageState extends State<EmployeesPage> {
         title: const Text('员工管理'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
-              Icons.person_add,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EmployeeFormPage(null),
-                ),
-              );
-            },
-          )
+            icon: Icon(Icons.search),
+            onPressed: () => showSearch(context: context, delegate: EmployeeSearchDelegate()),
+          ),
         ],
       ),
       body: Container(
@@ -53,6 +44,17 @@ class _EmployeesPageState extends State<EmployeesPage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EmployeeFormPage(null),
+            ),
+          );
+        },
       ),
     );
   }

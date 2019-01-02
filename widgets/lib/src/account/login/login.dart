@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
+  LoginPage(this.logo);
+
+  final Image logo;
+
   @override
   State<StatefulWidget> createState() {
-    return new _LoginPageState();
+    return _LoginPageState();
   }
 }
 
 class _LoginPageState extends State<LoginPage> {
-  GlobalKey<ScaffoldState> registrationKey = new GlobalKey();
+  GlobalKey<ScaffoldState> registrationKey = GlobalKey();
 
   String _phoneNum = '';
 
@@ -37,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
   _startTimer() {
     _seconds = 10;
 
-    _timer = new Timer.periodic(new Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_seconds == 0) {
         _cancelTimer();
         return;
@@ -54,36 +58,6 @@ class _LoginPageState extends State<LoginPage> {
 
   _cancelTimer() {
     _timer?.cancel();
-  }
-
-  Widget _buildCustomBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween, //子组件的排列方式为主轴两端对齐
-      children: <Widget>[
-        InkWell(
-          child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Icon(
-                Icons.clear,
-                color: Colors.grey[700],
-              )),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        InkWell(
-          child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                "密码登录",
-                style: TextStyle(fontSize: 16.0, color: Colors.grey[700]),
-              )),
-          onTap: () {
-            showTips();
-          },
-        ),
-      ],
-    );
   }
 
   Widget _buildPhoneEdit() {
@@ -179,11 +153,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: const EdgeInsets.only(top: 40.0, bottom: 20.0),
       alignment: Alignment.center,
-      child: Image.asset(
-        "images/logo.png",
-        width: 200.0,
-        height: 100.0,
-      ),
+      child: widget.logo,
     );
   }
 
@@ -229,7 +199,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildBody() {
     return ListView(
       children: <Widget>[
-        _buildCustomBar(),
         _buildLogo(),
         _buildPhoneEdit(),
         _buildVerifyCodeEdit(),
