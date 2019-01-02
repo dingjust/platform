@@ -30,3 +30,25 @@ class EnumModel {
 
   static Map<String, dynamic> toJson(EnumModel model) => _$EnumModelToJson(model);
 }
+
+/// 分页数据
+@JsonSerializable()
+class PaginationData {
+  int currentPage;
+  int pageSize;
+  int numberOfPages;
+  int totalNumberOfResults;
+  bool needsTotal;
+
+  PaginationData({
+    this.currentPage,
+    this.pageSize,
+    this.numberOfPages,
+    this.totalNumberOfResults,
+    this.needsTotal,
+  });
+
+  factory PaginationData.fromJson(Map<String, dynamic> json) => _$PaginationDataFromJson(json);
+
+  static Map<String, dynamic> toJson(PaginationData model) => _$PaginationDataToJson(model);
+}
