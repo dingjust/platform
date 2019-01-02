@@ -1,13 +1,10 @@
-import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
-import '../common/app_routes.dart';
-import 'products/apparel_product_form.dart';
+import 'products/apparel_product_stock_adjust_history_item.dart';
 import 'search/apparel_product_search.dart';
 
-class ProductStockAdjustHistoryPage extends StatelessWidget {
+class ApparelProductStockAdjustHistoryPage extends StatelessWidget {
   final List<ApparelProductModel> items = <ApparelProductModel>[
     ApparelProductModel.fromJson({
       'code': 'C0001',
@@ -25,8 +22,8 @@ class ProductStockAdjustHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ApparelProductItem> _items = items.map((item) {
-      return ApparelProductItem(item);
+    List<ApparelProductStockAdjustHistoryItem> _items = items.map((item) {
+      return ApparelProductStockAdjustHistoryItem(item);
     }).toList();
 
     return Scaffold(

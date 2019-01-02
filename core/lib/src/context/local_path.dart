@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../config/app_config.dart';
+import '../config/configs.dart';
 
 class LocalPath {
   static getLocalPath() async {
@@ -21,7 +21,7 @@ class LocalPath {
         return null;
       }
     }
-    String appDocPath = appDir.path + "/" + AppConfig.APP_NAME;
+    String appDocPath = appDir.path + "/" + GlobalConfigs.APP_NAME;
     Directory appPath = Directory(appDocPath);
     await appPath.create(recursive: true);
     return appPath;

@@ -4,6 +4,50 @@ import 'package:models/models.dart';
 
 part 'product.g.dart';
 
+@JsonSerializable()
+class CategoryModel extends ItemModel {
+  String code;
+  String name;
+
+  CategoryModel({
+    this.code,
+    this.name,
+  });
+
+  factory CategoryModel.fromJson(Map<String, dynamic> json) => _$CategoryModelFromJson(json);
+
+  static Map<String, dynamic> toJson(CategoryModel model) => _$CategoryModelToJson(model);
+}
+
+@JsonSerializable()
+class StaircasePriceModel extends ItemModel {
+  int minQuantity;
+  int maxQuantity;
+  double price;
+  ProductModel product;
+
+  StaircasePriceModel({
+    this.minQuantity,
+    this.maxQuantity,
+    this.price,
+    this.product,
+  });
+
+  factory StaircasePriceModel.fromJson(Map<String, dynamic> json) => _$StaircasePriceModelFromJson(json);
+
+  static Map<String, dynamic> toJson(StaircasePriceModel model) => _$StaircasePriceModelToJson(model);
+}
+
+/// 产品属性
+@JsonSerializable()
+class ProductAttributesModel extends ItemModel {
+  ProductAttributesModel();
+
+  factory ProductAttributesModel.fromJson(Map<String, dynamic> json) => _$ProductAttributesModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ProductAttributesModel model) => _$ProductAttributesModelToJson(model);
+}
+
 /// 产品
 @JsonSerializable()
 class ProductModel extends ItemModel {
@@ -11,8 +55,26 @@ class ProductModel extends ItemModel {
   String name;
   double price;
   List<VariantProductModel> variants;
+  List<StaircasePriceModel> staircasePrices;
+  ProductAttributesModel attributes;
+  bool privacy;
 
-  ProductModel({this.code, this.name, this.price = 0.0, this.variants});
+  /// 对于会员可见性，A/B/C
+  MemberRating ratingIfPrivacy;
+
+  /// 库存，对于变式商品则为实际库存，款式商品则为变式库存的总量
+  int stock;
+
+  ProductModel(
+      {this.code,
+      this.name,
+      this.price = 0.0,
+      this.variants,
+      this.staircasePrices,
+      this.stock,
+      this.attributes,
+      this.privacy,
+      this.ratingIfPrivacy});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
 
@@ -34,8 +96,28 @@ class VariantProductModel extends ProductModel {
 @JsonSerializable()
 class ApparelProductModel extends ProductModel {
   String skuID;
+  String brand;
+  CategoryModel majorCategory;
+  @JsonKey(name: 'supercategories')
+  List<CategoryModel> superCategories;
+  double price;
+  double price1;
+  double price2;
+  double price3;
+  double suggestedPrice;
+  double gramWeight;
 
-  ApparelProductModel({this.skuID});
+  ApparelProductModel({
+    this.skuID,
+    this.brand,
+    this.majorCategory,
+    this.superCategories,
+    this.price,
+    this.price1,
+    this.price2,
+    this.price3,
+    this.suggestedPrice,
+  });
 
   factory ApparelProductModel.fromJson(Map<String, dynamic> json) => _$ApparelProductModelFromJson(json);
 
