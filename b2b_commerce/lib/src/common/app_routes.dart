@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import '../business/apparel_product_stock_adjust_history.dart';
@@ -14,6 +15,7 @@ import '../business/requirement_orders.dart';
 import '../business/sales_orders.dart';
 import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
+import '../home/account/login.dart';
 import '../my/my_account.dart';
 import '../my/my_addresses.dart';
 import '../my/my_cart.dart';
@@ -23,7 +25,8 @@ import '../my/my_company.dart';
 import '../my/my_invoices.dart';
 import '../my/my_settings.dart';
 
-class AppRoutes {
+class AppRoutes with GlobalRoutes {
+  static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
   static const ROUTE_EMPLOYEES = '/business/employees';
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
   static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
@@ -48,6 +51,7 @@ class AppRoutes {
   static const ROUTE_MY_SETTINGS = '/my/my_settings';
 
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
+    ROUTE_LOGIN: (context) => LoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
     ROUTE_MEMBERSHIPS: (context) => MembershipsPage(),
     ROUTE_MEMBER_REQUESTS: (context) => MemberRequestsPage(),

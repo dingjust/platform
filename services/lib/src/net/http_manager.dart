@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 /// HTTP请求
 class HttpManager {
@@ -16,7 +17,7 @@ class HttpManager {
   static Dio _getInstance() {
     if (_instance == null) {
       Options options = Options(
-        baseUrl: AppConfig.BASE_URL,
+        baseUrl: GlobalConfigs.BASE_URL,
         connectTimeout: 5000,
         receiveTimeout: 10000,
       );
@@ -36,6 +37,7 @@ class HttpManager {
 
         // 在请求被发送之前做一些事情
         options.headers['Authorization'] = getAuthorization();
+        _instance.options.extra = options.extra;
         return options; //continue
         // 如果你想完成请求并返回一些自定义数据，可以返回一个`Response`对象或返回`dio.resolve(data)`。
         // 这样请求将会被终止，上层then会被调用，then中返回的数据将是你的自定义数据data.
@@ -45,7 +47,7 @@ class HttpManager {
       };
 
       _instance.interceptor.response.onSuccess = (Response response) {
-        if (AppConfig.DEBUG) {
+        if (GlobalConfigs.DEBUG) {
           if (response != null) {
             print('返回结果: ' + response.toString());
           }
@@ -57,8 +59,16 @@ class HttpManager {
 
       _instance.interceptor.response.onError = (DioError e) {
         // 当请求失败时做一些预处理
-        if (AppConfig.DEBUG) {
+        if (GlobalConfigs.DEBUG) {
           print(e.toString());
+        }
+
+        // unauthorized
+        if (e.response != null && e.response.statusCode == 401) {
+          BuildContext currentContext = _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY];
+          assert(currentContext != null);
+          Navigator.pushNamed(currentContext, GlobalRoutes.ROUTE_LOGIN);
+          return null;
         }
 
         return e; //continue
@@ -70,14 +80,14 @@ class HttpManager {
 
   ///清除授权
   static clearAuthorization() {
-    LocalStorage.remove(AppConfig.ACCESS_TOKEN_KEY);
+    LocalStorage.remove(GlobalConfigs.ACCESS_TOKEN_KEY);
   }
 
   ///获取授权token
   static getAuthorization() async {
-    String token = await LocalStorage.get(AppConfig.ACCESS_TOKEN_KEY);
+    String token = await LocalStorage.get(GlobalConfigs.ACCESS_TOKEN_KEY);
     if (token == null) {
-      String basic = await LocalStorage.get(AppConfig.BASIC_AUTH_TOKEN_KEY);
+      String basic = await LocalStorage.get(GlobalConfigs.BASIC_AUTH_TOKEN_KEY);
       if (basic == null) {
         // 提示输入账号密码
       } else {
