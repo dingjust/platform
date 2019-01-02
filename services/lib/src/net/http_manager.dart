@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
@@ -19,6 +21,12 @@ class HttpManager {
         receiveTimeout: 10000,
       );
       _instance = Dio(options);
+      _instance.onHttpClientCreate = (HttpClient client) {
+        // 忽略证书
+        HttpClient httpClient = new HttpClient()
+          ..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+        return httpClient;
+      };
 
       _instance.interceptor.request.onSend = (Options options) async {
         var connectivityResult = await Connectivity().checkConnectivity();
@@ -39,7 +47,7 @@ class HttpManager {
       _instance.interceptor.response.onSuccess = (Response response) {
         if (AppConfig.DEBUG) {
           if (response != null) {
-            print('返回参数: ' + response.toString());
+            print('返回结果: ' + response.toString());
           }
         }
 

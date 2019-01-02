@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class ApparelProductVariantsInputPage extends StatelessWidget {
+  final List<FilterChip> filterChips = <ColorModel>[
+    ColorModel(code: 'C01', name: '红色'),
+    ColorModel(code: 'C02', name: '黄色')
+  ].map((ColorModel color) {
+    return FilterChip(
+      key: ValueKey<String>(color.code),
+      label: Text(color.name),
+      selected: false, // _tools.contains(name) ? _selectedTools.contains(name) : false,
+      onSelected: null,
+    );
+  }).toList();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,18 +40,7 @@ class ApparelProductVariantsInputPage extends StatelessWidget {
               shrinkWrap: true,
               crossAxisCount: 5,
               padding: const EdgeInsets.all(5),
-              children: <Widget>[
-                ColorItem(ColorModel(code: 'C01', name: '红色')),
-                ColorItem(ColorModel(code: 'C02', name: '黄色')),
-                ColorItem(ColorModel(code: 'C03', name: '蓝色')),
-                ColorItem(ColorModel(code: 'C04', name: '绿色')),
-                ColorItem(ColorModel(code: 'C05', name: '紫色')),
-                ColorItem(ColorModel(code: 'C06', name: '粉红色')),
-                ColorItem(ColorModel(code: 'C07', name: '藏青色')),
-                ColorItem(ColorModel(code: 'C08', name: '黑色')),
-                ColorItem(ColorModel(code: 'C09', name: '白色')),
-                ColorItem(ColorModel(code: 'C10', name: '淡绿色')),
-              ],
+              children: filterChips,
             ),
             Text('选择尺码'),
             GridView.count(
