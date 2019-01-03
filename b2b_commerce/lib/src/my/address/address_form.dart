@@ -1,5 +1,7 @@
+import 'package:b2b_commerce/src/common/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 import 'region_select.dart';
 
@@ -34,7 +36,11 @@ class AddressFormState extends State<AddressFormPage> {
   _selectRegionCityAndDistrict(BuildContext context) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RegionSelectPage()),
+      MaterialPageRoute(
+        builder: (context) => RegionSelectPage(
+              RegionRepositoryImpl(AppConstants.APP_BASE_SITE_ID),
+            ),
+      ),
     );
 
     RegionModel regionModel = result[2];

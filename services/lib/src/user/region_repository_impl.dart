@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'dart:convert';
 
 import 'region_repository.dart';
 
@@ -11,7 +12,9 @@ class RegionRepositoryImpl implements RegionRepository {
   const RegionRepositoryImpl(this.baseStoreId);
 
   @override
-  Future<Response<List<RegionModel>>> list() {
-    return http$.get<List<RegionModel>>(Apis.regions(baseStoreId));
+  Future<List<RegionModel>> list() async {
+    Response response = await http$.get(Apis.regions(baseStoreId));
+
+    return response.data.map<RegionModel>((m) => RegionModel.fromJson(m)).toList();
   }
 }
