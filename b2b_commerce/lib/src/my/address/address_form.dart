@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/common/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -37,9 +36,7 @@ class AddressFormState extends State<AddressFormPage> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RegionSelectPage(
-              RegionRepositoryImpl(AppConstants.APP_BASE_SITE_ID),
-            ),
+        builder: (context) => RegionSelectPage(RegionRepositoryImpl()),
       ),
     ) as DistrictModel;
 

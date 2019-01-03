@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/common/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -15,11 +14,7 @@ class CitySelectPage extends StatelessWidget {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CityDistrictSelectPage(
-            city,
-            DistrictRepositoryImpl(
-              AppConstants.APP_BASE_SITE_ID,
-            )),
+        builder: (context) => CityDistrictSelectPage(city, DistrictRepositoryImpl()),
       ),
     ) as DistrictModel;
 
