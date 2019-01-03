@@ -4,6 +4,7 @@ import 'package:services/services.dart';
 
 import 'region_repository.dart';
 
+/// 省
 class RegionRepositoryImpl implements RegionRepository {
   final String baseStoreId;
 
