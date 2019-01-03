@@ -55,7 +55,7 @@ class _RegionSelectPageState extends State<RegionSelectPage> {
               }).toList(),
             );
           } else if (snapshot.hasError) {
-            return Text('$snapshot.error');
+            return Text('${snapshot.error}');
           }
 
           return Center(child: CircularProgressIndicator());
