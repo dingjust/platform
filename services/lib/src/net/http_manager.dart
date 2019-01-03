@@ -157,4 +157,4 @@ class HttpManager {
   }
 }
 
-var http$ = new HttpManager();
+var http$ = HttpManager();

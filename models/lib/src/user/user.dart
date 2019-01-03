@@ -96,7 +96,11 @@ class CityModel extends ItemModel {
   String name;
   RegionModel region;
 
-  CityModel({@required this.code, @required this.name, this.region});
+  CityModel({
+    @required this.code,
+    @required this.name,
+    this.region,
+  });
 
   factory CityModel.fromJson(Map<String, dynamic> json) => _$CityModelFromJson(json);
 

@@ -41,11 +41,15 @@ class AddressFormState extends State<AddressFormPage> {
               RegionRepositoryImpl(AppConstants.APP_BASE_SITE_ID),
             ),
       ),
-    );
+    ) as DistrictModel;
 
-    RegionModel regionModel = result[2];
-    CityModel cityModel = result[1];
-    DistrictModel districtModel = result[0];
+    if (result == null) {
+      return;
+    }
+
+    RegionModel regionModel = result.city.region;
+    CityModel cityModel = result.city;
+    DistrictModel districtModel = result;
 
     regionCityAndDistrict = regionModel.name + cityModel.name + districtModel.name;
   }

@@ -1,35 +1,32 @@
+import 'package:b2b_commerce/src/common/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 import 'city_select.dart';
 
-class RegionSelectPage extends StatefulWidget {
+class RegionSelectPage extends StatelessWidget {
   final RegionRepository regionRepository;
 
   RegionSelectPage(this.regionRepository);
 
-  @override
-  _RegionSelectPageState createState() => _RegionSelectPageState();
-}
-
-class _RegionSelectPageState extends State<RegionSelectPage> {
   _selectCity(BuildContext context, RegionModel region) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CitySelectPage(region),
+        builder: (context) =>
+            CitySelectPage(
+              region,
+              CityRepositoryImpl(AppConstants.APP_BASE_SITE_ID),
+            ),
       ),
-    ) as List;
+    ) as DistrictModel;
 
-    result.add(region);
+    if (result == null) {
+      return;
+    }
 
     Navigator.pop(context, result);
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -40,7 +37,7 @@ class _RegionSelectPageState extends State<RegionSelectPage> {
         title: Text('选择省'),
       ),
       body: FutureBuilder<List<RegionModel>>(
-        future: widget.regionRepository.list(),
+        future: regionRepository.list(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView(

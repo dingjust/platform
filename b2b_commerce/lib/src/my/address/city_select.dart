@@ -1,68 +1,64 @@
+import 'package:b2b_commerce/src/common/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 import 'city_district_select.dart';
 
 class CitySelectPage extends StatelessWidget {
-  CitySelectPage(this.region);
+  CitySelectPage(this.region, this.cityRepository);
 
   final RegionModel region;
-  final List<CityModel> cities = <CityModel>[
-    CityModel(
-      code: 'C001',
-      name: '广州市',
-      region: RegionModel(isocode: 'R001'),
-    ),
-    CityModel(
-      code: 'C001',
-      name: '中山市',
-    ),
-    CityModel(
-      code: 'C001',
-      name: '佛山市',
-    ),
-    CityModel(
-      code: 'C001',
-      name: '清远市',
-    ),
-    CityModel(
-      code: 'C001',
-      name: '湛江市',
-    ),
-  ];
+  final CityRepository cityRepository;
 
   _selectDistrict(BuildContext context, CityModel city) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CityDistrictSelectPage(city: city),
+        builder: (context) => CityDistrictSelectPage(
+            city,
+            DistrictRepositoryImpl(
+              AppConstants.APP_BASE_SITE_ID,
+            )),
       ),
-    ) as List;
+    ) as DistrictModel;
 
-    result.add(city);
+    if (result == null) {
+      return;
+    }
 
     Navigator.pop(context, result);
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<ListTile> _items = cities.map((city) {
-      return ListTile(
-        onTap: () {
-          _selectDistrict(context, city);
-        },
-        title: Text(city.name),
-        trailing: Icon(Icons.chevron_right),
-      );
-    }).toList();
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text('选择市'),
       ),
-      body: ListView(
-        children: _items,
+      body: FutureBuilder<List<CityModel>>(
+        future: cityRepository.list(region.isocode),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+              children: snapshot.data.map((city) {
+                return ListTile(
+                  onTap: () {
+                    city.region = region;
+                    _selectDistrict(context, city);
+                  },
+                  title: Text(city.name),
+                  trailing: Icon(Icons.chevron_right),
+                );
+              }).toList(),
+            );
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+
+          return Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

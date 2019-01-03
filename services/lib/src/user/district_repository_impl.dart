@@ -9,7 +9,9 @@ class DistrictRepositoryImpl implements DistrictRepository {
   const DistrictRepositoryImpl(this.baseStoreId);
 
   @override
-  Future<Response<List<DistrictModel>>> list(String city) {
-    return http$.get<List<DistrictModel>>(Apis.districtsForCity(baseStoreId, city));
+  Future<List<DistrictModel>> list(String city) async {
+    Response response = await http$.get(Apis.districtsForCity(baseStoreId, city));
+
+    return response.data.map<DistrictModel>((m) => DistrictModel.fromJson(m)).toList();
   }
 }

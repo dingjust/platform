@@ -9,7 +9,9 @@ class CityRepositoryImpl implements CityRepository {
   const CityRepositoryImpl(this.baseStoreId);
 
   @override
-  Future<Response<List<CityModel>>> list(String region) {
-    return http$.get<List<CityModel>>(Apis.citiesForRegion(baseStoreId, region));
+  Future<List<CityModel>> list(String region) async {
+    Response response = await http$.get(Apis.citiesForRegion(baseStoreId, region));
+
+    return response.data.map<CityModel>((m) => CityModel.fromJson(m)).toList();
   }
 }
