@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 /// HTTP请求
 class HttpManager {
+  final String baseSiteId;
+
+  HttpManager(this.baseSiteId);
+
   static const CONTENT_TYPE_JSON = "application/json";
   static const CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
 
@@ -89,17 +93,18 @@ class HttpManager {
     CancelToken cancelToken,
   }) {
     _setContext(context);
+    path = path.replaceAll('{baseSiteId}', baseSiteId);
     return instance.get(path, data: data, options: options, cancelToken: cancelToken);
   }
 
-  Future<Response<T>> post<T>(
-    String path, {
+  Future<Response<T>> post<T>(String path, {
     BuildContext context,
     data,
     Options options,
     CancelToken cancelToken,
   }) {
     _setContext(context);
+    path = path.replaceAll('{baseSiteId}', baseSiteId);
     return instance.post(path, data: data, options: options, cancelToken: cancelToken);
   }
 
@@ -111,6 +116,7 @@ class HttpManager {
     CancelToken cancelToken,
   }) {
     _setContext(context);
+    path = path.replaceAll('{baseSiteId}', baseSiteId);
     return instance.put(path, data: data, options: options, cancelToken: cancelToken);
   }
 
@@ -122,6 +128,7 @@ class HttpManager {
     CancelToken cancelToken,
   }) {
     _setContext(context);
+    path = path.replaceAll('{baseSiteId}', baseSiteId);
     return instance.delete(path, data: data, options: options, cancelToken: cancelToken);
   }
 
@@ -157,4 +164,4 @@ class HttpManager {
   }
 }
 
-var http$ = new HttpManager();
+var http$ = HttpManager(GlobalConfigs.APP_BASE_SITE_ID);

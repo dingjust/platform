@@ -10,6 +10,7 @@ class GlobalConfigs {
   static const CURRENT_CONTEXT_KEY = 'currentContext';
 
   /// 应用名称（英文），用于获取应用程序目录
-  static const APP_NAME = 'nbyjy';
+  static const APP_NAME = 'dingjust_platform';
+  /// 衣加衣base site id
   static const APP_BASE_SITE_ID = 'apparel-zh';
 }

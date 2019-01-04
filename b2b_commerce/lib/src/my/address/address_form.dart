@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 import 'region_select.dart';
 
@@ -34,12 +35,18 @@ class AddressFormState extends State<AddressFormPage> {
   _selectRegionCityAndDistrict(BuildContext context) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RegionSelectPage()),
-    );
+      MaterialPageRoute(
+        builder: (context) => RegionSelectPage(RegionRepositoryImpl()),
+      ),
+    ) as DistrictModel;
 
-    RegionModel regionModel = result[2];
-    CityModel cityModel = result[1];
-    DistrictModel districtModel = result[0];
+    if (result == null) {
+      return;
+    }
+
+    RegionModel regionModel = result.city.region;
+    CityModel cityModel = result.city;
+    DistrictModel districtModel = result;
 
     regionCityAndDistrict = regionModel.name + cityModel.name + districtModel.name;
   }

@@ -1,7 +1,15 @@
 class Apis {
   const Apis();
 
-  static const REGIONS = '/regions';
-  static const CITIES_FOR_REGION = '/regions/{region}/cities';
-  static const DISTRICTS_FOR_CITY = '/cities/{city}/districts';
+  static get regions => () {
+        return '/{baseSiteId}/regions';
+      };
+
+  static get citiesForRegion => (region) {
+        return '/{baseSiteId}/regions/$region/cities';
+      };
+
+  static get districtsForCity => (city) {
+        return '/{baseSiteId}/cities/$city/districts';
+      };
 }

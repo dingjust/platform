@@ -14,7 +14,10 @@ class AbstractOrderModel extends ItemModel {
 
 @JsonSerializable()
 class OrderModel extends AbstractOrderModel {
-  OrderModel();
+  OrderModel({
+    String code,
+    List<AbstractOrderEntryModel> entries,
+  }) : super(code: code, entries: entries);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
 
@@ -45,8 +48,22 @@ class AbstractOrderEntryModel extends ItemModel {
 }
 
 @JsonSerializable()
-class OrderEntryModel extends ItemModel {
-  OrderEntryModel();
+class OrderEntryModel extends AbstractOrderEntryModel {
+  OrderEntryModel({
+    int entryNumber,
+    ProductModel product,
+    OrderModel order,
+    double basePrice,
+    int quantity,
+    double totalPrice,
+  }) : super(
+          entryNumber: entryNumber,
+          product: product,
+          order: order,
+          basePrice: basePrice,
+          quantity: quantity,
+          totalPrice: totalPrice,
+        );
 
   factory OrderEntryModel.fromJson(Map<String, dynamic> json) => _$OrderEntryModelFromJson(json);
 
@@ -55,7 +72,10 @@ class OrderEntryModel extends ItemModel {
 
 @JsonSerializable()
 class CartModel extends AbstractOrderModel {
-  CartModel();
+  CartModel({
+    String code,
+    List<AbstractOrderEntryModel> entries,
+  }) : super(code: code, entries: entries);
 
   factory CartModel.fromJson(Map<String, dynamic> json) => _$CartModelFromJson(json);
 
@@ -63,8 +83,22 @@ class CartModel extends AbstractOrderModel {
 }
 
 @JsonSerializable()
-class CartEntryModel extends AbstractOrderModel {
-  CartEntryModel();
+class CartEntryModel extends AbstractOrderEntryModel {
+  CartEntryModel({
+    int entryNumber,
+    ProductModel product,
+    OrderModel order,
+    double basePrice,
+    int quantity,
+    double totalPrice,
+  }) : super(
+          entryNumber: entryNumber,
+          product: product,
+          order: order,
+          basePrice: basePrice,
+          quantity: quantity,
+          totalPrice: totalPrice,
+        );
 
   factory CartEntryModel.fromJson(Map<String, dynamic> json) => _$CartEntryModelFromJson(json);
 
@@ -97,7 +131,10 @@ class ConsignmentEntryModel extends ItemModel {
 
 @JsonSerializable()
 class RequirementOrderModel extends OrderModel {
-  RequirementOrderModel();
+  RequirementOrderModel({
+    String code,
+    List<AbstractOrderEntryModel> entries,
+  }) : super(code: code, entries: entries);
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderModelFromJson(json);
 
@@ -106,7 +143,21 @@ class RequirementOrderModel extends OrderModel {
 
 @JsonSerializable()
 class RequirementOrderEntryModel extends OrderEntryModel {
-  RequirementOrderEntryModel();
+  RequirementOrderEntryModel({
+    int entryNumber,
+    ProductModel product,
+    OrderModel order,
+    double basePrice,
+    int quantity,
+    double totalPrice,
+  }) : super(
+    entryNumber: entryNumber,
+    product: product,
+    order: order,
+    basePrice: basePrice,
+    quantity: quantity,
+    totalPrice: totalPrice,
+  );
 
   factory RequirementOrderEntryModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderEntryModelFromJson(json);
 
@@ -115,7 +166,10 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 
 @JsonSerializable()
 class PurchaseOrderModel extends OrderModel {
-  PurchaseOrderModel();
+  PurchaseOrderModel({
+    String code,
+    List<AbstractOrderEntryModel> entries,
+  }) : super(code: code, entries: entries);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) => _$PurchaseOrderModelFromJson(json);
 
@@ -124,7 +178,21 @@ class PurchaseOrderModel extends OrderModel {
 
 @JsonSerializable()
 class PurchaseOrderEntryModel extends OrderEntryModel {
-  PurchaseOrderEntryModel();
+  PurchaseOrderEntryModel({
+    int entryNumber,
+    ProductModel product,
+    OrderModel order,
+    double basePrice,
+    int quantity,
+    double totalPrice,
+  }) : super(
+          entryNumber: entryNumber,
+          product: product,
+          order: order,
+          basePrice: basePrice,
+          quantity: quantity,
+          totalPrice: totalPrice,
+        );
 
   factory PurchaseOrderEntryModel.fromJson(Map<String, dynamic> json) => _$PurchaseOrderEntryModelFromJson(json);
 
@@ -133,7 +201,10 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
 
 @JsonSerializable()
 class SalesOrderModel extends OrderModel {
-  SalesOrderModel();
+  SalesOrderModel({
+    String code,
+    List<AbstractOrderEntryModel> entries,
+  }) : super(code: code, entries: entries);
 
   factory SalesOrderModel.fromJson(Map<String, dynamic> json) => _$SalesOrderModelFromJson(json);
 
@@ -142,7 +213,21 @@ class SalesOrderModel extends OrderModel {
 
 @JsonSerializable()
 class SalesOrderEntryModel extends OrderEntryModel {
-  SalesOrderEntryModel();
+  SalesOrderEntryModel({
+    int entryNumber,
+    ProductModel product,
+    OrderModel order,
+    double basePrice,
+    int quantity,
+    double totalPrice,
+  }) : super(
+          entryNumber: entryNumber,
+          product: product,
+          order: order,
+          basePrice: basePrice,
+          quantity: quantity,
+          totalPrice: totalPrice,
+        );
 
   factory SalesOrderEntryModel.fromJson(Map<String, dynamic> json) => _$SalesOrderEntryModelFromJson(json);
 
@@ -151,7 +236,13 @@ class SalesOrderEntryModel extends OrderEntryModel {
 
 @JsonSerializable()
 class ProductionOrderModel extends ConsignmentModel {
-  ProductionOrderModel();
+  ProductionOrderModel({
+    String code,
+    List<ConsignmentEntryModel> consignmentEntries,
+  }) : super(
+          code: code,
+          consignmentEntries: consignmentEntries,
+        );
 
   factory ProductionOrderModel.fromJson(Map<String, dynamic> json) => _$ProductionOrderModelFromJson(json);
 
@@ -160,7 +251,13 @@ class ProductionOrderModel extends ConsignmentModel {
 
 @JsonSerializable()
 class ProductionOrderEntryModel extends ConsignmentEntryModel {
-  ProductionOrderEntryModel();
+  ProductionOrderEntryModel({
+    AbstractOrderEntryModel orderEntry,
+    ConsignmentModel consignment,
+  }) : super(
+          orderEntry: orderEntry,
+          consignment: consignment,
+        );
 
   factory ProductionOrderEntryModel.fromJson(Map<String, dynamic> json) => _$ProductionOrderEntryModelFromJson(json);
 
