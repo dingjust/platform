@@ -43,7 +43,7 @@
         <mat-menu #addMenu="matMenu" class="w-240">
 
             <mat-form-field class="px-16 w-100-p" (click)="$event.stopPropagation()" floatLabel="never">
-                <input #searchInput matInput placeholder="Search for an app or a page" (input)="search($event)">
+                <input #searchInput matInput placeholder="查询菜单..." (input)="search($event)">
             </mat-form-field>
 
             <mat-divider></mat-divider>
@@ -74,7 +74,7 @@
 
                 <mat-list-item *ngIf="shortcutItems.length === 0">
                     <p>
-                        <small>No shortcuts yet!</small>
+                        <small>当前无快捷菜单</small>
                     </p>
                 </mat-list-item>
 

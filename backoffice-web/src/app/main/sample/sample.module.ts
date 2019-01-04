@@ -1,14 +1,14 @@
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 
-import { FuseSharedModule } from '@fuse/shared.module';
+import {FuseSharedModule} from '@fuse/shared.module';
 
-import { SampleComponent } from './sample.component';
+import {SampleComponent} from './sample.component';
 
 const routes = [
     {
-        path     : 'sample',
+        path: 'sample',
         component: SampleComponent
     }
 ];
@@ -17,18 +17,17 @@ const routes = [
     declarations: [
         SampleComponent
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(routes),
 
         TranslateModule,
 
         FuseSharedModule
     ],
-    exports     : [
+    exports: [
         SampleComponent
     ]
 })
 
-export class SampleModule
-{
+export class SampleModule {
 }
