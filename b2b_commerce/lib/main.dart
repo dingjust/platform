@@ -1,19 +1,21 @@
 import 'package:b2b_commerce/src/common/wechatpay_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluwx/fluwx.dart';
 
 import 'src/business/index.dart';
 import 'src/common/app_routes.dart';
 import 'src/community/index.dart';
 import 'src/home/index.dart';
 import 'src/my/index.dart';
+
+//fluwx引入
 import 'package:fluwx/fluwx.dart' as fluwx;
 
 void main() {
   //注册微信信息
   fluwx.register(
       appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: false);
+
   debugInstrumentationEnabled = true;
   runApp(MyApp());
 }
@@ -33,8 +35,9 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void _shareText() {
-    // var date=DateTime.now().millisecondsSinceEpoch;
+  //微信支付,参数从后端接口获取
+  void _wechatPay() {
+    //TODO:调用统一下单接口处理
     fluwx.pay(
         appId: 'wxf72ddd003c54363c',
         partnerId: '1521483781',
@@ -45,8 +48,6 @@ class _MyAppState extends State<MyApp> {
         sign:
             '94FDDC57E7D074FBB3A3DE052A3E995130E25395C39C6C1E50E4CEF286ADADF7',
         signType: 'HMAC-SHA256');
-    // print('>>>>>' + ;
-
     // fluwx
     //     .share(fluwx.WeChatShareTextModel(
     //         text: '你好',
@@ -96,7 +97,7 @@ class _MyAppState extends State<MyApp> {
         floatingActionButton: FloatingActionButton(
           tooltip: '发布需求',
           child: Icon(Icons.add),
-          onPressed: _shareText,
+          onPressed: _wechatPay,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
