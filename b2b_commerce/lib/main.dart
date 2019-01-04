@@ -34,23 +34,40 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _shareText() {
-    fluwx
-        .share(fluwx.WeChatShareTextModel(
-            text: '你好',
-            transaction: "text${DateTime.now().millisecondsSinceEpoch}",
-            scene: WeChatScene.SESSION))
-        .then((data) {
-      print(data);
-    });
+    // var date=DateTime.now().millisecondsSinceEpoch;
+    fluwx.pay(
+        appId: 'wxf72ddd003c54363c',
+        partnerId: '1521483781',
+        prepayId: 'wx040932474020823d4257add82292985487',
+        packageValue: 'Sign=WXPay',
+        nonceStr: 'fpMeKU8JOyOZKjveFWIyYRhcATWCA377',
+        timeStamp: 1546565569,
+        sign:
+            '94FDDC57E7D074FBB3A3DE052A3E995130E25395C39C6C1E50E4CEF286ADADF7',
+        signType: 'HMAC-SHA256');
+    // print('>>>>>' + ;
+
+    // fluwx
+    //     .share(fluwx.WeChatShareTextModel(
+    //         text: '你好',
+    //         transaction: "text${DateTime.now().millisecondsSinceEpoch}",
+    //         scene: WeChatScene.SESSION))
+    //     .then((data) {
+    //   print(data);
+    // });
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    
+
     //监听微信回调
     fluwx.responseFromShare.listen((data) {
+      print('>>>>>' + data.toString());
+    });
+
+    fluwx.responseFromPayment.listen((data) {
       print('>>>>>' + data.toString());
     });
   }

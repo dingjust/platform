@@ -1,7 +1,7 @@
 class WechatPayConstants {
   static const String appId = 'wxf72ddd003c54363c';
   static const String appSecret = 'a119171cad87795e9d7e2e6ec65f7645';
-  static const String appSemerchantId = '1519014121';
+  static const String appSemerchantId = '1521483781';
   static const String merchantKey = 'ningboyijiayigongyinglianguanli1';
   static const String oauthUrl =
       'https://open.weixin.qq.com/connect/oauth2/authorize';
