@@ -18,6 +18,15 @@ import {AppComponent} from 'app/app.component';
 import {LayoutModule} from 'app/layout/layout.module';
 import {SampleModule} from 'app/main/sample/sample.module';
 
+/** config angular i18n **/
+import {registerLocaleData} from '@angular/common';
+import zh from '@angular/common/locales/zh';
+
+registerLocaleData(zh);
+
+// Zorro
+import {NgZorroAntdModule, NZ_I18N, zh_CN} from 'ng-zorro-antd';
+
 const appRoutes: Routes = [
     {
         path: 'platform',
@@ -48,6 +57,9 @@ const appRoutes: Routes = [
         MatButtonModule,
         MatIconModule,
 
+        // Zorro
+        NgZorroAntdModule,
+
         // Fuse modules
         FuseModule.forRoot(fuseConfig),
         FuseProgressBarModule,
@@ -61,7 +73,8 @@ const appRoutes: Routes = [
     ],
     bootstrap: [
         AppComponent
-    ]
+    ],
+    providers: [{provide: NZ_I18N, useValue: zh_CN}]
 })
 export class AppModule {
 }
