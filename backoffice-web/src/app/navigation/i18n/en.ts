@@ -6,7 +6,10 @@ export const locale = {
             'SAMPLE'        : {
                 'TITLE': 'Sample',
                 'BADGE': '25'
-            }
+            },
+            'PLATFORM': 'Platform',
+            'USER': 'User Management',
+            'EMPLOYEES': 'Employees'
         }
     }
 };

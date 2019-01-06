@@ -1,5 +1,36 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
+<div id="sample" class="page-layout blank p-24" fusePerfectScrollbar>
+    <nz-breadcrumb>
+        <nz-breadcrumb-item>
+            Home
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a>Application List</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            An Application
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
 
-    <h2>{{'SAMPLE.HELLO' | translate}}</h2>
-
+    <nz-table #basicTable [nzData]="dataSet">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Address</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of basicTable.data">
+            <td>{{data.name}}</td>
+            <td>{{data.age}}</td>
+            <td>{{data.address}}</td>
+            <td>
+                <a>Action 一 {{data.name}}</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a>Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </nz-table>
 </div>
