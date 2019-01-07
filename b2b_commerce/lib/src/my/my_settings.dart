@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 
 import 'settings/about.dart';
@@ -37,7 +38,9 @@ class _MySettingsPageState extends State<MySettingsPage> {
                 '切换账号',
                 style: TextStyle(color: Colors.red),
               ),
-              onPressed: null,
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.ROUTE_MY_LOGIN);
+              },
             ),
           ),
           InkWell(

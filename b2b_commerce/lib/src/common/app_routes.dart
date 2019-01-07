@@ -24,6 +24,8 @@ import '../my/my_collections.dart';
 import '../my/my_company.dart';
 import '../my/my_invoices.dart';
 import '../my/my_settings.dart';
+import '../my/account/login.dart';
+import '../my/account/register.dart';
 
 class AppRoutes with GlobalRoutes {
   static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
@@ -31,10 +33,12 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
   static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
   static const ROUTE_PRODUCT_STOCKS = '/business/product_stocks';
-  static const ROUTE_PRODUCT_STOCK_ADJUST_HISTORY = '/business/product_stock_adjust_history';
+  static const ROUTE_PRODUCT_STOCK_ADJUST_HISTORY =
+      '/business/product_stock_adjust_history';
   static const ROUTE_PRODUCTION_ORDERS = '/business/production_orders';
   static const ROUTE_PRODUCTS = '/business/products';
-  static const ROUTE_PRODUCTS_OFF_THE_SHELF = '/business/products_off_the_shelf';
+  static const ROUTE_PRODUCTS_OFF_THE_SHELF =
+      '/business/products_off_the_shelf';
   static const ROUTE_PURCHASE_ORDERS = '/business/purchase_orders';
   static const ROUTE_QUOTES = '/business/quotes';
   static const ROUTE_REQUIREMENT_ORDERS = '/business/requirement_orders';
@@ -49,6 +53,8 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_COLLECTIONS = '/my/my_collections';
   static const ROUTE_MY_CLIENT_SERVICES = '/my/my_client_services';
   static const ROUTE_MY_SETTINGS = '/my/my_settings';
+  static const ROUTE_MY_LOGIN = '/my/account/login';
+  static const ROUTE_MY_REGISTER = '/my/account/register';
 
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
@@ -58,7 +64,8 @@ class AppRoutes with GlobalRoutes {
     ROUTE_PRODUCT_STOCKS: (context) => ApparelProductStocksPage(),
     ROUTE_PRODUCTS: (context) => ApparelProductsPage(),
     ROUTE_PRODUCTS_OFF_THE_SHELF: (context) => OffTheShelfApparelProductsPage(),
-    ROUTE_PRODUCT_STOCK_ADJUST_HISTORY: (context) => ApparelProductStockAdjustHistoryPage(),
+    ROUTE_PRODUCT_STOCK_ADJUST_HISTORY: (context) =>
+        ApparelProductStockAdjustHistoryPage(),
     ROUTE_PRODUCTION_ORDERS: (context) => ProductionOrdersPage(),
     ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
@@ -73,6 +80,8 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
     ROUTE_MY_COLLECTIONS: (context) => MyCollectionsPage(),
     ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),
-    ROUTE_MY_SETTINGS: (context) => MySettingsPage()
+    ROUTE_MY_SETTINGS: (context) => MySettingsPage(),
+    ROUTE_MY_LOGIN: (context) => LoginPage(),
+    ROUTE_MY_REGISTER: (context) => RegisterPage()
   };
 }
