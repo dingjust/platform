@@ -73,7 +73,7 @@ class SaleOrderItem extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text('订单编号：1234567890'),
-                    Text('代付款')
+                    Text('待付款',style: TextStyle(color: Colors.amber))
                   ],
                 ),
                 Text('订单创建时间：2018-12-19 09:58:19'),
@@ -104,7 +104,7 @@ class SaleOrderItem extends StatelessWidget{
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('订单编号：1234567890'),
-                      Text('代付款')
+                      Text('待付款',style: TextStyle(color: Colors.amber))
                     ],
                   ),
                   Text('订单创建时间：2018-12-19 09:58:19'),
@@ -190,7 +190,7 @@ class SaleOrderItem extends StatelessWidget{
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('订单编号：1234567890'),
-                      Text('代付款')
+                      Text('待付款',style: TextStyle(color: Colors.amber))
                     ],
                   ),
                   Text('订单创建时间：2018-12-19 09:58:19'),
@@ -276,7 +276,7 @@ class SaleOrderItem extends StatelessWidget{
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('订单编号：1234567890'),
-                      Text('代付款')
+                      Text('待付款',style: TextStyle(color: Colors.amber))
                     ],
                   ),
                   Text('订单创建时间：2018-12-19 09:58:19'),

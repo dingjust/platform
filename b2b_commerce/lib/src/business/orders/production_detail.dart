@@ -260,10 +260,50 @@ class _ProductionDetailPage extends State<ProductionDetailPage> {
                               ),
                               new Container(
                                 padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
-                                  child: ListView.builder(
-                                    itemCount: 5,
-                                    itemBuilder: null ,
-                                  )
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Image.network(
+                                        "https://photo.16pic.com/00/08/36/16pic_836042_b.jpg",
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    Expanded(
+                                      child: Image.network(
+                                        "https://photo.16pic.com/00/08/36/16pic_836042_b.jpg",
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    Expanded(
+                                      child: Image.network(
+                                        "https://photo.16pic.com/00/08/36/16pic_836042_b.jpg",
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    Expanded(
+                                      child: Image.network(
+                                        "https://photo.16pic.com/00/08/36/16pic_836042_b.jpg",
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    Expanded(
+                                      child: Image.network(
+                                        "",
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                      flex: 2,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ]
                         )
