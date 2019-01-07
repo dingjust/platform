@@ -1,18 +1,17 @@
 // This file meant to be imported only once! Use fuse.scss to access
 // to the core Fuse and Angular Material mixins
-
 // ngx-datatable
 @import '~@swimlane/ngx-datatable/release/themes/material';
-
 // Perfect scrollbar
 @import '~perfect-scrollbar/css/perfect-scrollbar';
-
+// ng-zorro
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
 // Fuse
 @import "fuse";
-
 // Theme
 @import "theme";
-
+// antd override
+@import "antd";
 // Include core Angular Material styles
 @include mat-core();
 

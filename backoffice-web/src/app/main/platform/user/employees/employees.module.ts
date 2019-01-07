@@ -1,38 +1,33 @@
-import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 
-import {NgZorroAntdModule} from 'ng-zorro-antd';
-
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {SampleComponent} from './sample.component';
+import {EmployeesComponent} from './employees.component';
 
 const routes = [
     {
-        path: 'sample',
-        component: SampleComponent
+        path: 'employees',
+        component: EmployeesComponent
     }
 ];
 
 @NgModule({
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [
-        SampleComponent
+        EmployeesComponent
     ],
     imports: [
         RouterModule.forChild(routes),
 
         TranslateModule,
 
-        NgZorroAntdModule,
-
         FuseSharedModule
     ],
     exports: [
-        SampleComponent
+        EmployeesComponent
     ]
 })
 
-export class SampleModule {
+export class EmployeesModule {
 }
