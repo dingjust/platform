@@ -26,6 +26,9 @@ import '../my/my_invoices.dart';
 import '../my/my_settings.dart';
 import '../my/account/login.dart';
 import '../my/account/register.dart';
+import '../my/account/register_brand.dart';
+import '../my/account/register_factory.dart';
+import '../my/account/register_customer.dart';
 
 class AppRoutes with GlobalRoutes {
   static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
@@ -55,6 +58,9 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_SETTINGS = '/my/my_settings';
   static const ROUTE_MY_LOGIN = '/my/account/login';
   static const ROUTE_MY_REGISTER = '/my/account/register';
+  static const ROUTE_MY_REGISTER_BRAND = '/my/account/register_brand';
+  static const ROUTE_MY_REGISTER_FACTORY = '/my/account/register_factory';
+  static const ROUTE_MY_REGISTER_CUSTOMER = '/my/account/register_customer';
 
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
@@ -82,6 +88,9 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),
     ROUTE_MY_SETTINGS: (context) => MySettingsPage(),
     ROUTE_MY_LOGIN: (context) => LoginPage(),
-    ROUTE_MY_REGISTER: (context) => RegisterPage()
+    ROUTE_MY_REGISTER: (context) => RegisterPage(),
+    ROUTE_MY_REGISTER_BRAND: (context) => RegisterBrandPage(),
+    ROUTE_MY_REGISTER_FACTORY: (context) => RegisterFactoryPage(),
+    ROUTE_MY_REGISTER_CUSTOMER: (context) => RegisterCustomerPage()
   };
 }

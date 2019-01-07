@@ -60,17 +60,17 @@ class _LoginPageState extends State<LoginPage> {
           return v.trim().length > 0 ? null : '密码不能为空';
         });
 
-    return Container(
+    return Material(
       child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text('登陆'),
-          ),
+          // appBar: AppBar(
+          //   centerTitle: true,
+          //   title: const Text('登陆'),
+          // ),
           body: Form(
             key: _formKey,
             autovalidate: true,
             child: ListView(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
               children: <Widget>[
                 Container(
                   padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20),

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -140,7 +141,9 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
             RaisedButton(
-              onPressed: () {},
+              onPressed: () {
+                _nextStep();
+              },
               color: Colors.blue,
               child: Text(
                 '下一步',
@@ -151,6 +154,20 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  void _nextStep() {
+    switch (_userType) {
+      case 'brand':
+        Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_BRAND);
+        break;
+      case 'factory':
+        Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_FACTORY);
+        break;
+      case 'customer':
+        Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_CUSTOMER);
+        break;
+    }
   }
 }
 
@@ -193,6 +210,41 @@ class UserTypeSelector extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: widgetList,
+    );
+  }
+}
+
+class RegisterInput extends StatelessWidget {
+  final TextEditingController controller;
+  final String labelText;
+  final String remind;
+  final bool validate;
+
+  const RegisterInput(
+      {Key key,
+      @required this.controller,
+      @required this.labelText,
+      @required this.remind,
+      this.validate = true})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
+      child: TextFormField(
+          autofocus: false,
+          controller: controller,
+          decoration: InputDecoration(
+              labelText: labelText, hintText: '请输入', border: InputBorder.none),
+          // 校验用户名
+          validator: (v) {
+            if (validate) {
+              return v.trim().length > 0 ? null : remind;
+            } else {
+              return null;
+            }
+          }),
     );
   }
 }
