@@ -6,7 +6,17 @@ part 'user_group.g.dart';
 /// 用户组
 @JsonSerializable()
 class UserGroupModel extends PrincipalGroupModel {
-  UserGroupModel();
+  UserGroupModel({
+    String profilePicture,
+    String uid,
+    String name,
+    PrincipalModel members,
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          members: members,
+        );
 
   factory UserGroupModel.fromJson(Map<String, dynamic> json) => _$UserGroupModelFromJson(json);
 
@@ -16,7 +26,17 @@ class UserGroupModel extends PrincipalGroupModel {
 /// 公司
 @JsonSerializable()
 class CompanyModel extends UserGroupModel {
-  CompanyModel();
+  CompanyModel({
+    String profilePicture,
+    String uid,
+    String name,
+    PrincipalModel members,
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          members: members,
+        );
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) => _$CompanyModelFromJson(json);
 
@@ -25,7 +45,15 @@ class CompanyModel extends UserGroupModel {
 
 @JsonSerializable()
 class OrgUnitModel extends CompanyModel {
-  OrgUnitModel();
+  String path;
+
+  OrgUnitModel({String profilePicture, String uid, String name, PrincipalModel members, this.path})
+      : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          members: members,
+        );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) => _$OrgUnitModelFromJson(json);
 
@@ -35,9 +63,21 @@ class OrgUnitModel extends CompanyModel {
 @JsonSerializable()
 class B2BUnitModel extends OrgUnitModel {
   bool active;
-  String path;
 
-  B2BUnitModel({this.active, this.path});
+  B2BUnitModel({
+    String profilePicture,
+    String uid,
+    String name,
+    PrincipalModel members,
+    String path,
+    this.active,
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          members: members,
+          path: path,
+        );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) => _$B2BUnitModelFromJson(json);
 
@@ -45,7 +85,39 @@ class B2BUnitModel extends OrgUnitModel {
 }
 
 @JsonSerializable()
-class BrandModel extends B2BUnitModel {}
+class BrandModel extends B2BUnitModel {
+  BrandModel({
+    String profilePicture,
+    String uid,
+    String name,
+    PrincipalModel members,
+    String path,
+    bool active,
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          members: members,
+          path: path,
+          active: active,
+        );
+}
 
 @JsonSerializable()
-class FactoryModel extends B2BUnitModel {}
+class FactoryModel extends B2BUnitModel {
+  FactoryModel({
+    String profilePicture,
+    String uid,
+    String name,
+    PrincipalModel members,
+    String path,
+    bool active,
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          members: members,
+          path: path,
+          active: active,
+        );
+}

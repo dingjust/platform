@@ -122,7 +122,10 @@ class ConsignmentEntryModel extends ItemModel {
   AbstractOrderEntryModel orderEntry;
   ConsignmentModel consignment;
 
-  ConsignmentEntryModel({@required this.orderEntry, this.consignment});
+  ConsignmentEntryModel({
+    @required this.orderEntry,
+    this.consignment,
+  });
 
   factory ConsignmentEntryModel.fromJson(Map<String, dynamic> json) => _$ConsignmentEntryModelFromJson(json);
 
@@ -134,7 +137,10 @@ class RequirementOrderModel extends OrderModel {
   RequirementOrderModel({
     String code,
     List<AbstractOrderEntryModel> entries,
-  }) : super(code: code, entries: entries);
+  }) : super(
+          code: code,
+          entries: entries,
+        );
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderModelFromJson(json);
 
@@ -151,13 +157,13 @@ class RequirementOrderEntryModel extends OrderEntryModel {
     int quantity,
     double totalPrice,
   }) : super(
-    entryNumber: entryNumber,
-    product: product,
-    order: order,
-    basePrice: basePrice,
-    quantity: quantity,
-    totalPrice: totalPrice,
-  );
+          entryNumber: entryNumber,
+          product: product,
+          order: order,
+          basePrice: basePrice,
+          quantity: quantity,
+          totalPrice: totalPrice,
+        );
 
   factory RequirementOrderEntryModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderEntryModelFromJson(json);
 
@@ -169,7 +175,10 @@ class PurchaseOrderModel extends OrderModel {
   PurchaseOrderModel({
     String code,
     List<AbstractOrderEntryModel> entries,
-  }) : super(code: code, entries: entries);
+  }) : super(
+          code: code,
+          entries: entries,
+        );
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) => _$PurchaseOrderModelFromJson(json);
 
@@ -204,7 +213,10 @@ class SalesOrderModel extends OrderModel {
   SalesOrderModel({
     String code,
     List<AbstractOrderEntryModel> entries,
-  }) : super(code: code, entries: entries);
+  }) : super(
+          code: code,
+          entries: entries,
+        );
 
   factory SalesOrderModel.fromJson(Map<String, dynamic> json) => _$SalesOrderModelFromJson(json);
 

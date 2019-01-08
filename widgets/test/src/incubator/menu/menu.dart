@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,9 +28,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<MenuItem> list = [
     MenuItem(Icons.phone, '报价管理', null),
-    MenuItem(MyIcons.bool, '报价管理', null),
+    MenuItem(B2BIcons.bool, '报价管理', null),
     MenuItem(Icons.phone, '报价管理', null),
-    MenuItem(MyIcons.bool, '报价管理', null)
+    MenuItem(B2BIcons.bool, '报价管理', null)
   ];
   @override
   Widget build(BuildContext context) {
@@ -119,10 +120,3 @@ class MenuItem extends StatelessWidget {
 }
 
 
-class MyIcons{
-  static const IconData bool = const IconData(
-      0xe611, 
-      fontFamily: 'myIcon', 
-      matchTextDirection: true
-  );
-}

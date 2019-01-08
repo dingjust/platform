@@ -65,16 +65,17 @@ class ProductModel extends ItemModel {
   /// 库存，对于变式商品则为实际库存，款式商品则为变式库存的总量
   int stock;
 
-  ProductModel(
-      {this.code,
-      this.name,
-      this.price = 0.0,
-      this.variants,
-      this.staircasePrices,
-      this.stock,
-      this.attributes,
-      this.privacy,
-      this.ratingIfPrivacy});
+  ProductModel({
+    this.code,
+    this.name,
+    this.price = 0.0,
+    this.variants,
+    this.staircasePrices,
+    this.stock,
+    this.attributes,
+    this.privacy,
+    this.ratingIfPrivacy,
+  });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
 
@@ -86,7 +87,28 @@ class ProductModel extends ItemModel {
 class VariantProductModel extends ProductModel {
   String baseProduct;
 
-  VariantProductModel({this.baseProduct});
+  VariantProductModel({
+    String code,
+    String name,
+    double price,
+    List<VariantProductModel> variants,
+    List<StaircasePriceModel> staircasePrices,
+    ProductAttributesModel attributes,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    int stock,
+    this.baseProduct,
+  }) : super(
+          code: code,
+          name: name,
+          price: price,
+          variants: variants,
+          staircasePrices: staircasePrices,
+          attributes: attributes,
+          privacy: privacy,
+          ratingIfPrivacy: ratingIfPrivacy,
+          stock: stock,
+        );
 
   factory VariantProductModel.fromJson(Map<String, dynamic> json) => _$VariantProductModelFromJson(json);
 
@@ -100,7 +122,6 @@ class ApparelProductModel extends ProductModel {
   CategoryModel majorCategory;
   @JsonKey(name: 'supercategories')
   List<CategoryModel> superCategories;
-  double price;
   double price1;
   double price2;
   double price3;
@@ -108,16 +129,34 @@ class ApparelProductModel extends ProductModel {
   double gramWeight;
 
   ApparelProductModel({
+    String code,
+    String name,
+    double price,
+    List<VariantProductModel> variants,
+    List<StaircasePriceModel> staircasePrices,
+    ProductAttributesModel attributes,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    int stock,
     this.skuID,
     this.brand,
     this.majorCategory,
     this.superCategories,
-    this.price,
     this.price1,
     this.price2,
     this.price3,
     this.suggestedPrice,
-  });
+  }) : super(
+          code: code,
+          name: name,
+          price: price,
+          variants: variants,
+          staircasePrices: staircasePrices,
+          attributes: attributes,
+          privacy: privacy,
+          ratingIfPrivacy: ratingIfPrivacy,
+          stock: stock,
+        );
 
   factory ApparelProductModel.fromJson(Map<String, dynamic> json) => _$ApparelProductModelFromJson(json);
 
@@ -128,7 +167,30 @@ class ApparelProductModel extends ProductModel {
 class ApparelStyleVariantProductModel extends VariantProductModel {
   ColorModel color;
 
-  ApparelStyleVariantProductModel({this.color});
+  ApparelStyleVariantProductModel({
+    String code,
+    String name,
+    double price,
+    List<VariantProductModel> variants,
+    List<StaircasePriceModel> staircasePrices,
+    ProductAttributesModel attributes,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    int stock,
+    String baseProduct,
+    this.color,
+  }) : super(
+          code: code,
+          name: name,
+          price: price,
+          variants: variants,
+          staircasePrices: staircasePrices,
+          attributes: attributes,
+          privacy: privacy,
+          ratingIfPrivacy: ratingIfPrivacy,
+          stock: stock,
+          baseProduct: baseProduct,
+        );
 
   factory ApparelStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
       _$ApparelStyleVariantProductModelFromJson(json);
@@ -141,7 +203,31 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
 class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
   SizeModel size;
 
-  ApparelSizeVariantProductModel({this.size});
+  ApparelSizeVariantProductModel({
+    String code,
+    String name,
+    double price,
+    List<VariantProductModel> variants,
+    List<StaircasePriceModel> staircasePrices,
+    ProductAttributesModel attributes,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    int stock,
+    String baseProduct,
+    ColorModel color,
+    this.size,
+  }) : super(
+            code: code,
+            name: name,
+            price: price,
+            variants: variants,
+            staircasePrices: staircasePrices,
+            attributes: attributes,
+            privacy: privacy,
+            ratingIfPrivacy: ratingIfPrivacy,
+            stock: stock,
+            baseProduct: baseProduct,
+            color: color);
 
   factory ApparelSizeVariantProductModel.fromJson(Map<String, dynamic> json) =>
       _$ApparelSizeVariantProductModelFromJson(json);
@@ -152,7 +238,27 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
 
 @JsonSerializable()
 class FabricProductModel extends ProductModel {
-  FabricProductModel();
+  FabricProductModel({
+    String code,
+    String name,
+    double price,
+    List<VariantProductModel> variants,
+    List<StaircasePriceModel> staircasePrices,
+    ProductAttributesModel attributes,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    int stock,
+  }) : super(
+          code: code,
+          name: name,
+          price: price,
+          variants: variants,
+          staircasePrices: staircasePrices,
+          attributes: attributes,
+          privacy: privacy,
+          ratingIfPrivacy: ratingIfPrivacy,
+          stock: stock,
+        );
 
   factory FabricProductModel.fromJson(Map<String, dynamic> json) => _$FabricProductModelFromJson(json);
 
@@ -163,7 +269,28 @@ class FabricProductModel extends ProductModel {
 class FabricStyleVariantProductModel extends VariantProductModel {
   ColorModel color;
 
-  FabricStyleVariantProductModel({this.color});
+  FabricStyleVariantProductModel({
+    String code,
+    String name,
+    double price,
+    List<VariantProductModel> variants,
+    List<StaircasePriceModel> staircasePrices,
+    ProductAttributesModel attributes,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    int stock,
+    this.color,
+  }) : super(
+          code: code,
+          name: name,
+          price: price,
+          variants: variants,
+          staircasePrices: staircasePrices,
+          attributes: attributes,
+          privacy: privacy,
+          ratingIfPrivacy: ratingIfPrivacy,
+          stock: stock,
+        );
 
   factory FabricStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
       _$FabricStyleVariantProductModelFromJson(json);
@@ -178,7 +305,11 @@ class StyleModel extends ItemModel {
   String name;
   bool active;
 
-  StyleModel({@required this.code, @required this.name, this.active});
+  StyleModel({
+    @required this.code,
+    @required this.name,
+    this.active,
+  });
 
   factory StyleModel.fromJson(Map<String, dynamic> json) => _$StyleModelFromJson(json);
 
@@ -190,8 +321,14 @@ class ColorModel extends ItemModel {
   String code;
   String name;
   bool active;
+  String colorCode;
 
-  ColorModel({@required this.code, @required this.name, this.active});
+  ColorModel({
+    @required this.code,
+    @required this.name,
+    this.active,
+    this.colorCode,
+  });
 
   factory ColorModel.fromJson(Map<String, dynamic> json) => _$ColorModelFromJson(json);
 
@@ -204,7 +341,11 @@ class SizeModel extends ItemModel {
   String name;
   bool active;
 
-  SizeModel({@required this.code, @required this.name, this.active});
+  SizeModel({
+    @required this.code,
+    @required this.name,
+    this.active,
+  });
 
   factory SizeModel.fromJson(Map<String, dynamic> json) => _$SizeModelFromJson(json);
 

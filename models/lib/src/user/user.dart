@@ -9,10 +9,18 @@ part 'user.g.dart';
 /// 用户
 @JsonSerializable()
 class UserModel extends PrincipalModel {
-  String password;
   bool loginDisabled;
 
-  UserModel({this.password, this.loginDisabled});
+  UserModel({
+    String profilePicture,
+    String uid,
+    String name,
+    this.loginDisabled,
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+        );
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
@@ -24,7 +32,18 @@ class UserModel extends PrincipalModel {
 class CustomerModel extends UserModel {
   String mobileNumber;
 
-  CustomerModel({@required this.mobileNumber});
+  CustomerModel({
+    String profilePicture,
+    String uid,
+    String name,
+    bool loginDisabled,
+    @required this.mobileNumber,
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          loginDisabled: loginDisabled,
+        );
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) => _$CustomerModelFromJson(json);
 
@@ -37,7 +56,21 @@ class B2BCustomerModel extends CustomerModel {
   bool active;
   B2BUnitModel defaultB2BUnit;
 
-  B2BCustomerModel({this.active, this.defaultB2BUnit});
+  B2BCustomerModel({
+    String profilePicture,
+    String uid,
+    String name,
+    bool loginDisabled,
+    String mobileNumber,
+    this.active,
+    this.defaultB2BUnit,
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          loginDisabled: loginDisabled,
+          mobileNumber: mobileNumber,
+        );
 
   factory B2BCustomerModel.fromJson(Map<String, dynamic> json) => _$B2BCustomerModelFromJson(json);
 

@@ -131,4 +131,22 @@ class MenuItemImage {
     width: _width,
     height: _height,
   );
+  static Image register_brand = Image.asset(
+    'temp/business/register_brand.png',
+    package: _package,
+    width: _width,
+    height: _height,
+  );
+  static Image register_customer = Image.asset(
+    'temp/business/register_customer.png',
+    package: _package,
+    width: _width,
+    height: _height,
+  );
+  static Image register_factory = Image.asset(
+    'temp/business/register_factory.png',
+    package: _package,
+    width: _width,
+    height: _height,
+  );
 }

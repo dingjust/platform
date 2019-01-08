@@ -5,11 +5,11 @@ part 'media.g.dart';
 
 @JsonSerializable()
 class MediaModel extends ItemModel {
-  MediaModel(this.url);
-
   /// URL地址
   final String url;
   String description;
+
+  MediaModel(this.url, {this.description});
 
   factory MediaModel.fromJson(Map<String, dynamic> json) => _$MediaModelFromJson(json);
 

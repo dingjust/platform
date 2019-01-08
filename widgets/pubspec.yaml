@@ -46,9 +46,9 @@ flutter:
   assets:
     - images/logo.png
   fonts:
-    - family: myIcon
+    - family: b2bIcons
       fonts:
-      - asset: fonts/iconfont.ttf
+      - asset: lib/fonts/iconfont1.ttf
   #
   # For details regarding assets in packages, see
   # https://flutter.io/assets-and-images/#from-packages

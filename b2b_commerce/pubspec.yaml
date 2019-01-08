@@ -37,7 +37,6 @@ dependencies:
   rxdart: ^0.20.0
   fluwx: ^0.5.4
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,6 +79,18 @@ flutter:
     - packages/assets/temp/business/sale_order.png
     - packages/assets/temp/business/setting.png
     - packages/assets/temp/business/supplier_manage.png
+    - packages/assets/temp/business/register_brand.png
+    - packages/assets/temp/business/register_customer.png
+    - packages/assets/temp/business/register_factory.png
+
+  fonts:
+    - family: b2bIcons
+      fonts:
+        - asset: lib/fonts/iconfont1.ttf
+  # fonts:
+  #   - family: b2bIcons
+  #     fonts:
+  #     - asset: packages/widgets/fonts/iconfont.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
