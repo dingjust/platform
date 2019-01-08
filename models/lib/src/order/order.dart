@@ -7,17 +7,31 @@ part 'order.g.dart';
 @JsonSerializable()
 class AbstractOrderModel extends ItemModel {
   String code;
-  List<AbstractOrderEntryModel> entries;
+  String status;
+  int totalQuantity;
+  double totalPrice;
 
-  AbstractOrderModel({@required this.code, this.entries});
+  AbstractOrderModel({
+    @required this.code,
+    @required this.status,
+    this.totalQuantity = 0,
+    this.totalPrice = 0,
+  });
 }
 
 @JsonSerializable()
 class OrderModel extends AbstractOrderModel {
   OrderModel({
     String code,
-    List<AbstractOrderEntryModel> entries,
-  }) : super(code: code, entries: entries);
+    String status,
+    int totalQuantity,
+    double totalPrice,
+  }) : super(
+          code: code,
+          status: status,
+          totalQuantity: totalQuantity,
+          totalPrice: totalPrice,
+        );
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
 
@@ -72,10 +86,20 @@ class OrderEntryModel extends AbstractOrderEntryModel {
 
 @JsonSerializable()
 class CartModel extends AbstractOrderModel {
+  List<AbstractOrderEntryModel> entries;
+
   CartModel({
     String code,
-    List<AbstractOrderEntryModel> entries,
-  }) : super(code: code, entries: entries);
+    String status,
+    int totalQuantity,
+    double totalPrice,
+    this.entries,
+  }) : super(
+          code: code,
+          status: status,
+          totalQuantity: totalQuantity,
+          totalPrice: totalPrice,
+        );
 
   factory CartModel.fromJson(Map<String, dynamic> json) => _$CartModelFromJson(json);
 
@@ -108,9 +132,10 @@ class CartEntryModel extends AbstractOrderEntryModel {
 @JsonSerializable()
 class ConsignmentModel extends ItemModel {
   String code;
+  String status;
   List<ConsignmentEntryModel> consignmentEntries;
 
-  ConsignmentModel({@required this.code, this.consignmentEntries});
+  ConsignmentModel({@required this.code, @required this.status, this.consignmentEntries});
 
   factory ConsignmentModel.fromJson(Map<String, dynamic> json) => _$ConsignmentModelFromJson(json);
 
@@ -134,12 +159,14 @@ class ConsignmentEntryModel extends ItemModel {
 
 @JsonSerializable()
 class RequirementOrderModel extends OrderModel {
-  RequirementOrderModel({
-    String code,
-    List<AbstractOrderEntryModel> entries,
-  }) : super(
+  List<RequirementOrderEntryModel> entries;
+
+  RequirementOrderModel({String code, String status, int totalQuantity, double totalPrice, this.entries})
+      : super(
           code: code,
-          entries: entries,
+          status: status,
+          totalQuantity: totalQuantity,
+          totalPrice: totalPrice,
         );
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderModelFromJson(json);
@@ -172,12 +199,19 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 
 @JsonSerializable()
 class PurchaseOrderModel extends OrderModel {
+  List<PurchaseOrderEntryModel> entries;
+
   PurchaseOrderModel({
     String code,
-    List<AbstractOrderEntryModel> entries,
+    String status,
+    int totalQuantity,
+    double totalPrice,
+    this.entries,
   }) : super(
           code: code,
-          entries: entries,
+          status: status,
+          totalQuantity: totalQuantity,
+          totalPrice: totalPrice,
         );
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) => _$PurchaseOrderModelFromJson(json);
@@ -210,12 +244,19 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
 
 @JsonSerializable()
 class SalesOrderModel extends OrderModel {
+  List<SalesOrderEntryModel> entries;
+
   SalesOrderModel({
     String code,
-    List<AbstractOrderEntryModel> entries,
+    String status,
+    int totalQuantity,
+    double totalPrice,
+    this.entries,
   }) : super(
           code: code,
-          entries: entries,
+          status: status,
+          totalQuantity: totalQuantity,
+          totalPrice: totalPrice,
         );
 
   factory SalesOrderModel.fromJson(Map<String, dynamic> json) => _$SalesOrderModelFromJson(json);
@@ -250,9 +291,11 @@ class SalesOrderEntryModel extends OrderEntryModel {
 class ProductionOrderModel extends ConsignmentModel {
   ProductionOrderModel({
     String code,
+    String status,
     List<ConsignmentEntryModel> consignmentEntries,
   }) : super(
           code: code,
+          status: status,
           consignmentEntries: consignmentEntries,
         );
 

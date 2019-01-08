@@ -52,8 +52,10 @@ class ProductAttributesModel extends ItemModel {
 @JsonSerializable()
 class ProductModel extends ItemModel {
   String code;
+  String skuID;
   String name;
   double price;
+  String thumbnail;
   List<VariantProductModel> variants;
   List<StaircasePriceModel> staircasePrices;
   ProductAttributesModel attributes;
@@ -67,8 +69,10 @@ class ProductModel extends ItemModel {
 
   ProductModel({
     this.code,
+    this.skuID,
     this.name,
     this.price = 0.0,
+    this.thumbnail,
     this.variants,
     this.staircasePrices,
     this.stock,
@@ -91,6 +95,7 @@ class VariantProductModel extends ProductModel {
     String code,
     String name,
     double price,
+    String thumbnail,
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
     ProductAttributesModel attributes,
@@ -102,6 +107,7 @@ class VariantProductModel extends ProductModel {
           code: code,
           name: name,
           price: price,
+          thumbnail: thumbnail,
           variants: variants,
           staircasePrices: staircasePrices,
           attributes: attributes,
@@ -117,7 +123,6 @@ class VariantProductModel extends ProductModel {
 
 @JsonSerializable()
 class ApparelProductModel extends ProductModel {
-  String skuID;
   String brand;
   CategoryModel majorCategory;
   @JsonKey(name: 'supercategories')
@@ -132,13 +137,14 @@ class ApparelProductModel extends ProductModel {
     String code,
     String name,
     double price,
+    String thumbnail,
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
     ProductAttributesModel attributes,
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
-    this.skuID,
+    String skuID,
     this.brand,
     this.majorCategory,
     this.superCategories,
@@ -148,8 +154,10 @@ class ApparelProductModel extends ProductModel {
     this.suggestedPrice,
   }) : super(
           code: code,
+          skuID: skuID,
           name: name,
           price: price,
+          thumbnail: thumbnail,
           variants: variants,
           staircasePrices: staircasePrices,
           attributes: attributes,
@@ -171,6 +179,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     String code,
     String name,
     double price,
+    String thumbnail,
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
     ProductAttributesModel attributes,
@@ -183,6 +192,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
           code: code,
           name: name,
           price: price,
+          thumbnail: thumbnail,
           variants: variants,
           staircasePrices: staircasePrices,
           attributes: attributes,
@@ -207,6 +217,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     String code,
     String name,
     double price,
+    String thumbnail,
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
     ProductAttributesModel attributes,
@@ -220,6 +231,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
             code: code,
             name: name,
             price: price,
+            thumbnail: thumbnail,
             variants: variants,
             staircasePrices: staircasePrices,
             attributes: attributes,
@@ -242,6 +254,7 @@ class FabricProductModel extends ProductModel {
     String code,
     String name,
     double price,
+    String thumbnail,
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
     ProductAttributesModel attributes,
@@ -252,6 +265,7 @@ class FabricProductModel extends ProductModel {
           code: code,
           name: name,
           price: price,
+          thumbnail: thumbnail,
           variants: variants,
           staircasePrices: staircasePrices,
           attributes: attributes,
@@ -273,6 +287,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
     String code,
     String name,
     double price,
+    String thumbnail,
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
     ProductAttributesModel attributes,
@@ -284,6 +299,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
           code: code,
           name: name,
           price: price,
+          thumbnail: thumbnail,
           variants: variants,
           staircasePrices: staircasePrices,
           attributes: attributes,
