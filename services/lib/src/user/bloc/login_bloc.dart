@@ -4,6 +4,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/src/net/http_manager.dart';
+import 'package:services/src/net/http_util.dart';
 import 'package:services/src/user/bloc/login.dart';
 
 class LoginBLoC {
@@ -19,22 +20,15 @@ class LoginBLoC {
 
   login({String username, String password}) async {
     // // TODO: call login service
-    //拼接请求地址
-    String client_id = 'asm';
-    String client_secret = 'password';
-    String loginRequestUrl = GlobalConfigs.AUTH_TOKEN_URL +
-        '?client_id=' +
-        client_id +
-        '&client_secret=' +
-        client_secret +
-        '&grant_type=' +
-        GlobalConfigs.GRANT_TYPE_PASSWORD +
-        '&username=' +
-        username +
-        '&password=' +
-        password;
 
-    Response loginRequest = await http$.post(loginRequestUrl);
+    Response loginRequest = await http$
+        .post(HttpUtil.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+      'username': username,
+      'password': password,
+      'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
+      'client_id': 'asm', // TODO:
+      'client_secret': 'password' // TODO:
+    }));
 
     if (loginRequest.statusCode == 200) {
       LoginResponse _response = LoginResponse.fromJson(loginRequest.data);
