@@ -72,10 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
               flexibleSpace: FlexibleSpaceBar(
                 title: StreamBuilder<UserModel>(
                     stream: bloc.stream,
-                    initialData: UserModel(name: 'asdad'),
+                    initialData: bloc.currentUser,
                     builder: (BuildContext context,
                         AsyncSnapshot<UserModel> snapshot) {
-                      var result = snapshot.data;
                       return Text('${snapshot.data.name}');
                     }),
                 background: Stack(
