@@ -17,7 +17,7 @@ class LoginBLoC {
 
   Stream<UserModel> get stream => _controller.stream;
 
-  login(String username, String password) async {
+  login({String username, String password}) async {
     // // TODO: call login service
     //拼接请求地址
     String client_id = 'asm';

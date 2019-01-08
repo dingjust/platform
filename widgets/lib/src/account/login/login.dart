@@ -223,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
           margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
           child: RaisedButton(
             onPressed: () {
-              bloc.login('nbyjy', 'z123456');
+              bloc.login(username: 'nbyjy',password: 'z123456');
             },
             color: Colors.blue,
             child: Text(
