@@ -64,35 +64,35 @@ class SaleOrderItem extends StatelessWidget{
       padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
       children: <Widget>[
         Card(
-          child: Padding(
-            padding: EdgeInsets.all(5.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('订单编号：1234567890'),
-                    Text('待付款',style: TextStyle(color: Colors.amber))
-                  ],
-                ),
-                Text('订单创建时间：2018-12-19 09:58:19'),
-                ListView(
-                  shrinkWrap: true,
-                  children: items,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('共计5件商品 合计：￥800'),
-                    RaisedButton(
-                      child: Text('支付'),
-                    )
-                  ],
-                )
-              ],
-            ),
-          )
+            child: Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('订单编号：1234567890'),
+                      Text('待付款',style: TextStyle(color: Colors.amber))
+                    ],
+                  ),
+                  Text('订单创建时间：2018-12-19 09:58:19'),
+                  ListView(
+                    shrinkWrap: true,
+                    children: items,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('共计5件商品 合计：￥800'),
+                      RaisedButton(
+                        child: Text('支付'),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
         ),
         Card(
             child: Padding(

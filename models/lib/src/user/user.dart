@@ -16,7 +16,11 @@ class UserModel extends PrincipalModel {
     String uid,
     String name,
     this.loginDisabled,
-  });
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+        );
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
@@ -34,7 +38,12 @@ class CustomerModel extends UserModel {
     String name,
     bool loginDisabled,
     @required this.mobileNumber,
-  });
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          loginDisabled: loginDisabled,
+        );
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) => _$CustomerModelFromJson(json);
 
@@ -55,7 +64,13 @@ class B2BCustomerModel extends CustomerModel {
     String mobileNumber,
     this.active,
     this.defaultB2BUnit,
-  });
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+          loginDisabled: loginDisabled,
+          mobileNumber: mobileNumber,
+        );
 
   factory B2BCustomerModel.fromJson(Map<String, dynamic> json) => _$B2BCustomerModelFromJson(json);
 
