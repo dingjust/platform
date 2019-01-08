@@ -16,7 +16,7 @@ export 'src/order/invoice.dart';
 part 'models.g.dart';
 
 abstract class ItemModel {
-  int pk;
+  int id;
 }
 
 /// 枚举
