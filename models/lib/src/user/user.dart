@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:models/models.dart';
@@ -11,6 +12,8 @@ part 'user.g.dart';
 class UserModel extends PrincipalModel {
   bool loginDisabled;
 
+  Image get avatar => profilePicture ?? Image.network(profilePicture);
+
   UserModel({
     String profilePicture,
     String uid,
@@ -21,6 +24,13 @@ class UserModel extends PrincipalModel {
           uid: uid,
           name: name,
         );
+
+  UserModel.empty() {
+    this.profilePicture = null;
+    this.uid = "anonymouse";
+    this.name = "anonymouse";
+    this.loginDisabled = false;
+  }
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
