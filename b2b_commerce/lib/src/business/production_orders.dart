@@ -71,10 +71,39 @@ class _ProductionOrdersPage extends State<ProductionOrdersPage> {
                 ),
                 isScrollable: true,
             ),
-            body: new Center(
-                child: new ListView(
-              children: ordersItem(),
-            )),
+            body: TabBarView(
+              children: <Widget>[
+                new Center(
+                    child: new ListView(
+                        children: ordersItem()
+                    )
+                ),
+                Center(
+                  child: Text('待分配订单'),
+                ),
+                Center(
+                  child: Text('备料中订单'),
+                ),
+                Center(
+                  child: Text('待裁剪订单'),
+                ),
+                Center(
+                  child: Text('裁剪中订单'),
+                ),
+                Center(
+                  child: Text('车缝中订单'),
+                ),
+                Center(
+                  child: Text('待验货订单'),
+                ),
+                Center(
+                  child: Text('待发货订单'),
+                ),
+                Center(
+                  child: Text('已发货订单'),
+                ),
+              ],
+            ),
           ),
         ));
   }
