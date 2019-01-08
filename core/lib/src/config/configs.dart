@@ -2,10 +2,11 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
   static const DEBUG = true;
 
-  static const BASE_URL = 'https://47.106.112.137:9002/djwebservices/v2';
+  static const CONTEXT_PATH = 'https://47.106.112.137:9002';
+  static const BASE_URL = '$CONTEXT_PATH/djwebservices/v2';
   static const ACCESS_TOKEN_KEY = 'access_token';
   static const BASIC_AUTH_TOKEN_KEY = 'basic_auth_token';
-  static const AUTH_SERVER_URL = 'https://47.106.112.137:9002/authorizationserver';
+  static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
   static const AUTH_TOKEN_URL = '$AUTH_SERVER_URL/oauth/token';
   static const AUTH_CHECK_TOKEN_URL = '$AUTH_SERVER_URL/oauth/check_token';
   static const AUTH_CLIENT_ID_KEY = 'client_id';

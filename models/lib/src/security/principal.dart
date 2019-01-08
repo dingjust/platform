@@ -22,7 +22,16 @@ class PrincipalModel extends ItemModel {
 class PrincipalGroupModel extends PrincipalModel {
   PrincipalModel members;
 
-  PrincipalGroupModel({this.members});
+  PrincipalGroupModel({
+    String profilePicture,
+    String uid,
+    String name,
+    this.members,
+  }) : super(
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+        );
 
   factory PrincipalGroupModel.fromJson(Map<String, dynamic> json) => _$PrincipalGroupModelFromJson(json);
 
