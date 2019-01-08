@@ -1,6 +1,7 @@
 library widgets;
 
 export 'src/account/login/login.dart';
+export 'src/account/login/login_bloc_provider.dart';
 export 'src/commons/button/button.dart';
 export 'src/commons/carousel/carousel.dart';
 export 'src/commons/chat/chat.dart';
