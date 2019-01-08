@@ -39,7 +39,7 @@ class _MySettingsPageState extends State<MySettingsPage> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.ROUTE_MY_LOGIN);
+                Navigator.pushNamed(context, AppRoutes.ROUTE_LOGIN);
               },
             ),
           ),

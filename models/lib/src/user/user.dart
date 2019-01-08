@@ -16,11 +16,13 @@ class UserModel extends PrincipalModel {
     String uid,
     String name,
     this.loginDisabled,
-  });
+  }) : super(uid: uid, name: name, profilePicture: profilePicture);
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
-  static Map<String, dynamic> toJson(UserModel model) => _$UserModelToJson(model);
+  static Map<String, dynamic> toJson(UserModel model) =>
+      _$UserModelToJson(model);
 }
 
 /// 客户
@@ -36,9 +38,11 @@ class CustomerModel extends UserModel {
     @required this.mobileNumber,
   });
 
-  factory CustomerModel.fromJson(Map<String, dynamic> json) => _$CustomerModelFromJson(json);
+  factory CustomerModel.fromJson(Map<String, dynamic> json) =>
+      _$CustomerModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CustomerModel model) => _$CustomerModelToJson(model);
+  static Map<String, dynamic> toJson(CustomerModel model) =>
+      _$CustomerModelToJson(model);
 }
 
 /// B2B客户
@@ -57,9 +61,11 @@ class B2BCustomerModel extends CustomerModel {
     this.defaultB2BUnit,
   });
 
-  factory B2BCustomerModel.fromJson(Map<String, dynamic> json) => _$B2BCustomerModelFromJson(json);
+  factory B2BCustomerModel.fromJson(Map<String, dynamic> json) =>
+      _$B2BCustomerModelFromJson(json);
 
-  static Map<String, dynamic> toJson(B2BCustomerModel model) => _$B2BCustomerModelToJson(model);
+  static Map<String, dynamic> toJson(B2BCustomerModel model) =>
+      _$B2BCustomerModelToJson(model);
 }
 
 /// 地址
@@ -83,13 +89,16 @@ class AddressModel extends ItemModel {
     this.defaultAddress = false,
   });
 
-  String get regionCityAndDistrict => region.name + city.name + cityDistrict.name;
+  String get regionCityAndDistrict =>
+      region.name + city.name + cityDistrict.name;
 
   String get details => (region.name + city.name + cityDistrict.name + line1);
 
-  factory AddressModel.fromJson(Map<String, dynamic> json) => _$AddressModelFromJson(json);
+  factory AddressModel.fromJson(Map<String, dynamic> json) =>
+      _$AddressModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AddressModel model) => _$AddressModelToJson(model);
+  static Map<String, dynamic> toJson(AddressModel model) =>
+      _$AddressModelToJson(model);
 }
 
 /// 省份
@@ -102,9 +111,11 @@ class RegionModel extends ItemModel {
 
   RegionModel({this.isocode, this.name, this.isocodeShort, this.countryIso});
 
-  factory RegionModel.fromJson(Map<String, dynamic> json) => _$RegionModelFromJson(json);
+  factory RegionModel.fromJson(Map<String, dynamic> json) =>
+      _$RegionModelFromJson(json);
 
-  static Map<String, dynamic> toJson(RegionModel model) => _$RegionModelToJson(model);
+  static Map<String, dynamic> toJson(RegionModel model) =>
+      _$RegionModelToJson(model);
 }
 
 /// 城市
@@ -120,9 +131,11 @@ class CityModel extends ItemModel {
     this.region,
   });
 
-  factory CityModel.fromJson(Map<String, dynamic> json) => _$CityModelFromJson(json);
+  factory CityModel.fromJson(Map<String, dynamic> json) =>
+      _$CityModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CityModel model) => _$CityModelToJson(model);
+  static Map<String, dynamic> toJson(CityModel model) =>
+      _$CityModelToJson(model);
 }
 
 /// 地区
@@ -134,7 +147,9 @@ class DistrictModel extends ItemModel {
 
   DistrictModel({@required this.code, @required this.name, this.city});
 
-  factory DistrictModel.fromJson(Map<String, dynamic> json) => _$DistrictModelFromJson(json);
+  factory DistrictModel.fromJson(Map<String, dynamic> json) =>
+      _$DistrictModelFromJson(json);
 
-  static Map<String, dynamic> toJson(DistrictModel model) => _$DistrictModelToJson(model);
+  static Map<String, dynamic> toJson(DistrictModel model) =>
+      _$DistrictModelToJson(model);
 }

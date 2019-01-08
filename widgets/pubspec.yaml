@@ -27,6 +27,8 @@ dependencies:
   scoped_model: ^1.0.1
   flutter_redux: ^0.5.2
   rxdart: ^0.20.0
+  fluwx: ^0.5.4
+
 
 dev_dependencies:
   flutter_test:
