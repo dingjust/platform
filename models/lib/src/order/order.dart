@@ -10,12 +10,14 @@ class AbstractOrderModel extends ItemModel {
   String status;
   int totalQuantity;
   double totalPrice;
+  CompanyModel belongTo;
 
   AbstractOrderModel({
     @required this.code,
     @required this.status,
     this.totalQuantity = 0,
     this.totalPrice = 0,
+    this.belongTo,
   });
 }
 
@@ -26,11 +28,13 @@ class OrderModel extends AbstractOrderModel {
     String status,
     int totalQuantity,
     double totalPrice,
+    CompanyModel belongTo,
   }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          belongTo: belongTo,
         );
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
@@ -85,12 +89,14 @@ class CartModel extends AbstractOrderModel {
     String status,
     int totalQuantity,
     double totalPrice,
+    CompanyModel belongTo,
     this.entries,
   }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          belongTo: belongTo,
         );
 
   factory CartModel.fromJson(Map<String, dynamic> json) => _$CartModelFromJson(json);
@@ -154,12 +160,19 @@ class ConsignmentEntryModel extends ItemModel {
 class RequirementOrderModel extends OrderModel {
   List<RequirementOrderEntryModel> entries;
 
-  RequirementOrderModel({String code, String status, int totalQuantity, double totalPrice, this.entries})
-      : super(
+  RequirementOrderModel({
+    String code,
+    String status,
+    int totalQuantity,
+    double totalPrice,
+    CompanyModel belongTo,
+    this.entries,
+  }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          belongTo: belongTo,
         );
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderModelFromJson(json);
@@ -200,12 +213,14 @@ class PurchaseOrderModel extends OrderModel {
     String status,
     int totalQuantity,
     double totalPrice,
+    CompanyModel belongTo,
     this.entries,
   }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          belongTo: belongTo,
         );
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) => _$PurchaseOrderModelFromJson(json);
@@ -246,12 +261,14 @@ class SalesOrderModel extends OrderModel {
     String status,
     int totalQuantity,
     double totalPrice,
+    CompanyModel belongTo,
     this.entries,
   }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          belongTo: belongTo,
         );
 
   factory SalesOrderModel.fromJson(Map<String, dynamic> json) => _$SalesOrderModelFromJson(json);
@@ -285,16 +302,21 @@ class SalesOrderEntryModel extends OrderEntryModel {
 
 @JsonSerializable()
 class QuoteModel extends AbstractOrderModel {
+  String state;
+
   QuoteModel(
     String code,
     String status,
     int totalQuantity,
     double totalPrice,
+    CompanyModel belongTo,
+    this.state,
   ) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          belongTo: belongTo,
         );
 
   factory QuoteModel.fromJson(Map<String, dynamic> json) => _$QuoteModelFromJson(json);
@@ -323,10 +345,13 @@ class QuoteEntryModel extends AbstractOrderEntryModel {
 
 @JsonSerializable()
 class ProductionOrderModel extends ConsignmentModel {
+  CompanyModel assignedTo;
+
   ProductionOrderModel({
     String code,
     String status,
     List<ConsignmentEntryModel> consignmentEntries,
+    this.assignedTo,
   }) : super(
           code: code,
           status: status,
