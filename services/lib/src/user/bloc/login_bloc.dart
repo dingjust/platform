@@ -4,7 +4,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/src/net/http_manager.dart';
-import 'package:services/src/net/http_util.dart';
+import 'package:services/src/net/http_utils.dart';
 import 'package:services/src/user/bloc/login.dart';
 
 class LoginBLoC {
@@ -22,7 +22,7 @@ class LoginBLoC {
     // // TODO: call login service
 
     Response loginRequest = await http$
-        .post(HttpUtil.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+        .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
       'username': username,
       'password': password,
       'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
