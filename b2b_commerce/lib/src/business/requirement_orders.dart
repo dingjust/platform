@@ -1,4 +1,5 @@
-import 'package:b2b_commerce/src/business/search/sales_order_search.dart';
+import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -31,7 +32,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
             IconButton(
               icon: Icon(Icons.search),
               onPressed: () => showSearch(
-                  context: context, delegate: SalesOrderSearchDelegate()),
+                  context: context, delegate: RequirementOrderSearchDelegate()),
             ),
           ],
         ),
@@ -149,7 +150,7 @@ class RequirementOrderList extends StatelessWidget {
     ];
 
     return Container(
-      decoration: BoxDecoration(color: Colors.grey[200]),
+      decoration: BoxDecoration(color: Colors.grey[100]),
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: ListView(
         children: orders.map((order) {
@@ -175,24 +176,29 @@ class RequirementOrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          _buildHead(),
-          Column(
-            children: _buildEntries(),
-          ),
-          _buildSummary()
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
+      },
+      child: Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        child: Column(
+          children: <Widget>[
+            _buildHeader(),
+            Column(
+              children: _buildEntries(),
+            ),
+            _buildSummary()
+          ],
+        ),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(5)),
       ),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(5)),
     );
   }
 
-  Widget _buildHead() {
+  Widget _buildHeader() {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
