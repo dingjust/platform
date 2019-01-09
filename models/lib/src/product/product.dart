@@ -40,25 +40,24 @@ class StaircasePriceModel extends ItemModel {
 
 /// 产品属性
 @JsonSerializable()
-class ProductAttributesModel extends ItemModel {
-  ProductAttributesModel();
+class ApparelProductAttributesModel extends ItemModel {
+  ApparelProductAttributesModel();
 
-  factory ProductAttributesModel.fromJson(Map<String, dynamic> json) => _$ProductAttributesModelFromJson(json);
+  factory ApparelProductAttributesModel.fromJson(Map<String, dynamic> json) =>
+      _$ApparelProductAttributesModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProductAttributesModel model) => _$ProductAttributesModelToJson(model);
+  static Map<String, dynamic> toJson(ApparelProductAttributesModel model) =>
+      _$ApparelProductAttributesModelToJson(model);
 }
 
 /// 产品
 @JsonSerializable()
 class ProductModel extends ItemModel {
   String code;
-  String skuID;
   String name;
   double price;
   String thumbnail;
-  List<VariantProductModel> variants;
   List<StaircasePriceModel> staircasePrices;
-  ProductAttributesModel attributes;
   bool privacy;
 
   /// 对于会员可见性，A/B/C
@@ -69,14 +68,11 @@ class ProductModel extends ItemModel {
 
   ProductModel({
     this.code,
-    this.skuID,
     this.name,
     this.price = 0.0,
     this.thumbnail,
-    this.variants,
     this.staircasePrices,
     this.stock,
-    this.attributes,
     this.privacy,
     this.ratingIfPrivacy,
   });
@@ -98,7 +94,6 @@ class VariantProductModel extends ProductModel {
     String thumbnail,
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
-    ProductAttributesModel attributes,
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
@@ -108,9 +103,7 @@ class VariantProductModel extends ProductModel {
           name: name,
           price: price,
           thumbnail: thumbnail,
-          variants: variants,
           staircasePrices: staircasePrices,
-          attributes: attributes,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,
@@ -123,6 +116,9 @@ class VariantProductModel extends ProductModel {
 
 @JsonSerializable()
 class ApparelProductModel extends ProductModel {
+  List<ApparelSizeVariantProductModel> variants;
+  ApparelProductAttributesModel attributes;
+  String skuID;
   String brand;
   CategoryModel majorCategory;
   @JsonKey(name: 'supercategories')
@@ -138,13 +134,13 @@ class ApparelProductModel extends ProductModel {
     String name,
     double price,
     String thumbnail,
-    List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
-    ProductAttributesModel attributes,
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
-    String skuID,
+    this.variants,
+    this.attributes,
+    this.skuID,
     this.brand,
     this.majorCategory,
     this.superCategories,
@@ -154,13 +150,10 @@ class ApparelProductModel extends ProductModel {
     this.suggestedPrice,
   }) : super(
           code: code,
-          skuID: skuID,
           name: name,
           price: price,
           thumbnail: thumbnail,
-          variants: variants,
           staircasePrices: staircasePrices,
-          attributes: attributes,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,
@@ -182,7 +175,6 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     String thumbnail,
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
-    ProductAttributesModel attributes,
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
@@ -195,7 +187,6 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
           thumbnail: thumbnail,
           variants: variants,
           staircasePrices: staircasePrices,
-          attributes: attributes,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,
@@ -220,7 +211,6 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     String thumbnail,
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
-    ProductAttributesModel attributes,
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
@@ -234,7 +224,6 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
             thumbnail: thumbnail,
             variants: variants,
             staircasePrices: staircasePrices,
-            attributes: attributes,
             privacy: privacy,
             ratingIfPrivacy: ratingIfPrivacy,
             stock: stock,
@@ -250,25 +239,24 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
 
 @JsonSerializable()
 class FabricProductModel extends ProductModel {
+  List<FabricStyleVariantProductModel> variants;
+
   FabricProductModel({
     String code,
     String name,
     double price,
     String thumbnail,
-    List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
-    ProductAttributesModel attributes,
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
+    this.variants,
   }) : super(
           code: code,
           name: name,
           price: price,
           thumbnail: thumbnail,
-          variants: variants,
           staircasePrices: staircasePrices,
-          attributes: attributes,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,
@@ -288,9 +276,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
     String name,
     double price,
     String thumbnail,
-    List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
-    ProductAttributesModel attributes,
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
@@ -300,9 +286,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
           name: name,
           price: price,
           thumbnail: thumbnail,
-          variants: variants,
           staircasePrices: staircasePrices,
-          attributes: attributes,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,

@@ -41,19 +41,15 @@ class OrderModel extends AbstractOrderModel {
 @JsonSerializable()
 class AbstractOrderEntryModel extends ItemModel {
   int entryNumber;
-  ProductModel product;
-  OrderModel order;
   double basePrice;
   int quantity;
   double totalPrice;
 
   AbstractOrderEntryModel({
     @required this.entryNumber,
-    @required this.product,
     this.basePrice,
     this.quantity,
     this.totalPrice,
-    this.order,
   });
 
   factory AbstractOrderEntryModel.fromJson(Map<String, dynamic> json) => _$AbstractOrderEntryModelFromJson(json);
@@ -65,15 +61,11 @@ class AbstractOrderEntryModel extends ItemModel {
 class OrderEntryModel extends AbstractOrderEntryModel {
   OrderEntryModel({
     int entryNumber,
-    ProductModel product,
-    OrderModel order,
     double basePrice,
     int quantity,
     double totalPrice,
   }) : super(
           entryNumber: entryNumber,
-          product: product,
-          order: order,
           basePrice: basePrice,
           quantity: quantity,
           totalPrice: totalPrice,
@@ -86,7 +78,7 @@ class OrderEntryModel extends AbstractOrderEntryModel {
 
 @JsonSerializable()
 class CartModel extends AbstractOrderModel {
-  List<AbstractOrderEntryModel> entries;
+  List<CartEntryModel> entries;
 
   CartModel({
     String code,
@@ -108,17 +100,18 @@ class CartModel extends AbstractOrderModel {
 
 @JsonSerializable()
 class CartEntryModel extends AbstractOrderEntryModel {
+  ProductModel product;
+  OrderModel order;
+
   CartEntryModel({
     int entryNumber,
-    ProductModel product,
-    OrderModel order,
+    this.product,
+    this.order,
     double basePrice,
     int quantity,
     double totalPrice,
   }) : super(
           entryNumber: entryNumber,
-          product: product,
-          order: order,
           basePrice: basePrice,
           quantity: quantity,
           totalPrice: totalPrice,
@@ -176,17 +169,18 @@ class RequirementOrderModel extends OrderModel {
 
 @JsonSerializable()
 class RequirementOrderEntryModel extends OrderEntryModel {
+  ApparelProductModel product;
+  RequirementOrderModel order;
+
   RequirementOrderEntryModel({
     int entryNumber,
-    ProductModel product,
-    OrderModel order,
+    this.product,
+    this.order,
     double basePrice,
     int quantity,
     double totalPrice,
   }) : super(
           entryNumber: entryNumber,
-          product: product,
-          order: order,
           basePrice: basePrice,
           quantity: quantity,
           totalPrice: totalPrice,
@@ -221,17 +215,18 @@ class PurchaseOrderModel extends OrderModel {
 
 @JsonSerializable()
 class PurchaseOrderEntryModel extends OrderEntryModel {
+  ApparelProductModel product;
+  PurchaseOrderModel order;
+
   PurchaseOrderEntryModel({
     int entryNumber,
-    ProductModel product,
-    OrderModel order,
+    this.product,
+    this.order,
     double basePrice,
     int quantity,
     double totalPrice,
   }) : super(
           entryNumber: entryNumber,
-          product: product,
-          order: order,
           basePrice: basePrice,
           quantity: quantity,
           totalPrice: totalPrice,
@@ -266,17 +261,18 @@ class SalesOrderModel extends OrderModel {
 
 @JsonSerializable()
 class SalesOrderEntryModel extends OrderEntryModel {
+  ApparelProductModel product;
+  SalesOrderModel order;
+
   SalesOrderEntryModel({
     int entryNumber,
-    ProductModel product,
-    OrderModel order,
+    this.product,
+    this.order,
     double basePrice,
     int quantity,
     double totalPrice,
   }) : super(
           entryNumber: entryNumber,
-          product: product,
-          order: order,
           basePrice: basePrice,
           quantity: quantity,
           totalPrice: totalPrice,
