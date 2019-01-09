@@ -112,57 +112,101 @@ class SalesOrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        _buildHeader(context),
-        Column(
-          children: _buildEntries(context),
+    return Card(
+      margin: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildHeader(context),
+            Column(
+              children: _buildEntries(context),
+            ),
+            _buildSummary(context),
+          ],
         ),
-        _buildSummary(context),
-      ],
+      ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Text('销售订单号：${order.code}'),
-        ),
-        Text('${order.status}')
-      ],
+    return Container(
+      color: Color(0xFFFFFFFF),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('销售订单号：${order.code}',style: TextStyle(fontSize: 16.0),),
+              Text('${order.status}',style: TextStyle(color: Color(0xFF56C275), fontSize: 16.0))
+            ],
+          ),
+          Text('订单创建时间：${order.code}',style: TextStyle(fontSize: 16.0),),
+        ],
+      ),
     );
   }
 
   List<Widget> _buildEntries(BuildContext context) {
     return order.entries.map((entry) {
-      return Row(
-        children: <Widget>[
-          entry.product.thumbnail != null ?
-          Image.network(
-            '${entry.product.thumbnail}',
-            width: 220,
-            height: 220,
-          ) : Text('TODO: thumbnail'),
-          Column(
+      return Container(
+        color: Color(0xFFFAFAFA),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0, 5.0, 0, 5.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('${entry.product.name}'),
-              Text('货号：${entry.product.skuID}'),
+                Container(
+                  width: 100.0,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage("https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg"),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('${entry.product.name}',style: TextStyle(fontSize: 16.0,color: Color(0xFF323232)),),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
+                      child: Text('货号：${entry.product.skuID}',style: TextStyle(fontSize: 14.0,color: Color(0xFF969696)),),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF0F0F0),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
             ],
-          )
-        ],
+          ),
+        ),
       );
     }).toList();
   }
 
   Widget _buildSummary(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: Text.rich(TextSpan(children: <TextSpan>[
-        TextSpan(text: '共${order.totalQuantity}件商品'),
-        TextSpan(text: '  '),
-        TextSpan(text: '合计：${order.totalPrice}'),
-      ])),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text('共${order.totalQuantity}件商品，合计：${order.totalPrice}', style: TextStyle(color: Color(0xFFFF4444), fontSize: 16.0),),
+        RaisedButton(
+          child: Text('支付'),
+        )
+      ],
     );
+
   }
 }
