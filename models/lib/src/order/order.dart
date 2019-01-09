@@ -284,6 +284,44 @@ class SalesOrderEntryModel extends OrderEntryModel {
 }
 
 @JsonSerializable()
+class QuoteModel extends AbstractOrderModel {
+  QuoteModel(
+    String code,
+    String status,
+    int totalQuantity,
+    double totalPrice,
+  ) : super(
+          code: code,
+          status: status,
+          totalQuantity: totalQuantity,
+          totalPrice: totalPrice,
+        );
+
+  factory QuoteModel.fromJson(Map<String, dynamic> json) => _$QuoteModelFromJson(json);
+
+  static Map<String, dynamic> toJson(QuoteModel model) => _$QuoteModelToJson(model);
+}
+
+@JsonSerializable()
+class QuoteEntryModel extends AbstractOrderEntryModel {
+  QuoteEntryModel(
+    int entryNumber,
+    double basePrice,
+    int quantity,
+    double totalPrice,
+  ) : super(
+          entryNumber: entryNumber,
+          basePrice: basePrice,
+          quantity: quantity,
+          totalPrice: totalPrice,
+        );
+
+  factory QuoteEntryModel.fromJson(Map<String, dynamic> json) => _$QuoteEntryModelFromJson(json);
+
+  static Map<String, dynamic> toJson(QuoteEntryModel model) => _$QuoteEntryModelToJson(model);
+}
+
+@JsonSerializable()
 class ProductionOrderModel extends ConsignmentModel {
   ProductionOrderModel({
     String code,
