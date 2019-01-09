@@ -343,6 +343,7 @@ class SalesOrderEntryModel extends OrderEntryModel {
 @JsonSerializable()
 class QuoteModel extends AbstractOrderModel {
   String state;
+  QuoteEntryModel quoteEntry;
 
   QuoteModel({
     String code,
@@ -352,6 +353,7 @@ class QuoteModel extends AbstractOrderModel {
     CompanyModel belongTo,
     DateTime creationTime,
     this.state,
+    this.quoteEntry,
   }) : super(
           code: code,
           status: status,
