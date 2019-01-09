@@ -11,6 +11,8 @@ class AbstractOrderModel extends ItemModel {
   int totalQuantity;
   double totalPrice;
   CompanyModel belongTo;
+  @JsonKey(name: "creationtime")
+  DateTime creationTime;
 
   AbstractOrderModel({
     @required this.code,
@@ -18,6 +20,7 @@ class AbstractOrderModel extends ItemModel {
     this.totalQuantity = 0,
     this.totalPrice = 0,
     this.belongTo,
+    this.creationTime,
   });
 }
 
@@ -29,12 +32,14 @@ class OrderModel extends AbstractOrderModel {
     int totalQuantity,
     double totalPrice,
     CompanyModel belongTo,
+    DateTime creationTime,
   }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           belongTo: belongTo,
+          creationTime: creationTime,
         );
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
@@ -90,6 +95,7 @@ class CartModel extends AbstractOrderModel {
     int totalQuantity,
     double totalPrice,
     CompanyModel belongTo,
+    DateTime creationTime,
     this.entries,
   }) : super(
           code: code,
@@ -97,6 +103,7 @@ class CartModel extends AbstractOrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           belongTo: belongTo,
+          creationTime: creationTime,
         );
 
   factory CartModel.fromJson(Map<String, dynamic> json) => _$CartModelFromJson(json);
@@ -166,6 +173,7 @@ class RequirementOrderModel extends OrderModel {
     int totalQuantity,
     double totalPrice,
     CompanyModel belongTo,
+    DateTime creationTime,
     this.entries,
   }) : super(
           code: code,
@@ -173,6 +181,7 @@ class RequirementOrderModel extends OrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           belongTo: belongTo,
+          creationTime: creationTime,
         );
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderModelFromJson(json);
@@ -214,6 +223,7 @@ class PurchaseOrderModel extends OrderModel {
     int totalQuantity,
     double totalPrice,
     CompanyModel belongTo,
+    DateTime creationTime,
     this.entries,
   }) : super(
           code: code,
@@ -221,6 +231,7 @@ class PurchaseOrderModel extends OrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           belongTo: belongTo,
+          creationTime: creationTime,
         );
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) => _$PurchaseOrderModelFromJson(json);
@@ -262,6 +273,7 @@ class SalesOrderModel extends OrderModel {
     int totalQuantity,
     double totalPrice,
     CompanyModel belongTo,
+    DateTime creationTime,
     this.entries,
   }) : super(
           code: code,
@@ -269,6 +281,7 @@ class SalesOrderModel extends OrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           belongTo: belongTo,
+          creationTime: creationTime,
         );
 
   factory SalesOrderModel.fromJson(Map<String, dynamic> json) => _$SalesOrderModelFromJson(json);
@@ -310,6 +323,7 @@ class QuoteModel extends AbstractOrderModel {
     int totalQuantity,
     double totalPrice,
     CompanyModel belongTo,
+    DateTime creationTime,
     this.state,
   ) : super(
           code: code,
@@ -317,6 +331,7 @@ class QuoteModel extends AbstractOrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           belongTo: belongTo,
+          creationTime: creationTime,
         );
 
   factory QuoteModel.fromJson(Map<String, dynamic> json) => _$QuoteModelFromJson(json);
