@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:widgets/main.dart';
 
 import '../business/apparel_product_stock_adjust_history.dart';
 import '../business/apparel_product_stocks.dart';
@@ -16,6 +17,10 @@ import '../business/sales_orders.dart';
 import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
 import '../home/account/login.dart';
+import '../my/account/register.dart';
+import '../my/account/register_brand.dart';
+import '../my/account/register_customer.dart';
+import '../my/account/register_factory.dart';
 import '../my/my_account.dart';
 import '../my/my_addresses.dart';
 import '../my/my_cart.dart';
@@ -24,23 +29,18 @@ import '../my/my_collections.dart';
 import '../my/my_company.dart';
 import '../my/my_invoices.dart';
 import '../my/my_settings.dart';
-import '../my/account/register.dart';
-import '../my/account/register_brand.dart';
-import '../my/account/register_factory.dart';
-import '../my/account/register_customer.dart';
 
 class AppRoutes with GlobalRoutes {
   static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
+  static const ROUTE_MY_HOME = GlobalRoutes.ROUTE_MY_HOME;
   static const ROUTE_EMPLOYEES = '/business/employees';
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
   static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
   static const ROUTE_PRODUCT_STOCKS = '/business/product_stocks';
-  static const ROUTE_PRODUCT_STOCK_ADJUST_HISTORY =
-      '/business/product_stock_adjust_history';
+  static const ROUTE_PRODUCT_STOCK_ADJUST_HISTORY = '/business/product_stock_adjust_history';
   static const ROUTE_PRODUCTION_ORDERS = '/business/production_orders';
   static const ROUTE_PRODUCTS = '/business/products';
-  static const ROUTE_PRODUCTS_OFF_THE_SHELF =
-      '/business/products_off_the_shelf';
+  static const ROUTE_PRODUCTS_OFF_THE_SHELF = '/business/products_off_the_shelf';
   static const ROUTE_PURCHASE_ORDERS = '/business/purchase_orders';
   static const ROUTE_QUOTES = '/business/quotes';
   static const ROUTE_REQUIREMENT_ORDERS = '/business/requirement_orders';
@@ -68,8 +68,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_PRODUCT_STOCKS: (context) => ApparelProductStocksPage(),
     ROUTE_PRODUCTS: (context) => ApparelProductsPage(),
     ROUTE_PRODUCTS_OFF_THE_SHELF: (context) => OffTheShelfApparelProductsPage(),
-    ROUTE_PRODUCT_STOCK_ADJUST_HISTORY: (context) =>
-        ApparelProductStockAdjustHistoryPage(),
+    ROUTE_PRODUCT_STOCK_ADJUST_HISTORY: (context) => ApparelProductStockAdjustHistoryPage(),
     ROUTE_PRODUCTION_ORDERS: (context) => ProductionOrdersPage(),
     ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
@@ -77,6 +76,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_QUOTES: (context) => QuotesPage(),
     ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),
+    ROUTE_MY_HOME: (context) => MyHomePage(),
     ROUTE_MY_ACCOUNT: (context) => MyAccountPage(),
     ROUTE_MY_COMPANY: (context) => MyCompanyPage(),
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),

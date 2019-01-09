@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:widgets/src/account/login/login_bloc_provider.dart';
@@ -10,12 +11,12 @@ class LoginPage extends StatefulWidget {
       {Key key,
       @required this.logo,
       this.registerRoute,
-      this.fogetPasswordRoute})
+      this.forgetPasswordRoute})
       : super(key: key);
 
   final Image logo;
   final String registerRoute;
-  final String fogetPasswordRoute;
+  final String forgetPasswordRoute;
 
   _LoginPageState createState() => _LoginPageState();
 }
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
           body: Form(
         key: _formKey,
         autovalidate: true,
-        child: _buildBody(),
+        child: _buildBody(context),
       )),
     );
   }
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, widget.fogetPasswordRoute);
+            Navigator.pushNamed(context, widget.forgetPasswordRoute);
           },
           child: Container(
             margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
@@ -211,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20), child: widget.logo);
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     final bloc = LoginBlocProvider.of(context);
 
     return ListView(
@@ -223,7 +224,12 @@ class _LoginPageState extends State<LoginPage> {
           margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
           child: RaisedButton(
             onPressed: () {
-              bloc.login(username: 'nbyjy',password: 'z123456');
+              bloc.login(username: 'nbyjy', password: 'z123456')
+                  .then((success) {
+                if (success) {
+                  Navigator.pushNamed(context, GlobalRoutes.ROUTE_MY_HOME);
+                }
+              });
             },
             color: Colors.blue,
             child: Text(

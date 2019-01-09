@@ -14,13 +14,10 @@ class LoginBLoC {
 
   var _controller = StreamController<UserModel>.broadcast();
 
-  var _errorController = StreamController<bool>();
-
   Stream<UserModel> get stream => _controller.stream;
 
-  login({String username, String password}) async {
+  Future<bool> login({String username, String password}) async {
     // // TODO: call login service
-
     Response loginRequest = await http$
         .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
       'username': username,
@@ -39,13 +36,14 @@ class LoginBLoC {
       _user.name = '衣加衣管理员';
       _user.uid = 'nbyjy';
       _controller.sink.add(_user);
-    } else {
-      _errorController.sink.add(false);
+
+      return true;
     }
+
+    return false;
   }
 
   dispose() {
     _controller.close();
-    _errorController.close();
   }
 }
