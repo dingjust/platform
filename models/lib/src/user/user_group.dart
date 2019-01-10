@@ -116,6 +116,10 @@ class BrandModel extends B2BUnitModel {
           active: active,
           starLevel: starLevel,
         );
+
+  factory BrandModel.fromJson(Map<String, dynamic> json) => _$BrandModelFromJson(json);
+
+  static Map<String, dynamic> toJson(BrandModel model) => _$BrandModelToJson(model);
 }
 
 @JsonSerializable()
@@ -126,17 +130,17 @@ class FactoryModel extends B2BUnitModel {
   /// 接单成功率
   double orderedSuccessRate;
 
-  FactoryModel(
-      {String profilePicture,
-      String uid,
-      String name,
-      PrincipalModel members,
-      String path,
-      bool active,
-      int starLevel,
-      this.historyOrdersCount,
-      this.orderedSuccessRate})
-      : super(
+  FactoryModel({
+    String profilePicture,
+    String uid,
+    String name,
+    PrincipalModel members,
+    String path,
+    bool active,
+    int starLevel,
+    this.historyOrdersCount,
+    this.orderedSuccessRate,
+  }) : super(
           profilePicture: profilePicture,
           uid: uid,
           name: name,
@@ -145,4 +149,8 @@ class FactoryModel extends B2BUnitModel {
           active: active,
           starLevel: starLevel,
         );
+
+  factory FactoryModel.fromJson(Map<String, dynamic> json) => _$FactoryModelFromJson(json);
+
+  static Map<String, dynamic> toJson(FactoryModel model) => _$FactoryModelToJson(model);
 }

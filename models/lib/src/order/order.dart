@@ -12,6 +12,8 @@ class AbstractOrderModel extends ItemModel {
   double totalPrice;
   @JsonKey(name: "creationtime")
   DateTime creationTime;
+  /// 地址
+  AddressModel deliveryAddress;
 
   /// 备注
   String remarks;
@@ -22,6 +24,7 @@ class AbstractOrderModel extends ItemModel {
     this.totalQuantity = 0,
     this.totalPrice = 0,
     this.creationTime,
+    this.deliveryAddress,
     this.remarks,
   });
 }
@@ -34,6 +37,7 @@ class OrderModel extends AbstractOrderModel {
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
+    AddressModel deliveryAddress,
     String remarks,
   }) : super(
           code: code,
@@ -41,6 +45,7 @@ class OrderModel extends AbstractOrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
+          deliveryAddress: deliveryAddress,
           remarks: remarks,
         );
 
@@ -98,6 +103,7 @@ class CartModel extends AbstractOrderModel {
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
+    AddressModel deliveryAddress,
     String remarks,
     this.belongTo,
     this.entries,
@@ -107,6 +113,7 @@ class CartModel extends AbstractOrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
+          deliveryAddress: deliveryAddress,
           remarks: remarks,
         );
 
@@ -181,6 +188,7 @@ class RequirementOrderModel extends OrderModel {
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
+    AddressModel deliveryAddress,
     String remarks,
     this.belongTo,
     this.entries,
@@ -191,6 +199,7 @@ class RequirementOrderModel extends OrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
+          deliveryAddress: deliveryAddress,
           remarks: remarks,
         );
 
@@ -234,6 +243,7 @@ class PurchaseOrderModel extends OrderModel {
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
+    AddressModel deliveryAddress,
     String remarks,
     this.belongTo,
     this.entries,
@@ -243,6 +253,7 @@ class PurchaseOrderModel extends OrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
+          deliveryAddress: deliveryAddress,
           remarks: remarks,
         );
 
@@ -286,6 +297,7 @@ class SalesOrderModel extends OrderModel {
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
+    AddressModel deliveryAddress,
     String remarks,
     this.belongTo,
     this.entries,
@@ -295,6 +307,7 @@ class SalesOrderModel extends OrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
+          deliveryAddress: deliveryAddress,
           remarks: remarks,
         );
 
@@ -357,6 +370,7 @@ class QuoteModel extends AbstractOrderModel {
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
+    AddressModel deliveryAddress,
     String remarks,
     this.state,
     this.requirementOrderCode,
@@ -368,6 +382,7 @@ class QuoteModel extends AbstractOrderModel {
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
+          deliveryAddress: deliveryAddress,
           remarks: remarks,
         );
 
