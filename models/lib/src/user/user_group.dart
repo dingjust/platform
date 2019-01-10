@@ -116,6 +116,10 @@ class BrandModel extends B2BUnitModel {
           active: active,
           starLevel: starLevel,
         );
+
+  factory BrandModel.fromJson(Map<String, dynamic> json) => _$BrandModelFromJson(json);
+
+  static Map<String, dynamic> toJson(BrandModel model) => _$BrandModelToJson(model);
 }
 
 @JsonSerializable()
@@ -145,4 +149,8 @@ class FactoryModel extends B2BUnitModel {
           active: active,
           starLevel: starLevel,
         );
+
+  factory FactoryModel.fromJson(Map<String, dynamic> json) => _$FactoryModelFromJson(json);
+
+  static Map<String, dynamic> toJson(FactoryModel model) => _$FactoryModelToJson(model);
 }
