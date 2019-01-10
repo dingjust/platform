@@ -61,7 +61,7 @@ class SalesOrderList extends StatelessWidget {
     final List<SalesOrderModel> orders = <SalesOrderModel>[
       SalesOrderModel.fromJson({
         "code": "34938475200045",
-        "status": "CREATED",
+        "status": "PENDING_PAYMENT",
         "totalQuantity": 10,
         "totalPrice": 300,
         "creationtime": DateTime.now().toString(),
@@ -88,7 +88,7 @@ class SalesOrderList extends StatelessWidget {
       }),
       SalesOrderModel.fromJson({
         "code": "34938475200045",
-        "status": "CREATED",
+        "status": "PENDING_PAYMENT",
         "totalQuantity": 10,
         "totalPrice": 300,
         "creationtime": DateTime.now().toString(),
@@ -153,7 +153,7 @@ class SalesOrderItem extends StatelessWidget {
                 style: TextStyle(fontSize: 16.0),
               ),
               Text(
-                '${order.status}',
+                SalesOrderStatusLocalizedMap[order.status],
                 style: TextStyle(color: Color(0xFF56C275), fontSize: 16.0),
               )
             ],

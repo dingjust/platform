@@ -58,6 +58,7 @@ flutter:
   assets:
     - packages/assets/temp/lake.jpg
     - packages/assets/temp/login_logo.png
+    - packages/assets/temp/picture.png
     - packages/assets/temp/business/check_report.png
     - packages/assets/temp/business/address_manage.png
     - packages/assets/temp/business/cart.png
