@@ -423,7 +423,7 @@ class PurchaseOrderModel extends OrderModel {
   bool invoiceNeeded;
 
   /// 当前阶段
-  String currentPhase;
+  ProductionProgressPhase currentPhase;
 
   /// 附件
   List<String> attachments;
