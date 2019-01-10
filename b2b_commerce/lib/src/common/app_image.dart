@@ -29,7 +29,7 @@ class MenuItemImage {
     width: _width,
     height: _height,
   );
-   static Image clothes_manage = Image.asset(
+  static Image clothes_manage = Image.asset(
     'temp/business/clothes_manage.png',
     package: _package,
     width: _width,
@@ -149,4 +149,16 @@ class MenuItemImage {
     width: _width,
     height: _height,
   );
+}
+
+class CommonImage {
+  static String _package = 'assets';
+  static Image picture({double width, double height}) {
+    return Image.asset(
+      'temp/picture.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
 }
