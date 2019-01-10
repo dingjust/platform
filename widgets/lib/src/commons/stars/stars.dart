@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+//星级
 class Stars extends StatelessWidget {
   const Stars({Key key, this.starLevel = 1, this.color = Colors.orange})
       : super(key: key);

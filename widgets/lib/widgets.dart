@@ -13,4 +13,6 @@ export 'src/commons/snakebar/snake_bar.dart';
 export 'src/commons/splash/splash.dart';
 export 'src/report/site_statistics_section.dart';
 export 'src/commons/stars/stars.dart';
+export 'src/commons/attachments/attachments.dart';
+
 

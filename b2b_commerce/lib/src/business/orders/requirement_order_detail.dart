@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
   final String code;
@@ -301,44 +302,12 @@ class _RequirementOrderDetailPageState
               )
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Icon(
-                Icons.chevron_left,
-                color: Colors.grey,
-              ),
-              _buildAttachmentsListVie(320),
-              Icon(Icons.chevron_right, color: Colors.grey)
-            ],
+          Attachments(
+            list: order.attachments,
           )
         ],
       ),
     );
-  }
-
-  Widget _buildAttachmentsListVie(double width) {
-    return Container(
-        padding: EdgeInsets.all(10),
-        height: 100,
-        width: width,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: order.attachments
-              .map((url) => Container(
-                    width: 80,
-                    height: 80,
-                    margin: EdgeInsets.symmetric(horizontal: 5),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey,
-                        image: DecorationImage(
-                          image: NetworkImage(url),
-                          fit: BoxFit.cover,
-                        )),
-                  ))
-              .toList(),
-        ));
   }
 
   Widget _buildRemarks() {
@@ -433,3 +402,4 @@ class AttachmentItem extends StatelessWidget {
     );
   }
 }
+
