@@ -4,13 +4,132 @@ import 'package:models/models.dart';
 
 part 'order.g.dart';
 
+/// 销售订单状态
+enum SalesOrderStatus {
+  /// 待付款
+  PENDING_PAYMENT,
+
+  /// 待发货
+  PENDING_DELIVERY,
+
+  /// 已发货
+  SHIPPED,
+
+  /// 已完成
+  COMPLETED,
+}
+
+// TODO: i18n处理
+const SalesOrderStatusLocalizedMap = {
+  SalesOrderStatus.PENDING_PAYMENT: "待付款",
+  SalesOrderStatus.PENDING_DELIVERY: "待发货",
+  SalesOrderStatus.SHIPPED: "已发货",
+  SalesOrderStatus.COMPLETED: "已完成"
+};
+
+/// 需求订单状态
+enum RequirementOrderStatus {
+  /// 报价中
+  PENDING_QUOTE,
+
+  /// 已完成
+  COMPLETED,
+
+  /// 已失效
+  CANCELLED
+}
+
+// TODO: i18n处理
+const RequirementOrderStatusLocalizedMap = {
+  RequirementOrderStatus.PENDING_QUOTE: "报价中",
+  RequirementOrderStatus.COMPLETED: "已完成",
+  RequirementOrderStatus.CANCELLED: "已失效"
+};
+
+/// 采购订单状态
+enum PurchaseOrderStatus {
+  /// 待处理
+  WAIT_FOR_PROCESSING,
+
+  /// 待确认
+  PENDING_APPROVAL,
+
+  /// 已确认
+  APPROVED,
+
+  /// 待出库
+  WAIT_FOR_OUT_OF_STORE,
+
+  /// 已出库
+  OUT_OF_STORE,
+
+  /// 已完成
+  COMPLETED
+}
+
+// TODO: i18n处理
+const PurchaseOrderStatusLocalizedMap = {
+  PurchaseOrderStatus.WAIT_FOR_PROCESSING: "待处理",
+  PurchaseOrderStatus.PENDING_APPROVAL: "待确认",
+  PurchaseOrderStatus.APPROVED: "已确认",
+  PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: "待出库",
+  PurchaseOrderStatus.OUT_OF_STORE: "已出库",
+  PurchaseOrderStatus.COMPLETED: "已完成"
+};
+
+/// 报价单状态
+enum QuoteState {
+  /// （工厂）待处理
+  SELLER_SUBMITTED,
+
+  ///（品牌）通过
+  BUYER_APPROVED,
+
+  /// （品牌）拒绝
+  BUYER_REJECTED
+}
+
+// TODO: i18n处理
+const QuoteStateLocalizedMap = {
+  QuoteState.SELLER_SUBMITTED: "待处理",
+  QuoteState.BUYER_APPROVED: "通过",
+  QuoteState.BUYER_REJECTED: "拒绝"
+};
+
+enum ProductionProgressPhase {
+  /// 备料
+  MATERIAL_PREPARATION,
+
+  /// 产前样衣确认
+  SAMPLE_CONFIRM,
+
+  /// 裁剪
+  CUTTING,
+
+  /// 车缝
+  STITCHING,
+
+  /// 验货
+  INSPECTION,
+
+  /// 发货
+  DELIVERY
+}
+
+// TODO: i18n处理
+const ProductionProgressPhaseLocalizedMap = {
+  ProductionProgressPhase.MATERIAL_PREPARATION: "",
+  ProductionProgressPhase.SAMPLE_CONFIRM: "",
+  ProductionProgressPhase.CUTTING: "",
+  ProductionProgressPhase.STITCHING: "",
+  ProductionProgressPhase.INSPECTION: "",
+  ProductionProgressPhase.DELIVERY: ""
+};
+
 @JsonSerializable()
 class AbstractOrderModel extends ItemModel {
   /// 订单号
   String code;
-
-  /// 订单状态
-  String status;
 
   /// 合计数量
   int totalQuantity;
@@ -30,7 +149,6 @@ class AbstractOrderModel extends ItemModel {
 
   AbstractOrderModel({
     @required this.code,
-    @required this.status,
     this.totalQuantity = 0,
     this.totalPrice = 0,
     this.creationTime,
@@ -39,6 +157,7 @@ class AbstractOrderModel extends ItemModel {
   });
 }
 
+/// 订单
 @JsonSerializable()
 class OrderModel extends AbstractOrderModel {
   OrderModel({
@@ -51,7 +170,6 @@ class OrderModel extends AbstractOrderModel {
     String remarks,
   }) : super(
           code: code,
-          status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
@@ -126,7 +244,6 @@ class CartModel extends AbstractOrderModel {
     this.entries,
   }) : super(
           code: code,
-          status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
@@ -229,9 +346,15 @@ class RequirementOrderModel extends OrderModel {
   /// 报价数
   int countOfQuotes;
 
+  /// 附件
+  List<String> attachments;
+
+  /// 订单状态
+  RequirementOrderStatus status;
+
   RequirementOrderModel({
     String code,
-    String status,
+    this.status,
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
@@ -244,9 +367,9 @@ class RequirementOrderModel extends OrderModel {
     this.machiningType,
     this.invoiceNeeded = false,
     this.countOfQuotes,
+    this.attachments,
   }) : super(
           code: code,
-          status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
@@ -302,9 +425,21 @@ class PurchaseOrderModel extends OrderModel {
   /// 当前阶段
   String currentPhase;
 
+  /// 附件
+  List<String> attachments;
+
+  /// 订单状态
+  PurchaseOrderStatus status;
+
+  /// 需求订单号
+  String requirementOrderCode;
+
+  /// 预计交货时间
+  DateTime expectedDeliveryDate;
+
   PurchaseOrderModel({
     String code,
-    String status,
+    this.status,
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
@@ -314,9 +449,11 @@ class PurchaseOrderModel extends OrderModel {
     this.entries,
     this.machiningType,
     this.currentPhase,
+    this.attachments,
+    this.requirementOrderCode,
+    this.expectedDeliveryDate
   }) : super(
           code: code,
-          status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
@@ -335,9 +472,6 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
   ApparelProductModel product;
   PurchaseOrderModel order;
 
-  /// 需求订单号
-  String requirementOrderCode;
-
   PurchaseOrderEntryModel({
     int entryNumber,
     double basePrice,
@@ -345,7 +479,6 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
     double totalPrice,
     this.product,
     this.order,
-    this.requirementOrderCode,
   }) : super(
           entryNumber: entryNumber,
           basePrice: basePrice,
@@ -363,10 +496,11 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
 class SalesOrderModel extends OrderModel {
   CompanyModel belongTo;
   List<SalesOrderEntryModel> entries;
+  SalesOrderStatus status;
 
   SalesOrderModel({
     String code,
-    String status,
+    this.status,
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
@@ -376,7 +510,6 @@ class SalesOrderModel extends OrderModel {
     this.entries,
   }) : super(
           code: code,
-          status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
@@ -418,10 +551,13 @@ class SalesOrderEntryModel extends OrderEntryModel {
 @JsonSerializable()
 class QuoteModel extends AbstractOrderModel {
   /// 报价状态
-  String state;
+  QuoteState state;
 
   /// 需求订单号
   String requirementOrderCode;
+
+  /// 采购订单号
+  String purchaseOrderCode;
 
   /// 交货时间，工厂自己填写的交货时间，而不是需求订单中的交货时间
   DateTime expectedDeliveryDate;
@@ -446,7 +582,6 @@ class QuoteModel extends AbstractOrderModel {
 
   QuoteModel({
     String code,
-    String status,
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
@@ -454,11 +589,11 @@ class QuoteModel extends AbstractOrderModel {
     String remarks,
     this.state,
     this.requirementOrderCode,
+    this.purchaseOrderCode,
     this.belongTo,
     this.attachments,
   }) : super(
           code: code,
-          status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
           creationTime: creationTime,
@@ -500,7 +635,7 @@ class QuoteEntryModel extends AbstractOrderEntryModel {
 @JsonSerializable()
 class ProductionProgressModel extends ItemModel {
   /// 生产阶段
-  String phase;
+  ProductionProgressPhase phase;
 
   /// 数量
   int quantity;
