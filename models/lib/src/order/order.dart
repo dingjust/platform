@@ -10,12 +10,19 @@ class AbstractOrderModel extends ItemModel {
   String status;
   int totalQuantity;
   double totalPrice;
+  @JsonKey(name: "creationtime")
+  DateTime creationTime;
+
+  /// 备注
+  String remarks;
 
   AbstractOrderModel({
     @required this.code,
     @required this.status,
     this.totalQuantity = 0,
     this.totalPrice = 0,
+    this.creationTime,
+    this.remarks,
   });
 }
 
@@ -26,11 +33,15 @@ class OrderModel extends AbstractOrderModel {
     String status,
     int totalQuantity,
     double totalPrice,
+    DateTime creationTime,
+    String remarks,
   }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          creationTime: creationTime,
+          remarks: remarks,
         );
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
@@ -78,6 +89,7 @@ class OrderEntryModel extends AbstractOrderEntryModel {
 
 @JsonSerializable()
 class CartModel extends AbstractOrderModel {
+  CompanyModel belongTo;
   List<CartEntryModel> entries;
 
   CartModel({
@@ -85,12 +97,17 @@ class CartModel extends AbstractOrderModel {
     String status,
     int totalQuantity,
     double totalPrice,
+    DateTime creationTime,
+    String remarks,
+    this.belongTo,
     this.entries,
   }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          creationTime: creationTime,
+          remarks: remarks,
         );
 
   factory CartModel.fromJson(Map<String, dynamic> json) => _$CartModelFromJson(json);
@@ -152,14 +169,29 @@ class ConsignmentEntryModel extends ItemModel {
 
 @JsonSerializable()
 class RequirementOrderModel extends OrderModel {
+  BrandModel belongTo;
   List<RequirementOrderEntryModel> entries;
 
-  RequirementOrderModel({String code, String status, int totalQuantity, double totalPrice, this.entries})
-      : super(
+  /// 交货时间
+  DateTime expectedDeliveryDate;
+
+  RequirementOrderModel({
+    String code,
+    String status,
+    int totalQuantity,
+    double totalPrice,
+    DateTime creationTime,
+    String remarks,
+    this.belongTo,
+    this.entries,
+    this.expectedDeliveryDate,
+  }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          creationTime: creationTime,
+          remarks: remarks,
         );
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderModelFromJson(json);
@@ -193,6 +225,7 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 
 @JsonSerializable()
 class PurchaseOrderModel extends OrderModel {
+  BrandModel belongTo;
   List<PurchaseOrderEntryModel> entries;
 
   PurchaseOrderModel({
@@ -200,12 +233,17 @@ class PurchaseOrderModel extends OrderModel {
     String status,
     int totalQuantity,
     double totalPrice,
+    DateTime creationTime,
+    String remarks,
+    this.belongTo,
     this.entries,
   }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          creationTime: creationTime,
+          remarks: remarks,
         );
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) => _$PurchaseOrderModelFromJson(json);
@@ -239,6 +277,7 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
 
 @JsonSerializable()
 class SalesOrderModel extends OrderModel {
+  CompanyModel belongTo;
   List<SalesOrderEntryModel> entries;
 
   SalesOrderModel({
@@ -246,12 +285,17 @@ class SalesOrderModel extends OrderModel {
     String status,
     int totalQuantity,
     double totalPrice,
+    DateTime creationTime,
+    String remarks,
+    this.belongTo,
     this.entries,
   }) : super(
           code: code,
           status: status,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
+          creationTime: creationTime,
+          remarks: remarks,
         );
 
   factory SalesOrderModel.fromJson(Map<String, dynamic> json) => _$SalesOrderModelFromJson(json);
@@ -284,11 +328,87 @@ class SalesOrderEntryModel extends OrderEntryModel {
 }
 
 @JsonSerializable()
+class QuoteModel extends AbstractOrderModel {
+  String state;
+  /// 需求订单号
+  String requirementOrderCode;
+  /// 交货时间
+  DateTime expectedDeliveryDate;
+  FactoryModel belongTo;
+
+  /// 面料单价
+  double unitPriceOfFabric;
+
+  /// 辅料单价
+  double unitPriceOfExcipients;
+
+  /// 加工单价
+  double unitPriceOfProcessing;
+
+  /// 样衣费用
+  double costOfSamples;
+
+  /// 附件
+  List<String> attachments;
+
+  QuoteModel({
+    String code,
+    String status,
+    int totalQuantity,
+    double totalPrice,
+    DateTime creationTime,
+    String remarks,
+    this.state,
+    this.requirementOrderCode,
+    this.belongTo,
+    this.attachments
+  }) : super(
+          code: code,
+          status: status,
+          totalQuantity: totalQuantity,
+          totalPrice: totalPrice,
+          creationTime: creationTime,
+          remarks: remarks,
+        );
+
+  factory QuoteModel.fromJson(Map<String, dynamic> json) => _$QuoteModelFromJson(json);
+
+  static Map<String, dynamic> toJson(QuoteModel model) => _$QuoteModelToJson(model);
+}
+
+@JsonSerializable()
+class QuoteEntryModel extends AbstractOrderEntryModel {
+  ApparelProductModel product;
+  QuoteModel order;
+
+  QuoteEntryModel({
+    int entryNumber,
+    double basePrice,
+    int quantity,
+    double totalPrice,
+    this.product,
+    this.order,
+  }) : super(
+          entryNumber: entryNumber,
+          basePrice: basePrice,
+          quantity: quantity,
+          totalPrice: totalPrice,
+        );
+
+  factory QuoteEntryModel.fromJson(Map<String, dynamic> json) => _$QuoteEntryModelFromJson(json);
+
+  static Map<String, dynamic> toJson(QuoteEntryModel model) => _$QuoteEntryModelToJson(model);
+}
+
+@JsonSerializable()
 class ProductionOrderModel extends ConsignmentModel {
+  CompanyModel assignedTo;
+
   ProductionOrderModel({
     String code,
     String status,
     List<ConsignmentEntryModel> consignmentEntries,
+    this.assignedTo,
   }) : super(
           code: code,
           status: status,

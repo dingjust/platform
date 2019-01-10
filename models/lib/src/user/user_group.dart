@@ -26,11 +26,15 @@ class UserGroupModel extends PrincipalGroupModel {
 /// 公司
 @JsonSerializable()
 class CompanyModel extends UserGroupModel {
+  /// 星级
+  int starLevel;
+
   CompanyModel({
     String profilePicture,
     String uid,
     String name,
     PrincipalModel members,
+    this.starLevel,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -47,12 +51,19 @@ class CompanyModel extends UserGroupModel {
 class OrgUnitModel extends CompanyModel {
   String path;
 
-  OrgUnitModel({String profilePicture, String uid, String name, PrincipalModel members, this.path})
-      : super(
+  OrgUnitModel({
+    String profilePicture,
+    String uid,
+    String name,
+    PrincipalModel members,
+    int starLevel,
+    this.path,
+  }) : super(
           profilePicture: profilePicture,
           uid: uid,
           name: name,
           members: members,
+          starLevel: starLevel,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) => _$OrgUnitModelFromJson(json);
@@ -70,6 +81,7 @@ class B2BUnitModel extends OrgUnitModel {
     String name,
     PrincipalModel members,
     String path,
+    int starLevel,
     this.active,
   }) : super(
           profilePicture: profilePicture,
@@ -77,6 +89,7 @@ class B2BUnitModel extends OrgUnitModel {
           name: name,
           members: members,
           path: path,
+          starLevel: starLevel,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) => _$B2BUnitModelFromJson(json);
@@ -93,6 +106,7 @@ class BrandModel extends B2BUnitModel {
     PrincipalModel members,
     String path,
     bool active,
+    int starLevel,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -100,24 +114,35 @@ class BrandModel extends B2BUnitModel {
           members: members,
           path: path,
           active: active,
+          starLevel: starLevel,
         );
 }
 
 @JsonSerializable()
 class FactoryModel extends B2BUnitModel {
-  FactoryModel({
-    String profilePicture,
-    String uid,
-    String name,
-    PrincipalModel members,
-    String path,
-    bool active,
-  }) : super(
+  /// 历史接单数
+  int historyOrdersCount;
+
+  /// 接单成功率
+  double orderedSuccessRate;
+
+  FactoryModel(
+      {String profilePicture,
+      String uid,
+      String name,
+      PrincipalModel members,
+      String path,
+      bool active,
+      int starLevel,
+      this.historyOrdersCount,
+      this.orderedSuccessRate})
+      : super(
           profilePicture: profilePicture,
           uid: uid,
           name: name,
           members: members,
           path: path,
           active: active,
+          starLevel: starLevel,
         );
 }
