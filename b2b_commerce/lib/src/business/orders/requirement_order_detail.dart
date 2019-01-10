@@ -127,15 +127,15 @@ class _RequirementOrderDetailPageState
           ),
           InfoRow(
             label: '加工类型',
-            value: Text('包公包料'),
+            value: Text('包公包料',style: TextStyle(fontSize: 16),),
           ),
           InfoRow(
             label: '加工类型',
-            value: Text('包公包料'),
+            value: Text('包公包料',style: TextStyle(fontSize: 16),),
           ),
           InfoRow(
             label: '加工类型',
-            value: Text('包公包料'),
+            value: Text('包公包料',style: TextStyle(fontSize: 16),),
           )
         ],
       ),

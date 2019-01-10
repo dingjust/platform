@@ -147,6 +147,72 @@ class RequirementOrderList extends StatelessWidget {
           },
         ],
       }),
+    RequirementOrderModel.fromJson({
+        "code": "34938475200045",
+        "status": "PENDING_QUOTE",
+        "totalQuantity": 10,
+        "totalPrice": 300,
+        "entries": [
+          {
+            "product": {
+              "code": "NA89852509",
+              "name": "山本风法少女长裙复古气质秋冬款",
+              "skuID": "NA89852509",
+              "majorCategory": {"name": "女装-T恤"},
+              "supercategories": [
+                {"name": "针织"}
+              ],
+              "thumbnail":
+                  "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp",
+            },
+            "entryNumber": 500,
+          },
+        ],
+      }),
+      RequirementOrderModel.fromJson({
+        "code": "34938475200045",
+        "status": "COMPLETED",
+        "totalQuantity": 10,
+        "totalPrice": 300,
+        "entries": [
+          {
+            "product": {
+              "code": "NA89852509",
+              // "name": "山本风法少女长裙复古气质秋冬款",
+              // "skuID": "NA89852509",
+              "entryNumber": 500,
+              "majorCategory": {"name": "女装-T恤"},
+              "supercategories": [
+                {"name": "针织"}
+              ]
+            },
+            "entryNumber": 500,
+          }
+        ],
+      }),
+      RequirementOrderModel.fromJson({
+        "code": "34938475200045",
+        "status": "CANCELLED",
+        "totalQuantity": 10,
+        "totalPrice": 300,
+        "entries": [
+          {
+            "product": {
+              "code": "NA89852509",
+              "name": "山本风法少女长裙复古气质秋冬款",
+              "skuID": "NA89852509",
+              "entryNumber": 500,
+              "majorCategory": {"name": "女装-T恤"},
+              "supercategories": [
+                {"name": "针织"}
+              ],
+              "thumbnail":
+                  "https://img.alicdn.com/imgextra/i2/109570697/O1CN011H1GWjAIIrfgcfr_!!0-saturn_solar.jpg_220x220.jpg_.webp"
+            },
+            "entryNumber": 500,
+          },
+        ],
+      }),
     ];
 
     return Container(
