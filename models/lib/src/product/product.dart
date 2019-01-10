@@ -59,6 +59,8 @@ class ProductModel extends ItemModel {
   String thumbnail;
   List<StaircasePriceModel> staircasePrices;
   bool privacy;
+  @JsonKey(name: 'supercategories')
+  List<CategoryModel> superCategories;
 
   /// 对于会员可见性，A/B/C
   MemberRating ratingIfPrivacy;
@@ -74,6 +76,7 @@ class ProductModel extends ItemModel {
     this.staircasePrices,
     this.stock,
     this.privacy,
+    this.superCategories,
     this.ratingIfPrivacy,
   });
 
@@ -97,6 +100,7 @@ class VariantProductModel extends ProductModel {
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
+    List<CategoryModel> superCategories,
     this.baseProduct,
   }) : super(
           code: code,
@@ -107,6 +111,7 @@ class VariantProductModel extends ProductModel {
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,
+          superCategories: superCategories,
         );
 
   factory VariantProductModel.fromJson(Map<String, dynamic> json) => _$VariantProductModelFromJson(json);
@@ -121,8 +126,7 @@ class ApparelProductModel extends ProductModel {
   String skuID;
   String brand;
   CategoryModel majorCategory;
-  @JsonKey(name: 'supercategories')
-  List<CategoryModel> superCategories;
+  CategoryModel minorCategory;
   double price1;
   double price2;
   double price3;
@@ -139,13 +143,14 @@ class ApparelProductModel extends ProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     MemberRating ratingIfPrivacy,
+    List<CategoryModel> superCategories,
     int stock,
     this.variants,
     this.attributes,
     this.skuID,
     this.brand,
     this.majorCategory,
-    this.superCategories,
+    this.minorCategory,
     this.price1,
     this.price2,
     this.price3,
@@ -159,6 +164,7 @@ class ApparelProductModel extends ProductModel {
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,
+          superCategories: superCategories,
         );
 
   factory ApparelProductModel.fromJson(Map<String, dynamic> json) => _$ApparelProductModelFromJson(json);
@@ -178,6 +184,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
+    List<CategoryModel> superCategories,
     MemberRating ratingIfPrivacy,
     int stock,
     String baseProduct,
@@ -193,6 +200,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,
           baseProduct: baseProduct,
+          superCategories: superCategories,
         );
 
   factory ApparelStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
@@ -214,23 +222,26 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
+    List<CategoryModel> superCategories,
     MemberRating ratingIfPrivacy,
     int stock,
     String baseProduct,
     ColorModel color,
     this.size,
   }) : super(
-            code: code,
-            name: name,
-            price: price,
-            thumbnail: thumbnail,
-            variants: variants,
-            staircasePrices: staircasePrices,
-            privacy: privacy,
-            ratingIfPrivacy: ratingIfPrivacy,
-            stock: stock,
-            baseProduct: baseProduct,
-            color: color);
+          code: code,
+          name: name,
+          price: price,
+          thumbnail: thumbnail,
+          variants: variants,
+          staircasePrices: staircasePrices,
+          privacy: privacy,
+          ratingIfPrivacy: ratingIfPrivacy,
+          stock: stock,
+          baseProduct: baseProduct,
+          color: color,
+          superCategories: superCategories,
+        );
 
   factory ApparelSizeVariantProductModel.fromJson(Map<String, dynamic> json) =>
       _$ApparelSizeVariantProductModelFromJson(json);
@@ -252,6 +263,7 @@ class FabricProductModel extends ProductModel {
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
+    List<CategoryModel> superCategories,
     this.variants,
   }) : super(
           code: code,
@@ -262,6 +274,7 @@ class FabricProductModel extends ProductModel {
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,
+          superCategories: superCategories,
         );
 
   factory FabricProductModel.fromJson(Map<String, dynamic> json) => _$FabricProductModelFromJson(json);
@@ -282,6 +295,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
     bool privacy,
     MemberRating ratingIfPrivacy,
     int stock,
+    List<CategoryModel> superCategories,
     this.color,
   }) : super(
           code: code,
@@ -292,6 +306,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
           stock: stock,
+          superCategories: superCategories,
         );
 
   factory FabricStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
