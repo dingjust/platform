@@ -6,12 +6,22 @@ part 'order.g.dart';
 
 @JsonSerializable()
 class AbstractOrderModel extends ItemModel {
+  /// 订单号
   String code;
+
+  /// 订单状态
   String status;
+
+  /// 合计数量
   int totalQuantity;
+
+  /// 合计金额
   double totalPrice;
+
+  /// 创建时间
   @JsonKey(name: "creationtime")
   DateTime creationTime;
+
   /// 地址
   AddressModel deliveryAddress;
 
@@ -56,9 +66,16 @@ class OrderModel extends AbstractOrderModel {
 
 @JsonSerializable()
 class AbstractOrderEntryModel extends ItemModel {
+  /// 行号
   int entryNumber;
+
+  /// 行单价
   double basePrice;
+
+  /// 行数量
   int quantity;
+
+  /// 行总价
   double totalPrice;
 
   AbstractOrderEntryModel({
@@ -146,13 +163,27 @@ class CartEntryModel extends AbstractOrderEntryModel {
   static Map<String, dynamic> toJson(CartEntryModel model) => _$CartEntryModelToJson(model);
 }
 
+/// 发货
 @JsonSerializable()
 class ConsignmentModel extends ItemModel {
+  /// 发货单号
   String code;
+
+  /// 发货状态
   String status;
+
+  /// 物流单号
+  String trackingID;
+
+  /// 发货行
   List<ConsignmentEntryModel> consignmentEntries;
 
-  ConsignmentModel({@required this.code, @required this.status, this.consignmentEntries});
+  ConsignmentModel({
+    @required this.code,
+    @required this.status,
+    this.trackingID,
+    this.consignmentEntries,
+  });
 
   factory ConsignmentModel.fromJson(Map<String, dynamic> json) => _$ConsignmentModelFromJson(json);
 
@@ -174,13 +205,29 @@ class ConsignmentEntryModel extends ItemModel {
   static Map<String, dynamic> toJson(ConsignmentEntryModel model) => _$ConsignmentEntryModelToJson(model);
 }
 
+/// 需求订单
 @JsonSerializable()
 class RequirementOrderModel extends OrderModel {
+  /// 发布者
   BrandModel belongTo;
+
+  /// 订单行
   List<RequirementOrderEntryModel> entries;
 
-  /// 交货时间
+  /// 期望交货时间
   DateTime expectedDeliveryDate;
+
+  /// 期望价格
+  double expectedPrice;
+
+  /// 加工类型
+  String machiningType;
+
+  /// 是否开具发票
+  bool invoiceNeeded;
+
+  /// 报价数
+  int countOfQuotes;
 
   RequirementOrderModel({
     String code,
@@ -193,6 +240,10 @@ class RequirementOrderModel extends OrderModel {
     this.belongTo,
     this.entries,
     this.expectedDeliveryDate,
+    this.expectedPrice,
+    this.machiningType,
+    this.invoiceNeeded = false,
+    this.countOfQuotes,
   }) : super(
           code: code,
           status: status,
@@ -208,6 +259,7 @@ class RequirementOrderModel extends OrderModel {
   static Map<String, dynamic> toJson(RequirementOrderModel model) => _$RequirementOrderModelToJson(model);
 }
 
+/// 需求订单行
 @JsonSerializable()
 class RequirementOrderEntryModel extends OrderEntryModel {
   ApparelProductModel product;
@@ -232,10 +284,23 @@ class RequirementOrderEntryModel extends OrderEntryModel {
   static Map<String, dynamic> toJson(RequirementOrderEntryModel model) => _$RequirementOrderEntryModelToJson(model);
 }
 
+/// 采购订单
 @JsonSerializable()
 class PurchaseOrderModel extends OrderModel {
+  /// 采购者
   BrandModel belongTo;
+
+  /// 采购行
   List<PurchaseOrderEntryModel> entries;
+
+  /// 加工类型
+  String machiningType;
+
+  /// 是否开具发票
+  bool invoiceNeeded;
+
+  /// 当前阶段
+  String currentPhase;
 
   PurchaseOrderModel({
     String code,
@@ -247,6 +312,8 @@ class PurchaseOrderModel extends OrderModel {
     String remarks,
     this.belongTo,
     this.entries,
+    this.machiningType,
+    this.currentPhase,
   }) : super(
           code: code,
           status: status,
@@ -262,18 +329,23 @@ class PurchaseOrderModel extends OrderModel {
   static Map<String, dynamic> toJson(PurchaseOrderModel model) => _$PurchaseOrderModelToJson(model);
 }
 
+/// 采购订单行
 @JsonSerializable()
 class PurchaseOrderEntryModel extends OrderEntryModel {
   ApparelProductModel product;
   PurchaseOrderModel order;
 
+  /// 需求订单号
+  String requirementOrderCode;
+
   PurchaseOrderEntryModel({
     int entryNumber,
-    this.product,
-    this.order,
     double basePrice,
     int quantity,
     double totalPrice,
+    this.product,
+    this.order,
+    this.requirementOrderCode,
   }) : super(
           entryNumber: entryNumber,
           basePrice: basePrice,
@@ -286,6 +358,7 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
   static Map<String, dynamic> toJson(PurchaseOrderEntryModel model) => _$PurchaseOrderEntryModelToJson(model);
 }
 
+/// 销售订单
 @JsonSerializable()
 class SalesOrderModel extends OrderModel {
   CompanyModel belongTo;
@@ -316,6 +389,7 @@ class SalesOrderModel extends OrderModel {
   static Map<String, dynamic> toJson(SalesOrderModel model) => _$SalesOrderModelToJson(model);
 }
 
+/// 销售订单行
 @JsonSerializable()
 class SalesOrderEntryModel extends OrderEntryModel {
   ApparelProductModel product;
@@ -340,13 +414,19 @@ class SalesOrderEntryModel extends OrderEntryModel {
   static Map<String, dynamic> toJson(SalesOrderEntryModel model) => _$SalesOrderEntryModelToJson(model);
 }
 
+/// 报价单
 @JsonSerializable()
 class QuoteModel extends AbstractOrderModel {
+  /// 报价状态
   String state;
+
   /// 需求订单号
   String requirementOrderCode;
-  /// 交货时间
+
+  /// 交货时间，工厂自己填写的交货时间，而不是需求订单中的交货时间
   DateTime expectedDeliveryDate;
+
+  /// 报价工厂
   FactoryModel belongTo;
 
   /// 面料单价
@@ -375,7 +455,7 @@ class QuoteModel extends AbstractOrderModel {
     this.state,
     this.requirementOrderCode,
     this.belongTo,
-    this.attachments
+    this.attachments,
   }) : super(
           code: code,
           status: status,
@@ -391,6 +471,7 @@ class QuoteModel extends AbstractOrderModel {
   static Map<String, dynamic> toJson(QuoteModel model) => _$QuoteModelToJson(model);
 }
 
+/// 报价单行
 @JsonSerializable()
 class QuoteEntryModel extends AbstractOrderEntryModel {
   ApparelProductModel product;
@@ -415,37 +496,41 @@ class QuoteEntryModel extends AbstractOrderEntryModel {
   static Map<String, dynamic> toJson(QuoteEntryModel model) => _$QuoteEntryModelToJson(model);
 }
 
+/// 生产进度
 @JsonSerializable()
-class ProductionOrderModel extends ConsignmentModel {
-  CompanyModel assignedTo;
+class ProductionProgressModel extends ItemModel {
+  /// 生产阶段
+  String phase;
 
-  ProductionOrderModel({
-    String code,
-    String status,
-    List<ConsignmentEntryModel> consignmentEntries,
-    this.assignedTo,
-  }) : super(
-          code: code,
-          status: status,
-          consignmentEntries: consignmentEntries,
-        );
+  /// 数量
+  int quantity;
 
-  factory ProductionOrderModel.fromJson(Map<String, dynamic> json) => _$ProductionOrderModelFromJson(json);
+  /// 凭证
+  List<String> medias;
 
-  static Map<String, dynamic> toJson(ProductionOrderModel model) => _$ProductionOrderModelToJson(model);
-}
+  /// 生产阶段顺序
+  int sequence;
 
-@JsonSerializable()
-class ProductionOrderEntryModel extends ConsignmentEntryModel {
-  ProductionOrderEntryModel({
-    AbstractOrderEntryModel orderEntry,
-    ConsignmentModel consignment,
-  }) : super(
-          orderEntry: orderEntry,
-          consignment: consignment,
-        );
+  /// 预计完成时间
+  DateTime estimatedDate;
 
-  factory ProductionOrderEntryModel.fromJson(Map<String, dynamic> json) => _$ProductionOrderEntryModelFromJson(json);
+  /// 实际完成时间
+  DateTime finishDate;
 
-  static Map<String, dynamic> toJson(ProductionOrderEntryModel model) => _$ProductionOrderEntryModelToJson(model);
+  /// 采购订单
+  PurchaseOrderModel order;
+
+  ProductionProgressModel({
+    this.phase,
+    this.quantity,
+    this.medias,
+    this.sequence,
+    this.estimatedDate,
+    this.finishDate,
+    this.order,
+  });
+
+  factory ProductionProgressModel.fromJson(Map<String, dynamic> json) => _$ProductionProgressModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ProductionProgressModel model) => _$ProductionProgressModelToJson(model);
 }
