@@ -126,17 +126,17 @@ class FactoryModel extends B2BUnitModel {
   /// 接单成功率
   double orderedSuccessRate;
 
-  FactoryModel(
-      {String profilePicture,
-      String uid,
-      String name,
-      PrincipalModel members,
-      String path,
-      bool active,
-      int starLevel,
-      this.historyOrdersCount,
-      this.orderedSuccessRate})
-      : super(
+  FactoryModel({
+    String profilePicture,
+    String uid,
+    String name,
+    PrincipalModel members,
+    String path,
+    bool active,
+    int starLevel,
+    this.historyOrdersCount,
+    this.orderedSuccessRate,
+  }) : super(
           profilePicture: profilePicture,
           uid: uid,
           name: name,
