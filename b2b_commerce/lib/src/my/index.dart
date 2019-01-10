@@ -75,7 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     initialData: bloc.currentUser,
                     builder: (BuildContext context,
                         AsyncSnapshot<UserModel> snapshot) {
-                      return Text('${snapshot.data.name}');
+                      return Text(
+                        '${snapshot.data.name}',
+                        style: TextStyle(color: Colors.white),
+                      );
                     }),
                 background: Stack(
                   fit: StackFit.expand,
