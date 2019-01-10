@@ -28,6 +28,7 @@ class UserGroupModel extends PrincipalGroupModel {
 class CompanyModel extends UserGroupModel {
   /// 星级
   int starLevel;
+  AddressModel contactAddress;
 
   CompanyModel({
     String profilePicture,
@@ -35,6 +36,7 @@ class CompanyModel extends UserGroupModel {
     String name,
     PrincipalModel members,
     this.starLevel,
+    this.contactAddress,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -57,6 +59,7 @@ class OrgUnitModel extends CompanyModel {
     String name,
     PrincipalModel members,
     int starLevel,
+    AddressModel contactAddress,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -64,6 +67,7 @@ class OrgUnitModel extends CompanyModel {
           name: name,
           members: members,
           starLevel: starLevel,
+          contactAddress: contactAddress,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) => _$OrgUnitModelFromJson(json);
@@ -82,6 +86,7 @@ class B2BUnitModel extends OrgUnitModel {
     PrincipalModel members,
     String path,
     int starLevel,
+    AddressModel contactAddress,
     this.active,
   }) : super(
           profilePicture: profilePicture,
@@ -90,6 +95,7 @@ class B2BUnitModel extends OrgUnitModel {
           members: members,
           path: path,
           starLevel: starLevel,
+          contactAddress: contactAddress,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) => _$B2BUnitModelFromJson(json);
@@ -107,6 +113,7 @@ class BrandModel extends B2BUnitModel {
     String path,
     bool active,
     int starLevel,
+    AddressModel contactAddress,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -115,6 +122,7 @@ class BrandModel extends B2BUnitModel {
           path: path,
           active: active,
           starLevel: starLevel,
+          contactAddress: contactAddress,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) => _$BrandModelFromJson(json);
@@ -138,6 +146,7 @@ class FactoryModel extends B2BUnitModel {
     String path,
     bool active,
     int starLevel,
+    AddressModel contactAddress,
     this.historyOrdersCount,
     this.orderedSuccessRate,
   }) : super(
@@ -148,6 +157,7 @@ class FactoryModel extends B2BUnitModel {
           path: path,
           active: active,
           starLevel: starLevel,
+          contactAddress: contactAddress,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) => _$FactoryModelFromJson(json);
