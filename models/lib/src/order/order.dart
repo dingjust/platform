@@ -4,6 +4,36 @@ import 'package:models/models.dart';
 
 part 'order.g.dart';
 
+enum SalesOrderStatus {
+  /// 待付款
+  PENDING_PAYMENT,
+  /// 待发货
+  PENDING_DELIVERY,
+  /// 已发货
+  SHIPPED,
+  /// 已完成
+  COMPLETED
+}
+
+enum RequirementOrderStatus {
+  /// 报价中
+  PENDING_QUOTE,
+
+  /// 已完成
+  COMPLETED,
+
+  /// 已失效
+  CANCELLED
+}
+
+/*enum PurchaseOrderStatus {
+
+}
+
+enum QuoteState {
+
+}*/
+
 @JsonSerializable()
 class AbstractOrderModel extends ItemModel {
   /// 订单号
@@ -229,6 +259,9 @@ class RequirementOrderModel extends OrderModel {
   /// 报价数
   int countOfQuotes;
 
+  /// 附件
+  List<String> attachments;
+
   RequirementOrderModel({
     String code,
     String status,
@@ -244,6 +277,7 @@ class RequirementOrderModel extends OrderModel {
     this.machiningType,
     this.invoiceNeeded = false,
     this.countOfQuotes,
+    this.attachments,
   }) : super(
           code: code,
           status: status,
@@ -302,6 +336,9 @@ class PurchaseOrderModel extends OrderModel {
   /// 当前阶段
   String currentPhase;
 
+  /// 附件
+  List<String> attachments;
+
   PurchaseOrderModel({
     String code,
     String status,
@@ -314,6 +351,7 @@ class PurchaseOrderModel extends OrderModel {
     this.entries,
     this.machiningType,
     this.currentPhase,
+    this.attachments,
   }) : super(
           code: code,
           status: status,
