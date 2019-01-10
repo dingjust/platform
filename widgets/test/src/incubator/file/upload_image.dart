@@ -38,8 +38,8 @@ class _MyHomePageState extends State<MyHomePage> {
     //上次多张图片
     List<UploadFileInfo> uploadFiles = <UploadFileInfo>[];
 
-    for(File file in _papersImages){
-      uploadFiles.add(UploadFileInfo(file,file.absolute.path));
+    for (File file in _papersImages) {
+      uploadFiles.add(UploadFileInfo(file, file.absolute.path));
     }
 
     FormData formData = FormData.from({
@@ -53,26 +53,42 @@ class _MyHomePageState extends State<MyHomePage> {
       'files': UploadFileInfo(_headImage, _headImage.absolute.path),
     });*/
 
-    dio.post('http://192.168.31.58:9001/djbackoffice/system/carousel/updateMedia',data: formData);
+    dio.post(
+        'http://192.168.31.58:9001/djbackoffice/system/carousel/updateMedia',
+        data: formData);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> _papersWidgetList = _papersImages
+  List<Widget> get _papersWidgetList {
+    List<Widget> list = _papersImages
         .map((file) => Container(
-      width: 60.0,
-      height: 60.0,
-      child: Image.file(file),
-    ))
+              width: 60.0,
+              height: 60.0,
+              child: Image.file(file),
+            ))
         .toList();
-    _papersWidgetList.add(Container(
+    list.add(Container(
       child: IconButton(
-        onPressed: getPapersImage,
+        onPressed: selectPapersImages,
         icon: Icon(Icons.add_photo_alternate),
         iconSize: 60.0,
         color: Colors.grey[500],
       ),
     ));
+
+    return list;
+  }
+
+  /* _papersWidgetList.add(Container(
+  child: IconButton(
+  onPressed: selectImageSource,
+  icon: Icon(Icons.add_photo_alternate),
+  iconSize: 60.0,
+  color: Colors.grey[500],
+  ),
+  ));*/
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -112,29 +128,29 @@ class _MyHomePageState extends State<MyHomePage> {
                               Text('上传头像'),
                               Container(
                                 margin:
-                                EdgeInsets.fromLTRB(10.0, 10, 10.0, 10.0),
+                                    EdgeInsets.fromLTRB(10.0, 10, 10.0, 10.0),
                                 width: 70.0,
                                 height: 70.0,
                                 child: _headImage == null
                                     ? IconButton(
-                                  onPressed: getHeadImage,
-                                  icon: Icon(Icons.add_photo_alternate),
-                                  iconSize: 60.0,
-                                  color: Colors.grey[500],
-                                )
+                                        onPressed: selectHeadImage,
+                                        icon: Icon(Icons.add_photo_alternate),
+                                        iconSize: 60.0,
+                                        color: Colors.grey[500],
+                                      )
                                     : GestureDetector(
-                                  onTap: getHeadImage,
-                                  child: Container(
-                                    width: 60,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                          image: FileImage(_headImage),
-                                          fit: BoxFit.cover,
-                                        )),
-                                  ),
-                                ),
+                                        onTap: selectHeadImage,
+                                        child: Container(
+                                          width: 60,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                image: FileImage(_headImage),
+                                                fit: BoxFit.cover,
+                                              )),
+                                        ),
+                                      ),
                               ),
                             ],
                           ),
@@ -172,19 +188,77 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
   }
 
-  Future getHeadImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _headImage = image;
-    });
+  void selectHeadImage() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.camera),
+              title: Text('相机'),
+              onTap: () async {
+                var image =
+                    await ImagePicker.pickImage(source: ImageSource.camera);
+                setState(() {
+                  _headImage = image;
+                });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_album),
+              title: Text('相册'),
+              onTap: () async {
+                var image =
+                    await ImagePicker.pickImage(source: ImageSource.gallery);
+                setState(() {
+                  _headImage = image;
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  Future getPapersImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _papersImages.add(image);
-    });
+  void selectPapersImages() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.camera),
+              title: Text('相机'),
+              onTap: () async {
+                var image =
+                    await ImagePicker.pickImage(source: ImageSource.camera);
+                if (image != null) {
+                  setState(() {
+                    _papersImages.add(image);
+                  });
+                }
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_album),
+              title: Text('相册'),
+              onTap: () async {
+                var image =
+                    await ImagePicker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  setState(() {
+                    _papersImages.add(image);
+                  });
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -23,6 +23,7 @@ class TaxInvoiceDetailPage extends StatelessWidget {
         body: ListView(
           children: <Widget>[
             Card(
+              elevation: 0,
               margin: EdgeInsets.symmetric(horizontal: 0),
               child: Column(
                 children: <Widget>[
@@ -137,6 +138,7 @@ class TaxInvoiceDetailPage extends StatelessWidget {
               ),
             ),
             Card(
+              elevation: 0,
               margin: EdgeInsets.symmetric(horizontal: 0,vertical: 20),
               child: Column(
                 children: <Widget>[
