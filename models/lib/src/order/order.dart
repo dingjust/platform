@@ -118,12 +118,12 @@ enum ProductionProgressPhase {
 
 // TODO: i18n处理
 const ProductionProgressPhaseLocalizedMap = {
-  ProductionProgressPhase.MATERIAL_PREPARATION: "",
-  ProductionProgressPhase.SAMPLE_CONFIRM: "",
-  ProductionProgressPhase.CUTTING: "",
-  ProductionProgressPhase.STITCHING: "",
-  ProductionProgressPhase.INSPECTION: "",
-  ProductionProgressPhase.DELIVERY: ""
+  ProductionProgressPhase.MATERIAL_PREPARATION: "备料",
+  ProductionProgressPhase.SAMPLE_CONFIRM: "产前样衣确认",
+  ProductionProgressPhase.CUTTING: "裁剪",
+  ProductionProgressPhase.STITCHING: "车缝",
+  ProductionProgressPhase.INSPECTION: "验货",
+  ProductionProgressPhase.DELIVERY: "发货"
 };
 
 @JsonSerializable()
