@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -39,13 +40,21 @@ class _RequirementOrderDetailPageState
         "entryNumber": 500,
       },
     ],
+    "attachments": [
+      "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp",
+      "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp",
+      "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp",
+      "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp",
+      "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp",
+      "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp"
+    ]
   });
 
   QuoteModel quoteModel = QuoteModel.fromJson({
     "code": "34938475200045",
     "creationtime": DateTime.now().toString(),
     "belongTo": {"name": "广州好辣制衣厂"},
-    "state": "ADOPT",
+    "state": "BUYER_REJECTED",
     "totalPrice": 360.00,
     "deliveryAddress": {
       "region": {"name": "广东"},
@@ -54,10 +63,10 @@ class _RequirementOrderDetailPageState
     }
   });
 
-  static Map<String, MaterialColor> _statusColors = {
-    "PENDING_QUOTE": Colors.green,
-    "COMPLETED": Colors.orange,
-    "CANCELLED": Colors.red
+  static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
+    RequirementOrderStatus.PENDING_QUOTE: Colors.green,
+    RequirementOrderStatus.COMPLETED: Colors.orange,
+    RequirementOrderStatus.CANCELLED: Colors.red
   };
 
   @override
@@ -106,7 +115,7 @@ class _RequirementOrderDetailPageState
                   flex: 1,
                 ),
                 Text(
-                  order.status,
+                  RequirementOrderStatusLocalizedMap[order.status],
                   style: TextStyle(
                       fontSize: 15, color: _statusColors[order.status]),
                 )
@@ -256,13 +265,17 @@ class _RequirementOrderDetailPageState
   Widget _buildQuote() {
     return Container(
       color: Colors.white,
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
         children: <Widget>[
           QuoteItem(
             model: quoteModel,
           ),
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(
+                  context, AppRoutes.ROUTE_REQUIREMENT_QUOTE_DETAIL);
+            },
             child: Text(
               '查看全部报价>>',
               style: TextStyle(color: Colors.orange),
@@ -278,7 +291,6 @@ class _RequirementOrderDetailPageState
       color: Colors.white,
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-      height: 100,
       child: Column(
         children: <Widget>[
           Row(
@@ -290,11 +302,43 @@ class _RequirementOrderDetailPageState
             ],
           ),
           Row(
-              // children: ,
-              )
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Icon(
+                Icons.chevron_left,
+                color: Colors.grey,
+              ),
+              _buildAttachmentsListVie(320),
+              Icon(Icons.chevron_right, color: Colors.grey)
+            ],
+          )
         ],
       ),
     );
+  }
+
+  Widget _buildAttachmentsListVie(double width) {
+    return Container(
+        padding: EdgeInsets.all(10),
+        height: 100,
+        width: width,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: order.attachments
+              .map((url) => Container(
+                    width: 80,
+                    height: 80,
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey,
+                        image: DecorationImage(
+                          image: NetworkImage(url),
+                          fit: BoxFit.cover,
+                        )),
+                  ))
+              .toList(),
+        ));
   }
 
   Widget _buildRemarks() {

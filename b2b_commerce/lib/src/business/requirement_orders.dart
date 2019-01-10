@@ -234,10 +234,10 @@ class RequirementOrderItem extends StatelessWidget {
 
   final RequirementOrderModel order;
 
-  static Map<String, MaterialColor> _statusColors = {
-    "PENDING_QUOTE": Colors.green,
-    "COMPLETED": Colors.orange,
-    "CANCELLED": Colors.red
+  static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
+    RequirementOrderStatus.PENDING_QUOTE: Colors.green,
+    RequirementOrderStatus.COMPLETED: Colors.orange,
+    RequirementOrderStatus.CANCELLED: Colors.red
   };
 
   @override
@@ -265,6 +265,7 @@ class RequirementOrderItem extends StatelessWidget {
   }
 
   Widget _buildHeader() {
+    var sd=_statusColors[order.status];
     return Container(
       margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
@@ -276,7 +277,7 @@ class RequirementOrderItem extends StatelessWidget {
                 flex: 1,
                 child: Text('需求订单号：' + order.code),
               ),
-              Text(order.status,
+              Text(RequirementOrderStatusLocalizedMap[order.status],
                   style: TextStyle(color: _statusColors[order.status]))
             ],
           ),
