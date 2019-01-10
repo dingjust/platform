@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:models/models.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
@@ -22,6 +21,7 @@ class _RequirementOrderDetailPageState
     "totalPrice": 300,
     "expectedDeliveryDate": DateTime.now().toString(),
     "creationtime": DateTime.now().toString(),
+    "remarks": "交货时间 2019-01-01\n确定前请先与我厂沟通好样衣事宜，谢谢",
     "entries": [
       {
         "product": {
@@ -44,6 +44,14 @@ class _RequirementOrderDetailPageState
   QuoteModel quoteModel = QuoteModel.fromJson({
     "code": "34938475200045",
     "creationtime": DateTime.now().toString(),
+    "belongTo": {"name": "广州好辣制衣厂"},
+    "state": "ADOPT",
+    "totalPrice": 360.00,
+    "deliveryAddress": {
+      "region": {"name": "广东"},
+      "city": {"name": "广州"},
+      "cityDistrict": {"name": "白云"}
+    }
   });
 
   static Map<String, MaterialColor> _statusColors = {
@@ -72,9 +80,10 @@ class _RequirementOrderDetailPageState
           children: <Widget>[
             _buildHeader(),
             _buildMain(),
-            QuoteItem(
-              model: quoteModel,
-            )
+            _buildQuote(),
+            _buildAttachments(),
+            _buildRemarks(),
+            _buildButton()
           ],
         ),
       ),
@@ -145,7 +154,7 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '加工类型',
             value: Text(
-              '包公包料',
+              '包工包料',
               style: TextStyle(fontSize: 16),
             ),
           ),
@@ -243,6 +252,92 @@ class _RequirementOrderDetailPageState
             ))
         .toList();
   }
+
+  Widget _buildQuote() {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          QuoteItem(
+            model: quoteModel,
+          ),
+          FlatButton(
+            onPressed: () {},
+            child: Text(
+              '查看全部报价>>',
+              style: TextStyle(color: Colors.orange),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAttachments() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      height: 100,
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                '附件',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              )
+            ],
+          ),
+          Row(
+              // children: ,
+              )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRemarks() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  '备注',
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                )
+              ],
+            ),
+          ),
+          Row(
+            children: <Widget>[Text(order.remarks)],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButton() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+      child: RaisedButton(
+          onPressed: () {},
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          color: Color.fromRGBO(255, 149, 22, 1),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          child: Text(
+            '重新发布需求',
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          )),
+    );
+  }
 }
 
 class InfoRow extends StatelessWidget {
@@ -271,6 +366,26 @@ class InfoRow extends StatelessWidget {
           value
         ],
       ),
+    );
+  }
+}
+
+class AttachmentItem extends StatelessWidget {
+  const AttachmentItem({Key key, this.url}) : super(key: key);
+
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          image: DecorationImage(
+            image: NetworkImage(url),
+            fit: BoxFit.cover,
+          )),
     );
   }
 }
