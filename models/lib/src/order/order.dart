@@ -437,6 +437,9 @@ class PurchaseOrderModel extends OrderModel {
   /// 预计交货时间
   DateTime expectedDeliveryDate;
 
+  //生产进度
+  List<ProductionProgressModel> productionProgresses;
+
   PurchaseOrderModel({
     String code,
     this.status,
@@ -451,7 +454,8 @@ class PurchaseOrderModel extends OrderModel {
     this.currentPhase,
     this.attachments,
     this.requirementOrderCode,
-    this.expectedDeliveryDate
+    this.expectedDeliveryDate,
+    this.productionProgresses,
   }) : super(
           code: code,
           totalQuantity: totalQuantity,
