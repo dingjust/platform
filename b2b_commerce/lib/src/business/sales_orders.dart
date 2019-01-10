@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/search/sales_order_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'orders/sales_order_detail.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -168,52 +169,62 @@ class SalesOrderItem extends StatelessWidget {
 
   List<Widget> _buildEntries(BuildContext context) {
     return order.entries.map((entry) {
-      return Container(
-        color: Color(0xFFFAFAFA),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(0, 5.0, 0, 5.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: 100.0,
-                height: 100.0,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage("${entry.product.thumbnail}"),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '${entry.product.name}',
-                      style: TextStyle(fontSize: 16.0, color: Color(0xFF323232)),
+      return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SaleOrderDetail(),
+            ),
+          );
+        },
+        child: Container(
+          color: Color(0xFFFAFAFA),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, 5.0, 0, 5.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 100.0,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage("${entry.product.thumbnail}"),
+                      fit: BoxFit.cover,
                     ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
-                      child: Text(
-                        '货号：${entry.product.skuID}',
-                        style: TextStyle(fontSize: 14.0, color: Color(0xFF969696)),
-                      ),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF0F0F0),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                      ),
-                    )
-                  ],
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
                 ),
-              )
-            ],
+                Padding(
+                  padding: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '${entry.product.name}',
+                        style: TextStyle(fontSize: 16.0, color: Color(0xFF323232)),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
+                        child: Text(
+                          '货号：${entry.product.skuID}',
+                          style: TextStyle(fontSize: 14.0, color: Color(0xFF969696)),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF0F0F0),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       );

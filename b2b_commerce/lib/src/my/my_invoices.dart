@@ -31,6 +31,7 @@ class MyInvoicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Card> cardList = <Card>[
       Card(
+        elevation: 0,
         margin: EdgeInsets.all(0),
         child: ListTile(
           onTap: () {
@@ -76,6 +77,7 @@ class MyInvoicesPage extends StatelessWidget {
 
       cardList.add(
         Card(
+          elevation: 0,
           margin: EdgeInsets.only(top: 10),
           child: GestureDetector(
             onTap: () {
@@ -116,6 +118,7 @@ class MyInvoicesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         centerTitle: true,
         title: Text('发票管理'),
       ),

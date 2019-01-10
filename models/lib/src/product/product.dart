@@ -133,6 +133,8 @@ class ApparelProductModel extends ProductModel {
   double suggestedPrice;
   double gramWeight;
 
+  CategoryModel get superCategory => superCategories[0];
+
   ApparelProductModel({
     String code,
     String name,

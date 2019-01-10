@@ -118,12 +118,12 @@ enum ProductionProgressPhase {
 
 // TODO: i18n处理
 const ProductionProgressPhaseLocalizedMap = {
-  ProductionProgressPhase.MATERIAL_PREPARATION: "",
-  ProductionProgressPhase.SAMPLE_CONFIRM: "",
-  ProductionProgressPhase.CUTTING: "",
-  ProductionProgressPhase.STITCHING: "",
-  ProductionProgressPhase.INSPECTION: "",
-  ProductionProgressPhase.DELIVERY: ""
+  ProductionProgressPhase.MATERIAL_PREPARATION: "备料",
+  ProductionProgressPhase.SAMPLE_CONFIRM: "产前样衣确认",
+  ProductionProgressPhase.CUTTING: "裁剪",
+  ProductionProgressPhase.STITCHING: "车缝",
+  ProductionProgressPhase.INSPECTION: "验货",
+  ProductionProgressPhase.DELIVERY: "发货"
 };
 
 @JsonSerializable()
@@ -423,7 +423,7 @@ class PurchaseOrderModel extends OrderModel {
   bool invoiceNeeded;
 
   /// 当前阶段
-  String currentPhase;
+  ProductionProgressPhase currentPhase;
 
   /// 附件
   List<String> attachments;
@@ -436,6 +436,9 @@ class PurchaseOrderModel extends OrderModel {
 
   /// 预计交货时间
   DateTime expectedDeliveryDate;
+
+  //生产进度
+  List<ProductionProgressModel> productionProgresses;
 
   PurchaseOrderModel({
     String code,
@@ -451,7 +454,8 @@ class PurchaseOrderModel extends OrderModel {
     this.currentPhase,
     this.attachments,
     this.requirementOrderCode,
-    this.expectedDeliveryDate
+    this.expectedDeliveryDate,
+    this.productionProgresses,
   }) : super(
           code: code,
           totalQuantity: totalQuantity,
@@ -592,6 +596,11 @@ class QuoteModel extends AbstractOrderModel {
     this.purchaseOrderCode,
     this.belongTo,
     this.attachments,
+    this.unitPriceOfFabric,
+    this.unitPriceOfExcipients,
+    this.unitPriceOfProcessing,
+    this.costOfSamples,
+    this.expectedDeliveryDate,
   }) : super(
           code: code,
           totalQuantity: totalQuantity,

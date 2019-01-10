@@ -34,6 +34,7 @@ class TaxInvoicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Card> cards = taxInvoices.map((taxInvoice) {
       return Card(
+        elevation: 0,
         margin: EdgeInsets.symmetric(
           horizontal: 0,
           vertical: 8,
