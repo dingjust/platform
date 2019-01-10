@@ -147,7 +147,7 @@ class RequirementOrderList extends StatelessWidget {
           },
         ],
       }),
-    RequirementOrderModel.fromJson({
+      RequirementOrderModel.fromJson({
         "code": "34938475200045",
         "status": "PENDING_QUOTE",
         "totalQuantity": 10,
@@ -349,13 +349,6 @@ class RequirementOrderItem extends StatelessWidget {
                               "${entry.product.superCategories.first.name}   ${entry.product.majorCategory.name}   ${entry.entryNumber}件",
                               style:
                                   TextStyle(fontSize: 15, color: Colors.orange),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(3),
-                            child: Text(
-                              '发布者：XXX',
-                              style: TextStyle(color: Colors.grey),
                             ),
                           )
                         ],

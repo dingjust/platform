@@ -1,4 +1,7 @@
+import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:models/models.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
@@ -17,6 +20,8 @@ class _RequirementOrderDetailPageState
     "status": "PENDING_QUOTE",
     "totalQuantity": 10,
     "totalPrice": 300,
+    "expectedDeliveryDate": DateTime.now().toString(),
+    "creationtime": DateTime.now().toString(),
     "entries": [
       {
         "product": {
@@ -34,6 +39,11 @@ class _RequirementOrderDetailPageState
         "entryNumber": 500,
       },
     ],
+  });
+
+  QuoteModel quoteModel = QuoteModel.fromJson({
+    "code": "34938475200045",
+    "creationtime": DateTime.now().toString(),
   });
 
   static Map<String, MaterialColor> _statusColors = {
@@ -59,7 +69,13 @@ class _RequirementOrderDetailPageState
       body: Container(
         color: Colors.grey[100],
         child: ListView(
-          children: <Widget>[_buildHeader(), _buildMain()],
+          children: <Widget>[
+            _buildHeader(),
+            _buildMain(),
+            QuoteItem(
+              model: quoteModel,
+            )
+          ],
         ),
       ),
     );
@@ -92,7 +108,8 @@ class _RequirementOrderDetailPageState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Expanded(
-                child: Text('发布时间: 1997-01-01'),
+                child:
+                    Text('发布时间: ' + DateFormatUtil.format(order.creationTime)),
                 flex: 1,
               ),
               Text(
@@ -110,7 +127,7 @@ class _RequirementOrderDetailPageState
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
         children: <Widget>[
           Column(
@@ -127,15 +144,32 @@ class _RequirementOrderDetailPageState
           ),
           InfoRow(
             label: '加工类型',
-            value: Text('包公包料',style: TextStyle(fontSize: 16),),
+            value: Text(
+              '包公包料',
+              style: TextStyle(fontSize: 16),
+            ),
           ),
           InfoRow(
-            label: '加工类型',
-            value: Text('包公包料',style: TextStyle(fontSize: 16),),
+            label: '是否开具发票',
+            value: Text(
+              '否',
+              style: TextStyle(fontSize: 16),
+            ),
           ),
           InfoRow(
-            label: '加工类型',
-            value: Text('包公包料',style: TextStyle(fontSize: 16),),
+            label: '期望价格',
+            value: Text(
+              '￥15.00',
+              style: TextStyle(color: Colors.red, fontSize: 16),
+            ),
+          ),
+          InfoRow(
+            label: '预计交货时间',
+            value: Text(
+              '报价时间：${DateFormatUtil.format(order.expectedDeliveryDate)}',
+              style: TextStyle(fontSize: 16),
+            ),
+            hasBottomBorder: false,
           )
         ],
       ),
@@ -212,18 +246,21 @@ class _RequirementOrderDetailPageState
 }
 
 class InfoRow extends StatelessWidget {
-  const InfoRow({Key key, this.label, this.value}) : super(key: key);
+  const InfoRow({Key key, this.label, this.value, this.hasBottomBorder = true})
+      : super(key: key);
 
   final String label;
   final Widget value;
+  final bool hasBottomBorder;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
       decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Colors.grey[300]))),
+          border: hasBottomBorder
+              ? Border(bottom: BorderSide(width: 1, color: Colors.grey[300]))
+              : null),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
