@@ -63,9 +63,12 @@ class SalesOrderList extends StatelessWidget {
         "status": "CREATED",
         "totalQuantity": 10,
         "totalPrice": 300,
+        "creationtime": DateTime.now().toString(),
         "entries": [
           {
             "product": {
+              "thumbnail":
+                  "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
               "code": "NA89852509",
               "name": "山本风法少女长裙复古气质秋冬款",
               "skuID": "NA89852509",
@@ -73,6 +76,8 @@ class SalesOrderList extends StatelessWidget {
           },
           {
             "product": {
+              "thumbnail":
+                  "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
               "code": "NA89852509",
               "name": "山本风法少女长裙复古气质秋冬款",
               "skuID": "NA89852509",
@@ -85,9 +90,12 @@ class SalesOrderList extends StatelessWidget {
         "status": "CREATED",
         "totalQuantity": 10,
         "totalPrice": 300,
+        "creationtime": DateTime.now().toString(),
         "entries": [
           {
             "product": {
+              "thumbnail":
+                  "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
               "code": "NA89852509",
               "name": "山本风法少女长裙复古气质秋冬款2",
               "skuID": "NA89852509",
@@ -139,11 +147,20 @@ class SalesOrderItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('销售订单号：${order.code}',style: TextStyle(fontSize: 16.0),),
-              Text('${order.status}',style: TextStyle(color: Color(0xFF56C275), fontSize: 16.0))
+              Text(
+                '销售订单号：${order.code}',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              Text(
+                '${order.status}',
+                style: TextStyle(color: Color(0xFF56C275), fontSize: 16.0),
+              )
             ],
           ),
-          Text('订单创建时间：${order.code}',style: TextStyle(fontSize: 16.0),),
+          Text(
+            '订单创建时间：${order.creationTime}',
+            style: TextStyle(fontSize: 16.0),
+          ),
         ],
       ),
     );
@@ -158,28 +175,34 @@ class SalesOrderItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-                Container(
-                  width: 100.0,
-                  height: 100.0,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage("https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg"),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8.0),
-                    ),
+              Container(
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage("${entry.product.thumbnail}"),
+                    fit: BoxFit.cover,
                   ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('${entry.product.name}',style: TextStyle(fontSize: 16.0,color: Color(0xFF323232)),),
+                    Text(
+                      '${entry.product.name}',
+                      style: TextStyle(fontSize: 16.0, color: Color(0xFF323232)),
+                    ),
                     Container(
                       padding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
-                      child: Text('货号：${entry.product.skuID}',style: TextStyle(fontSize: 14.0,color: Color(0xFF969696)),),
+                      child: Text(
+                        '货号：${entry.product.skuID}',
+                        style: TextStyle(fontSize: 14.0, color: Color(0xFF969696)),
+                      ),
                       decoration: BoxDecoration(
                         color: Color(0xFFF0F0F0),
                         borderRadius: BorderRadius.all(
@@ -201,12 +224,14 @@ class SalesOrderItem extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Text('共${order.totalQuantity}件商品，合计：${order.totalPrice}', style: TextStyle(color: Color(0xFFFF4444), fontSize: 16.0),),
+        Text(
+          '共${order.totalQuantity}件商品，合计：${order.totalPrice}',
+          style: TextStyle(color: Color(0xFFFF4444), fontSize: 16.0),
+        ),
         RaisedButton(
           child: Text('支付'),
         )
       ],
     );
-
   }
 }
