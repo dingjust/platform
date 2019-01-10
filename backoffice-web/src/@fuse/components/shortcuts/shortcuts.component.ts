@@ -72,26 +72,14 @@ export class FuseShortcutsComponent implements OnInit, OnDestroy {
         }
         else {
             // User's shortcut items
-            /*this.shortcutItems = [
+            this.shortcutItems = [
                 {
-                    'title': 'Calendar',
+                    'title': 'Chat',
                     'type': 'item',
-                    'icon': 'today',
-                    'url': '/apps/calendar'
+                    'icon': 'chat',
+                    'url': '/apps/chat'
                 },
-                {
-                    'title': 'Contacts',
-                    'type': 'item',
-                    'icon': 'account_box',
-                    'url': '/apps/contacts'
-                },
-                {
-                    'title': 'To-Do',
-                    'type': 'item',
-                    'icon': 'check_box',
-                    'url': '/apps/todo'
-                }
-            ];*/
+            ];
         }
 
         // Subscribe to media changes

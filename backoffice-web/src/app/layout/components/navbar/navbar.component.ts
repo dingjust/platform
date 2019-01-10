@@ -1,13 +1,12 @@
-import { Component, ElementRef, Input, Renderer2, ViewEncapsulation } from '@angular/core';
+import {Component, ElementRef, Input, Renderer2, ViewEncapsulation} from '@angular/core';
 
 @Component({
-    selector     : 'navbar',
-    templateUrl  : './navbar.component.html',
-    styleUrls    : ['./navbar.component.scss'],
+    selector: 'navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class NavbarComponent
-{
+export class NavbarComponent {
     // Private
     _variant: string;
 
@@ -20,8 +19,7 @@ export class NavbarComponent
     constructor(
         private _elementRef: ElementRef,
         private _renderer: Renderer2
-    )
-    {
+    ) {
         // Set the private defaults
         this._variant = 'vertical-style-1';
     }
@@ -33,14 +31,12 @@ export class NavbarComponent
     /**
      * Variant
      */
-    get variant(): string
-    {
+    get variant(): string {
         return this._variant;
     }
 
     @Input()
-    set variant(value: string)
-    {
+    set variant(value: string) {
         // Remove the old class name
         this._renderer.removeClass(this._elementRef.nativeElement, this.variant);
 

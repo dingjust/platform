@@ -28,6 +28,8 @@
 
 <!-- THEME OPTIONS PANEL -->
 <button mat-icon-button class="warn mat-elevation-z2 theme-options-button"
+        [ngClass]="{'right-side-panel': fuseConfig.layout.sidepanel.position === 'right',
+                    'side-panel-hidden': fuseConfig.layout.sidepanel.hidden === true}"
         (click)="toggleSidebarOpen('themeOptionsPanel')">
     <mat-icon>settings</mat-icon>
 </button>

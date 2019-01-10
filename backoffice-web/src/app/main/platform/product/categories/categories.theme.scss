@@ -1,0 +1,23 @@
+@mixin platform-categories-theme($theme) {
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    platform-categories {
+        .header {
+            .search-wrapper {
+                background: map-get($background, card);
+
+                .search {
+                    .mat-icon {
+                        color: map-get($foreground, icon);
+                    }
+
+                    input {
+                        background: map-get($background, card);
+                        color: map-get($foreground, text);
+                    }
+                }
+            }
+        }
+    }
+}

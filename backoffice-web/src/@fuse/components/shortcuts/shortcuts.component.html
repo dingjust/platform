@@ -2,9 +2,9 @@
 
     <div class="shortcuts-mobile-toggle" *ngIf="!mobileShortcutsPanelActive" fxLayout="row" fxLayoutAlign="start center"
          fxHide fxShow.lt-md>
-        <button mat-icon-button (click)="showMobileShortcutsPanel()">
+        <!--<button mat-icon-button (click)="showMobileShortcutsPanel()">
             <mat-icon class="amber-600-fg">star</mat-icon>
-        </button>
+        </button>-->
     </div>
 
     <div class="shortcuts" fxLayout="row" fxHide fxShow.gt-sm>
@@ -25,10 +25,10 @@
 
                 </div>
 
-                <button mat-icon-button [matMenuTriggerFor]="addMenu" matTooltip="Click to add/remove shortcut"
+                <!--<button mat-icon-button [matMenuTriggerFor]="addMenu" matTooltip="Click to add/remove shortcut"
                         (menuOpened)="onMenuOpen()">
                     <mat-icon class="amber-600-fg">star</mat-icon>
-                </button>
+                </button>-->
 
             </div>
 
