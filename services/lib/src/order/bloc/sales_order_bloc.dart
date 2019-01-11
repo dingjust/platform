@@ -142,6 +142,7 @@ class SalesOrderBLoC {
   }
 
   loadingMoreByStatuses(String status) async {
+    //模拟数据到底
     if (_ordersMap[status].length < 6) {
       _ordersMap[status]
           .add(await Future.delayed(const Duration(seconds: 1), () {

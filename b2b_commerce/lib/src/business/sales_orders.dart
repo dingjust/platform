@@ -79,14 +79,6 @@ class SalesOrderList extends StatelessWidget {
       }
     });
 
-    // if (status.code == 'ALL') {
-    //   bloc.filterByStatuses(statuses.map((status) {
-    //     return status.code;
-    //   }).toSet());
-    // } else {
-    //   bloc.filterByStatuses(Set.of([status.code]));
-    // }
-
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       controller: _scrollController,
