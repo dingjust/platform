@@ -19,7 +19,7 @@
                     shopping_basket
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Products
+                    商品
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -53,62 +53,38 @@
                        [@animateStagger]="{value:'50'}"
                        fusePerfectScrollbar>
 
-                <!-- ID Column -->
-                <ng-container matColumnDef="id">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                    <mat-cell *matCellDef="let product">{{product.id}}</mat-cell>
+                <!-- code Column -->
+                <ng-container matColumnDef="code">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>商品编码</mat-header-cell>
+                    <mat-cell *matCellDef="let model">{{model.code}}</mat-cell>
                 </ng-container>
 
-                <!-- Name Column -->
+                <!-- name Column -->
                 <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-                    <mat-cell *matCellDef="let product">{{product.name}}</mat-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>商品名称</mat-header-cell>
+                    <mat-cell *matCellDef="let model">{{model.name}}</mat-cell>
                 </ng-container>
 
-                <!-- Category Column -->
-                <ng-container matColumnDef="category">
-                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
-                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-md>{{product.categories[0]}}</mat-cell>
+                <!-- skuID Column -->
+                <ng-container matColumnDef="skuID">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>供应商商品编码</mat-header-cell>
+                    <mat-cell *matCellDef="let model">{{model.skuID}}</mat-cell>
                 </ng-container>
 
-                <!-- Price Column -->
+                <!-- price Column -->
                 <ng-container matColumnDef="price">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
-                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
-                        {{product.priceTaxIncl | currency:'USD':'symbol'}}
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Quantity Column -->
-                <ng-container matColumnDef="quantity">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
-                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-sm>
-
-                        <span class="quantity-indicator text-truncate"
-                              [ngClass]="{'red-500':product.quantity <= 5, 'amber-500':product.quantity > 5 && product.quantity <= 25,'green-600':product.quantity > 25}">
-                        </span>
-                        <span>
-                            {{product.quantity}}
-                        </span>
-
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Active Column -->
-                <ng-container matColumnDef="active">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
-                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
-                        <mat-icon *ngIf="product.active" class="active-icon green-600 s-16">check</mat-icon>
-                        <mat-icon *ngIf="!product.active" class="active-icon red-500 s-16">close</mat-icon>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>价格</mat-header-cell>
+                    <mat-cell *matCellDef="let model" fxHide fxShow.gt-xs>
+                        {{model.price | currency:'USD':'symbol'}}
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let product; columns: displayedColumns;"
+                <mat-row *matRowDef="let model; columns: displayedColumns;"
                          class="product"
                          matRipple
-                         [routerLink]="'/platform/product/products/'+product.id+'/'+product.handle">
+                         [routerLink]="'/platform/product/products/'+model.id">
                 </mat-row>
 
             </mat-table>

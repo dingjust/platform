@@ -1,8 +1,8 @@
 export class ItemModel {
     id?: number;
 
-    constructor(model?) {
-        model = model || {};
-        this.id = model.id;
+    constructor(props?) {
+        props = props || {};
+        this.id = props.id;
     }
 }

@@ -1,177 +1,230 @@
-import {MatChipInputEvent} from '@angular/material';
-
-import {FuseUtils} from '@fuse/utils';
-
 import {ItemModel} from '../item.model';
 
-export class UnitModel extends ItemModel {
-    code: string;
-    name: string;
+export enum MemberRating { A, B, C }
 
-    constructor(model?) {
-        super(model);
-        model = model || {};
-        this.code = model.code;
-        this.name = model.name;
-    }
-}
-
-export class CatalogModel {
-    id: string;
-    name: string;
-
-    constructor(model?) {
-        model = model || {};
-        this.id = model.id;
-        this.name = model.name;
-    }
-}
-
-export class CatalogVersionModel extends ItemModel {
-    catalog: CatalogModel;
-    version: string;
-
-    constructor(model?) {
-        super(model);
-        model = model || {};
-        this.catalog = model.catalog;
-        this.version = model.version;
-    }
-}
-
+/**
+ * 产品分类
+ */
 export class CategoryModel extends ItemModel {
     code: string;
     name: string;
     description?: string;
-    catalogVersion: CatalogVersionModel;
 
-    constructor(model?) {
-        super(model);
-        model = model || {};
-        this.code = model.code;
-        this.name = model.name;
-        this.description = model.description;
-        this.catalogVersion = model.catalogVersion;
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.code = props.code;
+        this.name = props.name;
+        this.description = props.description;
     }
 }
 
-export class ProductModel {
-    id: string;
-    name: string;
-    handle: string;
-    description: string;
-    categories: string[];
-    tags: string[];
-    images: {
-        default: boolean,
-        id: string,
-        url: string,
-        type: string
-    }[];
-    priceTaxExcl: number;
-    priceTaxIncl: number;
-    taxRate: number;
-    comparedPrice: number;
-    quantity: number;
-    sku: string;
-    width: string;
-    height: string;
-    depth: string;
-    weight: string;
-    extraShippingFee: number;
-    active: boolean;
+/**
+ * 阶梯价
+ */
+export class StaircasePriceModel extends ItemModel {
+    minQuantity: number;
+    maxQuantity: number;
+    price: number;
+    product: ProductModel;
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.minQuantity = props.minQuantity || 0;
+        this.maxQuantity = props.maxQuantity || 0;
+        this.price = props.price || 0.00;
+        this.product = props.product;
+    }
+}
+
+/**
+ * 服装产品属性
+ */
+export class ApparelProductAttributesModel extends ItemModel {
+}
+
+/**
+ * 基本产品
+ */
+export class ProductModel extends ItemModel {
+    code: string;
+    name?: string;
+    price?: number;
+    thumbnail?: string;
+    staircasePrices?: StaircasePriceModel[];
+    privacy?: boolean;
+    supercategories?: CategoryModel[];
+    ratingIfPrivacy?: MemberRating;
 
     /**
      * Constructor
      *
-     * @param product
+     * @param props
      */
-    constructor(product?) {
-        product = product || {};
-        this.id = product.id || FuseUtils.generateGUID();
-        this.name = product.name || '';
-        this.handle = product.handle || FuseUtils.handleize(this.name);
-        this.description = product.description || '';
-        this.categories = product.categories || [];
-        this.tags = product.tags || [];
-        this.images = product.images || [];
-        this.priceTaxExcl = product.priceTaxExcl || 0;
-        this.priceTaxIncl = product.priceTaxIncl || 0;
-        this.taxRate = product.taxRate || 0;
-        this.comparedPrice = product.comparedPrice || 0;
-        this.quantity = product.quantity || 0;
-        this.sku = product.sku || 0;
-        this.width = product.width || 0;
-        this.height = product.height || 0;
-        this.depth = product.depth || 0;
-        this.weight = product.weight || 0;
-        this.extraShippingFee = product.extraShippingFee || 0;
-        this.active = product.active || true;
-    }
-
-    /**
-     * Add category
-     *
-     * @param {MatChipInputEvent} event
-     */
-    addCategory(event: MatChipInputEvent): void {
-        const input = event.input;
-        const value = event.value;
-
-        // Add category
-        if (value) {
-            this.categories.push(value);
-        }
-
-        // Reset the input value
-        if (input) {
-            input.value = '';
-        }
-    }
-
-    /**
-     * Remove category
-     *
-     * @param category
-     */
-    removeCategory(category): void {
-        const index = this.categories.indexOf(category);
-
-        if (index >= 0) {
-            this.categories.splice(index, 1);
-        }
-    }
-
-    /**
-     * Add tag
-     *
-     * @param {MatChipInputEvent} event
-     */
-    addTag(event: MatChipInputEvent): void {
-        const input = event.input;
-        const value = event.value;
-
-        // Add tag
-        if (value) {
-            this.tags.push(value);
-        }
-
-        // Reset the input value
-        if (input) {
-            input.value = '';
-        }
-    }
-
-    /**
-     * Remove tag
-     *
-     * @param tag
-     */
-    removeTag(tag): void {
-        const index = this.tags.indexOf(tag);
-
-        if (index >= 0) {
-            this.tags.splice(index, 1);
-        }
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.code = props.code;
+        this.name = props.name || '';
+        this.price = props.price || 0.00;
+        this.thumbnail = props.thumbnail || '';
+        this.staircasePrices = props.staircasePrices || [];
+        this.privacy = props.privacy || false;
+        this.supercategories = props.supercategories || [];
+        this.ratingIfPrivacy = props.ratingIfPrivacy || null;
     }
 }
+
+/**
+ * 变式产品
+ */
+export class VariantProductModel extends ProductModel {
+    baseProduct: string;
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.baseProduct = props.baseProduct;
+    }
+}
+
+/**
+ * 服装产品
+ */
+export class ApparelProductModel extends ProductModel {
+    variants?: ApparelSizeVariantProductModel[];
+    attributes?: ApparelProductAttributesModel;
+    skuID?: string;
+    brand?: string;
+    majorCategory?: CategoryModel;
+    minorCategory?: CategoryModel;
+    price1?: number;
+    price2?: number;
+    price3?: number;
+    suggestedPrice?: number;
+    gramWeight?: number;
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.variants = props.variants || [];
+        this.attributes = props.attributes;
+        this.skuID = props.skuID || '';
+        this.brand = props.brand || '';
+        this.majorCategory = props.majorCategory;
+        this.minorCategory = props.minorCategory;
+        this.price1 = props.price1 || 0.00;
+        this.price2 = props.price2 || 0.00;
+        this.price3 = props.price3 || 0.00;
+        this.suggestedPrice = props.suggestedPrice || 0.00;
+        this.gramWeight = props.gramWeight || 0.000;
+    }
+}
+
+/**
+ * 变式产品，颜色
+ */
+export class ApparelStyleVariantProductModel extends VariantProductModel {
+    color: ColorModel;
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.color = props.color;
+    }
+}
+
+/**
+ * 变式产品，尺码
+ */
+export class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
+    size: SizeModel;
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.size = props.size;
+    }
+}
+
+/**
+ * 面辅料产品
+ */
+export class FabricProductModel extends ProductModel {
+    variants?: FabricStyleVariantProductModel[];
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.variants = props.variants || [];
+    }
+}
+
+/**
+ * 面辅料变式产品：颜色
+ */
+export class FabricStyleVariantProductModel extends VariantProductModel {
+    color: ColorModel;
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.color = props.color;
+    }
+}
+
+/**
+ * 风格
+ */
+export class StyleModel extends ItemModel {
+    code: string;
+    name: string;
+    active: boolean;
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.code = props.code;
+        this.name = props.name;
+        this.active = props.active;
+    }
+}
+
+/**
+ * 颜色
+ */
+export class ColorModel extends ItemModel {
+    code: string;
+    name: string;
+    active: boolean;
+    colorCode: string;
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.code = props.code;
+        this.name = props.name;
+        this.active = props.active;
+        this.colorCode = props.colorCode;
+    }
+}
+
+/**
+ * 尺码
+ */
+export class SizeModel extends ItemModel {
+    code: string;
+    name: string;
+    active: boolean;
+
+    constructor(props?) {
+        super(props);
+        props = props || {};
+        this.code = props.code;
+        this.name = props.name;
+        this.active = props.active;
+    }
+}
+
+

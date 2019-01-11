@@ -19,7 +19,7 @@ import {takeUntil} from 'rxjs/internal/operators';
 })
 export class ProductsComponent implements OnInit {
     dataSource: FilesDataSource | null;
-    displayedColumns = ['id', 'name', 'category', 'price', 'quantity', 'active'];
+    displayedColumns = ['code', 'name', 'skuID', 'price'];
 
     @ViewChild(MatPaginator)
     paginator: MatPaginator;
