@@ -54,7 +54,7 @@ class _RequirementOrderDetailPageState
   QuoteModel quoteModel = QuoteModel.fromJson({
     "code": "34938475200045",
     "creationtime": DateTime.now().toString(),
-    "belongTo": {"name": "广州好辣制衣厂"},
+        "belongTo": {"name": "广州好辣制衣厂", "starLevel": 3},
     "state": "BUYER_REJECTED",
     "totalPrice": 360.00,
     "deliveryAddress": {

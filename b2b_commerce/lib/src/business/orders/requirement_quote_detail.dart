@@ -16,7 +16,7 @@ class _RequirementQuoteDetailPageState
       QuoteModel.fromJson({
         "code": "34938475200045",
         "creationtime": DateTime.now().toString(),
-        "belongTo": {"name": "广州好辣制衣厂"},
+        "belongTo": {"name": "广州好辣制衣厂", "starLevel": 3},
         "state": "BUYER_APPROVED",
         "totalPrice": 360.00,
         "deliveryAddress": {
@@ -28,7 +28,7 @@ class _RequirementQuoteDetailPageState
       QuoteModel.fromJson({
         "code": "34938475200045",
         "creationtime": DateTime.now().toString(),
-        "belongTo": {"name": "广州好辣制衣厂"},
+        "belongTo": {"name": "广州好辣制衣厂", "starLevel": 2},
         "state": "BUYER_REJECTED",
         "totalPrice": 360.00,
         "deliveryAddress": {
@@ -40,7 +40,7 @@ class _RequirementQuoteDetailPageState
       QuoteModel.fromJson({
         "code": "34938475200045",
         "creationtime": DateTime.now().toString(),
-        "belongTo": {"name": "广州好辣制衣厂"},
+        "belongTo": {"name": "广州好辣制衣厂", "starLevel": 4},
         "state": "SELLER_SUBMITTED",
         "totalPrice": 360.00,
         "deliveryAddress": {
@@ -52,7 +52,7 @@ class _RequirementQuoteDetailPageState
       QuoteModel.fromJson({
         "code": "34938475200045",
         "creationtime": DateTime.now().toString(),
-        "belongTo": {"name": "广州好辣制衣厂"},
+        "belongTo": {"name": "广州好辣制衣厂", "starLevel": 5},
         "state": "BUYER_APPROVED",
         "totalPrice": 360.00,
         "deliveryAddress": {
@@ -179,8 +179,10 @@ class QuoteItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Stars(
-                              starLevel: 5,
-                              color: Color.fromRGBO(255, 183, 0, 1)),
+                            starLevel: model.belongTo.starLevel,
+                            color: Color.fromRGBO(255, 183, 0, 1),
+                            highlightOnly: false,
+                          ),
                         ],
                       ),
                     )),
