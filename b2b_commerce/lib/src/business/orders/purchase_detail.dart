@@ -41,18 +41,6 @@ class PurchaseDetailPage extends StatelessWidget {
 
 }
 
-class PurchaseOrderDetail extends StatelessWidget {
-
-  final EnumModel status;
-
-  PurchaseOrderDetail(this.status);
-
-  @override
-  Widget build(BuildContext context) {
-    return null;
-  }
-
-}
 
 class PurchaseOrderContent extends StatelessWidget {
 
