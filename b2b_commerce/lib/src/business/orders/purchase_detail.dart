@@ -64,6 +64,8 @@ class PurchaseOrderContent extends StatelessWidget {
 //包装订单行
   Widget _bildEntryUi(BuildContext context){
     return Card(
+      elevation:0.3,
+      margin: EdgeInsets.fromLTRB(4, 10, 4, 0),
       child: Column(
         children:
         _buildOrderEntry(context),
@@ -120,6 +122,7 @@ class PurchaseOrderContent extends StatelessWidget {
 //构建底部UI
   Widget _buildBottom(BuildContext context) {
     return Card(
+      elevation:0.3,
       child: Column(
         children: <Widget>[
           Align(
@@ -147,6 +150,7 @@ class PurchaseOrderContent extends StatelessWidget {
 //构建工厂信息UI
   Widget _buildFactoryInfo(BuildContext context){
     return Card(
+      elevation:0.3,
       child: Column(
         children: <Widget>[
           Container(
@@ -234,6 +238,7 @@ class PurchaseOrderContent extends StatelessWidget {
 //构建收货信息UI
   Widget _buildDeliveryAddress(BuildContext context) {
       return Card(
+        elevation:0.3,
         child: Column(
           children: <Widget>[
             ListTile(
@@ -279,6 +284,7 @@ class PurchaseOrderContent extends StatelessWidget {
       }
     }
     return Card(
+      elevation:0.3,
       child: Column(
         children: <Widget>[
           PurchaseProductionProgresse(order.productionProgresses[_index-1],false),
