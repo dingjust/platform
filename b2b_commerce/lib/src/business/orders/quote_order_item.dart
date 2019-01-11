@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 import 'quote_order_detail.dart';
 
 class QuoteOrderItem extends StatelessWidget {
-  QuoteEntryModel item;
+  final QuoteEntryModel item;
 
   QuoteOrderItem({this.item});
 

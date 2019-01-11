@@ -1,6 +1,8 @@
+import 'package:b2b_commerce/src/business/orders/provider/sales_order_bloc_provider.dart';
 import 'package:b2b_commerce/src/business/search/sales_order_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
 import 'orders/sales_order_detail.dart';
 
 const statuses = <EnumModel>[
@@ -14,36 +16,38 @@ const statuses = <EnumModel>[
 class SalesOrdersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('销售订单'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => showSearch(context: context, delegate: SalesOrderSearchDelegate()),
-          ),
-        ],
-      ),
-      body: DefaultTabController(
-        length: statuses.length,
-        child: Scaffold(
-          appBar: TabBar(
-            unselectedLabelColor: Colors.black26,
-            labelColor: Colors.black38,
-            tabs: statuses.map((status) {
-              return Tab(text: status.name);
-            }).toList(),
-            labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-            isScrollable: true,
-          ),
-          body: TabBarView(
-            children: <Widget>[
-              SalesOrderList(statuses[0]),
-              SalesOrderList(statuses[1]),
-              SalesOrderList(statuses[2]),
-              SalesOrderList(statuses[3]),
-              SalesOrderList(statuses[4]),
-            ],
+    return SalesOrderBlocProvider(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('销售订单'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () => showSearch(context: context, delegate: SalesOrderSearchDelegate()),
+            ),
+          ],
+        ),
+        body: DefaultTabController(
+          length: statuses.length,
+          child: Scaffold(
+            appBar: TabBar(
+              unselectedLabelColor: Colors.black26,
+              labelColor: Colors.black38,
+              tabs: statuses.map((status) {
+                return Tab(text: status.name);
+              }).toList(),
+              labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+              isScrollable: true,
+            ),
+            body: TabBarView(
+              children: <Widget>[
+                SalesOrderList(statuses[0]),
+                SalesOrderList(statuses[1]),
+                SalesOrderList(statuses[2]),
+                SalesOrderList(statuses[3]),
+                SalesOrderList(statuses[4]),
+              ],
+            ),
           ),
         ),
       ),
@@ -58,58 +62,32 @@ class SalesOrderList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<SalesOrderModel> orders = <SalesOrderModel>[
-      SalesOrderModel.fromJson({
-        "code": "34938475200045",
-        "status": "PENDING_PAYMENT",
-        "totalQuantity": 10,
-        "totalPrice": 300,
-        "creationtime": DateTime.now().toString(),
-        "entries": [
-          {
-            "product": {
-              "thumbnail":
-                  "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
-              "code": "NA89852509",
-              "name": "山本风法少女长裙复古气质秋冬款",
-              "skuID": "NA89852509",
-            },
-          },
-          {
-            "product": {
-              "thumbnail":
-                  "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
-              "code": "NA89852509",
-              "name": "山本风法少女长裙复古气质秋冬款",
-              "skuID": "NA89852509",
-            },
-          }
-        ],
-      }),
-      SalesOrderModel.fromJson({
-        "code": "34938475200045",
-        "status": "PENDING_PAYMENT",
-        "totalQuantity": 10,
-        "totalPrice": 300,
-        "creationtime": DateTime.now().toString(),
-        "entries": [
-          {
-            "product": {
-              "thumbnail":
-                  "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
-              "code": "NA89852509",
-              "name": "山本风法少女长裙复古气质秋冬款2",
-              "skuID": "NA89852509",
-            },
-          }
-        ],
-      })
-    ];
+    final bloc = SalesOrderBlocProvider.of(context);
 
-    return ListView(
-      children: orders.map((order) {
-        return SalesOrderItem(order);
-      }).toList(),
+    if (status.code == 'ALL') {
+      bloc.filterByStatuses(statuses.map((status) {
+        return status.code;
+      }).toSet());
+    } else {
+      bloc.filterByStatuses(Set.of([status.code]));
+    }
+
+    return StreamBuilder<List<SalesOrderModel>>(
+      stream: bloc.stream,
+      initialData: [],
+      builder: (BuildContext context, AsyncSnapshot<List<SalesOrderModel>> snapshot) {
+        if (snapshot.hasData) {
+          return ListView(
+            children: snapshot.data.map((order) {
+              return SalesOrderItem(order);
+            }).toList(),
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 }
