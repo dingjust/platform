@@ -19,9 +19,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
           brightness: Brightness.light,
-          iconTheme: IconThemeData(color: Colors.grey),
           centerTitle: true,
           elevation: 0.5,
           title: Text(

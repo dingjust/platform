@@ -47,9 +47,10 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: '衣加衣供应链',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          accentColor: Colors.orangeAccent[400],
-        ),
+            // primarySwatch: Colors.blue,
+            primaryColor: Colors.white,
+            accentColor: Colors.orangeAccent[400],
+            bottomAppBarColor: Colors.grey),
         home: Scaffold(
           body: _modules[_currentIndex],
           bottomNavigationBar: BottomNavigation(
@@ -102,11 +103,14 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
+
     return BottomNavigationBar(
       items: items,
       currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
       onTap: _handleTap,
+      fixedColor: themeData.accentColor,
     );
   }
 }
