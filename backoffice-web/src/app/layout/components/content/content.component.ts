@@ -1,17 +1,15 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 
 @Component({
-    selector     : 'content',
-    templateUrl  : './content.component.html',
-    styleUrls    : ['./content.component.scss'],
+    selector: 'content',
+    templateUrl: './content.component.html',
+    styleUrls: ['./content.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class ContentComponent
-{
+export class ContentComponent {
     /**
      * Constructor
      */
-    constructor()
-    {
+    constructor() {
     }
 }

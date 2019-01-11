@@ -11,9 +11,10 @@ import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
 import {FuseSplashScreenService} from '@fuse/services/splash-screen.service';
 import {FuseTranslationLoaderService} from '@fuse/services/translation-loader.service';
 
-import {navigation} from 'app/navigation/navigation';
-import {locale as navigationEnglish} from 'app/navigation/i18n/en';
-import {locale as navigationChinese} from 'app/navigation/i18n/zh';
+import {navigation} from './navigation/navigation';
+
+import {locale as navigationChinese} from './navigation/i18n/zh';
+import {locale as navigationEnglish} from './navigation/i18n/en';
 
 @Component({
     selector: 'app',
@@ -59,13 +60,13 @@ export class AppComponent implements OnInit, OnDestroy {
         this._fuseNavigationService.setCurrentNavigation('main');
 
         // Add languages
-        this._translateService.addLangs(['en', 'zh']);
+        this._translateService.addLangs(['zh', 'en']);
 
         // Set the default language
         this._translateService.setDefaultLang('zh');
 
         // Set the navigation translations
-        this._fuseTranslationLoaderService.loadTranslations(navigationEnglish, navigationChinese);
+        this._fuseTranslationLoaderService.loadTranslations(navigationChinese, navigationEnglish);
 
         // Use a language
         this._translateService.use('zh');

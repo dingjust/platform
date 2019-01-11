@@ -596,6 +596,11 @@ class QuoteModel extends AbstractOrderModel {
     this.purchaseOrderCode,
     this.belongTo,
     this.attachments,
+    this.unitPriceOfFabric,
+    this.unitPriceOfExcipients,
+    this.unitPriceOfProcessing,
+    this.costOfSamples,
+    this.expectedDeliveryDate,
   }) : super(
           code: code,
           totalQuantity: totalQuantity,

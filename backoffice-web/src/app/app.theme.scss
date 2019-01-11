@@ -76,17 +76,34 @@ $typography: mat-typography-config(
 // -----------------------------------------------------------------------------------------------------
 // @ Component theming
 // -----------------------------------------------------------------------------------------------------
+// Import platform themes
+@import "src/app/main/platform/product/categories/categories.theme";
+@import "src/app/main/platform/product/products/products.theme";
+@import "src/app/main/platform/order/orders/orders.theme";
+@import "src/app/main/platform/user/employees/employees.theme";
+@import "src/app/main/platform/user/user-groups/user-groups.theme";
+@import "src/app/main/platform/user/roles/roles.theme";
 
 // Import app and page component themes here to enable theming for them
 @import "src/app/layout/components/chat-panel/chat-panel.theme";
 @import "src/app/layout/components/toolbar/toolbar.theme";
+// shortcut
+@import "src/app/main/apps/chat/chat.theme";
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {
-
     // Layout components
     @include chat-panel-theme($theme);
     @include toolbar-theme($theme);
+    // Shortcuts
+    @include chat-theme($theme);
+    // Platform
+    @include platform-categories-theme($theme);
+    @include platform-products-theme($theme);
+    @include platform-orders-theme($theme);
+    @include platform-employees-theme($theme);
+    @include platform-user-groups-theme($theme);
+    @include platform-roles-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------
