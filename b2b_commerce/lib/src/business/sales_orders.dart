@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/orders/provider/sales_order_bloc_provi
 import 'package:b2b_commerce/src/business/search/sales_order_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 import 'orders/sales_order_detail.dart';
 
@@ -23,7 +24,8 @@ class SalesOrdersPage extends StatelessWidget {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: () => showSearch(context: context, delegate: SalesOrderSearchDelegate()),
+              onPressed: () => showSearch(
+                  context: context, delegate: SalesOrderSearchDelegate()),
             ),
           ],
         ),
@@ -36,7 +38,10 @@ class SalesOrdersPage extends StatelessWidget {
               tabs: statuses.map((status) {
                 return Tab(text: status.name);
               }).toList(),
-              labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black),
               isScrollable: true,
             ),
             body: TabBarView(
@@ -60,33 +65,107 @@ class SalesOrderList extends StatelessWidget {
 
   SalesOrderList(this.status);
 
+  ScrollController _scrollController = new ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final bloc = SalesOrderBlocProvider.of(context);
 
-    if (status.code == 'ALL') {
-      bloc.filterByStatuses(statuses.map((status) {
-        return status.code;
-      }).toSet());
-    } else {
-      bloc.filterByStatuses(Set.of([status.code]));
-    }
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        bloc.loadingStart();
+        bloc.loadingMoreByStatuses(status.code);
+      }
+    });
 
-    return StreamBuilder<List<SalesOrderModel>>(
-      stream: bloc.stream,
-      initialData: [],
-      builder: (BuildContext context, AsyncSnapshot<List<SalesOrderModel>> snapshot) {
-        if (snapshot.hasData) {
-          return ListView(
-            children: snapshot.data.map((order) {
-              return SalesOrderItem(order);
-            }).toList(),
-          );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
+    // if (status.code == 'ALL') {
+    //   bloc.filterByStatuses(statuses.map((status) {
+    //     return status.code;
+    //   }).toSet());
+    // } else {
+    //   bloc.filterByStatuses(Set.of([status.code]));
+    // }
 
-        return Center(child: CircularProgressIndicator());
+    return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      controller: _scrollController,
+      children: <Widget>[
+        StreamBuilder<List<SalesOrderModel>>(
+          stream: bloc.stream,
+          initialData: null,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<SalesOrderModel>> snapshot) {
+            if (snapshot.data == null) {
+              bloc.filterByStatuses(status.code);
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 200),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            if (snapshot.hasData) {
+              return Column(
+                children: snapshot.data.map((order) {
+                  return SalesOrderItem(order);
+                }).toList(),
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+          },
+        ),
+        StreamBuilder<bool>(
+          stream: bloc.loadingStream,
+          initialData: false,
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Center(
+                child: new Opacity(
+                  opacity: snapshot.data ? 1.0 : 0,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            );
+          },
+        ),
+        StreamBuilder<bool>(
+          stream: bloc.bottomStream,
+          initialData: false,
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            return snapshot.data
+                ? Container(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                    child: Center(
+                      child: Text(
+                        "┑(￣Д ￣)┍ 已经到底了",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  )
+                : Container();
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _buildLoading(BuildContext context) {
+    final bloc = SalesOrderBlocProvider.of(context);
+
+    return StreamBuilder<bool>(
+      stream: bloc.loadingStream,
+      initialData: false,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: new Center(
+            child: new Opacity(
+              opacity: snapshot.data ? 1.0 : 0.0,
+              child: new CircularProgressIndicator(),
+            ),
+          ),
+        );
       },
     );
   }
@@ -183,13 +262,15 @@ class SalesOrderItem extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         '${entry.product.name}',
-                        style: TextStyle(fontSize: 16.0, color: Color(0xFF323232)),
+                        style:
+                            TextStyle(fontSize: 16.0, color: Color(0xFF323232)),
                       ),
                       Container(
                         padding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
                         child: Text(
                           '货号：${entry.product.skuID}',
-                          style: TextStyle(fontSize: 14.0, color: Color(0xFF969696)),
+                          style: TextStyle(
+                              fontSize: 14.0, color: Color(0xFF969696)),
                         ),
                         decoration: BoxDecoration(
                           color: Color(0xFFF0F0F0),
