@@ -257,13 +257,15 @@ class RequirementOrderItem extends StatelessWidget {
           ],
         ),
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(5)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
       ),
     );
   }
 
   Widget _buildHeader() {
-    var sd=_statusColors[order.status];
+    var sd = _statusColors[order.status];
     return Container(
       margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
