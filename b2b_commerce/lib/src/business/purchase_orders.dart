@@ -511,8 +511,9 @@ class PurchaseOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Card(
-        margin: EdgeInsets.all(6),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
           children: <Widget>[
             _buildOrderHeader(context),
@@ -521,6 +522,10 @@ class PurchaseOrderItem extends StatelessWidget {
             ),
             _buildOrderBottom(context),
           ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
         ),
       ),
       onTap: (){

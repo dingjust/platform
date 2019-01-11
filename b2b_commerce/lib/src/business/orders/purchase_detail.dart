@@ -63,12 +63,16 @@ class PurchaseOrderContent extends StatelessWidget {
   }
 //包装订单行
   Widget _bildEntryUi(BuildContext context){
-    return Card(
-      elevation:0.3,
-      margin: EdgeInsets.fromLTRB(4, 10, 4, 0),
+    return Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
         children:
         _buildOrderEntry(context),
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
       ),
     );
   }
@@ -77,6 +81,7 @@ class PurchaseOrderContent extends StatelessWidget {
     return order.entries.map((entry) {
       return Container(
           padding: EdgeInsets.all(10),
+          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: Row(
             children: <Widget>[
               Image.network(
@@ -115,14 +120,19 @@ class PurchaseOrderContent extends StatelessWidget {
                   )
               )
             ],
-          )
+          ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
       );
     }).toList();
   }
 //构建底部UI
   Widget _buildBottom(BuildContext context) {
-    return Card(
-      elevation:0.3,
+    return Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
         children: <Widget>[
           Align(
@@ -145,12 +155,17 @@ class PurchaseOrderContent extends StatelessWidget {
           ),
         ],
       ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+      ),
     );
   }
 //构建工厂信息UI
   Widget _buildFactoryInfo(BuildContext context){
-    return Card(
-      elevation:0.3,
+    return Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
         children: <Widget>[
           Container(
@@ -233,12 +248,17 @@ class PurchaseOrderContent extends StatelessWidget {
           ),
         ],
       ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+      ),
     );
   }
 //构建收货信息UI
   Widget _buildDeliveryAddress(BuildContext context) {
-      return Card(
-        elevation:0.3,
+      return Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
           children: <Widget>[
             ListTile(
@@ -272,6 +292,10 @@ class PurchaseOrderContent extends StatelessWidget {
             )
           ],
         ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
       );
   }
 //构建生产进度UI
@@ -283,8 +307,9 @@ class PurchaseOrderContent extends StatelessWidget {
           break;
       }
     }
-    return Card(
-      elevation:0.3,
+    return Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
         children: <Widget>[
           PurchaseProductionProgresse(order.productionProgresses[_index-1],false),
@@ -311,6 +336,10 @@ class PurchaseOrderContent extends StatelessWidget {
               )
           )
         ],
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
       ),
     );
   }
@@ -377,7 +406,7 @@ class PurchaseProductionProgresse extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.0),
       width: double.infinity,
-      child:   Column(
+      child: Column(
             children: <Widget>[
               ListTile(
                 title:  Text(
@@ -606,12 +635,18 @@ class PurchaseDocument extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child:  Column(
               children: <Widget>[
                 _buildDoc(context),
               ],
-            )
+            ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+      ),
     );
   }
 

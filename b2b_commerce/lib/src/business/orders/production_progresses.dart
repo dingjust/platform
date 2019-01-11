@@ -15,8 +15,14 @@ class ProductionProgressePage extends StatelessWidget {
         appBar: AppBar(
           title: Text('生产进度明细'),
         ),
-        body: Card(
-        child:_buildPorgresse(context)
+        body: Container(
+          padding: EdgeInsets.all(10),
+          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: _buildPorgresse(context),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+          ),
         )
     );
   }
