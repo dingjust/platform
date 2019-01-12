@@ -38,13 +38,6 @@ const routes: Routes = [
         resolve: {
             data: ProductService
         }
-    },
-    {
-        path: 'products/:id/:handle',
-        component: ProductComponent,
-        resolve: {
-            data: ProductService
-        }
     }
 ];
 
