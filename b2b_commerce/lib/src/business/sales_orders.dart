@@ -141,26 +141,6 @@ class SalesOrderList extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildLoading(BuildContext context) {
-    final bloc = SalesOrderBlocProvider.of(context);
-
-    return StreamBuilder<bool>(
-      stream: bloc.loadingStream,
-      initialData: false,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: new Center(
-            child: new Opacity(
-              opacity: snapshot.data ? 1.0 : 0.0,
-              child: new CircularProgressIndicator(),
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
 
 class SalesOrderItem extends StatelessWidget {
