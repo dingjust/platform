@@ -1,6 +1,8 @@
 /**
  * 所在行业
  */
+import {EnumModel} from '../../item.model';
+
 export enum LineOfBusiness {
     TRADE = 'TRADE',
     BANK = 'BANK',
@@ -10,7 +12,7 @@ export enum LineOfBusiness {
     SERVICE = 'SERVICE'
 }
 
-export const LINE_OF_BUSINESS_OPTIONS: any[] = [
+export const LINE_OF_BUSINESS_OPTIONS: EnumModel[] = [
     {
         code: 'TRADE',
         name: '贸易',

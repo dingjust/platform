@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {EmployeesModule} from './employees/employees.module';
@@ -21,6 +21,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [
         RouterModule.forChild(routes),
 
