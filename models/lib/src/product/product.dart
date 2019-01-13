@@ -4,6 +4,25 @@ import 'package:models/models.dart';
 
 part 'product.g.dart';
 
+/// 样衣归还状态
+enum SampleProductReturnState {
+  /// 未还
+  NO_RETURN,
+
+  /// 已还
+  RETURNED,
+
+  /// 异常
+  ABNORMAL,
+}
+
+// TODO: i18n处理
+const SampleProductReturnStateLocalizedMap = {
+  SampleProductReturnState.NO_RETURN: "未还",
+  SampleProductReturnState.RETURNED: "已还",
+  SampleProductReturnState.ABNORMAL: "异常"
+};
+
 @JsonSerializable()
 class CategoryModel extends ItemModel {
   String code;
@@ -369,21 +388,22 @@ class SizeModel extends ItemModel {
   static Map<String, dynamic> toJson(SizeModel model) => _$SizeModelToJson(model);
 }
 
-/*@JsonSerializable()
+@JsonSerializable()
 class SampleProductModel extends ProductModel {
   //归还状态
-  bool returnState;
+  SampleProductReturnState state;
   //借出数量
-  int borrowedQuantity;
+  int lendQuantity;
   //借出日期
   DateTime lendDate;
   //预计归还日期
   DateTime expectedReturnDate;
+  //归还日期
+  DateTime returnedDate;
   //借方
-  String belongTo;
+  String debtor;
 
   String skuID;
-  double gramWeight;
 
   CategoryModel get superCategory => superCategories[0];
 
@@ -398,6 +418,12 @@ class SampleProductModel extends ProductModel {
     List<CategoryModel> superCategories,
     int stock,
     this.skuID,
+    this.state,
+    this.lendDate,
+    this.lendQuantity,
+    this.debtor,
+    this.expectedReturnDate,
+    this.returnedDate
   }) : super(
     code: code,
     name: name,
@@ -410,10 +436,51 @@ class SampleProductModel extends ProductModel {
     superCategories: superCategories,
   );
 
-  factory SampleProductModel.fromJson(Map<String, dynamic> json) => _$SampleProductModelModelFromJson(json);
+  factory SampleProductModel.fromJson(Map<String, dynamic> json) => _$SampleProductModelFromJson(json);
 
   static Map<String, dynamic> toJson(SampleProductModel model) => _$SampleProductModelToJson(model);
-}*/
+}
+
+@JsonSerializable()
+class SampleProductInventoryModel extends ProductModel {
+  //库存数量
+  int inventoryQuantity;
+  //借出数量
+  int totalLendQuantity;
+
+  String skuID;
+
+  CategoryModel get superCategory => superCategories[0];
+
+  SampleProductInventoryModel({
+    String code,
+    String name,
+    double price,
+    String thumbnail,
+    List<StaircasePriceModel> staircasePrices,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    List<CategoryModel> superCategories,
+    int stock,
+    this.skuID,
+    this.inventoryQuantity,
+    this.totalLendQuantity,
+  }) : super(
+    code: code,
+    name: name,
+    price: price,
+    thumbnail: thumbnail,
+    staircasePrices: staircasePrices,
+    privacy: privacy,
+    ratingIfPrivacy: ratingIfPrivacy,
+    stock: stock,
+    superCategories: superCategories,
+  );
+
+  factory SampleProductInventoryModel.fromJson(Map<String, dynamic> json) => _$SampleProductInventoryModelFromJson(json);
+
+  static Map<String, dynamic> toJson(SampleProductInventoryModel model) => _$SampleProductInventoryModelToJson(model);
+}
 
 @JsonSerializable()
 class ZoneDeliveryModeValueModel extends ItemModel {
@@ -423,11 +490,14 @@ class ZoneDeliveryModeValueModel extends ItemModel {
   double firstWeight;
   //续重价
   double value;
+  //地区
+  AddressModel address;
 
   ZoneDeliveryModeValueModel({
     this.minimum,
     this.firstWeight,
     this.value,
+    this.address,
   });
 
   factory ZoneDeliveryModeValueModel.fromJson(Map<String, dynamic> json) => _$ZoneDeliveryModeValueModelFromJson(json);
