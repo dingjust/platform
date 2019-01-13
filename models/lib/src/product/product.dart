@@ -368,3 +368,88 @@ class SizeModel extends ItemModel {
 
   static Map<String, dynamic> toJson(SizeModel model) => _$SizeModelToJson(model);
 }
+
+/*@JsonSerializable()
+class SampleProductModel extends ProductModel {
+  //归还状态
+  bool returnState;
+  //借出数量
+  int borrowedQuantity;
+  //借出日期
+  DateTime lendDate;
+  //预计归还日期
+  DateTime expectedReturnDate;
+  //借方
+  String belongTo;
+
+  String skuID;
+  double gramWeight;
+
+  CategoryModel get superCategory => superCategories[0];
+
+  SampleProductModel({
+    String code,
+    String name,
+    double price,
+    String thumbnail,
+    List<StaircasePriceModel> staircasePrices,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    List<CategoryModel> superCategories,
+    int stock,
+    this.skuID,
+  }) : super(
+    code: code,
+    name: name,
+    price: price,
+    thumbnail: thumbnail,
+    staircasePrices: staircasePrices,
+    privacy: privacy,
+    ratingIfPrivacy: ratingIfPrivacy,
+    stock: stock,
+    superCategories: superCategories,
+  );
+
+  factory SampleProductModel.fromJson(Map<String, dynamic> json) => _$SampleProductModelModelFromJson(json);
+
+  static Map<String, dynamic> toJson(SampleProductModel model) => _$SampleProductModelToJson(model);
+}*/
+
+@JsonSerializable()
+class ZoneDeliveryModeValueModel extends ItemModel {
+  //起步价
+  double minimum;
+  //首重
+  double firstWeight;
+  //续重价
+  double value;
+
+  ZoneDeliveryModeValueModel({
+    this.minimum,
+    this.firstWeight,
+    this.value,
+  });
+
+  factory ZoneDeliveryModeValueModel.fromJson(Map<String, dynamic> json) => _$ZoneDeliveryModeValueModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ZoneDeliveryModeValueModel model) => _$ZoneDeliveryModeValueModelToJson(model);
+}
+
+@JsonSerializable()
+class ZoneDeliveryModeModel extends ItemModel {
+  String code;
+  bool active;
+  bool net;
+  Set<ZoneDeliveryModeValueModel> values;
+
+  ZoneDeliveryModeModel({
+    this.code,
+    this.active,
+    this.net,
+    this.values,
+  });
+
+  factory ZoneDeliveryModeModel.fromJson(Map<String, dynamic> json) => _$ZoneDeliveryModeModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ZoneDeliveryModeModel model) => _$ZoneDeliveryModeModelToJson(model);
+}
