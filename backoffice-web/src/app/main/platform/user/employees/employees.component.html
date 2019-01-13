@@ -19,7 +19,7 @@
                     shopping_basket
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Employees
+                    员工
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -28,7 +28,7 @@
             <div class="search-wrapper mx-32 mx-md-0">
                 <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>search</mat-icon>
-                    <input #filter placeholder="Search for a employee">
+                    <input #filter placeholder="账户ID/名称">
                 </div>
             </div>
             <!-- / SEARCH -->
@@ -55,13 +55,13 @@
 
                 <!-- UID Column -->
                 <ng-container matColumnDef="uid">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>UID</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>账户ID</mat-header-cell>
                     <mat-cell *matCellDef="let model">{{model.uid}}</mat-cell>
                 </ng-container>
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>账户名称</mat-header-cell>
                     <mat-cell *matCellDef="let model">{{model.name}}</mat-cell>
                 </ng-container>
 

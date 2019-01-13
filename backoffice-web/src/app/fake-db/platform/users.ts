@@ -1,26 +1,11 @@
-import {CountryModel} from '@hybris/models/i18n/i18n.model';
 import {
-    CompanyModel,
-    CustomerModel,
     EmployeeModel,
     RoleModel,
     UserGroupModel,
-    UserModel,
-    LineOfBusiness
 } from '@hybris/models/user';
+import {Page, PaginationData} from '../../../@hybris/models/item.model';
 
 export class PlatformUsersFakeDb {
-    public static companies: CompanyModel[] = [
-        {
-            id: 1,
-            uid: 'com000001',
-            name: '定制加（深圳）科技有限公司',
-            contact: new UserModel({uid: 'zhanhongbo', name: '湛红波'}),
-            country: new CountryModel({isocode: 'CN', name: '中国'}),
-            lineOfBusiness: LineOfBusiness.BANK,
-            members: []
-        }
-    ];
     public static employees: EmployeeModel[] = [
         {
             id: 1,
@@ -28,13 +13,17 @@ export class PlatformUsersFakeDb {
             name: '系统管理员'
         }
     ];
-    public static customers: CustomerModel[] = [
-        {
-            id: 1,
-            uid: 'zhanhongbo',
-            name: '湛红波'
-        }
-    ];
+
+    public static pagedEmployees: Page<EmployeeModel> = {
+        pagination: new PaginationData({
+            pageSize: 10,
+            currentPage: 0,
+            numberOfPages: 1,
+            totalNumberOfResults: 1
+        }),
+        content: PlatformUsersFakeDb.employees
+    };
+
     public static userGroups: UserGroupModel[] = [
         {
             id: 1,

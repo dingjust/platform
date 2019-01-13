@@ -661,6 +661,9 @@ class ProductionProgressModel extends ItemModel {
   /// 实际完成时间
   DateTime finishDate;
 
+  ///备注
+  String remarks;
+
   /// 采购订单
   PurchaseOrderModel order;
 
@@ -672,6 +675,7 @@ class ProductionProgressModel extends ItemModel {
     this.estimatedDate,
     this.finishDate,
     this.order,
+    this.remarks
   });
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) => _$ProductionProgressModelFromJson(json);

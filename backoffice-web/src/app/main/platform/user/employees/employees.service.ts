@@ -3,11 +3,12 @@ import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/rou
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 
-import {EmployeeModel} from '@hybris/models/user';
+import {Page, EmployeeModel} from '@hybris/models';
 
 @Injectable()
 export class EmployeesService implements Resolve<any> {
     models: EmployeeModel[];
+    page: Page<EmployeeModel>; // TODO: replace models to provide pagination
     onModelsChanged: BehaviorSubject<any>;
 
     /**

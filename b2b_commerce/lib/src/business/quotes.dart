@@ -141,13 +141,20 @@ class QuotesPage extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        iconTheme: IconThemeData(color: Colors.black),
         centerTitle: true,
-        title: Text('报价管理'),
+        title: Text(
+          '报价管理',
+          style: TextStyle(color: Colors.black),
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.search,
-              color: Colors.white,
+              color: Colors.black,
             ),
             onPressed: null,
           ),
@@ -159,11 +166,9 @@ class QuotesPage extends StatelessWidget {
           appBar: TabBar(
             labelColor: Colors.orange,
             unselectedLabelColor: Colors.black,
+            indicatorSize: TabBarIndicatorSize.label,
             tabs: states.map((state) {
-              String text = state.name;
-              return Tab(
-                text: text,
-              );
+              return Tab(text: state.name);
             }).toList(),
             labelStyle: TextStyle(
               fontWeight: FontWeight.w800,

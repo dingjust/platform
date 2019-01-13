@@ -92,25 +92,9 @@ export class ProductComponent implements OnInit, OnDestroy {
      */
     createForm(): FormGroup {
         return this._formBuilder.group({
-            id: [this.product.id],
+            code: [this.product.code],
             name: [this.product.name],
-            handle: [this.product.handle],
-            description: [this.product.description],
-            categories: [this.product.categories],
-            tags: [this.product.tags],
-            images: [this.product.images],
-            priceTaxExcl: [this.product.priceTaxExcl],
-            priceTaxIncl: [this.product.priceTaxIncl],
-            taxRate: [this.product.taxRate],
-            comparedPrice: [this.product.comparedPrice],
-            quantity: [this.product.quantity],
-            sku: [this.product.sku],
-            width: [this.product.width],
-            height: [this.product.height],
-            depth: [this.product.depth],
-            weight: [this.product.weight],
-            extraShippingFee: [this.product.extraShippingFee],
-            active: [this.product.active]
+            price: [this.product.price]
         });
     }
 
@@ -119,7 +103,6 @@ export class ProductComponent implements OnInit, OnDestroy {
      */
     saveProduct(): void {
         const data = this.productForm.getRawValue();
-        data.handle = FuseUtils.handleize(data.name);
 
         this._productService.saveProduct(data)
             .then(() => {
@@ -127,7 +110,7 @@ export class ProductComponent implements OnInit, OnDestroy {
                 this._productService.onProductChanged.next(data);
 
                 // Show the success message
-                this._matSnackBar.open('Product saved', 'OK', {
+                this._matSnackBar.open('保存成功', 'OK', {
                     verticalPosition: 'top',
                     duration: 2000
                 });
@@ -148,13 +131,13 @@ export class ProductComponent implements OnInit, OnDestroy {
                 this._productService.onProductChanged.next(data);
 
                 // Show the success message
-                this._matSnackBar.open('Product added', 'OK', {
+                this._matSnackBar.open('添加成功', 'OK', {
                     verticalPosition: 'top',
                     duration: 2000
                 });
 
                 // Change the location with new one
-                this._location.go('platform/product/products/' + this.product.id + '/' + this.product.handle);
+                this._location.go('platform/product/products/' + this.product.id);
             });
     }
 }
