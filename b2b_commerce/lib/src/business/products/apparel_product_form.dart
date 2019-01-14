@@ -354,6 +354,31 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   ),
                 ),
               ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: ActionChip(
+                        backgroundColor: Colors.red,
+                        labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                        labelStyle: TextStyle(fontSize: 16),
+                        label: Text('发布商品'),
+                        onPressed: () {},
+                      ),
+                    ),
+                    Expanded(
+                      child: ActionChip(
+                        backgroundColor: Colors.orange,
+                        labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                        labelStyle: TextStyle(fontSize: 16),
+                        label: Text('直接上架'),
+                        onPressed: () {},
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
