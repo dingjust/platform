@@ -126,7 +126,6 @@ class VariantProductModel extends ProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     MemberRating ratingIfPrivacy,
-    int stock,
     List<CategoryModel> superCategories,
     this.baseProduct,
   }) : super(
@@ -137,7 +136,6 @@ class VariantProductModel extends ProductModel {
           staircasePrices: staircasePrices,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
-          stock: stock,
           superCategories: superCategories,
         );
 
@@ -212,7 +210,6 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     bool privacy,
     List<CategoryModel> superCategories,
     MemberRating ratingIfPrivacy,
-    int stock,
     String baseProduct,
     this.color,
   }) : super(
@@ -224,7 +221,6 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
           staircasePrices: staircasePrices,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
-          stock: stock,
           baseProduct: baseProduct,
           superCategories: superCategories,
         );
@@ -250,7 +246,6 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     bool privacy,
     List<CategoryModel> superCategories,
     MemberRating ratingIfPrivacy,
-    int stock,
     String baseProduct,
     ColorModel color,
     this.size,
@@ -263,7 +258,6 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
           staircasePrices: staircasePrices,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
-          stock: stock,
           baseProduct: baseProduct,
           color: color,
           superCategories: superCategories,
@@ -288,7 +282,6 @@ class FabricProductModel extends ProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     MemberRating ratingIfPrivacy,
-    int stock,
     List<CategoryModel> superCategories,
     this.variants,
   }) : super(
@@ -299,7 +292,6 @@ class FabricProductModel extends ProductModel {
           staircasePrices: staircasePrices,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
-          stock: stock,
           superCategories: superCategories,
         );
 
@@ -320,7 +312,6 @@ class FabricStyleVariantProductModel extends VariantProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     MemberRating ratingIfPrivacy,
-    int stock,
     List<CategoryModel> superCategories,
     this.color,
   }) : super(
@@ -331,7 +322,6 @@ class FabricStyleVariantProductModel extends VariantProductModel {
           staircasePrices: staircasePrices,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
-          stock: stock,
           superCategories: superCategories,
         );
 
@@ -406,7 +396,6 @@ class SampleProductModel extends ApparelProductModel {
     bool privacy,
     MemberRating ratingIfPrivacy,
     List<CategoryModel> superCategories,
-    int stock,
   }) : super(
     code: code,
     name: name,
@@ -415,7 +404,6 @@ class SampleProductModel extends ApparelProductModel {
     staircasePrices: staircasePrices,
     privacy: privacy,
     ratingIfPrivacy: ratingIfPrivacy,
-    stock: stock,
     superCategories: superCategories,
   );
 
