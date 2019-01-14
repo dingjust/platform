@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 final String defaultPicUrl =
     "https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg";
@@ -38,7 +39,7 @@ class ProductionProgressesPage extends StatelessWidget {
       _list.add(Container(
         child: ProductionProgressItem(
           order.productionProgresses[i],
-          ProductionProgressPhaseLocalizedMap[order.currentPhase],
+          order.currentPhase.toString(),
         ),
       ));
     }
@@ -61,7 +62,8 @@ class ProductionProgressItem extends StatelessWidget {
   //TimeLineUI
   Widget _buildProductionProgress(BuildContext context) {
     int _index = 0;
-    if (ProductionProgressPhaseLocalizedMap[progressModel.phase] == currentPhase) {
+    String phase = '${progressModel.phase}';
+    if (phase == currentPhase) {
       _index = progressModel.sequence;
     }
     return Stack(
@@ -98,8 +100,9 @@ class ProductionProgressItem extends StatelessWidget {
 
 //TimeLineUI右边的Card部分
   Widget _buildProgressTimeLine(BuildContext context) {
+    String phase = '${progressModel.phase}';
     int _index = 0;
-    if (ProductionProgressPhaseLocalizedMap[progressModel.phase] == currentPhase) {
+    if (phase == currentPhase) {
       _index = progressModel.sequence;
     }
     return Container(
@@ -130,7 +133,7 @@ class ProductionProgressItem extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child:
-                            Text(progressModel.estimatedDate.toString(), style: TextStyle(fontWeight: FontWeight.w500)),
+                            Text('${progressModel.estimatedDate}', style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
@@ -147,7 +150,7 @@ class ProductionProgressItem extends StatelessWidget {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text(progressModel.finishDate.toString(), style: TextStyle(fontWeight: FontWeight.w500)),
+                        child: Text('${progressModel.finishDate}', style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                           alignment: Alignment.centerRight,
@@ -170,7 +173,7 @@ class ProductionProgressItem extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text(progressModel.quantity.toString(), style: TextStyle(fontWeight: FontWeight.w500)),
+                      child: Text('${progressModel.quantity}', style: TextStyle(fontWeight: FontWeight.w500)),
                     ),
                     Align(
                       alignment: Alignment.centerRight,
@@ -202,7 +205,9 @@ class ProductionProgressItem extends StatelessWidget {
                   ],
                 ),
               )),
-          Container(padding: EdgeInsets.fromLTRB(20, 10, 10, 10), child: PurchaseVoucherPic(progressModel)),
+          Container(padding: EdgeInsets.fromLTRB(20, 10, 10, 10), child: Attachments(
+            list: progressModel.medias,
+          )),
           Container(
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
               child: Column(children: <Widget>[
@@ -215,7 +220,7 @@ class ProductionProgressItem extends StatelessWidget {
           Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-              child: ProductionProgressPhaseLocalizedMap[progressModel.phase] == currentPhase
+              child: phase == currentPhase
                   ? RaisedButton(
                       color: Colors.orange,
                       child: Text(
@@ -243,38 +248,57 @@ class PurchaseVoucherPic extends StatelessWidget {
   }
 
   Widget _buildPicRow(BuildContext context) {
-    return Row(children: _buildPicList(context));
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                '附件',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              )
+            ],
+          ),
+          Attachments(
+            list: progressModel.medias,
+          )
+        ],
+      ),
+    );
   }
 
 //构造凭证横向图片UI
-  List<Widget> _buildPicList(BuildContext context) {
-    List<Widget> _listPic = new List();
-    int mediasNumber = 4;
-    if (progressModel.medias.length < 4) {
-      mediasNumber = progressModel.medias.length;
-    }
-    for (int i = 0; i < mediasNumber; i++) {
-      _listPic.add(Expanded(
-        child: Image.network(
-          progressModel.medias[i] == null ? defaultPicUrl : progressModel.medias[i],
-          width: 50,
-          height: 50,
-          fit: BoxFit.scaleDown,
-        ),
-      ));
-    }
-    if (_listPic.length < 4) {
-      for (int i = 0; i <= 4 - _listPic.length; i++) {
-        _listPic.add(Expanded(
-          child: Image.network(
-            defaultPicUrl,
-            width: 50,
-            height: 50,
-            fit: BoxFit.scaleDown,
-          ),
-        ));
-      }
-    }
-    return _listPic;
-  }
+//  List<Widget> _buildPicList(BuildContext context) {
+//    List<Widget> _listPic = new List();
+//    int mediasNumber = 4;
+//    if (progressModel.medias.length < 4) {
+//      mediasNumber = progressModel.medias.length;
+//    }
+//    for (int i = 0; i < mediasNumber; i++) {
+//      _listPic.add(Expanded(
+//        child: Image.network(
+//          progressModel.medias[i] == null ? defaultPicUrl : progressModel.medias[i],
+//          width: 50,
+//          height: 50,
+//          fit: BoxFit.scaleDown,
+//        ),
+//      ));
+//    }
+//    if (_listPic.length < 4) {
+//      for (int i = 0; i <= 4 - _listPic.length; i++) {
+//        _listPic.add(Expanded(
+//          child: Image.network(
+//            defaultPicUrl,
+//            width: 50,
+//            height: 50,
+//            fit: BoxFit.scaleDown,
+//          ),
+//        ));
+//      }
+//    }
+//    return _listPic;
+//  }
 }
