@@ -150,21 +150,21 @@ class SalesOrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-      child: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildHeader(context),
-            Column(
-              children: _buildEntries(context),
-            ),
-            _buildSummary(context),
-          ],
-        ),
+    return Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildHeader(context),
+          Column(
+            children: _buildEntries(context),
+          ),
+          _buildSummary(context),
+        ],
       ),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(5)),
     );
   }
 
