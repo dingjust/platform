@@ -329,7 +329,7 @@ class PurchaseOrderContent extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ProductionProgressePage(order: order),
+                      builder: (context) => ProductionProgressesPage(order: order),
                     ),
                   );
                 },
