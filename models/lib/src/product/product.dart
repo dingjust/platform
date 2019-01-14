@@ -16,6 +16,14 @@ enum SampleProductReturnState {
   ABNORMAL,
 }
 
+///借的类型
+enum LendBorrowType{
+  ///借出
+  LEND,
+  ///借入
+  BORROW,
+}
+
 // TODO: i18n处理
 const SampleProductReturnStateLocalizedMap = {
   SampleProductReturnState.NO_RETURN: "未还",
@@ -84,8 +92,8 @@ class ProductModel extends ItemModel {
   /// 对于会员可见性，A/B/C
   MemberRating ratingIfPrivacy;
 
-  /// 库存，对于变式商品则为实际库存，款式商品则为变式库存的总量
-  int stock;
+  //库存
+  StockLevelModel stockLevel;
 
   ProductModel({
     this.code,
@@ -93,10 +101,10 @@ class ProductModel extends ItemModel {
     this.price = 0.0,
     this.thumbnail,
     this.staircasePrices,
-    this.stock,
     this.privacy,
     this.superCategories,
     this.ratingIfPrivacy,
+    this.stockLevel,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
@@ -182,7 +190,6 @@ class ApparelProductModel extends ProductModel {
           staircasePrices: staircasePrices,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
-          stock: stock,
           superCategories: superCategories,
         );
 
@@ -389,24 +396,7 @@ class SizeModel extends ItemModel {
 }
 
 @JsonSerializable()
-class SampleProductModel extends ProductModel {
-  //归还状态
-  SampleProductReturnState state;
-  //借出数量
-  int lendQuantity;
-  //借出日期
-  DateTime lendDate;
-  //预计归还日期
-  DateTime expectedReturnDate;
-  //归还日期
-  DateTime returnedDate;
-  //借方
-  String debtor;
-
-  String skuID;
-
-  CategoryModel get superCategory => superCategories[0];
-
+class SampleProductModel extends ApparelProductModel {
   SampleProductModel({
     String code,
     String name,
@@ -417,13 +407,6 @@ class SampleProductModel extends ProductModel {
     MemberRating ratingIfPrivacy,
     List<CategoryModel> superCategories,
     int stock,
-    this.skuID,
-    this.state,
-    this.lendDate,
-    this.lendQuantity,
-    this.debtor,
-    this.expectedReturnDate,
-    this.returnedDate
   }) : super(
     code: code,
     name: name,
@@ -442,44 +425,52 @@ class SampleProductModel extends ProductModel {
 }
 
 @JsonSerializable()
-class SampleProductInventoryModel extends ProductModel {
-  //库存数量
-  int inventoryQuantity;
-  //借出数量
-  int totalLendQuantity;
+class SampleLendingHistoryModel extends ItemModel{
+  //样衣产品
+  SampleProductModel sampleProduct;
+  //借的类型
+  LendBorrowType type;
+  //数量
+  int quantity;
+  //预计归还日期
+  DateTime expectedReturnDate;
+  //归还日期
+  DateTime returnedDate;
+  //借方（归属）
+  String debtor;
 
-  String skuID;
+  SampleLendingHistoryModel({
+    this.sampleProduct,
+    this.type,
+    this.quantity,
+    this.expectedReturnDate,
+    this.returnedDate,
+    this.debtor,
+  });
 
-  CategoryModel get superCategory => superCategories[0];
+  factory SampleLendingHistoryModel.fromJson(Map<String, dynamic> json) => _$SampleLendingHistoryModelFromJson(json);
 
-  SampleProductInventoryModel({
-    String code,
-    String name,
-    double price,
-    String thumbnail,
-    List<StaircasePriceModel> staircasePrices,
-    bool privacy,
-    MemberRating ratingIfPrivacy,
-    List<CategoryModel> superCategories,
-    int stock,
-    this.skuID,
-    this.inventoryQuantity,
-    this.totalLendQuantity,
-  }) : super(
-    code: code,
-    name: name,
-    price: price,
-    thumbnail: thumbnail,
-    staircasePrices: staircasePrices,
-    privacy: privacy,
-    ratingIfPrivacy: ratingIfPrivacy,
-    stock: stock,
-    superCategories: superCategories,
-  );
+  static Map<String, dynamic> toJson(SampleLendingHistoryModel model) => _$SampleLendingHistoryModelToJson(model);
+}
 
-  factory SampleProductInventoryModel.fromJson(Map<String, dynamic> json) => _$SampleProductInventoryModelFromJson(json);
+@JsonSerializable()
+class StockLevelModel extends ItemModel{
+  //产品
+  ProductModel product;
+  //实际库存
+  int available;
+  //平台库存
+  int maxPreOrder;
 
-  static Map<String, dynamic> toJson(SampleProductInventoryModel model) => _$SampleProductInventoryModelToJson(model);
+  StockLevelModel({
+    this.product,
+    this.available,
+    this.maxPreOrder,
+  });
+
+  factory StockLevelModel.fromJson(Map<String, dynamic> json) => _$StockLevelModelFromJson(json);
+
+  static Map<String, dynamic> toJson(StockLevelModel model) => _$StockLevelModelToJson(model);
 }
 
 @JsonSerializable()
