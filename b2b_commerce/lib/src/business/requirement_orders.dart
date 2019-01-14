@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/provider/requirement_order_bloc_provider.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -17,57 +18,59 @@ class RequirementOrdersPage extends StatefulWidget {
 class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          brightness: Brightness.light,
-          centerTitle: true,
-          elevation: 0.5,
-          title: Text(
-            '需求订单管理',
-            style: TextStyle(color: Colors.black),
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () => showSearch(
-                  context: context, delegate: RequirementOrderSearchDelegate()),
-            ),
-          ],
-        ),
-        body: DefaultTabController(
-          length: statuses.length,
-          child: Scaffold(
-            appBar: TabBar(
-              unselectedLabelColor: Colors.black26,
-              labelColor: Colors.black38,
-              indicatorSize: TabBarIndicatorSize.label,
-              tabs: statuses.map((status) {
-                return Tab(text: status.name);
-              }).toList(),
-              labelStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black),
-              isScrollable: false,
-            ),
-            body: TabBarView(
-              children: <Widget>[
-                RequirementOrderList(
-                  status: statuses[0],
+    return RequirementOrderBlocProvider(
+        child: Scaffold(
+            appBar: AppBar(
+              brightness: Brightness.light,
+              centerTitle: true,
+              elevation: 0.5,
+              title: Text(
+                '需求订单管理',
+                style: TextStyle(color: Colors.black),
+              ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () => showSearch(
+                      context: context,
+                      delegate: RequirementOrderSearchDelegate()),
                 ),
-                RequirementOrderList(
-                  status: statuses[1],
-                ),
-                RequirementOrderList(
-                  status: statuses[2],
-                ),
-                RequirementOrderList(
-                  status: statuses[3],
-                )
               ],
             ),
-          ),
-        ));
+            body: DefaultTabController(
+              length: statuses.length,
+              child: Scaffold(
+                appBar: TabBar(
+                  unselectedLabelColor: Colors.black26,
+                  labelColor: Colors.black38,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  tabs: statuses.map((status) {
+                    return Tab(text: status.name);
+                  }).toList(),
+                  labelStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black),
+                  isScrollable: false,
+                ),
+                body: TabBarView(
+                  children: <Widget>[
+                    RequirementOrderList(
+                      status: statuses[0],
+                    ),
+                    RequirementOrderList(
+                      status: statuses[1],
+                    ),
+                    RequirementOrderList(
+                      status: statuses[2],
+                    ),
+                    RequirementOrderList(
+                      status: statuses[3],
+                    )
+                  ],
+                ),
+              ),
+            )));
   }
 }
 
@@ -76,154 +79,85 @@ class RequirementOrderList extends StatelessWidget {
 
   final EnumModel status;
 
+  ScrollController _scrollController = new ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    List<RequirementOrderModel> orders = <RequirementOrderModel>[
-      RequirementOrderModel.fromJson({
-        "code": "34938475200045",
-        "status": "PENDING_QUOTE",
-        "totalQuantity": 10,
-        "totalPrice": 300,
-        "entries": [
-          {
-            "product": {
-              "code": "NA89852509",
-              "name": "山本风法少女长裙复古气质秋冬款",
-              "skuID": "NA89852509",
-              "majorCategory": {"name": "女装-T恤"},
-              "supercategories": [
-                {"name": "针织"}
-              ],
-              "thumbnail":
-                  "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp",
-            },
-            "entryNumber": 500,
-          },
-        ],
-      }),
-      RequirementOrderModel.fromJson({
-        "code": "34938475200045",
-        "status": "COMPLETED",
-        "totalQuantity": 10,
-        "totalPrice": 300,
-        "entries": [
-          {
-            "product": {
-              "code": "NA89852509",
-              // "name": "山本风法少女长裙复古气质秋冬款",
-              // "skuID": "NA89852509",
-              "entryNumber": 500,
-              "majorCategory": {"name": "女装-T恤"},
-              "supercategories": [
-                {"name": "针织"}
-              ]
-            },
-            "entryNumber": 500,
-          }
-        ],
-      }),
-      RequirementOrderModel.fromJson({
-        "code": "34938475200045",
-        "status": "CANCELLED",
-        "totalQuantity": 10,
-        "totalPrice": 300,
-        "entries": [
-          {
-            "product": {
-              "code": "NA89852509",
-              "name": "山本风法少女长裙复古气质秋冬款",
-              "skuID": "NA89852509",
-              "entryNumber": 500,
-              "majorCategory": {"name": "女装-T恤"},
-              "supercategories": [
-                {"name": "针织"}
-              ],
-              "thumbnail":
-                  "https://img.alicdn.com/imgextra/i2/109570697/O1CN011H1GWjAIIrfgcfr_!!0-saturn_solar.jpg_220x220.jpg_.webp"
-            },
-            "entryNumber": 500,
-          },
-        ],
-      }),
-      RequirementOrderModel.fromJson({
-        "code": "34938475200045",
-        "status": "PENDING_QUOTE",
-        "totalQuantity": 10,
-        "totalPrice": 300,
-        "entries": [
-          {
-            "product": {
-              "code": "NA89852509",
-              "name": "山本风法少女长裙复古气质秋冬款",
-              "skuID": "NA89852509",
-              "majorCategory": {"name": "女装-T恤"},
-              "supercategories": [
-                {"name": "针织"}
-              ],
-              "thumbnail":
-                  "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp",
-            },
-            "entryNumber": 500,
-          },
-        ],
-      }),
-      RequirementOrderModel.fromJson({
-        "code": "34938475200045",
-        "status": "COMPLETED",
-        "totalQuantity": 10,
-        "totalPrice": 300,
-        "entries": [
-          {
-            "product": {
-              "code": "NA89852509",
-              // "name": "山本风法少女长裙复古气质秋冬款",
-              // "skuID": "NA89852509",
-              "entryNumber": 500,
-              "majorCategory": {"name": "女装-T恤"},
-              "supercategories": [
-                {"name": "针织"}
-              ]
-            },
-            "entryNumber": 500,
-          }
-        ],
-      }),
-      RequirementOrderModel.fromJson({
-        "code": "34938475200045",
-        "status": "CANCELLED",
-        "totalQuantity": 10,
-        "totalPrice": 300,
-        "entries": [
-          {
-            "product": {
-              "code": "NA89852509",
-              "name": "山本风法少女长裙复古气质秋冬款",
-              "skuID": "NA89852509",
-              "entryNumber": 500,
-              "majorCategory": {"name": "女装-T恤"},
-              "supercategories": [
-                {"name": "针织"}
-              ],
-              "thumbnail":
-                  "https://img.alicdn.com/imgextra/i2/109570697/O1CN011H1GWjAIIrfgcfr_!!0-saturn_solar.jpg_220x220.jpg_.webp"
-            },
-            "entryNumber": 500,
-          },
-        ],
-      }),
-    ];
+    final bloc = RequirementOrderBlocProvider.of(context);
 
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        bloc.loadingStart();
+        bloc.loadingMoreByStatuses(status.code);
+      }
+    });
     return Container(
-      decoration: BoxDecoration(color: Colors.grey[100]),
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: ListView(
-        children: orders.map((order) {
-          return RequirementOrderItem(
-            order: order,
-          );
-        }).toList(),
-      ),
-    );
+        decoration: BoxDecoration(color: Colors.grey[100]),
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _scrollController,
+          children: <Widget>[
+            StreamBuilder<List<RequirementOrderModel>>(
+              stream: bloc.stream,
+              initialData: null,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
+                if (snapshot.data == null) {
+                  bloc.filterByStatuses(status.code);
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 200),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (snapshot.hasData) {
+                  return Column(
+                    children: snapshot.data.map((order) {
+                      return RequirementOrderItem(
+                        order: order,
+                      );
+                    }).toList(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: bloc.loadingStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: new Center(
+                    child: new Opacity(
+                      opacity: snapshot.data ? 1.0 : 0,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: bloc.bottomStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                return snapshot.data
+                    ? Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                        child: Center(
+                          child: Text(
+                            "┑(￣Д ￣)┍ 已经到底了",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      )
+                    : Container();
+              },
+            )
+          ],
+        ));
   }
 }
 
