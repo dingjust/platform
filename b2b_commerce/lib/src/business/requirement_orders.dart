@@ -125,6 +125,28 @@ class RequirementOrderList extends StatelessWidget {
               },
             ),
             StreamBuilder<bool>(
+              stream: bloc.bottomStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.data) {
+                  _scrollController.animateTo(_scrollController.offset - 70,
+                      duration: new Duration(milliseconds: 500),
+                      curve: Curves.easeOut);
+                }
+                return snapshot.data
+                    ? Container(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                        child: Center(
+                          child: Text(
+                            "┑(￣Д ￣)┍ 已经到底了",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      )
+                    : Container();
+              },
+            ),
+            StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -139,23 +161,6 @@ class RequirementOrderList extends StatelessWidget {
                 );
               },
             ),
-            StreamBuilder<bool>(
-              stream: bloc.bottomStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return snapshot.data
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                        child: Center(
-                          child: Text(
-                            "┑(￣Д ￣)┍ 已经到底了",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      )
-                    : Container();
-              },
-            )
           ],
         ));
   }

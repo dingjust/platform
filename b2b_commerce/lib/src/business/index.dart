@@ -21,8 +21,7 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () => showSearch(
-                context: context, delegate: ApparelProductSearchDelegate()),
+            onPressed: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
           ),
           IconButton(
             icon: Icon(Icons.message),
@@ -40,20 +39,13 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
               SiteStatisticsModel('在架商品', '15款')
             ]),
             AdvanceMenu('我的待办', <AdvanceMenuItem>[
-              AdvanceMenuItem(
-                  MenuItemImage.price_manage, '报价管理', AppRoutes.ROUTE_QUOTES),
-              AdvanceMenuItem(MenuItemImage.customer_audit, '会员审核',
-                  AppRoutes.ROUTE_MEMBER_REQUESTS),
+              AdvanceMenuItem(MenuItemImage.price_manage, '报价管理', AppRoutes.ROUTE_QUOTES),
+              AdvanceMenuItem(MenuItemImage.customer_audit, '会员审核', AppRoutes.ROUTE_MEMBER_REQUESTS),
             ]),
             AdvanceMenu('订单管理', <AdvanceMenuItem>[
-              AdvanceMenuItem(MenuItemImage.requirement_order, '需求订单',
-                  AppRoutes.ROUTE_REQUIREMENT_ORDERS),
-              AdvanceMenuItem(MenuItemImage.purchase_order, '采购订单',
-                  AppRoutes.ROUTE_PURCHASE_ORDERS),
-              AdvanceMenuItem(MenuItemImage.sale_order, '销售订单',
-                  AppRoutes.ROUTE_SALES_ORDERS),
-               AdvanceMenuItem(MenuItemImage.requirement_order, '生产订单',
-                   AppRoutes.ROUTE_PRODUCTION_ORDERS),
+              AdvanceMenuItem(MenuItemImage.requirement_order, '需求订单', AppRoutes.ROUTE_REQUIREMENT_ORDERS),
+              AdvanceMenuItem(MenuItemImage.purchase_order, '采购订单', AppRoutes.ROUTE_PURCHASE_ORDERS),
+              AdvanceMenuItem(MenuItemImage.sale_order, '销售订单', AppRoutes.ROUTE_SALES_ORDERS),
             ]),
             AdvanceMenu('店铺管理', <AdvanceMenuItem>[
               AdvanceMenuItem(MenuItemImage.product_manage, '商品管理', AppRoutes.ROUTE_PRODUCTS),
