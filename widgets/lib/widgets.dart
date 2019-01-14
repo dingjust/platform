@@ -14,5 +14,6 @@ export 'src/commons/splash/splash.dart';
 export 'src/report/site_statistics_section.dart';
 export 'src/commons/stars/stars.dart';
 export 'src/commons/attachments/attachments.dart';
+export 'src/commons/albums_cameras/albums_cameras.dart';
 
 

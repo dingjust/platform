@@ -84,6 +84,7 @@ class ProductModel extends ItemModel {
   String name;
   double price;
   String thumbnail;
+  int salesVolume;
   List<StaircasePriceModel> staircasePrices;
   bool privacy;
   @JsonKey(name: 'supercategories')
@@ -105,6 +106,7 @@ class ProductModel extends ItemModel {
     this.superCategories,
     this.ratingIfPrivacy,
     this.stockLevel,
+    this.salesVolume,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
@@ -157,6 +159,7 @@ class ApparelProductModel extends ProductModel {
   double price3;
   double suggestedPrice;
   double gramWeight;
+  bool isRecommend;
 
   CategoryModel get superCategory => superCategories[0];
 
@@ -169,7 +172,8 @@ class ApparelProductModel extends ProductModel {
     bool privacy,
     MemberRating ratingIfPrivacy,
     List<CategoryModel> superCategories,
-    int stock,
+    int salesVolume,
+    StockLevelModel stockLevel,
     this.variants,
     this.attributes,
     this.skuID,
@@ -180,6 +184,7 @@ class ApparelProductModel extends ProductModel {
     this.price2,
     this.price3,
     this.suggestedPrice,
+    this.isRecommend,
   }) : super(
           code: code,
           name: name,
@@ -187,8 +192,10 @@ class ApparelProductModel extends ProductModel {
           thumbnail: thumbnail,
           staircasePrices: staircasePrices,
           privacy: privacy,
+          salesVolume:salesVolume,
           ratingIfPrivacy: ratingIfPrivacy,
           superCategories: superCategories,
+          stockLevel:stockLevel,
         );
 
   factory ApparelProductModel.fromJson(Map<String, dynamic> json) => _$ApparelProductModelFromJson(json);
