@@ -2,8 +2,6 @@ import 'package:b2b_commerce/src/business/orders/provider/sales_order_bloc_provi
 import 'package:b2b_commerce/src/business/search/sales_order_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
-
 import 'orders/sales_order_detail.dart';
 
 const statuses = <EnumModel>[
