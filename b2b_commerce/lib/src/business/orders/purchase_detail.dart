@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 
 const statuses = <EnumModel>[
@@ -211,7 +212,7 @@ class PurchaseOrderContent extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: Row(
                         children: <Widget>[
-                          Text('广州白云'),
+                          Text(order.belongTo.contactAddress.region.name+order.belongTo.contactAddress.city.name+order.belongTo.contactAddress.cityDistrict.name),
                           Icon(Icons.chevron_right),
                         ],
                       )
@@ -329,7 +330,7 @@ class PurchaseOrderContent extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ProductionProgressePage(order: order),
+                      builder: (context) => ProductionProgressesPage(order: order),
                     ),
                   );
                 },
@@ -534,7 +535,9 @@ class PurchaseProductionProgresse extends StatelessWidget {
               ),
               Container(
                   padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
-                  child: PurchaseVoucherPic(progressModel)
+                  child: Attachments(
+                    list: progressModel.medias,
+                  )
               ),
               Container(
                   padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
@@ -580,50 +583,69 @@ class PurchaseVoucherPic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildPicRow(context);
-  }
-
-  Widget _buildPicRow(BuildContext context){
-    return Row(
-        children: _buildPicList(context)
-    );
-  }
-
-//构造凭证横向图片UI
-  List<Widget> _buildPicList(BuildContext context) {
-    List<Widget> _listPic = new List();
-    int mediasNumber = 4;
-    if(progressModel.medias.length < 4){
-      mediasNumber = progressModel.medias.length;
-    }
-    for (int i = 0; i < mediasNumber; i++) {
-      _listPic.add(
-          Expanded(
-            child: Image.network(
-              progressModel.medias[i] == null ? defaultPicUrl : progressModel.medias[i],
-              width: 50,
-              height: 50,
-              fit: BoxFit.scaleDown,
-            ),
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                '附件',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              )
+            ],
+          ),
+          Attachments(
+            list: progressModel.medias,
           )
-      );
-    }
-    if(_listPic.length < 4){
-      for (int i = 0; i <= 4 - _listPic.length; i++) {
-        _listPic.add(
-            Expanded(
-              child: Image.network(
-                defaultPicUrl,
-                width: 50,
-                height: 50,
-                fit: BoxFit.scaleDown,
-              ),
-            )
-        );
-      }
-    }
-    return _listPic;
+        ],
+      ),
+    );;
   }
+
+//  Widget _buildPicRow(BuildContext context){
+////    return Row(
+////        children: _buildPicList(context)
+////    );
+////  }
+////
+//////构造凭证横向图片UI
+////  List<Widget> _buildPicList(BuildContext context) {
+////    List<Widget> _listPic = new List();
+////    int mediasNumber = 4;
+////    if(progressModel.medias.length < 4){
+////      mediasNumber = progressModel.medias.length;
+////    }
+////    for (int i = 0; i < mediasNumber; i++) {
+////      _listPic.add(
+////          Expanded(
+////            child: Image.network(
+////              progressModel.medias[i] == null ? defaultPicUrl : progressModel.medias[i],
+////              width: 50,
+////              height: 50,
+////              fit: BoxFit.scaleDown,
+////            ),
+////          )
+////      );
+////    }
+////    if(_listPic.length < 4){
+////      for (int i = 0; i <= 4 - _listPic.length; i++) {
+////        _listPic.add(
+////            Expanded(
+////              child: Image.network(
+////                defaultPicUrl,
+////                width: 50,
+////                height: 50,
+////                fit: BoxFit.scaleDown,
+////              ),
+////            )
+////        );
+////      }
+////    }
+////    return _listPic;
+////  }
 
 }
 
@@ -652,50 +674,65 @@ class PurchaseDocument extends StatelessWidget{
 
   Widget _buildDoc(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(5),
+      padding:EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Column(
-          children: _buildDocumentInfo(context)
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                '附件',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500
+                ),
+              )
+            ],
+          ),
+          Attachments(
+            list: order.attachments,
+          )
+        ],
       ),
     );
   }
 
-  List<Widget> _buildDocumentInfo(BuildContext context){
-    List<Widget> _docList = new List();
-    int docCount = 2;
-    if (order.attachments.length < 2) {
-      docCount = order.attachments.length;
-    }
-    for (int i = 0; i < docCount; i++) {
-      _docList.add(
-          Row(
-            children: <Widget>[
-              Expanded(
-                  child: Image.network(
-                    "http://img.aso.aizhan.com/icon/f7/d0/cc/f7d0cc9b577ff84ec59b6d9932606c33.jpg",
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.scaleDown,
-                  ),
-                flex: 1,
-              ),
-              Expanded(
-                child: Text(
-                  order.attachments[i],
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 20.0,
-                  ),
-                ),
-                flex: 4,
-              ),
-              Icon(Icons.keyboard_arrow_right),
-            ],
-          )
-      );
-      _docList.add(Divider());
-    }
-    _docList.removeLast();
-    return _docList;
-  }
+//  List<Widget> _buildDocumentInfo(BuildContext context){
+//    List<Widget> _docList = new List();
+//    int docCount = 2;
+//    if (order.attachments.length < 2) {
+//      docCount = order.attachments.length;
+//    }
+//    for (int i = 0; i < docCount; i++) {
+//      _docList.add(
+//          Row(
+//            children: <Widget>[
+//              Expanded(
+//                  child: Image.network(
+//                    "http://img.aso.aizhan.com/icon/f7/d0/cc/f7d0cc9b577ff84ec59b6d9932606c33.jpg",
+//                    width: 50,
+//                    height: 50,
+//                    fit: BoxFit.scaleDown,
+//                  ),
+//                flex: 1,
+//              ),
+//              Expanded(
+//                child: Text(
+//                  order.attachments[i],
+//                  style: TextStyle(
+//                    color: Colors.black54,
+//                    fontSize: 20.0,
+//                  ),
+//                ),
+//                flex: 4,
+//              ),
+//              Icon(Icons.keyboard_arrow_right),
+//            ],
+//          )
+//      );
+//      _docList.add(Divider());
+//    }
+//    _docList.removeLast();
+//    return _docList;
+//  }
 
 }

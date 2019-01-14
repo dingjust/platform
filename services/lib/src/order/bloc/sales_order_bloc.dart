@@ -7,11 +7,11 @@ class SalesOrderBLoC {
 
   SalesOrderBLoC() {
     _ordersMap = {
-      "ALL": [],
-      "PENDING_PAYMENT": [],
-      "PENDING_DELIVERY": [],
-      "SHIPPED": [],
-      "COMPLETED": []
+      'ALL': [],
+      'PENDING_PAYMENT': [],
+      'PENDING_DELIVERY': [],
+      'SHIPPED': [],
+      'COMPLETED': []
     };
   }
 
@@ -40,7 +40,7 @@ class SalesOrderBLoC {
     // }
 
     //若没有数据则查询
-    if (_ordersMap[status].length == 0) {
+    if (_ordersMap[status].isEmpty) {
       // TODO: 分页拿数据，response.data;
       _ordersMap[status]
           .addAll(await Future.delayed(const Duration(seconds: 1), () {
