@@ -19,9 +19,9 @@ enum SampleProductReturnState {
 ///借的类型
 enum LendBorrowType{
   ///借出
-  Lend,
+  LEND,
   ///借入
-  Borrow,
+  BORROW,
 }
 
 // TODO: i18n处理
@@ -190,7 +190,6 @@ class ApparelProductModel extends ProductModel {
           staircasePrices: staircasePrices,
           privacy: privacy,
           ratingIfPrivacy: ratingIfPrivacy,
-          stock: stock,
           superCategories: superCategories,
         );
 
