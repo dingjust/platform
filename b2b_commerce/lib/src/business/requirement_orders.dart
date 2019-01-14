@@ -20,57 +20,56 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
   Widget build(BuildContext context) {
     return RequirementOrderBlocProvider(
         child: Scaffold(
-            appBar: AppBar(
-              brightness: Brightness.light,
-              centerTitle: true,
-              elevation: 0.5,
-              title: Text(
-                '需求订单管理',
-                style: TextStyle(color: Colors.black),
+      appBar: AppBar(
+        brightness: Brightness.light,
+        centerTitle: true,
+        elevation: 0.5,
+        title: Text(
+          '需求订单管理',
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => showSearch(
+                context: context, delegate: RequirementOrderSearchDelegate()),
+          ),
+        ],
+      ),
+      body: DefaultTabController(
+        length: statuses.length,
+        child: Scaffold(
+          appBar: TabBar(
+            unselectedLabelColor: Colors.black26,
+            labelColor: Colors.black38,
+            indicatorSize: TabBarIndicatorSize.label,
+            tabs: statuses.map((status) {
+              return Tab(text: status.name);
+            }).toList(),
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+            isScrollable: false,
+          ),
+          body: TabBarView(
+            children: <Widget>[
+              RequirementOrderList(
+                status: statuses[0],
               ),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () => showSearch(
-                      context: context,
-                      delegate: RequirementOrderSearchDelegate()),
-                ),
-              ],
-            ),
-            body: DefaultTabController(
-              length: statuses.length,
-              child: Scaffold(
-                appBar: TabBar(
-                  unselectedLabelColor: Colors.black26,
-                  labelColor: Colors.black38,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  tabs: statuses.map((status) {
-                    return Tab(text: status.name);
-                  }).toList(),
-                  labelStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black),
-                  isScrollable: false,
-                ),
-                body: TabBarView(
-                  children: <Widget>[
-                    RequirementOrderList(
-                      status: statuses[0],
-                    ),
-                    RequirementOrderList(
-                      status: statuses[1],
-                    ),
-                    RequirementOrderList(
-                      status: statuses[2],
-                    ),
-                    RequirementOrderList(
-                      status: statuses[3],
-                    )
-                  ],
-                ),
+              RequirementOrderList(
+                status: statuses[1],
               ),
-            )));
+              RequirementOrderList(
+                status: statuses[2],
+              ),
+              RequirementOrderList(
+                status: statuses[3],
+              )
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: ToTopBtn(),
+    ));
   }
 }
 
@@ -92,6 +91,25 @@ class RequirementOrderList extends StatelessWidget {
         bloc.loadingMoreByStatuses(status.code);
       }
     });
+
+    //监听滚动事件，打印滚动位置
+    _scrollController.addListener(() {
+      if (_scrollController.offset < 500) {
+        bloc.hideToTopBtn();
+      } else if (_scrollController.offset >= 500) {
+        bloc.showToTopBtn();
+      }
+    });
+
+    //状态管理触发的返回顶部
+    bloc.returnToTopStream.listen((data) {
+      //返回到顶部时执行动画
+      if (data) {
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
+      }
+    });
+
     return Container(
         decoration: BoxDecoration(color: Colors.grey[100]),
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -125,6 +143,28 @@ class RequirementOrderList extends StatelessWidget {
               },
             ),
             StreamBuilder<bool>(
+              stream: bloc.bottomStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.data) {
+                  _scrollController.animateTo(_scrollController.offset - 70,
+                      duration: new Duration(milliseconds: 500),
+                      curve: Curves.easeOut);
+                }
+                return snapshot.data
+                    ? Container(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                        child: Center(
+                          child: Text(
+                            "┑(￣Д ￣)┍ 已经到底了",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      )
+                    : Container();
+              },
+            ),
+            StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -139,23 +179,6 @@ class RequirementOrderList extends StatelessWidget {
                 );
               },
             ),
-            StreamBuilder<bool>(
-              stream: bloc.bottomStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return snapshot.data
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                        child: Center(
-                          child: Text(
-                            "┑(￣Д ￣)┍ 已经到底了",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      )
-                    : Container();
-              },
-            )
           ],
         ));
   }
@@ -308,5 +331,27 @@ class RequirementOrderItem extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class ToTopBtn extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final bloc = RequirementOrderBlocProvider.of(context);
+
+    return StreamBuilder<bool>(
+        stream: bloc.toTopBtnStream,
+        initialData: false,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          return snapshot.data
+              ? FloatingActionButton(
+                  child: Icon(Icons.arrow_upward,color: Colors.white,),
+                  onPressed: () {
+                    bloc.returnToTop();
+                  },
+                  backgroundColor: Colors.blue,
+                )
+              : Container();
+        });
   }
 }

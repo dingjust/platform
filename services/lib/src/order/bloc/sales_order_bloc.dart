@@ -7,11 +7,11 @@ class SalesOrderBLoC {
 
   SalesOrderBLoC() {
     _ordersMap = {
-      "ALL": [],
-      "PENDING_PAYMENT": [],
-      "PENDING_DELIVERY": [],
-      "SHIPPED": [],
-      "COMPLETED": []
+      'ALL': [],
+      'PENDING_PAYMENT': [],
+      'PENDING_DELIVERY': [],
+      'SHIPPED': [],
+      'COMPLETED': []
     };
   }
 

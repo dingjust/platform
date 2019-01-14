@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:models/models.dart';
 
 class RequirementOrderBLoC {
@@ -7,10 +6,10 @@ class RequirementOrderBLoC {
 
   RequirementOrderBLoC() {
     _ordersMap = {
-      "ALL": [],
-      "PENDING_QUOTE": [],
-      "COMPLETED": [],
-      "CANCELLED": []
+      'ALL': [],
+      'PENDING_QUOTE': [],
+      'COMPLETED': [],
+      'CANCELLED': []
     };
   }
 
@@ -162,12 +161,14 @@ class RequirementOrderBLoC {
   //页面控制
 
   var _loadingController = StreamController<bool>.broadcast();
+  var _bottomController = StreamController<bool>.broadcast();
+  var _toTopBtnController = StreamController<bool>.broadcast();
+  var _returnToTopController = StreamController<bool>.broadcast();
 
   Stream<bool> get loadingStream => _loadingController.stream;
-
-  var _bottomController = StreamController<bool>.broadcast();
-
   Stream<bool> get bottomStream => _bottomController.stream;
+  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
+  Stream<bool> get returnToTopStream => _returnToTopController.stream;
 
   loadingStart() async {
     _loadingController.sink.add(true);
@@ -175,6 +176,18 @@ class RequirementOrderBLoC {
 
   loadingEnd() async {
     _loadingController.sink.add(false);
+  }
+
+  showToTopBtn() async {
+    _toTopBtnController.sink.add(true);
+  }
+
+  hideToTopBtn() async {
+    _toTopBtnController.sink.add(false);
+  }
+
+  returnToTop() async {
+    _returnToTopController.sink.add(true);
   }
 
   dispose() {

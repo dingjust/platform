@@ -22,11 +22,26 @@ final List<PurchaseOrderModel> orders = <PurchaseOrderModel>[
     'expectedDeliveryDate':DateTime.now().toString(),
     'currentPhase':'SAMPLE_CONFIRM',
     'machiningType':'包工包料',
-    'invoiceNeeded':true,
-    'attachments':['附件1','附件2','附件3'],
+    'invoiceNeeded': true,
+    'attachments': [
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
+    ],
     'remarks':'延期了12天',
     'belongTo': {
-      'name':'京东工厂'
+      'name':'京东工厂',
+      'contactAddress':{
+        'region':{
+          'name':'广东省'
+        },
+        'city':{
+          'name':'广州市'
+        },
+        'cityDistrict':{
+          'name':'白云区'
+        },
+      }
     },
     'productionProgresses':[
       {
@@ -175,10 +190,24 @@ final List<PurchaseOrderModel> orders = <PurchaseOrderModel>[
     'currentPhase':'SAMPLE_CONFIRM',
     'machiningType':'包工包料',
     'invoiceNeeded':false,
-    'attachments':['附件1','附件2'],
-    'remarks':'延期了12天',
+    'attachments': [
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
+    ],
+    'remarks': '延期了12天',
     'belongTo': {
-      'name':'京东工厂'
+      'name':'京东工厂',
+      'contactAddress':{
+        'region':{
+          'name':'广东省'
+        },
+        'city':{
+          'name':'广州市'
+        },
+        'cityDistrict':{
+          'name':'白云区'
+        },
+      }
     },
     'productionProgresses':[
       {
@@ -313,12 +342,26 @@ final List<PurchaseOrderModel> orders = <PurchaseOrderModel>[
     'creationtime' : DateTime.now().toString(),
     'expectedDeliveryDate':DateTime.now().toString(),
     'currentPhase':'SAMPLE_CONFIRM',
-    'machiningType':'包工包料',
-    'invoiceNeeded':false,
-    'attachments':['附件1','附件2'],
+    'machiningType': '包工包料',
+    'invoiceNeeded': false,
+    'attachments': [
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
+    ],
     'remarks':'延期了12天',
     'belongTo': {
-      'name':'京东工厂'
+      'name':'京东工厂',
+      'contactAddress':{
+        'region':{
+          'name':'广东省'
+        },
+        'city':{
+          'name':'广州市'
+        },
+        'cityDistrict':{
+          'name':'白云区'
+        },
+      }
     },
     'productionProgresses':[
       {
