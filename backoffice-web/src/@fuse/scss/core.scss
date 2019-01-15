@@ -4,14 +4,10 @@
 @import '~@swimlane/ngx-datatable/release/themes/material';
 // Perfect scrollbar
 @import '~perfect-scrollbar/css/perfect-scrollbar';
-// ng-zorro
-@import "~ng-zorro-antd/ng-zorro-antd.min.css";
 // Fuse
 @import "fuse";
 // Theme
 @import "theme";
-// antd override
-@import "antd";
 // Include core Angular Material styles
 @include mat-core();
 

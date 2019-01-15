@@ -64,8 +64,7 @@
         "rxjs": "6.3.3",
         "rxjs-compat": "6.3.3",
         "web-animations-js": "2.3.1",
-        "zone.js": "0.8.26",
-        "ng-zorro-antd": "7.0.0-rc.3"
+        "zone.js": "0.8.26"
     },
     "devDependencies": {
         "@angular/cli": "7.0.6",
