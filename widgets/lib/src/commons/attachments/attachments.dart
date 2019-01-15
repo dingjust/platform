@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 //横向滚动图片列表
 class Attachments extends StatefulWidget {
@@ -125,5 +131,35 @@ class _AttachmentsState extends State<Attachments> {
         ));
       },
     );
+  }
+
+  Future<String> _getFilePath() async {
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    // // print(dir);
+    // // File file = File('$dir/counter.doc');
+    // // await file.writeAsString('sdadsdasda');
+    // // OpenFile.open('$dir/counter.doc');
+
+    var dio = new Dio();
+
+    dio.onHttpClientCreate = (HttpClient client) {
+      client.idleTimeout = new Duration(seconds: 0);
+    };
+
+    var url =
+        "http://zb.guaihou.com/zdoc/03J012-2%20%E7%8E%AF%E5%A2%83%E6%99%AF%E8%A7%82--%E7%BB%BF%E5%8C%96%E7%A7%8D%E6%A4%8D%E8%AE%BE%E8%AE%A1.pdf";
+    try {
+      Response response = await dio.download(url, "$dir/flutter.pdf",
+          // Listen the download progress.
+          onProgress: (received, total) {
+        print((received / total * 100).toStringAsFixed(0) + "%");
+      });
+      print(response.statusCode);
+    } catch (e) {
+      print(e);
+    }
+    print(dir);
+   OpenFile.open('$dir/flutter.pdf');
+    return "dir";
   }
 }

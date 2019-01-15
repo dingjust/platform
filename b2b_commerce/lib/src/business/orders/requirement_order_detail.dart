@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
@@ -54,7 +59,7 @@ class _RequirementOrderDetailPageState
   QuoteModel quoteModel = QuoteModel.fromJson({
     "code": "34938475200045",
     "creationtime": DateTime.now().toString(),
-        "belongTo": {"name": "广州好辣制衣厂", "starLevel": 3},
+    "belongTo": {"name": "广州好辣制衣厂", "starLevel": 3},
     "state": "BUYER_REJECTED",
     "totalPrice": 360.00,
     "deliveryAddress": {
@@ -338,7 +343,9 @@ class _RequirementOrderDetailPageState
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: RaisedButton(
-          onPressed: () {},
+          onPressed: () {
+            _getFilePath();
+          },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           color: Color.fromRGBO(255, 149, 22, 1),
@@ -348,6 +355,37 @@ class _RequirementOrderDetailPageState
             style: TextStyle(color: Colors.white, fontSize: 16),
           )),
     );
+  }
+
+  Future<String> _getFilePath() async {
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    // // print(dir);
+    // // File file = File('$dir/counter.doc');
+    // // await file.writeAsString('sdadsdasda');
+    // // OpenFile.open('$dir/counter.doc');
+
+    var dio = new Dio();
+
+    dio.onHttpClientCreate = (HttpClient client) {
+      client.idleTimeout = new Duration(seconds: 0);
+    };
+
+    var url =
+        "http://zb.guaihou.com/zdoc/03J012-2%20%E7%8E%AF%E5%A2%83%E6%99%AF%E8%A7%82--%E7%BB%BF%E5%8C%96%E7%A7%8D%E6%A4%8D%E8%AE%BE%E8%AE%A1.pdf";
+    try {
+      Response response = await dio.download(url, "$dir/flutter.pdf",
+          // Listen the download progress.
+          onProgress: (received, total) {
+        print((received / total * 100).toStringAsFixed(0) + "%");
+      });
+      print(response.statusCode);
+    } catch (e) {
+      print(e);
+    }
+    print(dir);
+    OpenFile.open('$dir/flutter.pdf');
+
+    return "dir";
   }
 }
 
@@ -400,4 +438,3 @@ class AttachmentItem extends StatelessWidget {
     );
   }
 }
-

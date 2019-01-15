@@ -222,7 +222,6 @@ class RequirementOrderItem extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    var sd = _statusColors[order.status];
     return Container(
       margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
