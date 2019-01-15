@@ -5,11 +5,14 @@ import 'package:services/services.dart';
 class RequirementOrderBlocProvider extends InheritedWidget {
   final RequirementOrderBLoC bloc = RequirementOrderBLoC();
 
-  RequirementOrderBlocProvider({Key key, Widget child}) : super(key: key, child: child);
+  RequirementOrderBlocProvider({Key key, Widget child})
+      : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(_) => true;
 
   static RequirementOrderBLoC of(BuildContext context) =>
-      (context.inheritFromWidgetOfExactType(RequirementOrderBlocProvider) as RequirementOrderBlocProvider).bloc;
+      (context.inheritFromWidgetOfExactType(RequirementOrderBlocProvider)
+              as RequirementOrderBlocProvider)
+          .bloc;
 }
