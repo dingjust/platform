@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 //横向滚动图片列表
 class Attachments extends StatefulWidget {
@@ -118,15 +119,10 @@ class _AttachmentsState extends State<Attachments> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[
-            Image.network(
-              url,
-              fit: BoxFit.cover,
-            )
-          ],
-          contentPadding: EdgeInsets.all(0),
-        );
+        return Container(
+            child: PhotoView(
+          imageProvider: NetworkImage(url),
+        ));
       },
     );
   }
