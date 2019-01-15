@@ -15,6 +15,7 @@ import {
     MatTableModule,
     MatTabsModule
 } from '@angular/material';
+import {FileUploadModule} from 'ng2-file-upload';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseWidgetModule} from '@fuse/components';
@@ -62,6 +63,8 @@ const routes: Routes = [
         MatSnackBarModule,
         MatTableModule,
         MatTabsModule,
+
+        FileUploadModule,
 
         FuseSharedModule,
         FuseWidgetModule
