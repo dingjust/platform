@@ -144,7 +144,7 @@ class PurchaseOrderList extends StatelessWidget{
                   padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
                   child: Center(
                     child: Text(
-                      "我可是有底线的。。。",
+                      "人家可是有底线的。。。",
                       style: TextStyle(color: Colors.grey),
                     ),
                   ),
