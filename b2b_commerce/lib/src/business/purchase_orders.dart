@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/provider/purchase_order_bloc_provider.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_detail.dart';
 import 'package:b2b_commerce/src/business/search/purchase_order_search.dart';
 import 'package:flutter/material.dart';
@@ -12,485 +13,16 @@ const statuses = <EnumModel>[
   EnumModel('COMPLETED', '已完成'),
 ];
 
-final List<PurchaseOrderModel> orders = <PurchaseOrderModel>[
-  PurchaseOrderModel.fromJson({
-    'code': 'PO34938475200045',
-    'status': 'WAIT_FOR_PROCESSING',
-    'totalQuantity': 10,
-    'totalPrice': 300,
-    'creationtime' : DateTime.now().toString(),
-    'expectedDeliveryDate':DateTime.now().toString(),
-    'currentPhase':'SAMPLE_CONFIRM',
-    'machiningType':'包工包料',
-    'invoiceNeeded': true,
-    'attachments': [
-      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
-    ],
-    'remarks':'延期了12天',
-    'belongTo': {
-      'name':'京东工厂',
-      'contactAddress':{
-        'region':{
-          'name':'广东省'
-        },
-        'city':{
-          'name':'广州市'
-        },
-        'cityDistrict':{
-          'name':'白云区'
-        },
-      }
-    },
-    'productionProgresses':[
-      {
-        'phase': 'MATERIAL_PREPARATION',
-        'quantity': 70,
-        'sequence': 0,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'SAMPLE_CONFIRM',
-        'quantity': 70,
-        'sequence': 1,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'CUTTING',
-        'quantity': 70,
-        'sequence': 2,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'STITCHING',
-        'quantity': 70,
-        'sequence': 3,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'INSPECTION',
-        'quantity': 70,
-        'sequence': 4,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'DELIVERY',
-        'quantity': 70,
-        'sequence': 5,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-    ],
-    'deliveryAddress': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {
-        'isocode': 'R123',
-        'name': '广东省'
-      },
-      'city': {
-        'code': 'C123',
-        'name': '广州市'
-      },
-      'cityDistrict': {
-        'code': 'D123',
-        'name': '海珠区'
-      },
-      'line1': '广州大道',
-      'defaultAddress': true
-    },
-    'entries': [
-      {
-        'basePrice':33.0,
-        'quantity':23,
-        'totalPrice':999.9,
-        'requirementOrderCode' :'RC34938475200045',
-        'product': {
-          'code': 'NA89852509',
-          'name': '山本风法少女长裙复古气质秋冬款',
-          'skuID': 'NA89852509',
-          'thumbnail':'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
-        },
-      },
-      {
-        'basePrice':33.0,
-        'quantity':23,
-        'totalPrice':999.9,
-        'requirementOrderCode' :'RC34938475200045',
-        'product': {
-          'code': 'NA89852509',
-          'name': '山本风法少女长裙复古气质秋冬款',
-          'skuID': 'NA89852509',
-          'thumbnail':'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
-        },
-      }
-    ],
-  }),
-  PurchaseOrderModel.fromJson({
-    'code': 'PO34938475200045',
-    'status': 'WAIT_FOR_PROCESSING',
-    'totalQuantity': 10,
-    'totalPrice': 300,
-    'creationtime' : DateTime.now().toString(),
-    'expectedDeliveryDate':DateTime.now().toString(),
-    'currentPhase':'SAMPLE_CONFIRM',
-    'machiningType':'包工包料',
-    'invoiceNeeded':false,
-    'attachments': [
-      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
-    ],
-    'remarks': '延期了12天',
-    'belongTo': {
-      'name':'京东工厂',
-      'contactAddress':{
-        'region':{
-          'name':'广东省'
-        },
-        'city':{
-          'name':'广州市'
-        },
-        'cityDistrict':{
-          'name':'白云区'
-        },
-      }
-    },
-    'productionProgresses':[
-      {
-        'phase': 'MATERIAL_PREPARATION',
-        'quantity': 70,
-        'sequence': 0,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'SAMPLE_CONFIRM',
-        'quantity': 70,
-        'sequence': 1,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'CUTTING',
-        'quantity': 70,
-        'sequence': 2,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'STITCHING',
-        'quantity': 70,
-        'sequence': 3,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'INSPECTION',
-        'quantity': 70,
-        'sequence': 4,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-      {
-        'phase': 'DELIVERY',
-        'quantity': 70,
-        'sequence': 5,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'remarks':'延期了12天',
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-      },
-    ],
-    'deliveryAddress': {
-      'fullname': "",
-      'cellphone': '',
-      'region': {
-        'isocode': 'R123',
-        'name': '广东省'
-      },
-      'city': {
-        'code': 'C123',
-        'name': '广州市'
-      },
-      'cityDistrict': {
-        'code': 'D123',
-        'name': '海珠区'
-      },
-      'line1': '广州大道',
-      'defaultAddress': true
-    },
-    'entries': [
-      {
-        'basePrice':33.0,
-        'quantity':23,
-        'totalPrice':999.9,
-        'requirementOrderCode' :'RC34938475200045',
-        'product': {
-          'code': 'NA89852509',
-          'name': '山本风法少女长裙复古气质秋冬款2',
-          'skuID': 'NA89852509',
-          'thumbnail':'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
-        },
-      }
-    ],
-  }),
-  PurchaseOrderModel.fromJson({
-    'code': 'PO34938475200045',
-    'status': 'WAIT_FOR_PROCESSING',
-    'totalQuantity': 10,
-    'totalPrice': 300,
-    'creationtime' : DateTime.now().toString(),
-    'expectedDeliveryDate':DateTime.now().toString(),
-    'currentPhase':'SAMPLE_CONFIRM',
-    'machiningType': '包工包料',
-    'invoiceNeeded': false,
-    'attachments': [
-      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
-    ],
-    'remarks':'延期了12天',
-    'belongTo': {
-      'name':'京东工厂',
-      'contactAddress':{
-        'region':{
-          'name':'广东省'
-        },
-        'city':{
-          'name':'广州市'
-        },
-        'cityDistrict':{
-          'name':'白云区'
-        },
-      }
-    },
-    'productionProgresses':[
-      {
-        'phase': 'MATERIAL_PREPARATION',
-        'quantity': 70,
-        'sequence': 0,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-        ],
-        "remarks":"1234564564564"
-      },
-      {
-        'phase': 'SAMPLE_CONFIRM',
-        'quantity': 70,
-        'sequence': 1,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-        "remarks":"1234564564564"
-      },
-      {
-        'phase': 'CUTTING',
-        'quantity': 70,
-        'sequence': 2,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-        "remarks":"1234564564564"
-      },
-      {
-        'phase': 'STITCHING',
-        'quantity': 70,
-        'sequence': 3,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-        "remarks":"1234564564564"
-      },
-      {
-        'phase': 'INSPECTION',
-        'quantity': 70,
-        'sequence': 4,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-        "remarks":"1234564564564"
-      },
-      {
-        'phase': 'DELIVERY',
-        'quantity': 70,
-        'sequence': 5,
-        'estimatedDate': DateTime.now().toString(),
-        'finishDate': DateTime.now().toString(),
-        'medias': [
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-          "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
-        ],
-        "remarks":"1234564564564"
-      },
-    ],
-    'deliveryAddress': {
-      'fullname': "",
-      'cellphone': '',
-      'region': {
-        'isocode': 'R123',
-        'name': '广东省'
-      },
-      'city': {
-        'code': 'C123',
-        'name': '广州市'
-      },
-      'cityDistrict': {
-        'code': 'D123',
-        'name': '海珠区'
-      },
-      'line1': '广州大道',
-      'defaultAddress': true
-    },
-    'entries': [
-      {
-        'basePrice':33.0,
-        'quantity':23,
-        'totalPrice':999.9,
-        'requirementOrderCode' :'RC34938475200045',
-        'product': {
-          'code': 'NA89852509',
-          'name': '山本风法少女长裙复古气质秋冬款2',
-          'skuID': 'NA89852509',
-          'thumbnail':'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
-        },
-      }
-    ],
-  })
-];
 
-class PurchaseOrdersPage extends StatelessWidget {
+class PurchaseOrdersPage extends StatefulWidget {
+  _PurchaseOrdersPageState createState() => _PurchaseOrdersPageState();
+}
+
+class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PurchaseOrderBlocProvider(
+        child:Scaffold(
       appBar: AppBar(
         title: Text('采购订单'),
         actions: <Widget>[
@@ -525,22 +57,118 @@ class PurchaseOrdersPage extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 }
 
 class PurchaseOrderList extends StatelessWidget{
   final EnumModel status;
 
+  ScrollController _scrollController = new ScrollController();
+
   PurchaseOrderList(this.status);
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: orders.map((order) {
-        return PurchaseOrderItem(order);
-      }).toList(),
-    );
+    final bloc = PurchaseOrderBlocProvider.of(context);
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        bloc.loadingStart();
+        bloc.loadingMoreByStatuses(status.code);
+      }
+    });
+
+    //监听滚动事件，打印滚动位置
+    _scrollController.addListener(() {
+      if (_scrollController.offset < 500) {
+        bloc.hideToTopBtn();
+      } else if (_scrollController.offset >= 500) {
+        bloc.showToTopBtn();
+      }
+    });
+
+    //状态管理触发的返回顶部
+    bloc.returnToTopStream.listen((data) {
+      //返回到顶部时执行动画
+      if (data) {
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
+      }
+    });
+
+    return Container(
+        decoration: BoxDecoration(color: Colors.grey[100]),
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _scrollController,
+          children: <Widget>[
+            StreamBuilder<List<PurchaseOrderModel>>(
+              stream: bloc.stream,
+              initialData: null,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+                if (snapshot.data == null) {
+                  bloc.filterByStatuses(status.code);
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 200),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (snapshot.hasData) {
+                  return Column(
+                    children: snapshot.data.map((order) {
+                      return PurchaseOrderItem(
+                        order,
+                      );
+                    }).toList(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: bloc.bottomStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.data) {
+                  _scrollController.animateTo(_scrollController.offset - 70,
+                      duration: new Duration(milliseconds: 500),
+                      curve: Curves.easeOut);
+                }
+                return snapshot.data
+                    ? Container(
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                  child: Center(
+                    child: Text(
+                      "人家可是有底线的。。。",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                )
+                    : Container();
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: bloc.loadingStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: new Center(
+                    child: new Opacity(
+                      opacity: snapshot.data ? 1.0 : 0,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ));
   }
 
 }
@@ -555,7 +183,6 @@ class PurchaseOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        padding: EdgeInsets.all(10),
         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
           children: <Widget>[
