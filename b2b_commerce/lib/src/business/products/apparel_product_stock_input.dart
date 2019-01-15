@@ -11,7 +11,6 @@ class ApparelProductStockInputPage extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.done,
-              color: Colors.white,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -46,7 +45,8 @@ class SizeStockItem {
 class ApparelProductStockInputItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Map<ColorModel, List<SizeStockItem>> items = <ColorModel, List<SizeStockItem>>{
+    final Map<ColorModel, List<SizeStockItem>> items =
+        <ColorModel, List<SizeStockItem>>{
       ColorModel(code: 'C01', name: '红色'): <SizeStockItem>[
         SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
         SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
@@ -57,7 +57,8 @@ class ApparelProductStockInputItem extends StatelessWidget {
       ],
     };
 
-    Widget buildRow(BuildContext context, MapEntry<ColorModel, List<SizeStockItem>> row) {
+    Widget buildRow(
+        BuildContext context, MapEntry<ColorModel, List<SizeStockItem>> row) {
       final List<TableRow> _subRows = row.value.map((item) {
         return TableRow(children: <TableCell>[
           TableCell(
@@ -68,6 +69,8 @@ class ApparelProductStockInputItem extends StatelessWidget {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: '实际库存',
+                hintStyle: TextStyle(color: Colors.grey[400]),
+                border: InputBorder.none,
               ),
             ),
           ),
@@ -76,6 +79,8 @@ class ApparelProductStockInputItem extends StatelessWidget {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: '平台库存',
+                hintStyle: TextStyle(color: Colors.grey[400]),
+                border: InputBorder.none,
               ),
             ),
           )
@@ -83,6 +88,8 @@ class ApparelProductStockInputItem extends StatelessWidget {
       }).toList();
 
       return Card(
+        elevation: 0,
+        margin: EdgeInsets.only(bottom: 15),
         child: Column(
           children: <Widget>[
             Text(row.key.name),

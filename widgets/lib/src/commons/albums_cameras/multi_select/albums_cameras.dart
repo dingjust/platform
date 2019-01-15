@@ -3,19 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AlbumsAndCameras extends StatefulWidget{
+class AlbumsAndCameras extends StatefulWidget {
   List<File> images;
   double height;
   double width;
   double iconSize;
+  int count;
 
-  AlbumsAndCameras({this.images,this.height,this.width,this.iconSize,});
+  AlbumsAndCameras(
+      {this.images, this.height, this.width, this.iconSize, this.count});
 
   AlbumsAndCamerasState createState() => AlbumsAndCamerasState();
 }
 
-class AlbumsAndCamerasState extends State<AlbumsAndCameras>{
-
+class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,25 +42,26 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras>{
   List<Widget> get _papersWidgetList {
     List<Widget> list = widget.images
         .map((file) => Container(
-      width: widget.width,
-      height: widget.height,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: FileImage(file),
-          fit: BoxFit.cover,
-        ),
-      ),
-    ))
+              width: widget.width,
+              height: widget.height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: FileImage(file),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ))
         .toList();
-    list.add(Container(
-      child: IconButton(
-        onPressed: selectPapersImages,
-        icon: Icon(Icons.add_photo_alternate),
-        iconSize: widget.iconSize,
-        color: Colors.grey[500],
-      ),
-    ));
-
+    if (list.length < widget.count) {
+      list.add(Container(
+        child: IconButton(
+          onPressed: selectPapersImages,
+          icon: Icon(Icons.add_photo_alternate),
+          iconSize: widget.iconSize,
+          color: Colors.grey[500],
+        ),
+      ));
+    }
     return list;
   }
 
@@ -75,10 +77,11 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras>{
               title: Text('相机'),
               onTap: () async {
                 var image =
-                await ImagePicker.pickImage(source: ImageSource.camera);
+                    await ImagePicker.pickImage(source: ImageSource.camera);
                 if (image != null) {
                   setState(() {
                     widget.images.add(image);
+                    Navigator.pop(context);
                   });
                 }
               },
@@ -88,10 +91,11 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras>{
               title: Text('相册'),
               onTap: () async {
                 var image =
-                await ImagePicker.pickImage(source: ImageSource.gallery);
+                    await ImagePicker.pickImage(source: ImageSource.gallery);
                 if (image != null) {
                   setState(() {
                     widget.images.add(image);
+                    Navigator.pop(context);
                   });
                 }
               },

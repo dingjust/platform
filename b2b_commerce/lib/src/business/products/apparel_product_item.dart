@@ -119,6 +119,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                                 });
                               },
                               child: Container(
+                                height: 24,
                                 margin: EdgeInsets.only(right: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -132,7 +133,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                                 ),
                               ),
                             ),
-                      Text('推款')
+                      Text('推款',style: TextStyle(fontSize: 18),)
                     ],
                   ),
                   Row(

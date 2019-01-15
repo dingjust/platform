@@ -171,11 +171,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           Expanded(
                             flex: 1,
                             child: Wrap(
-                                spacing: 5.0,
-                                runSpacing: 5.0,
-                                alignment: WrapAlignment.start,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: _papersWidgetList),
+                              spacing: 5.0,
+                              runSpacing: 5.0,
+                              alignment: WrapAlignment.start,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: _papersWidgetList,
+                            ),
                           )
                         ],
                       ),
@@ -224,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void selectPapersImages() async {
-    showModalBottomSheet(
+  Future<void> x = showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return new Column(
@@ -239,6 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (image != null) {
                   setState(() {
                     _papersImages.add(image);
+                    Navigator.pop(context);
                   });
                 }
               },
@@ -252,6 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (image != null) {
                   setState(() {
                     _papersImages.add(image);
+                    Navigator.pop(context);
                   });
                 }
               },
@@ -260,5 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+    x.then((void value) => print('close'));
   }
+
 }
