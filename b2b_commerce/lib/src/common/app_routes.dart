@@ -31,6 +31,7 @@ import '../my/my_invoices.dart';
 import '../my/my_settings.dart';
 import '../business/orders/requirement_order_detail.dart';
 import '../business/orders/requirement_quote_detail.dart';
+import '../business/delivery.dart';
 
 class AppRoutes with GlobalRoutes {
   static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
@@ -67,6 +68,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_REGISTER_BRAND = '/my/account/register_brand';
   static const ROUTE_MY_REGISTER_FACTORY = '/my/account/register_factory';
   static const ROUTE_MY_REGISTER_CUSTOMER = '/my/account/register_customer';
+  static const ROUTE_DELIVERY = '/business/delivery';
 
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
@@ -99,6 +101,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_REGISTER_BRAND: (context) => RegisterBrandPage(),
     ROUTE_MY_REGISTER_FACTORY: (context) => RegisterFactoryPage(),
     ROUTE_MY_REGISTER_CUSTOMER: (context) => RegisterCustomerPage(),
-    ROUTE_REQUIREMENT_QUOTE_DETAIL: (context) => RequirementQuoteDetailPage()
+    ROUTE_REQUIREMENT_QUOTE_DETAIL: (context) => RequirementQuoteDetailPage(),
+    ROUTE_DELIVERY: (context) => DeliveryPage(),
   };
 }
