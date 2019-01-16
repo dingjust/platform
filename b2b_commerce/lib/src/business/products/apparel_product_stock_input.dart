@@ -21,7 +21,28 @@ class ApparelProductStockInputPage extends StatelessWidget {
       body: Container(
         color: Colors.grey[200],
         child: Column(
-          children: <Widget>[ApparelProductStockInputItem()],
+          children: <Widget>[
+            Card(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Text('实际库存',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Text('平台库存',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                      ),
+                    ],
+                  ),
+                  ApparelProductStockInputItem(),
+                ],
+              ),
+            )
+          ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -47,11 +68,15 @@ class ApparelProductStockInputItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<ColorModel, List<SizeStockItem>> items =
         <ColorModel, List<SizeStockItem>>{
-      ColorModel(code: 'C01', name: '红色'): <SizeStockItem>[
+      ColorModel(code: 'C01', name: '红色',colorCode: 'FF0033'): <SizeStockItem>[
         SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
         SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
       ],
-      ColorModel(code: 'C02', name: '绿色'): <SizeStockItem>[
+      ColorModel(code: 'C02', name: '海军蓝',colorCode: '0066FF'): <SizeStockItem>[
+        SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
+        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
+      ],
+      ColorModel(code: 'C02', name: '浅紫色',colorCode: 'CC99CC'): <SizeStockItem>[
         SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
         SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
       ],
@@ -62,7 +87,7 @@ class ApparelProductStockInputItem extends StatelessWidget {
       final List<TableRow> _subRows = row.value.map((item) {
         return TableRow(children: <TableCell>[
           TableCell(
-            child: Center(child: Text(item.size.name)),
+            child: Center(child: Text(item.size.name,style: TextStyle(fontSize: 14),)),
           ),
           TableCell(
             child: TextField(
@@ -87,19 +112,46 @@ class ApparelProductStockInputItem extends StatelessWidget {
         ]);
       }).toList();
 
-      return Card(
-        elevation: 0,
-        margin: EdgeInsets.only(bottom: 15),
-        child: Column(
-          children: <Widget>[
-            Text(row.key.name),
-            Table(
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              border: new TableBorder.all(width: 1.0, color: Colors.black12),
-              children: _subRows,
+      return Table(
+        columnWidths: <int, TableColumnWidth>{
+          0: FixedColumnWidth(85),
+          1: FixedColumnWidth(255),
+        },
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        border: new TableBorder.all(width: 1.0, color: Colors.black12),
+        children: <TableRow>[
+          TableRow(children: <Widget>[
+            TableCell(
+              child:  Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: 20,
+                        decoration: BoxDecoration(
+                          color: Color(int.parse('0xff'+ row.key.colorCode)),
+//                          border: Border.all(
+//                            color: Colors.grey,
+//                          ),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(''),
+                      ),
+                      Text(row.key.name),
+                    ],
+                ),
+              ),
+            TableCell(
+              child: Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: _subRows,
+                border: new TableBorder.all(
+                  width: 1.0,
+                  color: Colors.black12,
+                ),
+              ),
             ),
-          ],
-        ),
+          ]),
+        ],
       );
     }
 

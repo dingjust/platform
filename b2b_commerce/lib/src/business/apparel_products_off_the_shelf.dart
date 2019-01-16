@@ -7,8 +7,36 @@ import 'search/apparel_product_search.dart';
 
 class OffTheShelfApparelProductsPage extends StatelessWidget {
   final List<ApparelProductModel> items = <ApparelProductModel>[
-    ApparelProductModel.fromJson({'code': '', 'name': '', 'price': 100, 'skuID': ''}),
-    ApparelProductModel.fromJson({'code': '', 'name': '', 'price': 100, 'skuID': ''}),
+    ApparelProductModel.fromJson({
+      'code': 'C0001',
+      'name': '山本风少女长裙复古气质秋冬流行新款',
+      'price': 100.00,
+      'skuID': 'SKU0001',
+      'salesVolume':10,
+      'isRecommend':true,
+      'brand':'云顶',
+      'gramWeight':1.00,
+      'thumbnail':'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+      'stockLevel':{
+        'available':99,
+        'maxPreOrder':120,
+      }
+    }),
+    ApparelProductModel.fromJson({
+      'code': 'C0002',
+      'name': '山本风少女长裙复古气质秋冬流行新款',
+      'price': 102.00,
+      'skuID': 'SKU0002',
+      'salesVolume':12,
+      'isRecommend':false,
+      'brand':'同创',
+      'gramWeight':1.50,
+      'thumbnail':'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+      'stockLevel':{
+        'available':97,
+        'maxPreOrder':122,
+      }
+    }),
   ];
 
   @override
