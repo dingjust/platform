@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/provider/purchase_order_bloc_provider.dart';
-import 'package:b2b_commerce/src/business/orders/purchase_detail.dart';
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/purchase_order_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -57,6 +57,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
           ),
         ),
       ),
+          floatingActionButton: ToTopBtn(),
     ));
   }
 }
@@ -202,7 +203,7 @@ class PurchaseOrderItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PurchaseDetailPage(order: order),
+            builder: (context) => PurchaseOrderDetailPage(order: order),
           ),
         );
       },
@@ -319,3 +320,24 @@ class PurchaseOrderItem extends StatelessWidget {
 
 }
 
+class ToTopBtn extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final bloc = PurchaseOrderBlocProvider.of(context);
+
+    return StreamBuilder<bool>(
+        stream: bloc.toTopBtnStream,
+        initialData: false,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          return snapshot.data
+              ? FloatingActionButton(
+            child: Icon(Icons.arrow_upward,color: Colors.white,),
+            onPressed: () {
+              bloc.returnToTop();
+            },
+            backgroundColor: Colors.blue,
+          )
+              : Container();
+        });
+  }
+}
