@@ -57,7 +57,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 110,
+              height: 120,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +103,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                                 });
                               },
                               child: Container(
-                                margin: EdgeInsets.only(right: 5),
+                                padding: EdgeInsets.only(right: 5),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle, color: Colors.red),
                                 child: Icon(
@@ -120,7 +120,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                               },
                               child: Container(
                                 height: 24,
-                                margin: EdgeInsets.only(right: 5),
+                                padding: EdgeInsets.only(right: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Colors.grey,
