@@ -82,15 +82,18 @@ class ApparelProductVariantsInputState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('颜色/尺码'),
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.done,
-              color: Colors.white,
             ),
             onPressed: () {
-              Navigator.pop(context);
+              Map<String,List<String>> map = Map();
+              map['colors'] = _colorFilters;
+              map['sizes'] = _sizeFilters;
+              Navigator.pop(context,map);
             },
           )
         ],

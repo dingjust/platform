@@ -22,12 +22,15 @@ class EnumSelectPage extends StatelessWidget {
               title: Text(item.name),
               value: item.code,
               groupValue: '',
-              onChanged: (T) {},
+              onChanged: (T) {
+                Navigator.pop(context,item.name);
+              },
             );
     }).toList();
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(title),
         actions: <Widget>[
           IconButton(

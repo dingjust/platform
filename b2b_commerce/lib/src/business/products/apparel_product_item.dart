@@ -57,7 +57,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 110,
+              height: 120,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +103,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                                 });
                               },
                               child: Container(
-                                margin: EdgeInsets.only(right: 5),
+                                padding: EdgeInsets.only(right: 5),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle, color: Colors.red),
                                 child: Icon(
@@ -119,7 +119,8 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                                 });
                               },
                               child: Container(
-                                margin: EdgeInsets.only(right: 5),
+                                height: 24,
+                                padding: EdgeInsets.only(right: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Colors.grey,
@@ -132,7 +133,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                                 ),
                               ),
                             ),
-                      Text('推款')
+                      Text('推款',style: TextStyle(fontSize: 18),)
                     ],
                   ),
                   Row(

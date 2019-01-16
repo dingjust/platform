@@ -1,140 +1,142 @@
 import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
+import 'package:b2b_commerce/src/business/supplier/provider/suppliers_provider.dart';
 import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-final List<SupplierModel> suppliers = <SupplierModel>[
-  SupplierModel.fromJson({
-    'code': 'S100001',
-    'name': '广州迷你裙制衣厂',
-    'orderCount': 50,
-    'address': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {'isocode': 'R123', 'name': '广东省'},
-      'city': {'code': 'C123', 'name': '广州市'},
-      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-      'line1': '广州大道',
-      'defaultAddress': true
-    },
-  }),
-  SupplierModel.fromJson({
-    'code': 'S100002',
-    'name': '广州超短裙制衣厂',
-    'orderCount': 60,
-    'address': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {'isocode': 'R123', 'name': '广东省'},
-      'city': {'code': 'C123', 'name': '广州市'},
-      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-      'line1': '广州大道',
-      'defaultAddress': true
-    }
-  }),
-  SupplierModel.fromJson({
-    'code': 'S100003',
-    'name': '广州卫衣制衣厂',
-    'orderCount': 60,
-    'address': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {'isocode': 'R123', 'name': '广东省'},
-      'city': {'code': 'C123', 'name': '广州市'},
-      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-      'line1': '广州大道',
-      'defaultAddress': true
-    }
-  }),
-  SupplierModel.fromJson({
-    'code': 'S100004',
-    'name': '广州毛衣制衣厂',
-    'orderCount': 60,
-    'address': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {'isocode': 'R123', 'name': '广东省'},
-      'city': {'code': 'C123', 'name': '广州市'},
-      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-      'line1': '广州大道',
-      'defaultAddress': true
-    }
-  }),
-  SupplierModel.fromJson({
-    'code': 'S100005',
-    'name': '广州羽绒制衣厂',
-    'orderCount': 60,
-    'address': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {'isocode': 'R123', 'name': '广东省'},
-      'city': {'code': 'C123', 'name': '广州市'},
-      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-      'line1': '广州大道',
-      'defaultAddress': true
-    }
-  }),
-  SupplierModel.fromJson({
-    'code': 'S100005',
-    'name': '广州羽绒制衣厂',
-    'orderCount': 60,
-    'address': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {'isocode': 'R123', 'name': '广东省'},
-      'city': {'code': 'C123', 'name': '广州市'},
-      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-      'line1': '广州大道',
-      'defaultAddress': true
-    }
-  }),
-  SupplierModel.fromJson({
-    'code': 'S100005',
-    'name': '广州羽绒制衣厂',
-    'orderCount': 60,
-    'address': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {'isocode': 'R123', 'name': '广东省'},
-      'city': {'code': 'C123', 'name': '广州市'},
-      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-      'line1': '广州大道',
-      'defaultAddress': true
-    }
-  }),
-];
+class SuppliersPage extends StatefulWidget{
+  _SuppliersPageState createState() => _SuppliersPageState();
+}
 
-class SuppliersPage extends StatelessWidget {
+class _SuppliersPageState extends State<SuppliersPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('供应商管理'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => showSearch(
-                context: context, delegate: SuppliersSearchDelegate()),
+    return SuppliersBlocProvider(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('供应商管理'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () =>
+                    showSearch(
+                        context: context, delegate: SuppliersSearchDelegate()),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Container(
-        child: SuppliersList(),
-      ),
-    );
+          body: Container(
+            child: SuppliersList(),
+          ),
+        ));
   }
 }
 
 class SuppliersList extends StatelessWidget {
   SuppliersList();
 
+  ScrollController _scrollController = new ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: suppliers.map((sup) {
-        return SuppliersItem(sup);
-      }).toList(),
-    );
+    final bloc = SuppliersBlocProvider.of(context);
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        bloc.loadingStart();
+        bloc.loadingMore();
+      }
+    });
+
+    //监听滚动事件，打印滚动位置
+    _scrollController.addListener(() {
+      if (_scrollController.offset < 500) {
+        bloc.hideToTopBtn();
+      } else if (_scrollController.offset >= 500) {
+        bloc.showToTopBtn();
+      }
+    });
+
+    //状态管理触发的返回顶部
+    bloc.returnToTopStream.listen((data) {
+      //返回到顶部时执行动画
+      if (data) {
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
+      }
+    });
+
+    return Container(
+        decoration: BoxDecoration(color: Colors.grey[100]),
+    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+    child: ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      controller: _scrollController,
+      children: <Widget>[
+        StreamBuilder<List<SupplierModel>>(
+          stream: bloc.stream,
+          initialData: null,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<SupplierModel>> snapshot) {
+            if (snapshot.data == null) {
+              bloc.filter();
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 200),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            if (snapshot.hasData) {
+              return Column(
+                children: snapshot.data.map((supplierModel) {
+                  return SuppliersItem(
+                    supplierModel,
+                  );
+                }).toList(),
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+          },
+        ),
+        StreamBuilder<bool>(
+          stream: bloc.bottomStream,
+          initialData: false,
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (snapshot.data) {
+              _scrollController.animateTo(_scrollController.offset - 70,
+                  duration: new Duration(milliseconds: 500),
+                  curve: Curves.easeOut);
+            }
+            return snapshot.data
+                ? Container(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+              child: Center(
+                child: Text(
+                  "人家可是有底线的。。。",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            )
+                : Container();
+          },
+        ),
+        StreamBuilder<bool>(
+          stream: bloc.loadingStream,
+          initialData: false,
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Center(
+                child: new Opacity(
+                  opacity: snapshot.data ? 1.0 : 0,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    ));
   }
 }
 

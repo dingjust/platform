@@ -149,13 +149,10 @@ class QuotesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
-        backgroundColor: Colors.white,
         brightness: Brightness.light,
-        iconTheme: IconThemeData(color: Colors.black),
         centerTitle: true,
         title: Text(
           '报价管理',
-          style: TextStyle(color: Colors.black),
         ),
         actions: <Widget>[
           IconButton(
@@ -184,6 +181,7 @@ class QuotesPage extends StatelessWidget {
             unselectedLabelStyle: TextStyle(
               fontSize: 16,
             ),
+            isScrollable: false,
           ),
           body: TabBarView(
             children: states.map((state) {

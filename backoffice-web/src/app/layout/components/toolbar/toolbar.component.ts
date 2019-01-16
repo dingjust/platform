@@ -3,7 +3,6 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import * as _ from 'lodash';
-import {en_US, zh_CN, NzI18nService} from 'ng-zorro-antd';
 
 import {FuseConfigService} from '@fuse/services/config.service';
 import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
@@ -35,13 +34,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
      * @param {FuseConfigService} _fuseConfigService
      * @param {FuseSidebarService} _fuseSidebarService
      * @param {TranslateService} _translateService
-     * @param {NzI18nService} _nzI18nService
      */
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
         private _translateService: TranslateService,
-        private _nzI18nService: NzI18nService
     ) {
         // Set the defaults
         this.userStatusOptions = [
@@ -76,14 +73,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
             {
                 id: 'zh',
                 title: 'Chinese',
-                flag: 'cn',
-                locale: zh_CN
+                flag: 'cn'
             },
             {
                 id: 'en',
                 title: 'English',
-                flag: 'us',
-                locale: en_US
+                flag: 'us'
             }
         ];
 
@@ -157,6 +152,5 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
         // Use the selected language for translations
         this._translateService.use(lang.id);
-        this._nzI18nService.setLocale(lang.locale);
     }
 }

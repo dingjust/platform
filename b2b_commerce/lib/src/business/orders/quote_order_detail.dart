@@ -114,9 +114,15 @@ class QuoteOrderDetailPage extends StatelessWidget {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(right: 10),
-                              child: Text(item.order.belongTo.name,style: TextStyle(fontSize: 18),),
+                              child: Text(
+                                item.order.belongTo.name,
+                                style: TextStyle(fontSize: 18),
+                              ),
                             ),
-                            Stars(starLevel: item.order.belongTo.starLevel,highlightOnly: false,)
+                            Stars(
+                              starLevel: item.order.belongTo.starLevel,
+                              highlightOnly: false,
+                            )
                           ],
                         ),
                       ),
@@ -252,7 +258,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildQuoteCost(){
+  Widget _buildQuoteCost() {
     return Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 15),
@@ -336,8 +342,8 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     '费用合计'
                         '￥' +
                         (item.order.unitPriceOfFabric +
-                            item.order.unitPriceOfExcipients +
-                            item.order.unitPriceOfProcessing)
+                                item.order.unitPriceOfExcipients +
+                                item.order.unitPriceOfProcessing)
                             .toString(),
                     style: TextStyle(
                       color: Colors.red,
@@ -373,7 +379,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDeliveryDate(){
+  Widget _buildDeliveryDate() {
     return Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 15),
@@ -385,7 +391,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAttachment(){
+  Widget _buildAttachment() {
     return Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 15),
@@ -404,7 +410,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRemark(){
+  Widget _buildRemark() {
     return Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 15),
@@ -426,10 +432,9 @@ class QuoteOrderDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildActionChip(){
+  Widget _buildActionChip() {
     return Offstage(
-      offstage:
-      item.order.state != QuoteState.SELLER_SUBMITTED ? true : false,
+      offstage: item.order.state != QuoteState.SELLER_SUBMITTED ? true : false,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
         child: Row(
@@ -437,19 +442,16 @@ class QuoteOrderDetailPage extends StatelessWidget {
             Expanded(
               child: ActionChip(
                 backgroundColor: Colors.red,
-                labelPadding:
-                EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                 labelStyle: TextStyle(fontSize: 16),
                 label: Text('拒绝报价'),
                 onPressed: () {},
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(left: 20),
+            Expanded(
               child: ActionChip(
                 backgroundColor: Colors.orange,
-                labelPadding:
-                EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                 labelStyle: TextStyle(fontSize: 16),
                 label: Text('确认报价'),
                 onPressed: () {},

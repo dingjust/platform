@@ -50,6 +50,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
             // primarySwatch: Colors.blue,
             primaryColor: Colors.white,
+            textSelectionColor:Colors.black,
             accentColor: Colors.orangeAccent[400],
             bottomAppBarColor: Colors.grey),
         home: Scaffold(

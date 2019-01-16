@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
@@ -22,6 +21,10 @@ class ApparelProductFormPage extends StatefulWidget {
 class ApparelProductFormState extends State<ApparelProductFormPage> {
   bool _postageFree = false;
   final GlobalKey _apparelProductForm = GlobalKey<FormState>();
+  FocusNode _nameFocusNode = FocusNode();
+  FocusNode _skuIDFocusNode = FocusNode();
+  FocusNode _brandFocusNode = FocusNode();
+  FocusNode _weightFocusNode = FocusNode();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _skuIDController = TextEditingController();
   final TextEditingController _brandController = TextEditingController();
@@ -29,12 +32,15 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   List<File> _masterImages = [];
   List<File> _detailImages = [];
 
+  String _minorCategoryText;
+
   @override
   void initState() {
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
     _weightController.text = widget.item?.gramWeight?.toString();
+    _minorCategoryText = widget.item?.minorCategory?.name;
 
     // TODO: implement initState
     super.initState();
@@ -69,7 +75,13 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                       )
                     ],
                   )),
-             AlbumsAndCameras(images: _masterImages,height: 100,width: 100,iconSize:100,),
+              AlbumsAndCameras(
+                images: _masterImages,
+                height: 100,
+                width: 100,
+                iconSize: 100,
+                count: 5,
+              ),
               Container(
                 margin:
                     EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
@@ -86,129 +98,63 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   ],
                 ),
               ),
-              AlbumsAndCameras(images: _detailImages,height: 100,width: 100,iconSize:100,),
-              ListTile(
-                leading: Text(
-                  '产品名称：',
-                  style: TextStyle(fontSize: 16),
-                ),
-                title: TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: '请输入产品名称，必填',
-                  ),
-                  validator: (v) {
-                    return v.trim().length > 0 ? null : "产品名称不能为空";
-                  },
-                ),
+              AlbumsAndCameras(
+                images: _detailImages,
+                height: 100,
+                width: 100,
+                iconSize: 100,
+                count: 8,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Divider(
-                  height: 0,
-                  color: Colors.blueGrey,
-                ),
+              TextFieldComponent(
+                focusNode: _nameFocusNode,
+                controller: _nameController,
+                leadingText: '产品名称',
+                hintText: '请输入产品名称，必填',
               ),
-              ListTile(
-                leading: Text(
-                  '产品货号：',
-                  style: TextStyle(fontSize: 16),
-                ),
-                title: TextFormField(
-                  controller: _skuIDController,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: '请输入产品货号，必填',
-                  ),
-                  validator: (v) {
-                    return v.trim().length > 0 ? null : "产品货号不能为空";
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Divider(
-                  height: 0,
-                  color: Colors.blueGrey,
-                ),
+              TextFieldComponent(
+                focusNode: _skuIDFocusNode,
+                controller: _skuIDController,
+                leadingText: '产品货号',
+                hintText: '请输入产品货号，必填',
               ),
               InkWell(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                _minorCategoryText = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnumSelectPage(
-                            '选择大类',
+                            '选择分类',
                             <EnumModel>[
-                              EnumModel('R001', '针织'),
-                              EnumModel('R002', '其他'),
+                              EnumModel('R001', '男装'),
+                              EnumModel('R002', '女装'),
                             ],
                           ),
                     ),
                   );
                 },
-                child: ListTile(
-                  title: Text('选择大类'),
-                  trailing: Icon(Icons.chevron_right),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Divider(
-                  height: 0,
-                  color: Colors.blueGrey,
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EnumSelectPage(
-                            '选择小类',
-                            <EnumModel>[
-                              EnumModel('R001', '针织'),
-                              EnumModel('R002', '其他'),
-                            ],
-                          ),
-                    ),
-                  );
-                },
-                child: ListTile(
-                  title: Text('选择小类'),
-                  trailing: Icon(Icons.chevron_right),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Divider(
-                  height: 0,
-                  color: Colors.blueGrey,
-                ),
-              ),
-              ListTile(
-                leading: Text(
-                  '品牌：',
-                  style: TextStyle(fontSize: 16),
-                ),
-                title: TextFormField(
-                  controller: _brandController,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: '请输入品牌，必填',
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(child: Text('选择分类',style: TextStyle(fontSize: 16),),),
+                      _minorCategoryText != null ? Text(_minorCategoryText,style: TextStyle(color: Colors.orange ),) : Text(''),
+                      Icon(Icons.chevron_right,color: Colors.grey[600],)
+                    ],
                   ),
-                  validator: (v) {
-                    return v.trim().length > 0 ? null : "品牌不能为空";
-                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Divider(
                   height: 0,
-                  color: Colors.blueGrey,
+                  color: Colors.grey[400],
                 ),
+              ),
+              TextFieldComponent(
+                focusNode: _brandFocusNode,
+                controller: _brandController,
+                leadingText: '品牌',
+                hintText: '请输入品牌，必填',
               ),
               InkWell(
                 onTap: () {
@@ -228,40 +174,28 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Divider(
                   height: 0,
-                  color: Colors.blueGrey,
+                  color: Colors.grey[400],
                 ),
               ),
-              ListTile(
-                leading: Text(
-                  '重量(kg)：',
-                  style: TextStyle(fontSize: 16),
-                ),
-                title: TextFormField(
-                  controller: _weightController,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: '请输入重量，必填',
-                  ),
-                  validator: (v) {
-                    return v.trim().length > 0 ? null : "重量不能为空";
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Divider(
-                  height: 0,
-                  color: Colors.blueGrey,
-                ),
+              TextFieldComponent(
+                focusNode: _weightFocusNode,
+                controller: _weightController,
+                inputType: TextInputType.number,
+                leadingText: '重量',
+                hintText: '请输入重量，必填',
               ),
               InkWell(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  dynamic result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ApparelProductVariantsInputPage(),
                     ),
                   );
+
+                  showDialog(context: context,builder:(context) => AlertDialog(
+                    title: Text(result.toString()),
+                  ));
                 },
                 child: ListTile(
                   title: Text('颜色/尺码'),
@@ -272,7 +206,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Divider(
                   height: 0,
-                  color: Colors.blueGrey,
+                  color: Colors.grey[400],
                 ),
               ),
               InkWell(
@@ -293,7 +227,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Divider(
                   height: 0,
-                  color: Colors.blueGrey,
+                  color: Colors.grey[400],
                 ),
               ),
               InkWell(
@@ -314,7 +248,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Divider(
                   height: 0,
-                  color: Colors.blueGrey,
+                  color: Colors.grey[400],
                 ),
               ),
               InkWell(
@@ -335,7 +269,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Divider(
                   height: 0,
-                  color: Colors.blueGrey,
+                  color: Colors.grey[400],
                 ),
               ),
               Padding(
@@ -361,7 +295,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     Expanded(
                       child: ActionChip(
                         backgroundColor: Colors.red,
-                        labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                        labelPadding:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                         labelStyle: TextStyle(fontSize: 16),
                         label: Text('发布商品'),
                         onPressed: () {},
@@ -370,7 +305,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     Expanded(
                       child: ActionChip(
                         backgroundColor: Colors.orange,
-                        labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                        labelPadding:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                         labelStyle: TextStyle(fontSize: 16),
                         label: Text('直接上架'),
                         onPressed: () {},

@@ -200,27 +200,28 @@ class QuoteOrderItem extends StatelessWidget {
           ? true
           : false,
       child: Padding(
-        padding: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(top: 10,left: 100),
         child: Row(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 70, right: 20),
+            Expanded(
               child: ActionChip(
                 backgroundColor: Colors.red,
                 labelPadding: EdgeInsets.symmetric(
-                    vertical: 2, horizontal: 13),
-                labelStyle: TextStyle(fontSize: 18),
+                    vertical: 1, horizontal: 15),
+                labelStyle: TextStyle(fontSize: 16),
                 label: Text('拒绝报价'),
                 onPressed: () {},
               ),
             ),
-            ActionChip(
-              backgroundColor: Colors.orange,
-              labelPadding: EdgeInsets.symmetric(
-                  vertical: 2, horizontal: 13),
-              labelStyle: TextStyle(fontSize: 18),
-              label: Text('确认报价'),
-              onPressed: () {},
+            Expanded(
+              child: ActionChip(
+                backgroundColor: Colors.orange,
+                labelPadding: EdgeInsets.symmetric(
+                    vertical: 1, horizontal: 15),
+                labelStyle: TextStyle(fontSize: 16),
+                label: Text('确认报价'),
+                onPressed: () {},
+              ),
             ),
           ],
         ),
