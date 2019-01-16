@@ -17,9 +17,10 @@ enum SampleProductReturnState {
 }
 
 ///借的类型
-enum LendBorrowType{
+enum LendBorrowType {
   ///借出
   LEND,
+
   ///借入
   BORROW,
 }
@@ -68,7 +69,60 @@ class StaircasePriceModel extends ItemModel {
 /// 产品属性
 @JsonSerializable()
 class ApparelProductAttributesModel extends ItemModel {
-  ApparelProductAttributesModel();
+  /// 风格
+  List<String> styles;
+
+  /// 面料成分
+  String fabricComposition;
+
+  /// 版型
+  String editionType;
+
+  /// 款式
+  String pattern;
+
+  /// 袖型
+  String sleeveType;
+
+  /// 袖长/裤腿
+  String sleeveLength;
+
+  /// 图案
+  String decorativePattern;
+
+  /// 流行元素
+  List<String> popularElements;
+
+  /// 填充物
+  String filler;
+
+  /// 厚薄
+  String thickness;
+
+  /// 季节
+  String season;
+
+  /// 是否有吊牌
+  bool taggable;
+
+  /// 门襟
+  String placket;
+
+  ApparelProductAttributesModel({
+    this.styles,
+    this.fabricComposition,
+    this.editionType,
+    this.pattern,
+    this.sleeveType,
+    this.sleeveLength,
+    this.decorativePattern,
+    this.popularElements,
+    this.filler,
+    this.thickness,
+    this.season,
+    this.taggable,
+    this.placket,
+  });
 
   factory ApparelProductAttributesModel.fromJson(Map<String, dynamic> json) =>
       _$ApparelProductAttributesModelFromJson(json);
@@ -192,10 +246,10 @@ class ApparelProductModel extends ProductModel {
           thumbnail: thumbnail,
           staircasePrices: staircasePrices,
           privacy: privacy,
-          salesVolume:salesVolume,
+          salesVolume: salesVolume,
           ratingIfPrivacy: ratingIfPrivacy,
           superCategories: superCategories,
-          stockLevel:stockLevel,
+          stockLevel: stockLevel,
         );
 
   factory ApparelProductModel.fromJson(Map<String, dynamic> json) => _$ApparelProductModelFromJson(json);
@@ -404,15 +458,15 @@ class SampleProductModel extends ApparelProductModel {
     MemberRating ratingIfPrivacy,
     List<CategoryModel> superCategories,
   }) : super(
-    code: code,
-    name: name,
-    price: price,
-    thumbnail: thumbnail,
-    staircasePrices: staircasePrices,
-    privacy: privacy,
-    ratingIfPrivacy: ratingIfPrivacy,
-    superCategories: superCategories,
-  );
+          code: code,
+          name: name,
+          price: price,
+          thumbnail: thumbnail,
+          staircasePrices: staircasePrices,
+          privacy: privacy,
+          ratingIfPrivacy: ratingIfPrivacy,
+          superCategories: superCategories,
+        );
 
   factory SampleProductModel.fromJson(Map<String, dynamic> json) => _$SampleProductModelFromJson(json);
 
@@ -420,17 +474,22 @@ class SampleProductModel extends ApparelProductModel {
 }
 
 @JsonSerializable()
-class SampleLendingHistoryModel extends ItemModel{
+class SampleLendingHistoryModel extends ItemModel {
   //样衣产品
   SampleProductModel sampleProduct;
+
   //借的类型
   LendBorrowType type;
+
   //数量
   int quantity;
+
   //预计归还日期
   DateTime expectedReturnDate;
+
   //归还日期
   DateTime returnedDate;
+
   //借方（归属）
   String debtor;
 
@@ -449,11 +508,13 @@ class SampleLendingHistoryModel extends ItemModel{
 }
 
 @JsonSerializable()
-class StockLevelModel extends ItemModel{
+class StockLevelModel extends ItemModel {
   //产品
   ProductModel product;
+
   //实际库存
   int available;
+
   //平台库存
   int maxPreOrder;
 
@@ -472,10 +533,13 @@ class StockLevelModel extends ItemModel{
 class ZoneDeliveryModeValueModel extends ItemModel {
   //起步价
   double minimum;
+
   //首重
   double firstWeight;
+
   //续重价
   double value;
+
   //地区
   AddressModel address;
 
