@@ -48,7 +48,9 @@ flutter:
 
   # To add assets to your package, add an assets section, like this:
   assets:
-    - images/logo.png
+    - packages/assets/temp/pdf.png
+    - packages/assets/temp/word.png
+
   fonts:
     - family: b2bIcons
       fonts:

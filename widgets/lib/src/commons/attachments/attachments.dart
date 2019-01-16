@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:open_file/open_file.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 //横向滚动图片列表
 class Attachments extends StatefulWidget {
@@ -18,7 +19,7 @@ class Attachments extends StatefulWidget {
       this.imageHeight = 80})
       : super(key: key);
 
-  final List<String> list;
+  final List<MediaModel> list;
 
   final double width;
   final double height;
@@ -95,28 +96,48 @@ class _AttachmentsState extends State<Attachments> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
-        children: widget.list
-            .map(
-              (url) => GestureDetector(
-                    child: Container(
-                      width: widget.imageWidth,
-                      height: widget.imageHeight,
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey,
-                        image: DecorationImage(
-                          image: NetworkImage(url),
-                          fit: BoxFit.cover,
-                        ),
+        children: widget.list.map(
+          (model) {
+            //图片类型
+            switch (model.mediaType) {
+              case 'pdf':
+                return GestureDetector(
+                  child: CommonImage.pdf(),
+                  onTap: () {
+                    _preViewFile(model.url, model.mediaType);
+                  },
+                );
+                break;
+              case 'word':
+                return GestureDetector(
+                  child: CommonImage.word(),
+                  onTap: () {
+                    _preViewFile(model.url, model.mediaType);
+                  },
+                );
+                break;
+              default:
+                return GestureDetector(
+                  child: Container(
+                    width: widget.imageWidth,
+                    height: widget.imageHeight,
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey,
+                      image: DecorationImage(
+                        image: NetworkImage(model.url),
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    onTap: () {
-                      onPreview(context, url);
-                    },
                   ),
-            )
-            .toList(),
+                  onTap: () {
+                    onPreview(context, model.url);
+                  },
+                );
+            }
+          },
+        ).toList(),
       ),
     );
   }
@@ -133,7 +154,7 @@ class _AttachmentsState extends State<Attachments> {
     );
   }
 
-  Future<String> _getFilePath() async {
+  Future<String> _preViewFile(String url, String mediaType) async {
     String dir = (await getApplicationDocumentsDirectory()).path;
     // // print(dir);
     // // File file = File('$dir/counter.doc');
@@ -145,11 +166,8 @@ class _AttachmentsState extends State<Attachments> {
     dio.onHttpClientCreate = (HttpClient client) {
       client.idleTimeout = new Duration(seconds: 0);
     };
-
-    var url =
-        "http://zb.guaihou.com/zdoc/03J012-2%20%E7%8E%AF%E5%A2%83%E6%99%AF%E8%A7%82--%E7%BB%BF%E5%8C%96%E7%A7%8D%E6%A4%8D%E8%AE%BE%E8%AE%A1.pdf";
     try {
-      Response response = await dio.download(url, "$dir/flutter.pdf",
+      Response response = await dio.download(url, "$dir/flutter.$mediaType",
           // Listen the download progress.
           onProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
@@ -158,8 +176,7 @@ class _AttachmentsState extends State<Attachments> {
     } catch (e) {
       print(e);
     }
-    print(dir);
-   OpenFile.open('$dir/flutter.pdf');
-    return "dir";
+    OpenFile.open('$dir/flutter.$mediaType');
+    return 'dir';
   }
 }

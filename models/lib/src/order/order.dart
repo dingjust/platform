@@ -347,7 +347,7 @@ class RequirementOrderModel extends OrderModel {
   int countOfQuotes;
 
   /// 附件
-  List<String> attachments;
+  List<MediaModel> attachments;
 
   /// 订单状态
   RequirementOrderStatus status;
@@ -426,7 +426,7 @@ class PurchaseOrderModel extends OrderModel {
   ProductionProgressPhase currentPhase;
 
   /// 附件
-  List<String> attachments;
+  List<MediaModel> attachments;
 
   /// 订单状态
   PurchaseOrderStatus status;
@@ -582,7 +582,7 @@ class QuoteModel extends AbstractOrderModel {
   double costOfSamples;
 
   /// 附件
-  List<String> attachments;
+  List<MediaModel> attachments;
 
   QuoteModel({
     String code,
@@ -650,7 +650,7 @@ class ProductionProgressModel extends ItemModel {
   int quantity;
 
   /// 凭证
-  List<String> medias;
+  List<MediaModel> medias;
 
   /// 生产阶段顺序
   int sequence;
