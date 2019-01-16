@@ -68,7 +68,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
           ),
         ),
       ),
-      floatingActionButton: ToTopBtn(),
+      floatingActionButton: _ToTopBtn(),
     ));
   }
 }
@@ -333,7 +333,7 @@ class RequirementOrderItem extends StatelessWidget {
   }
 }
 
-class ToTopBtn extends StatelessWidget {
+class _ToTopBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = RequirementOrderBlocProvider.of(context);
