@@ -27,6 +27,7 @@ class _SuppliersPageState extends State<SuppliersPage> {
           body: Container(
             child: SuppliersList(),
           ),
+          floatingActionButton: ToTopBtn(),
         ));
   }
 }
@@ -141,7 +142,7 @@ class SuppliersList extends StatelessWidget {
 }
 
 class SuppliersItem extends StatelessWidget {
-  SupplierModel supplierModel;
+  final SupplierModel supplierModel;
 
   SuppliersItem(this.supplierModel);
 
@@ -193,5 +194,27 @@ class SuppliersItem extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class ToTopBtn extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final bloc = SuppliersBlocProvider.of(context);
+
+    return StreamBuilder<bool>(
+        stream: bloc.toTopBtnStream,
+        initialData: false,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          return snapshot.data
+              ? FloatingActionButton(
+            child: Icon(Icons.arrow_upward,color: Colors.white,),
+            onPressed: () {
+              bloc.returnToTop();
+            },
+            backgroundColor: Colors.blue,
+          )
+              : Container();
+        });
   }
 }

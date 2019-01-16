@@ -141,6 +141,48 @@ class SuppliersBloc{
               'defaultAddress': true
             }
           }),
+          SupplierModel.fromJson({
+            'code': 'S100001',
+            'name': '广州迷你裙制衣厂',
+            'orderCount': 50,
+            'address': {
+              'fullname': "张三",
+              'cellphone': '13123456789',
+              'region': {'isocode': 'R123', 'name': '广东省'},
+              'city': {'code': 'C123', 'name': '广州市'},
+              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+              'line1': '广州大道',
+              'defaultAddress': true
+            },
+          }),
+          SupplierModel.fromJson({
+            'code': 'S100002',
+            'name': '广州超短裙制衣厂',
+            'orderCount': 60,
+            'address': {
+              'fullname': "张三",
+              'cellphone': '13123456789',
+              'region': {'isocode': 'R123', 'name': '广东省'},
+              'city': {'code': 'C123', 'name': '广州市'},
+              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+              'line1': '广州大道',
+              'defaultAddress': true
+            }
+          }),
+          SupplierModel.fromJson({
+            'code': 'S100003',
+            'name': '广州卫衣制衣厂',
+            'orderCount': 60,
+            'address': {
+              'fullname': "张三",
+              'cellphone': '13123456789',
+              'region': {'isocode': 'R123', 'name': '广东省'},
+              'city': {'code': 'C123', 'name': '广州市'},
+              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+              'line1': '广州大道',
+              'defaultAddress': true
+            }
+          }),
         ];
       }));
     }

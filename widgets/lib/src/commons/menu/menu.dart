@@ -90,8 +90,6 @@ class AdvanceMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = Theme.of(context).primaryColor;
-
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, routeTo);

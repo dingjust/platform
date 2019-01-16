@@ -1,14 +1,31 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 final String defaultPicUrl =
     "https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg";
 
-class ProductionProgressesPage extends StatelessWidget {
+class ProductionProgressesPage extends StatefulWidget{
   final PurchaseOrderModel order;
 
   ProductionProgressesPage({Key key, @required this.order}) : super(key: key);
+
+  _ProductionProgressesPageState createState() =>
+      _ProductionProgressesPageState(order: order);
+}
+
+class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
+  DateTime _blDate;
+  String _blNumber;
+  TextEditingController dialogText;
+  File _image;
+
+  final PurchaseOrderModel order;
+
+  _ProductionProgressesPageState({this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +51,9 @@ class ProductionProgressesPage extends StatelessWidget {
 
   List<Widget> _buildPurchaseProductionProgresses(BuildContext context) {
     List<Widget> _list = new List();
-    int _index = 0;
     for (int i = 0; i < order.productionProgresses.length; i++) {
       _list.add(Container(
-        child: ProductionProgressItem(
+        child: _buildProductionProgress(context,
           order.productionProgresses[i],
           order.currentPhase.toString(),
         ),
@@ -45,30 +61,17 @@ class ProductionProgressesPage extends StatelessWidget {
     }
     return _list;
   }
-}
-
-class ProductionProgressItem extends StatelessWidget {
-  final ProductionProgressModel progressModel;
-  final String currentPhase;
-
-  @override
-  ProductionProgressItem(this.progressModel, this.currentPhase);
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildProductionProgress(context);
-  }
 
   //TimeLineUI
-  Widget _buildProductionProgress(BuildContext context) {
+  Widget _buildProductionProgress(BuildContext context,ProductionProgressModel progress,String currentPhase) {
     int _index = 0;
-    String phase = '${progressModel.phase}';
+    String phase = '${progress.phase}';
     if (phase == currentPhase) {
-      _index = progressModel.sequence;
+      _index = progress.sequence;
     }
     return Stack(
       children: <Widget>[
-        Padding(padding: const EdgeInsets.only(left: 30.0), child: _buildProgressTimeLine(context)),
+        Padding(padding: const EdgeInsets.only(left: 30.0), child: _buildProgressTimeLine(context,progress,currentPhase)),
         Positioned(
           top: 30.0,
           bottom: 0.0,
@@ -76,7 +79,7 @@ class ProductionProgressItem extends StatelessWidget {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color: progressModel.sequence <= _index ? Colors.orangeAccent : Colors.black45,
+            color: progress.sequence <= _index ? Colors.orangeAccent : Colors.black45,
           ),
         ),
         Positioned(
@@ -90,7 +93,7 @@ class ProductionProgressItem extends StatelessWidget {
               height: 16.0,
               width: 16.0,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: progressModel.sequence <= _index ? Colors.orange : Colors.black),
+                  shape: BoxShape.circle, color: progress.sequence <= _index ? Colors.orange : Colors.black),
             ),
           ),
         )
@@ -99,11 +102,11 @@ class ProductionProgressItem extends StatelessWidget {
   }
 
 //TimeLineUI右边的Card部分
-  Widget _buildProgressTimeLine(BuildContext context) {
-    String phase = '${progressModel.phase}';
+  Widget _buildProgressTimeLine(BuildContext context,ProductionProgressModel progress,String currentPhase) {
+    String phase = '${progress.phase}';
     int _index = 0;
     if (phase == currentPhase) {
-      _index = progressModel.sequence;
+      _index = progress.sequence;
     }
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.0),
@@ -111,10 +114,10 @@ class ProductionProgressItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           ListTile(
-            title: Text(ProductionProgressPhaseLocalizedMap[progressModel.phase],
+            title: Text(ProductionProgressPhaseLocalizedMap[progress.phase],
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: progressModel.sequence <= _index ? Colors.orange : Colors.black54,
+                    color: progress.sequence <= _index ? Colors.orange : Colors.black54,
                     fontSize: 18)),
             trailing: Text(
               '已延期2天',
@@ -133,12 +136,13 @@ class ProductionProgressItem extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child:
-                            Text('${progressModel.estimatedDate}', style: TextStyle(fontWeight: FontWeight.w500)),
+                        Text('${progress.estimatedDate}', style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           icon: Icon(Icons.date_range),
+                            onPressed: _showDatePicker
                         ),
                       )
                     ],
@@ -150,7 +154,7 @@ class ProductionProgressItem extends StatelessWidget {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('${progressModel.finishDate}', style: TextStyle(fontWeight: FontWeight.w500)),
+                        child: Text('${progress.finishDate}', style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                           alignment: Alignment.centerRight,
@@ -173,12 +177,13 @@ class ProductionProgressItem extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text('${progressModel.quantity}', style: TextStyle(fontWeight: FontWeight.w500)),
+                      child: Text('${progress.quantity}', style: TextStyle(fontWeight: FontWeight.w500)),
                     ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: IconButton(
                         icon: Icon(Icons.keyboard_arrow_right),
+                        onPressed: progress.sequence <= _index ? _showDialog : null,
                       ),
                     )
                   ],
@@ -197,16 +202,17 @@ class ProductionProgressItem extends StatelessWidget {
                     ),
                     Expanded(
                         child: Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        icon: Icon(Icons.chevron_right),
-                      ),
-                    )),
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            icon: Icon(Icons.chevron_right),
+                            onPressed: progress.sequence <= _index ? _getImage : null,
+                          ),
+                        )),
                   ],
                 ),
               )),
           Container(padding: EdgeInsets.fromLTRB(20, 10, 10, 10), child: Attachments(
-            list: progressModel.medias,
+            list: progress.medias,
           )),
           Container(
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
@@ -215,26 +221,98 @@ class ProductionProgressItem extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text("备注"),
                 ),
-                Align(alignment: Alignment.centerLeft, child: Text(progressModel.remarks))
+                Align(alignment: Alignment.centerLeft, child: Text(progress.remarks))
               ])),
           Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
               child: phase == currentPhase
                   ? RaisedButton(
-                      color: Colors.orange,
-                      child: Text(
-                        '验货完成',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {},
-                    )
+                color: Colors.orange,
+                child: Text(
+                  '验货完成',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {},
+              )
                   : null)
         ],
       ),
     );
   }
+
+  //生成日期选择器
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime _picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: new DateTime(1990),
+        lastDate: new DateTime(2999)
+    );
+
+    if(_picked != null){
+      print(_picked);
+      setState(() {
+        _blDate = _picked;
+      });
+    }
+  }
+
+//生成Dialog控件
+  Future<void> _neverSatisfied(BuildContext context) async {
+    dialogText = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('请输入数量'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller:dialogText,
+                  keyboardType: TextInputType.number,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                if(dialogText.text != null){
+                  print(dialogText.text);
+                  setState(() {
+                    _blNumber = dialogText.text;
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+//打开相册同步照片到页面上
+  Future _getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+  }
+//打开日期选择器
+  void _showDatePicker() {
+    _selectDate(context);
+  }
+//打开数量输入弹框
+  void _showDialog(){
+    _neverSatisfied(context);
+  }
 }
+
 
 class PurchaseVoucherPic extends StatelessWidget {
   final ProductionProgressModel progressModel;

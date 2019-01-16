@@ -1,5 +1,12 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:open_file/open_file.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 //横向滚动图片列表
 class Attachments extends StatefulWidget {
@@ -12,7 +19,7 @@ class Attachments extends StatefulWidget {
       this.imageHeight = 80})
       : super(key: key);
 
-  final List<String> list;
+  final List<MediaModel> list;
 
   final double width;
   final double height;
@@ -89,32 +96,61 @@ class _AttachmentsState extends State<Attachments> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
-        children: widget.list
-            .map(
-              (url) => GestureDetector(
-                    child: Container(
-                      width: widget.imageWidth,
-                      height: widget.imageHeight,
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey,
-                        image: DecorationImage(
-                          image: NetworkImage(url),
-                          fit: BoxFit.cover,
-                        ),
+        children: widget.list.map(
+          (model) {
+            // 附件类型
+            switch (model.mediaType) {
+              case 'pdf':
+                return GestureDetector(
+                  child: CommonImage.pdf(),
+                  onTap: () {
+                    _previewFile(model.url, 'yijiayi',model.mediaType);
+                  },
+                );
+                break;
+              case 'docx':
+                return GestureDetector(
+                  child: CommonImage.word(),
+                  onTap: () {
+                    _previewFile(model.url,'yijiayi', model.mediaType);
+                  },
+                );
+                break;
+              case 'xlsx':
+                return GestureDetector(
+                  child: CommonImage.excel(),
+                  onTap: () {
+                    _previewFile(model.url,'yijiayi', model.mediaType);
+                  },
+                );
+                break;
+              default:
+                return GestureDetector(
+                  child: Container(
+                    width: widget.imageWidth,
+                    height: widget.imageHeight,
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey,
+                      image: DecorationImage(
+                        image: NetworkImage(model.url),
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    onTap: () {
-                      onPreview(context, url);
-                    },
                   ),
-            )
-            .toList(),
+                  onTap: () {
+                    onPreview(context, model.url);
+                  },
+                );
+            }
+          },
+        ).toList(),
       ),
     );
   }
 
+  //图片预览
   void onPreview(BuildContext context, String url) {
     showDialog(
       context: context,
@@ -125,5 +161,28 @@ class _AttachmentsState extends State<Attachments> {
         ));
       },
     );
+  }
+
+  //文件下载打开
+  Future<String> _previewFile(String url,String name String mediaType) async {
+    //获取应用目录路径
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    String filePath="$dir/$name.$mediaType";
+    var dio = new Dio();
+    dio.onHttpClientCreate = (HttpClient client) {
+      client.idleTimeout = new Duration(seconds: 0);
+    };
+    try {
+      Response response = await dio.download(url, filePath,
+          onProgress: (received, total) {
+        print((received / total * 100).toStringAsFixed(0) + "%");
+      });
+      print(response.statusCode);
+    } catch (e) {
+      print(e);
+    }
+    //打开文件
+    OpenFile.open(filePath);
+    return filePath;
   }
 }

@@ -37,6 +37,8 @@ dependencies:
   rxdart: ^0.20.0
   fluwx: ^0.5.4
   photo_view: ^0.1.3
+  open_file: ^1.1.1
+  path_provider: ^0.4.1
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +62,9 @@ flutter:
     - packages/assets/temp/lake.jpg
     - packages/assets/temp/login_logo.png
     - packages/assets/temp/picture.png
+    - packages/assets/temp/pdf.png
+    - packages/assets/temp/word.png
+    - packages/assets/temp/excel.png
     - packages/assets/temp/business/check_report.png
     - packages/assets/temp/business/address_manage.png
     - packages/assets/temp/business/cart.png

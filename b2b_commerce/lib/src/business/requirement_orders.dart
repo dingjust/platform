@@ -68,7 +68,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
           ),
         ),
       ),
-      floatingActionButton: ToTopBtn(),
+      floatingActionButton: _ToTopBtn(),
     ));
   }
 }
@@ -222,7 +222,6 @@ class RequirementOrderItem extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    var sd = _statusColors[order.status];
     return Container(
       margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
@@ -334,7 +333,7 @@ class RequirementOrderItem extends StatelessWidget {
   }
 }
 
-class ToTopBtn extends StatelessWidget {
+class _ToTopBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = RequirementOrderBlocProvider.of(context);
