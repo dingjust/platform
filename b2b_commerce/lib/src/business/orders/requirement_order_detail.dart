@@ -59,8 +59,8 @@ class _RequirementOrderDetailPageState
       },
       {
         'url':
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        'mediaType': 'word'
+            'http://www.gzedu.gov.cn/gzsjyj/zsks/201901/4cbfd27ec7cf47ecb8867bad65a57040/files/ed312aa5e162435f928614b9c79d8fab.docx',
+        'mediaType': 'docx'
       },
       {
         'url':

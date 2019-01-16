@@ -98,21 +98,21 @@ class _AttachmentsState extends State<Attachments> {
         controller: _scrollController,
         children: widget.list.map(
           (model) {
-            //图片类型
+            // 附件类型
             switch (model.mediaType) {
               case 'pdf':
                 return GestureDetector(
                   child: CommonImage.pdf(),
                   onTap: () {
-                    _preViewFile(model.url, model.mediaType);
+                    _previewFile(model.url, 'yijiayi',model.mediaType);
                   },
                 );
                 break;
-              case 'word':
+              case 'docx':
                 return GestureDetector(
                   child: CommonImage.word(),
                   onTap: () {
-                    _preViewFile(model.url, model.mediaType);
+                    _previewFile(model.url,'yijiayi', model.mediaType);
                   },
                 );
                 break;
@@ -142,6 +142,7 @@ class _AttachmentsState extends State<Attachments> {
     );
   }
 
+  //图片预览
   void onPreview(BuildContext context, String url) {
     showDialog(
       context: context,
@@ -154,21 +155,17 @@ class _AttachmentsState extends State<Attachments> {
     );
   }
 
-  Future<String> _preViewFile(String url, String mediaType) async {
+  //文件下载打开
+  Future<String> _previewFile(String url,String name String mediaType) async {
+    //获取应用目录路径
     String dir = (await getApplicationDocumentsDirectory()).path;
-    // // print(dir);
-    // // File file = File('$dir/counter.doc');
-    // // await file.writeAsString('sdadsdasda');
-    // // OpenFile.open('$dir/counter.doc');
-
+    String filePath="$dir/$name.$mediaType";
     var dio = new Dio();
-
     dio.onHttpClientCreate = (HttpClient client) {
       client.idleTimeout = new Duration(seconds: 0);
     };
     try {
-      Response response = await dio.download(url, "$dir/flutter.$mediaType",
-          // Listen the download progress.
+      Response response = await dio.download(url, filePath,
           onProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
       });
@@ -176,7 +173,8 @@ class _AttachmentsState extends State<Attachments> {
     } catch (e) {
       print(e);
     }
-    OpenFile.open('$dir/flutter.$mediaType');
-    return 'dir';
+    //打开文件
+    OpenFile.open(filePath);
+    return filePath;
   }
 }

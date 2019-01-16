@@ -13,7 +13,6 @@ class PurchaseOrderBLoC {
       'OUT_OF_STORE': [],
       'COMPLETED': []
     };
-
   }
 
   List<PurchaseOrderModel> orders(String status) => _ordersMap[status];
@@ -40,9 +39,21 @@ class PurchaseOrderBLoC {
             'machiningType': '包工包料',
             'invoiceNeeded': true,
             'attachments': [
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
+              {
+                'url':
+                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'mediaType': 'jpg'
+              },
+              {
+                'url':
+                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'mediaType': 'jpg'
+              },
+              {
+                'url':
+                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'mediaType': 'jpg'
+              },
             ],
             'remarks': '延期了12天',
             'belongTo': {
@@ -62,11 +73,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -77,11 +98,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -92,11 +123,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -107,11 +148,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -122,11 +173,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -137,11 +198,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
             ],
@@ -194,8 +265,21 @@ class PurchaseOrderBLoC {
             'machiningType': '包工包料',
             'invoiceNeeded': false,
             'attachments': [
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
+              {
+                'url':
+                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'mediaType': 'jpg'
+              },
+              {
+                'url':
+                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'mediaType': 'jpg'
+              },
+              {
+                'url':
+                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'mediaType': 'jpg'
+              },
             ],
             'remarks': '延期了12天',
             'belongTo': {
@@ -215,11 +299,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -230,11 +324,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -245,11 +349,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -260,11 +374,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -275,11 +399,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
               {
@@ -290,11 +424,21 @@ class PurchaseOrderBLoC {
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
               },
             ],
@@ -334,8 +478,21 @@ class PurchaseOrderBLoC {
             'machiningType': '包工包料',
             'invoiceNeeded': false,
             'attachments': [
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
+              {
+                'url':
+                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'mediaType': 'jpg'
+              },
+              {
+                'url':
+                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'mediaType': 'jpg'
+              },
+              {
+                'url':
+                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'mediaType': 'jpg'
+              },
             ],
             'remarks': '延期了12天',
             'belongTo': {
@@ -354,8 +511,21 @@ class PurchaseOrderBLoC {
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
                 "remarks": "1234564564564"
               },
@@ -366,11 +536,21 @@ class PurchaseOrderBLoC {
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
                 "remarks": "1234564564564"
               },
@@ -381,11 +561,21 @@ class PurchaseOrderBLoC {
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
                 "remarks": "1234564564564"
               },
@@ -396,11 +586,21 @@ class PurchaseOrderBLoC {
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
                 "remarks": "1234564564564"
               },
@@ -411,11 +611,21 @@ class PurchaseOrderBLoC {
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
                 "remarks": "1234564564564"
               },
@@ -426,11 +636,21 @@ class PurchaseOrderBLoC {
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'medias': [
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                  "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
+                  {
+                    'url':
+                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                    'mediaType': 'jpg'
+                  },
                 ],
                 "remarks": "1234564564564"
               },
@@ -482,8 +702,21 @@ class PurchaseOrderBLoC {
           'machiningType': '包工包料',
           'invoiceNeeded': false,
           'attachments': [
-            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg'
+            {
+              'url':
+                  'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+              'mediaType': 'jpg'
+            },
+            {
+              'url':
+                  'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+              'mediaType': 'jpg'
+            },
+            {
+              'url':
+                  'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+              'mediaType': 'jpg'
+            },
           ],
           'remarks': '延期了12天',
           'belongTo': {
@@ -502,8 +735,21 @@ class PurchaseOrderBLoC {
               'estimatedDate': DateTime.now().toString(),
               'finishDate': DateTime.now().toString(),
               'medias': [
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
               ],
               "remarks": "1234564564564"
             },
@@ -514,11 +760,21 @@ class PurchaseOrderBLoC {
               'estimatedDate': DateTime.now().toString(),
               'finishDate': DateTime.now().toString(),
               'medias': [
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
               ],
               "remarks": "1234564564564"
             },
@@ -529,11 +785,21 @@ class PurchaseOrderBLoC {
               'estimatedDate': DateTime.now().toString(),
               'finishDate': DateTime.now().toString(),
               'medias': [
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
               ],
               "remarks": "1234564564564"
             },
@@ -544,11 +810,21 @@ class PurchaseOrderBLoC {
               'estimatedDate': DateTime.now().toString(),
               'finishDate': DateTime.now().toString(),
               'medias': [
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
               ],
               "remarks": "1234564564564"
             },
@@ -559,11 +835,21 @@ class PurchaseOrderBLoC {
               'estimatedDate': DateTime.now().toString(),
               'finishDate': DateTime.now().toString(),
               'medias': [
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
               ],
               "remarks": "1234564564564"
             },
@@ -574,11 +860,21 @@ class PurchaseOrderBLoC {
               'estimatedDate': DateTime.now().toString(),
               'finishDate': DateTime.now().toString(),
               'medias': [
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg",
-                "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b7003af33a87e9502f2a82b910385343fbf2b421.jpg"
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
+                {
+                  'url':
+                      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                  'mediaType': 'jpg'
+                },
               ],
               "remarks": "1234564564564"
             },
