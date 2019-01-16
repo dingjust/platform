@@ -8,3 +8,7 @@ class AppConstants with GlobalConfigs {
 
   static get currentContextKey => GlobalConfigs.CURRENT_CONTEXT_KEY;
 }
+
+class FontSizeConstants {
+  static double defaultSize = 12.00;
+}

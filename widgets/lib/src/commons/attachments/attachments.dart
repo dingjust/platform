@@ -116,6 +116,14 @@ class _AttachmentsState extends State<Attachments> {
                   },
                 );
                 break;
+              case 'xlsx':
+                return GestureDetector(
+                  child: CommonImage.excel(),
+                  onTap: () {
+                    _previewFile(model.url,'yijiayi', model.mediaType);
+                  },
+                );
+                break;
               default:
                 return GestureDetector(
                   child: Container(
