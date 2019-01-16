@@ -20,42 +20,40 @@ class ApparelProductStockInputPage extends StatelessWidget {
       ),
       body: Container(
         color: Colors.grey[200],
-        child: Column(
-          children: <Widget>[
-            Card(
-              child: Column(
+        child: Card(
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(
-                          '实际库存',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(
-                          '平台库存',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      '实际库存',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
-                  ApparelProductStockInputItem(),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      '平台库存',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 ],
               ),
-            )
-          ],
+              ApparelProductStockInputItem(),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: RaisedButton(
-          onPressed: () {},
+          onPressed: () {
+
+          },
           child: Text('批量调整'),
         ),
       ),
@@ -68,9 +66,16 @@ class SizeStockItem {
   int available;
   int maxPreOrder;
   TextEditingController availableController;
-  TextEditingController maxPreController;
+  TextEditingController maxPreOrderController;
 
-  SizeStockItem({this.size, this.available = 0, this.maxPreOrder = 0});
+  SizeStockItem({
+    this.size,
+    this.available = 0,
+    this.maxPreOrder = 0,
+  }) {
+    this.availableController = TextEditingController();
+    this.maxPreOrderController = TextEditingController();
+  }
 }
 
 class ApparelProductStockInputItem extends StatelessWidget {
@@ -80,9 +85,24 @@ class ApparelProductStockInputItem extends StatelessWidget {
         <ColorModel, List<SizeStockItem>>{
       ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'): <SizeStockItem>[
         SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
+        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
       ],
       ColorModel(code: 'C02', name: '海军蓝', colorCode: '0066FF'):
+          <SizeStockItem>[
+        SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
+        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+      ],
+      ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
+          <SizeStockItem>[
+        SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
+        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
+      ],
+      ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
           <SizeStockItem>[
         SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
         SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
@@ -114,11 +134,12 @@ class ApparelProductStockInputItem extends StatelessWidget {
                 hintStyle: TextStyle(color: Colors.grey[400]),
                 border: InputBorder.none,
               ),
+              autofocus: true,
             ),
           ),
           TableCell(
             child: TextField(
-              controller: item.maxPreController,
+              controller: item.maxPreOrderController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: '平台库存',
@@ -173,12 +194,17 @@ class ApparelProductStockInputItem extends StatelessWidget {
       );
     }
 
-    return ListView.builder(
+//    return ListView(
+//      children: items.entries.map((entry){
+//        return buildRow(context, entry);
+//      }).toList(),
+//    ) ;
+    return Expanded(child: ListView.builder(
       shrinkWrap: true,
       itemCount: items.length,
       itemBuilder: (context, index) {
         return buildRow(context, items.entries.toList()[index]);
       },
-    );
+    ),);
   }
 }

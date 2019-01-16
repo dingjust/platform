@@ -30,19 +30,19 @@ class ApparelProductAttributesInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(children: <Widget>[
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择风格',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择风格',
+                    StyleEnum,
+                    true,
+                  ),
             ),
           );
+
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('风格'),
@@ -51,18 +51,19 @@ class ApparelProductAttributesInput extends StatelessWidget {
       ),
       InkWell(
         onTap: () {
-          Navigator.push(
+          dynamic result = Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择面料',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择面料',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('面料'),
@@ -70,19 +71,20 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择版型',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择版型',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('版型'),
@@ -90,19 +92,20 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择袖型',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择袖型',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('袖型'),
@@ -110,19 +113,20 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择袖长/裤长',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择袖长/裤长',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('袖长/裤长'),
@@ -130,19 +134,20 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择图案',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                  '选择图案',
+                  <EnumModel>[
+                    EnumModel('R001', '针织'),
+                    EnumModel('R002', '其他'),
+                  ],
+                  true),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('图案'),
@@ -150,19 +155,21 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择流行元素',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择流行元素',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                    true,
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('流行元素'),
@@ -170,19 +177,20 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择填充物',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择填充物',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('填充物'),
@@ -190,19 +198,20 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: ()async {
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择厚薄',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择厚薄',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('厚薄'),
@@ -210,19 +219,20 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择季节',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择季节',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('季节'),
@@ -230,19 +240,20 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择吊牌',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择吊牌',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('吊牌'),
@@ -250,19 +261,20 @@ class ApparelProductAttributesInput extends StatelessWidget {
         ),
       ),
       InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EnumSelectPage(
-                '选择门襟',
-                <EnumModel>[
-                  EnumModel('R001', '针织'),
-                  EnumModel('R002', '其他'),
-                ],
-              ),
+                    '选择门襟',
+                    <EnumModel>[
+                      EnumModel('R001', '针织'),
+                      EnumModel('R002', '其他'),
+                    ],
+                  ),
             ),
           );
+          showDialog(context: context,builder: (context) => AlertDialog(title: Text(result.toString()),));
         },
         child: ListTile(
           title: Text('门襟'),

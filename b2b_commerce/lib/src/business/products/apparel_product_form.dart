@@ -243,6 +243,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               ),
               InkWell(
                 onTap: () {
+//                  print(widget.item.attributes.styles);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

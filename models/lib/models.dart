@@ -32,6 +32,14 @@ class EnumModel {
   static Map<String, dynamic> toJson(EnumModel model) => _$EnumModelToJson(model);
 }
 
+const StyleEnum = <EnumModel>[
+  EnumModel('A001', '潮流'),
+  EnumModel('A002', '潮流'),
+  EnumModel('A003', '潮流'),
+  EnumModel('A004', '潮流'),
+  EnumModel('A005', '潮流'),
+];
+
 /// 分页数据
 @JsonSerializable()
 class PaginationData {
