@@ -30,11 +30,19 @@ class ApparelProductStockInputPage extends StatelessWidget {
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Text('实际库存',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                        child: Text(
+                          '实际库存',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Text('平台库存',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                        child: Text(
+                          '平台库存',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ],
                   ),
@@ -59,6 +67,8 @@ class SizeStockItem {
   SizeModel size;
   int available;
   int maxPreOrder;
+  TextEditingController availableController;
+  TextEditingController maxPreController;
 
   SizeStockItem({this.size, this.available = 0, this.maxPreOrder = 0});
 }
@@ -68,15 +78,17 @@ class ApparelProductStockInputItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<ColorModel, List<SizeStockItem>> items =
         <ColorModel, List<SizeStockItem>>{
-      ColorModel(code: 'C01', name: '红色',colorCode: 'FF0033'): <SizeStockItem>[
+      ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'): <SizeStockItem>[
         SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
         SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
       ],
-      ColorModel(code: 'C02', name: '海军蓝',colorCode: '0066FF'): <SizeStockItem>[
+      ColorModel(code: 'C02', name: '海军蓝', colorCode: '0066FF'):
+          <SizeStockItem>[
         SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
         SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
       ],
-      ColorModel(code: 'C02', name: '浅紫色',colorCode: 'CC99CC'): <SizeStockItem>[
+      ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
+          <SizeStockItem>[
         SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
         SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
       ],
@@ -87,10 +99,15 @@ class ApparelProductStockInputItem extends StatelessWidget {
       final List<TableRow> _subRows = row.value.map((item) {
         return TableRow(children: <TableCell>[
           TableCell(
-            child: Center(child: Text(item.size.name,style: TextStyle(fontSize: 14),)),
+            child: Center(
+                child: Text(
+              item.size.name,
+              style: TextStyle(fontSize: 14),
+            )),
           ),
           TableCell(
             child: TextField(
+              controller: item.availableController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: '实际库存',
@@ -101,6 +118,7 @@ class ApparelProductStockInputItem extends StatelessWidget {
           ),
           TableCell(
             child: TextField(
+              controller: item.maxPreController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: '平台库存',
@@ -122,24 +140,24 @@ class ApparelProductStockInputItem extends StatelessWidget {
         children: <TableRow>[
           TableRow(children: <Widget>[
             TableCell(
-              child:  Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: 20,
-                        decoration: BoxDecoration(
-                          color: Color(int.parse('0xff'+ row.key.colorCode)),
+                children: <Widget>[
+                  Container(
+                    width: 20,
+                    decoration: BoxDecoration(
+                      color: Color(int.parse('0xff' + row.key.colorCode)),
 //                          border: Border.all(
 //                            color: Colors.grey,
 //                          ),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(''),
-                      ),
-                      Text(row.key.name),
-                    ],
-                ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(''),
+                  ),
+                  Text(row.key.name),
+                ],
               ),
+            ),
             TableCell(
               child: Table(
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
