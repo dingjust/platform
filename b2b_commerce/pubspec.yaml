@@ -64,6 +64,7 @@ flutter:
     - packages/assets/temp/picture.png
     - packages/assets/temp/pdf.png
     - packages/assets/temp/word.png
+    - packages/assets/temp/excel.png
     - packages/assets/temp/business/check_report.png
     - packages/assets/temp/business/address_manage.png
     - packages/assets/temp/business/cart.png

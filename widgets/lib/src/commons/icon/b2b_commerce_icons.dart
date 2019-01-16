@@ -27,4 +27,13 @@ class CommonImage {
       height: height,
     );
   }
+
+  static Image excel({double width, double height}) {
+    return Image.asset(
+      'temp/excel.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
 }

@@ -127,7 +127,7 @@ class QuoteItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("报价：￥${model.totalPrice}"),
+            Text("报价：￥${model.totalPrice}", style: TextStyle(fontSize: 14)),
             Text(
               QuoteStateLocalizedMap[model.state],
               style: TextStyle(color: _statusColors[model.state]),
@@ -145,8 +145,9 @@ class QuoteItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("报价单号：${model.code}"),
-            Text("报价时间：${DateFormatUtil.format(model.creationTime)}")
+            Text("报价单号：${model.code}", style: TextStyle(fontSize: 14)),
+            Text("报价时间：${DateFormatUtil.format(model.creationTime)}",
+                style: TextStyle(fontSize: 14))
           ],
         ));
   }

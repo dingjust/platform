@@ -50,6 +50,7 @@ flutter:
   assets:
     - packages/assets/temp/pdf.png
     - packages/assets/temp/word.png
+    - packages/assets/temp/excel.png
 
   fonts:
     - family: b2bIcons
