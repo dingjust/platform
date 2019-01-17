@@ -23,7 +23,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   DateTime _blDate;
   String _blNumber;
   TextEditingController dialogText;
-  File _image;
 
   final PurchaseOrderModel order;
 
@@ -418,7 +417,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     _neverComplete(context,progresses);
   }
 }
-
 
 class PurchaseVoucherPic extends StatelessWidget {
   final ProductionProgressModel progressModel;
