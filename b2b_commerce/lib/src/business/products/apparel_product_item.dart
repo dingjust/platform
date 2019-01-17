@@ -103,7 +103,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                                 });
                               },
                               child: Container(
-                                padding: EdgeInsets.only(right: 5),
+//                                padding: EdgeInsets.only(right: 0),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle, color: Colors.red),
                                 child: Icon(
@@ -120,7 +120,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                               },
                               child: Container(
                                 height: 24,
-                                padding: EdgeInsets.only(right: 5),
+//                                padding: EdgeInsets.only(right: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Colors.grey,

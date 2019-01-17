@@ -13,6 +13,10 @@ class ApparelProductsPage extends StatelessWidget {
       'code': 'C0001',
       'name': '山本风少女长裙复古气质秋冬流行新款',
       'price': 100.00,
+      'suggestedPrice' : 99,
+      'price1' : 98,
+      'price2' : 97,
+      'price3' : 96,
       'skuID': 'SKU0001',
       'salesVolume':10,
       'isRecommend':true,
@@ -22,12 +26,22 @@ class ApparelProductsPage extends StatelessWidget {
       'stockLevel':{
         'available':99,
         'maxPreOrder':120,
+      },
+      'attributes': {
+        'styles': [
+          'A001', 'A002'
+        ],
+        'fabricComposition': ''
       }
     }),
     ApparelProductModel.fromJson({
       'code': 'C0002',
       'name': '山本风少女长裙复古气质秋冬流行新款',
       'price': 102.00,
+      'suggestedPrice' : 89,
+      'price1' : 88,
+      'price2' : 87,
+      'price3' : 86,
       'skuID': 'SKU0002',
       'salesVolume':12,
       'isRecommend':false,
@@ -39,6 +53,84 @@ class ApparelProductsPage extends StatelessWidget {
         'maxPreOrder':122,
       }
     }),
+    ApparelProductModel.fromJson({
+      'code': 'C0002',
+      'name': '山本风少女长裙复古气质秋冬流行新款',
+      'price': 102.00,
+      'suggestedPrice' : 89,
+      'price1' : 88,
+      'price2' : 87,
+      'price3' : 86,
+      'skuID': 'SKU0002',
+      'salesVolume':12,
+      'isRecommend':false,
+      'brand':'同创',
+      'gramWeight':1.50,
+      'thumbnail':'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+      'stockLevel':{
+        'available':97,
+        'maxPreOrder':122,
+      }
+    }),
+    ApparelProductModel.fromJson({
+      'code': 'C0002',
+      'name': '山本风少女长裙复古气质秋冬流行新款',
+      'price': 102.00,
+      'suggestedPrice' : 89,
+      'price1' : 88,
+      'price2' : 87,
+      'price3' : 86,
+      'skuID': 'SKU0002',
+      'salesVolume':12,
+      'isRecommend':false,
+      'brand':'同创',
+      'gramWeight':1.50,
+      'thumbnail':'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+      'stockLevel':{
+        'available':97,
+        'maxPreOrder':122,
+      }
+    }),
+    ApparelProductModel.fromJson({
+      'code': 'C0002',
+      'name': '山本风少女长裙复古气质秋冬流行新款',
+      'price': 102.00,
+      'suggestedPrice' : 89,
+      'price1' : 88,
+      'price2' : 87,
+      'price3' : 86,
+      'skuID': 'SKU0002',
+      'salesVolume':12,
+      'isRecommend':false,
+      'brand':'同创',
+      'gramWeight':1.50,
+      'thumbnail':'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+      'stockLevel':{
+        'available':97,
+        'maxPreOrder':122,
+      }
+    }),
+//    ApparelProductModel(
+//        code: 'C003',
+//        name: '山本风少女长裙复古气质秋冬流行新款',
+//        attributes: ApparelProductAttributesModel(styles: [
+//          'A001',
+//          'A002',
+//        ]),
+//        thumbnail: '',
+//        price1: 0,
+//        price2: 0,
+//        price3: 0,
+//        price: 0,
+//        skuID: '',
+//        salesVolume: 0,
+//        suggestedPrice: 0,
+//        isRecommend: false,
+//        brand: '',
+//        stockLevel: StockLevelModel(
+//          available: 0,
+//          maxPreOrder: 0,
+//        )),
   ];
 
   @override
@@ -54,7 +146,8 @@ class ApparelProductsPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
+            onPressed: () => showSearch(
+                context: context, delegate: ApparelProductSearchDelegate()),
           ),
         ],
       ),
@@ -72,12 +165,14 @@ class ApparelProductsPage extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: _items.length,
-              itemBuilder: (context, index) {
-                return _items[index];
-              },
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: _items.length,
+                itemBuilder: (context, index) {
+                  return _items[index];
+                },
+              ),
             ),
           ],
         ),
