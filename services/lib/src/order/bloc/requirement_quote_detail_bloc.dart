@@ -97,6 +97,26 @@ class RequirementQuoteDetailBLoC {
     _controller.sink.add(this.quotesList);
   }
 
+  //下拉刷新
+  Future refreshData() async {
+    this.quotesList.clear();
+    this.quotesList.add(await Future.delayed(const Duration(seconds: 1), () {
+          return QuoteModel.fromJson({
+            "code": "34938475200045",
+            "creationtime": DateTime.now().toString(),
+            "belongTo": {"name": "广州好辣制衣厂", "starLevel": 5},
+            "state": "BUYER_APPROVED",
+            "totalPrice": 360.00,
+            "deliveryAddress": {
+              "region": {"name": "广东"},
+              "city": {"name": "广州"},
+              "cityDistrict": {"name": "白云"}
+            }
+          });
+        }));
+    _controller.sink.add(this.quotesList);
+  }
+
   //页面控制
 
   var _loadingController = StreamController<bool>.broadcast();

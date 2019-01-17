@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/provider/purchase_order_bloc_provider.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/purchase_order_search.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -239,7 +240,7 @@ class PurchaseOrderItem extends StatelessWidget {
             Row(
               children: <Widget>[
                 Text(
-                  '创建时间：' + order.creationTime.toString(),
+                  '创建时间：${DateFormatUtil.format(order.creationTime)}',
                   style: TextStyle(
                       fontSize: 14
                   ),
