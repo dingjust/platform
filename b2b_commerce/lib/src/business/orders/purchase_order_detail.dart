@@ -8,7 +8,6 @@ import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
   EnumModel('WAIT_FOR_PROCESSING', '待处理'),
