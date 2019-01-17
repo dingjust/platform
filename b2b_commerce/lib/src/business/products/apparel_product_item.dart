@@ -12,10 +12,18 @@ class ApparelProductItem extends StatefulWidget {
 
 class ApparelProductItemState extends State<ApparelProductItem> {
   bool _isRecommend;
+  String _approvalStatusText;
 
   @override
   void initState() {
     _isRecommend = widget.item.isRecommend;
+
+    if(widget.item.approvalStatus == ArticleApprovalStatus.APPROVED){
+      _approvalStatusText = '下架';
+    }else if(widget.item.approvalStatus == ArticleApprovalStatus.UNAPPROVED){
+      _approvalStatusText = '上架';
+    }
+
     // TODO: implement initState
     super.initState();
   }
@@ -214,7 +222,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
             shape: StadiumBorder(side: BorderSide(color: Colors.orange)),
             labelPadding: EdgeInsets.symmetric(horizontal: 15),
             backgroundColor: Colors.white,
-            label: Text('下架'),
+            label: Text(_approvalStatusText),
             labelStyle: TextStyle(color: Colors.orange),
             onPressed: () {},
           ),

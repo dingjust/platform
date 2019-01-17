@@ -91,7 +91,7 @@ class EditableMembershipForm extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => EnumSelectPage('选择会员等级', AppEnums.MemberRatingList),
+                builder: (context) => EnumSelectPage(title:'选择会员等级', items:AppEnums.MemberRatingList),
               ),
             );
           },

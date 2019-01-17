@@ -91,8 +91,8 @@ class EditableEmployeeForm extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => EnumSelectPage(
-                      '选择角色/岗位',
-                      <EnumModel>[
+                      title:'选择角色/岗位',
+                      items:<EnumModel>[
                         EnumModel('R001', '超级管理员'),
                         EnumModel('R002', '会计'),
                       ],
