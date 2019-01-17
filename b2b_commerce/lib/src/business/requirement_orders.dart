@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/provider/requirement_order_bloc_provider.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -82,7 +82,7 @@ class RequirementOrderList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     var bloc = RequirementOrderBlocProvider.of(context);
+    var bloc = RequirementOrderBlocProvider.of(context);
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -204,7 +204,9 @@ class RequirementOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
+        // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => RequirementOrderDetailPage(order: order)));
       },
       child: Container(
         padding: EdgeInsets.all(10),
