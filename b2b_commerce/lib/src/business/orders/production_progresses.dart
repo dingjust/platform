@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:b2b_commerce/src/business/orders/status_line.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -56,6 +58,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         child: _buildProductionProgress(context,
           order.productionProgresses[i],
           order.currentPhase.toString(),
+          i
         ),
       ));
     }
@@ -63,15 +66,15 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   //TimeLineUI
-  Widget _buildProductionProgress(BuildContext context,ProductionProgressModel progress,String currentPhase) {
+  Widget _buildProductionProgress(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence) {
     int _index = 0;
-    String phase = '${progress.phase}';
+    String phase = progress.phase.toString();
     if (phase == currentPhase) {
       _index = progress.sequence;
     }
     return Stack(
       children: <Widget>[
-        Padding(padding: const EdgeInsets.only(left: 30.0), child: _buildProgressTimeLine(context,progress,currentPhase)),
+        Padding(padding: const EdgeInsets.only(left: 30.0), child: _buildProgressTimeLine(context,progress,currentPhase,sequence)),
         Positioned(
           top: 30.0,
           bottom: 0.0,
@@ -79,7 +82,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color: progress.sequence <= _index ? Colors.orangeAccent : Colors.black45,
+            color: sequence <= _index ? Colors.orangeAccent : Colors.black45,
           ),
         ),
         Positioned(
@@ -93,7 +96,9 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               height: 16.0,
               width: 16.0,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: progress.sequence <= _index ? Colors.orange : Colors.black),
+                  shape: BoxShape.circle,
+                  color: sequence <= _index ? Colors.orange : Colors.black
+              ),
             ),
           ),
         )
@@ -102,8 +107,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
 //TimeLineUI右边的Card部分
-  Widget _buildProgressTimeLine(BuildContext context,ProductionProgressModel progress,String currentPhase) {
-    String phase = '${progress.phase}';
+  Widget _buildProgressTimeLine(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence) {
+    String phase = progress.phase.toString();
     int _index = 0;
     if (phase == currentPhase) {
       _index = progress.sequence;
@@ -117,7 +122,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             title: Text(ProductionProgressPhaseLocalizedMap[progress.phase],
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: progress.sequence <= _index ? Colors.orange : Colors.black54,
+                    color: sequence <= _index ? Colors.orange : Colors.black54,
                     fontSize: 18)),
             trailing: Text(
               '已延期2天',
@@ -131,18 +136,29 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: new Text('预计完成时间', style: TextStyle(fontWeight: FontWeight.w500)),
+                        child: GestureDetector(
+                            child: Text('预计完成时间',
+                                style: TextStyle(fontWeight: FontWeight.w500)),
+                            onTap: () {
+                              sequence > _index || phase == currentPhase ? _showDatePicker() : null;
+                            }),
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child:
-                        Text('${progress.estimatedDate}', style: TextStyle(fontWeight: FontWeight.w500)),
-                      ),
+                      GestureDetector(
+                          child:Align(
+                            alignment: Alignment.centerRight,
+                            child:
+                            Text('${DateFormatUtil.format(
+                                progress.estimatedDate)}',
+                                style: TextStyle(fontWeight: FontWeight.w500)),
+                          ),
+                          onTap: () {
+                            sequence > _index || phase == currentPhase ? _showDatePicker() : null;
+                          }),
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           icon: Icon(Icons.date_range),
-                            onPressed: _showDatePicker
+                            onPressed: sequence > _index || phase == currentPhase ? _showDatePicker:null
                         ),
                       )
                     ],
@@ -154,7 +170,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('${progress.finishDate}', style: TextStyle(fontWeight: FontWeight.w500)),
+                        child: Text('${DateFormatUtil.format(progress.finishDate)}', style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                           alignment: Alignment.centerRight,
@@ -173,17 +189,27 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: Text('数量', style: TextStyle(fontWeight: FontWeight.w500)),
+                      child: GestureDetector(
+                          child: Text('数量',
+                              style: TextStyle(fontWeight: FontWeight.w500)),
+                          onTap: () {
+                            sequence > _index || phase == currentPhase ? _showDialog(): null;
+                          }),
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text('${progress.quantity}', style: TextStyle(fontWeight: FontWeight.w500)),
-                    ),
+                    GestureDetector(
+                        child:Align(
+                          alignment: Alignment.centerRight,
+                          child: Text('${progress.quantity}',
+                              style: TextStyle(fontWeight: FontWeight.w500)),
+                        ),
+                        onTap: () {
+                          sequence > _index || phase == currentPhase ? _showDialog() : null;
+                        }),
                     Align(
                       alignment: Alignment.centerRight,
                       child: IconButton(
                         icon: Icon(Icons.keyboard_arrow_right),
-                        onPressed: progress.sequence <= _index ? _showDialog : null,
+                        onPressed: sequence > _index || phase == currentPhase ? _showDialog : null,
                       ),
                     )
                   ],
@@ -197,7 +223,12 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: Text('凭证', style: TextStyle(fontWeight: FontWeight.w500)),
+                      child:GestureDetector(
+                          child: Text('凭证',
+                              style: TextStyle(fontWeight: FontWeight.w500)),
+                          onTap: () {
+                            sequence > _index || phase == currentPhase ? _selectPapersImages() : null;
+                          }),
                       flex: 4,
                     ),
                     Expanded(
@@ -205,7 +236,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           alignment: Alignment.centerRight,
                           child: IconButton(
                             icon: Icon(Icons.chevron_right),
-                            onPressed: progress.sequence <= _index ? _getImage : null,
+                            onPressed: sequence > _index || phase == currentPhase ? _selectPapersImages : null,
                           ),
                         )),
                   ],
@@ -226,18 +257,65 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-              child: phase == currentPhase
+              child: phase == currentPhase &&
+              (progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM ||
+                  progress.phase == ProductionProgressPhase.INSPECTION)
                   ? RaisedButton(
                 color: Colors.orange,
                 child: Text(
-                  '验货完成',
+                  progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
+                  '样衣确认':'验货完成',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
+                  _showTipsDialog('样衣确认'):_showTipsDialog('验货');
+                },
               )
                   : null)
         ],
       ),
+    );
+  }
+
+  void _selectPapersImages() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.camera),
+              title: Text('相机'),
+              onTap: () async {
+                var image =
+                await ImagePicker.pickImage(source: ImageSource.camera);
+                if (image != null) {
+                  setState(() {
+//                    widget.images.add(image);
+                    Navigator.pop(context);
+                  });
+                }
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_album),
+              title: Text('相册'),
+              onTap: () async {
+                var image =
+                await ImagePicker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  setState(() {
+//                    widget.images.add(image);
+                    Navigator.pop(context);
+                  });
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -257,6 +335,37 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       });
     }
   }
+
+
+  //确认完成按钮方法
+  Future<void> _neverComplete(BuildContext context,String progresses) async {
+    dialogText = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text('是否'+progresses+'完成？'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
 //生成Dialog控件
   Future<void> _neverSatisfied(BuildContext context) async {
@@ -295,14 +404,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       },
     );
   }
-//打开相册同步照片到页面上
-  Future _getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      _image = image;
-    });
-  }
 //打开日期选择器
   void _showDatePicker() {
     _selectDate(context);
@@ -310,6 +412,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 //打开数量输入弹框
   void _showDialog(){
     _neverSatisfied(context);
+  }
+//确认是否完成动作
+  void _showTipsDialog(String progresses){
+    _neverComplete(context,progresses);
   }
 }
 
