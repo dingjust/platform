@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -136,7 +137,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       Align(
                         alignment: Alignment.centerRight,
                         child:
-                        Text('${progress.estimatedDate}', style: TextStyle(fontWeight: FontWeight.w500)),
+                        Text('${DateFormatUtil.format(progress.estimatedDate)}', style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
@@ -154,7 +155,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('${progress.finishDate}', style: TextStyle(fontWeight: FontWeight.w500)),
+                        child: Text('${DateFormatUtil.format(progress.finishDate)}', style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                           alignment: Alignment.centerRight,

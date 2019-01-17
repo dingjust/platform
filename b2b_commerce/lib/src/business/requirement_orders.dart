@@ -82,7 +82,7 @@ class RequirementOrderList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = RequirementOrderBlocProvider.of(context);
+     var bloc = RequirementOrderBlocProvider.of(context);
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -113,73 +113,78 @@ class RequirementOrderList extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(color: Colors.grey[100]),
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: _scrollController,
-          children: <Widget>[
-            StreamBuilder<List<RequirementOrderModel>>(
-              stream: bloc.stream,
-              initialData: null,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
-                if (snapshot.data == null) {
-                  bloc.filterByStatuses(status.code);
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 200),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if (snapshot.hasData) {
-                  return Column(
-                    children: snapshot.data.map((order) {
-                      return RequirementOrderItem(
-                        order: order,
-                      );
-                    }).toList(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-              },
-            ),
-            StreamBuilder<bool>(
-              stream: bloc.bottomStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  _scrollController.animateTo(_scrollController.offset - 70,
-                      duration: new Duration(milliseconds: 500),
-                      curve: Curves.easeOut);
-                }
-                return snapshot.data
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                        child: Center(
-                          child: Text(
-                            "┑(￣Д ￣)┍ 已经到底了",
-                            style: TextStyle(color: Colors.grey),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            return await bloc.refreshData(status.code);
+          },
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _scrollController,
+            children: <Widget>[
+              StreamBuilder<List<RequirementOrderModel>>(
+                stream: bloc.stream,
+                // initialData: null,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
+                  if (snapshot.data == null) {
+                    bloc.filterByStatuses(status.code);
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 200),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: snapshot.data.map((order) {
+                        return RequirementOrderItem(
+                          order: order,
+                        );
+                      }).toList(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                },
+              ),
+              StreamBuilder<bool>(
+                stream: bloc.bottomStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  if (snapshot.data) {
+                    _scrollController.animateTo(_scrollController.offset - 70,
+                        duration: new Duration(milliseconds: 500),
+                        curve: Curves.easeOut);
+                  }
+                  return snapshot.data
+                      ? Container(
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                          child: Center(
+                            child: Text(
+                              "┑(￣Д ￣)┍ 已经到底了",
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           ),
-                        ),
-                      )
-                    : Container();
-              },
-            ),
-            StreamBuilder<bool>(
-              stream: bloc.loadingStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Center(
-                    child: new Opacity(
-                      opacity: snapshot.data ? 1.0 : 0,
-                      child: CircularProgressIndicator(),
+                        )
+                      : Container();
+                },
+              ),
+              StreamBuilder<bool>(
+                stream: bloc.loadingStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: new Center(
+                      child: new Opacity(
+                        opacity: snapshot.data ? 1.0 : 0,
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ));
   }
 }
@@ -344,7 +349,10 @@ class _ToTopBtn extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return snapshot.data
               ? FloatingActionButton(
-                  child: Icon(Icons.arrow_upward,color: Colors.white,),
+                  child: Icon(
+                    Icons.arrow_upward,
+                    color: Colors.white,
+                  ),
                   onPressed: () {
                     bloc.returnToTop();
                   },

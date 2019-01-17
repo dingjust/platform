@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -428,7 +429,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       Align(
                         alignment: Alignment.centerRight,
                         child:  Text(
-                            productionProgress.estimatedDate.toString(),
+                            DateFormatUtil.format(productionProgress.estimatedDate),
                             style:  TextStyle(
                                 fontWeight: FontWeight.w500)),
                       ),
@@ -452,7 +453,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       Align(
                         alignment: Alignment.centerRight,
                         child:  Text(
-                            productionProgress.finishDate.toString(),
+                            DateFormatUtil.format(productionProgress.finishDate),
                             style:  TextStyle(
                                 fontWeight: FontWeight.w500)),
                       ),
