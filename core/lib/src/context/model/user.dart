@@ -14,3 +14,14 @@ class User {
 
   static empty() {}
 }
+
+enum UserType {
+  /// 匿名用戶
+  ANONYMOUS,
+
+  /// 品牌用户
+  BRAND,
+
+  /// 工厂用户
+  FACTORY
+}

@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
 import '../common/app_routes.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -14,13 +13,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static final GlobalKey<ScaffoldState> _scaffoldKey =
-      GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final double _appBarHeight = 256.0;
 
   @override
   Widget build(BuildContext context) {
-    final bloc = LoginBlocProvider.of(context);
+    final bloc = UserBlocProvider.of(context);
 
     final List<Widget> menus = <Widget>[
       Menu('', <MenuItem>[
@@ -58,9 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   tooltip: 'Edit',
                   onPressed: () {
                     // http test
-                    http$
-                        .get('/apparel-zh/users/13234', context: context)
-                        .then((response) {});
+                    http$.get('/apparel-zh/users/13234', context: context).then((response) {});
 //                    _scaffoldKey.currentState.showSnackBar(
 //                      const SnackBar(
 //                        content: Text('Editing isn\'t supported in this screen.'),
@@ -71,15 +67,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
               flexibleSpace: FlexibleSpaceBar(
                 title: StreamBuilder<UserModel>(
-                    stream: bloc.stream,
-                    initialData: bloc.currentUser,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<UserModel> snapshot) {
-                      return Text(
-                        '${snapshot.data.name}',
-                        style: TextStyle(color: Colors.white),
-                      );
-                    }),
+                  stream: bloc.stream,
+                  initialData: bloc.currentUser,
+                  builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+                    debugPrint('${snapshot.data.userType}');
+                    return Text(
+                      '${snapshot.data.name}',
+                      style: TextStyle(color: Colors.white),
+                    );
+                  },
+                ),
                 background: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[

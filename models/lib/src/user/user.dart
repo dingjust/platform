@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
@@ -11,6 +12,7 @@ part 'user.g.dart';
 @JsonSerializable()
 class UserModel extends PrincipalModel {
   bool loginDisabled;
+  UserType userType;
 
   Image get avatar => profilePicture ?? Image.network(profilePicture);
 
@@ -27,9 +29,10 @@ class UserModel extends PrincipalModel {
 
   UserModel.empty() {
     this.profilePicture = null;
-    this.uid = "anonymouse";
-    this.name = "anonymouse";
+    this.uid = "anonymous";
+    this.name = "未登录用户";
     this.loginDisabled = false;
+    this.userType = UserType.ANONYMOUS;
   }
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
@@ -166,16 +169,15 @@ class DistrictModel extends ItemModel {
 
 //供应商
 @JsonSerializable()
-class SupplierModel extends ItemModel{
+class SupplierModel extends ItemModel {
   String code;
   String name;
   int orderCount;
   AddressModel address;
 
-  SupplierModel({this.code,this.name,this.orderCount,this.address});
+  SupplierModel({this.code, this.name, this.orderCount, this.address});
 
   factory SupplierModel.fromJson(Map<String, dynamic> json) => _$SupplierModelFromJson(json);
 
   static Map<String, dynamic> toJson(SupplierModel model) => _$SupplierModelToJson(model);
-
 }
