@@ -13,7 +13,10 @@ class _RequirementQuoteDetailPageState
     extends State<RequirementQuoteDetailPage> {
   @override
   Widget build(BuildContext context) {
+    GlobalKey _requirementQuoteDetailBLoCKey=GlobalKey();
+
     return RequirementQuoteDetailBLoCProvider(
+      key: _requirementQuoteDetailBLoCKey,
       child: Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,

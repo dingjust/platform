@@ -3,7 +3,7 @@ import 'package:services/services.dart';
 
 @immutable
 class RequirementQuoteDetailBLoCProvider extends InheritedWidget {
-  final RequirementQuoteDetailBLoC bloc = RequirementQuoteDetailBLoC();
+  final RequirementQuoteDetailBLoC bloc = RequirementQuoteDetailBLoC.instance;
 
   RequirementQuoteDetailBLoCProvider({Key key, Widget child})
       : super(key: key, child: child);
