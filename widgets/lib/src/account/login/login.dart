@@ -227,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
               bloc.login(username: 'nbyjy', password: 'z123456')
                   .then((success) {
                 if (success) {
-                  Navigator.pushNamed(context, GlobalRoutes.ROUTE_MY_HOME);
+                  Navigator.pop(context);
                 }
               });
             },
