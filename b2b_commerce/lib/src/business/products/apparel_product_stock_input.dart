@@ -27,7 +27,7 @@ class ApparelProductStockInputPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
                     child: Text(
                       '实际库存',
                       style: TextStyle(
@@ -130,7 +130,7 @@ class ApparelProductStockInputItem extends StatelessWidget {
               controller: item.availableController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                hintText: '实际库存',
+//                hintText: '实际库存',
                 hintStyle: TextStyle(color: Colors.grey[400]),
                 border: InputBorder.none,
               ),
@@ -142,7 +142,7 @@ class ApparelProductStockInputItem extends StatelessWidget {
               controller: item.maxPreOrderController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                hintText: '平台库存',
+//                hintText: '平台库存',
                 hintStyle: TextStyle(color: Colors.grey[400]),
                 border: InputBorder.none,
               ),

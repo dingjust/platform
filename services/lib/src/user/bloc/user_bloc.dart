@@ -7,10 +7,16 @@ import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/net/http_utils.dart';
 import 'package:services/src/user/bloc/login.dart';
 
-class LoginBLoC {
-  UserModel _user = UserModel(name: '未登录用户', uid: '123');
+class UserBLoC {
+  UserModel _user = UserModel.empty();
 
   UserModel get currentUser => _user;
+
+  bool get isBrandUser => _user.userType == UserType.BRAND;
+
+  bool get isFactoryUser => _user.userType == UserType.FACTORY;
+
+  bool get isAnonymousUser => !isBrandUser || !isFactoryUser;
 
   var _controller = StreamController<UserModel>.broadcast();
 
@@ -18,8 +24,7 @@ class LoginBLoC {
 
   Future<bool> login({String username, String password}) async {
     // // TODO: call login service
-    Response loginRequest = await http$
-        .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+    Response loginRequest = await http$.post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
       'username': username,
       'password': password,
       'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
@@ -35,6 +40,9 @@ class LoginBLoC {
       // http$.get('');
       _user.name = '衣加衣管理员';
       _user.uid = 'nbyjy';
+
+      /// 品牌用户
+      _user.userType = UserType.BRAND;
       _controller.sink.add(_user);
 
       return true;

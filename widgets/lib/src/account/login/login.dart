@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:widgets/src/account/login/login_bloc_provider.dart';
+import 'package:widgets/src/account/user_bloc_provider.dart';
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 class LoginPage extends StatefulWidget {
@@ -213,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    final bloc = LoginBlocProvider.of(context);
+    final bloc = UserBlocProvider.of(context);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),

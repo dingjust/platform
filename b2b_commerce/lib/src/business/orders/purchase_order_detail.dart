@@ -1,20 +1,48 @@
 import 'dart:io';
 
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
+import 'package:b2b_commerce/src/business/orders/status_line.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 const statuses = <EnumModel>[
-  EnumModel('MATERIAL_PREPARATION', '备料'),
-  EnumModel('SAMPLE_CONFIRM', '产前样衣确认'),
-  EnumModel('CUTTING', '裁剪'),
-  EnumModel('STITCHING', '车缝'),
-  EnumModel('INSPECTION', '验货'),
-  EnumModel('DELIVERY', '发货'),
+  EnumModel('ALL', '全部'),
+  EnumModel('WAIT_FOR_PROCESSING', '待处理'),
+  EnumModel('PENDING_APPROVAL', '待确认'),
+  EnumModel('IN_PRODUCTION', '生产中'),
+  EnumModel('OUT_OF_STORE', '已出库'),
+  EnumModel('COMPLETED', '已完成'),
+];
+
+final List<OrderStatusModel> _statusList = [
+  OrderStatusModel.fromJson({
+    'code': 'WAIT_FOR_PROCESSING',
+    'name': '待处理',
+    'sort': 1,
+  }),
+  OrderStatusModel.fromJson({
+    'code': 'PENDING_APPROVAL',
+    'name': '待确认',
+    'sort': 2,
+  }),
+  OrderStatusModel.fromJson({
+    'code': 'IN_PRODUCTION',
+    'name': '生产中',
+    'sort': 3,
+  }),
+  OrderStatusModel.fromJson({
+    'code': 'OUT_OF_STORE',
+    'name': '已出库',
+    'sort': 4,
+  }),
+  OrderStatusModel.fromJson({
+    'code': 'COMPLETED',
+    'name': '已完成',
+    'sort': 5,
+  }),
 ];
 
 final List<Widget> _list = new List();
@@ -57,7 +85,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         body: Container(
             child: ListView(
               children: <Widget>[
-                _bildEntryUi(context),
+                StatusLine(
+                  list: _statusList,
+                  currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
+                  isScroll: false,
+                ),
+                _buildEntryUi(context),
                 _buildPurchaseProductionProgresse(context),
                 _buildFactoryInfo(context),
                 _buildDocutment(context),
@@ -70,7 +103,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   //包装订单行
-  Widget _bildEntryUi(BuildContext context){
+  Widget _buildEntryUi(BuildContext context){
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -145,21 +178,21 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         children: <Widget>[
           Align(
             alignment: Alignment.centerLeft,
-            child: Text('采购订单号：' + order.code),
+            child: Text('采购订单号：${order.code}'),
           ),
           Align(
               alignment: Alignment.centerLeft,
               child:
-              Text('需求订单号：' + order.code)
+              Text('需求订单号：${order.code}')
           ),
           Align(
               alignment: Alignment.centerLeft,
-              child: Text('订单生成时间：' + order.creationTime.toString())
+              child: Text('订单生成时间：${DateFormatUtil.format(order.creationTime)}')
           ),
           Align(
               alignment: Alignment.centerLeft,
               child:
-              Text('预计交货时间：' + order.creationTime.toString())
+              Text('预计交货时间：${DateFormatUtil.format(order.expectedDeliveryDate)}')
           ),
         ],
       ),
@@ -426,18 +459,23 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             style:  TextStyle(
                                 fontWeight: FontWeight.w500)),
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child:  Text(
-                            DateFormatUtil.format(productionProgress.estimatedDate),
-                            style:  TextStyle(
-                                fontWeight: FontWeight.w500)),
-                      ),
+                      GestureDetector(
+                          child:Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                '${DateFormatUtil.format(
+                                    productionProgress.estimatedDate)}',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          onTap: () {
+                            isCurrentStatus == true ? _showDatePicker():null;
+                          }),
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           icon: Icon(Icons.date_range),
-                          onPressed: _showDatePicker,
+                          onPressed: isCurrentStatus == true ? _showDatePicker:null,
                         ),
                       )
                     ],
@@ -452,9 +490,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child:  Text(
-                            DateFormatUtil.format(productionProgress.finishDate),
-                            style:  TextStyle(
+                        child: Text(
+                            '${DateFormatUtil.format(
+                                productionProgress.finishDate)}',
+                            style: TextStyle(
                                 fontWeight: FontWeight.w500)),
                       ),
                       Align(
@@ -476,18 +515,29 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 child:Row(
                   children: <Widget>[
                     Expanded(
-                      child:  Text(
-                          '数量' ,
-                          style:  TextStyle(
-                              fontWeight: FontWeight.w500)),
+                      child: GestureDetector(
+                          child: Text(
+                              '数量',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500)
+                          ),
+                          onTap: () {
+                            isCurrentStatus == true ? _showDialog() : null;
+                          }
+                      ),
                     ),
-                    Align(
-                      alignment : Alignment.centerRight,
-                      child:  Text(
-                          productionProgress.quantity.toString(),
-                          style:  TextStyle(
-                              fontWeight: FontWeight.w500)),
-                    ),
+                    GestureDetector(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                              productionProgress.quantity.toString(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                        onTap: () {
+                          isCurrentStatus == true ? _showDialog() : null;
+                        }
+                     ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: IconButton(
@@ -506,10 +556,17 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 child:Row(
                   children: <Widget>[
                     Expanded(
-                      child:  Text(
-                          '凭证',
-                          style:  TextStyle(
-                              fontWeight: FontWeight.w500)),
+                      child: GestureDetector(
+                          child: Text(
+                              '凭证',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500
+                              )
+                          ),
+                          onTap: () {
+                            isCurrentStatus == true ? _selectPapersImages() : null;
+                          }
+                      ),
                       flex: 4,
                     ),
                     Expanded(
@@ -517,7 +574,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           alignment: Alignment.centerRight,
                           child: IconButton(
                             icon: Icon(Icons.chevron_right),
-                            onPressed: isCurrentStatus == true ? _getImage : null,
+                            onPressed: isCurrentStatus == true ? _selectPapersImages : null,
                           ),
                         )
                     ),
@@ -548,24 +605,74 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-              child: isCurrentStatus==true?
+              child: isCurrentStatus==true && (productionProgress.phase == ProductionProgressPhase.SAMPLE_CONFIRM ||
+                  productionProgress.phase == ProductionProgressPhase.INSPECTION)?
               RaisedButton(
                 color: Colors.orange,
                 child: Text(
-                  '验货完成', style: TextStyle(
+                  productionProgress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
+                  '样衣确认':'验货完成',
+                  style: TextStyle(
                     color: Colors.white),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  productionProgress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
+                  _showTipsDialog('样衣确认'):_showTipsDialog('验货');
+                },
               ):null
           )
         ],
       ),
     );
   }
-//构建附件UI
+
+  //构建附件UI
   Widget _buildDocutment(BuildContext context){
     return PurchaseDocument(order);
   }
+
+  void _selectPapersImages() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.camera),
+              title: Text('相机'),
+              onTap: () async {
+                var image =
+                await ImagePicker.pickImage(source: ImageSource.camera);
+                if (image != null) {
+                  setState(() {
+//                    widget.images.add(image);
+                    Navigator.pop(context);
+                  });
+                }
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_album),
+              title: Text('相册'),
+              onTap: () async {
+                var image =
+                await ImagePicker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  setState(() {
+//                    widget.images.add(image);
+                    Navigator.pop(context);
+                  });
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 
 //生成日期选择器
   Future<Null> _selectDate(BuildContext context) async {
@@ -582,6 +689,35 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         _blDate = _picked;
       });
     }
+  }
+
+  //确认完成按钮方法
+  Future<void> _neverComplete(BuildContext context,String progresses) async {
+    dialogText = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text('是否'+progresses+'完成？'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
 //生成Dialog控件
@@ -621,14 +757,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       },
     );
   }
-//打开相册同步照片到页面上
-  Future _getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _image = image;
-    });
-  }
 //打开日期选择器
   void _showDatePicker() {
     _selectDate(context);
@@ -636,6 +764,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 //打开数量输入弹框
   void _showDialog(){
     _neverSatisfied(context);
+  }
+
+  //确认是否完成动作
+  void _showTipsDialog(String progresses){
+    _neverComplete(context,progresses);
   }
 
 }

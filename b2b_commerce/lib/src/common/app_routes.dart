@@ -1,6 +1,5 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:widgets/main.dart';
 
 import '../business/apparel_product_stock_adjust_history.dart';
 import '../business/apparel_product_stocks.dart';
@@ -21,6 +20,7 @@ import '../my/account/register.dart';
 import '../my/account/register_brand.dart';
 import '../my/account/register_customer.dart';
 import '../my/account/register_factory.dart';
+import '../my/index.dart';
 import '../my/my_account.dart';
 import '../my/my_addresses.dart';
 import '../my/my_cart.dart';

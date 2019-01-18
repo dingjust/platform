@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       MyHomePage(),
     ];
 
-    return LoginBlocProvider(
+    return UserBlocProvider(
       child: MaterialApp(
         title: '衣加衣供应链',
         theme: ThemeData(

@@ -240,7 +240,7 @@ class PurchaseOrderItem extends StatelessWidget {
             Row(
               children: <Widget>[
                 Text(
-                  '创建时间：${DateFormatUtil.format(order.creationTime)}' ,
+                  '创建时间：${DateFormatUtil.format(order.creationTime)}',
                   style: TextStyle(
                       fontSize: 14
                   ),
