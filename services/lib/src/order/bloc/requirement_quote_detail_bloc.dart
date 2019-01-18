@@ -4,6 +4,20 @@ import 'package:models/models.dart';
 class RequirementQuoteDetailBLoC {
   static final List<QuoteModel> quotes = [];
 
+  // 工厂模式
+  factory RequirementQuoteDetailBLoC() => _getInstance();
+  static RequirementQuoteDetailBLoC get instance => _getInstance();
+  static RequirementQuoteDetailBLoC _instance;
+  RequirementQuoteDetailBLoC._internal() {
+    // 初始化
+  }
+  static RequirementQuoteDetailBLoC _getInstance() {
+    if (_instance == null) {
+      _instance = new RequirementQuoteDetailBLoC._internal();
+    }
+    return _instance;
+  }
+
   List<QuoteModel> get quotesList => quotes;
 
   var _controller = StreamController<List<QuoteModel>>.broadcast();

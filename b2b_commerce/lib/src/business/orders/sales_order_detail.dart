@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
+import '../../my/address/address_form.dart';
+
 class SaleOrderDetail extends StatelessWidget {
+
+  final List<AddressModel> addresses = <AddressModel>[
+    AddressModel(
+      fullname: '华安',
+      cellphone: '13660339514',
+      region: RegionModel(name: '广东省'),
+      city: CityModel(code: 'CN-01-01', name: '广州市'),
+      cityDistrict: DistrictModel(code: 'CN-01-01', name: '海珠区'),
+      line1: '云顶同创汇A01',
+      defaultAddress: true,
+    ),
+  ];
 
   final List<SalesOrderModel> orders = <SalesOrderModel>[
     SalesOrderModel.fromJson({
@@ -67,26 +81,16 @@ class SaleOrderDetail extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
-          _buildProcess(),
           _buildPlaceholder(),
           _buildOverview(),
           _buildPlaceholder(),
-          _buildAddress(),
+          _buildAddress(context),
           _buildMain(),
           _buildPlaceholder(),
           _buildRemarks(),
           _buildPlaceholder(),
           _buildExpress(),
         ],
-      ),
-    );
-  }
-
-  Widget _buildProcess() {
-    return Container(
-      height: 135.0,
-      child: Center(
-        child: Text('步骤'),
       ),
     );
   }
@@ -127,12 +131,72 @@ class SaleOrderDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildAddress() {
+  Widget _buildRow(String name, String telephone, bool isDefaultAddress) {
+    List<Container> containers = <Container>[
+      Container(
+        padding: EdgeInsets.only(right: 22.0),
+        child: Column(
+          children: <Widget>[
+            Text(name),
+          ],
+        ),
+      ),
+      Container(
+        padding: EdgeInsets.only(right: 22.0),
+        child: Column(
+          children: <Widget>[
+            Text(
+              telephone,
+              style: TextStyle(fontSize: 11, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    ];
+
+    if (isDefaultAddress) {
+      containers.add(
+        Container(
+          padding: EdgeInsets.all(0),
+          child: Column(
+            children: <Widget>[
+              Text(
+                '默认地址',
+                style: TextStyle(fontSize: 11, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Row(children: containers);
+  }
+
+  Widget _buildAddress(context) {
+    List<ListTile> tiles = this.addresses.map((address) {
+      return ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddressFormPage(address: address),
+            ),
+          );
+        },
+        title: _buildRow(
+          address.fullname,
+          address.cellphone,
+          address.defaultAddress,
+        ),
+        subtitle: Text(address.details),
+        trailing: Icon(Icons.chevron_right),
+      );
+    }).toList();
+
     return Container(
       height: 135.0,
-      child: Center(
-        child: Text('地址管理'),
-      ),
+      child: ListView(children: tiles),
     );
   }
 
@@ -141,7 +205,7 @@ class SaleOrderDetail extends StatelessWidget {
       children: <Widget>[
         Container(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
+            padding: EdgeInsets.fromLTRB(5.0, 20.0, 15.0, 20.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -5,20 +6,16 @@ import 'package:widgets/widgets.dart';
 
 import '../common/app_routes.dart';
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   static const String ROUTE_SETTINGS = '/settings';
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final double _appBarHeight = 256.0;
 
+  MyHomePage() :super(key: AppKeys.myHomePage);
+
   @override
   Widget build(BuildContext context) {
-    final bloc = UserBlocProvider.of(context);
+    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     final List<Widget> menus = <Widget>[
       Menu('', <MenuItem>[
@@ -66,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
               flexibleSpace: FlexibleSpaceBar(
+                key: const Key('__myHomeSpaceBar__'),
                 title: StreamBuilder<UserModel>(
                   stream: bloc.stream,
                   initialData: bloc.currentUser,

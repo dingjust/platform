@@ -1,9 +1,12 @@
+import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 /// 网站主页
 class HomePage extends StatefulWidget {
+  HomePage() :super(key: AppKeys.homePage);
+
   @override
   _HomePageState createState() => new _HomePageState();
 }

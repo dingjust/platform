@@ -1,9 +1,9 @@
 library widgets;
 
 export 'src/account/login/login.dart';
-export 'src/account/user_bloc_provider.dart';
 export 'src/commons/albums_cameras/single_select/albums_cameras.dart';
 export 'src/commons/attachments/attachments.dart';
+export 'src/commons/bloc_provider.dart';
 export 'src/commons/button/button.dart';
 export 'src/commons/carousel/carousel.dart';
 export 'src/commons/chat/chat.dart';

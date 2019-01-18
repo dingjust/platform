@@ -203,7 +203,9 @@ class ApparelProductItemState extends State<ApparelProductItem> {
             backgroundColor: Colors.orange,
             label: Text('生产'),
             labelStyle: TextStyle(color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              // TODO: 带到商品，跳到需求页面，需求页面未提供
+            },
           ),
           ActionChip(
             shape: StadiumBorder(side: BorderSide(color: Colors.orange)),
