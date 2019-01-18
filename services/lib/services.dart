@@ -19,3 +19,4 @@ export 'src/user/district_repository_impl.dart';
 export 'src/user/region_repository.dart';
 export 'src/user/region_repository_impl.dart';
 export 'src/supplier/bloc/suppliers_bloc.dart';
+export 'src/product/bloc/product_bloc.dart';

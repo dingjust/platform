@@ -16,5 +16,6 @@ export 'src/commons/stars/stars.dart';
 export 'src/commons/attachments/attachments.dart';
 export 'src/commons/albums_cameras/single_select/albums_cameras.dart';
 export 'src/commons/form/text_field.dart';
+export 'src/commons/form/show_select_tile.dart';
 
 

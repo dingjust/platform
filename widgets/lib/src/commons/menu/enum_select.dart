@@ -64,10 +64,10 @@ class EnumSelectPageState extends State<EnumSelectPage> {
               },
             )
           : RadioListTile(
-              selected: _singleSelect.code == item.code,
+              selected: _singleSelect?.code == item.code,
               title: Text(item.name),
               value: item.code,
-              groupValue: _singleSelect.code,
+              groupValue: _singleSelect?.code,
               onChanged: (T) {
                 setState(() {
                   _singleSelect = item;

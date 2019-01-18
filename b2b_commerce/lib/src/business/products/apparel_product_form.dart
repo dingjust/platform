@@ -167,18 +167,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     ),
                   );
 
-                 _minorCategoryText = category.name;
+                 _minorCategoryText = category?.name;
                 },
-                child: Container(
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: Text('选择分类',style: TextStyle(fontSize: 16),),),
-                      _minorCategoryText != null ? Text(_minorCategoryText,style: TextStyle(color: Colors.orange ),) : Text(''),
-                      Icon(Icons.chevron_right,color: Colors.grey[600],)
-                    ],
-                  ),
-                ),
+                child: ShowSelectTile(leadingText: '选择分类',tralingText: _minorCategoryText,tralingTextColor: Colors.orange,),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
