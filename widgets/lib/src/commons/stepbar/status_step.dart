@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-class StatusLine extends StatefulWidget{
+class StatusStep extends StatefulWidget{
   //状态数组
   final List<OrderStatusModel> list ;
   //当前订单状态
@@ -19,14 +19,14 @@ class StatusLine extends StatefulWidget{
   final Color activeColor;
   //当前进度颜色
   final Color nowActiveColor;
-  
 
-  StatusLine({@required this.list,@required this.currentStatus,this.isScroll,this.width,this.height,this.notActiveColor,this.activeColor,this.nowActiveColor});
 
-  _StatusLineStates createState() => _StatusLineStates();
+  StatusStep({@required this.list,@required this.currentStatus,this.isScroll,this.width,this.height,this.notActiveColor,this.activeColor,this.nowActiveColor});
+
+  _StatusStepStates createState() => _StatusStepStates();
 }
 
-class _StatusLineStates extends State<StatusLine>{
+class _StatusStepStates extends State<StatusStep>{
   final List<Widget> _widgetList = new List();
 
   @override
