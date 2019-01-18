@@ -11,12 +11,13 @@ import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 //横向滚动图片列表
 class Attachments extends StatefulWidget {
-  Attachments({Key key,
-    @required this.list,
-    this.width = 320,
-    this.height = 100,
-    this.imageWidth = 80,
-    this.imageHeight = 80})
+  Attachments(
+      {Key key,
+      @required this.list,
+      this.width = 320,
+      this.height = 100,
+      this.imageWidth = 80,
+      this.imageHeight = 80})
       : super(key: key);
 
   final List<MediaModel> list;
@@ -34,13 +35,8 @@ class _AttachmentsState extends State<Attachments> {
   Color iconColorLeft = Colors.grey[200];
   Color iconColorRight = Colors.black;
 
-  final StreamController _streamController = StreamController < double
-
-  >
-
-      .
-
-  broadcast();
+  final StreamController _streamController =
+      StreamController<double>.broadcast();
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +59,6 @@ class _AttachmentsState extends State<Attachments> {
         });
       }
     });
-
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,7 +101,7 @@ class _AttachmentsState extends State<Attachments> {
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         children: widget.list.map(
-              (model) {
+          (model) {
             // 附件类型
             switch (model.mediaType) {
               case 'pdf':
@@ -166,84 +161,76 @@ class _AttachmentsState extends State<Attachments> {
       builder: (BuildContext context) {
         return Container(
             child: PhotoView(
-              imageProvider: NetworkImage(url),
-            ));
+          imageProvider: NetworkImage(url),
+        ));
       },
     );
   }
 
   //文件下载打开
-  Future<String> _previewFile
+  Future<String> _previewFile(String url, String name, String mediaType) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: <Widget>[
+            StreamBuilder<double>(
+                stream: _streamController.stream,
+                initialData: 0.0,
+                builder:
+                    (BuildContext context, AsyncSnapshot<double> snapshot) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: Text(
+                            '下载中',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        Center(
+                          child: LinearProgressIndicator(
+                            value: snapshot.data,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('进度:', style: TextStyle(fontSize: 12)),
+                            Text('${((snapshot.data / 1) * 100).round()}%',
+                                style: TextStyle(fontSize: 12))
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                })
+          ],
+        );
+      },
+    );
 
-  (
-
-  String url, String
-
-  name String
-
-  mediaType
-
-  )
-
-  async
-
-  {
-  showDialog(
-  context: context,
-  builder: (BuildContext context) {
-  return SimpleDialog(
-  children: <Widget>[
-  StreamBuilder<double>(
-  stream: _streamController.stream,
-  initialData: 0.0,
-  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-  return Container(
-  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-  child: Column(
-  children: <Widget>[
-  Container(
-  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-  child: Text('下载中', style: TextStyle(fontSize: 12), ),
-  ),
-  Center(
-  child: LinearProgressIndicator(value: snapshot.data, ),
-  ),
-  Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: <Widget>[
-  Text('进度:', style: TextStyle(fontSize: 12)),
-  Text('${((snapshot.data/1)*100).round()}%', style: TextStyle(fontSize: 12))
-  ], )
-  ],
-  ),
-  );
-  }
-  )
-  ],
-  );
-  },
-  );
-
-
-  //获取应用目录路径
-  String dir = (await getApplicationDocumentsDirectory()).path;
-  String filePath="$dir/$name.$mediaType";
-  var dio = new Dio();
-  dio.onHttpClientCreate = (HttpClient client) {
-  client.idleTimeout = new Duration(seconds: 0);
-  };
-  try {
-  Response response = await dio.download(url, filePath,
-  onProgress: (received, total) {
-  print((received / total * 100).toStringAsFixed(0) + "%");
-  _streamController.sink.add(received / total);
-  });
-  print(response.statusCode);
-  } catch (e) {
-  print(e);
-  }
-  //打开文件
-  OpenFile.open(filePath);
-  return filePath;
+    //获取应用目录路径
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    String filePath = "$dir/$name.$mediaType";
+    var dio = new Dio();
+    dio.onHttpClientCreate = (HttpClient client) {
+      client.idleTimeout = new Duration(seconds: 0);
+    };
+    try {
+      Response response =
+          await dio.download(url, filePath, onProgress: (received, total) {
+        print((received / total * 100).toStringAsFixed(0) + "%");
+        _streamController.sink.add(received / total);
+      });
+      print(response.statusCode);
+    } catch (e) {
+      print(e);
+    }
+    //打开文件
+    OpenFile.open(filePath);
+    return filePath;
   }
 }
