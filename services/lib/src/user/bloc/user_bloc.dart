@@ -3,21 +3,25 @@ import 'dart:async';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/net/http_utils.dart';
 import 'package:services/src/user/bloc/login.dart';
 
-class UserBLoC {
+class UserBLoC extends BLoCBase {
   UserModel _user;
 
   // 工厂模式
   factory UserBLoC() => _getInstance();
+
   static UserBLoC get instance => _getInstance();
   static UserBLoC _instance;
+
   UserBLoC._internal() {
     // 初始化
     _user = UserModel.empty();
   }
+
   static UserBLoC _getInstance() {
     if (_instance == null) {
       _instance = new UserBLoC._internal();
@@ -39,8 +43,7 @@ class UserBLoC {
 
   Future<bool> login({String username, String password}) async {
     // // TODO: call login service
-    Response loginRequest = await http$
-        .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+    Response loginRequest = await http$.post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
       'username': username,
       'password': password,
       'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
@@ -67,6 +70,7 @@ class UserBLoC {
     return false;
   }
 
+  @override
   dispose() {
     _controller.close();
   }

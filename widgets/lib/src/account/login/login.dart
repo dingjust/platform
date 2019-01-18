@@ -3,16 +3,17 @@ import 'dart:async';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:widgets/src/account/user_bloc_provider.dart';
+import 'package:services/services.dart' show UserBLoC;
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
+import 'package:widgets/widgets.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage(
-      {Key key,
-      @required this.logo,
-      this.registerRoute,
-      this.forgetPasswordRoute})
-      : super(key: key);
+  const LoginPage({
+    Key key,
+    @required this.logo,
+    this.registerRoute,
+    this.forgetPasswordRoute,
+  }) : super(key: key);
 
   final Image logo;
   final String registerRoute;
@@ -116,9 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                   _isPasswordHide = !_isPasswordHide;
                 });
               },
-              child: Icon(_isPasswordHide
-                  ? B2BIcons.eye_not_see
-                  : Icons.remove_red_eye),
+              child: Icon(_isPasswordHide ? B2BIcons.eye_not_see : Icons.remove_red_eye),
             )),
         // 校验用户名
         validator: (v) {
@@ -208,12 +207,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLogo() {
-    return Container(
-        padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20), child: widget.logo);
+    return Container(padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20), child: widget.logo);
   }
 
   Widget _buildBody(BuildContext context) {
-    final bloc = UserBlocProvider.of(context);
+    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
@@ -224,8 +222,7 @@ class _LoginPageState extends State<LoginPage> {
           margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
           child: RaisedButton(
             onPressed: () {
-              bloc.login(username: 'nbyjy', password: 'z123456')
-                  .then((success) {
+              bloc.login(username: 'nbyjy', password: 'z123456').then((success) {
                 if (success) {
                   Navigator.pop(context);
                 }

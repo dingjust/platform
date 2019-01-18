@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'src/business/index.dart';
+import 'src/common/app_bloc.dart';
 import 'src/common/app_routes.dart';
 import 'src/community/index.dart';
 import 'src/home/index.dart';
@@ -10,18 +12,27 @@ import 'src/my/index.dart';
 
 void main() {
   debugInstrumentationEnabled = true;
-  runApp(MyApp());
+
+  runApp(BLoCProvider<AppBLoC>(
+    bloc: AppBLoC(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
+  final List<Widget> modules = <Widget>[
+    HomePage(),
+    ForumHomePage(),
+    BusinessHomePage(),
+    MyHomePage(),
+  ];
+
   @override
   _MyAppState createState() => new _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   int _currentIndex = 0;
-  List<Widget> _modules;
-  GlobalKey _userBlocProviderKey=GlobalKey();
 
   void _handleNavigation(int index) {
     setState(() {
@@ -33,30 +44,24 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    
   }
 
   @override
   Widget build(BuildContext context) {
-    _modules = <Widget>[
-      HomePage(),
-      ForumHomePage(),
-      BusinessHomePage(),
-      MyHomePage(),
-    ];
-
-    return UserBlocProvider(
-      key: _userBlocProviderKey,
+    return BLoCProvider<UserBLoC>(
+      bloc: UserBLoC.instance,
       child: MaterialApp(
         title: '衣加衣供应链',
         theme: ThemeData(
-            // primarySwatch: Colors.blue,
-            primaryColor: Colors.white,
-            textSelectionColor:Colors.black,
-            accentColor: Colors.orangeAccent[400],
-            bottomAppBarColor: Colors.grey),
+          // primarySwatch: Colors.blue,
+          primaryColor: Colors.white,
+          textSelectionColor: Colors.black,
+          accentColor: Colors.orangeAccent[400],
+          bottomAppBarColor: Colors.grey,
+        ),
         home: Scaffold(
-          body: _modules[_currentIndex],
+          key: const Key('__appPage__'),
+          body: widget.modules[_currentIndex],
           bottomNavigationBar: BottomNavigation(
             currentIndex: _currentIndex,
             onChanged: _handleNavigation,
@@ -66,8 +71,7 @@ class _MyAppState extends State<MyApp> {
             child: Icon(Icons.add),
             onPressed: null,
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ),
         routes: AppRoutes.allRoutes,
       ),
@@ -76,8 +80,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class BottomNavigation extends StatelessWidget {
-  BottomNavigation({Key key, this.currentIndex: 0, @required this.onChanged})
-      : super(key: key);
+  BottomNavigation({Key key, this.currentIndex: 0, @required this.onChanged}) : super(key: key);
 
   final int currentIndex;
   final ValueChanged<int> onChanged;
