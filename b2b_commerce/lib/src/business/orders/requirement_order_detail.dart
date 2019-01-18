@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -238,8 +237,9 @@ class _RequirementOrderDetailPageState
           ),
           FlatButton(
             onPressed: () {
-              Navigator.pushNamed(
-                  context, AppRoutes.ROUTE_REQUIREMENT_QUOTE_DETAIL);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      RequirementQuoteDetailPage()));
             },
             child: Text(
               '查看全部报价>>',

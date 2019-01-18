@@ -30,7 +30,6 @@ import '../my/my_company.dart';
 import '../my/my_invoices.dart';
 import '../my/my_settings.dart';
 import '../business/orders/requirement_order_detail.dart';
-import '../business/orders/requirement_quote_detail.dart';
 import '../business/delivery.dart';
 
 class AppRoutes with GlobalRoutes {
@@ -51,8 +50,6 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_REQUIREMENT_ORDERS = '/business/requirement_orders';
   static const ROUTE_REQUIREMENT_ORDERS_DETAIL =
       '/business/orders/requirement_orders_detail';
-  static const ROUTE_REQUIREMENT_QUOTE_DETAIL =
-      '/business/orders/requirement_quote_detail';
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
   static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
@@ -101,7 +98,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_REGISTER_BRAND: (context) => RegisterBrandPage(),
     ROUTE_MY_REGISTER_FACTORY: (context) => RegisterFactoryPage(),
     ROUTE_MY_REGISTER_CUSTOMER: (context) => RegisterCustomerPage(),
-    ROUTE_REQUIREMENT_QUOTE_DETAIL: (context) => RequirementQuoteDetailPage(),
     ROUTE_DELIVERY: (context) => DeliveryPage(),
   };
 }
