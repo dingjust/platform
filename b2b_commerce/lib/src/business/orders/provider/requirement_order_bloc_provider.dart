@@ -3,7 +3,7 @@ import 'package:services/services.dart';
 
 @immutable
 class RequirementOrderBlocProvider extends InheritedWidget {
-  final RequirementOrderBLoC bloc = RequirementOrderBLoC();
+  final RequirementOrderBLoC bloc = RequirementOrderBLoC.instance;
 
   RequirementOrderBlocProvider({Key key, Widget child})
       : super(key: key, child: child);

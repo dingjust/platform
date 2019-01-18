@@ -2,6 +2,21 @@ import 'dart:async';
 import 'package:models/models.dart';
 
 class RequirementOrderBLoC {
+
+    // 工厂模式
+  factory RequirementOrderBLoC() => _getInstance();
+  static RequirementOrderBLoC get instance => _getInstance();
+  static RequirementOrderBLoC _instance;
+  RequirementOrderBLoC._internal() {
+    // 初始化
+  }
+  static RequirementOrderBLoC _getInstance() {
+    if (_instance == null) {
+      _instance = new RequirementOrderBLoC._internal();
+    }
+    return _instance;
+  }
+
   static final Map<String, List<RequirementOrderModel>> _ordersMap = {
     'ALL': List<RequirementOrderModel>(),
     'PENDING_QUOTE': List<RequirementOrderModel>(),

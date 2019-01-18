@@ -16,60 +16,66 @@ class RequirementOrdersPage extends StatefulWidget {
 }
 
 class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
+  GlobalKey _requirementOrderBlocProviderKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return RequirementOrderBlocProvider(
+        key: _requirementOrderBlocProviderKey,
         child: Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-          '需求订单管理',
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => showSearch(
-                context: context, delegate: RequirementOrderSearchDelegate()),
-          ),
-        ],
-      ),
-      body: DefaultTabController(
-        length: statuses.length,
-        child: Scaffold(
-          appBar: TabBar(
-            unselectedLabelColor: Colors.black26,
-            labelColor: Colors.black38,
-            indicatorSize: TabBarIndicatorSize.label,
-            tabs: statuses.map((status) {
-              return Tab(text: status.name);
-            }).toList(),
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-            isScrollable: false,
-          ),
-          body: TabBarView(
-            children: <Widget>[
-              RequirementOrderList(
-                status: statuses[0],
+          appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: true,
+            elevation: 0.5,
+            title: Text(
+              '需求订单管理',
+              style: TextStyle(color: Colors.black),
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => showSearch(
+                    context: context,
+                    delegate: RequirementOrderSearchDelegate()),
               ),
-              RequirementOrderList(
-                status: statuses[1],
-              ),
-              RequirementOrderList(
-                status: statuses[2],
-              ),
-              RequirementOrderList(
-                status: statuses[3],
-              )
             ],
           ),
-        ),
-      ),
-      floatingActionButton: _ToTopBtn(),
-    ));
+          body: DefaultTabController(
+            length: statuses.length,
+            child: Scaffold(
+              appBar: TabBar(
+                unselectedLabelColor: Colors.black26,
+                labelColor: Colors.black38,
+                indicatorSize: TabBarIndicatorSize.label,
+                tabs: statuses.map((status) {
+                  return Tab(text: status.name);
+                }).toList(),
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black),
+                isScrollable: false,
+              ),
+              body: TabBarView(
+                children: <Widget>[
+                  RequirementOrderList(
+                    status: statuses[0],
+                  ),
+                  RequirementOrderList(
+                    status: statuses[1],
+                  ),
+                  RequirementOrderList(
+                    status: statuses[2],
+                  ),
+                  RequirementOrderList(
+                    status: statuses[3],
+                  )
+                ],
+              ),
+            ),
+          ),
+          floatingActionButton: _ToTopBtn(),
+        ));
   }
 }
 
