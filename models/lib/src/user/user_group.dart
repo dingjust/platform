@@ -78,7 +78,8 @@ class OrgUnitModel extends CompanyModel {
 @JsonSerializable()
 class B2BUnitModel extends OrgUnitModel {
   bool active;
-
+  String email;
+  String telephone;
   B2BUnitModel({
     String profilePicture,
     String uid,
@@ -88,6 +89,8 @@ class B2BUnitModel extends OrgUnitModel {
     int starLevel,
     AddressModel contactAddress,
     this.active,
+    this.email,
+    this.telephone,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -105,6 +108,31 @@ class B2BUnitModel extends OrgUnitModel {
 
 @JsonSerializable()
 class BrandModel extends B2BUnitModel {
+  //品牌名
+  String brandName;
+  //合作品牌
+  String cooperativeBrand;
+  //规模范围
+  ScaleRanges scaleRange;
+  //风格
+  List<StyleModel> styles;
+  //品类
+  List<CategoryModel> categories;
+  //年龄段
+  List<String> ageRanges;
+  //价位段（春秋）
+  List<String> priceRange1s;
+  //价位段（秋冬）
+  List<String> priceRange2s;
+  //注册时间
+  DateTime registrationDate;
+  //开户税号
+  String taxNumber;
+  //开户银行
+  String bankOfDeposit;
+  //认证证件
+  List<MediaModel> certificate;
+
   BrandModel({
     String profilePicture,
     String uid,
@@ -113,7 +141,21 @@ class BrandModel extends B2BUnitModel {
     String path,
     bool active,
     int starLevel,
+    String email,
+    String telephone,
     AddressModel contactAddress,
+    this.brandName,
+    this.scaleRange,
+    this.cooperativeBrand,
+    this.ageRanges,
+    this.categories,
+    this.priceRange1s,
+    this.priceRange2s,
+    this.styles,
+    this.bankOfDeposit,
+    this.certificate,
+    this.registrationDate,
+    this.taxNumber,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -123,7 +165,9 @@ class BrandModel extends B2BUnitModel {
           active: active,
           starLevel: starLevel,
           contactAddress: contactAddress,
-        );
+          email: email,
+          telephone: telephone
+       );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) => _$BrandModelFromJson(json);
 
@@ -138,6 +182,36 @@ class FactoryModel extends B2BUnitModel {
   /// 接单成功率
   double orderedSuccessRate;
 
+  //合作品牌
+  String cooperativeBrand;
+
+  //规模范围
+  ScaleRanges scaleRange;
+
+  //品类
+  List<CategoryModel> categories;
+
+  //合作方式
+  List<CooperationModes> modes;
+
+  //开发能力
+  bool developmentCapacity;
+
+  //月均产能
+  MonthlyCapacityRanges monthlyCapacityRanges;
+
+  //车位数量
+  int latheQuantity;
+
+  //注册时间
+  DateTime registrationDate;
+  //开户税号
+  String taxNumber;
+  //开户银行
+  String bankOfDeposit;
+  //认证证件
+  List<MediaModel> certificate;
+
   FactoryModel({
     String profilePicture,
     String uid,
@@ -149,6 +223,17 @@ class FactoryModel extends B2BUnitModel {
     AddressModel contactAddress,
     this.historyOrdersCount,
     this.orderedSuccessRate,
+    this.monthlyCapacityRanges,
+    this.certificate,
+    this.bankOfDeposit,
+    this.taxNumber,
+    this.registrationDate,
+    this.categories,
+    this.scaleRange,
+    this.cooperativeBrand,
+    this.developmentCapacity,
+    this.latheQuantity,
+    this.modes,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -164,3 +249,76 @@ class FactoryModel extends B2BUnitModel {
 
   static Map<String, dynamic> toJson(FactoryModel model) => _$FactoryModelToJson(model);
 }
+
+//合作方式枚举
+enum CooperationModes {
+  ///  纯加工
+  PURE_PROCESSING,
+
+  /// FOB
+  FOB,
+
+  /// ODM
+  ODM,
+
+  /// OEM
+  OEM,
+
+}
+
+const CooperationModesLocalizedMap = {
+  CooperationModes.PURE_PROCESSING: "PURE_PROCESSING",
+  CooperationModes.FOB: "FOB",
+  CooperationModes.ODM: "ODM",
+  CooperationModes.OEM: "OEM",
+};
+
+//月均产能
+enum MonthlyCapacityRanges {
+  //0-5000件
+  MCR001,
+
+  //5000-10000件
+  MCR002,
+
+  //10000-30000件
+  MCR003,
+
+  //30000件以上
+  MCR004
+}
+
+const MonthlyCapacityRangesLocalizedMap = {
+  MonthlyCapacityRanges.MCR001: "0-5000件",
+  MonthlyCapacityRanges.MCR002: "5000-10000件",
+  MonthlyCapacityRanges.MCR003: "10000-30000件",
+  MonthlyCapacityRanges.MCR004: "30000件以上",
+};
+
+//产值规模
+enum ScaleRanges{
+
+  //0-100万
+  SR001,
+
+  //100万-500万
+  SR002,
+
+  //500万-1000万
+  SR003,
+
+  //1000万-5000万
+  SR004,
+
+  //5000万以上
+  SR005,
+
+}
+
+const ScaleRangesLocalizedMap = {
+  ScaleRanges.SR001: "0-100万",
+  ScaleRanges.SR002: "100万-500万",
+  ScaleRanges.SR003: "500万-1000万",
+  ScaleRanges.SR004: "1000万-5000万",
+  ScaleRanges.SR005: "5000万以上",
+};

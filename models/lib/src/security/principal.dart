@@ -9,8 +9,9 @@ class PrincipalModel extends ItemModel {
   String profilePicture;
   String uid;
   String name;
+  String phone;
 
-  PrincipalModel({this.profilePicture, @required this.uid, this.name});
+  PrincipalModel({this.profilePicture, @required this.uid, this.name, this.phone});
 
   factory PrincipalModel.fromJson(Map<String, dynamic> json) => _$PrincipalModelFromJson(json);
 
