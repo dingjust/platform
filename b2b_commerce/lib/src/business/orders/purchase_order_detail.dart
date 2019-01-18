@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
-import 'package:b2b_commerce/src/business/orders/status_line.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -85,7 +84,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         body: Container(
             child: ListView(
               children: <Widget>[
-                StatusLine(
+                StatusStep(
                   list: _statusList,
                   currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
                   isScroll: false,
@@ -894,44 +893,5 @@ class PurchaseDocument extends StatelessWidget{
       ),
     );
   }
-
-//  List<Widget> _buildDocumentInfo(BuildContext context){
-//    List<Widget> _docList = new List();
-//    int docCount = 2;
-//    if (order.attachments.length < 2) {
-//      docCount = order.attachments.length;
-//    }
-//    for (int i = 0; i < docCount; i++) {
-//      _docList.add(
-//          Row(
-//            children: <Widget>[
-//              Expanded(
-//                  child: Image.network(
-//                    "http://img.aso.aizhan.com/icon/f7/d0/cc/f7d0cc9b577ff84ec59b6d9932606c33.jpg",
-//                    width: 50,
-//                    height: 50,
-//                    fit: BoxFit.scaleDown,
-//                  ),
-//                flex: 1,
-//              ),
-//              Expanded(
-//                child: Text(
-//                  order.attachments[i],
-//                  style: TextStyle(
-//                    color: Colors.black54,
-//                    fontSize: 20.0,
-//                  ),
-//                ),
-//                flex: 4,
-//              ),
-//              Icon(Icons.keyboard_arrow_right),
-//            ],
-//          )
-//      );
-//      _docList.add(Divider());
-//    }
-//    _docList.removeLast();
-//    return _docList;
-//  }
 
 }
