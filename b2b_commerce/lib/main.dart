@@ -21,6 +21,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _currentIndex = 0;
   List<Widget> _modules;
+  GlobalKey _userBlocProviderKey=GlobalKey();
 
   void _handleNavigation(int index) {
     setState(() {
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
     ];
 
     return UserBlocProvider(
+      key: _userBlocProviderKey,
       child: MaterialApp(
         title: '衣加衣供应链',
         theme: ThemeData(
