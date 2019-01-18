@@ -30,7 +30,7 @@ class PurchaseOrderBLoC {
         return <PurchaseOrderModel>[
           PurchaseOrderModel.fromJson({
             'code': 'PO34938475200045',
-            'status': 'WAIT_FOR_PROCESSING',
+            'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),
@@ -238,25 +238,12 @@ class PurchaseOrderBLoC {
                   'thumbnail':
                       'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
                 },
-              },
-              {
-                'basePrice': 33.0,
-                'quantity': 23,
-                'totalPrice': 999.9,
-                'requirementOrderCode': 'RC34938475200045',
-                'product': {
-                  'code': 'NA89852509',
-                  'name': '山本风法少女长裙复古气质秋冬款',
-                  'skuID': 'NA89852509',
-                  'thumbnail':
-                      'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
-                },
               }
             ],
           }),
           PurchaseOrderModel.fromJson({
             'code': 'PO34938475200045',
-            'status': 'WAIT_FOR_PROCESSING',
+            'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),
@@ -469,7 +456,7 @@ class PurchaseOrderBLoC {
           }),
           PurchaseOrderModel.fromJson({
             'code': 'PO34938475200045',
-            'status': 'WAIT_FOR_PROCESSING',
+            'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),

@@ -67,82 +67,87 @@ class QuotesListView extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10),
       color: Colors.grey[100],
-      child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: _scrollController,
-          children: <Widget>[
-            StreamBuilder<List<QuoteModel>>(
-              stream: bloc.stream,
-              initialData: null,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<QuoteModel>> snapshot) {
-                if (snapshot.data == null) {
-                  bloc.getData();
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 200),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if (snapshot.hasData) {
-                  return Column(
-                    children: snapshot.data
-                        .map((quote) => Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: QuoteItem(
-                                model: quote,
-                              ),
-                            ))
-                        .toList(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-              },
-            ),
-            StreamBuilder<bool>(
-              stream: bloc.bottomStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  _scrollController.animateTo(_scrollController.offset - 70,
-                      duration: new Duration(milliseconds: 500),
-                      curve: Curves.easeOut);
-                }
-                return snapshot.data
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                        child: Center(
-                          child: Text(
-                            "┑(￣Д ￣)┍ 已经到底了",
-                            style: TextStyle(color: Colors.grey),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          return await bloc.refreshData();
+        },
+        child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _scrollController,
+            children: <Widget>[
+              StreamBuilder<List<QuoteModel>>(
+                stream: bloc.stream,
+                initialData: null,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<QuoteModel>> snapshot) {
+                  if (snapshot.data == null) {
+                    bloc.getData();
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 200),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: snapshot.data
+                          .map((quote) => Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                child: QuoteItem(
+                                  model: quote,
+                                ),
+                              ))
+                          .toList(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                },
+              ),
+              StreamBuilder<bool>(
+                stream: bloc.bottomStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  if (snapshot.data) {
+                    _scrollController.animateTo(_scrollController.offset - 70,
+                        duration: new Duration(milliseconds: 500),
+                        curve: Curves.easeOut);
+                  }
+                  return snapshot.data
+                      ? Container(
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                          child: Center(
+                            child: Text(
+                              "┑(￣Д ￣)┍ 已经到底了",
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           ),
-                        ),
-                      )
-                    : Container();
-              },
-            ),
-            StreamBuilder<bool>(
-              stream: bloc.loadingStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Center(
-                    child: new Opacity(
-                      opacity: snapshot.data ? 1.0 : 0,
-                      child: CircularProgressIndicator(),
+                        )
+                      : Container();
+                },
+              ),
+              StreamBuilder<bool>(
+                stream: bloc.loadingStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: new Center(
+                      child: new Opacity(
+                        opacity: snapshot.data ? 1.0 : 0,
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ]),
+                  );
+                },
+              ),
+            ]),
+      ),
     );
   }
 }
@@ -192,9 +197,10 @@ class QuoteItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("报价单号：${model.code}", style: TextStyle(fontSize: 14)),
+            Text("报价单号：${model.code}",
+                style: TextStyle(fontSize: 12, color: Colors.grey)),
             Text("报价时间：${DateFormatUtil.format(model.creationTime)}",
-                style: TextStyle(fontSize: 14))
+                style: TextStyle(fontSize: 12, color: Colors.grey))
           ],
         ));
   }
@@ -203,8 +209,7 @@ class QuoteItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
       child: InkWell(
-        onTap: () {
-        },
+        onTap: () {},
         child: Column(
           children: <Widget>[
             Row(

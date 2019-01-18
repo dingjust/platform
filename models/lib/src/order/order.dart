@@ -54,11 +54,8 @@ enum PurchaseOrderStatus {
   /// 待确认
   PENDING_APPROVAL,
 
-  /// 已确认
-  APPROVED,
-
-  /// 待出库
-  WAIT_FOR_OUT_OF_STORE,
+  /// 生产中
+  IN_PRODUCTION,
 
   /// 已出库
   OUT_OF_STORE,
@@ -71,8 +68,7 @@ enum PurchaseOrderStatus {
 const PurchaseOrderStatusLocalizedMap = {
   PurchaseOrderStatus.WAIT_FOR_PROCESSING: "待处理",
   PurchaseOrderStatus.PENDING_APPROVAL: "待确认",
-  PurchaseOrderStatus.APPROVED: "已确认",
-  PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: "待出库",
+  PurchaseOrderStatus.IN_PRODUCTION: "生产中",
   PurchaseOrderStatus.OUT_OF_STORE: "已出库",
   PurchaseOrderStatus.COMPLETED: "已完成"
 };
@@ -681,4 +677,23 @@ class ProductionProgressModel extends ItemModel {
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) => _$ProductionProgressModelFromJson(json);
 
   static Map<String, dynamic> toJson(ProductionProgressModel model) => _$ProductionProgressModelToJson(model);
+}
+
+//订单状态model，用于订单状态控件的List传入
+@JsonSerializable()
+class OrderStatusModel extends ItemModel {
+  String code;
+  String name;
+  int sort;
+
+  OrderStatusModel({
+    this.code,
+    this.name,
+    this.sort,
+  });
+
+  factory OrderStatusModel.fromJson(Map<String, dynamic> json) => _$OrderStatusModelFromJson(json);
+
+  static Map<String, dynamic> toJson(OrderStatusModel model) => _$OrderStatusModelToJson(model);
+
 }

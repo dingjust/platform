@@ -4,6 +4,13 @@ import 'package:models/models.dart';
 
 part 'product.g.dart';
 
+///产品状态
+enum ArticleApprovalStatus{
+  CHECK,
+  APPROVED,
+  UNAPPROVED,
+}
+
 /// 样衣归还状态
 enum SampleProductReturnState {
   /// 未还
@@ -29,7 +36,7 @@ enum LendBorrowType {
 const SampleProductReturnStateLocalizedMap = {
   SampleProductReturnState.NO_RETURN: "未还",
   SampleProductReturnState.RETURNED: "已还",
-  SampleProductReturnState.ABNORMAL: "异常"
+  SampleProductReturnState.ABNORMAL: "异常",
 };
 
 @JsonSerializable()
@@ -88,7 +95,7 @@ class ApparelProductAttributesModel extends ItemModel {
   String sleeveLength;
 
   /// 图案
-  String decorativePattern;
+  List<String> decorativePattern;
 
   /// 流行元素
   List<String> popularElements;
@@ -138,11 +145,15 @@ class ProductModel extends ItemModel {
   String name;
   double price;
   String thumbnail;
+  List<String> normal;
+  List<String> detail;
+  List<String> picture;
   int salesVolume;
   List<StaircasePriceModel> staircasePrices;
   bool privacy;
   @JsonKey(name: 'supercategories')
   List<CategoryModel> superCategories;
+  ArticleApprovalStatus  approvalStatus;
 
   /// 对于会员可见性，A/B/C
   MemberRating ratingIfPrivacy;
@@ -161,6 +172,10 @@ class ProductModel extends ItemModel {
     this.ratingIfPrivacy,
     this.stockLevel,
     this.salesVolume,
+    this.approvalStatus,
+    this.detail,
+    this.normal,
+    this.picture,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);

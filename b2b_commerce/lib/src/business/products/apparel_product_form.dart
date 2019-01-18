@@ -9,6 +9,7 @@ import 'apparel_product_prices_input.dart';
 import 'apparel_product_privacy_select.dart';
 import 'apparel_product_stock_input.dart';
 import 'apparel_product_variants_input.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
   ApparelProductFormPage({this.item});
@@ -34,13 +35,47 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 
   String _minorCategoryText;
 
+  Future<List<File>> _cachedImage(List<String> urls,List<File> files) async {
+    var cacheManager = await CacheManager.getInstance();
+    urls.forEach((url)async{
+      var file = await cacheManager.getFile(url);
+      files.add(file);
+      print(files);
+    });
+
+//    CacheManager.inBetweenCleans = new Duration(days: 7);
+    print(files);
+    return files;
+  }
+
   @override
-  void initState() {
+  void initState(){
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
     _weightController.text = widget.item?.gramWeight?.toString();
     _minorCategoryText = widget.item?.minorCategory?.name;
+
+    if(widget.item?.picture != null){
+      _cachedImage(widget.item?.picture,<File>[]).then((files){
+//        print(files);
+        files.forEach((file){
+          setState(() {
+            _masterImages.add(file);
+          });
+        });
+      });
+    }
+    if(widget.item?.detail != null){
+      _cachedImage(widget.item?.detail,<File>[]).then((files){
+        files.forEach((file){
+          setState(() {
+            _detailImages.add(file);
+          });
+        });
+      });
+    }
+
 
     // TODO: implement initState
     super.initState();
@@ -108,40 +143,33 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               TextFieldComponent(
                 focusNode: _nameFocusNode,
                 controller: _nameController,
-                leadingText: '产品名称',
-                hintText: '请输入产品名称，必填',
+                leadingText: '商品名称',
+                hintText: '请输入商品名称，必填',
               ),
               TextFieldComponent(
                 focusNode: _skuIDFocusNode,
                 controller: _skuIDController,
-                leadingText: '产品货号',
-                hintText: '请输入产品货号，必填',
+                leadingText: '商品货号',
+                hintText: '请输入商品货号，必填',
               ),
               InkWell(
                 onTap: () async {
-                _minorCategoryText = await Navigator.push(
+                EnumModel category = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnumSelectPage(
-                            '选择分类',
-                            <EnumModel>[
+                            title:'选择分类',
+                            items:<EnumModel>[
                               EnumModel('R001', '男装'),
                               EnumModel('R002', '女装'),
                             ],
                           ),
                     ),
                   );
+
+                 _minorCategoryText = category?.name;
                 },
-                child: Container(
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: Text('选择分类',style: TextStyle(fontSize: 16),),),
-                      _minorCategoryText != null ? Text(_minorCategoryText,style: TextStyle(color: Colors.orange ),) : Text(''),
-                      Icon(Icons.chevron_right,color: Colors.grey[600],)
-                    ],
-                  ),
-                ),
+                child: ShowSelectTile(leadingText: '选择分类',tralingText: _minorCategoryText,tralingTextColor: Colors.orange,),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
@@ -165,16 +193,21 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   priceMap['price2'] = widget.item?.price2;
                   priceMap['price3'] = widget.item?.price3;
 
-                  dynamic result = await Navigator.push(
+                  Map<String,double> result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ApparelProductPricesInputPage(priceMap: priceMap,),
                     ),
                   );
 
-                  showDialog(context: context,builder: (context) => AlertDialog(
-                    title: Text(result.toString()),
-                  ));
+                  if (result != null && result.length > 0) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(result.toString()),
+                      ),
+                    );
+                  }
                 },
                 child: ListTile(
                   title: Text('价格'),
@@ -204,9 +237,14 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     ),
                   );
 
-                  showDialog(context: context,builder:(context) => AlertDialog(
-                    title: Text(result.toString()),
-                  ));
+                  if (result != null && result.length > 0) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(result.toString()),
+                      ),
+                    );
+                  }
                 },
                 child: ListTile(
                   title: Text('颜色/尺码'),
@@ -247,7 +285,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ApparelProductAttributesInputPage(),
+                      builder: (context) => ApparelProductAttributesInputPage(item: widget.item,),
                     ),
                   );
                 },
@@ -311,7 +349,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                             EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                         labelStyle: TextStyle(fontSize: 16),
                         label: Text('发布商品'),
-                        onPressed: () {},
+                        onPressed: () {
+                          print(_masterImages);
+                        },
                       ),
                     ),
                     Expanded(
