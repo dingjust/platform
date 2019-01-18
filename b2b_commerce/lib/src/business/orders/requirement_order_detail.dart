@@ -346,23 +346,3 @@ class InfoRow extends StatelessWidget {
     );
   }
 }
-
-class AttachmentItem extends StatelessWidget {
-  const AttachmentItem({Key key, this.url}) : super(key: key);
-
-  final String url;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: NetworkImage(url),
-            fit: BoxFit.cover,
-          )),
-    );
-  }
-}
