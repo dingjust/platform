@@ -16,7 +16,7 @@ class UserBLoC {
 
   bool get isFactoryUser => _user.userType == UserType.FACTORY;
 
-  bool get isAnonymousUser => !isBrandUser || !isFactoryUser;
+  bool get isAnonymousUser => !isBrandUser && !isFactoryUser;
 
   var _controller = StreamController<UserModel>.broadcast();
 
