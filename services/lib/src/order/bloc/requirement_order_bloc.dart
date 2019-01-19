@@ -1,14 +1,19 @@
 import 'dart:async';
-import 'package:models/models.dart';
 
-class RequirementOrderBLoC {
+import 'package:models/models.dart';
+import 'package:services/services.dart';
+
+class RequirementOrderBLoC extends BLoCBase {
   // 工厂模式
   factory RequirementOrderBLoC() => _getInstance();
+
   static RequirementOrderBLoC get instance => _getInstance();
   static RequirementOrderBLoC _instance;
+
   RequirementOrderBLoC._internal() {
     // 初始化
   }
+
   static RequirementOrderBLoC _getInstance() {
     if (_instance == null) {
       _instance = new RequirementOrderBLoC._internal();
@@ -33,8 +38,7 @@ class RequirementOrderBLoC {
     //若没有数据则查询
     if (_ordersMap[status].isEmpty) {
       // TODO: 分页拿数据，response.data;
-      _ordersMap[status]
-          .addAll(await Future.delayed(const Duration(seconds: 1), () {
+      _ordersMap[status].addAll(await Future.delayed(const Duration(seconds: 1), () {
         return <RequirementOrderModel>[
           RequirementOrderModel.fromJson({
             "code": "34938475200045",
@@ -275,8 +279,7 @@ class RequirementOrderBLoC {
   loadingMoreByStatuses(String status) async {
     //模拟数据到底
     if (_ordersMap[status].length < 6) {
-      _ordersMap[status]
-          .add(await Future.delayed(const Duration(seconds: 1), () {
+      _ordersMap[status].add(await Future.delayed(const Duration(seconds: 1), () {
         return RequirementOrderModel.fromJson({
           "code": "34938475200045",
           "status": "PENDING_QUOTE",
@@ -418,8 +421,11 @@ class RequirementOrderBLoC {
   var _returnToTopController = StreamController<bool>.broadcast();
 
   Stream<bool> get loadingStream => _loadingController.stream;
+
   Stream<bool> get bottomStream => _bottomController.stream;
+
   Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
+
   Stream<bool> get returnToTopStream => _returnToTopController.stream;
 
   loadingStart() async {

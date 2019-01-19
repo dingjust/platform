@@ -1,7 +1,9 @@
-import 'package:b2b_commerce/src/business/orders/provider/sales_order_bloc_provider.dart';
 import 'package:b2b_commerce/src/business/search/sales_order_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
+
 import 'orders/sales_order_detail.dart';
 
 const statuses = <EnumModel>[
@@ -15,15 +17,15 @@ const statuses = <EnumModel>[
 class SalesOrdersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SalesOrderBlocProvider(
+    return BLoCProvider<SalesOrderBLoC>(
+      bloc: SalesOrderBLoC.instance,
       child: Scaffold(
         appBar: AppBar(
           title: Text('销售订单'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: () => showSearch(
-                  context: context, delegate: SalesOrderSearchDelegate()),
+              onPressed: () => showSearch(context: context, delegate: SalesOrderSearchDelegate()),
             ),
           ],
         ),
@@ -36,10 +38,7 @@ class SalesOrdersPage extends StatelessWidget {
               tabs: statuses.map((status) {
                 return Tab(text: status.name);
               }).toList(),
-              labelStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black),
+              labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
               isScrollable: true,
             ),
             body: TabBarView(
@@ -67,11 +66,10 @@ class SalesOrderList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = SalesOrderBlocProvider.of(context);
+    final bloc = BLoCProvider.of<SalesOrderBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(status.code);
       }
@@ -84,8 +82,7 @@ class SalesOrderList extends StatelessWidget {
         StreamBuilder<List<SalesOrderModel>>(
           stream: bloc.stream,
           initialData: null,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<SalesOrderModel>> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<List<SalesOrderModel>> snapshot) {
             if (snapshot.data == null) {
               bloc.filterByStatuses(status.code);
               return Padding(
@@ -161,8 +158,7 @@ class SalesOrderItem extends StatelessWidget {
           _buildSummary(context),
         ],
       ),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(5)),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
     );
   }
 
@@ -232,15 +228,13 @@ class SalesOrderItem extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         '${entry.product.name}',
-                        style:
-                            TextStyle(fontSize: 16.0, color: Color(0xFF323232)),
+                        style: TextStyle(fontSize: 16.0, color: Color(0xFF323232)),
                       ),
                       Container(
                         padding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
                         child: Text(
                           '货号：${entry.product.skuID}',
-                          style: TextStyle(
-                              fontSize: 14.0, color: Color(0xFF969696)),
+                          style: TextStyle(fontSize: 14.0, color: Color(0xFF969696)),
                         ),
                         decoration: BoxDecoration(
                           color: Color(0xFFF0F0F0),

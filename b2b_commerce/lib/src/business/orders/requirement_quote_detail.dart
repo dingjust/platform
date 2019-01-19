@@ -1,22 +1,21 @@
-import 'package:b2b_commerce/src/business/orders/provider/requirement_quote_detail_bloc_provider.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementQuoteDetailPage extends StatefulWidget {
-  _RequirementQuoteDetailPageState createState() =>
-      _RequirementQuoteDetailPageState();
+  _RequirementQuoteDetailPageState createState() => _RequirementQuoteDetailPageState();
 }
 
-class _RequirementQuoteDetailPageState
-    extends State<RequirementQuoteDetailPage> {
+class _RequirementQuoteDetailPageState extends State<RequirementQuoteDetailPage> {
   @override
   Widget build(BuildContext context) {
-    GlobalKey _requirementQuoteDetailBLoCKey=GlobalKey();
+    GlobalKey _requirementQuoteDetailBLoCKey = GlobalKey();
 
-    return RequirementQuoteDetailBLoCProvider(
+    return BLoCProvider<RequirementQuoteDetailBLoC>(
       key: _requirementQuoteDetailBLoCKey,
+      bloc: RequirementQuoteDetailBLoC.instance,
       child: Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,
@@ -39,11 +38,10 @@ class QuotesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = RequirementQuoteDetailBLoCProvider.of(context);
+    final bloc = BLoCProvider.of<RequirementQuoteDetailBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMore();
       }
@@ -62,8 +60,7 @@ class QuotesListView extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -74,82 +71,77 @@ class QuotesListView extends StatelessWidget {
         onRefresh: () async {
           return await bloc.refreshData();
         },
-        child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: _scrollController,
-            children: <Widget>[
-              StreamBuilder<List<QuoteModel>>(
-                stream: bloc.stream,
-                initialData: null,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<QuoteModel>> snapshot) {
-                  if (snapshot.data == null) {
-                    bloc.getData();
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 200),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: snapshot.data
-                          .map((quote) => Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                ),
-                                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                child: QuoteItem(
-                                  model: quote,
-                                ),
-                              ))
-                          .toList(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                },
-              ),
-              StreamBuilder<bool>(
-                stream: bloc.bottomStream,
-                initialData: false,
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
-                  }
-                  return snapshot.data
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                          child: Center(
-                            child: Text(
-                              "┑(￣Д ￣)┍ 已经到底了",
-                              style: TextStyle(color: Colors.grey),
+        child:
+            ListView(physics: const AlwaysScrollableScrollPhysics(), controller: _scrollController, children: <Widget>[
+          StreamBuilder<List<QuoteModel>>(
+            stream: bloc.stream,
+            initialData: null,
+            builder: (BuildContext context, AsyncSnapshot<List<QuoteModel>> snapshot) {
+              if (snapshot.data == null) {
+                bloc.getData();
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 200),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (snapshot.hasData) {
+                return Column(
+                  children: snapshot.data
+                      .map((quote) => Container(
+                            margin: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
                             ),
-                          ),
-                        )
-                      : Container();
-                },
-              ),
-              StreamBuilder<bool>(
-                stream: bloc.loadingStream,
-                initialData: false,
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Center(
-                      child: new Opacity(
-                        opacity: snapshot.data ? 1.0 : 0,
-                        child: CircularProgressIndicator(),
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: QuoteItem(
+                              model: quote,
+                            ),
+                          ))
+                      .toList(),
+                );
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+            },
+          ),
+          StreamBuilder<bool>(
+            stream: bloc.bottomStream,
+            initialData: false,
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if (snapshot.data) {
+                _scrollController.animateTo(_scrollController.offset - 70,
+                    duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+              }
+              return snapshot.data
+                  ? Container(
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                      child: Center(
+                        child: Text(
+                          "┑(￣Д ￣)┍ 已经到底了",
+                          style: TextStyle(color: Colors.grey),
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ]),
+                    )
+                  : Container();
+            },
+          ),
+          StreamBuilder<bool>(
+            stream: bloc.loadingStream,
+            initialData: false,
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Center(
+                  child: new Opacity(
+                    opacity: snapshot.data ? 1.0 : 0,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              );
+            },
+          ),
+        ]),
       ),
     );
   }
@@ -194,14 +186,11 @@ class QuoteItem extends StatelessWidget {
   Widget _buildOrderRow() {
     return Container(
         padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-        decoration: BoxDecoration(
-            border:
-                Border(bottom: BorderSide(width: 1, color: Colors.grey[300]))),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: Colors.grey[300]))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("报价单号：${model.code}",
-                style: TextStyle(fontSize: 12, color: Colors.grey)),
+            Text("报价单号：${model.code}", style: TextStyle(fontSize: 12, color: Colors.grey)),
             Text("报价时间：${DateFormatUtil.format(model.creationTime)}",
                 style: TextStyle(fontSize: 12, color: Colors.grey))
           ],
@@ -265,18 +254,11 @@ class QuoteItem extends StatelessWidget {
             Row(
               children: <Widget>[
                 RichText(
-                  text: TextSpan(
-                      text: '历史接单',
-                      style: TextStyle(color: Colors.black54),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: '214', style: TextStyle(color: Colors.red)),
-                        TextSpan(
-                            text: '单,报价成功率',
-                            style: TextStyle(color: Colors.black54)),
-                        TextSpan(
-                            text: '34%', style: TextStyle(color: Colors.red))
-                      ]),
+                  text: TextSpan(text: '历史接单', style: TextStyle(color: Colors.black54), children: <TextSpan>[
+                    TextSpan(text: '214', style: TextStyle(color: Colors.red)),
+                    TextSpan(text: '单,报价成功率', style: TextStyle(color: Colors.black54)),
+                    TextSpan(text: '34%', style: TextStyle(color: Colors.red))
+                  ]),
                 )
               ],
             )
@@ -290,7 +272,7 @@ class QuoteItem extends StatelessWidget {
 class _ToTopBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bloc = RequirementQuoteDetailBLoCProvider.of(context);
+    final bloc = BLoCProvider.of<RequirementQuoteDetailBLoC>(context);
 
     return StreamBuilder<bool>(
         stream: bloc.toTopBtnStream,

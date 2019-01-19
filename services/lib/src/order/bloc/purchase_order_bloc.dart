@@ -1,10 +1,19 @@
 import 'dart:async';
-import 'package:models/models.dart';
 
-class PurchaseOrderBLoC {
+import 'package:models/models.dart';
+import 'package:services/services.dart';
+
+class PurchaseOrderBLoC extends BLoCBase {
   Map<String, List<PurchaseOrderModel>> _ordersMap;
 
-  PurchaseOrderBLoC() {
+  // 工厂模式
+  factory PurchaseOrderBLoC() => _getInstance();
+
+  static PurchaseOrderBLoC get instance => _getInstance();
+  static PurchaseOrderBLoC _instance;
+
+  PurchaseOrderBLoC._internal() {
+    // 初始化
     _ordersMap = {
       'ALL': [],
       'WAIT_FOR_PROCESSING': [],
@@ -13,6 +22,13 @@ class PurchaseOrderBLoC {
       'OUT_OF_STORE': [],
       'COMPLETED': []
     };
+  }
+
+  static PurchaseOrderBLoC _getInstance() {
+    if (_instance == null) {
+      _instance = PurchaseOrderBLoC._internal();
+    }
+    return _instance;
   }
 
   List<PurchaseOrderModel> orders(String status) => _ordersMap[status];
@@ -25,8 +41,7 @@ class PurchaseOrderBLoC {
     //若没有数据则查询
     if (_ordersMap[status].isEmpty) {
       // TODO: 分页拿数据，response.data;
-      _ordersMap[status]
-          .addAll(await Future.delayed(const Duration(seconds: 1), () {
+      _ordersMap[status].addAll(await Future.delayed(const Duration(seconds: 1), () {
         return <PurchaseOrderModel>[
           PurchaseOrderModel.fromJson({
             'code': 'PO34938475200045',
@@ -676,8 +691,7 @@ class PurchaseOrderBLoC {
   loadingMoreByStatuses(String status) async {
     //模拟数据到底
     if (_ordersMap[status].length < 6) {
-      _ordersMap[status]
-          .add(await Future.delayed(const Duration(seconds: 1), () {
+      _ordersMap[status].add(await Future.delayed(const Duration(seconds: 1), () {
         return PurchaseOrderModel.fromJson({
           'code': 'PO34938475200045',
           'status': 'WAIT_FOR_PROCESSING',

@@ -1,18 +1,33 @@
 import 'dart:async';
 
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
-class SalesOrderBLoC {
+class SalesOrderBLoC extends BLoCBase {
   Map<String, List<SalesOrderModel>> _ordersMap;
 
-  SalesOrderBLoC() {
+  // 工厂模式
+  factory SalesOrderBLoC() => _getInstance();
+
+  static SalesOrderBLoC get instance => _getInstance();
+  static SalesOrderBLoC _instance;
+
+  SalesOrderBLoC._internal() {
+    // 初始化
     _ordersMap = {
       'ALL': [],
       'PENDING_PAYMENT': [],
       'PENDING_DELIVERY': [],
       'SHIPPED': [],
-      'COMPLETED': []
+      'COMPLETED': [],
     };
+  }
+
+  static SalesOrderBLoC _getInstance() {
+    if (_instance == null) {
+      _instance = SalesOrderBLoC._internal();
+    }
+    return _instance;
   }
 
   List<SalesOrderModel> orders(String status) => _ordersMap[status];
@@ -42,8 +57,7 @@ class SalesOrderBLoC {
     //若没有数据则查询
     if (_ordersMap[status].isEmpty) {
       // TODO: 分页拿数据，response.data;
-      _ordersMap[status]
-          .addAll(await Future.delayed(const Duration(seconds: 1), () {
+      _ordersMap[status].addAll(await Future.delayed(const Duration(seconds: 1), () {
         return <SalesOrderModel>[
           SalesOrderModel.fromJson({
             "code": "34938475200045",
@@ -144,8 +158,7 @@ class SalesOrderBLoC {
   loadingMoreByStatuses(String status) async {
     //模拟数据到底
     if (_ordersMap[status].length < 6) {
-      _ordersMap[status]
-          .add(await Future.delayed(const Duration(seconds: 1), () {
+      _ordersMap[status].add(await Future.delayed(const Duration(seconds: 1), () {
         return SalesOrderModel.fromJson({
           "code": "34938475200045",
           "status": "PENDING_PAYMENT",
@@ -174,7 +187,7 @@ class SalesOrderBLoC {
           ],
         });
       }));
-    }else{
+    } else {
       //通知显示已经到底部
       _bottomController.sink.add(true);
     }

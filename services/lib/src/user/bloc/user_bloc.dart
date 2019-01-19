@@ -24,7 +24,7 @@ class UserBLoC extends BLoCBase {
 
   static UserBLoC _getInstance() {
     if (_instance == null) {
-      _instance = new UserBLoC._internal();
+      _instance = UserBLoC._internal();
     }
     return _instance;
   }

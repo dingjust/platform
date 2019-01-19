@@ -1,8 +1,9 @@
-import 'package:b2b_commerce/src/business/orders/provider/requirement_order_bloc_provider.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -20,8 +21,9 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RequirementOrderBlocProvider(
+    return BLoCProvider<RequirementOrderBLoC>(
         key: _requirementOrderBlocProviderKey,
+        bloc: RequirementOrderBLoC.instance,
         child: Scaffold(
           appBar: AppBar(
             brightness: Brightness.light,
@@ -34,9 +36,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () => showSearch(
-                    context: context,
-                    delegate: RequirementOrderSearchDelegate()),
+                onPressed: () => showSearch(context: context, delegate: RequirementOrderSearchDelegate()),
               ),
             ],
           ),
@@ -50,10 +50,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);
                 }).toList(),
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black),
+                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
                 isScrollable: false,
               ),
               body: TabBarView(
@@ -88,11 +85,10 @@ class RequirementOrderList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var bloc = RequirementOrderBlocProvider.of(context);
+    var bloc = BLoCProvider.of<RequirementOrderBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(status.code);
       }
@@ -111,8 +107,7 @@ class RequirementOrderList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -130,8 +125,7 @@ class RequirementOrderList extends StatelessWidget {
               StreamBuilder<List<RequirementOrderModel>>(
                 stream: bloc.stream,
                 // initialData: null,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses(status.code);
                     return Padding(
@@ -158,8 +152,7 @@ class RequirementOrderList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data) {
                     _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
                   return snapshot.data
                       ? Container(
@@ -211,8 +204,7 @@ class RequirementOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => RequirementOrderDetailPage(order: order)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequirementOrderDetailPage(order: order)));
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -280,8 +272,7 @@ class RequirementOrderItem extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                       height: 100,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -294,31 +285,25 @@ class RequirementOrderItem extends StatelessWidget {
                                 )
                               : Text(
                                   '暂无产品',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.red),
+                                  style: TextStyle(fontSize: 15, color: Colors.red),
                                 ),
                           entry.product.skuID != null
                               ? Container(
                                   padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius: BorderRadius.circular(5)),
+                                  decoration:
+                                      BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(5)),
                                   child: Text(
                                     '货号：' + entry.product.skuID,
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.grey),
+                                    style: TextStyle(fontSize: 12, color: Colors.grey),
                                   ),
                                 )
                               : Container(),
                           Container(
                             padding: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                                color: Colors.yellow[50],
-                                borderRadius: BorderRadius.circular(5)),
+                            decoration: BoxDecoration(color: Colors.yellow[50], borderRadius: BorderRadius.circular(5)),
                             child: Text(
                               "${entry.product.superCategories.first.name}   ${entry.product.majorCategory.name}   ${entry.entryNumber}件",
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.orange),
+                              style: TextStyle(fontSize: 15, color: Colors.orange),
                             ),
                           )
                         ],
@@ -349,7 +334,7 @@ class RequirementOrderItem extends StatelessWidget {
 class _ToTopBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bloc = RequirementOrderBlocProvider.of(context);
+    var bloc = BLoCProvider.of<RequirementOrderBLoC>(context);
 
     return StreamBuilder<bool>(
         stream: bloc.toTopBtnStream,

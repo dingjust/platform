@@ -1,16 +1,21 @@
 import 'dart:async';
-import 'package:models/models.dart';
 
-class RequirementQuoteDetailBLoC {
+import 'package:models/models.dart';
+import 'package:services/services.dart';
+
+class RequirementQuoteDetailBLoC extends BLoCBase {
   static final List<QuoteModel> quotes = [];
 
   // 工厂模式
   factory RequirementQuoteDetailBLoC() => _getInstance();
+
   static RequirementQuoteDetailBLoC get instance => _getInstance();
   static RequirementQuoteDetailBLoC _instance;
+
   RequirementQuoteDetailBLoC._internal() {
     // 初始化
   }
+
   static RequirementQuoteDetailBLoC _getInstance() {
     if (_instance == null) {
       _instance = new RequirementQuoteDetailBLoC._internal();
@@ -28,9 +33,7 @@ class RequirementQuoteDetailBLoC {
     //若没有数据则查询
     if (quotes.isEmpty) {
       // TODO: 分页拿数据，response.data;
-      this
-          .quotesList
-          .addAll(await Future.delayed(const Duration(seconds: 1), () {
+      this.quotesList.addAll(await Future.delayed(const Duration(seconds: 1), () {
             return <QuoteModel>[
               QuoteModel.fromJson({
                 "code": "34938475200045",
@@ -139,8 +142,11 @@ class RequirementQuoteDetailBLoC {
   var _returnToTopController = StreamController<bool>.broadcast();
 
   Stream<bool> get loadingStream => _loadingController.stream;
+
   Stream<bool> get bottomStream => _bottomController.stream;
+
   Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
+
   Stream<bool> get returnToTopStream => _returnToTopController.stream;
 
   loadingStart() async {
