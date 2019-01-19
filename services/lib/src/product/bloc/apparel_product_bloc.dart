@@ -395,5 +395,9 @@ class ApparelProductBLoC extends BLoCBase {
   dispose() {
     _controller.close();
     _detailController.close();
+    _loadingController.close();
+    _bottomController.close();
+    _toTopBtnController.close();
+    _returnToTopController.close();
   }
 }

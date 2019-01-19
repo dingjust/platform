@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 
-class BLoCProvider<T extends BLoCBase> extends StatefulWidget {
+class BLoCProvider<T extends BLoCBase> extends InheritedWidget {
   BLoCProvider({
     Key key,
     @required this.child,
@@ -12,7 +12,7 @@ class BLoCProvider<T extends BLoCBase> extends StatefulWidget {
   final Widget child;
 
   @override
-  _BLoCProviderState<T> createState() => _BLoCProviderState<T>();
+  bool updateShouldNotify(_) => true;
 
   static T of<T extends BLoCBase>(BuildContext context) {
     final type = _typeOf<BLoCProvider<T>>();
@@ -21,17 +21,4 @@ class BLoCProvider<T extends BLoCBase> extends StatefulWidget {
   }
 
   static Type _typeOf<T>() => T;
-}
-
-class _BLoCProviderState<T> extends State<BLoCProvider<BLoCBase>> {
-  @override
-  void dispose() {
-    widget.bloc.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
-  }
 }
