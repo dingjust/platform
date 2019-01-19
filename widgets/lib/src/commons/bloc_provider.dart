@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 
 class BLoCProvider<T extends BLoCBase> extends InheritedWidget {
-  BLoCProvider({
-    Key key,
-    @required this.child,
-    @required this.bloc,
-  }) : super(key: key);
+  BLoCProvider({Key key, @required this.child, @required this.bloc}) : super(key: key, child: child);
 
   final T bloc;
   final Widget child;
