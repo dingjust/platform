@@ -1,5 +1,7 @@
-import 'dart:io';
-
+import 'package:b2b_commerce/src/business/products/form/detail_picture_field.dart';
+import 'package:b2b_commerce/src/business/products/form/minor_category_field.dart';
+import 'package:b2b_commerce/src/business/products/form/name_field.dart';
+import 'package:b2b_commerce/src/business/products/form/sku_id_field.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -9,7 +11,7 @@ import 'apparel_product_prices_input.dart';
 import 'apparel_product_privacy_select.dart';
 import 'apparel_product_stock_input.dart';
 import 'apparel_product_variants_input.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'form/master_picture_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
   ApparelProductFormPage({this.item});
@@ -22,60 +24,19 @@ class ApparelProductFormPage extends StatefulWidget {
 class ApparelProductFormState extends State<ApparelProductFormPage> {
   bool _postageFree = false;
   final GlobalKey _apparelProductForm = GlobalKey<FormState>();
-  FocusNode _nameFocusNode = FocusNode();
-  FocusNode _skuIDFocusNode = FocusNode();
+
   FocusNode _brandFocusNode = FocusNode();
   FocusNode _weightFocusNode = FocusNode();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _skuIDController = TextEditingController();
+
   final TextEditingController _brandController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
-  List<File> _masterImages = [];
-  List<File> _detailImages = [];
 
-  String _minorCategoryText;
 
-  Future<List<File>> _cachedImage(List<String> urls,List<File> files) async {
-    var cacheManager = await CacheManager.getInstance();
-    urls.forEach((url)async{
-      var file = await cacheManager.getFile(url);
-      files.add(file);
-      print(files);
-    });
-
-//    CacheManager.inBetweenCleans = new Duration(days: 7);
-    print(files);
-    return files;
-  }
 
   @override
-  void initState(){
-    _nameController.text = widget.item?.name;
-    _skuIDController.text = widget.item?.skuID;
+  void initState() {
     _brandController.text = widget.item?.brand;
     _weightController.text = widget.item?.gramWeight?.toString();
-    _minorCategoryText = widget.item?.minorCategory?.name;
-
-    if(widget.item?.picture != null){
-      _cachedImage(widget.item?.picture,<File>[]).then((files){
-//        print(files);
-        files.forEach((file){
-          setState(() {
-            _masterImages.add(file);
-          });
-        });
-      });
-    }
-    if(widget.item?.detail != null){
-      _cachedImage(widget.item?.detail,<File>[]).then((files){
-        files.forEach((file){
-          setState(() {
-            _detailImages.add(file);
-          });
-        });
-      });
-    }
-
 
     // TODO: implement initState
     super.initState();
@@ -95,82 +56,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
           autovalidate: false,
           child: ListView(
             children: <Widget>[
-              Container(
-                  margin:
-                      EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        '上传主图',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        '（最多5张）',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                      )
-                    ],
-                  )),
-              AlbumsAndCameras(
-                images: _masterImages,
-                height: 100,
-                width: 100,
-                iconSize: 100,
-                count: 5,
-              ),
-              Container(
-                margin:
-                    EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '上传详情图',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      '（最多8张）',
-                      style: TextStyle(color: Colors.grey, fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-              AlbumsAndCameras(
-                images: _detailImages,
-                height: 100,
-                width: 100,
-                iconSize: 100,
-                count: 8,
-              ),
-              TextFieldComponent(
-                focusNode: _nameFocusNode,
-                controller: _nameController,
-                leadingText: '商品名称',
-                hintText: '请输入商品名称，必填',
-              ),
-              TextFieldComponent(
-                focusNode: _skuIDFocusNode,
-                controller: _skuIDController,
-                leadingText: '商品货号',
-                hintText: '请输入商品货号，必填',
-              ),
-              InkWell(
-                onTap: () async {
-                EnumModel category = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EnumSelectPage(
-                            title:'选择分类',
-                            items:<EnumModel>[
-                              EnumModel('R001', '男装'),
-                              EnumModel('R002', '女装'),
-                            ],
-                          ),
-                    ),
-                  );
-
-                 _minorCategoryText = category?.name;
-                },
-                child: ShowSelectTile(leadingText: '选择分类',tralingText: _minorCategoryText,tralingTextColor: Colors.orange,),
-              ),
+              MasterPictureField(widget.item),
+              DetailPictureField(widget.item),
+              NameField(widget.item),
+              SkuIDField(widget.item),
+              MinorCategoryField(widget.item),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Divider(
@@ -185,18 +75,20 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 hintText: '请输入品牌，必填',
               ),
               InkWell(
-                onTap: ()async {
-                  Map<String,double> priceMap = Map();
+                onTap: () async {
+                  Map<String, double> priceMap = Map();
                   priceMap['price'] = widget.item?.price;
                   priceMap['suggestedPrice'] = widget.item?.suggestedPrice;
                   priceMap['price1'] = widget.item?.price1;
                   priceMap['price2'] = widget.item?.price2;
                   priceMap['price3'] = widget.item?.price3;
 
-                  Map<String,double> result = await Navigator.push(
+                  Map<String, double> result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ApparelProductPricesInputPage(priceMap: priceMap,),
+                      builder: (context) => ApparelProductPricesInputPage(
+                            priceMap: priceMap,
+                          ),
                     ),
                   );
 
@@ -204,8 +96,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text(result.toString()),
-                      ),
+                            title: Text(result.toString()),
+                          ),
                     );
                   }
                 },
@@ -241,8 +133,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text(result.toString()),
-                      ),
+                            title: Text(result.toString()),
+                          ),
                     );
                   }
                 },
@@ -285,7 +177,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ApparelProductAttributesInputPage(item: widget.item,),
+                      builder: (context) => ApparelProductAttributesInputPage(
+                            item: widget.item,
+                          ),
                     ),
                   );
                 },
@@ -345,20 +239,18 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     Expanded(
                       child: ActionChip(
                         backgroundColor: Colors.red,
-                        labelPadding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                        labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                         labelStyle: TextStyle(fontSize: 16),
                         label: Text('发布商品'),
                         onPressed: () {
-                          print(_masterImages);
+                          // print(_masterImages);
                         },
                       ),
                     ),
                     Expanded(
                       child: ActionChip(
                         backgroundColor: Colors.orange,
-                        labelPadding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                        labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                         labelStyle: TextStyle(fontSize: 16),
                         label: Text('直接上架'),
                         onPressed: () {},
