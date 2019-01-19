@@ -1,9 +1,28 @@
 import 'dart:async';
+
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
-class ProductBloc{
-
+class ApparelProductBLoC extends BLoCBase {
   List<ApparelProductModel> products = List<ApparelProductModel>();
+
+  // 工厂模式
+  factory ApparelProductBLoC() => _getInstance();
+
+  static ApparelProductBLoC get instance => _getInstance();
+  static ApparelProductBLoC _instance;
+
+  ApparelProductBLoC._internal() {
+    // 初始化
+    products = List<ApparelProductModel>();
+  }
+
+  static ApparelProductBLoC _getInstance() {
+    if (_instance == null) {
+      _instance = ApparelProductBLoC._internal();
+    }
+    return _instance;
+  }
 
   var _controller = StreamController<List<ApparelProductModel>>.broadcast();
 
@@ -29,8 +48,7 @@ class ProductBloc{
             'isRecommend': true,
             'brand': '云顶',
             'gramWeight': 1.00,
-            'thumbnail':
-            'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+            'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
             'picture': [
               'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
               'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
@@ -72,8 +90,7 @@ class ProductBloc{
             'isRecommend': false,
             'brand': '同创',
             'gramWeight': 1.50,
-            'thumbnail':
-            'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+            'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
             'stockLevel': {
               'available': 97,
               'maxPreOrder': 122,
@@ -107,8 +124,7 @@ class ProductBloc{
             'isRecommend': false,
             'brand': '同创',
             'gramWeight': 1.50,
-            'thumbnail':
-            'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+            'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
             'stockLevel': {
               'available': 97,
               'maxPreOrder': 122,
@@ -142,8 +158,7 @@ class ProductBloc{
             'isRecommend': false,
             'brand': '同创',
             'gramWeight': 1.50,
-            'thumbnail':
-            'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+            'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
             'stockLevel': {
               'available': 97,
               'maxPreOrder': 122,
@@ -177,8 +192,7 @@ class ProductBloc{
             'isRecommend': false,
             'brand': '同创',
             'gramWeight': 1.50,
-            'thumbnail':
-            'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+            'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
             'stockLevel': {
               'available': 97,
               'maxPreOrder': 122,
@@ -222,8 +236,7 @@ class ProductBloc{
           'isRecommend': false,
           'brand': '同创',
           'gramWeight': 1.50,
-          'thumbnail':
-          'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+          'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
           'stockLevel': {
             'available': 97,
             'maxPreOrder': 122,
@@ -270,8 +283,7 @@ class ProductBloc{
         'isRecommend': false,
         'brand': '同创',
         'gramWeight': 1.50,
-        'thumbnail':
-        'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+        'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
         'stockLevel': {
           'available': 97,
           'maxPreOrder': 122,
@@ -289,7 +301,7 @@ class ProductBloc{
           'thickness': 'K001',
           'season': 'L001',
           'placket': 'M001',
-         }
+        }
       });
     }));
     _controller.sink.add(products);
@@ -303,8 +315,11 @@ class ProductBloc{
   var _returnToTopController = StreamController<bool>.broadcast();
 
   Stream<bool> get loadingStream => _loadingController.stream;
+
   Stream<bool> get bottomStream => _bottomController.stream;
+
   Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
+
   Stream<bool> get returnToTopStream => _returnToTopController.stream;
 
   loadingStart() async {

@@ -1,7 +1,3 @@
-import 'package:b2b_commerce/src/business/products/form/detail_picture_field.dart';
-import 'package:b2b_commerce/src/business/products/form/minor_category_field.dart';
-import 'package:b2b_commerce/src/business/products/form/name_field.dart';
-import 'package:b2b_commerce/src/business/products/form/sku_id_field.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -11,7 +7,11 @@ import 'apparel_product_prices_input.dart';
 import 'apparel_product_privacy_select.dart';
 import 'apparel_product_stock_input.dart';
 import 'apparel_product_variants_input.dart';
+import 'form/detail_picture_field.dart';
 import 'form/master_picture_field.dart';
+import 'form/minor_category_field.dart';
+import 'form/name_field.dart';
+import 'form/sku_id_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
   ApparelProductFormPage({this.item});
@@ -30,8 +30,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 
   final TextEditingController _brandController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
-
-
 
   @override
   void initState() {

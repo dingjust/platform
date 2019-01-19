@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'apparel_product_list.dart';
+
 import '../common/app_routes.dart';
+import 'apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
 import 'search/apparel_product_search.dart';
-import 'products/provider/product_bloc_provider.dart';
 
 class ApparelProductsPage extends StatelessWidget {
 //  final List<ApparelProductModel> items = <ApparelProductModel>[];
@@ -15,7 +16,8 @@ class ApparelProductsPage extends StatelessWidget {
 //      return ApparelProductItem(item);
 //    }).toList();
 
-    return ProductBlocProvider(
+    return BLoCProvider<ApparelProductBLoC>(
+      bloc: ApparelProductBLoC.instance,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -24,7 +26,9 @@ class ApparelProductsPage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.search),
               onPressed: () => showSearch(
-                  context: context, delegate: ApparelProductSearchDelegate()),
+                    context: context,
+                    delegate: ApparelProductSearchDelegate(),
+                  ),
             ),
           ],
         ),

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'products/provider/product_bloc_provider.dart';
-import 'apparel_product_list.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
+import 'apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
 import 'search/apparel_product_search.dart';
 
 class OffTheShelfApparelProductsPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return ProductBlocProvider(
+    return BLoCProvider<ApparelProductBLoC>(
+      bloc: ApparelProductBLoC.instance,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -28,7 +29,9 @@ class OffTheShelfApparelProductsPage extends StatelessWidget {
               SizedBox(
                 height: 15,
               ),
-            Expanded(child: ApparelProductList(),),
+              Expanded(
+                child: ApparelProductList(),
+              ),
 
 //              Expanded(child: ListView.builder(
 //                shrinkWrap: true,

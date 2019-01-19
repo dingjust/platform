@@ -6,7 +6,7 @@ export 'src/order/bloc/purchase_order_bloc.dart';
 export 'src/order/bloc/requirement_order_bloc.dart';
 export 'src/order/bloc/requirement_quote_detail_bloc.dart';
 export 'src/order/bloc/sales_order_bloc.dart';
-export 'src/product/bloc/product_bloc.dart';
+export 'src/product/bloc/apparel_product_bloc.dart';
 export 'src/supplier/bloc/suppliers_bloc.dart';
 export 'src/supplier/bloc/suppliers_bloc.dart';
 export 'src/system/notification/message_file_storage.dart';

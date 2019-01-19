@@ -1,19 +1,18 @@
-import 'products/provider/product_bloc_provider.dart';
+import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class ApparelProductList extends StatelessWidget {
-
   ScrollController _scrollController = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    var bloc = ProductBlocProvider.of(context);
+    var bloc = BLoCProvider.of<ApparelProductBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses();
       }
@@ -32,8 +31,7 @@ class ApparelProductList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -51,8 +49,7 @@ class ApparelProductList extends StatelessWidget {
               StreamBuilder<List<ApparelProductModel>>(
                 stream: bloc.stream,
                 // initialData: null,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<ApparelProductModel>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses();
                     return Padding(
@@ -77,19 +74,18 @@ class ApparelProductList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data) {
                     _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
                   return snapshot.data
                       ? Container(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                    child: Center(
-                      child: Text(
-                        "┑(￣Д ￣)┍ 已经到底了",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  )
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                          child: Center(
+                            child: Text(
+                              "┑(￣Д ￣)┍ 已经到底了",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        )
                       : Container();
                 },
               ),
@@ -113,7 +109,6 @@ class ApparelProductList extends StatelessWidget {
         ));
   }
 }
-
 
 //class _ToTopBtn extends StatelessWidget {
 //  @override
