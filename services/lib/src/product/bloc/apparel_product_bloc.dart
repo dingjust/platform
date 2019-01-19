@@ -4,7 +4,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 class ApparelProductBLoC extends BLoCBase {
-  List<ApparelProductModel> products = List<ApparelProductModel>();
+  List<ApparelProductModel> products;
+  ApparelProductModel currentProduct;
 
   // 工厂模式
   factory ApparelProductBLoC() => _getInstance();
@@ -15,6 +16,7 @@ class ApparelProductBLoC extends BLoCBase {
   ApparelProductBLoC._internal() {
     // 初始化
     products = List<ApparelProductModel>();
+    currentProduct = ApparelProductModel.empty();
   }
 
   static ApparelProductBLoC _getInstance() {
@@ -25,8 +27,11 @@ class ApparelProductBLoC extends BLoCBase {
   }
 
   var _controller = StreamController<List<ApparelProductModel>>.broadcast();
+  var _detailController = StreamController<ApparelProductModel>();
 
   Stream<List<ApparelProductModel>> get stream => _controller.stream;
+
+  Stream<ApparelProductModel> get detailStream => _detailController.stream;
 
   filterByStatuses() async {
     //若没有数据则查询
@@ -344,5 +349,6 @@ class ApparelProductBLoC extends BLoCBase {
 
   dispose() {
     _controller.close();
+    _detailController.close();
   }
 }

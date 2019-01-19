@@ -267,6 +267,11 @@ class ApparelProductModel extends ProductModel {
           stockLevel: stockLevel,
         );
 
+  ApparelProductModel.empty() {
+    this.code = '';
+    this.name = '';
+  }
+
   factory ApparelProductModel.fromJson(Map<String, dynamic> json) => _$ApparelProductModelFromJson(json);
 
   static Map<String, dynamic> toJson(ApparelProductModel model) => _$ApparelProductModelToJson(model);

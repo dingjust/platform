@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class ApparelProductItem extends StatefulWidget {
   ApparelProductItem(this.item);
@@ -18,9 +20,9 @@ class ApparelProductItemState extends State<ApparelProductItem> {
   void initState() {
     _isRecommend = widget.item.isRecommend;
 
-    if(widget.item.approvalStatus == ArticleApprovalStatus.APPROVED){
+    if (widget.item.approvalStatus == ArticleApprovalStatus.APPROVED) {
       _approvalStatusText = '下架';
-    }else if(widget.item.approvalStatus == ArticleApprovalStatus.UNAPPROVED){
+    } else if (widget.item.approvalStatus == ArticleApprovalStatus.UNAPPROVED) {
       _approvalStatusText = '上架';
     }
 
@@ -35,14 +37,14 @@ class ApparelProductItemState extends State<ApparelProductItem> {
       elevation: 0,
       child: Column(
         children: <Widget>[
-          _buildProduct(),
-          _buildButtons(),
+          _buildProduct(context),
+          _buildButtons(context),
         ],
       ),
     );
   }
 
-  Widget _buildProduct() {
+  Widget _buildProduct(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
       child: Row(
@@ -112,8 +114,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                               },
                               child: Container(
 //                                padding: EdgeInsets.only(right: 0),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle, color: Colors.red),
+                                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
                                 child: Icon(
                                   Icons.done,
                                   color: Colors.white,
@@ -141,14 +142,16 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                                 ),
                               ),
                             ),
-                      Text('推款',style: TextStyle(fontSize: 18),)
+                      Text(
+                        '推款',
+                        style: TextStyle(fontSize: 18),
+                      )
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+                        padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
                         decoration: BoxDecoration(
                           color: Colors.orange[50],
                           borderRadius: BorderRadius.circular(5),
@@ -163,8 +166,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 10),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+                        padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
                         decoration: BoxDecoration(
                           color: Colors.orange[50],
                           borderRadius: BorderRadius.circular(5),
@@ -192,14 +194,14 @@ class ApparelProductItemState extends State<ApparelProductItem> {
     );
   }
 
-  Widget _buildButtons() {
+  Widget _buildButtons(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           ActionChip(
-            labelPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 1),
+            labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
             backgroundColor: Colors.orange,
             label: Text('生产'),
             labelStyle: TextStyle(color: Colors.white),
@@ -216,7 +218,14 @@ class ApparelProductItemState extends State<ApparelProductItem> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ApparelProductFormPage(item: widget.item,)),
+                MaterialPageRoute(
+                  builder: (context) => BLoCProvider(
+                        bloc: ApparelProductBLoC.instance,
+                        child: ApparelProductFormPage(
+                          item: widget.item,
+                        ),
+                      ),
+                ),
               );
             },
           ),

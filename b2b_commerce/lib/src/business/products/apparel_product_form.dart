@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'apparel_product_attributes_input.dart';
@@ -14,7 +15,7 @@ import 'form/name_field.dart';
 import 'form/sku_id_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
-  ApparelProductFormPage({this.item});
+  ApparelProductFormPage({Key key, this.item}) :super(key: const Key('__apparelProductFormPage__'));
 
   final ApparelProductModel item;
 
@@ -42,6 +43,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    var bloc = BLoCProvider.of<ApparelProductBLoC>(context);
+    debugPrint(bloc.currentProduct.toString());
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
