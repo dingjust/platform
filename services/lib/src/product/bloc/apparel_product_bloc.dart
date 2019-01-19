@@ -33,6 +33,51 @@ class ApparelProductBLoC extends BLoCBase {
 
   Stream<ApparelProductModel> get detailStream => _detailController.stream;
 
+  getProduct(String code) {
+    _detailController.sink.add(ApparelProductModel.fromJson({
+      'approvalStatus': 'UNAPPROVED',
+      'code': 'C0001',
+      'name': '山本风少女长裙复古气质秋冬流行新款',
+      'price': 100.00,
+      'suggestedPrice': 99,
+      'price1': 98,
+      'price2': 97,
+      'price3': 96,
+      'skuID': 'SKU0001',
+      'salesVolume': 10,
+      'isRecommend': true,
+      'brand': '云顶',
+      'gramWeight': 1.00,
+      'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+      'picture': [
+        'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+        'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
+      ],
+      'detail': [
+        'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+        'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
+      ],
+      'stockLevel': {
+        'available': 99,
+        'maxPreOrder': 120,
+      },
+      'attributes': {
+        'styles': ['A001', 'A002'],
+        'fabricComposition': 'B001',
+        'editionType': 'C001',
+        'pattern': 'D001',
+        'sleeveType': 'E001',
+        'sleeveLength': 'F001',
+        'decorativePattern': ['G001', 'G002'],
+        'popularElements': ['H001', 'H002'],
+        'filler': 'J001',
+        'thickness': 'K001',
+        'season': 'L001',
+        'placket': 'M001',
+      }
+    }));
+  }
+
   filterByStatuses() async {
     //若没有数据则查询
     if (products.isEmpty) {
