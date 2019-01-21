@@ -582,7 +582,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           Container(
               padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
-              child: Attachments(
+              child: EditableAttachments(
                 list: productionProgress.medias,
               )
           ),
