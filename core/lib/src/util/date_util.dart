@@ -1,5 +1,6 @@
+import 'package:intl/intl.dart';
 class DateFormatUtil {
   static String format(DateTime date) {
-    return "${date.year.toString()}-${date.month.toString()}-${date.day.toString()} ${date.hour.toString()}:${date.minute.toString()}";
+    return DateFormat('yyyy-MM-dd HH:mm').format(date);
   }
 }
