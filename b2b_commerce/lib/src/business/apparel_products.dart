@@ -3,7 +3,7 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import '../common/app_routes.dart';
-import 'package:b2b_commerce/src/business/products/apparel_product_list.dart';
+import 'apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
 import 'search/apparel_product_search.dart';
 
@@ -26,9 +26,9 @@ class ApparelProductsPage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.search),
               onPressed: () => showSearch(
-                    context: context,
-                    delegate: ApparelProductSearchDelegate(),
-                  ),
+                context: context,
+                delegate: ApparelProductSearchDelegate(),
+              ),
             ),
           ],
         ),

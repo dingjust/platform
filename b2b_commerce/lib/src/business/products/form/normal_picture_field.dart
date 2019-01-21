@@ -6,44 +6,21 @@ import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 /// 主图
-class MasterPictureField extends StatefulWidget {
-  MasterPictureField(this.item);
+class NormalPictureField extends StatefulWidget {
+  NormalPictureField(this.item);
 
   final ApparelProductModel item;
 
   @override
-  State<StatefulWidget> createState() => _MasterPictureFieldState();
+  State<StatefulWidget> createState() => _NormalPictureFieldState();
 }
 
-class _MasterPictureFieldState extends State<MasterPictureField> {
-  List<File> _masterImages = [];
-
-  Future<List<File>> _cachedImage(List<String> urls, List<File> files) async {
-    var cacheManager = await CacheManager.getInstance();
-    urls.forEach((url) async {
-      var file = await cacheManager.getFile(url);
-      files.add(file);
-      print(files);
-    });
-
-//    CacheManager.inBetweenCleans = new Duration(days: 7);
-    print(files);
-    return files;
-  }
+class _NormalPictureFieldState extends State<NormalPictureField> {
+  List<File> _normalImages = [];
 
   @override
   void initState() {
     super.initState();
-    if (widget.item?.picture != null) {
-      _cachedImage(widget.item?.picture, <File>[]).then((files) {
-//        print(files);
-        files.forEach((file) {
-          setState(() {
-            _masterImages.add(file);
-          });
-        });
-      });
-    }
   }
 
   @override
@@ -66,7 +43,8 @@ class _MasterPictureFieldState extends State<MasterPictureField> {
           ),
         ),
         AlbumsAndCameras(
-          images: _masterImages,
+          images: _normalImages,
+          pictureUrls: widget.item?.normal,
           height: 100,
           width: 100,
           iconSize: 100,

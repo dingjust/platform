@@ -35,7 +35,7 @@ class ApparelProductBLoC extends BLoCBase {
 
   getProduct(String code) {
     _detailController.sink.add(ApparelProductModel.fromJson({
-      'approvalStatus': 'UNAPPROVED',
+      'approvalStatus': 'APPROVED',
       'code': 'C0001',
       'name': '山本风少女长裙复古气质秋冬流行新款',
       'price': 100.00,
@@ -49,7 +49,7 @@ class ApparelProductBLoC extends BLoCBase {
       'brand': '云顶',
       'gramWeight': 1.00,
       'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-      'picture': [
+      'normal': [
         'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
         'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
       ],
@@ -85,7 +85,7 @@ class ApparelProductBLoC extends BLoCBase {
       products.addAll(await Future.delayed(const Duration(seconds: 1), () {
         return <ApparelProductModel>[
           ApparelProductModel.fromJson({
-            'approvalStatus': 'UNAPPROVED',
+            'approvalStatus': 'APPROVED',
             'code': 'C0001',
             'name': '山本风少女长裙复古气质秋冬流行新款',
             'price': 100.00,
@@ -99,7 +99,7 @@ class ApparelProductBLoC extends BLoCBase {
             'brand': '云顶',
             'gramWeight': 1.00,
             'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-            'picture': [
+            'normal': [
               'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
               'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
             ],
@@ -141,6 +141,14 @@ class ApparelProductBLoC extends BLoCBase {
             'brand': '同创',
             'gramWeight': 1.50,
             'thumbnail': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+            'normal': [
+              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
+            ],
+            'detail': [
+              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
+            ],
             'stockLevel': {
               'available': 97,
               'maxPreOrder': 122,

@@ -147,7 +147,7 @@ class ProductModel extends ItemModel {
   String thumbnail;
   List<String> normal;
   List<String> detail;
-  List<String> picture;
+  List<String> master;
   int salesVolume;
   List<StaircasePriceModel> staircasePrices;
   bool privacy;
@@ -175,7 +175,7 @@ class ProductModel extends ItemModel {
     this.approvalStatus,
     this.detail,
     this.normal,
-    this.picture,
+    this.master,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);

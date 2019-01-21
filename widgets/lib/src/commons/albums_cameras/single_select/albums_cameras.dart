@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AlbumsAndCameras extends StatefulWidget {
+  List<String> pictureUrls;
   List<File> images;
   double height;
   double width;
@@ -11,7 +12,7 @@ class AlbumsAndCameras extends StatefulWidget {
   int count;
 
   AlbumsAndCameras(
-      {this.images, this.height, this.width, this.iconSize, this.count});
+      {this.images, this.height, this.width, this.iconSize, this.count,this.pictureUrls});
 
   AlbumsAndCamerasState createState() => AlbumsAndCamerasState();
 }
@@ -40,7 +41,8 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
   }
 
   List<Widget> get _papersWidgetList {
-    List<Widget> list = widget.images
+    List<Widget> list = <Widget>[];
+    List<Widget> images = widget.images
         .map((file) => Container(
               width: widget.width,
               height: widget.height,
@@ -52,6 +54,16 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
               ),
             ))
         .toList();
+
+    if(widget.pictureUrls != null){
+      List<Widget> pictures = widget.pictureUrls.map((url){
+        return Image.network(url,width: widget.width,height: widget.height,fit: BoxFit.fill,);
+      }).toList();
+      list.addAll(pictures);
+    }
+
+    list.addAll(images);
+
     if (list.length < widget.count) {
       list.add(Container(
         child: IconButton(

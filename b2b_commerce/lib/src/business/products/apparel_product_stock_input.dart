@@ -23,26 +23,35 @@ class ApparelProductStockInputPage extends StatelessWidget {
         child: Card(
           child: Column(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-                    child: Text(
+              Container(
+                color: Colors.grey[200],
+                padding:
+                    EdgeInsets.only(left: 0, right: 0, top: 15, bottom: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Text(
+                      '颜色',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      '尺码',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
                       '实际库存',
-                      style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
+                    Text(
                       '平台库存',
-                      style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               ApparelProductStockInputItem(),
             ],
@@ -51,9 +60,7 @@ class ApparelProductStockInputPage extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         child: RaisedButton(
-          onPressed: () {
-
-          },
+          onPressed: () {},
           child: Text('批量调整'),
         ),
       ),
@@ -157,7 +164,7 @@ class ApparelProductStockInputItem extends StatelessWidget {
           1: FixedColumnWidth(255),
         },
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        border: new TableBorder.all(width: 1.0, color: Colors.black12),
+        border: new TableBorder.all(width: 0.5, color: Colors.grey[300]),
         children: <TableRow>[
           TableRow(children: <Widget>[
             TableCell(
@@ -168,9 +175,6 @@ class ApparelProductStockInputItem extends StatelessWidget {
                     width: 20,
                     decoration: BoxDecoration(
                       color: Color(int.parse('0xff' + row.key.colorCode)),
-//                          border: Border.all(
-//                            color: Colors.grey,
-//                          ),
                       shape: BoxShape.circle,
                     ),
                     child: Text(''),
@@ -183,10 +187,8 @@ class ApparelProductStockInputItem extends StatelessWidget {
               child: Table(
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: _subRows,
-                border: new TableBorder.all(
-                  width: 1.0,
-                  color: Colors.black12,
-                ),
+                border:
+                    new TableBorder.all(width: 0.5, color: Colors.grey[200]),
               ),
             ),
           ]),
@@ -199,12 +201,14 @@ class ApparelProductStockInputItem extends StatelessWidget {
 //        return buildRow(context, entry);
 //      }).toList(),
 //    ) ;
-    return Expanded(child: ListView.builder(
-      shrinkWrap: true,
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return buildRow(context, items.entries.toList()[index]);
-      },
-    ),);
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return buildRow(context, items.entries.toList()[index]);
+        },
+      ),
+    );
   }
 }

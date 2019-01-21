@@ -52,7 +52,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         widget.trailing == null
             ? ListTile(
                 leading: Container(
-                  width: widget.leadingWidth ?? 60,
+                  width: widget.leadingWidth ?? 75,
                   child: Text(
                     widget.leadingText,
                     style: TextStyle(fontSize: 16),

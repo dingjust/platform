@@ -17,19 +17,6 @@ class DetailPictureField extends StatefulWidget {
 class _DetailPictureFieldState extends State<DetailPictureField> {
   List<File> _detailImages = [];
 
-  Future<List<File>> _cachedImage(List<String> urls, List<File> files) async {
-    var cacheManager = await CacheManager.getInstance();
-    urls.forEach((url) async {
-      var file = await cacheManager.getFile(url);
-      files.add(file);
-      print(files);
-    });
-
-//    CacheManager.inBetweenCleans = new Duration(days: 7);
-    print(files);
-    return files;
-  }
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -51,6 +38,7 @@ class _DetailPictureFieldState extends State<DetailPictureField> {
           ),
         ),
         AlbumsAndCameras(
+          pictureUrls: widget.item?.detail,
           images: _detailImages,
           height: 100,
           width: 100,
@@ -64,14 +52,5 @@ class _DetailPictureFieldState extends State<DetailPictureField> {
   @override
   void initState() {
     super.initState();
-    if (widget.item?.detail != null) {
-      _cachedImage(widget.item?.detail, <File>[]).then((files) {
-        files.forEach((file) {
-          setState(() {
-            _detailImages.add(file);
-          });
-        });
-      });
-    }
   }
 }
