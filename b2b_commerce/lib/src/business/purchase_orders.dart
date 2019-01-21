@@ -30,7 +30,8 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () => showSearch(context: context, delegate: PurchaseOrderSearchDelegate()),
+                onPressed: () => showSearch(
+                    context: context, delegate: PurchaseOrderSearchDelegate()),
               ),
             ],
           ),
@@ -43,7 +44,10 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);
                 }).toList(),
-                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black),
                 isScrollable: true,
               ),
               body: TabBarView(
@@ -75,7 +79,8 @@ class PurchaseOrderList extends StatelessWidget {
     final bloc = BLoCProvider.of<PurchaseOrderBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(status.code);
       }
@@ -94,79 +99,88 @@ class PurchaseOrderList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
     return Container(
         decoration: BoxDecoration(color: Colors.grey[100]),
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: _scrollController,
-          children: <Widget>[
-            StreamBuilder<List<PurchaseOrderModel>>(
-              stream: bloc.stream,
-              initialData: null,
-              builder: (BuildContext context, AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
-                if (snapshot.data == null) {
-                  bloc.filterByStatuses(status.code);
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 200),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if (snapshot.hasData) {
-                  return Column(
-                    children: snapshot.data.map((order) {
-                      return PurchaseOrderItem(
-                        order,
+        child: RefreshIndicator(
+            onRefresh: () async {
+              return await bloc.refreshData(status.code);
+            },
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _scrollController,
+              children: <Widget>[
+                StreamBuilder<List<PurchaseOrderModel>>(
+                  stream: bloc.stream,
+                  initialData: null,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+                    if (snapshot.data == null) {
+                      bloc.filterByStatuses(status.code);
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 200),
+                        child: Center(child: CircularProgressIndicator()),
                       );
-                    }).toList(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-              },
-            ),
-            StreamBuilder<bool>(
-              stream: bloc.bottomStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  _scrollController.animateTo(_scrollController.offset - 70,
-                      duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                }
-                return snapshot.data
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                        child: Center(
-                          child: Text(
-                            "人家可是有底线的。。。",
-                            style: TextStyle(color: Colors.grey),
-                          ),
+                    }
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: snapshot.data.map((order) {
+                          return PurchaseOrderItem(
+                            order,
+                          );
+                        }).toList(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                  },
+                ),
+                StreamBuilder<bool>(
+                  stream: bloc.bottomStream,
+                  initialData: false,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    if (snapshot.data) {
+                      _scrollController.animateTo(_scrollController.offset - 70,
+                          duration: new Duration(milliseconds: 500),
+                          curve: Curves.easeOut);
+                    }
+                    return snapshot.data
+                        ? Container(
+                            padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                            child: Center(
+                              child: Text(
+                                "人家可是有底线的。。。",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          )
+                        : Container();
+                  },
+                ),
+                StreamBuilder<bool>(
+                  stream: bloc.loadingStream,
+                  initialData: false,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: new Center(
+                        child: new Opacity(
+                          opacity: snapshot.data ? 1.0 : 0,
+                          child: CircularProgressIndicator(),
                         ),
-                      )
-                    : Container();
-              },
-            ),
-            StreamBuilder<bool>(
-              stream: bloc.loadingStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Center(
-                    child: new Opacity(
-                      opacity: snapshot.data ? 1.0 : 0,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ));
+                      ),
+                    );
+                  },
+                ),
+              ],
+            )));
   }
 }
 
@@ -260,13 +274,15 @@ class PurchaseOrderItem extends StatelessWidget {
                               alignment: Alignment.topLeft,
                               child: Text(
                                 entry.product.name,
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
                               )),
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 '货号：' + entry.product.skuID,
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w500),
                               ))
                         ],
                       )))
@@ -281,7 +297,10 @@ class PurchaseOrderItem extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: Text(
-            '共' + order.totalQuantity.toString() + '件商品   合计： ￥' + order.totalPrice.toString(),
+            '共' +
+                order.totalQuantity.toString() +
+                '件商品   合计： ￥' +
+                order.totalPrice.toString(),
             style: TextStyle(fontSize: 16, color: Colors.red),
           ),
         )

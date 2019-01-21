@@ -10,7 +10,7 @@ import '../business/member_requests.dart';
 import '../business/memberships.dart';
 import '../business/production_orders.dart';
 import '../business/purchase_orders.dart';
-import '../business/quotes.dart';
+import '../business/quote_orders.dart';
 import '../business/requirement_orders.dart';
 import '../business/sales_orders.dart';
 import '../business/sample_garments.dart';
@@ -85,7 +85,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS_DETAIL: (context) => RequirementOrderDetailPage(),
     ROUTE_SALES_ORDERS: (context) => SalesOrdersPage(),
-    ROUTE_QUOTES: (context) => QuotesPage(),
+    ROUTE_QUOTES: (context) => QuoteOrdersPage(),
     ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),
     ROUTE_MY_HOME: (context) => MyHomePage(),
