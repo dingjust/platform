@@ -12,16 +12,20 @@ class PricesField extends StatefulWidget {
 }
 
 class _PricesFieldState extends State<PricesField> {
-  Map<String, double> priceMap = Map();
+  List<Object> prices = [];
 
   @override
   void initState() {
     super.initState();
+    Map<String, double> priceMap = Map();
     priceMap['price'] = widget.item?.price;
     priceMap['suggestedPrice'] = widget.item?.suggestedPrice;
     priceMap['price1'] = widget.item?.price1;
     priceMap['price2'] = widget.item?.price2;
     priceMap['price3'] = widget.item?.price3;
+
+    prices.add(priceMap);
+    prices.add(widget.item?.staircasePrices);
   }
 
   @override
@@ -31,14 +35,20 @@ class _PricesFieldState extends State<PricesField> {
       children: <Widget>[
         InkWell(
           onTap: () async {
-            Map<String, double> result = await Navigator.push(
+            List<Object> result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ApparelProductPricesInputPage(
-                  priceMap: priceMap,
+                  prices: prices,
                 ),
               ),
             );
+
+//            List list = result[1] as List;
+//
+//            list.forEach((item){
+//              print(item.staircasePrice?.price);
+//            });
 
             if (result != null && result.length > 0) {
               showDialog(

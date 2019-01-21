@@ -53,10 +53,12 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         autovalidate: false,
         child: ListView(
           children: <Widget>[
-            NormalPictureField(widget.item),
-            DetailPictureField(widget.item),
             NameField(widget.item),
             SkuIDField(widget.item),
+            DetailPictureField(widget.item),
+
+            NormalPictureField(widget.item),
+
             MinorCategoryField(widget.item),
             BrandField(widget.item),
             PricesField(widget.item),

@@ -39,10 +39,22 @@ class ApparelProductBLoC extends BLoCBase {
       'code': 'C0001',
       'name': '山本风少女长裙复古气质秋冬流行新款',
       'price': 100.00,
-      'suggestedPrice': 99,
-      'price1': 98,
-      'price2': 97,
-      'price3': 96,
+      'suggestedPrice': 99.00,
+      'price1': 98.00,
+      'price2': 97.00,
+      'price3': 96.00,
+     /* 'variants':[
+        {
+          'color':{
+            'code':'C01',
+            'name':'海军蓝',
+            'colorCode':'0066FF',
+          },
+          'size':{
+
+          }
+        }
+      ],*/
       'skuID': 'SKU0001',
       'salesVolume': 10,
       'isRecommend': true,
@@ -93,6 +105,20 @@ class ApparelProductBLoC extends BLoCBase {
             'price1': 98,
             'price2': 97,
             'price3': 96,
+            'staircasePrices':[
+              {
+                'minQuantity':50,
+                'price':59,
+              },
+              {
+                'minQuantity':100,
+                'price':119,
+              },
+              {
+                'minQuantity':200,
+                'price':199,
+              },
+            ],
             'skuID': 'SKU0001',
             'salesVolume': 10,
             'isRecommend': true,
@@ -111,6 +137,7 @@ class ApparelProductBLoC extends BLoCBase {
               'available': 99,
               'maxPreOrder': 120,
             },
+
             'attributes': {
               'styles': ['A001', 'A002'],
               'fabricComposition': 'B001',

@@ -12,7 +12,7 @@ class TextFieldComponent extends StatefulWidget {
 //  final FormFieldValidator<String> _validator;
 
   TextFieldComponent({
-    @required this.leadingText,
+    this.leadingText,
     this.hintText,
     this.leadingWidth,
     this.controller,
@@ -26,6 +26,7 @@ class TextFieldComponent extends StatefulWidget {
 
 class TextFieldComponentState extends State<TextFieldComponent> {
   Color _dividerColor = Colors.grey[400];
+  double _width = 75;
 
   @override
   void initState() {
@@ -41,8 +42,20 @@ class TextFieldComponentState extends State<TextFieldComponent> {
       }
     });
 
+    if(widget.leadingText == null || widget.leadingText == ''){
+      _width = 0.0;
+    }else{
+      _width = widget.leadingWidth;
+    }
+
     // TODO: implement initState
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -52,9 +65,9 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         widget.trailing == null
             ? ListTile(
                 leading: Container(
-                  width: widget.leadingWidth ?? 75,
+                  width: _width,
                   child: Text(
-                    widget.leadingText,
+                    widget.leadingText ?? '',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),

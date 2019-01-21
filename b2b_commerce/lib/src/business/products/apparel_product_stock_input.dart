@@ -2,6 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class ApparelProductStockInputPage extends StatelessWidget {
+  final Map<ColorModel, List<SizeStockItem>> items =
+  <ColorModel, List<SizeStockItem>>{
+    ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'): <SizeStockItem>[
+      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL'),available: 35,maxPreOrder: 55),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+    ],
+    ColorModel(code: 'C02', name: '海军蓝', colorCode: '0066FF'):
+    <SizeStockItem>[
+      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+    ],
+    ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
+    <SizeStockItem>[
+      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
+    ],
+    ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
+    <SizeStockItem>[
+      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
+    ],
+    ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
+    <SizeStockItem>[
+      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
+      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
+    ],
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,42 +58,72 @@ class ApparelProductStockInputPage extends StatelessWidget {
             children: <Widget>[
               Container(
                 color: Colors.grey[200],
-                padding:
-                    EdgeInsets.only(left: 0, right: 0, top: 15, bottom: 15),
+                padding: EdgeInsets.symmetric(vertical: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Text(
-                      '颜色',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    SizedBox(
+                      width: 85,
+                      height: 15,
+                      child: Center(
+                        child: Text(
+                          '颜色',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
-                    Text(
-                      '尺码',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    SizedBox(
+                      width: 85,
+                      height: 15,
+                      child: Center(
+                        child: Text(
+                          '尺码',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
-                    Text(
-                      '实际库存',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    SizedBox(
+                      width: 85,
+                      height: 15,
+                      child: Center(
+                        child: Text(
+                          '实际库存',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
-                    Text(
-                      '平台库存',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    SizedBox(
+                      width: 85,
+                      height: 15,
+                      child: Center(
+                        child: Text(
+                          '平台库存',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-              ApparelProductStockInputItem(),
+              ApparelProductStockInputItem(items:items),
+//            ApparelProductStockInputItem(),
             ],
           ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: RaisedButton(
-          onPressed: () {},
+          onPressed: () {
+            items.values.forEach((item){
+              item.forEach((it){
+                print(it.availableController.text);
+              });
+            });
+          },
           child: Text('批量调整'),
         ),
       ),
@@ -79,50 +142,37 @@ class SizeStockItem {
     this.size,
     this.available = 0,
     this.maxPreOrder = 0,
-  }) {
-    this.availableController = TextEditingController();
-    this.maxPreOrderController = TextEditingController();
+  }){
+    this.availableController = TextEditingController(text: this.available == 0 ?null: this.available.toString());
+    this.maxPreOrderController = TextEditingController(text: this.maxPreOrder == 0 ?null:this.maxPreOrder.toString());
   }
 }
 
-class ApparelProductStockInputItem extends StatelessWidget {
+class ApparelProductStockInputItem extends StatefulWidget {
+  final Map<ColorModel,List<SizeStockItem>> items;
+  ApparelProductStockInputItem({this.items});
+
+  ApparelProductStockInputItemState createState() =>
+      ApparelProductStockInputItemState();
+}
+
+class ApparelProductStockInputItemState extends State<ApparelProductStockInputItem>{
+  Map<ColorModel, List<SizeStockItem>> items;
+
+  @override
+  void initState() {
+    items = widget.items;
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Map<ColorModel, List<SizeStockItem>> items =
-        <ColorModel, List<SizeStockItem>>{
-      ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'): <SizeStockItem>[
-        SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-      ],
-      ColorModel(code: 'C02', name: '海军蓝', colorCode: '0066FF'):
-          <SizeStockItem>[
-        SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-      ],
-      ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
-          <SizeStockItem>[
-        SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
-      ],
-      ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
-          <SizeStockItem>[
-        SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
-      ],
-      ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
-          <SizeStockItem>[
-        SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-        SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
-      ],
-    };
 
     Widget buildRow(
-        BuildContext context, MapEntry<ColorModel, List<SizeStockItem>> row) {
+        BuildContext context, MapEntry<ColorModel, List<SizeStockItem>> row,int index) {
+//      print(index);
       final List<TableRow> _subRows = row.value.map((item) {
         return TableRow(children: <TableCell>[
           TableCell(
@@ -206,7 +256,7 @@ class ApparelProductStockInputItem extends StatelessWidget {
         shrinkWrap: true,
         itemCount: items.length,
         itemBuilder: (context, index) {
-          return buildRow(context, items.entries.toList()[index]);
+          return buildRow(context, items.entries.toList()[index],index);
         },
       ),
     );

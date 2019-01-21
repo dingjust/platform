@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
@@ -17,11 +16,6 @@ class NormalPictureField extends StatefulWidget {
 
 class _NormalPictureFieldState extends State<NormalPictureField> {
   List<File> _normalImages = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,5 +46,10 @@ class _NormalPictureFieldState extends State<NormalPictureField> {
         ),
       ],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 }

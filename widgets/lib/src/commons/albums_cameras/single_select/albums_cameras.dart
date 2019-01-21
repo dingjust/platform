@@ -18,8 +18,49 @@ class AlbumsAndCameras extends StatefulWidget {
 }
 
 class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
+  List<Widget> _list = <Widget>[];
+
+  @override
+  void initState() {
+    if(widget.pictureUrls != null){
+      List<Widget> pictures = widget.pictureUrls.map((url){
+        return Image.network(url,width: widget.width,height: widget.height,fit: BoxFit.fill,);
+      }).toList();
+      _list.addAll(pictures);
+    }
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+      List<Widget> images = widget.images
+          .map((file) => Container(
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: FileImage(file),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ))
+          .toList();
+
+      _list.addAll(images);
+
+      if (_list.length < widget.count) {
+        _list.add(Container(
+          child: IconButton(
+            onPressed: selectPapersImages,
+            icon: Icon(Icons.add_photo_alternate),
+            iconSize: widget.iconSize,
+            color: Colors.grey[500],
+          ),
+        ));
+      }
+
     return Container(
       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
       child: Row(
@@ -32,7 +73,7 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
               runSpacing: 5.0,
               alignment: WrapAlignment.start,
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: _papersWidgetList,
+              children: _list,
             ),
           )
         ],
@@ -40,42 +81,6 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
     );
   }
 
-  List<Widget> get _papersWidgetList {
-    List<Widget> list = <Widget>[];
-    List<Widget> images = widget.images
-        .map((file) => Container(
-              width: widget.width,
-              height: widget.height,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: FileImage(file),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ))
-        .toList();
-
-    if(widget.pictureUrls != null){
-      List<Widget> pictures = widget.pictureUrls.map((url){
-        return Image.network(url,width: widget.width,height: widget.height,fit: BoxFit.fill,);
-      }).toList();
-      list.addAll(pictures);
-    }
-
-    list.addAll(images);
-
-    if (list.length < widget.count) {
-      list.add(Container(
-        child: IconButton(
-          onPressed: selectPapersImages,
-          icon: Icon(Icons.add_photo_alternate),
-          iconSize: widget.iconSize,
-          color: Colors.grey[500],
-        ),
-      ));
-    }
-    return list;
-  }
 
   void selectPapersImages() async {
     showModalBottomSheet(
