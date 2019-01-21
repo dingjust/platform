@@ -479,6 +479,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       )
                     ],
                   ),
+                  isCurrentStatus == true ?
+                  Container() :
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -567,15 +569,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           }
                       ),
                       flex: 4,
-                    ),
-                    Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: IconButton(
-                            icon: Icon(Icons.chevron_right),
-                            onPressed: isCurrentStatus == true ? _selectPapersImages : null,
-                          ),
-                        )
                     ),
                   ],
                 ),)

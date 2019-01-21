@@ -159,6 +159,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       )
                     ],
                   ),
+                  sequence > _index || phase == currentPhase ?
+                  Container() :
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -227,14 +229,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           }),
                       flex: 4,
                     ),
-                    Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: IconButton(
-                            icon: Icon(Icons.chevron_right),
-                            onPressed: sequence > _index || phase == currentPhase ? _selectPapersImages : null,
-                          ),
-                        )),
                   ],
                 ),
               )),
