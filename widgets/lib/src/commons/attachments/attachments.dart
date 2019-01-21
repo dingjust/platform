@@ -246,7 +246,7 @@ class EditableAttachments extends StatefulWidget {
       this.imageWidth = 60,
       this.imageHeight = 60,
       this.maxNum = 5,
-      this.uploadURL})
+      this.uploadURL, this.deleteURL})
       : super(key: key);
 
   final List<MediaModel> list;
@@ -265,6 +265,9 @@ class EditableAttachments extends StatefulWidget {
 
   ///上传URL
   final String uploadURL;
+
+  ///删除URL
+  final String deleteURL;
 
   _EditableAttachmentsState createState() => _EditableAttachmentsState();
 }
