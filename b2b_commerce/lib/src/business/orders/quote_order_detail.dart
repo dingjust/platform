@@ -71,7 +71,6 @@ class QuoteOrderDetailPage extends StatelessWidget {
                   QuoteStateLocalizedMap[item.order.state],
                   style: TextStyle(
                     color: _statesColor[item.order.state],
-                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ],
@@ -284,7 +283,6 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     '￥' + item.order.unitPriceOfFabric.toString(),
                     style: TextStyle(
                       color: Colors.red,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -304,7 +302,6 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     '￥' + item.order.unitPriceOfExcipients.toString(),
                     style: TextStyle(
                       color: Colors.red,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -324,7 +321,6 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     '￥' + item.order.unitPriceOfProcessing.toString(),
                     style: TextStyle(
                       color: Colors.red,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -347,7 +343,6 @@ class QuoteOrderDetailPage extends StatelessWidget {
                             .toString(),
                     style: TextStyle(
                       color: Colors.red,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -367,7 +362,6 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     '￥' + item.order.costOfSamples.toString(),
                     style: TextStyle(
                       color: Colors.red,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -424,7 +418,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                 style: TextStyle(color: Colors.grey),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Text('确定前请先与我厂沟通好样衣事宜，谢谢。'),
               ),
             ],
