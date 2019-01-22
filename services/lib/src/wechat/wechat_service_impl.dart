@@ -1,4 +1,4 @@
-import 'package:services/src/wechat/wechat_models.dart';
+import 'package:models/models.dart';
 import 'package:services/src/wechat/wechat_pay_helper.dart';
 import 'package:services/src/wechat/wechat_service.dart';
 import 'package:services/src/wechat/wechatpay_constants.dart';
