@@ -5,6 +5,7 @@ class WechatPayHelper {
   static Future<WechatPrepayModel> prepay(String orderCode) async {
     WechatPrepayModel model = WechatPrepayModel();
     //TODO:调用统一下单接口，返回预支付信息
+    
     return model;
   }
 }

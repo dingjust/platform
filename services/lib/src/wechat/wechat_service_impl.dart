@@ -5,10 +5,24 @@ import 'package:services/src/wechat/wechatpay_constants.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 
 class WechatServiceImpl implements WechatService {
-  WechatServiceImpl() {
+  // 工厂模式
+  factory WechatServiceImpl() => _getInstance();
+
+  static WechatServiceImpl get instance => _getInstance();
+  static WechatServiceImpl _instance;
+
+  WechatServiceImpl._internal() {
+    // 初始化
     //注册微信信息
     fluwx.register(
         appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: false);
+  }
+
+  static WechatServiceImpl _getInstance() {
+    if (_instance == null) {
+      _instance = new WechatServiceImpl._internal();
+    }
+    return _instance;
   }
 
   @override

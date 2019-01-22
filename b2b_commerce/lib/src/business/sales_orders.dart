@@ -264,6 +264,9 @@ class SalesOrderItem extends StatelessWidget {
         ),
         RaisedButton(
           child: Text('支付'),
+          onPressed: (){
+            // WechatServiceImpl.instance.pay()
+          },
         )
       ],
     );
