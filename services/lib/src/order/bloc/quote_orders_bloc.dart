@@ -51,6 +51,7 @@ class QuoteOrdersBLoC extends BLoCBase {
               unitPriceOfExcipients: 5.00,
               unitPriceOfProcessing: 15.00,
               costOfSamples: 200.00,
+              costOfOther: 100.00,
               belongTo: FactoryModel(
                 name: '广州旭日',
                 starLevel: 3,
@@ -99,6 +100,7 @@ class QuoteOrdersBLoC extends BLoCBase {
               unitPriceOfExcipients: 5.00,
               unitPriceOfProcessing: 15.00,
               costOfSamples: 200.00,
+              costOfOther: 100.00,
               belongTo: FactoryModel(
                 name: '广州旭日',
                 starLevel: 3,
@@ -147,6 +149,7 @@ class QuoteOrdersBLoC extends BLoCBase {
               unitPriceOfExcipients: 5.00,
               unitPriceOfProcessing: 15.00,
               costOfSamples: 200.00,
+              costOfOther: 100.00,
               belongTo: FactoryModel(
                 name: '广州旭日',
                 starLevel: 3,
@@ -195,6 +198,7 @@ class QuoteOrdersBLoC extends BLoCBase {
               unitPriceOfExcipients: 5.00,
               unitPriceOfProcessing: 15.00,
               costOfSamples: 200.00,
+              costOfOther: 100.00,
               belongTo: FactoryModel(
                 name: '广州旭日',
                 starLevel: 3,
@@ -254,6 +258,7 @@ class QuoteOrdersBLoC extends BLoCBase {
             unitPriceOfExcipients: 5.00,
             unitPriceOfProcessing: 15.00,
             costOfSamples: 200.00,
+            costOfOther: 100.00,
             belongTo: FactoryModel(
               name: '广州旭日',
               starLevel: 3,
@@ -311,6 +316,7 @@ class QuoteOrdersBLoC extends BLoCBase {
           unitPriceOfExcipients: 5.00,
           unitPriceOfProcessing: 15.00,
           costOfSamples: 200.00,
+          costOfOther: 100.00,
           belongTo: FactoryModel(
             name: '广州旭日',
             starLevel: 3,
