@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'count_bloc.dart';
-import 'under_screen2.dart';
+import 'bloc_provider.dart';
 
-class UnderScreenPage extends StatefulWidget {
+class UnderScreenPage2 extends StatefulWidget {
   final bloc;
-  UnderScreenPage({this.bloc});
+  UnderScreenPage2({this.bloc});
 
-  UnderScreenPageState createState() => UnderScreenPageState();
+  UnderScreenPage2State createState() => UnderScreenPage2State();
 }
 
-class UnderScreenPageState extends State<UnderScreenPage>{
+class UnderScreenPage2State extends State<UnderScreenPage2>{
   CountBloc _bloc;
 
   @override
   void initState() {
     _bloc = widget.bloc;
-    print(_bloc.value);
     // TODO: implement initState
     super.initState();
   }
@@ -37,8 +36,8 @@ class UnderScreenPageState extends State<UnderScreenPage>{
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:() => Navigator.push(context, MaterialPageRoute(builder: (context) => UnderScreenPage2(bloc: _bloc,))),
-        child: Icon(Icons.forward),
+        onPressed:() => _bloc.increment(),
+        child: Icon(Icons.add),
       ),
     );
   }

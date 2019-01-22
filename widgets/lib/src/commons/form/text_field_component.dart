@@ -44,7 +44,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
     if(widget.leadingText == null || widget.leadingText == ''){
       _width = 0.0;
-    }else{
+    }else if(widget.leadingWidth != null){
       _width = widget.leadingWidth;
     }
 

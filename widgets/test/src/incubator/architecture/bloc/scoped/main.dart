@@ -10,11 +10,9 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      child: MaterialApp(
-        theme: ThemeData.dark(),
-        home: TopScreenPage(),
-      ),
+    return MaterialApp(
+      theme: ThemeData.dark(),
+      home: BlocProvider(child: TopScreenPage()),
     );
 
   }
