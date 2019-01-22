@@ -81,7 +81,6 @@ class SaleOrderDetail extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
-          _buildPlaceholder(),
           _buildOverview(),
           _buildPlaceholder(),
           _buildAddress(context),
@@ -104,7 +103,6 @@ class SaleOrderDetail extends StatelessWidget {
 
   Widget _buildOverview() {
     return Container(
-      height: 114.0,
       padding: EdgeInsets.fromLTRB(15.0, 22.0, 15.0, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,10 +192,7 @@ class SaleOrderDetail extends StatelessWidget {
       );
     }).toList();
 
-    return Container(
-      height: 135.0,
-      child: ListView(children: tiles),
-    );
+    return  Column(children: tiles);
   }
 
   Widget _buildMain() {
@@ -205,7 +200,7 @@ class SaleOrderDetail extends StatelessWidget {
       children: <Widget>[
         Container(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(5.0, 20.0, 15.0, 20.0),
+            padding: EdgeInsets.all(15.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -257,7 +252,7 @@ class SaleOrderDetail extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
+          padding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
