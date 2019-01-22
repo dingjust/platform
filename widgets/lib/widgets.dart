@@ -9,7 +9,7 @@ export 'src/commons/carousel/carousel.dart';
 export 'src/commons/chat/chat.dart';
 export 'src/commons/divider/divider.dart';
 export 'src/commons/form/show_select_tile.dart';
-export 'src/commons/form/text_field.dart';
+export 'src/commons/form/text_field_component.dart';
 export 'src/commons/menu/enum_select.dart';
 export 'src/commons/menu/menu.dart';
 export 'src/commons/progress/progress_indicator.dart';
