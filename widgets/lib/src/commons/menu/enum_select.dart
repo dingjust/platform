@@ -26,7 +26,6 @@ class EnumSelectPageState extends State<EnumSelectPage> {
 
   @override
   void initState() {
-    widget.items.firstWhere((item) => item.code == 'a', orElse: () => null);
     if (widget.codes != null && widget.codes.length > 0) {
       _selects = widget.codes.map((code) {
         return widget.items

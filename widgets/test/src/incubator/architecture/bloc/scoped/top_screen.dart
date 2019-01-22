@@ -23,7 +23,7 @@ class TopScreenPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed:() => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UnderScreenPage()),
+          MaterialPageRoute(builder: (context) => UnderScreenPage(bloc:bloc)),
       ),
         child: Icon(Icons.forward),
       ),
