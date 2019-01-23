@@ -1,11 +1,12 @@
 import 'package:b2b_commerce/src/common/app_keys.dart';
+import 'package:b2b_commerce/src/home/quick_reaction_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 /// 网站主页
 class HomePage extends StatefulWidget {
-  HomePage() :super(key: AppKeys.homePage);
+  HomePage() : super(key: AppKeys.homePage);
 
   @override
   _HomePageState createState() => new _HomePageState();
@@ -26,6 +27,13 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         children: [
           HomeBannerSection(),
+          RaisedButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => QuickReactionFactoryPage()));
+            },
+            child: Text('快反工厂'),
+          )
         ],
       ),
     );
