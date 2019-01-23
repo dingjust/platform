@@ -577,6 +577,9 @@ class QuoteModel extends AbstractOrderModel {
   /// 样衣费用
   double costOfSamples;
 
+  /// 其他
+  double costOfOther;
+
   /// 附件
   List<MediaModel> attachments;
 
@@ -596,6 +599,7 @@ class QuoteModel extends AbstractOrderModel {
     this.unitPriceOfExcipients,
     this.unitPriceOfProcessing,
     this.costOfSamples,
+    this.costOfOther,
     this.expectedDeliveryDate,
   }) : super(
           code: code,

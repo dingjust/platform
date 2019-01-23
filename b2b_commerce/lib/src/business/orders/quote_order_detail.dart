@@ -330,17 +330,14 @@ class QuoteOrderDetailPage extends StatelessWidget {
               color: Colors.grey,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
+                  Expanded(
+                    child: Text('其他'),
+                  ),
                   Text(
-                    '费用合计'
-                        '￥' +
-                        (item.order.unitPriceOfFabric +
-                                item.order.unitPriceOfExcipients +
-                                item.order.unitPriceOfProcessing)
-                            .toString(),
+                    '￥ ${item.order.costOfOther}',
                     style: TextStyle(
                       color: Colors.red,
                     ),
@@ -356,10 +353,32 @@ class QuoteOrderDetailPage extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text('样衣费用'),
+                    child: Text('打样费'),
                   ),
                   Text(
                     '￥' + item.order.costOfSamples.toString(),
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Colors.grey,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    '费用合计'
+                        '￥' +
+                        (item.order.unitPriceOfFabric +
+                                item.order.unitPriceOfExcipients +
+                                item.order.unitPriceOfProcessing)
+                            .toString(),
                     style: TextStyle(
                       color: Colors.red,
                     ),
