@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/home/quick_reaction_factory.dart';
+import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
