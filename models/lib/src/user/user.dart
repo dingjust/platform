@@ -166,18 +166,3 @@ class DistrictModel extends ItemModel {
 
   static Map<String, dynamic> toJson(DistrictModel model) => _$DistrictModelToJson(model);
 }
-
-//供应商
-@JsonSerializable()
-class SupplierModel extends ItemModel {
-  String code;
-  String name;
-  int orderCount;
-  AddressModel address;
-
-  SupplierModel({this.code, this.name, this.orderCount, this.address});
-
-  factory SupplierModel.fromJson(Map<String, dynamic> json) => _$SupplierModelFromJson(json);
-
-  static Map<String, dynamic> toJson(SupplierModel model) => _$SupplierModelToJson(model);
-}
