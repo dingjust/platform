@@ -262,7 +262,6 @@ class FactoryModel extends B2BUnitModel {
     this.responseQuotedTime,
     this.contactPerson,
     this.contactPhone,
-    this.responseQuotedTime,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
