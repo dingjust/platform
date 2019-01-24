@@ -50,6 +50,7 @@ class SuppliersDetail extends StatelessWidget {
     );
   }
 
+  //供应商明细头部显示
   Widget _buildTop(BuildContext context){
     return Container(
       margin: EdgeInsets.fromLTRB(5, 5, 0, 5),
@@ -157,6 +158,7 @@ class SuppliersDetail extends StatelessWidget {
     );
   }
 
+  //报价单信息
   Widget _buildQuoteInfo(BuildContext context){
     return Container(
       margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -219,6 +221,7 @@ class SuppliersDetail extends StatelessWidget {
     );
   }
 
+  //采购单信息
   Widget _buildPurchaseOrderInfo(BuildContext context){
       return Container(
         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -340,6 +343,7 @@ class SuppliersDetail extends StatelessWidget {
     );
   }
 
+  //历史订单信息
   Widget _buildHistoryOrderCount(BuildContext context){
     return Container(
       padding: EdgeInsets.all(10),
@@ -417,6 +421,7 @@ class SuppliersDetail extends StatelessWidget {
     );
   }
 
+  //工厂部分信息
   Widget _buildFactory(BuildContext context){
     return Container(
       padding: EdgeInsets.all(10),
@@ -520,6 +525,7 @@ class SuppliersDetail extends StatelessWidget {
     );
   }
 
+  //面辅料
   Widget _buildFabric(BuildContext context){
     return Container(
       padding: EdgeInsets.all(10),
@@ -560,6 +566,7 @@ class SuppliersDetail extends StatelessWidget {
     );
   }
 
+  //现款商品
   Widget _buildApparelProductItem(BuildContext context){
       return Container(
         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -645,6 +652,7 @@ class SuppliersDetail extends StatelessWidget {
       );
   }
 
+  //合作品牌
   Widget _buildCooperativeBrand(BuildContext context){
     return Container(
       margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -706,6 +714,7 @@ class SuppliersDetail extends StatelessWidget {
     );
   }
 
+  //工厂生产环境
   Widget _buildFactoryWorkPicInfo(BuildContext context){
     return Container(
       margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
