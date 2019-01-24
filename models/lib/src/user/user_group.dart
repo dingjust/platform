@@ -10,7 +10,7 @@ class UserGroupModel extends PrincipalGroupModel {
     String profilePicture,
     String uid,
     String name,
-    PrincipalModel members,
+    List<PrincipalModel> members,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -92,6 +92,7 @@ class B2BUnitModel extends OrgUnitModel {
     String path,
     int starLevel,
     AddressModel address,
+    String describe,
     this.active,
     this.email,
     this.phone,
@@ -177,9 +178,9 @@ class BrandModel extends B2BUnitModel {
           path: path,
           active: active,
           starLevel: starLevel,
-          contactAddress: contactAddress,
+          address: address,
           email: email,
-          telephone: telephone
+          phone: phone
        );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) => _$BrandModelFromJson(json);
@@ -207,6 +208,9 @@ class FactoryModel extends B2BUnitModel {
 
   //品类
   List<CategoryModel> categories;
+
+  //擅长品类
+  List<String> adeptAtCategories;
 
   //合作方式
   CooperationModes cooperationModes;
@@ -255,7 +259,6 @@ class FactoryModel extends B2BUnitModel {
     this.latheQuantity,
     this.cooperationModes,
     this.responseQuotedTime,
-    this.modes,
     this.contactPerson,
     this.contactPhone,
   }) : super(
