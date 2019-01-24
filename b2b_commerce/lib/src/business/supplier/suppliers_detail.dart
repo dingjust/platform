@@ -171,18 +171,18 @@ class SuppliersDetail extends StatelessWidget {
                     child: RichText(
                       text: TextSpan(
                           text: '向我报价',
-                          style: TextStyle(fontSize: 18, color: Colors.black),
+                          style: TextStyle(fontSize: 16, color: Colors.black),
                           children: <TextSpan>[
                             TextSpan(
                                 text: '${supplierModel.quoteCount}',
                                 style: TextStyle(
                                     color: Colors.red,
-                                  fontSize: 18
+                                  fontSize: 16
                                 )),
                             TextSpan(
                                 text: '次',
                                 style: TextStyle(
-                                    fontSize: 18
+                                    fontSize: 16
                                 )
                             ),
                           ]),
@@ -233,17 +233,17 @@ class SuppliersDetail extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                         text: '订单合作',
-                        style: TextStyle(fontSize: 18, color: Colors.black),
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                         children: <TextSpan>[
                           TextSpan(
                               text: '${supplierModel.orderCount}',
                               style: TextStyle(
                                   color: Colors.red,
-                                fontSize: 18
+                                fontSize: 16
                               )),
                           TextSpan(
                               text: '次',
-                            style: TextStyle(fontSize: 18)
+                            style: TextStyle(fontSize: 16)
                           ),
                         ]),
                   ),
@@ -354,7 +354,7 @@ class SuppliersDetail extends StatelessWidget {
                 child: Text(
                   '历史接单数',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
 //                    color: Colors.grey,
                   ),
@@ -368,7 +368,7 @@ class SuppliersDetail extends StatelessWidget {
                       child: Text(
                         '${supplierModel.factory.historyOrdersCount}单',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -385,7 +385,7 @@ class SuppliersDetail extends StatelessWidget {
                 child: Text(
                   '响应报价时间',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
 //                    color: Colors.grey,
                   ),
@@ -399,7 +399,7 @@ class SuppliersDetail extends StatelessWidget {
                       child: Text(
                         '${supplierModel.factory.responseQuotedTime}小时(平均)',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -431,7 +431,7 @@ class SuppliersDetail extends StatelessWidget {
                 child: Text(
                   '月均产能',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
 //                    color: Colors.grey,
                   ),
@@ -445,7 +445,7 @@ class SuppliersDetail extends StatelessWidget {
                     child: Text(
                       MonthlyCapacityRangesLocalizedMap[supplierModel.factory.monthlyCapacityRanges],
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -462,7 +462,7 @@ class SuppliersDetail extends StatelessWidget {
                 child: Text(
                   '产值规模',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
 //                    color: Colors.grey,
                   ),
@@ -477,7 +477,7 @@ class SuppliersDetail extends StatelessWidget {
                         ScaleRangesLocalizedMap[supplierModel.factory
                             .scaleRange],
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -495,7 +495,7 @@ class SuppliersDetail extends StatelessWidget {
                   child: Text(
                     '优势品类',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
 //                      color: Colors.grey,
                     ),
@@ -534,7 +534,7 @@ class SuppliersDetail extends StatelessWidget {
                 child: Text(
                   '常备面料',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
 //                    color: Colors.grey,
                   ),
@@ -574,7 +574,7 @@ class SuppliersDetail extends StatelessWidget {
                       child: Text(
                         '现货商品',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -660,7 +660,7 @@ class SuppliersDetail extends StatelessWidget {
                   child: Text(
                     '合作品牌',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -720,7 +720,7 @@ class SuppliersDetail extends StatelessWidget {
                   child: Text(
                     '硬件设备和生产环境',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -798,7 +798,7 @@ class SuppliersDetail extends StatelessWidget {
           ListTile(
             leading: Text(
               '认证信息',
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
             ),
           ),
           Divider(
@@ -885,7 +885,7 @@ class SuppliersDetail extends StatelessWidget {
               child: Text(
                 _list[i].name,
                 style: TextStyle(
-                    fontSize: 18
+                    fontSize: 16
                 ),
               )
           ),
@@ -917,7 +917,7 @@ class SuppliersDetail extends StatelessWidget {
                 Text(
                   PurchaseOrderStatusLocalizedMap[supplierModel.purchaseOrder.status],
                   textAlign: TextAlign.end,
-                  style: TextStyle(fontSize: 18, color: Colors.green),
+                  style: TextStyle(fontSize: 16, color: Colors.green),
                 )
               ],
             ),
@@ -1094,7 +1094,7 @@ class SuppliersDetail extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         "${supplierModel.quoteOrder.order.totalQuantity}件",
-                        style: TextStyle(fontSize: 18, color: Colors.orange),
+                        style: TextStyle(fontSize: 16, color: Colors.orange),
                       )
                     ],
                   ),
