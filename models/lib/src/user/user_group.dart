@@ -10,7 +10,7 @@ class UserGroupModel extends PrincipalGroupModel {
     String profilePicture,
     String uid,
     String name,
-    List<PrincipalModel> members,
+    PrincipalModel members,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -29,6 +29,7 @@ class CompanyModel extends UserGroupModel {
   /// 星级
   int starLevel;
   AddressModel address;
+  String describe;
 
   CompanyModel({
     String profilePicture,
@@ -37,6 +38,7 @@ class CompanyModel extends UserGroupModel {
     List<PrincipalModel> members,
     this.starLevel,
     this.address,
+    this.describe,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -60,6 +62,7 @@ class OrgUnitModel extends CompanyModel {
     List<PrincipalModel> members,
     int starLevel,
     AddressModel address,
+    String describe,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -68,6 +71,7 @@ class OrgUnitModel extends CompanyModel {
           members: members,
           starLevel: starLevel,
           address: address,
+    describe: describe,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) => _$OrgUnitModelFromJson(json);
@@ -99,6 +103,7 @@ class B2BUnitModel extends OrgUnitModel {
           path: path,
           starLevel: starLevel,
           address: address,
+          describe: describe,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) => _$B2BUnitModelFromJson(json);
@@ -172,9 +177,9 @@ class BrandModel extends B2BUnitModel {
           path: path,
           active: active,
           starLevel: starLevel,
-          address: address,
+          contactAddress: contactAddress,
           email: email,
-          phone: phone
+          telephone: telephone
        );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) => _$BrandModelFromJson(json);
@@ -204,7 +209,7 @@ class FactoryModel extends B2BUnitModel {
   List<CategoryModel> categories;
 
   //合作方式
-  List<CooperationModes> modes;
+  CooperationModes cooperationModes;
 
   //开发能力
   bool developmentCapacity;
@@ -223,6 +228,8 @@ class FactoryModel extends B2BUnitModel {
   String bankOfDeposit;
   //认证证件
   List<MediaModel> certificate;
+  //响应报价时间
+  int responseQuotedTime;
 
   FactoryModel({
     String profilePicture,
@@ -233,6 +240,7 @@ class FactoryModel extends B2BUnitModel {
     bool active,
     int starLevel,
     AddressModel address,
+    String describe,
     this.historyOrdersCount,
     this.orderedSuccessRate,
     this.monthlyCapacityRanges,
@@ -245,6 +253,8 @@ class FactoryModel extends B2BUnitModel {
     this.cooperativeBrand,
     this.developmentCapacity,
     this.latheQuantity,
+    this.cooperationModes,
+    this.responseQuotedTime,
     this.modes,
     this.contactPerson,
     this.contactPhone,
@@ -256,6 +266,7 @@ class FactoryModel extends B2BUnitModel {
           path: path,
           active: active,
           starLevel: starLevel,
+          describe :describe,
           address: address,
         );
 
@@ -336,3 +347,22 @@ const ScaleRangesLocalizedMap = {
   ScaleRanges.SR004: "1000万-5000万",
   ScaleRanges.SR005: "5000万以上",
 };
+
+//供应商
+@JsonSerializable()
+class SupplierModel extends ItemModel {
+  //工厂信息
+  FactoryModel factory;
+  //合作次数
+  int orderCount;
+  //报价单信息（取最新一条）
+  QuoteModel quote;
+  //采购订单信息（取最新一条）
+  PurchaseOrderModel purchaseOrder;
+
+  SupplierModel({this.factory,this.orderCount,this.quote,this.purchaseOrder});
+
+  factory SupplierModel.fromJson(Map<String, dynamic> json) => _$SupplierModelFromJson(json);
+
+  static Map<String, dynamic> toJson(SupplierModel model) => _$SupplierModelToJson(model);
+}
