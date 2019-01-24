@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
+import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -33,6 +34,19 @@ class _HomePageState extends State<HomePage> {
                   builder: (context) => QuickReactionFactoryPage()));
             },
             child: Text('快反工厂'),
+          ),
+          RaisedButton(
+            onPressed: () {
+              // Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (context) => QuickReactionFactoryPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => PublishRequirementSuccessDialog(),
+                    fullscreenDialog: true,
+                  ));
+            },
+            child: Text('发布需求成功'),
           )
         ],
       ),
