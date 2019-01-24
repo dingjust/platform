@@ -114,7 +114,7 @@ class _PublishRequirementSuccessDialogState
               child: Center(
                 child: Text(
                   '需求发布成功！',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20,color: Colors.orange),
                 ),
               ),
             ))
@@ -327,6 +327,7 @@ class _PublishRequirementSuccessDialogState
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
         children: <Widget>[
           Row(
