@@ -21,7 +21,7 @@ class PrincipalModel extends ItemModel {
 /// Principal Group
 @JsonSerializable()
 class PrincipalGroupModel extends PrincipalModel {
-  PrincipalModel members;
+  List<PrincipalModel> members;
 
   PrincipalGroupModel({
     String profilePicture,

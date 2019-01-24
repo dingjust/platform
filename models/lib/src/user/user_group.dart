@@ -10,13 +10,13 @@ class UserGroupModel extends PrincipalGroupModel {
     String profilePicture,
     String uid,
     String name,
-    PrincipalModel members,
+    List<PrincipalModel> members,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-        );
+    profilePicture: profilePicture,
+    uid: uid,
+    name: name,
+    members: members,
+  );
 
   factory UserGroupModel.fromJson(Map<String, dynamic> json) => _$UserGroupModelFromJson(json);
 
@@ -29,7 +29,6 @@ class CompanyModel extends UserGroupModel {
   /// 星级
   int starLevel;
   AddressModel address;
-  String describe;
 
   CompanyModel({
     String profilePicture,
@@ -38,13 +37,12 @@ class CompanyModel extends UserGroupModel {
     List<PrincipalModel> members,
     this.starLevel,
     this.address,
-    this.describe,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-        );
+    profilePicture: profilePicture,
+    uid: uid,
+    name: name,
+    members: members,
+  );
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) => _$CompanyModelFromJson(json);
 
@@ -62,17 +60,15 @@ class OrgUnitModel extends CompanyModel {
     List<PrincipalModel> members,
     int starLevel,
     AddressModel address,
-    String describe,
     this.path,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-          starLevel: starLevel,
-          address: address,
-    describe: describe,
-        );
+    profilePicture: profilePicture,
+    uid: uid,
+    name: name,
+    members: members,
+    starLevel: starLevel,
+    address: address,
+  );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) => _$OrgUnitModelFromJson(json);
 
@@ -96,15 +92,14 @@ class B2BUnitModel extends OrgUnitModel {
     this.email,
     this.phone,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-          path: path,
-          starLevel: starLevel,
-          address: address,
-          describe: describe,
-        );
+    profilePicture: profilePicture,
+    uid: uid,
+    name: name,
+    members: members,
+    path: path,
+    starLevel: starLevel,
+    address: address,
+  );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) => _$B2BUnitModelFromJson(json);
 
@@ -170,17 +165,17 @@ class BrandModel extends B2BUnitModel {
     this.contactPerson,
     this.contactPhone,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-          path: path,
-          active: active,
-          starLevel: starLevel,
-          contactAddress: contactAddress,
-          email: email,
-          telephone: telephone
-       );
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      members: members,
+      path: path,
+      active: active,
+      starLevel: starLevel,
+      address: address,
+      email: email,
+      phone: phone
+  );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) => _$BrandModelFromJson(json);
 
@@ -209,7 +204,7 @@ class FactoryModel extends B2BUnitModel {
   List<CategoryModel> categories;
 
   //合作方式
-  CooperationModes cooperationModes;
+  List<String> cooperationModes;
 
   //开发能力
   bool developmentCapacity;
@@ -228,6 +223,7 @@ class FactoryModel extends B2BUnitModel {
   String bankOfDeposit;
   //认证证件
   List<MediaModel> certificate;
+
   //响应报价时间
   int responseQuotedTime;
 
@@ -240,7 +236,6 @@ class FactoryModel extends B2BUnitModel {
     bool active,
     int starLevel,
     AddressModel address,
-    String describe,
     this.historyOrdersCount,
     this.orderedSuccessRate,
     this.monthlyCapacityRanges,
@@ -254,21 +249,19 @@ class FactoryModel extends B2BUnitModel {
     this.developmentCapacity,
     this.latheQuantity,
     this.cooperationModes,
-    this.responseQuotedTime,
-    this.modes,
     this.contactPerson,
     this.contactPhone,
+    this.responseQuotedTime,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-          path: path,
-          active: active,
-          starLevel: starLevel,
-          describe :describe,
-          address: address,
-        );
+    profilePicture: profilePicture,
+    uid: uid,
+    name: name,
+    members: members,
+    path: path,
+    active: active,
+    starLevel: starLevel,
+    address: address,
+  );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) => _$FactoryModelFromJson(json);
 
@@ -359,8 +352,10 @@ class SupplierModel extends ItemModel {
   QuoteModel quote;
   //采购订单信息（取最新一条）
   PurchaseOrderModel purchaseOrder;
+  //现货商品
+  List<ApparelProductModel> apparelProducts;
 
-  SupplierModel({this.factory,this.orderCount,this.quote,this.purchaseOrder});
+  SupplierModel({this.factory,this.orderCount,this.quote,this.purchaseOrder,this.apparelProducts});
 
   factory SupplierModel.fromJson(Map<String, dynamic> json) => _$SupplierModelFromJson(json);
 

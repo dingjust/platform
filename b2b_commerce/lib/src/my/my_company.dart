@@ -12,12 +12,10 @@ BrandModel brandModel = BrandModel.fromJson({
   'name': '草帽商店',
   'starLevel': 5,
   'email': 'monkey.D.luffy@163.com',
-  'telephone': '020-12345678',
-  'members': {
-    'name': 'luffy',
-    'phone': '13123456789',
-  },
-  'contactAddress': {
+  'phone': '020-12345678',
+  'contactPerson': 'luffy',
+  'contactPhone': '13123456789',
+  'address': {
     'fullname': "张三",
     'cellphone': '13123456789',
     'region': {'isocode': 'R123', 'name': '广东省'},
@@ -25,7 +23,7 @@ BrandModel brandModel = BrandModel.fromJson({
     'cityDistrict': {'code': 'D123', 'name': '海珠区'},
     'line1': '广州大道南',
   },
-  'brandName': '草帽海贼团',
+  'brand': '草帽海贼团',
   'cooperativeBrand': '红心海贼团',
   'scaleRange': 'SR005',
   'ageRanges': ['16-22', '23-30'],
@@ -76,16 +74,14 @@ FactoryModel factoryModel = FactoryModel.fromJson({
   'name': '草帽工厂',
   'starLevel': 5,
   'email': 'monkey.D.luffy@163.com',
-  'telephone': '020-12345678',
-  'cooperationModes': 'FOB',
+  'phone': '020-12345678',
+  'cooperationModes': ['FOB'],
   'developmentCapacity': true,
   'monthlyCapacityRanges': 'MCR003',
   'latheQuantity': 5,
-  'members': {
-    'name': 'luffy',
-    'phone': '13123456789',
-  },
-  'contactAddress': {
+  'contactPerson': 'luffy',
+  'contactPhone': '13123456789',
+  'address': {
     'fullname': "张三",
     'cellphone': '13123456789',
     'region': {'isocode': 'R123', 'name': '广东省'},
@@ -220,31 +216,31 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
         children: <Widget>[
           ListTile(
             leading: Text('联系人'),
-            trailing: Text(brandModel.members.name),
+            trailing: Text(brandModel.contactPhone),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('联系电话'),
-            trailing: Text(brandModel.members.phone),
+            trailing: Text(brandModel.contactPhone),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('经营地址'),
-            trailing: Text(brandModel.contactAddress.region.name +
-                brandModel.contactAddress.city.name +
-                brandModel.contactAddress.cityDistrict.name +
-                brandModel.contactAddress.line1),
+            trailing: Text(brandModel.address.region.name +
+                brandModel.address.city.name +
+                brandModel.address.cityDistrict.name +
+                brandModel.address.line1),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('座机号码'),
-            trailing: Text(brandModel.telephone),
+            trailing: Text(brandModel.phone),
           ),
           Divider(
             height: 5,
@@ -258,7 +254,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           ),
           ListTile(
             leading: Text('品牌名称'),
-            trailing: Text(brandModel.brandName),
+            trailing: Text(brandModel.name),
           ),
           Divider(
             height: 5,
@@ -494,7 +490,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
         children: <Widget>[
           ListTile(
             leading: Text('联系人'),
-            trailing: Text(factoryModel.members.name),
+            trailing: Text(factoryModel.contactPerson),
           ),
           Divider(
             height: 5,
@@ -502,19 +498,19 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           GestureDetector(
               child: ListTile(
                   leading: Text('联系电话'),
-                  trailing: Text(factoryModel.members.phone)),
+                  trailing: Text(factoryModel.contactPhone)),
               onTap: () {
-                _selectActionButton('${factoryModel.members.phone}');
+                _selectActionButton('${factoryModel.contactPhone}');
               }),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('经营地址'),
-            trailing: Text(factoryModel.contactAddress.region.name +
-                factoryModel.contactAddress.city.name +
-                factoryModel.contactAddress.cityDistrict.name +
-                factoryModel.contactAddress.line1),
+            trailing: Text(factoryModel.address.region.name +
+                factoryModel.address.city.name +
+                factoryModel.address.cityDistrict.name +
+                factoryModel.address.line1),
           ),
           Divider(
             height: 5,
@@ -522,10 +518,10 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           GestureDetector(
               child: ListTile(
                 leading: Text('座机号码'),
-                trailing: Text(factoryModel.telephone),
+                trailing: Text(factoryModel.phone),
               ),
               onTap: () {
-                _selectActionButton('${factoryModel.telephone}');
+                _selectActionButton('${factoryModel.phone}');
               }),
           Divider(
             height: 5,
@@ -577,10 +573,20 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           Divider(
             height: 5,
           ),
-          ListTile(
-            leading: Text('合作方式'),
-            trailing: Text(
-                CooperationModesLocalizedMap[factoryModel.cooperationModes]),
+          Container(
+            padding: EdgeInsets.all(15),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: Text('合作方式')),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Row(
+                    children: _buildItemsByStringList(
+                        context, factoryModel.cooperationModes),
+                  ),
+                ),
+              ],
+            ),
           ),
           Divider(
             height: 5,
