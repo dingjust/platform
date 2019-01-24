@@ -15,7 +15,8 @@ BrandModel brandModel = BrandModel.fromJson({
   'phone': '020-12345678',
   'contactPerson': 'luffy',
   'contactPhone': '13123456789',
-  'address': {
+  'address':'广东省广州市海珠区广州大道南',
+  'contactAddress': {
     'fullname': "张三",
     'cellphone': '13123456789',
     'region': {'isocode': 'R123', 'name': '广东省'},
@@ -30,22 +31,9 @@ BrandModel brandModel = BrandModel.fromJson({
   'priceRange1s': ['1000-3999', '4999-9999'],
   'priceRange2s': ['5999-9999', '10000-19999'],
   'styles': [
-    {'code': '1001', 'name': '潮流'},
-    {
-      'code': '1002',
-      'name': '古典',
-    },
+    'C001','C002',
   ],
-  'categories': [
-    {
-      'code': '1001',
-      'name': '卫衣',
-    },
-    {
-      'code': '1002',
-      'name': '毛衣',
-    },
-  ],
+  'adeptAtCategories': ['毛衣'],
   'registrationDate': DateTime.now().toString(),
   'taxNumber': '41553315446687844',
   'bankOfDeposit': '中国工商银行',
@@ -81,7 +69,7 @@ FactoryModel factoryModel = FactoryModel.fromJson({
   'latheQuantity': 5,
   'contactPerson': 'luffy',
   'contactPhone': '13123456789',
-  'address': {
+  'contactAddress': {
     'fullname': "张三",
     'cellphone': '13123456789',
     'region': {'isocode': 'R123', 'name': '广东省'},
@@ -89,16 +77,7 @@ FactoryModel factoryModel = FactoryModel.fromJson({
     'cityDistrict': {'code': 'D123', 'name': '海珠区'},
     'line1': '广州大道南',
   },
-  'categories': [
-    {
-      'code': '1001',
-      'name': '卫衣',
-    },
-    {
-      'code': '1002',
-      'name': '毛衣',
-    },
-  ],
+  'adeptAtCategories': ['毛衣'],
   'cooperativeBrand': '红心海贼团',
   'scaleRange': 'SR005',
   'registrationDate': DateTime.now().toString(),
@@ -129,6 +108,14 @@ class MyCompanyPage extends StatefulWidget {
 }
 
 class _MyCompanyPageState extends State<MyCompanyPage> {
+  UserRepository _userRepository = UserRepositoryImpl();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = BLoCProvider.of<UserBLoC>(context);
@@ -151,16 +138,31 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
         ),
         body: Container(
           child:
-              bloc.isBrandUser ? _buildBrand(context) : _buildFactory(context),
+//              bloc.isBrandUser ? _buildBrand(context) : _buildFactory(context),
+            _buildBrand(context)
         ));
   }
 
   Widget _buildBrand(BuildContext context) {
+    /*return FutureBuilder(
+      future: _userRepository.getBrand('B0001'),
+      builder: (BuildContext context,AsyncSnapshot<BrandModel> snapshot){
+        return ListView(
+          children: <Widget>[
+            _buildBrandTop(context,snapshot.data),
+            _buildBrandInfo(context,snapshot.data),
+            _buildBrandAuthentication(context,snapshot.data),
+          ],
+          padding: const EdgeInsets.all(10.0),
+        );
+      },
+    );*/
+
     return ListView(
       children: <Widget>[
-        _buildBrandTop(context),
-        _buildBrandInfo(context),
-        _buildBrandAuthentication(context),
+        _buildBrandTop(context,brandModel),
+        _buildBrandInfo(context,brandModel),
+        _buildBrandAuthentication(context,brandModel),
       ],
       padding: const EdgeInsets.all(10.0),
     );
@@ -178,7 +180,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
   }
 
   //品牌头部展示，头像及公司名
-  Widget _buildBrandTop(BuildContext context) {
+  Widget _buildBrandTop(BuildContext context,BrandModel brandModel) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Center(
@@ -186,14 +188,14 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           children: <Widget>[
             CircleAvatar(
               backgroundImage: NetworkImage(
-                brandModel.profilePicture,
+                brandModel?.profilePicture ?? '',
               ),
               radius: 50.0,
             ),
             Container(
               color: Colors.white,
               child: Text(
-                brandModel.name,
+                brandModel?.name ?? '',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             )
@@ -208,7 +210,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
   }
 
   //品牌端信息
-  Widget _buildBrandInfo(BuildContext context) {
+  Widget _buildBrandInfo(BuildContext context,BrandModel brandModel) {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -216,59 +218,60 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
         children: <Widget>[
           ListTile(
             leading: Text('联系人'),
-            trailing: Text(brandModel.contactPhone),
+            trailing: Text(brandModel?.contactPhone ?? ''),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('联系电话'),
-            trailing: Text(brandModel.contactPhone),
+            trailing: Text(brandModel?.contactPhone ?? ''),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('经营地址'),
-            trailing: Text(brandModel.address.region.name +
-                brandModel.address.city.name +
-                brandModel.address.cityDistrict.name +
-                brandModel.address.line1),
+//            trailing: Text(brandModel.contactAddress.region.name +
+//                brandModel.contactAddress.city.name +
+//                brandModel.contactAddress.cityDistrict.name +
+//                brandModel.contactAddress.line1),
+          trailing: Text(brandModel?.address ?? ''),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('座机号码'),
-            trailing: Text(brandModel.phone),
+            trailing: Text(brandModel?.phone ?? ''),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('邮箱地址'),
-            trailing: Text(brandModel.email),
+            trailing: Text(brandModel?.email ?? ''),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('品牌名称'),
-            trailing: Text(brandModel.name),
+            trailing: Text(brandModel?.brand ?? ''),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('合作品牌'),
-            trailing: Text(brandModel.cooperativeBrand),
+            trailing: Text(brandModel?.cooperativeBrand ?? ''),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('产业规模'),
-            trailing: Text(ScaleRangesLocalizedMap[brandModel.scaleRange]),
+            trailing: Text(ScaleRangesLocalizedMap[brandModel?.scaleRange] ?? ''),
           ),
           Divider(
             height: 5,
@@ -282,7 +285,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                   alignment: Alignment.centerRight,
                   child: Row(
                     children:
-                        _buildItemsByEntityList(context, brandModel.styles),
+                        _buildItemsByStringList(context, brandModel?.styles ?? []),
                   ),
                 ),
               ],
@@ -300,7 +303,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                   alignment: Alignment.centerRight,
                   child: Row(
                     children:
-                        _buildItemsByEntityList(context, brandModel.categories),
+                    _buildItemsByStringList(context, brandModel?.adeptAtCategories ?? []),
                   ),
                 ),
               ],
@@ -318,7 +321,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                   alignment: Alignment.centerRight,
                   child: Row(
                     children:
-                        _buildItemsByStringList(context, brandModel.ageRanges),
+                        _buildItemsByStringList(context, brandModel?.ageRanges ?? []),
                   ),
                 ),
               ],
@@ -336,7 +339,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                   alignment: Alignment.centerRight,
                   child: Row(
                     children: _buildItemsByStringList(
-                        context, brandModel.priceRange1s),
+                        context, brandModel?.priceRange1s ?? []),
                   ),
                 ),
               ],
@@ -354,7 +357,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                   alignment: Alignment.centerRight,
                   child: Row(
                     children: _buildItemsByStringList(
-                        context, brandModel.priceRange2s),
+                        context, brandModel?.priceRange2s ?? []),
                   ),
                 ),
               ],
@@ -372,7 +375,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                   alignment: Alignment.centerRight,
                   child: Row(
                     children:
-                        _buildItemsStarIcon(context, brandModel.starLevel),
+                        _buildItemsStarIcon(context, brandModel?.starLevel ?? 0),
                   ),
                 ),
               ],
@@ -388,7 +391,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
   }
 
   //品牌端认证信息
-  Widget _buildBrandAuthentication(BuildContext context) {
+  Widget _buildBrandAuthentication(BuildContext context,BrandModel brandModel) {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -406,21 +409,21 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           ListTile(
             leading: Text("注册时间"),
             trailing:
-                Text('${DateFormatUtil.format(brandModel.registrationDate)}'),
+                Text('${DateFormatUtil.format(brandModel?.registrationDate ?? DateTime.now())}'),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text("税号"),
-            trailing: Text(brandModel.taxNumber),
+            trailing: Text(brandModel?.taxNumber ?? ''),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text("开户行"),
-            trailing: Text(brandModel.bankOfDeposit),
+            trailing: Text(brandModel?.bankOfDeposit ?? ''),
           ),
           Divider(
             height: 5,
@@ -437,7 +440,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                   ],
                 ),
                 Attachments(
-                  list: brandModel.certificate,
+                  list: brandModel?.certificate ?? [],
                 )
               ],
             ),
@@ -507,10 +510,11 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           ),
           ListTile(
             leading: Text('经营地址'),
-            trailing: Text(factoryModel.address.region.name +
-                factoryModel.address.city.name +
-                factoryModel.address.cityDistrict.name +
-                factoryModel.address.line1),
+//            trailing: Text(factoryModel.contactAddress.region.name +
+//                factoryModel.contactAddress.city.name +
+//                factoryModel.contactAddress.cityDistrict.name +
+//                factoryModel.contactAddress.line1),
+            trailing: Text(factoryModel.address ?? ''),
           ),
           Divider(
             height: 5,
@@ -563,8 +567,8 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Row(
-                    children: _buildItemsByEntityList(
-                        context, factoryModel.categories),
+                    children: _buildItemsByStringList(
+                        context, factoryModel.adeptAtCategories),
                   ),
                 ),
               ],
@@ -696,8 +700,8 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
 
   List<Widget> _buildItemsByStringList(
       BuildContext context, List<String> _list) {
-    List<Widget> _widget = new List();
-    if (_list.isNotEmpty) {
+    List<Widget> _widget = <Widget>[];
+    if (_list != null && _list.isNotEmpty) {
       for (int i = 0; i < _list.length; i++) {
         _widget.add(Container(
           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),

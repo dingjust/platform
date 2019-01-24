@@ -86,6 +86,7 @@ class ApparelProductBLoC extends BLoCBase {
         'thickness': 'K001',
         'season': 'L001',
         'placket': 'M001',
+        'taggable':true,
       }
     }));
   }
@@ -148,6 +149,7 @@ class ApparelProductBLoC extends BLoCBase {
               'decorativePattern': ['G001', 'G002'],
               'popularElements': ['H001', 'H002'],
               'filler': 'J001',
+              'taggable':true,
               'thickness': 'K001',
               'season': 'L001',
               'placket': 'M001',
@@ -192,6 +194,7 @@ class ApparelProductBLoC extends BLoCBase {
               'filler': 'J001',
               'thickness': 'K001',
               'season': 'L001',
+              'taggable':false,
               'placket': 'M001',
             }
           }),
@@ -386,6 +389,7 @@ class ApparelProductBLoC extends BLoCBase {
           'thickness': 'K001',
           'season': 'L001',
           'placket': 'M001',
+          'taggable':true,
         }
       });
     }));

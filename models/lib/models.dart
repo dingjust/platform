@@ -36,6 +36,12 @@ class EnumModel {
       _$EnumModelToJson(model);
 }
 
+
+String enumMap(dynamic enumModels,String code){
+  EnumModel model = enumModels.firstWhere((enumModel) => enumModel.code == code,orElse: () => EnumModel('',''));
+  return model.name;
+}
+
 ///风格
 const StyleEnum = <EnumModel>[
   EnumModel('A001', '潮流'),

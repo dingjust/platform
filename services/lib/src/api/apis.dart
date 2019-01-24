@@ -12,4 +12,16 @@ class Apis {
   static get districtsForCity => (city) {
         return '/{baseSiteId}/cities/$city/districts';
       };
+
+  static get register => (type) {
+        if (type != 'BRAND') {
+          return '/{baseSiteId}/factory/register';
+        }
+
+        return '/{baseSiteId}/brand/register';
+      };
+
+  static get brand => (uid) {
+    return '/{baseSiteId}/brand/$uid';
+  };
 }

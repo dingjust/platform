@@ -28,7 +28,8 @@ class UserGroupModel extends PrincipalGroupModel {
 class CompanyModel extends UserGroupModel {
   /// 星级
   int starLevel;
-  AddressModel address;
+  AddressModel contactAddress;
+  String address;
   String describe;
 
   CompanyModel({
@@ -39,6 +40,7 @@ class CompanyModel extends UserGroupModel {
     this.starLevel,
     this.address,
     this.describe,
+    this.contactAddress,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -61,8 +63,9 @@ class OrgUnitModel extends CompanyModel {
     String name,
     List<PrincipalModel> members,
     int starLevel,
-    AddressModel address,
+    String address,
     String describe,
+    AddressModel contactAddress,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -71,7 +74,8 @@ class OrgUnitModel extends CompanyModel {
           members: members,
           starLevel: starLevel,
           address: address,
-    describe: describe,
+          contactAddress:contactAddress,
+          describe: describe,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) => _$OrgUnitModelFromJson(json);
@@ -91,7 +95,8 @@ class B2BUnitModel extends OrgUnitModel {
     List<PrincipalModel> members,
     String path,
     int starLevel,
-    AddressModel address,
+    AddressModel contactAddress,
+    String address,
     String describe,
     this.active,
     this.email,
@@ -104,6 +109,7 @@ class B2BUnitModel extends OrgUnitModel {
           path: path,
           starLevel: starLevel,
           address: address,
+          contactAddress:contactAddress,
           describe: describe,
         );
 
@@ -125,7 +131,7 @@ class BrandModel extends B2BUnitModel {
   //规模范围
   ScaleRanges scaleRange;
   //风格
-  List<StyleModel> styles;
+  List<String> styles;
   //品类
   List<CategoryModel> categories;
   //擅长品类
@@ -155,7 +161,8 @@ class BrandModel extends B2BUnitModel {
     int starLevel,
     String email,
     String phone,
-    AddressModel address,
+    AddressModel contactAddress,
+    String address,
     this.brand,
     this.scaleRange,
     this.cooperativeBrand,
@@ -179,6 +186,7 @@ class BrandModel extends B2BUnitModel {
       active: active,
       starLevel: starLevel,
       address: address,
+      contactAddress:contactAddress,
       email: email,
       phone: phone
   );
@@ -244,7 +252,8 @@ class FactoryModel extends B2BUnitModel {
     String path,
     bool active,
     int starLevel,
-    AddressModel address,
+    AddressModel contactAddress,
+    String address,
     String describe,
     this.historyOrdersCount,
     this.orderedSuccessRate,
@@ -272,6 +281,7 @@ class FactoryModel extends B2BUnitModel {
           starLevel: starLevel,
           describe :describe,
           address: address,
+      contactAddress:contactAddress,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) => _$FactoryModelFromJson(json);

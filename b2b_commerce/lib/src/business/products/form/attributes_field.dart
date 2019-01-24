@@ -24,7 +24,7 @@ class _AttributesFieldState extends State<AttributesField> {
               context,
               MaterialPageRoute(
                 builder: (context) => ApparelProductAttributesInputPage(
-                  item: widget.item.attributes,
+                  item: widget.item?.attributes,
                 ),
               ),
             );

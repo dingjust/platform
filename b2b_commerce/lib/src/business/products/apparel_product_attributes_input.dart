@@ -14,13 +14,121 @@ class ApparelProductAttributesInputPage extends StatefulWidget {
 class ApparelProductAttributesInputPageState
     extends State<ApparelProductAttributesInputPage> {
   String _styleText;
+  String _fabricCompositionText;
+  String _editionTypeText;
+  String _patternText;
+  String _sleeveTypeText;
+  String _sleeveLengthText;
+  String _decorativePatternText;
+  String _popularElementsText;
+  String _fillerText;
+  String _thicknessText;
+  String _seasonText;
+  String _taggableText;
+  String _placketText;
+  List<String> _styleCodes;
+  String _fabricCompositionCode;
+  String _editionTypeCode;
+  String _patternCode;
+  String _sleeveTypeCode;
+  String _sleeveLengthCode;
+  List<String> _decorativePatternCodes;
+  List<String> _popularElementsCodes;
+  String _fillerCode;
+  String _thicknessCode;
+  String _seasonCode;
+  String _taggableCode;
+  String _placketCode;
 
   @override
   void initState() {
-    if (widget.item != null) {
-      _styleText = widget.item?.styles?.length > 0
-          ? '已选择 ' + widget.item?.styles?.length.toString()
-          : '';
+    if (widget.item?.styles != null) {
+      _styleText = '';
+      for (int i = 0; i < widget.item.styles.length; i++) {
+        if (i == 4) {
+          _styleText += '...';
+          break;
+        }
+
+        _styleText += enumMap(StyleEnum, widget.item.styles[i]);
+
+        if (i != widget.item.styles.length - 1) {
+          _styleText += '、';
+        }
+      }
+      _styleCodes = widget.item?.styles;
+    }
+
+    _fabricCompositionText =
+        enumMap(FabricCompositionEnum, widget.item?.fabricComposition);
+    _fabricCompositionCode = widget.item?.fabricComposition;
+
+    _editionTypeText = enumMap(EditionTypeEnum, widget.item?.editionType);
+    _editionTypeCode = widget.item?.editionType;
+
+    _patternText = enumMap(PatternEnum, widget.item?.pattern);
+    _patternCode = widget.item?.pattern;
+
+    _sleeveTypeText = enumMap(SleeveTypeEnum, widget.item?.sleeveType);
+    _sleeveTypeCode = widget.item?.sleeveType;
+
+    _sleeveLengthText = enumMap(SleeveLengthEnum, widget.item?.sleeveLength);
+    _sleeveLengthCode = widget.item?.sleeveLength;
+
+    if (widget.item?.decorativePattern != null) {
+      _decorativePatternText = '';
+      for (int i = 0; i < widget.item?.decorativePattern.length; i++) {
+        if (i == 4) {
+          _decorativePatternText += '...';
+          break;
+        }
+
+        _decorativePatternText +=
+            enumMap(DecorativePatternEnum, widget.item?.decorativePattern[i]);
+
+        if (i != widget.item?.decorativePattern.length - 1) {
+          _decorativePatternText += '、';
+        }
+      }
+
+      _decorativePatternCodes = widget.item?.decorativePattern;
+    }
+    if (widget.item?.popularElements != null) {
+      _popularElementsText = '';
+      for (int i = 0; i < widget.item?.popularElements.length; i++) {
+        if (i == 4) {
+          _popularElementsText += '...';
+          break;
+        }
+
+        _popularElementsText +=
+            enumMap(PopularElementsEnum, widget.item?.popularElements[i]);
+
+        if (i != widget.item?.popularElements.length - 1) {
+          _popularElementsText += '、';
+        }
+      }
+
+      _popularElementsCodes = widget.item?.popularElements;
+    }
+
+    _fillerText = enumMap(FillerEnum, widget.item?.filler);
+    _fillerCode = widget.item?.filler;
+
+    _thicknessText = enumMap(ThicknessEnum, widget.item?.thickness);
+    _thicknessCode = widget.item?.thickness;
+
+    _seasonText = enumMap(SeasonEnum, widget.item?.season);
+    _seasonCode = widget.item?.season;
+
+    _placketText = enumMap(PlacketEnum, widget.item?.placket);
+    _placketCode = widget.item?.placket;
+
+    print(widget.item?.taggable);
+    if (widget.item?.taggable != null) {
+      print(widget.item?.taggable);
+      _taggableText = widget.item?.taggable ? '有' : '没有';
+      _taggableCode = widget.item?.taggable ? 'true' : 'false';
     }
 
     // TODO: implement initState
@@ -29,7 +137,6 @@ class ApparelProductAttributesInputPageState
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('属性'),
@@ -49,28 +156,36 @@ class ApparelProductAttributesInputPageState
         children: <Widget>[
           InkWell(
             onTap: () async {
-              dynamic result = await Navigator.push(
+              List<EnumModel> result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EnumSelectPage(
                         title: '选择风格',
                         items: StyleEnum,
-                        codes: widget.item?.styles,
+                        codes: _styleCodes,
                         multiple: true,
                       ),
                 ),
               );
 
               if (result != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.length.toString()),
-                      ),
-                );
-                if (result.length > 0) {
-                  _styleText = '已选择' + result.length.toString();
+                _styleText = '';
+                for (int i = 0; i < result.length; i++) {
+                  if (i == 4) {
+                    _styleText += '...';
+                    break;
+                  }
+
+                  _styleText += result[i].name;
+
+                  if (i != result.length - 1) {
+                    _styleText += '、';
+                  }
                 }
+
+                _styleCodes = result.map((style) {
+                  return style.code;
+                }).toList();
               }
             },
             child: ShowSelectTile(
@@ -87,24 +202,16 @@ class ApparelProductAttributesInputPageState
                   builder: (context) => EnumSelectPage(
                         title: '选择面料',
                         items: FabricCompositionEnum,
-                        code: widget.item.fabricComposition,
+                        code: _fabricCompositionCode,
                       ),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _fabricCompositionText = result.name;
+              _fabricCompositionCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '面料',
-              tralingText: FabricCompositionEnum.firstWhere(
-                  (item) => item.code == widget.item.fabricComposition,
-                  orElse: () => EnumModel('', '')).name,
+              tralingText: _fabricCompositionText,
               tralingTextColor: Colors.orange,
             ),
           ),
@@ -116,22 +223,16 @@ class ApparelProductAttributesInputPageState
                   builder: (context) => EnumSelectPage(
                         title: '选择版型',
                         items: EditionTypeEnum,
-                        code: widget.item?.editionType,
+                        code: _editionTypeCode,
                       ),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _editionTypeText = result.name;
+              _editionTypeCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '版型',
-              tralingText: '',
+              tralingText: _editionTypeText,
               tralingTextColor: Colors.orange,
             ),
           ),
@@ -143,22 +244,16 @@ class ApparelProductAttributesInputPageState
                   builder: (context) => EnumSelectPage(
                         title: '选择款式',
                         items: PatternEnum,
-                        code: widget.item?.pattern,
+                        code: _patternCode,
                       ),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _patternText = result.name;
+              _patternCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '款式',
-              tralingText: '',
+              tralingText: _patternText,
               tralingTextColor: Colors.orange,
             ),
           ),
@@ -170,22 +265,16 @@ class ApparelProductAttributesInputPageState
                   builder: (context) => EnumSelectPage(
                         title: '选择袖型',
                         items: SleeveTypeEnum,
-                        code: widget.item?.sleeveType,
+                        code: _sleeveTypeCode,
                       ),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _sleeveTypeText = result.name;
+              _sleeveTypeCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '袖型',
-              tralingText: '',
+              tralingText: _sleeveTypeText,
               tralingTextColor: Colors.orange,
             ),
           ),
@@ -197,78 +286,96 @@ class ApparelProductAttributesInputPageState
                   builder: (context) => EnumSelectPage(
                         title: '选择袖长/裤长',
                         items: SleeveLengthEnum,
-                        code: widget.item?.sleeveLength,
+                        code: _sleeveLengthCode,
                       ),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _sleeveLengthText = result.name;
+              _sleeveLengthCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '袖长/裤长',
-              tralingText: '',
+              tralingText: _sleeveLengthText,
               tralingTextColor: Colors.orange,
             ),
           ),
           InkWell(
             onTap: () async {
-              dynamic result = await Navigator.push(
+              List<EnumModel> result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EnumSelectPage(
                         title: '选择图案',
                         items: DecorativePatternEnum,
                         multiple: true,
-                        codes: widget.item?.decorativePattern,
+                        codes: _decorativePatternCodes,
                       ),
                 ),
               );
+
               if (result != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result[0].name),
-                      ),
-                );
+                _decorativePatternText = '';
+                for (int i = 0; i < result.length; i++) {
+                  if (i == 4) {
+                    _decorativePatternText += '...';
+                    break;
+                  }
+
+                  _decorativePatternText += result[i].name;
+
+                  if (i != result.length - 1) {
+                    _decorativePatternText += '、';
+                  }
+                }
+
+                _decorativePatternCodes = result.map((item) {
+                  return item.code;
+                }).toList();
               }
             },
             child: ShowSelectTile(
               leadingText: '图案',
-              tralingText: '',
+              tralingText: _decorativePatternText,
               tralingTextColor: Colors.orange,
             ),
           ),
           InkWell(
             onTap: () async {
-              dynamic result = await Navigator.push(
+              List<EnumModel> result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EnumSelectPage(
                         title: '选择流行元素',
                         items: PopularElementsEnum,
                         multiple: true,
-                        codes: widget.item?.popularElements,
+                        codes: _popularElementsCodes,
                       ),
                 ),
               );
+
               if (result != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result[0].name),
-                      ),
-                );
+                _popularElementsText = '';
+                for (int i = 0; i < result.length; i++) {
+                  if (i == 4) {
+                    _popularElementsText += '...';
+                    break;
+                  }
+
+                  _popularElementsText += result[i].name;
+
+                  if (i != result.length - 1) {
+                    _popularElementsText += '、';
+                  }
+                }
+
+                _popularElementsCodes = result.map((item) {
+                  return item.code;
+                }).toList();
               }
             },
             child: ShowSelectTile(
               leadingText: '流行元素',
-              tralingText: '',
+              tralingText: _popularElementsText,
               tralingTextColor: Colors.orange,
             ),
           ),
@@ -280,22 +387,16 @@ class ApparelProductAttributesInputPageState
                   builder: (context) => EnumSelectPage(
                         title: '选择填充物',
                         items: FillerEnum,
-                        code: widget.item?.filler,
+                        code: _fillerCode,
                       ),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _fillerText = result.name;
+              _fillerCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '填充物',
-              tralingText: '',
+              tralingText: _fillerText,
               tralingTextColor: Colors.orange,
             ),
           ),
@@ -307,22 +408,16 @@ class ApparelProductAttributesInputPageState
                   builder: (context) => EnumSelectPage(
                         title: '选择厚薄',
                         items: ThicknessEnum,
-                        code: widget.item?.thickness,
+                        code: _thicknessCode,
                       ),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _thicknessText = result.name;
+              _thicknessCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '厚薄',
-              tralingText: '',
+              tralingText: _thicknessText,
               tralingTextColor: Colors.orange,
             ),
           ),
@@ -332,23 +427,15 @@ class ApparelProductAttributesInputPageState
                 context,
                 MaterialPageRoute(
                   builder: (context) => EnumSelectPage(
-                      title: '选择季节',
-                      items: SeasonEnum,
-                      code: widget.item?.season),
+                      title: '选择季节', items: SeasonEnum, code: _seasonCode),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _seasonText = result.name;
+              _fillerCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '季节',
-              tralingText: '',
+              tralingText: _seasonText,
               tralingTextColor: Colors.orange,
             ),
           ),
@@ -360,24 +447,19 @@ class ApparelProductAttributesInputPageState
                   builder: (context) => EnumSelectPage(
                         title: '选择吊牌',
                         items: <EnumModel>[
-                          EnumModel('Y001', '有'),
-                          EnumModel('Y002', '没有'),
+                          EnumModel('true', '有'),
+                          EnumModel('false', '没有'),
                         ],
+                        code: _taggableCode,
                       ),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _taggableText = result.name;
+              _taggableCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '吊牌',
-              tralingText: '',
+              tralingText: _taggableText,
               tralingTextColor: Colors.orange,
             ),
           ),
@@ -389,22 +471,16 @@ class ApparelProductAttributesInputPageState
                   builder: (context) => EnumSelectPage(
                         title: '选择门襟',
                         items: PlacketEnum,
-                        code: widget.item?.placket,
+                        code: _placketCode,
                       ),
                 ),
               );
-              if (result?.name != null) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text(result.name),
-                      ),
-                );
-              }
+              _placketText = result.name;
+              _placketCode = result.code;
             },
             child: ShowSelectTile(
               leadingText: '门襟',
-              tralingText: '',
+              tralingText: _placketText,
               tralingTextColor: Colors.orange,
             ),
           ),

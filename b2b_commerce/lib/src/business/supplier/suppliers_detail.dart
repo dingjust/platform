@@ -49,7 +49,7 @@ class SuppliersDetail extends StatelessWidget {
           new Divider(),
           ListTile(
             title: Text('联系人'),
-            trailing: Text(supplierModel.factory.members.name,
+            trailing: Text(supplierModel.factory.contactAddress.fullname,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -57,7 +57,7 @@ class SuppliersDetail extends StatelessWidget {
           new Divider(),
           ListTile(
             title: Text('手机号码'),
-            trailing: Text(supplierModel.factory.members.phone,
+            trailing: Text(supplierModel.factory.contactAddress.cellphone,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -67,9 +67,9 @@ class SuppliersDetail extends StatelessWidget {
             title: Text('地址'),
             trailing: Text(
                 supplierModel.factory.contactAddress.region.name +
-                supplierModel.factory.contactAddress.city.name +
-                supplierModel.factory.contactAddress.cityDistrict.name +
-                supplierModel.factory.contactAddress.line1,
+                    supplierModel.factory.contactAddress.city.name +
+                    supplierModel.factory.contactAddress.cityDistrict.name +
+                    supplierModel.factory.contactAddress.line1,
                 style: TextStyle(
                   fontSize: 16,
                 )),

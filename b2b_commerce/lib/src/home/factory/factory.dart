@@ -58,7 +58,7 @@ class FactoryItem extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Stars(
-                      size: 15,
+//                      size: 15,
                       color: Color.fromRGBO(255, 183, 0, 1),
                       highlightOnly: false,
                       starLevel: model.starLevel,
