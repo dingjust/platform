@@ -5,6 +5,8 @@ class B2BIcons {
       const IconData(0xe656, fontFamily: 'b2bIcons', matchTextDirection: true);
   static const IconData eye_not_see =
       const IconData(0xe652, fontFamily: 'b2bIcons', matchTextDirection: true);
+  static const IconData publish_requirement_success =
+      const IconData(0xe69e, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

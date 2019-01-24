@@ -168,7 +168,7 @@ class SuppliersDetail extends StatelessWidget {
             children: <Widget>[
               Expanded(
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    padding: EdgeInsets.all(10),
                     margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
                     child: RichText(
                       text: TextSpan(
@@ -231,7 +231,7 @@ class SuppliersDetail extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    padding: EdgeInsets.all(10),
                     margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
                   child: RichText(
                     text: TextSpan(
@@ -909,7 +909,7 @@ class SuppliersDetail extends StatelessWidget {
 
   Widget _buildPurchaseOrderHeader(BuildContext context) {
     return Container(
-        padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(5, 5, 10, 5),
         margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
         child: Column(
           children: <Widget>[
@@ -1004,7 +1004,7 @@ class SuppliersDetail extends StatelessWidget {
 
   Widget _buildQuoteHeader() {
     return Container(
-      padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
+      padding: EdgeInsets.fromLTRB(5, 5, 10, 5),
       margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

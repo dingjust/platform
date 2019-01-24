@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class PublishRequirementSuccessDialog extends StatefulWidget {
   final RequirementOrderModel model;
@@ -112,9 +113,22 @@ class _PublishRequirementSuccessDialogState
               padding: EdgeInsets.symmetric(vertical: 10),
               color: Colors.white,
               child: Center(
-                child: Text(
-                  '需求发布成功！',
-                  style: TextStyle(fontSize: 20,color: Colors.orange),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.fromLTRB(18, 0, 0, 10),
+                      child: Icon(
+                        B2BIcons.publish_requirement_success,
+                        size: 60,
+                        color: Colors.orange,
+                      ),
+                    ),
+                    Text(
+                      '需求发布成功!',
+                      style: TextStyle(fontSize: 20, color: Colors.orange),
+                    )
+                  ],
                 ),
               ),
             ))
