@@ -44,6 +44,14 @@ class SalesOrderBLoC extends BLoCBase {
 
   Stream<bool> get bottomStream => _bottomController.stream;
 
+  var _toTopBtnController = StreamController<bool>.broadcast();
+
+  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
+
+  var _returnToTopController = StreamController<bool>.broadcast();
+
+  Stream<bool> get returnToTopStream => _returnToTopController.stream;
+
   filterByStatuses(String status) async {
     Set<String> statusesSet;
     // if (status== 'ALL') {
@@ -195,12 +203,59 @@ class SalesOrderBLoC extends BLoCBase {
     _controller.sink.add(this._ordersMap[status]);
   }
 
+  //下拉刷新
+  Future refreshData(String status) async {
+    _ordersMap[status].clear();
+    _ordersMap[status].add(await Future.delayed(const Duration(seconds: 1), () {
+      return SalesOrderModel.fromJson({
+        "code": "34938475200045",
+        "status": "PENDING_PAYMENT",
+        "totalQuantity": 10,
+        "totalPrice": 300,
+        "creationtime": DateTime.now().toString(),
+        "entries": [
+          {
+            "product": {
+              "thumbnail":
+              "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
+              "code": "NA89852509",
+              "name": "山本风法少女长裙复古气质秋冬款",
+              "skuID": "NA89852509",
+            },
+          },
+          {
+            "product": {
+              "thumbnail":
+              "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
+              "code": "NA89852509",
+              "name": "山本风法少女长裙复古气质秋冬款",
+              "skuID": "NA89852509",
+            },
+          }
+        ],
+      });
+    }));
+    _controller.sink.add(_ordersMap[status]);
+  }
+
   loadingStart() async {
     _loadingController.sink.add(true);
   }
 
   loadingEnd() async {
     _loadingController.sink.add(false);
+  }
+
+  showToTopBtn() async {
+    _toTopBtnController.sink.add(true);
+  }
+
+  hideToTopBtn() async {
+    _toTopBtnController.sink.add(false);
+  }
+
+  returnToTop() async {
+    _returnToTopController.sink.add(true);
   }
 
   dispose() {
