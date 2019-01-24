@@ -55,7 +55,7 @@ class QuoteOrdersBLoC extends BLoCBase {
               belongTo: FactoryModel(
                 name: '广州旭日',
                 starLevel: 3,
-                address: AddressModel(
+                contactAddress: AddressModel(
                   region: RegionModel(name: '广东省'),
                   city: CityModel(name: '广州市'),
                   cityDistrict: DistrictModel(name: '海珠区'),
@@ -104,7 +104,7 @@ class QuoteOrdersBLoC extends BLoCBase {
               belongTo: FactoryModel(
                 name: '广州旭日',
                 starLevel: 3,
-                address: AddressModel(
+                contactAddress: AddressModel(
                   region: RegionModel(name: '广东省'),
                   city: CityModel(name: '广州市'),
                   cityDistrict: DistrictModel(name: '海珠区'),
@@ -153,7 +153,7 @@ class QuoteOrdersBLoC extends BLoCBase {
               belongTo: FactoryModel(
                 name: '广州旭日',
                 starLevel: 3,
-                address: AddressModel(
+                contactAddress: AddressModel(
                   region: RegionModel(name: '广东省'),
                   city: CityModel(name: '广州市'),
                   cityDistrict: DistrictModel(name: '海珠区'),
@@ -202,7 +202,7 @@ class QuoteOrdersBLoC extends BLoCBase {
               belongTo: FactoryModel(
                 name: '广州旭日',
                 starLevel: 3,
-                address: AddressModel(
+                contactAddress: AddressModel(
                   region: RegionModel(name: '广东省'),
                   city: CityModel(name: '广州市'),
                   cityDistrict: DistrictModel(name: '海珠区'),
@@ -262,7 +262,7 @@ class QuoteOrdersBLoC extends BLoCBase {
             belongTo: FactoryModel(
               name: '广州旭日',
               starLevel: 3,
-              address: AddressModel(
+              contactAddress: AddressModel(
                 region: RegionModel(name: '广东省'),
                 city: CityModel(name: '广州市'),
                 cityDistrict: DistrictModel(name: '海珠区'),
@@ -320,7 +320,7 @@ class QuoteOrdersBLoC extends BLoCBase {
           belongTo: FactoryModel(
             name: '广州旭日',
             starLevel: 3,
-            address: AddressModel(
+            contactAddress: AddressModel(
               region: RegionModel(name: '广东省'),
               city: CityModel(name: '广州市'),
               cityDistrict: DistrictModel(name: '海珠区'),

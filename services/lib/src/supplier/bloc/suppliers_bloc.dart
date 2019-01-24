@@ -30,7 +30,7 @@ class SuppliersBloc{
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
-              'address': {
+              'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
                 'region': {'isocode': 'R123', 'name': '广东省'},
@@ -87,7 +87,7 @@ class SuppliersBloc{
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
-              'address': {
+              'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
                 'region': {'isocode': 'R123', 'name': '广东省'},
@@ -144,7 +144,7 @@ class SuppliersBloc{
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
-              'address': {
+              'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
                 'region': {'isocode': 'R123', 'name': '广东省'},
@@ -201,7 +201,7 @@ class SuppliersBloc{
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
-              'address': {
+              'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
                 'region': {'isocode': 'R123', 'name': '广东省'},
@@ -258,7 +258,7 @@ class SuppliersBloc{
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
-              'address': {
+              'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
                 'region': {'isocode': 'R123', 'name': '广东省'},
@@ -315,7 +315,7 @@ class SuppliersBloc{
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
-              'address': {
+              'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
                 'region': {'isocode': 'R123', 'name': '广东省'},
@@ -383,7 +383,7 @@ class SuppliersBloc{
                 'latheQuantity': 5,
                 'contactPerson': 'luffy',
                 'contactPhone': '13123456789',
-                'address': {
+                'contactAddress': {
                   'fullname': "张三",
                   'cellphone': '13123456789',
                   'region': {'isocode': 'R123', 'name': '广东省'},

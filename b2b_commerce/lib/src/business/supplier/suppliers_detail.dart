@@ -66,10 +66,10 @@ class SuppliersDetail extends StatelessWidget {
           ListTile(
             title: Text('地址'),
             trailing: Text(
-                supplierModel.factory.address.region.name +
-                supplierModel.factory.address.city.name +
-                supplierModel.factory.address.cityDistrict.name +
-                supplierModel.factory.address.line1,
+                supplierModel.factory.contactAddress.region.name +
+                supplierModel.factory.contactAddress.city.name +
+                supplierModel.factory.contactAddress.cityDistrict.name +
+                supplierModel.factory.contactAddress.line1,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -166,9 +166,9 @@ class SuppliersDetail extends StatelessWidget {
                           child: Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                supplierModel.factory.address.region.name +
-                                    supplierModel.factory.address.city.name +
-                                    supplierModel.factory.address.cityDistrict.name,
+                                supplierModel.factory.contactAddress.region.name +
+                                    supplierModel.factory.contactAddress.city.name +
+                                    supplierModel.factory.contactAddress.cityDistrict.name,
                                 style: TextStyle(
                                   fontSize: 14
                                 ),

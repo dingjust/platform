@@ -150,8 +150,8 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Text(
-                          item.order.belongTo.address.city.name +
-                              item.order.belongTo.address.cityDistrict
+                          item.order.belongTo.contactAddress.city.name +
+                              item.order.belongTo.contactAddress.cityDistrict
                                   .name,
                           style: TextStyle(color: Colors.grey),
                         ),
