@@ -217,6 +217,8 @@ class FactoryModel extends B2BUnitModel {
   String bankOfDeposit;
   //认证证件
   List<MediaModel> certificate;
+  //响应报价时间
+  int responseQuotedTime;
 
   FactoryModel({
     String profilePicture,
@@ -241,6 +243,7 @@ class FactoryModel extends B2BUnitModel {
     this.developmentCapacity,
     this.latheQuantity,
     this.cooperationModes,
+    this.responseQuotedTime,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
