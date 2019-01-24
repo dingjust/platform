@@ -209,7 +209,7 @@ class FactoryModel extends B2BUnitModel {
   double orderedSuccessRate;
 
   //合作品牌
-  String cooperativeBrand;
+  List<BrandModel> cooperativeBrands;
 
   //规模范围
   ScaleRanges scaleRange;
@@ -244,6 +244,9 @@ class FactoryModel extends B2BUnitModel {
   //响应报价时间
   int responseQuotedTime;
 
+  //现货商品
+  List<ProductModel> products;
+
   FactoryModel({
     String profilePicture,
     String uid,
@@ -264,13 +267,15 @@ class FactoryModel extends B2BUnitModel {
     this.registrationDate,
     this.categories,
     this.scaleRange,
-    this.cooperativeBrand,
+    this.cooperativeBrands,
     this.developmentCapacity,
     this.latheQuantity,
     this.cooperationModes,
     this.responseQuotedTime,
     this.contactPerson,
     this.contactPhone,
+    this.products,
+    this.adeptAtCategories,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -369,14 +374,14 @@ class SupplierModel extends ItemModel {
   FactoryModel factory;
   //合作次数
   int orderCount;
+  //报价次数
+  int quoteCount;
   //报价单信息（取最新一条）
-  QuoteModel quote;
+  QuoteEntryModel quoteOrder;
   //采购订单信息（取最新一条）
   PurchaseOrderModel purchaseOrder;
-  //现货商品
-  List<ApparelProductModel> apparelProducts;
 
-  SupplierModel({this.factory,this.orderCount,this.quote,this.purchaseOrder,this.apparelProducts});
+  SupplierModel({this.factory,this.orderCount,this.quoteOrder,this.purchaseOrder,this.quoteCount});
 
   factory SupplierModel.fromJson(Map<String, dynamic> json) => _$SupplierModelFromJson(json);
 

@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/common/app_keys.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                             "totalPrice": 300,
                             "expectedDeliveryDate": DateTime.now().toString(),
                             "creationtime": DateTime.now().toString(),
-                            "remarks": "交货时间 2019-01-01\n确定前请先与我厂沟通好样衣事宜，谢谢",
+                            "remarks": "确定前请先与我厂沟通好样衣事宜，谢谢",
                             "entries": [
                               {
                                 "product": {
@@ -107,6 +108,12 @@ class _HomePageState extends State<HomePage> {
                   ));
             },
             child: Text('发布需求成功'),
+          ),
+          RaisedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY);
+            },
+            child: Text('热门品类'),
           )
         ],
       ),

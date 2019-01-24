@@ -539,7 +539,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           ),
           ListTile(
             leading: Text('合作品牌'),
-            trailing: Text(factoryModel.cooperativeBrand),
+            trailing: Text(factoryModel.cooperativeBrands[0].name),
           ),
           Divider(
             height: 5,
@@ -700,8 +700,8 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
 
   List<Widget> _buildItemsByStringList(
       BuildContext context, List<String> _list) {
-    List<Widget> _widget = <Widget>[];
-    if (_list != null && _list.isNotEmpty) {
+    List<Widget> _widget = new List();
+    if (_list.isNotEmpty) {
       for (int i = 0; i < _list.length; i++) {
         _widget.add(Container(
           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
