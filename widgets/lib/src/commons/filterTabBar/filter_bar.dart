@@ -1,93 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 
-void main() {
-  runApp(MaterialApp(
-    title: '衣加衣供应链',
-    theme: ThemeData(
-      // primarySwatch: Colors.blue,
-      primaryColor: Colors.white,
-      textSelectionColor: Colors.black,
-      accentColor: Colors.orangeAccent[400],
-      bottomAppBarColor: Colors.grey,
-    ),
-    home: ProductPage(),
-  ));
-}
-
-class ProductPage extends StatefulWidget {
-  _ProductPageState createState() => _ProductPageState();
-  List<int> list = [1, 2, 3, 4, 5, 6, 7, 8];
-  List<FilterTabEntry> entries = <FilterTabEntry>[
-    FilterTabEntry(label: '综合', checked: true),
-    FilterTabEntry(
-      label: '星级',
-    ),
-    FilterTabEntry(
-      label: '接单数',
-    ),
-    FilterTabEntry(
-      label: '响应时间',
-    ),
-  ];
-}
-
-class _ProductPageState extends State<ProductPage> {
-  @override
-  Widget build(BuildContext context) {
-    final StreamController _streamController =
-        StreamController<FilterTabEntry>.broadcast();
-
-    Stream<FilterTabEntry> _stream = _streamController.stream;
-
-    _stream.listen((entry) {
-      print("${entry.label}  ${entry.checked}");
-    });
-
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Scaffold(
-        appBar: AppBar(
-          bottom: FilterTabBar(
-            entries: widget.entries,
-            action: IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {},
-            ),
-            streamController: _streamController,
-          ),
-        ),
-        body: ListView(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-          children: widget.list
-              .map((value) => Container(
-                    width: 200,
-                    height: 200,
-                    color: Colors.white,
-                    child: Center(
-                      child: Text(value.toString()),
-                    ),
-                  ))
-              .toList(),
-        ),
-      ),
-    );
-  }
-}
-
-class FilterTabBar extends StatefulWidget implements PreferredSizeWidget {
-  const FilterTabBar(
+class FilterBar extends StatefulWidget implements PreferredSizeWidget {
+  const FilterBar(
       {Key key,
       this.itemHeight = 20,
       this.itemWidth = 100,
@@ -98,9 +15,9 @@ class FilterTabBar extends StatefulWidget implements PreferredSizeWidget {
       this.action})
       : super(key: key);
 
-  _FilterTabBarState createState() => _FilterTabBarState();
+  _FilterBarState createState() => _FilterBarState();
 
-  final List<FilterTabEntry> entries;
+  final List<FilterConditionEntry> entries;
   final double itemHeight;
   final double itemWidth;
   final Color unselectedColor;
@@ -113,7 +30,7 @@ class FilterTabBar extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => null;
 }
 
-class _FilterTabBarState extends State<FilterTabBar> {
+class _FilterBarState extends State<FilterBar> {
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
@@ -146,6 +63,7 @@ class _FilterTabBarState extends State<FilterTabBar> {
                             });
                           },
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
                                 '${entry.label}',
@@ -173,20 +91,4 @@ class _FilterTabBarState extends State<FilterTabBar> {
           ],
         ));
   }
-}
-
-class FilterTabEntry {
-  FilterTabEntry(
-      {@required this.label,
-      this.value,
-      this.checked = false,
-      this.isDESC = false});
-  ///Tab标签
-  final String label;
-  ///Tab筛选值
-  final String value;
-  ///选中状态
-  bool checked;
-  ///是否降序
-  bool isDESC;
 }

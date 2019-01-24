@@ -172,7 +172,7 @@ class SuppliersItem extends StatelessWidget {
   Widget _buildList(BuildContext context) {
     return ListTile(
       title: Text(
-        supplierModel.name,
+        supplierModel.factory.name,
         style: TextStyle(
           fontSize: 18,
         ),
@@ -183,8 +183,8 @@ class SuppliersItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-                supplierModel.address.city.name +
-                supplierModel.address.cityDistrict.name,
+                supplierModel.factory.contactAddress.city.name +
+                supplierModel.factory.contactAddress.cityDistrict.name,
             style: TextStyle(fontSize: 16, color: Colors.black26),
           ),
           Icon(

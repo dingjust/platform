@@ -28,7 +28,7 @@ class SuppliersDetail extends StatelessWidget {
         children: <Widget>[
           ListTile(
             title: Text('供应商名'),
-            trailing: Text(supplierModel.name,
+            trailing: Text(supplierModel.factory.name,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -44,7 +44,7 @@ class SuppliersDetail extends StatelessWidget {
           new Divider(),
           ListTile(
             title: Text('联系人'),
-            trailing: Text(supplierModel.address.fullname,
+            trailing: Text(supplierModel.factory.contactAddress.fullname,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -52,7 +52,7 @@ class SuppliersDetail extends StatelessWidget {
           new Divider(),
           ListTile(
             title: Text('手机号码'),
-            trailing: Text(supplierModel.address.cellphone,
+            trailing: Text(supplierModel.factory.contactAddress.cellphone,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -61,10 +61,10 @@ class SuppliersDetail extends StatelessWidget {
           ListTile(
             title: Text('地址'),
             trailing: Text(
-                supplierModel.address.region.name +
-                    supplierModel.address.city.name +
-                    supplierModel.address.cityDistrict.name +
-                    supplierModel.address.line1,
+                supplierModel.factory.contactAddress.region.name +
+                    supplierModel.factory.contactAddress.city.name +
+                    supplierModel.factory.contactAddress.cityDistrict.name +
+                    supplierModel.factory.contactAddress.line1,
                 style: TextStyle(
                   fontSize: 16,
                 )),
