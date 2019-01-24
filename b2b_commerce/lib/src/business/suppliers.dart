@@ -183,8 +183,9 @@ class SuppliersItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-                supplierModel.factory.contactAddress.city.name +
-                supplierModel.factory.contactAddress.cityDistrict.name,
+                supplierModel.factory.address.region.name +
+                supplierModel.factory.address.city.name +
+                supplierModel.factory.address.cityDistrict.name,
             style: TextStyle(fontSize: 16, color: Colors.black26),
           ),
           Icon(

@@ -73,7 +73,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             'remarks': '延期了12天',
             'belongTo': {
               'name': '京东工厂',
-              'contactAddress': {
+              'address': {
                 'region': {'name': '广东省'},
                 'city': {'name': '广州市'},
                 'cityDistrict': {'name': '白云区'},
@@ -286,7 +286,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             'remarks': '延期了12天',
             'belongTo': {
               'name': '京东工厂',
-              'contactAddress': {
+              'address': {
                 'region': {'name': '广东省'},
                 'city': {'name': '广州市'},
                 'cityDistrict': {'name': '白云区'},
@@ -499,7 +499,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             'remarks': '延期了12天',
             'belongTo': {
               'name': '京东工厂',
-              'contactAddress': {
+              'address': {
                 'region': {'name': '广东省'},
                 'city': {'name': '广州市'},
                 'cityDistrict': {'name': '白云区'},
@@ -722,7 +722,7 @@ class PurchaseOrderBLoC extends BLoCBase {
           'remarks': '延期了12天',
           'belongTo': {
             'name': '京东工厂',
-            'contactAddress': {
+            'address': {
               'region': {'name': '广东省'},
               'city': {'name': '广州市'},
               'cityDistrict': {'name': '白云区'},
@@ -948,7 +948,7 @@ class PurchaseOrderBLoC extends BLoCBase {
         'remarks': '延期了12天',
         'belongTo': {
           'name': '京东工厂',
-          'contactAddress': {
+          'address': {
             'region': {'name': '广东省'},
             'city': {'name': '广州市'},
             'cityDistrict': {'name': '白云区'},
