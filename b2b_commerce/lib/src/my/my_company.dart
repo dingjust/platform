@@ -99,7 +99,69 @@ FactoryModel factoryModel = FactoryModel.fromJson({
       'name': '毛衣',
     },
   ],
-  'cooperativeBrand': '红心海贼团',
+  'cooperativeBrands': [
+    {
+      'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+      'uid': 'BB123456',
+      'name': '草帽商店',
+      'starLevel': 5,
+      'email': 'monkey.D.luffy@163.com',
+      'phone': '020-12345678',
+      'contactPerson': 'luffy',
+      'contactPhone': '13123456789',
+      'address': {
+        'fullname': "张三",
+        'cellphone': '13123456789',
+        'region': {'isocode': 'R123', 'name': '广东省'},
+        'city': {'code': 'C123', 'name': '广州市'},
+        'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+        'line1': '广州大道南',
+      },
+      'brand': '草帽海贼团',
+      'cooperativeBrand': '红心海贼团',
+      'scaleRange': 'SR005',
+      'ageRanges': ['16-22', '23-30'],
+      'priceRange1s': ['1000-3999', '4999-9999'],
+      'priceRange2s': ['5999-9999', '10000-19999'],
+      'styles': [
+        {'code': '1001', 'name': '潮流'},
+        {
+          'code': '1002',
+          'name': '古典',
+        },
+      ],
+      'categories': [
+        {
+          'code': '1001',
+          'name': '卫衣',
+        },
+        {
+          'code': '1002',
+          'name': '毛衣',
+        },
+      ],
+      'registrationDate': DateTime.now().toString(),
+      'taxNumber': '41553315446687844',
+      'bankOfDeposit': '中国工商银行',
+      'certificate': [
+        {
+          'url':
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'mediaType': 'jpg',
+        },
+        {
+          'url':
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'mediaType': 'jpg',
+        },
+        {
+          'url':
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'mediaType': 'jpg',
+        },
+      ],
+    }
+  ],
   'scaleRange': 'SR005',
   'registrationDate': DateTime.now().toString(),
   'taxNumber': '41553315446687844',
@@ -535,7 +597,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           ),
           ListTile(
             leading: Text('合作品牌'),
-            trailing: Text(factoryModel.cooperativeBrand),
+            trailing: Text(factoryModel.cooperativeBrands[0].name),
           ),
           Divider(
             height: 5,
