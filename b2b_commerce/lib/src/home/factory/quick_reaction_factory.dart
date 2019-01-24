@@ -59,6 +59,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
           ),
           floatingActionButton: FloatingActionButton(
               onPressed: () {},
+              backgroundColor: Colors.orangeAccent,
               child: Center(
                 child: Container(
                   width: 35,

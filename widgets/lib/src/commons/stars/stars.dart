@@ -6,12 +6,14 @@ class Stars extends StatelessWidget {
       {Key key,
       this.starLevel = 1,
       this.color = Colors.orange,
-      this.highlightOnly = true})
+      this.highlightOnly = true,
+      this.size=20})
       : super(key: key);
 
   final int starLevel;
   final Color color;
-  
+  final double size;
+
   //是否只显示亮的星
   final bool highlightOnly;
 
@@ -25,6 +27,7 @@ class Stars extends StatelessWidget {
         child: Icon(
           Icons.star,
           color: color,
+          size: size,
         ),
       ));
     }
@@ -36,6 +39,7 @@ class Stars extends StatelessWidget {
           child: Icon(
             Icons.star,
             color: Colors.grey[300],
+            size: size,
           ),
         ));
       }
