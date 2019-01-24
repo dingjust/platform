@@ -55,6 +55,9 @@ flutter:
     - family: b2bIcons
       fonts:
         - asset: lib/fonts/iconfont1.ttf
+    - family: b2bIcons2
+      fonts:
+        - asset: lib/fonts/iconfont2.ttf
   #
   # For details regarding assets in packages, see
   # https://flutter.io/assets-and-images/#from-packages
