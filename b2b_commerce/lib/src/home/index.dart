@@ -1,8 +1,8 @@
-import 'package:b2b_commerce/src/business/search/apparel_product_search.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
+import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
               expandedHeight: _appBarHeight,
               pinned: true,
               elevation: 0.5,
-              title: SearchInputBox(),
+              title: HomeSearchInputBox(),
               centerTitle: true,
               brightness: Brightness.dark,
               actions: <Widget>[
@@ -94,12 +94,9 @@ class _HomePageState extends State<HomePage> {
                 height: 190,
                 dataList: _gridItemList(),
               ),
-              RaisedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => QuickReactionFactoryPage()));
-                },
-                child: Text('快反工厂'),
+              _buildInfoSection(),
+              HomeTabSection(
+                height: 150,
               ),
               RaisedButton(
                 onPressed: () {
@@ -214,58 +211,33 @@ class _HomePageState extends State<HomePage> {
           pic: B2BImage.find_factory(width: 60, height: 60)),
     ];
   }
-}
 
-/// 首页Banner
-class HomeBannerSection extends StatelessWidget {
-  final List<MediaModel> items = <MediaModel>[
-    MediaModel(
-      'http://pixdaus.com/files/items/pics/8/28/76828_bc2803f807a3f05873b3f0c105995173_large.jpg',
-    ),
-    MediaModel(
-      'http://pixdaus.com/files/items/pics/8/28/76828_bc2803f807a3f05873b3f0c105995173_large.jpg',
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Carousel(items, 240);
-  }
-}
-
-/// 搜索框
-class SearchInputBox extends StatelessWidget {
-  // final
-  final double width;
-  final double height;
-
-  const SearchInputBox({Key key, this.width = 300, this.height = 30})
-      : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => showSearch(
-          context: context, delegate: ApparelProductSearchDelegate()),
-      child: Container(
-        width: width,
-        height: height,
-        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey[300], width: 0.5)),
-        child: Row(
-          children: <Widget>[
-            Icon(
-              Icons.search,
-              color: Colors.grey,
-            ),
-            Text(
-              '找点什么...',
-              style: TextStyle(color: Colors.grey, fontSize: 12),
-            )
-          ],
-        ),
+  Widget _buildInfoSection() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(8, 5, 8, 5),
+      padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            '衣报送',
+            style: TextStyle(color: Colors.orange, fontSize: 20),
+          ),
+          HomeInfoItem(
+            label: '接单工厂',
+            value: '566',
+          ),
+          HomeInfoItem(
+            label: '正在报价',
+            value: '376',
+          ),
+          HomeInfoItem(
+            label: '今日成交',
+            value: '106',
+          )
+        ],
       ),
     );
   }
