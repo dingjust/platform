@@ -62,6 +62,7 @@ class SuppliersDetail extends StatelessWidget {
       onPressed: () {
 
       },
+
       backgroundColor: Colors.orangeAccent,
     );
   }
