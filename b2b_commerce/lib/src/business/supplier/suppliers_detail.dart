@@ -8,8 +8,9 @@ import 'package:widgets/widgets.dart';
 
 class SuppliersDetail extends StatefulWidget {
   final SupplierModel supplierModel;
+  final bool isSupplier;
 
-  SuppliersDetail({Key key, @required this.supplierModel}) : super(key: key);
+  SuppliersDetail({Key key, @required this.supplierModel,@required this.isSupplier}) : super(key: key);
 
   _SuppliersDetailState createState() => _SuppliersDetailState();
 }
@@ -182,7 +183,8 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
 
   //报价单信息
   Widget _buildQuoteInfo(BuildContext context){
-    return Container(
+    return widget.isSupplier ?
+    Container(
       margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Column(
         children: <Widget>[
@@ -201,7 +203,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                                 text: '${widget.supplierModel.quoteCount}',
                                 style: TextStyle(
                                     color: Colors.red,
-                                  fontSize: 16
+                                    fontSize: 16
                                 )),
                             TextSpan(
                                 text: '次',
@@ -240,12 +242,13 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
       ),
-    );
+    ) : Container();
   }
 
   //采购单信息
   Widget _buildPurchaseOrderInfo(BuildContext context){
-      return Container(
+      return widget.isSupplier?
+      Container(
         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: Column(
           children: <Widget>[
@@ -304,7 +307,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
           color: Colors.white,
           borderRadius: BorderRadius.circular(5),
         ),
-      );
+      ):Container();
   }
 
   Widget _buildFactoryInfo(BuildContext context) {
