@@ -251,7 +251,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         alignment: Alignment.centerRight,
                         child: Row(
                           children: <Widget>[
-                            Text(order.belongTo.contactAddress.region.name+order.belongTo.contactAddress.city.name+order.belongTo.contactAddress.cityDistrict.name),
+                            Text(order.belongTo.address),
                             Icon(Icons.chevron_right),
                           ],
                         )
