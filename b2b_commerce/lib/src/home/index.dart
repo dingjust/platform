@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/search/apparel_product_search.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
@@ -19,12 +20,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('衣加衣首页'),
         leading: new IconButton(
           tooltip: '搜索',
           icon: Icon(Icons.search),
-          onPressed: () {},
+          onPressed: () => showSearch(
+              context: context, delegate: ApparelProductSearchDelegate()),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.message),
+            onPressed: (){},
+          )
+        ],
       ),
       body: ListView(
         children: [
