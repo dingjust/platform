@@ -32,6 +32,7 @@ class SuppliersBloc {
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
+              'address':'广东省广州市海珠区广州大道南',
               'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
@@ -275,6 +276,7 @@ class SuppliersBloc {
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
+              'address':'广东省广州市海珠区广州大道南',
               'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
@@ -518,6 +520,7 @@ class SuppliersBloc {
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
+              'address':'广东省广州市海珠区广州大道南',
               'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
@@ -761,6 +764,7 @@ class SuppliersBloc {
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
+              'address':'广东省广州市海珠区广州大道南',
               'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
@@ -877,8 +881,34 @@ class SuppliersBloc {
                   'contactPhone': '13123456789',
                 },
                 {
-                  'code': '1002',
-                  'name': '毛衣',
+                  'profilePicture':
+                  'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+                  'uid': 'BB123456',
+                  'name': '草帽工厂',
+                  'starLevel': 5,
+                  'email': 'monkey.D.luffy@163.com',
+                  'phone': '020-12345678',
+                  'cooperationModes': ['FOB'],
+                  'developmentCapacity': true,
+                  'monthlyCapacityRanges': 'MCR003',
+                  'latheQuantity': 5,
+                  'contactPerson': 'luffy',
+                  'contactPhone': '13123456789',
+                },
+                {
+                  'profilePicture':
+                  'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+                  'uid': 'BB123456',
+                  'name': '草帽工厂',
+                  'starLevel': 5,
+                  'email': 'monkey.D.luffy@163.com',
+                  'phone': '020-12345678',
+                  'cooperationModes': ['FOB'],
+                  'developmentCapacity': true,
+                  'monthlyCapacityRanges': 'MCR003',
+                  'latheQuantity': 5,
+                  'contactPerson': 'luffy',
+                  'contactPhone': '13123456789',
                 },
               ],
               'products': [
@@ -978,6 +1008,7 @@ class SuppliersBloc {
               'latheQuantity': 5,
               'contactPerson': 'luffy',
               'contactPhone': '13123456789',
+              'address':'广东省广州市海珠区广州大道南',
               'contactAddress': {
                 'fullname': "张三",
                 'cellphone': '13123456789',
@@ -1217,7 +1248,7 @@ class SuppliersBloc {
         return SupplierModel.fromJson({
           'factory': {
             'profilePicture':
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
             'uid': 'BB123456',
             'name': '草帽工厂',
             'starLevel': 5,
@@ -1231,6 +1262,7 @@ class SuppliersBloc {
             'latheQuantity': 5,
             'contactPerson': 'luffy',
             'contactPhone': '13123456789',
+            'address':'广东省广州市海珠区广州大道南',
             'contactAddress': {
               'fullname': "张三",
               'cellphone': '13123456789',
@@ -1256,24 +1288,24 @@ class SuppliersBloc {
             'certificate': [
               {
                 'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
                 'mediaType': 'jpg',
               },
               {
                 'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
                 'mediaType': 'jpg',
               },
               {
                 'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
                 'mediaType': 'jpg',
               },
             ],
             'cooperativeBrands': [
               {
                 'profilePicture':
-                    'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
                 'uid': 'BB123456',
                 'name': '草帽工厂',
                 'starLevel': 5,
@@ -1288,7 +1320,7 @@ class SuppliersBloc {
               },
               {
                 'profilePicture':
-                    'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
                 'uid': 'BB123456',
                 'name': '草帽工厂',
                 'starLevel': 5,
@@ -1303,7 +1335,7 @@ class SuppliersBloc {
               },
               {
                 'profilePicture':
-                    'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
                 'uid': 'BB123456',
                 'name': '草帽工厂',
                 'starLevel': 5,
@@ -1318,7 +1350,7 @@ class SuppliersBloc {
               },
               {
                 'profilePicture':
-                    'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
                 'uid': 'BB123456',
                 'name': '草帽工厂',
                 'starLevel': 5,
@@ -1333,7 +1365,7 @@ class SuppliersBloc {
               },
               {
                 'profilePicture':
-                    'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
                 'uid': 'BB123456',
                 'name': '草帽工厂',
                 'starLevel': 5,
@@ -1348,7 +1380,7 @@ class SuppliersBloc {
               },
               {
                 'profilePicture':
-                    'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
                 'uid': 'BB123456',
                 'name': '草帽工厂',
                 'starLevel': 5,
@@ -1363,7 +1395,7 @@ class SuppliersBloc {
               },
               {
                 'profilePicture':
-                    'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
                 'uid': 'BB123456',
                 'name': '草帽工厂',
                 'starLevel': 5,
@@ -1416,7 +1448,7 @@ class SuppliersBloc {
             ]
           },
           'orderCount': 50,
-          'quoteCount':30,
+          'quoteCount': 30,
           'purchaseOrder': {
             'code': 'PO34938475200045',
             'status': 'WAIT_FOR_PROCESSING',
@@ -1434,7 +1466,7 @@ class SuppliersBloc {
                   'name': '山本风法少女长裙复古气质秋冬款2',
                   'skuID': 'NA89852509',
                   'thumbnail':
-                      'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
+                  'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
                 },
               }
             ],
@@ -1453,7 +1485,7 @@ class SuppliersBloc {
               'name': '山本风少女长裙复古气质秋冬流行新款',
               'skuID': 'NA89852631',
               'thumbnail':
-                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
             },
           }
         });

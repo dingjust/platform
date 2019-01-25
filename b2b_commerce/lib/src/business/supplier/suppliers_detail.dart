@@ -23,6 +23,7 @@ class SuppliersDetail extends StatelessWidget {
       body: Container(
         child:_buildSuppliersWidget(context)
       ),
+      floatingActionButton: _buildRequestOrderButton(context),
     );
   }
 
@@ -47,6 +48,21 @@ class SuppliersDetail extends StatelessWidget {
         _buildFactoryWorkPicInfo(context),
         _buildFactoryAuthentication(context),
       ],
+    );
+  }
+
+  //发布需求按钮
+  Widget _buildRequestOrderButton(BuildContext context){
+    return FloatingActionButton.extended(
+      icon: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+      label: Text('发布需求'),
+      onPressed: () {
+
+      },
+      backgroundColor: Colors.orangeAccent,
     );
   }
 
@@ -133,9 +149,7 @@ class SuppliersDetail extends StatelessWidget {
                             child: Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  supplierModel.factory.address.region.name +
-                                      supplierModel.factory.address.city.name +
-                                      supplierModel.factory.address.cityDistrict.name,
+                                  supplierModel.factory.address,
                                   style: TextStyle(
                                       fontSize: 14
                                   ),
@@ -326,10 +340,7 @@ class SuppliersDetail extends StatelessWidget {
           ListTile(
             title: Text('地址'),
             trailing: Text(
-                supplierModel.factory.address.region.name +
-                supplierModel.factory.address.city.name +
-                supplierModel.factory.address.cityDistrict.name +
-                supplierModel.factory.address.line1,
+                supplierModel.factory.address,
                 style: TextStyle(
                   fontSize: 16,
                 )),
