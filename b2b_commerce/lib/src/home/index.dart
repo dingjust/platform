@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
@@ -17,7 +18,45 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Widget> list = <Widget>[];
+  //TODO:调用接口查询推荐工厂
+  List<FactoryModel> factories = <FactoryModel>[
+    FactoryModel(
+        historyOrdersCount: 214,
+        name: '广州旭日4',
+        starLevel: 4,
+        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
+        profilePicture:
+            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        categories: [
+          CategoryModel(name: '牛仔'),
+          CategoryModel(name: '衬衫'),
+          CategoryModel(name: '夹克'),
+        ]),
+    FactoryModel(
+        historyOrdersCount: 214,
+        name: '广州旭日3',
+        starLevel: 4,
+        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
+        profilePicture:
+            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        categories: [
+          CategoryModel(name: '牛仔'),
+          CategoryModel(name: '衬衫'),
+          CategoryModel(name: '夹克'),
+        ]),
+    FactoryModel(
+        historyOrdersCount: 214,
+        name: '广州旭日2',
+        starLevel: 4,
+        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
+        profilePicture:
+            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        categories: [
+          CategoryModel(name: '牛仔'),
+          CategoryModel(name: '衬衫'),
+          CategoryModel(name: '夹克'),
+        ]),
+  ];
 
   static Color black = Colors.black;
   static Color white = Colors.white;
@@ -29,17 +68,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final double _appBarHeight = 200.0;
     ScrollController _scrollController = ScrollController();
-
-    for (int i = 0; i < 10; i++) {
-      list.add(Container(
-        width: 100,
-        height: 100,
-        color: Colors.grey[100],
-        child: Center(
-          child: Text('${i}'),
-        ),
-      ));
-    }
 
     // 监听滚动变化该表图标颜色, _appBarHeight - kToolbarHeight为顶部标题栏底部与轮播图底部之间高度
     _scrollController.addListener(() {
@@ -172,15 +200,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Text('发布需求成功'),
               ),
-              RaisedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY);
-                },
-                child: Text('热门品类'),
-              ),
-              Column(
-                children: list,
-              )
+              _buildRecommend(),
             ])),
           ],
         ),
@@ -193,8 +213,7 @@ class _HomePageState extends State<HomePage> {
       GridItem(
           title: '当季快反',
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => QuickReactionFactoryPage()));
+            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY);
           },
           pic: B2BImage.fast_factory(width: 60, height: 80)),
       GridItem(
@@ -236,6 +255,44 @@ class _HomePageState extends State<HomePage> {
           HomeInfoItem(
             label: '今日成交',
             value: '106',
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecommend() {
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                child: RichText(
+                  text: TextSpan(
+                      text: '———',
+                      style: TextStyle(fontSize: 15, color: Colors.grey),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: '工厂推荐',
+                            style: TextStyle(color: Colors.black)),
+                        TextSpan(text: '———')
+                      ]),
+                ),
+              )
+            ],
+          ),
+          Column(
+            children: factories
+                .map((item) => FactoryItem(
+                      model: item,
+                      showButton: true,
+                    ))
+                .toList(),
           )
         ],
       ),
