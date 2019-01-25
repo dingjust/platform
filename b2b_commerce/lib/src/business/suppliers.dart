@@ -162,7 +162,7 @@ class SuppliersItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SuppliersDetail(supplierModel: supplierModel),
+            builder: (context) => SuppliersDetail(supplierModel: supplierModel,isSupplier: true,),
           ),
         );
       },
