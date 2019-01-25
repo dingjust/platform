@@ -151,11 +151,47 @@ class MenuItemImage {
   );
 }
 
-class CommonImage {
+class B2BImage {
   static String _package = 'assets';
   static Image picture({double width, double height}) {
     return Image.asset(
       'temp/picture.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image fast_factory({double width, double height}) {
+    return Image.asset(
+      'temp/common/fast_factory.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image find_factory({double width, double height}) {
+    return Image.asset(
+      'temp/common/find_factory.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image idle_capacity({double width, double height}) {
+    return Image.asset(
+      'temp/common/idle_capacity.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image order({double width, double height}) {
+    return Image.asset(
+      'temp/common/order.png',
       package: _package,
       width: width,
       height: height,

@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: '发布需求',
-            child: Icon(Icons.add),
+            child: Icon(Icons.add,color: Colors.white,),
             onPressed: null,
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

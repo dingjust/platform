@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/search/apparel_product_search.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
@@ -20,6 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   static Color black = Colors.black;
   static Color white = Colors.white;
+
   ///图标颜色
   Color iconColor = white;
 
@@ -88,6 +90,10 @@ class _HomePageState extends State<HomePage> {
             ),
             SliverList(
                 delegate: SliverChildListDelegate(<Widget>[
+              EasyGrid(
+                height: 190,
+                dataList: _gridItemList(),
+              ),
               RaisedButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -183,6 +189,30 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  List<GridItem> _gridItemList() {
+    return [
+      GridItem(
+          title: '当季快反',
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => QuickReactionFactoryPage()));
+          },
+          pic: B2BImage.fast_factory(width: 60, height: 80)),
+      GridItem(
+          title: '看款下单',
+          onPressed: () {},
+          pic: B2BImage.order(width: 60, height: 80)),
+      GridItem(
+          title: '空闲产能',
+          onPressed: () {},
+          pic: B2BImage.idle_capacity(width: 60, height: 80)),
+      GridItem(
+          title: '电商找厂',
+          onPressed: () {},
+          pic: B2BImage.find_factory(width: 60, height: 60)),
+    ];
   }
 }
 
