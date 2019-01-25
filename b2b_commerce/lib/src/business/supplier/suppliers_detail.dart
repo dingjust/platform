@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
         _buildFactory(context),
 //        _buildFactoryInfo(context),
         _buildFabric(context),
-        _buildApparelProductItem(context),
+        _buildExistingProductItem(context),
         _buildCooperativeBrand(context),
         _buildFactoryWorkPicInfo(context),
         _buildFactoryAuthentication(context),
@@ -585,9 +586,10 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   }
 
   //现款商品
-  Widget _buildApparelProductItem(BuildContext context){
-      return Container(
-        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+  Widget _buildExistingProductItem(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
           child: Column(
             children: <Widget>[
               Container(
@@ -597,7 +599,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                     Container(
                       width: 110,
                       child: Text(
-                        '现货商品',
+                        '现款商品',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -621,9 +623,9 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: GridView.count(
-                  physics: new NeverScrollableScrollPhysics(),
-                  crossAxisCount: 3,
-                  childAspectRatio: 2.5 / 5,
+                    physics: new NeverScrollableScrollPhysics(),
+                    crossAxisCount: 3,
+                    childAspectRatio: 2.5 / 5,
                     children: List.generate(3, (index) {
                       return Container(
                           child: Center(
@@ -631,7 +633,8 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                               children: <Widget>[
                                 Container(
                                   child: Image.network(
-                                    widget.supplierModel.factory.products[index].normal[0],
+                                    widget.supplierModel.factory.products[index]
+                                        .normal[0],
                                     width: 100,
                                     height: 100,
                                     fit: BoxFit.fill,
@@ -639,7 +642,8 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                                 ),
                                 Container(
                                   child: Text(
-                                    widget.supplierModel.factory.products[index].name,
+                                    widget.supplierModel.factory.products[index]
+                                        .name,
                                     style: TextStyle(
                                       fontSize: 16,
                                     ),
@@ -647,10 +651,13 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                                 ),
                                 Container(
                                   child: Text(
-                                    '￥${widget.supplierModel.factory.products[index].price} ～ ￥${widget.supplierModel.factory.products[index].price}',
+                                    '￥${widget.supplierModel.factory
+                                        .products[index].price} ～ ￥${widget
+                                        .supplierModel.factory.products[index]
+                                        .price}',
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color:Colors.red,
+                                      color: Colors.red,
                                     ),
                                   ),
                                 )
@@ -663,11 +670,19 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
               )
             ],
           ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+          ),
         ),
-      );
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ExistingProduct(),
+            ),
+          );
+        });
   }
 
   //合作品牌
