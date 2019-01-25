@@ -1,14 +1,20 @@
+import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
-class SuppliersDetail extends StatelessWidget {
+class SuppliersDetail extends StatefulWidget {
   final SupplierModel supplierModel;
 
   SuppliersDetail({Key key, @required this.supplierModel}) : super(key: key);
 
+  _SuppliersDetailState createState() => _SuppliersDetailState();
+}
+
+class _SuppliersDetailState extends State<SuppliersDetail>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +23,9 @@ class SuppliersDetail extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.phone),
-          )
+            onPressed: () =>
+            _selectActionButton(widget.supplierModel.factory.contactPhone),
+          ),
         ],
       ),
       body: Container(
@@ -43,7 +51,7 @@ class SuppliersDetail extends StatelessWidget {
         _buildFactory(context),
 //        _buildFactoryInfo(context),
         _buildFabric(context),
-        _buildApparelProductItem(context),
+        _buildExistingProductItem(context),
         _buildCooperativeBrand(context),
         _buildFactoryWorkPicInfo(context),
         _buildFactoryAuthentication(context),
@@ -58,11 +66,10 @@ class SuppliersDetail extends StatelessWidget {
         Icons.add,
         color: Colors.white,
       ),
+      tooltip: '敬请期待',
       label: Text('发布需求'),
       onPressed: () {
-
       },
-
       backgroundColor: Colors.orangeAccent,
     );
   }
@@ -77,7 +84,7 @@ class SuppliersDetail extends StatelessWidget {
           Container(
             color: Colors.grey,
             child: Image.network(
-              supplierModel.factory.profilePicture,
+              widget.supplierModel.factory.profilePicture,
               width: 90,
               height: 90,
               fit: BoxFit.fill,
@@ -93,7 +100,7 @@ class SuppliersDetail extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          supplierModel.factory.name,
+                          widget.supplierModel.factory.name,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
@@ -109,7 +116,7 @@ class SuppliersDetail extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             child: Row(
                               children:
-                              _buildItemsStarIcon(context, supplierModel.factory.starLevel),
+                              _buildItemsStarIcon(context, widget.supplierModel.factory.starLevel),
                             ),
                           ),
                         ],
@@ -150,7 +157,7 @@ class SuppliersDetail extends StatelessWidget {
                             child: Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  supplierModel.factory.address,
+                                  widget.supplierModel.factory.address,
                                   style: TextStyle(
                                       fontSize: 14
                                   ),
@@ -191,7 +198,7 @@ class SuppliersDetail extends StatelessWidget {
                           style: TextStyle(fontSize: 16, color: Colors.black),
                           children: <TextSpan>[
                             TextSpan(
-                                text: '${supplierModel.quoteCount}',
+                                text: '${widget.supplierModel.quoteCount}',
                                 style: TextStyle(
                                     color: Colors.red,
                                   fontSize: 16
@@ -254,7 +261,7 @@ class SuppliersDetail extends StatelessWidget {
                         style: TextStyle(fontSize: 16, color: Colors.black),
                         children: <TextSpan>[
                           TextSpan(
-                              text: '${supplierModel.orderCount}',
+                              text: '${widget.supplierModel.orderCount}',
                               style: TextStyle(
                                   color: Colors.red,
                                 fontSize: 16
@@ -308,7 +315,7 @@ class SuppliersDetail extends StatelessWidget {
         children: <Widget>[
           ListTile(
             title: Text('供应商名'),
-            trailing: Text(supplierModel.factory.name,
+            trailing: Text(widget.supplierModel.factory.name,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -316,7 +323,7 @@ class SuppliersDetail extends StatelessWidget {
           new Divider(),
           ListTile(
             title: Text('合作单数'),
-            trailing: Text(supplierModel.orderCount.toString(),
+            trailing: Text(widget.supplierModel.orderCount.toString(),
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -324,7 +331,7 @@ class SuppliersDetail extends StatelessWidget {
           new Divider(),
           ListTile(
             title: Text('联系人'),
-            trailing: Text(supplierModel.factory.contactPerson,
+            trailing: Text(widget.supplierModel.factory.contactPerson,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -332,7 +339,7 @@ class SuppliersDetail extends StatelessWidget {
           new Divider(),
           ListTile(
             title: Text('手机号码'),
-            trailing: Text(supplierModel.factory.contactPhone,
+            trailing: Text(widget.supplierModel.factory.contactPhone,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -341,7 +348,7 @@ class SuppliersDetail extends StatelessWidget {
           ListTile(
             title: Text('地址'),
             trailing: Text(
-                supplierModel.factory.address,
+                widget.supplierModel.factory.address,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -382,7 +389,7 @@ class SuppliersDetail extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${supplierModel.factory.historyOrdersCount}单',
+                        '${widget.supplierModel.factory.historyOrdersCount}单',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -413,7 +420,7 @@ class SuppliersDetail extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${supplierModel.factory.responseQuotedTime}小时(平均)',
+                        '${widget.supplierModel.factory.responseQuotedTime}小时(平均)',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -460,7 +467,7 @@ class SuppliersDetail extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      MonthlyCapacityRangesLocalizedMap[supplierModel.factory.monthlyCapacityRanges],
+                      MonthlyCapacityRangesLocalizedMap[widget.supplierModel.factory.monthlyCapacityRanges],
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -491,7 +498,7 @@ class SuppliersDetail extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        ScaleRangesLocalizedMap[supplierModel.factory
+                        ScaleRangesLocalizedMap[widget.supplierModel.factory
                             .scaleRange],
                         style: TextStyle(
                           fontSize: 16,
@@ -523,7 +530,7 @@ class SuppliersDetail extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: Row(
                   children: _buildItemsByEntityList(
-                      context, supplierModel.factory.categories),
+                      context, widget.supplierModel.factory.categories),
                 ),
               ),
             ],
@@ -579,9 +586,10 @@ class SuppliersDetail extends StatelessWidget {
   }
 
   //现款商品
-  Widget _buildApparelProductItem(BuildContext context){
-      return Container(
-        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+  Widget _buildExistingProductItem(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
           child: Column(
             children: <Widget>[
               Container(
@@ -591,7 +599,7 @@ class SuppliersDetail extends StatelessWidget {
                     Container(
                       width: 110,
                       child: Text(
-                        '现货商品',
+                        '现款商品',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -615,9 +623,9 @@ class SuppliersDetail extends StatelessWidget {
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: GridView.count(
-                  physics: new NeverScrollableScrollPhysics(),
-                  crossAxisCount: 3,
-                  childAspectRatio: 2.5 / 5,
+                    physics: new NeverScrollableScrollPhysics(),
+                    crossAxisCount: 3,
+                    childAspectRatio: 2.5 / 5,
                     children: List.generate(3, (index) {
                       return Container(
                           child: Center(
@@ -625,7 +633,8 @@ class SuppliersDetail extends StatelessWidget {
                               children: <Widget>[
                                 Container(
                                   child: Image.network(
-                                    supplierModel.factory.products[index].normal[0],
+                                    widget.supplierModel.factory.products[index]
+                                        .normal[0],
                                     width: 100,
                                     height: 100,
                                     fit: BoxFit.fill,
@@ -633,7 +642,8 @@ class SuppliersDetail extends StatelessWidget {
                                 ),
                                 Container(
                                   child: Text(
-                                    supplierModel.factory.products[index].name,
+                                    widget.supplierModel.factory.products[index]
+                                        .name,
                                     style: TextStyle(
                                       fontSize: 16,
                                     ),
@@ -641,10 +651,13 @@ class SuppliersDetail extends StatelessWidget {
                                 ),
                                 Container(
                                   child: Text(
-                                    '￥${supplierModel.factory.products[index].price} ～ ￥${supplierModel.factory.products[index].price}',
+                                    '￥${widget.supplierModel.factory
+                                        .products[index].price} ～ ￥${widget
+                                        .supplierModel.factory.products[index]
+                                        .price}',
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color:Colors.red,
+                                      color: Colors.red,
                                     ),
                                   ),
                                 )
@@ -657,11 +670,19 @@ class SuppliersDetail extends StatelessWidget {
               )
             ],
           ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+          ),
         ),
-      );
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ExistingProduct(),
+            ),
+          );
+        });
   }
 
   //合作品牌
@@ -704,11 +725,11 @@ class SuppliersDetail extends StatelessWidget {
                 child: GridView.count(
                     physics: new NeverScrollableScrollPhysics(),
                     crossAxisCount: 4,
-                    children: List.generate(supplierModel.factory.cooperativeBrands.length, (index) {
+                    children: List.generate(widget.supplierModel.factory.cooperativeBrands.length, (index) {
                       return Container(
                         margin: EdgeInsets.all(5),
                         child: Image.network(
-                            supplierModel.factory.cooperativeBrands[index].profilePicture,
+                          widget.supplierModel.factory.cooperativeBrands[index].profilePicture,
                           width: 60,
                           height: 60,
                           fit: BoxFit.fill,
@@ -828,28 +849,28 @@ class SuppliersDetail extends StatelessWidget {
           ListTile(
             leading: Text('注册时间'),
             trailing:
-            Text('${DateFormatUtil.format(supplierModel.factory.registrationDate)}'),
+            Text('${DateFormatUtil.format(widget.supplierModel.factory.registrationDate)}'),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('车位数量'),
-            trailing: Text(supplierModel.factory.latheQuantity.toString()),
+            trailing: Text(widget.supplierModel.factory.latheQuantity.toString()),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('税号'),
-            trailing: Text(supplierModel.factory.taxNumber),
+            trailing: Text(widget.supplierModel.factory.taxNumber),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('开户行'),
-            trailing: Text(supplierModel.factory.bankOfDeposit),
+            trailing: Text(widget.supplierModel.factory.bankOfDeposit),
           ),
           Divider(
             height: 5,
@@ -866,7 +887,7 @@ class SuppliersDetail extends StatelessWidget {
                   ],
                 ),
                 Attachments(
-                  list: supplierModel.factory.certificate,
+                  list: widget.supplierModel.factory.certificate,
                 )
               ],
             ),
@@ -929,14 +950,14 @@ class SuppliersDetail extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     child: Text(
-                      '采购订单号：' + supplierModel.purchaseOrder.code,
+                      '采购订单号：' + widget.supplierModel.purchaseOrder.code,
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     )),
                 Text(
-                  PurchaseOrderStatusLocalizedMap[supplierModel.purchaseOrder.status],
+                  PurchaseOrderStatusLocalizedMap[widget.supplierModel.purchaseOrder.status],
                   textAlign: TextAlign.end,
                   style: TextStyle(fontSize: 16, color: Colors.green),
                 )
@@ -945,7 +966,7 @@ class SuppliersDetail extends StatelessWidget {
             Row(
               children: <Widget>[
                 Text(
-                  '创建时间：${DateFormatUtil.format(supplierModel.purchaseOrder.creationTime)}',
+                  '创建时间：${DateFormatUtil.format(widget.supplierModel.purchaseOrder.creationTime)}',
                   style: TextStyle(fontSize: 14),
                 )
               ],
@@ -955,7 +976,7 @@ class SuppliersDetail extends StatelessWidget {
   }
 
   List<Widget> _buildPurchaseOrderContent(BuildContext context) {
-    return supplierModel.purchaseOrder.entries.map((entry) {
+    return widget.supplierModel.purchaseOrder.entries.map((entry) {
       return Container(
           padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
           margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
@@ -1003,9 +1024,9 @@ class SuppliersDetail extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: Text(
                 '共' +
-                    supplierModel.purchaseOrder.totalQuantity.toString() +
+                    widget.supplierModel.purchaseOrder.totalQuantity.toString() +
                     '件商品   合计： ￥' +
-                    supplierModel.purchaseOrder.totalPrice.toString(),
+                    widget.supplierModel.purchaseOrder.totalPrice.toString(),
                 style: TextStyle(fontSize: 16, color: Colors.red),
               ),
             )
@@ -1025,7 +1046,7 @@ class SuppliersDetail extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '报价单号：${supplierModel.quoteOrder.order.code}',
+                '报价单号：${widget.supplierModel.quoteOrder.order.code}',
                 style: TextStyle(fontSize: 15),
               ),
               RichText(
@@ -1034,12 +1055,12 @@ class SuppliersDetail extends StatelessWidget {
                     style: TextStyle(fontSize: 15, color: Colors.black),
                     children: <TextSpan>[
                       TextSpan(
-                          text: '${supplierModel.quoteOrder.order.totalPrice}',
+                          text: '${widget.supplierModel.quoteOrder.order.totalPrice}',
                           style: TextStyle(color: Colors.red)),
                       TextSpan(text: '元'),
                     ]),
               ),
-              Text(QuoteStateLocalizedMap[supplierModel.quoteOrder.order.state],
+              Text(QuoteStateLocalizedMap[widget.supplierModel.quoteOrder.order.state],
                   style: TextStyle(
                       color: Colors.blue, fontSize: 15))
             ],
@@ -1048,7 +1069,7 @@ class SuppliersDetail extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '报价时间：${DateFormatUtil.format(supplierModel.quoteOrder.order.creationTime)}',
+                '报价时间：${DateFormatUtil.format(widget.supplierModel.quoteOrder.order.creationTime)}',
                 style: TextStyle(fontSize: 15),
               ),
             ],
@@ -1070,8 +1091,8 @@ class SuppliersDetail extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image: supplierModel.quoteOrder.product.thumbnail != null
-                      ? NetworkImage(supplierModel.quoteOrder.product.thumbnail)
+                  image: widget.supplierModel.quoteOrder.product.thumbnail != null
+                      ? NetworkImage(widget.supplierModel.quoteOrder.product.thumbnail)
                       : AssetImage(
                     'temp/picture.png',
                     package: "assets",
@@ -1088,9 +1109,9 @@ class SuppliersDetail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  supplierModel.quoteOrder.product.name != null
+                  widget.supplierModel.quoteOrder.product.name != null
                       ? Text(
-                    supplierModel.quoteOrder.product.name,
+                    widget.supplierModel.quoteOrder.product.name,
                     style: TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   )
@@ -1098,14 +1119,14 @@ class SuppliersDetail extends StatelessWidget {
                     '暂无产品',
                     style: TextStyle(fontSize: 15, color: Colors.red),
                   ),
-                  supplierModel.quoteOrder.product.skuID != null
+                  widget.supplierModel.quoteOrder.product.skuID != null
                       ? Container(
                     padding: EdgeInsets.all(3),
                     decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(5)),
                     child: Text(
-                      '货号：${supplierModel.quoteOrder.product.skuID}',
+                      '货号：${widget.supplierModel.quoteOrder.product.skuID}',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   )
@@ -1114,13 +1135,13 @@ class SuppliersDetail extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        "${supplierModel.quoteOrder.order.totalQuantity}件",
+                        "${widget.supplierModel.quoteOrder.order.totalQuantity}件",
                         style: TextStyle(fontSize: 16, color: Colors.orange),
                       )
                     ],
                   ),
                   Text(
-                    '需求订单号：${supplierModel.quoteOrder.order.requirementOrderCode}',
+                    '需求订单号：${widget.supplierModel.quoteOrder.order.requirementOrderCode}',
                     style: TextStyle(fontSize: 13, color: Colors.grey),
                   )
                 ],
@@ -1132,5 +1153,33 @@ class SuppliersDetail extends StatelessWidget {
     );
   }
 
+  void _selectActionButton(String tel) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text('拨打电话'),
+              onTap: () async {
+                var url = 'tel:' + tel;
+                await launch(url);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.message),
+              title: Text('发送短信'),
+              onTap: () async {
+                var url = 'sms:' + tel;
+                await launch(url);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 }
