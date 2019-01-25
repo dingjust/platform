@@ -199,24 +199,29 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Image.network(
-            imageUrl,
-            width: width - 15,
-            height: height - 20,
-          ),
-          Text(
-            name,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        //TODO: 分类跳转
+      },
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Image.network(
+              imageUrl,
+              width: width - 15,
+              height: height - 20,
+            ),
+            Text(
+              name,
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
       ),
     );
   }
