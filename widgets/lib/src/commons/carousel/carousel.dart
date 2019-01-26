@@ -150,8 +150,8 @@ class _CarouselState extends State<Carousel> {
         child: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
           image: item.url,
-          height: widget.height,
-          fit: BoxFit.fitWidth,
+          // height: widget.height,
+          fit: BoxFit.cover,
         ),
       ),
     );

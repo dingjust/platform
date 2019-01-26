@@ -23,6 +23,14 @@ class B2BIcons {
       const IconData(0xe6a5, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData right_quotation =
       const IconData(0xe6a6, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData production =
+      const IconData(0xe696, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData home =
+      const IconData(0xe64d, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData business =
+      const IconData(0xe650, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData my =
+      const IconData(0xe64c, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

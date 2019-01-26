@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
         ]),
   ];
 
-  static Color black = Colors.black;
+  static Color orange = Colors.orange;
   static Color white = Colors.white;
 
   ///图标颜色
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
     // 监听滚动变化该表图标颜色, _appBarHeight - kToolbarHeight为顶部标题栏底部与轮播图底部之间高度
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < _appBarHeight - kToolbarHeight) {
-        if (iconColor == black) {
+        if (iconColor == orange) {
           setState(() {
             iconColor = white;
           });
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
       } else {
         if (iconColor == white) {
           setState(() {
-            iconColor = black;
+            iconColor = orange;
           });
         }
       }
@@ -168,19 +168,22 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           Text(
             '衣报送',
-            style: TextStyle(color: Colors.orange, fontSize: 20),
+            style: TextStyle(color: Colors.orange, fontSize: 16),
           ),
           HomeInfoItem(
             label: '接单工厂',
             value: '566',
+            end: '家',
           ),
           HomeInfoItem(
             label: '正在报价',
             value: '376',
+            end: '单',
           ),
           HomeInfoItem(
             label: '今日成交',
             value: '106',
+            end: '单',
           )
         ],
       ),

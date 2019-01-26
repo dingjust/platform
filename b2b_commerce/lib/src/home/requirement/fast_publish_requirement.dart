@@ -122,6 +122,10 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                     margin: EdgeInsets.symmetric(vertical: 5),
                     child: RaisedButton(
                         onPressed: () {
+                          //清空数据
+                          expectedDeliveryDate = null;
+                          _requirementNumController.clear();
+                          //跳转
                           Navigator.push(
                               context,
                               MaterialPageRoute(
