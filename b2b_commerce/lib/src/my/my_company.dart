@@ -27,11 +27,11 @@ BrandModel brandModel = BrandModel.fromJson({
   'brand': '草帽海贼团',
   'cooperativeBrand': '红心海贼团',
   'scaleRange': 'SR005',
-  'ageRanges': ['16-22', '23-30'],
-  'priceRange1s': ['1000-3999', '4999-9999'],
-  'priceRange2s': ['5999-9999', '10000-19999'],
+  'ageRanges': ['AR001','AR002'],
+  'priceRange1s': ['PR001','PR002'],
+  'priceRange2s': ['PR003','PR003'],
   'styles': [
-    'C001','C002',
+    'FG0001','FG0003',
   ],
   'adeptAtCategories': ['毛衣'],
   'registrationDate': DateTime.now().toString(),
@@ -144,8 +144,8 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
   }
 
   Widget _buildBrand(BuildContext context) {
-    /*return FutureBuilder(
-      future: _userRepository.getBrand('B0001'),
+   /* return FutureBuilder(
+      future: _userRepository.getBrand('PR00009001'),
       builder: (BuildContext context,AsyncSnapshot<BrandModel> snapshot){
         return ListView(
           children: <Widget>[
@@ -181,6 +181,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
 
   //品牌头部展示，头像及公司名
   Widget _buildBrandTop(BuildContext context,BrandModel brandModel) {
+//    String picUrl = brandModel != null ? 'http://192.168.1.103:9001' : '';
     return Container(
       padding: EdgeInsets.all(10),
       child: Center(
@@ -188,7 +189,8 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           children: <Widget>[
             CircleAvatar(
               backgroundImage: NetworkImage(
-                brandModel?.profilePicture ?? '',
+//                picUrl + brandModel?.profilePicture,
+                  brandModel?.profilePicture
               ),
               radius: 50.0,
             ),
@@ -284,8 +286,17 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Row(
-                    children:
-                        _buildItemsByStringList(context, brandModel?.styles ?? []),
+                    children: brandModel?.styles?.map((code){
+                      return  Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: Text(enumMap(StyleEnum, code)),
+                        decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      );
+                    })?.toList() ?? <Widget>[],
+//                        _buildItemsByStringList(context, brandModel?.styles ?? []),
                   ),
                 ),
               ],
@@ -320,8 +331,17 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Row(
-                    children:
-                        _buildItemsByStringList(context, brandModel?.ageRanges ?? []),
+                    children:brandModel?.ageRanges?.map((code){
+                      return Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: Text(AgeRangesLocalizedMap[code] ?? ''),
+                        decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      );
+                    })?.toList() ?? <Widget>[],
+//                        _buildItemsByStringList(context, brandModel?.ageRanges ?? []),
                   ),
                 ),
               ],
@@ -338,8 +358,17 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Row(
-                    children: _buildItemsByStringList(
-                        context, brandModel?.priceRange1s ?? []),
+                    children: brandModel?.priceRange1s?.map((code){
+                      return Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: Text(PriceRangesLocalizedMap[code] ?? ''),
+                        decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      );
+                    })?.toList(),
+//                    _buildItemsByStringList(context, brandModel?.priceRange1s ?? []),
                   ),
                 ),
               ],
@@ -356,8 +385,17 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Row(
-                    children: _buildItemsByStringList(
-                        context, brandModel?.priceRange2s ?? []),
+                    children: brandModel?.priceRange2s?.map((code){
+                      return Container(
+                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: Text(PriceRangesLocalizedMap[code] ?? ''),
+                        decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      );
+                    })?.toList(),
+//                    _buildItemsByStringList(context, brandModel?.priceRange2s ?? []),
                   ),
                 ),
               ],
@@ -392,6 +430,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
 
   //品牌端认证信息
   Widget _buildBrandAuthentication(BuildContext context,BrandModel brandModel) {
+//    String picUrl = brandModel != null ? 'http://192.168.1.103:9001' : '';
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -440,7 +479,11 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
                   ],
                 ),
                 Attachments(
-                  list: brandModel?.certificate ?? [],
+                  list:
+                  brandModel?.certificate ?? [],
+//                  brandModel?.certificate?.map((media){
+//                    return MediaModel(picUrl+media.url,description: media.description,mediaType: media.mediaType);
+//                  })?.toList(),
                 )
               ],
             ),
@@ -539,7 +582,8 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           ),
           ListTile(
             leading: Text('合作品牌'),
-            trailing: Text(factoryModel.cooperativeBrands[0].name),
+//            trailing: Text(factoryModel.cooperativeBrands[0].name),
+            trailing: Text(factoryModel.cooperativeBrand),
           ),
           Divider(
             height: 5,
@@ -701,7 +745,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
   List<Widget> _buildItemsByStringList(
       BuildContext context, List<String> _list) {
     List<Widget> _widget = new List();
-    if (_list.isNotEmpty) {
+    if (_list != null && _list.isNotEmpty) {
       for (int i = 0; i < _list.length; i++) {
         _widget.add(Container(
           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
