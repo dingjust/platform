@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/main.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:core/core.dart';
@@ -308,7 +309,12 @@ class _PublishRequirementSuccessDialogState
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => MyApp()));
+                  },
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 30),
                   shape: RoundedRectangleBorder(

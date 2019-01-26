@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: '发布需求',
-            child: Icon(Icons.add),
+            child: Icon(Icons.add,color: Colors.white,),
             onPressed: null,
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -87,19 +87,19 @@ class BottomNavigation extends StatelessWidget {
 
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
-      icon: const Icon(Icons.home),
+      icon: const Icon(B2BIcons.home),
       title: const Text('首页'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(Icons.forum),
-      title: const Text('广场'),
+      icon: const Icon(B2BIcons.production),
+      title: const Text('生产'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(Icons.shopping_cart),
+      icon: const Icon(B2BIcons.business),
       title: const Text('生意'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(Icons.account_box),
+      icon: const Icon(B2BIcons.my),
       title: const Text('我的'),
     )
   ];
