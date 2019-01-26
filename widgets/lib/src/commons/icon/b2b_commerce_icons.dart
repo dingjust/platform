@@ -17,6 +17,12 @@ class B2BIcons {
       const IconData(0xe69c, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData factory_all =
       const IconData(0xe69a, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData message =
+      const IconData(0xe653, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData left_quotation =
+      const IconData(0xe6a5, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData right_quotation =
+      const IconData(0xe6a6, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

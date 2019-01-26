@@ -141,6 +141,7 @@ class HomeTabSection extends StatelessWidget {
         child: DefaultTabController(
           length: 3,
           child: Scaffold(
+            backgroundColor: Colors.white,
             appBar: TabBar(
               unselectedLabelColor: Colors.black26,
               labelColor: Colors.orange,
@@ -162,12 +163,14 @@ class HomeTabSection extends StatelessWidget {
             body: TabBarView(
               children: <Widget>[
                 Container(
+                  color: Colors.white,
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: iconList),
                 ),
                 Container(
+                  color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -179,6 +182,7 @@ class HomeTabSection extends StatelessWidget {
                   ),
                 ),
                 Container(
+                  color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
