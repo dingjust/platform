@@ -219,7 +219,6 @@ class _HomePageState extends State<HomePage> {
             children: factories
                 .map((item) => FactoryItem(
                       model: item,
-                      showButton: true,
                     ))
                 .toList(),
           )

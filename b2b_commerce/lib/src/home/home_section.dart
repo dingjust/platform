@@ -11,7 +11,7 @@ class HomeBannerSection extends StatelessWidget {
       'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548494182390&di=a7928c3e9b9adb28e71cd84991a28470&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01c16a59016013a80121455009859b.jpg%401280w_1l_2o_100sh.jpg',
     ),
     MediaModel(
-      'http://pixdaus.com/files/items/pics/8/28/76828_bc2803f807a3f05873b3f0c105995173_large.jpg',
+      'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190126151855.jpg',
     ),
   ];
 

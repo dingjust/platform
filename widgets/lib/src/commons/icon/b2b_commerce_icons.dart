@@ -31,6 +31,8 @@ class B2BIcons {
       const IconData(0xe650, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData my =
       const IconData(0xe64c, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData delay =
+      const IconData(0xe6a8, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {
