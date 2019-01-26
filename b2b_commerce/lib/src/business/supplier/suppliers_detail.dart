@@ -721,7 +721,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
               ],
             ),
           ),
-         Container(
+        /* Container(
              height: 200,
              width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -740,7 +740,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                       );
                     })
                 )
-            ),
+            ),*/
         ],
       ),
       decoration: BoxDecoration(
