@@ -7,6 +7,16 @@ class B2BIcons {
       const IconData(0xe652, fontFamily: 'b2bIcons', matchTextDirection: true);
   static const IconData publish_requirement_success =
       const IconData(0xe69e, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData factory_map =
+      const IconData(0xe69b, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData industrial_cluster =
+      const IconData(0xe698, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData factory_brand =
+      const IconData(0xe699, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData free_proofing =
+      const IconData(0xe69c, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData factory_all =
+      const IconData(0xe69a, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

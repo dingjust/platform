@@ -93,7 +93,7 @@ class _CarouselState extends State<Carousel> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-          color: Colors.black45,
+          // color: Colors.black45,
           height: 20.0,
           child: Center(
             child: SizedBox(

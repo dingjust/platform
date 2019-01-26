@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/home/factory/factory.dart';
+import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -7,48 +8,6 @@ class HotCategoryPage extends StatefulWidget {
 }
 
 class _HotCategoryPageState extends State<HotCategoryPage> {
-  List<CategoryItem> categories = <CategoryItem>[
-    CategoryItem(
-      imageUrl: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/T%E6%81%A4.png',
-      name: 'T恤',
-    ),
-    CategoryItem(
-      imageUrl:
-          'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%8D%8A%E6%88%AA%E8%A3%99.png',
-      name: '半截裙',
-    ),
-    CategoryItem(
-      imageUrl:
-          'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%A5%B3%E7%9A%AE%E8%A3%A4.png',
-      name: '女皮裤',
-    ),
-    CategoryItem(
-      imageUrl:
-          'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E6%AF%9B%E8%A1%A3.png',
-      name: '毛衣',
-    ),
-    CategoryItem(
-      imageUrl:
-          'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E7%89%9B%E4%BB%94%E8%A3%A4.png',
-      name: '牛仔裤',
-    ),
-    CategoryItem(
-      imageUrl:
-          'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E8%A1%AC%E8%A1%A3.png',
-      name: '衬衣',
-    ),
-    CategoryItem(
-      imageUrl:
-          'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E9%A3%8E%E8%A1%A3.png',
-      name: '风衣',
-    ),
-    CategoryItem(
-      imageUrl:
-          'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%A5%B3%E5%A5%97%E8%A3%85.png',
-      name: '女套装',
-    ),
-  ];
-
   //TODO:调用接口查询推荐工厂
   List<FactoryModel> factories = <FactoryModel>[
     FactoryModel(
@@ -131,6 +90,80 @@ class _HotCategoryPageState extends State<HotCategoryPage> {
   }
 
   Widget _buildCategory() {
+    List<CategoryItem> categories = <CategoryItem>[
+      CategoryItem(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuickReactionFactoryPage()));
+        },
+        imageUrl: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/T%E6%81%A4.png',
+        name: 'T恤',
+      ),
+      CategoryItem(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuickReactionFactoryPage()));
+        },
+        imageUrl:
+            'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%8D%8A%E6%88%AA%E8%A3%99.png',
+        name: '半截裙',
+      ),
+      CategoryItem(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuickReactionFactoryPage()));
+        },
+        imageUrl:
+            'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%A5%B3%E7%9A%AE%E8%A3%A4.png',
+        name: '女皮裤',
+      ),
+      CategoryItem(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuickReactionFactoryPage()));
+        },
+        imageUrl:
+            'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E6%AF%9B%E8%A1%A3.png',
+        name: '毛衣',
+      ),
+      CategoryItem(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuickReactionFactoryPage()));
+        },
+        imageUrl:
+            'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E7%89%9B%E4%BB%94%E8%A3%A4.png',
+        name: '牛仔裤',
+      ),
+      CategoryItem(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuickReactionFactoryPage()));
+        },
+        imageUrl:
+            'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E8%A1%AC%E8%A1%A3.png',
+        name: '衬衣',
+      ),
+      CategoryItem(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuickReactionFactoryPage()));
+        },
+        imageUrl:
+            'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E9%A3%8E%E8%A1%A3.png',
+        name: '风衣',
+      ),
+      CategoryItem(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuickReactionFactoryPage()));
+        },
+        imageUrl:
+            'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%A5%B3%E5%A5%97%E8%A3%85.png',
+        name: '女套装',
+      ),
+    ];
+
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
@@ -187,6 +220,7 @@ class CategoryItem extends StatelessWidget {
   final String name;
   final String code;
   final String imageUrl;
+  final VoidCallback onPressed;
 
   const CategoryItem({
     Key key,
@@ -195,14 +229,13 @@ class CategoryItem extends StatelessWidget {
     @required this.name,
     this.code,
     @required this.imageUrl,
+    this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        //TODO: 分类跳转
-      },
+      onTap: onPressed,
       child: Container(
         width: width,
         height: height,
