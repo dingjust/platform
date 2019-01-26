@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
             SliverList(
                 delegate: SliverChildListDelegate(<Widget>[
               EasyGrid(
-                height: 190,
+                height: 160,
                 dataList: _gridItemList(),
               ),
               _buildInfoSection(),
@@ -159,8 +159,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildInfoSection() {
     return Container(
-      margin: EdgeInsets.fromLTRB(8, 5, 8, 5),
-      padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+      margin: EdgeInsets.fromLTRB(8, 2, 8, 5),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Row(
