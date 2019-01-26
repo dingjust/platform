@@ -41,7 +41,6 @@ class CategorySelectState extends State<CategorySelect> {
   Widget build(BuildContext context) {
     widget.categorys.forEach((category) {
       _keyItem = category.keys.map((key) {
-        print(key.name);
         if(_selectLeft == key.code){
           _color = Colors.orange;
         }else{
