@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 import users from './modules/users';
+import colors from './modules/colors';
 
 // 状态管理
 const state = {
@@ -30,7 +31,8 @@ const actions = {
 
 export default new Vuex.Store({
   modules: {
-    UsersModule: users
+    UsersModule: users,
+    ColorsModule: colors,
   },
   state,
   getters,

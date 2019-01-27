@@ -37,14 +37,9 @@ let http = {
     return new Promise((resolve, reject) => {
       axios.get(url, {
         params: params
-      })
-        .then((response) => {
-          resolve(response.data);
-        }).catch((error) => {
-          reject(error);
-        }
-      );
-    })
+      }).then((response) => resolve(response.data))
+        .catch((error) => resolve(error.response.data));
+    });
   },
   /** post 请求
    * @param  {接口地址} url
@@ -54,13 +49,9 @@ let http = {
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.post(url, data)
-        .then((response) => {
-          resolve(response.data);
-        }).catch((error) => {
-          reject(error);
-        }
-      );
-    })
+        .then((response) => resolve(response.data))
+        .catch((error) => resolve(error.response.data));
+    });
   },
   /** post 请求
    * @param  {接口地址} url
@@ -70,13 +61,9 @@ let http = {
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.put(url, data)
-        .then((response) => {
-          resolve(response.data);
-        }).catch((error) => {
-          reject(error);
-        }
-      );
-    })
+        .then((response) => resolve(response.data))
+        .catch((error) => resolve(error.response.data));
+    });
   },
   /** post 请求
    * @param  {接口地址} url
@@ -86,13 +73,9 @@ let http = {
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.delete(url, params)
-        .then((response) => {
-          resolve(response.data);
-        }).catch((error) => {
-          reject(error);
-        }
-      );
-    })
+        .then((response) => resolve(response.data))
+        .catch((error) => resolve(error.response.data));
+    });
   }
 };
 

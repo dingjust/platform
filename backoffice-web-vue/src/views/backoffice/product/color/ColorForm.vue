@@ -23,7 +23,8 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {mapActions} from 'vuex';
+
   import ColorBaseForm from "./ColorBaseForm";
 
   export default {
@@ -31,25 +32,33 @@
     components: {ColorBaseForm},
     props: ["slotData"],
     methods: {
+      ...mapActions({
+        refresh: "ColorsModule/refresh"
+      }),
       onSubmit() {
         this.$refs["baseForm"].validate(valid => {
           if (!valid) {
             return false;
           }
 
-          axios.post("/djbackoffice/product/color", this.slotData)
-            .then(() => {
-              this.$message.success("保存成功");
-              this.fn.closeSlider(true);
-            }).catch(error => {
-              this.$message.error(this.getErrorMessage(error));
-            }
-          );
+          this._create(this.slotData);
+
           return true;
         });
       },
       onCancel() {
         this.fn.closeSlider();
+      },
+      async _create(item) {
+        const response = await this.$http.post("/djbackoffice/product/color", item);
+        if (response["errors"]) {
+          this.$message.error(response["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("保存成功");
+        this.refresh();
+        this.fn.closeSlider(true);
       }
     },
     computed: {
