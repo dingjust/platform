@@ -1,0 +1,114 @@
+// Bootstrap overrides
+
+//
+// Color system
+//
+
+$white:                           #fff;
+$gray-100:                        #f0f2f7;
+$gray-200:                        #e4e6eb;
+$gray-300:                        #c7cbd5;
+$gray-400:                        #869fac;
+$gray-500:                        #678898;
+$gray-600:                        #9da0a8;
+$gray-700:                        #3e515b;
+$gray-800:                        #383e4b;
+$gray-900:                        #151b1e;
+$black:                           #000 !default;
+
+$blue:                            #36a9e1;
+$indigo:                          #6610f2 !default;
+$purple:                          #6f42c1 !default;
+$pink:                            #e83e8c !default;
+$red:                             #ff5454;
+$orange:                          #fabb3d;
+$yellow:                          #ffc107 !default;
+$green:                           #bdea74;
+$teal:                            #20c997 !default;
+$cyan:                            #67c2ef;
+
+$colors: (
+  blue:                           $blue,
+  indigo:                         $indigo,
+  purple:                         $purple,
+  pink:                           $pink,
+  red:                            $red,
+  orange:                         $orange,
+  yellow:                         $yellow,
+  green:                          $green,
+  teal:                           $teal,
+  cyan:                           $cyan,
+  white:                          $white,
+  gray:                           $gray-600,
+  gray-dark:                      $gray-800
+);
+
+$theme-colors: (
+  primary:                        $blue,
+  secondary:                      $gray-300,
+  success:                        $green,
+  info:                           $cyan,
+  warning:                        $orange,
+  danger:                         $red,
+  light:                          $gray-100,
+  dark:                           $gray-800
+);
+
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+
+$enable-transitions:              true;
+$enable-rounded:                  true;
+
+// Body
+//
+// Settings for the `<body>` element.
+
+$body-bg:                         #f5f5f5;
+$body-color:                      $gray-800;
+
+// Typography
+//
+// Font, line-height, and color for body text, headings, and more.
+
+$font-size-base:                  0.875rem;
+$text-muted:                      $gray-600;
+
+// Breadcrumbs
+
+$breadcrumb-padding-x:            2rem;
+$breadcrumb-bg:                   transparent;
+$breadcrumb-margin-bottom:        0;
+$breadcrumb-divider-color:        $gray-600;
+$breadcrumb-active-color:         $gray-600;
+
+// Cards
+
+$card-border-color:               $gray-200;
+$card-cap-bg:                     $gray-100;
+
+// Dropdowns
+
+$dropdown-padding-y:              0;
+$dropdown-border-color:           $gray-200;
+$dropdown-divider-bg:             $gray-100;
+
+// Buttons
+
+$btn-secondary-border:            $gray-300;
+
+// Progress bars
+
+$progress-bg:                     $gray-100;
+
+// Tables
+
+$table-bg-accent:                 $gray-100;
+$table-bg-hover:                  $gray-100;
+
+// Forms
+
+$input-group-addon-bg:            $gray-100;
+$input-border-color:              $gray-200;
+$input-group-addon-border-color:  $gray-200;

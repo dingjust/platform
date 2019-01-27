@@ -1,0 +1,50 @@
+{
+  "code": "",
+  "order": {
+    "code": "00000000"
+  },
+  "consignmentEntries": [
+    {
+      "entryNumber": 0,
+      "quantity": 1,
+      "shippedQuantity": 1,
+      "orderEntry": {
+        "id": 8796093055022,
+        "code": null,
+        "name": null,
+        "description": null,
+        "createdTs": 1536550799100,
+        "modifiedTs": 1536550799100,
+        "entryNumber": 0,
+        "order": {
+          "id": null,
+          "code": "00000000",
+          "name": null,
+          "description": null,
+          "createdTs": null,
+          "modifiedTs": null,
+          "user": null,
+          "status": null,
+          "type": null,
+          "currencyIsocode": null,
+          "entries": null,
+          "totalPrice": 0,
+          "subtotal": 0,
+          "deliveryAddress": null
+        },
+        "quantity": 1,
+        "unitCode": "件",
+        "basePrice": 100,
+        "totalPrice": 0,
+        "product": {
+          "id": 8796126052353,
+          "code": "00001001C000S03",
+          "name": "针织产品001",
+          "price": 0,
+          "approvalStatus": "CHECK",
+          "categories": []
+        }
+      }
+    }
+  ]
+}

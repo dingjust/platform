@@ -1,0 +1,44 @@
+// core overrides
+
+$border-color:                        $gray-200;
+
+// Navbar
+
+$navbar-height:                       50px;
+$navbar-bg:                           theme-color("primary");
+$navbar-border:                       0;
+$navbar-brand-width:                  220px;
+$navbar-brand-bg:                     darken(theme-color("primary"),10%);
+$navbar-brand-logo-size:              90px auto;
+$navbar-brand-border:                 0;
+
+$navbar-color:                        #fff;
+$navbar-hover-color:                  darken($navbar-color, 10%);
+$navbar-active-color:                 darken($navbar-color, 20%);
+$navbar-disabled-color:               lighter($navbar-color, 20%);
+
+// Sidebar
+$sidebar-bg:                          $gray-800;
+$sidebar-width:                       220px;
+$mobile-sidebar-width:                220px;
+
+// Sidebar Navigation
+
+$sidebar-nav-title-padding-y:         .95rem;
+$sidebar-nav-title-color:             $text-muted;
+
+$sidebar-nav-link-hover-bg:           darken($sidebar-bg, 10%);
+
+$sidebar-nav-link-active-bg:          darken($sidebar-bg, 10%);
+$sidebar-nav-link-active-icon-color:  theme-color("primary");
+
+$sidebar-nav-dropdown-bg:             darken($sidebar-bg, 5%);
+
+// Breadcrumb
+
+$breadcrumb-borders:                  0;
+
+// Footer
+
+$footer-bg:                           $gray-800;
+$footer-color:                        #fff;
