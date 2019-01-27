@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -243,7 +244,7 @@ class RequirementOrderItem extends StatelessWidget {
                   style: TextStyle(color: _statusColors[order.status]))
             ],
           ),
-          Text('发布时间: 1997-01-01'),
+          Text('发布时间: ${DateFormatUtil.format(order.creationTime)}'),
         ],
       ),
     );

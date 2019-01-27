@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/production/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
@@ -6,7 +7,6 @@ import 'package:widgets/widgets.dart';
 import 'src/business/index.dart';
 import 'src/common/app_bloc.dart';
 import 'src/common/app_routes.dart';
-import 'src/community/index.dart';
 import 'src/home/index.dart';
 import 'src/my/index.dart';
 
@@ -22,7 +22,7 @@ void main() {
 class MyApp extends StatefulWidget {
   final List<Widget> modules = <Widget>[
     HomePage(),
-    ForumHomePage(),
+    ProductionPage(),
     BusinessHomePage(),
     MyHomePage(),
   ];
@@ -68,10 +68,14 @@ class _MyAppState extends State<MyApp> {
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: '发布需求',
-            child: Icon(Icons.add,color: Colors.white,),
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
             onPressed: null,
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
         ),
         routes: AppRoutes.allRoutes,
       ),
@@ -80,26 +84,27 @@ class _MyAppState extends State<MyApp> {
 }
 
 class BottomNavigation extends StatelessWidget {
-  BottomNavigation({Key key, this.currentIndex: 0, @required this.onChanged}) : super(key: key);
+  BottomNavigation({Key key, this.currentIndex: 0, @required this.onChanged})
+      : super(key: key);
 
   final int currentIndex;
   final ValueChanged<int> onChanged;
 
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
-      icon: const Icon(Icons.home),
+      icon: const Icon(B2BIcons.home),
       title: const Text('首页'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(Icons.forum),
-      title: const Text('广场'),
+      icon: const Icon(B2BIcons.production),
+      title: const Text('生产'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(Icons.shopping_cart),
+      icon: const Icon(B2BIcons.business),
       title: const Text('生意'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(Icons.account_box),
+      icon: const Icon(B2BIcons.my),
       title: const Text('我的'),
     )
   ];

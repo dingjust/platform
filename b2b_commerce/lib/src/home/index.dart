@@ -2,9 +2,8 @@ import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory.dart';
-import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
-import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
+import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -58,7 +57,7 @@ class _HomePageState extends State<HomePage> {
         ]),
   ];
 
-  static Color black = Colors.black;
+  static Color orange = Colors.orange;
   static Color white = Colors.white;
 
   ///图标颜色
@@ -72,7 +71,7 @@ class _HomePageState extends State<HomePage> {
     // 监听滚动变化该表图标颜色, _appBarHeight - kToolbarHeight为顶部标题栏底部与轮播图底部之间高度
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < _appBarHeight - kToolbarHeight) {
-        if (iconColor == black) {
+        if (iconColor == orange) {
           setState(() {
             iconColor = white;
           });
@@ -80,7 +79,7 @@ class _HomePageState extends State<HomePage> {
       } else {
         if (iconColor == white) {
           setState(() {
-            iconColor = black;
+            iconColor = orange;
           });
         }
       }
@@ -101,7 +100,7 @@ class _HomePageState extends State<HomePage> {
               brightness: Brightness.dark,
               actions: <Widget>[
                 IconButton(
-                  icon: const Icon(Icons.message),
+                  icon: const Icon(B2BIcons.message),
                   color: iconColor,
                   tooltip: 'message',
                   onPressed: () {},
@@ -119,87 +118,14 @@ class _HomePageState extends State<HomePage> {
             SliverList(
                 delegate: SliverChildListDelegate(<Widget>[
               EasyGrid(
-                height: 190,
+                height: 160,
                 dataList: _gridItemList(),
               ),
               _buildInfoSection(),
               HomeTabSection(
                 height: 150,
               ),
-              RaisedButton(
-                onPressed: () {
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => QuickReactionFactoryPage()));
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            PublishRequirementSuccessDialog(
-                              model: RequirementOrderModel.fromJson({
-                                "code": "34938475200045",
-                                "status": "PENDING_QUOTE",
-                                "totalQuantity": 10,
-                                "totalPrice": 300,
-                                "expectedDeliveryDate":
-                                    DateTime.now().toString(),
-                                "creationtime": DateTime.now().toString(),
-                                "remarks": "确定前请先与我厂沟通好样衣事宜，谢谢",
-                                "entries": [
-                                  {
-                                    "product": {
-                                      "code": "NA89852509",
-                                      "name": "山本风法少女长裙复古气质秋冬款",
-                                      "skuID": "NA89852509",
-                                      "majorCategory": {"name": "女装-T恤"},
-                                      "supercategories": [
-                                        {"name": "针织"}
-                                      ],
-                                      "thumbnail":
-                                          "https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp",
-                                    },
-                                    "basePrice": 100.00,
-                                    "entryNumber": 500,
-                                  },
-                                ],
-                                "attachments": [
-                                  {
-                                    'url':
-                                        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                                    'mediaType': 'webp'
-                                  },
-                                  {
-                                    'url':
-                                        'http://zb.guaihou.com/zdoc/03J012-2%20%E7%8E%AF%E5%A2%83%E6%99%AF%E8%A7%82--%E7%BB%BF%E5%8C%96%E7%A7%8D%E6%A4%8D%E8%AE%BE%E8%AE%A1.pdf',
-                                    'mediaType': 'pdf'
-                                  },
-                                  {
-                                    'url':
-                                        'http://www.gzedu.gov.cn/gzsjyj/zsks/201901/4cbfd27ec7cf47ecb8867bad65a57040/files/ed312aa5e162435f928614b9c79d8fab.docx',
-                                    'mediaType': 'docx'
-                                  },
-                                  {
-                                    'url':
-                                        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                                    'mediaType': 'webp'
-                                  },
-                                  {
-                                    'url':
-                                        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                                    'mediaType': 'webp'
-                                  },
-                                  {
-                                    'url':
-                                        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                                    'mediaType': 'webp'
-                                  },
-                                ]
-                              }),
-                            ),
-                        fullscreenDialog: true,
-                      ));
-                },
-                child: Text('发布需求成功'),
-              ),
+              FastPublishRequirement(),
               _buildRecommend(),
             ])),
           ],
@@ -233,8 +159,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildInfoSection() {
     return Container(
-      margin: EdgeInsets.fromLTRB(8, 5, 8, 5),
-      padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+      margin: EdgeInsets.fromLTRB(8, 2, 8, 5),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Row(
@@ -242,19 +168,22 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           Text(
             '衣报送',
-            style: TextStyle(color: Colors.orange, fontSize: 20),
+            style: TextStyle(color: Colors.orange, fontSize: 16),
           ),
           HomeInfoItem(
             label: '接单工厂',
             value: '566',
+            end: '家',
           ),
           HomeInfoItem(
             label: '正在报价',
             value: '376',
+            end: '单',
           ),
           HomeInfoItem(
             label: '今日成交',
             value: '106',
+            end: '单',
           )
         ],
       ),
@@ -290,7 +219,6 @@ class _HomePageState extends State<HomePage> {
             children: factories
                 .map((item) => FactoryItem(
                       model: item,
-                      showButton: true,
                     ))
                 .toList(),
           )

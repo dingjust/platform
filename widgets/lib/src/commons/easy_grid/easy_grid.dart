@@ -34,7 +34,7 @@ class _EasyGridState extends State<EasyGrid> {
           padding: EdgeInsets.zero,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: widget.itemWidth,
-              childAspectRatio: 2.0 //宽高比为2
+              childAspectRatio: 2.35 //宽高比为2
               ),
           children: List.generate(widget.dataList.length, (index) {
             return GestureDetector(
