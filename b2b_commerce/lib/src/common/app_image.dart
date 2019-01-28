@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MenuItemImage {
-  static final _width = 40.0;
-  static final _height = 40.0;
+  static final _width = 30.0;
+  static final _height = 30.0;
   static String _package = 'assets';
 
   static Image check_report = Image.asset(

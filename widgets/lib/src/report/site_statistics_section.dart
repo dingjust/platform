@@ -16,7 +16,7 @@ class SiteStatisticsSection extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(label,style: TextStyle(fontSize: 18.0),),
+          Text(label,style: TextStyle(fontSize: 15.0),),
           Container(
             margin: const EdgeInsets.only(top: 8.0),
             child: Text(

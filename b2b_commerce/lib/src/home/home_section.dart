@@ -8,10 +8,10 @@ import 'package:widgets/widgets.dart';
 class HomeBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
-      'http://pixdaus.com/files/items/pics/8/28/76828_bc2803f807a3f05873b3f0c105995173_large.jpg',
+      'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548494182390&di=a7928c3e9b9adb28e71cd84991a28470&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01c16a59016013a80121455009859b.jpg%401280w_1l_2o_100sh.jpg',
     ),
     MediaModel(
-      'http://pixdaus.com/files/items/pics/8/28/76828_bc2803f807a3f05873b3f0c105995173_large.jpg',
+      'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190126151855.jpg',
     ),
   ];
 
@@ -27,7 +27,7 @@ class HomeSearchInputBox extends StatelessWidget {
   final double width;
   final double height;
 
-  const HomeSearchInputBox({Key key, this.width = 300, this.height = 30})
+  const HomeSearchInputBox({Key key, this.width = 400, this.height = 30})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -63,8 +63,10 @@ class HomeSearchInputBox extends StatelessWidget {
 class HomeInfoItem extends StatelessWidget {
   final String label;
   final String value;
+  final String end;
 
-  const HomeInfoItem({Key key, this.label, this.value}) : super(key: key);
+  const HomeInfoItem({Key key, this.label, this.value, this.end})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class HomeInfoItem extends StatelessWidget {
           style: TextStyle(fontSize: 12, color: Colors.black),
           children: <TextSpan>[
             TextSpan(text: value, style: TextStyle(color: Colors.red)),
-            TextSpan(text: '单')
+            TextSpan(text: '${end}')
           ]),
     );
   }
@@ -141,6 +143,7 @@ class HomeTabSection extends StatelessWidget {
         child: DefaultTabController(
           length: 3,
           child: Scaffold(
+            backgroundColor: Colors.white,
             appBar: TabBar(
               unselectedLabelColor: Colors.black26,
               labelColor: Colors.orange,
@@ -162,12 +165,14 @@ class HomeTabSection extends StatelessWidget {
             body: TabBarView(
               children: <Widget>[
                 Container(
+                  color: Colors.white,
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: iconList),
                 ),
                 Container(
+                  color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -179,6 +184,7 @@ class HomeTabSection extends StatelessWidget {
                   ),
                 ),
                 Container(
+                  color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

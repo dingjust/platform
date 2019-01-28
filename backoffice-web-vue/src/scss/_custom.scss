@@ -1,0 +1,57 @@
+// Custom styles for this template
+
+.card, .social-box {
+  border-top-width: 0;
+  border-bottom-width: 2 * $card-border-width;
+}
+
+[class*="card-outline-"] {
+  border-top-width: 1px !important;
+}
+
+[class*="card-accent-"] {
+  border-top-width: 2px !important;
+}
+
+.aside-menu {
+  .nav-tabs .nav-link,
+  .callout {
+    border-radius: 0;
+  }
+}
+
+.sidebar .nav-dropdown-items .nav-item {
+  padding: 0 -10px 0 15px;
+}
+
+// Here you can add other styles
+.el-form--label-top .el-form-item__label {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover>td{
+  background-color: #ffc107  !important;
+}
+
+.main .container-fluid {
+  padding: 0 15px;
+  position: relative;
+}
+
+.breadcrumb {
+  padding-left: 15px;
+}
+
+.content {
+  position: absolute;
+  top: 0px;
+  bottom: 60px;
+  left: 10px;
+  right: 10px;
+}
+
+.pagination-right {
+  text-align: right;
+  padding-top: 10px;
+}
