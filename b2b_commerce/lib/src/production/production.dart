@@ -169,9 +169,10 @@ class ProductionItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: StatusStep(
+              width: 300,
               list: _statusList,
               currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
-              isScroll: true,
+              isScroll: false,
             ),
           )
         ],

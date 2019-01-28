@@ -68,7 +68,7 @@ class AdvanceMenu extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(10.0),
             child: Wrap(
-              spacing: 36.0,
+              spacing: 30.0,
               runSpacing: 20.0,
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,

@@ -46,9 +46,10 @@ final List<OrderStatusModel> _statusList = [
 
 final List<Widget> _list = new List();
 
-final String defaultPicUrl = "https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg";
+final String defaultPicUrl =
+    "https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg";
 
-class PurchaseOrderDetailPage extends StatefulWidget{
+class PurchaseOrderDetailPage extends StatefulWidget {
   final PurchaseOrderModel order;
 
   PurchaseOrderDetailPage({Key key, @required this.order}) : super(key: key);
@@ -56,7 +57,6 @@ class PurchaseOrderDetailPage extends StatefulWidget{
   _PurchaseDetailPageState createState() =>
       _PurchaseDetailPageState(order: order);
 }
-
 
 class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   DateTime _blDate;
@@ -83,32 +83,33 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         ),
         body: Container(
             child: ListView(
-              children: <Widget>[
-                StatusStep(
-                  list: _statusList,
-                  currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
-                  isScroll: false,
-                ),
-                _buildEntryUi(context),
-                _buildPurchaseProductionProgresse(context),
-                _buildFactoryInfo(context),
-                _buildDocutment(context),
-                _buildDeliveryAddress(context),
-                _buildBottom(context)
-              ],
-            )
-        )
-    );
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.only(left: 10),
+              child: StatusStep(
+                list: _statusList,
+                currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
+                isScroll: false,
+              ),
+            ),
+            _buildEntryUi(context),
+            _buildPurchaseProductionProgresse(context),
+            _buildFactoryInfo(context),
+            _buildDocutment(context),
+            _buildDeliveryAddress(context),
+            _buildBottom(context)
+          ],
+        )));
   }
 
   //包装订单行
-  Widget _buildEntryUi(BuildContext context){
+  Widget _buildEntryUi(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
-        children:
-        _buildOrderEntry(context),
+        children: _buildOrderEntry(context),
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -116,8 +117,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       ),
     );
   }
+
 //构建订单行UI
-  List<Widget> _buildOrderEntry(BuildContext context){
+  List<Widget> _buildOrderEntry(BuildContext context) {
     return order.entries.map((entry) {
       return Container(
         padding: EdgeInsets.all(10),
@@ -140,25 +142,17 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             child: Text(
                               entry.product.name,
                               style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight:FontWeight.w500
-                              ),
-                            )
-                        ),
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            )),
                         Align(
                             alignment: Alignment.topLeft,
                             child: Text(
                               '货号：' + entry.product.skuID,
                               style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight:FontWeight.w500
-                              ),
-                            )
-                        )
+                                  fontSize: 14, fontWeight: FontWeight.w500),
+                            ))
                       ],
-                    )
-                )
-            )
+                    )))
           ],
         ),
         decoration: BoxDecoration(
@@ -168,6 +162,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       );
     }).toList();
   }
+
 //构建底部UI
   Widget _buildBottom(BuildContext context) {
     return Container(
@@ -181,18 +176,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           Align(
               alignment: Alignment.centerLeft,
-              child:
-              Text('需求订单号：${order.code}')
-          ),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Text('订单生成时间：${DateFormatUtil.format(order.creationTime)}')
-          ),
+              child: Text('需求订单号：${order.code}')),
           Align(
               alignment: Alignment.centerLeft,
               child:
-              Text('预计交货时间：${DateFormatUtil.format(order.expectedDeliveryDate)}')
-          ),
+                  Text('订单生成时间：${DateFormatUtil.format(order.creationTime)}')),
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                  '预计交货时间：${DateFormatUtil.format(order.expectedDeliveryDate)}')),
         ],
       ),
       decoration: BoxDecoration(
@@ -201,8 +193,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       ),
     );
   }
+
 //构建工厂信息UI
-  Widget _buildFactoryInfo(BuildContext context){
+  Widget _buildFactoryInfo(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -210,7 +203,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(13),
-            child:Column(
+            child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Row(
@@ -219,9 +212,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       child: Text(
                         order.belongTo.name,
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 18, fontWeight: FontWeight.w500),
                       ),
                     ),
                     Row(
@@ -238,14 +229,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 Row(
                   children: <Widget>[
                     Expanded(
-                      child: Text(
-                          '报价：',
-                          style:TextStyle(
+                      child: Text('报价：',
+                          style: TextStyle(
                               fontSize: 18,
                               color: Colors.red,
-                              fontWeight: FontWeight.w500
-                          )
-                      ),
+                              fontWeight: FontWeight.w500)),
                     ),
                     Align(
                         alignment: Alignment.centerRight,
@@ -254,8 +242,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             Text(order.belongTo.address),
                             Icon(Icons.chevron_right),
                           ],
-                        )
-                    )
+                        ))
                   ],
                 ),
                 Row(
@@ -273,18 +260,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           new Divider(),
           ListTile(
             title: Text('是否开具发票'),
-            trailing: Text(order.invoiceNeeded==true?'是':'否'),
+            trailing: Text(order.invoiceNeeded == true ? '是' : '否'),
           ),
           new Divider(),
           ListTile(
             title: Text('合计金额'),
-            trailing: Text(
-                '￥'+order.totalPrice.toString(),
-                style:TextStyle(
-                    fontSize: 18,
-                    color:Colors.red
-                )
-            ),
+            trailing: Text('￥' + order.totalPrice.toString(),
+                style: TextStyle(fontSize: 18, color: Colors.red)),
           ),
         ],
       ),
@@ -294,6 +276,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       ),
     );
   }
+
 //构建收货信息UI
   Widget _buildDeliveryAddress(BuildContext context) {
     return Container(
@@ -311,12 +294,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 Expanded(
                   child: Text(order.deliveryAddress.fullname),
                 ),
-                Expanded(
-                    child: Text(order.deliveryAddress.cellphone)
-                )
+                Expanded(child: Text(order.deliveryAddress.cellphone))
               ],
             ),
-            subtitle: Text(order.deliveryAddress.region.name + order.deliveryAddress.city.name + order.deliveryAddress.cityDistrict.name + order.deliveryAddress.line1),
+            subtitle: Text(order.deliveryAddress.region.name +
+                order.deliveryAddress.city.name +
+                order.deliveryAddress.cityDistrict.name +
+                order.deliveryAddress.line1),
             trailing: Icon(Icons.chevron_right),
           ),
           Divider(
@@ -338,11 +322,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       ),
     );
   }
+
 //构建生产进度UI
   Widget _buildPurchaseProductionProgresse(BuildContext context) {
     int _index = 0;
-    for(int i=0;i<order.productionProgresses.length;i++){
-      if(order.currentPhase == order.productionProgresses[i].phase){
+    for (int i = 0; i < order.productionProgresses.length; i++) {
+      if (order.currentPhase == order.productionProgresses[i].phase) {
         _index = order.productionProgresses[i].sequence;
         break;
       }
@@ -352,29 +337,30 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
         children: <Widget>[
-          _buildProductionProgress(context,order.productionProgresses[_index-1],false),
-          _buildProductionProgress(context,order.productionProgresses[_index],true),
+          _buildProductionProgress(
+              context, order.productionProgresses[_index - 1], false),
+          _buildProductionProgress(
+              context, order.productionProgresses[_index], true),
           Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
-              child:
-              RaisedButton(
-                elevation:0,
+              child: RaisedButton(
+                elevation: 0,
                 color: Colors.white,
                 child: Text(
-                  '查看全部', style: TextStyle(
-                    color: Colors.orange),
+                  '查看全部',
+                  style: TextStyle(color: Colors.orange),
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ProductionProgressesPage(order: order),
+                      builder: (context) =>
+                          ProductionProgressesPage(order: order),
                     ),
                   );
                 },
-              )
-          )
+              ))
         ],
       ),
       decoration: BoxDecoration(
@@ -383,14 +369,16 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       ),
     );
   }
+
   //TimeLineUI
-  Widget _buildProductionProgress(BuildContext context,ProductionProgressModel productionProgress,bool isCurrentStatus){
-    return  Stack(
+  Widget _buildProductionProgress(BuildContext context,
+      ProductionProgressModel productionProgress, bool isCurrentStatus) {
+    return Stack(
       children: <Widget>[
         Padding(
             padding: const EdgeInsets.only(left: 30.0),
-            child:  _buildProgressTimeLine(context,productionProgress,isCurrentStatus)
-        ),
+            child: _buildProgressTimeLine(
+                context, productionProgress, isCurrentStatus)),
         Positioned(
           top: 30.0,
           bottom: 0.0,
@@ -398,7 +386,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color: isCurrentStatus == true ? Colors.orangeAccent : Colors.black45,
+            color:
+                isCurrentStatus == true ? Colors.orangeAccent : Colors.black45,
           ),
         ),
         Positioned(
@@ -411,134 +400,119 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               margin: EdgeInsets.all(3.0),
               height: 16.0,
               width: 16.0,
-              decoration:
-              BoxDecoration(
+              decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isCurrentStatus == true ? Colors.orange : Colors.black
-              ),
+                  color:
+                      isCurrentStatus == true ? Colors.orange : Colors.black),
             ),
           ),
         )
       ],
     );
   }
+
 //TimeLineUI右边的Card部分
-  Widget _buildProgressTimeLine(BuildContext context,ProductionProgressModel productionProgress,bool isCurrentStatus){
+  Widget _buildProgressTimeLine(BuildContext context,
+      ProductionProgressModel productionProgress, bool isCurrentStatus) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.0),
       width: double.infinity,
       child: Column(
         children: <Widget>[
           ListTile(
-            title:  Text(
+            title: Text(
                 ProductionProgressPhaseLocalizedMap[productionProgress.phase],
-                style:  TextStyle(
+                style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: isCurrentStatus==true?Colors.orange:Colors.black54,
-                    fontSize: 18
-                )),
-            trailing:  Text(
+                    color: isCurrentStatus == true
+                        ? Colors.orange
+                        : Colors.black54,
+                    fontSize: 18)),
+            trailing: Text(
               '已延期2天',
-              style:  TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                  fontSize: 18
-              ),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
             ),
           ),
           Container(
               padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-              child:Column(
+              child: Column(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: new Text(
-                            '预计完成时间' ,
-                            style:  TextStyle(
-                                fontWeight: FontWeight.w500)),
+                        child: new Text('预计完成时间',
+                            style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       GestureDetector(
-                          child:Align(
+                          child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                                '${DateFormatUtil.format(
-                                    productionProgress.estimatedDate)}',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500)),
+                                '${DateFormatUtil.format(productionProgress.estimatedDate)}',
+                                style: TextStyle(fontWeight: FontWeight.w500)),
                           ),
                           onTap: () {
-                            isCurrentStatus == true ? _showDatePicker():null;
+                            isCurrentStatus == true ? _showDatePicker() : null;
                           }),
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           icon: Icon(Icons.date_range),
-                          onPressed: isCurrentStatus == true ? _showDatePicker:null,
+                          onPressed:
+                              isCurrentStatus == true ? _showDatePicker : null,
                         ),
                       )
                     ],
                   ),
-                  isCurrentStatus == true ?
-                  Container() :
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child:  Text(
-                            '实际完成时间' ,
-                            style:  TextStyle(
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            '${DateFormatUtil.format(
-                                productionProgress.finishDate)}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: SizedBox(
-                            width: 48,
-                          )
-                      )
-                    ],
-                  ),
+                  isCurrentStatus == true
+                      ? Container()
+                      : Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text('实际完成时间',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w500)),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                  '${DateFormatUtil.format(productionProgress.finishDate)}',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w500)),
+                            ),
+                            Align(
+                                alignment: Alignment.centerRight,
+                                child: SizedBox(
+                                  width: 48,
+                                ))
+                          ],
+                        ),
                 ],
-              )
-          ),
+              )),
           Align(
               alignment: Alignment.center,
               child: Container(
                 height: 35,
                 padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child:Row(
+                child: Row(
                   children: <Widget>[
                     Expanded(
                       child: GestureDetector(
-                          child: Text(
-                              '数量',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500)
-                          ),
+                          child: Text('数量',
+                              style: TextStyle(fontWeight: FontWeight.w500)),
                           onTap: () {
                             isCurrentStatus == true ? _showDialog() : null;
-                          }
-                      ),
+                          }),
                     ),
                     GestureDetector(
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: Text(
-                              productionProgress.quantity.toString(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500)),
+                          child: Text(productionProgress.quantity.toString(),
+                              style: TextStyle(fontWeight: FontWeight.w500)),
                         ),
                         onTap: () {
                           isCurrentStatus == true ? _showDialog() : null;
-                        }
-                     ),
+                        }),
                     Align(
                       alignment: Alignment.centerRight,
                       child: IconButton(
@@ -547,79 +521,77 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       ),
                     )
                   ],
-                ),)
-          ),
+                ),
+              )),
           Align(
               alignment: Alignment.center,
               child: Container(
                 height: 35,
                 padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child:Row(
+                child: Row(
                   children: <Widget>[
                     Expanded(
                       child: GestureDetector(
-                          child: Text(
-                              '凭证',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500
-                              )
-                          ),
+                          child: Text('凭证',
+                              style: TextStyle(fontWeight: FontWeight.w500)),
                           onTap: () {
-                            isCurrentStatus == true ? _selectPapersImages() : null;
-                          }
-                      ),
+                            isCurrentStatus == true
+                                ? _selectPapersImages()
+                                : null;
+                          }),
                       flex: 4,
                     ),
                   ],
-                ),)
-          ),
+                ),
+              )),
           Container(
               padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
               child: EditableAttachments(
                 list: productionProgress.medias,
-              )
-          ),
+              )),
           Container(
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-              child: Column(
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("备注"),
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(productionProgress.remarks)
-                    )
-                  ]
-              )
-          ),
+              child: Column(children: <Widget>[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("备注"),
+                ),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(productionProgress.remarks))
+              ])),
           Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-              child: isCurrentStatus==true && (productionProgress.phase == ProductionProgressPhase.SAMPLE_CONFIRM ||
-                  productionProgress.phase == ProductionProgressPhase.INSPECTION)?
-              RaisedButton(
-                color: Colors.orange,
-                child: Text(
-                  productionProgress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
-                  '样衣确认':'验货完成',
-                  style: TextStyle(
-                    color: Colors.white),
-                ),
-                onPressed: () {
-                  productionProgress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
-                  _showTipsDialog('样衣确认'):_showTipsDialog('验货');
-                },
-              ):null
-          )
+              child: isCurrentStatus == true &&
+                      (productionProgress.phase ==
+                              ProductionProgressPhase.SAMPLE_CONFIRM ||
+                          productionProgress.phase ==
+                              ProductionProgressPhase.INSPECTION)
+                  ? RaisedButton(
+                      color: Colors.orange,
+                      child: Text(
+                        productionProgress.phase ==
+                                ProductionProgressPhase.SAMPLE_CONFIRM
+                            ? '样衣确认'
+                            : '验货完成',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        productionProgress.phase ==
+                                ProductionProgressPhase.SAMPLE_CONFIRM
+                            ? _showTipsDialog('样衣确认')
+                            : _showTipsDialog('验货');
+                      },
+                    )
+                  : null)
         ],
       ),
     );
   }
 
   //构建附件UI
-  Widget _buildDocutment(BuildContext context){
+  Widget _buildDocutment(BuildContext context) {
     return PurchaseDocument(order);
   }
 
@@ -635,7 +607,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               title: Text('相机'),
               onTap: () async {
                 var image =
-                await ImagePicker.pickImage(source: ImageSource.camera);
+                    await ImagePicker.pickImage(source: ImageSource.camera);
                 if (image != null) {
                   setState(() {
 //                    widget.images.add(image);
@@ -649,7 +621,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               title: Text('相册'),
               onTap: () async {
                 var image =
-                await ImagePicker.pickImage(source: ImageSource.gallery);
+                    await ImagePicker.pickImage(source: ImageSource.gallery);
                 if (image != null) {
                   setState(() {
 //                    widget.images.add(image);
@@ -664,18 +636,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     );
   }
 
-
-
 //生成日期选择器
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: new DateTime(1990),
-        lastDate: new DateTime(2999)
-    );
+        lastDate: new DateTime(2999));
 
-    if(_picked != null){
+    if (_picked != null) {
       print(_picked);
       setState(() {
         _blDate = _picked;
@@ -684,7 +653,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   //确认完成按钮方法
-  Future<void> _neverComplete(BuildContext context,String progresses) async {
+  Future<void> _neverComplete(BuildContext context, String progresses) async {
     dialogText = TextEditingController();
     return showDialog<void>(
       context: context,
@@ -692,7 +661,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       builder: (context) {
         return AlertDialog(
           title: Text('提示'),
-          content: Text('是否'+progresses+'完成？'),
+          content: Text('是否' + progresses + '完成？'),
           actions: <Widget>[
             FlatButton(
               child: Text('取消'),
@@ -725,7 +694,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             child: ListBody(
               children: <Widget>[
                 TextField(
-                  controller:dialogText,
+                  controller: dialogText,
                   keyboardType: TextInputType.number,
                 ),
               ],
@@ -735,7 +704,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             FlatButton(
               child: Text('确定'),
               onPressed: () {
-                if(dialogText.text != null){
+                if (dialogText.text != null) {
                   print(dialogText.text);
                   setState(() {
                     _blNumber = dialogText.text;
@@ -749,20 +718,21 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       },
     );
   }
+
 //打开日期选择器
   void _showDatePicker() {
     _selectDate(context);
   }
+
 //打开数量输入弹框
-  void _showDialog(){
+  void _showDialog() {
     _neverSatisfied(context);
   }
 
   //确认是否完成动作
-  void _showTipsDialog(String progresses){
-    _neverComplete(context,progresses);
+  void _showTipsDialog(String progresses) {
+    _neverComplete(context, progresses);
   }
-
 }
 
 //生产进度凭证图片
@@ -793,7 +763,8 @@ class PurchaseVoucherPic extends StatelessWidget {
           )
         ],
       ),
-    );;
+    );
+    ;
   }
 
 //  Widget _buildPicRow(BuildContext context){
@@ -841,7 +812,7 @@ class PurchaseVoucherPic extends StatelessWidget {
 }
 
 //附件
-class PurchaseDocument extends StatelessWidget{
+class PurchaseDocument extends StatelessWidget {
   final PurchaseOrderModel order;
 
   PurchaseDocument(this.order);
@@ -851,11 +822,11 @@ class PurchaseDocument extends StatelessWidget{
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child:  Column(
-              children: <Widget>[
-                _buildDoc(context),
-              ],
-            ),
+      child: Column(
+        children: <Widget>[
+          _buildDoc(context),
+        ],
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
@@ -865,17 +836,14 @@ class PurchaseDocument extends StatelessWidget{
 
   Widget _buildDoc(BuildContext context) {
     return Container(
-      padding:EdgeInsets.fromLTRB(15, 0, 15, 0),
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
               Text(
                 '附件',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               )
             ],
           ),
@@ -886,5 +854,4 @@ class PurchaseDocument extends StatelessWidget{
       ),
     );
   }
-
 }

@@ -84,8 +84,8 @@ class _StatusStepStates extends State<StatusStep> {
       _widgetList.add(Container(
         margin: EdgeInsets.all(0),
         padding: EdgeInsets.all(0),
-        height: 80,
-        width: 80,
+        height: 75,
+        width: 75,
         child: Stack(
           children: <Widget>[
             Positioned(

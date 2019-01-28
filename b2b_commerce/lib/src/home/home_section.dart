@@ -27,7 +27,7 @@ class HomeSearchInputBox extends StatelessWidget {
   final double width;
   final double height;
 
-  const HomeSearchInputBox({Key key, this.width = 300, this.height = 30})
+  const HomeSearchInputBox({Key key, this.width = 400, this.height = 30})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

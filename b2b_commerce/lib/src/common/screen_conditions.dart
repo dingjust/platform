@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -46,6 +47,25 @@ final List<Map<CategoryModel, List<CategoryModel>>> _majorCategory = [
   },
 ];
 
+final List<EnumModel> processingTypeList = [
+  EnumModel.fromJson({
+    'code':'FOB',
+    'name':'FOB'
+  }),
+  EnumModel.fromJson({
+    'code':'PURE_PROCESSING',
+    'name':'PURE_PROCESSING'
+  }),
+  EnumModel.fromJson({
+    'code':'ODM',
+    'name':'ODM'
+  }),
+  EnumModel.fromJson({
+    'code':'OEM',
+    'name':'OEM'
+  }),
+];
+
 class ScreenConditions extends StatefulWidget {
   _ScreenConditionsState createState() => _ScreenConditionsState();
 }
@@ -53,6 +73,7 @@ class ScreenConditions extends StatefulWidget {
 class _ScreenConditionsState extends State<ScreenConditions> {
   List<CategoryModel> _mojarSelected = [];
   List<CategoryModel> _categorySelected = [];
+  List<EnumModel> _processingTypeSelected = [];
   String mojar = '点击选取';
   String category = '点击选取';
   bool _isShowA = false;
@@ -62,6 +83,8 @@ class _ScreenConditionsState extends State<ScreenConditions> {
   String requestCount = '输入';
   TextEditingController inputNumber;
   bool _isShowMore = true;
+  String address = '点击选取';
+  String processingType = '点击选取';
 
   @override
   void initState() {
@@ -241,28 +264,49 @@ class _ScreenConditionsState extends State<ScreenConditions> {
   }
 
   Widget _buildAddress(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(20,10,20,10),
-      child: ListTile(
-        leading: Text(
-          "生产地区",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+    return GestureDetector(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+          child: ListTile(
+            leading: Text(
+              "生产地区",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              address,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.black12,
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
-        trailing: Text(
-          "点击选取",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-      decoration: BoxDecoration(
-        color: Colors.black12,
-        borderRadius: BorderRadius.circular(16),
-      ),
+        onTap: () {
+          address='';
+          AddressPicker.showAddressPicker(
+            context,
+            selectProvince: (province) {
+              address += province['name'];
+            },
+            selectCity: (city) {
+              address += city['name'];
+            },
+            selectArea: (area) {
+              address += area['name'];
+              setState(() {
+                address = address;
+              });
+            },
+          );
+
+        }
     );
   }
 
@@ -302,7 +346,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
 
 
   Widget _buildScreenFactory(BuildContext context) {
-    return Container(
+    return  Container(
       margin: EdgeInsets.fromLTRB(20,10,20,10),
       height:90,
       child: GridView.count(
@@ -349,32 +393,37 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         ],
       ),
     );
+
   }
 
   Widget _buildCooperationModes(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(20,10,20,10),
-      child: ListTile(
-        leading: Text(
-          "加工类型",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+    return GestureDetector(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+          child: ListTile(
+            leading: Text(
+              "加工类型",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              processingType,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.black12,
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
-        trailing: Text(
-          "点击选取",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-      decoration: BoxDecoration(
-        color: Colors.black12,
-        borderRadius: BorderRadius.circular(16),
-      ),
-    );
+        onTap: () {
+          _showTypeSelect();
+        });
   }
 
   Widget _buildTechnology(BuildContext context) {
@@ -478,6 +527,31 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       }
       setState(() {
         category = category;
+      });
+    });
+  }
+
+  void _showTypeSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: EnumSelection(
+            enumModels: processingTypeList,
+            multiple: true,
+            enumSelect: _processingTypeSelected,
+          ),
+        );
+      },
+    ).then((val){
+      processingType = '';
+      if(_processingTypeSelected.isNotEmpty){
+        for(int i=0;i<_processingTypeSelected.length;i++){
+          processingType += _processingTypeSelected[i].name + ',';
+        }
+      }
+      setState(() {
+        processingType = processingType;
       });
     });
   }
