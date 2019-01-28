@@ -895,10 +895,10 @@ class _ProductionPageState extends State<ProductionPage> {
       appBar: AppBar(
         elevation: 0.5,
         title: HomeSearchInputBox(),
-        centerTitle: true,
         brightness: Brightness.dark,
         actions: <Widget>[
           IconButton(
+            padding: EdgeInsets.only(right: 20),
             icon: const Icon(B2BIcons.message),
             color: Colors.orange,
             tooltip: 'message',
@@ -941,9 +941,19 @@ class _ProductionPageState extends State<ProductionPage> {
           )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Text(
-          '线下订单',
-          style: TextStyle(color: Colors.white, fontSize: 12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '添加',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+            Text(
+              '线下订单',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            )
+          ],
         ),
       ),
     );

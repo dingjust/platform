@@ -55,6 +55,30 @@ class _HomePageState extends State<HomePage> {
           CategoryModel(name: '衬衫'),
           CategoryModel(name: '夹克'),
         ]),
+    FactoryModel(
+        historyOrdersCount: 214,
+        name: '广州旭日1',
+        starLevel: 3,
+        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
+        profilePicture:
+            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        categories: [
+          CategoryModel(name: '牛仔'),
+          CategoryModel(name: '衬衫'),
+          CategoryModel(name: '夹克'),
+        ]),
+    FactoryModel(
+        historyOrdersCount: 214,
+        name: '广州旭日0',
+        starLevel: 1,
+        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
+        profilePicture:
+            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        categories: [
+          CategoryModel(name: '牛仔'),
+          CategoryModel(name: '衬衫'),
+          CategoryModel(name: '夹克'),
+        ])
   ];
 
   static Color orange = Colors.orange;
@@ -96,10 +120,11 @@ class _HomePageState extends State<HomePage> {
               pinned: true,
               elevation: 0.5,
               title: HomeSearchInputBox(),
-              centerTitle: true,
+              // centerTitle: true,
               brightness: Brightness.dark,
               actions: <Widget>[
                 IconButton(
+                  padding: EdgeInsets.only(right: 20),
                   icon: const Icon(B2BIcons.message),
                   color: iconColor,
                   tooltip: 'message',
