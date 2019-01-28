@@ -44,6 +44,10 @@ const actions = {
       + "&client_id=" + CLIENT_ID
       + "&client_secret=" + CLIENT_SECRET
       + "&grant_type=" + GRANT_TYPE_PASSWORD);
+    if (response["errors"]) {
+      alert(response["errors"][0].message);
+      return;
+    }
     axios.defaults.headers.common['Authorization'] = "Bearer " + response["access_token"];
 
     commit("token", response["access_token"]);
@@ -67,6 +71,10 @@ const actions = {
       + "&client_secret=" + CLIENT_SECRET
       + "&grant_type=" + GRANT_TYPE_REFRESH_TOKEN
       + "&refresh_token=" + state.refreshToken);
+    if (response["errors"]) {
+      alert(response["errors"][0].message);
+      return;
+    }
     axios.defaults.headers.common['Authorization'] = "Bearer " + response["access_token"];
     commit("token", response["access_token"]);
     commit("expiresIn", response["expires_in"]);
