@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class ProductionPage extends StatefulWidget {
   _ProductionPageState createState() => _ProductionPageState();
@@ -16,43 +17,99 @@ class _ProductionPageState extends State<ProductionPage> {
   @override
   Widget build(BuildContext context) {
     return BLoCProvider<ProductionBLoC>(
-      key: _productionOrderBlocProviderKey,
-      bloc: ProductionBLoC.instance,
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0.5,
-          title: HomeSearchInputBox(),
-          brightness: Brightness.dark,
-          actions: <Widget>[
-            IconButton(
-              padding: EdgeInsets.only(right: 20),
-              icon: const Icon(B2BIcons.message),
-              color: Colors.orange,
-              tooltip: 'message',
-              onPressed: () {},
-            ),
-          ],
-        ),
-        body: ProductionListView(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                '添加',
-                style: TextStyle(color: Colors.white, fontSize: 12),
+        key: _productionOrderBlocProviderKey,
+        bloc: ProductionBLoC.instance,
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0.5,
+            title: HomeSearchInputBox(),
+            brightness: Brightness.dark,
+            actions: <Widget>[
+              IconButton(
+                padding: EdgeInsets.only(right: 20),
+                icon: const Icon(B2BIcons.message),
+                color: Colors.orange,
+                tooltip: 'message',
+                onPressed: () {},
               ),
-              Text(
-                '线下订单',
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              )
             ],
           ),
-        ),
-      ),
-    );
+          body: ProductionListView(),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {},
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: <Widget>[
+          //       Text(
+          //         '添加',
+          //         style: TextStyle(color: Colors.white, fontSize: 12),
+          //       ),
+          //       Text(
+          //         '线下订单',
+          //         style: TextStyle(color: Colors.white, fontSize: 12),
+          //       )
+          //     ],
+          //   ),
+          // ),
+          floatingActionButton: SpeedDial(
+            // animatedIcon: AnimatedIcons.menu_close,
+            animatedIconTheme: IconThemeData(size: 22.0),
+            // this is ignored if animatedIcon is non null
+            // child: Icon(Icons.add),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '添加',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+                Text(
+                  '线下订单',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                )
+              ],
+            ),
+            visible: true,
+            curve: Curves.bounceIn,
+            // overlayColor: Colors.black,
+            overlayOpacity: 0.5,
+            onOpen: () => print('OPENING DIAL'),
+            onClose: () => print('DIAL CLOSED'),
+            tooltip: 'Speed Dial',
+            heroTag: 'speed-dial-hero-tag',
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.black,
+            elevation: 8.0,
+            shape: CircleBorder(),
+            children: [
+              SpeedDialChild(
+                child: Center(
+                  child: Text(
+                    '唯一码',
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ),
+                backgroundColor: Colors.blue,
+                // label: '唯一码',
+                // labelStyle: TextTheme(fontSize: 18.0),
+                onTap: () => print('SECOND CHILD'),
+              ),
+              SpeedDialChild(
+                  child: Center(
+                    child: Text(
+                      '创建',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                  backgroundColor: Colors.red,
+                  // label: '创建',
+                  // labelStyle: TextTheme(fontSize: 18.0),
+                  onTap: () => print('FIRST CHILD')),
+            ],
+          ),
+        ));
   }
 }
 
