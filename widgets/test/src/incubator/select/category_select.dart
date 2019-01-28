@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-class CategorySelect extends StatefulWidget {
+class CategorySelectPage extends StatefulWidget {
   final List<Map<CategoryModel, List<CategoryModel>>> categorys;
   final bool multiple;
   final double verticalDividerOpacity;
   List<CategoryModel> categorySelect;
 
+  CategorySelectPage({@required this.categorys,this.multiple = false,this.verticalDividerOpacity = 1,this.categorySelect});
 
-  CategorySelect({@required this.categorys,this.multiple = false,this.verticalDividerOpacity = 0,this.categorySelect});
-
-  CategorySelectState createState() => CategorySelectState();
+  CategorySelectPageState createState() => CategorySelectPageState();
 }
 
-class CategorySelectState extends State<CategorySelect> {
+class CategorySelectPageState extends State<CategorySelectPage> {
 
   //透明度0到1
   double _verticalDivider;
@@ -23,15 +22,13 @@ class CategorySelectState extends State<CategorySelect> {
   List<Widget> _valueItem = <Widget>[];
   String _selectLeft;
   Color _color;
-//  List<CategoryModel> _selectRights;
 
 
   @override
   void initState() {
     _verticalDivider = widget.verticalDividerOpacity;
     _multiple = widget.multiple;
-    _selectLeft = widget.categorys[0].keys.toList()[0].code;
-//    _selectRights = widget.categorySelect;
+    _selectLeft = widget?.categorys?.length > 0 ? widget.categorys[0].keys.toList()[0].code : null;
     _color = Colors.black;
     // TODO: implement initState
     super.initState();

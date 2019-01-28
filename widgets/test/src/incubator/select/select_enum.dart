@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'enum_select.dart';
+import 'select_enum2.dart';
 import 'category_select.dart';
 
 void main() => runApp(MyApp());
@@ -13,12 +15,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SelectCategory(),
+      home: SelectEnumPage(),
     );
   }
 }
 
-class SelectCategory extends StatefulWidget {
+class SelectEnumPage extends StatefulWidget {
+  SelectEnumPageState createState() => SelectEnumPageState();
+}
+
+class SelectEnumPageState extends State<SelectEnumPage> {
+  List<EnumModel> _enumSelect = <EnumModel>[];
+  List<CategoryModel> _categorySelect = [];
   final List<Map<CategoryModel, List<CategoryModel>>> _minCategorys = [
     {
       CategoryModel(code: 'C01', name: '男装'): [
@@ -51,28 +59,57 @@ class SelectCategory extends StatefulWidget {
       ],
     },
   ];
-
-  SelectCategoryState createState() => SelectCategoryState();
-}
-
-class SelectCategoryState extends State<SelectCategory> {
-  List<CategoryModel> selects = [];
+  List<CategoryModel> maxCategorys = <CategoryModel>[
+    CategoryModel(code: 'C1',name: '针织'),
+    CategoryModel(code: 'C2',name: '针织'),
+    CategoryModel(code: 'C3',name: '针织'),
+    CategoryModel(code: 'C4',name: '针织'),
+    CategoryModel(code: 'C5',name: '其他'),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('选择分类'),
+        title: Text('选择枚举'),
       ),
-      body: CategorySelectPage(
-        categorys: widget._minCategorys,
-        multiple: true,
-        verticalDividerOpacity: 1,
-        categorySelect: selects,
+      body: ListView(
+        children: _enumSelect.map((enumModel) {
+          return Text(enumModel.name);
+        }).toList(),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        print(selects);
-      }),
+      floatingActionButton: FloatingActionButton(
+//        onPressed: () => Navigator.push(
+//              context,
+//              MaterialPageRoute(
+//                builder: (context) => SelectEnum2Page(
+//                      enumSelect: _enumSelect,
+//                      multiple: true,
+//                      categorySelect: _categorySelect,
+//                      categorys:_minCategorys,
+//                    ),
+//              ),
+//            ),
+      onPressed: (){
+        showModalBottomSheet(context: context, builder: (context){
+          return Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text('大类'),
+                  ),
+                  EnumSelectPage(enumSelect: _enumSelect,multiple: false,enumModels: maxCategorys.map((category) => EnumModel(category.code, category.name)).toList(),)
+                ],
+              ),
+              Divider(),
+              Expanded(child: CategorySelectPage(categorys: _minCategorys,multiple: true,categorySelect: _categorySelect,verticalDividerOpacity: 0.5,)),
+            ],
+          );
+        });
+      },
+      ),
     );
   }
 }
