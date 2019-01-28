@@ -74,22 +74,6 @@ class _HotCategoryPageState extends State<HotCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.5,
-        centerTitle: true,
-        title: Text('热门品类'),
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.grey[100]),
-        child: ListView(
-          children: <Widget>[_buildCategory(), _buildRecommend()],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCategory() {
     List<CategoryItem> categories = <CategoryItem>[
       CategoryItem(
         onPressed: () {
@@ -164,51 +148,78 @@ class _HotCategoryPageState extends State<HotCategoryPage> {
       ),
     ];
 
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
-      child: Wrap(
-        spacing: 17,
-        runSpacing: 5,
-        children: categories,
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.5,
+        centerTitle: true,
+        title: Text('热门品类'),
+      ),
+      body: Container(
+        decoration: BoxDecoration(color: Colors.white),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverPadding(
+              padding: EdgeInsets.all(10),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4, //Grid按两列显示
+                  mainAxisSpacing: 10.0,
+                  crossAxisSpacing: 10.0,
+                  childAspectRatio: 0.75,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return categories[index];
+                }, childCount: categories.length),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(<Widget>[_buildRecommend()]),
+            )
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildRecommend() {
     return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                      text: '———',
-                      style: TextStyle(fontSize: 15, color: Colors.grey),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: '工厂推荐',
-                            style: TextStyle(color: Colors.black)),
-                        TextSpan(text: '———')
-                      ]),
-                ),
-              )
-            ],
-          ),
-          Column(
-            children: factories
-                .map((item) => FactoryItem(
-                      model: item,
-                      showButton: true,
-                    ))
-                .toList(),
-          )
-        ],
+      color: Colors.grey[100],
+      padding: EdgeInsets.only(top: 10),
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                        text: '———',
+                        style: TextStyle(fontSize: 15, color: Colors.grey),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: '工厂推荐',
+                              style: TextStyle(color: Colors.black)),
+                          TextSpan(text: '———')
+                        ]),
+                  ),
+                )
+              ],
+            ),
+            Column(
+              children: factories
+                  .map((item) => FactoryItem(
+                        model: item,
+                        showButton: true,
+                      ))
+                  .toList(),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -224,8 +235,8 @@ class CategoryItem extends StatelessWidget {
 
   const CategoryItem({
     Key key,
-    this.width = 85,
-    this.height = 110,
+    this.width = 70,
+    this.height = 80,
     @required this.name,
     this.code,
     @required this.imageUrl,
@@ -237,8 +248,6 @@ class CategoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: width,
-        height: height,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -246,8 +255,8 @@ class CategoryItem extends StatelessWidget {
           children: <Widget>[
             Image.network(
               imageUrl,
-              width: width - 15,
-              height: height - 20,
+              width: width,
+              height: height,
             ),
             Text(
               name,

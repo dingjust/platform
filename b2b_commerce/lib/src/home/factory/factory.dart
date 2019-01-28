@@ -11,8 +11,10 @@ class FactoryItem extends StatelessWidget {
       : super(key: key);
 
   final FactoryModel model;
+
   ///是否显示按钮
   final bool showButton;
+
   ///是否已经邀请
   final bool hasInvited;
 
@@ -20,6 +22,7 @@ class FactoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        //TODO 工厂跳转
         // Navigator.of(context).push(MaterialPageRoute(
         //     builder: (context) => ));
       },
@@ -58,51 +61,53 @@ class FactoryItem extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              width: 280,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Stars(
-                        size: 15,
-                        color: Color.fromRGBO(255, 183, 0, 1),
-                        highlightOnly: false,
-                        starLevel: model.starLevel,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: _buildCategoryTags(),
-                      )
-                    ],
-                  ),
-                  Container(
-                    child: Text(
-                      model.describe,
-                      overflow: TextOverflow.clip,
+            Expanded(
+              flex: 1,
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Stars(
+                          size: 15,
+                          color: Color.fromRGBO(255, 183, 0, 1),
+                          highlightOnly: false,
+                          starLevel: model.starLevel,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: _buildCategoryTags(),
+                        )
+                      ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                            text: '历史接单',
-                            style: TextStyle(color: Colors.grey),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: '${model.historyOrdersCount}',
-                                  style: TextStyle(color: Colors.red)),
-                              TextSpan(text: '单')
-                            ]),
+                    Container(
+                      child: Text(
+                        model.describe,
+                        overflow: TextOverflow.clip,
                       ),
-                      _buildButton()
-                    ],
-                  )
-                ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        RichText(
+                          text: TextSpan(
+                              text: '历史接单',
+                              style: TextStyle(color: Colors.grey),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: '${model.historyOrdersCount}',
+                                    style: TextStyle(color: Colors.red)),
+                                TextSpan(text: '单')
+                              ]),
+                        ),
+                        _buildButton()
+                      ],
+                    )
+                  ],
+                ),
               ),
             )
           ],

@@ -41,6 +41,7 @@ dependencies:
   path_provider: ^0.4.1
   flutter_cache_manager: ^0.1.1
   url_launcher: ^3.0.3
+  flutter_speed_dial: ^1.0.9
 
 dev_dependencies:
   flutter_test:
@@ -95,6 +96,7 @@ flutter:
     - packages/assets/temp/common/find_factory.png
     - packages/assets/temp/common/idle_capacity.png
     - packages/assets/temp/common/order.png
+    - data/province.json
 
   fonts:
     - family: b2bIcons
