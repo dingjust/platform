@@ -108,10 +108,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
   List<EnumModel> _technologySelected = [];
   String mojar = '点击选取';
   String category = '点击选取';
-  bool _isShowA = false;
-  bool _isShowB = false;
-  bool _isShowC = false;
-  bool _isShowD = false;
   String processCount = '输入';
   String expectPrice = '输入';
   TextEditingController inputNumber;
@@ -123,16 +119,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
   String remarks = '输入';
   List<File> _normalImages ;
   List<String> normal ;
-
-  @override
-  void initState() {
-    _isShowA = false;
-    _isShowB = false;
-    _isShowC = false;
-    _isShowD = false;
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +186,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         ));
   }
 
+  //图片
   Widget _buildPic(BuildContext context){
     return Column(
       children: <Widget>[
@@ -232,6 +219,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
     );
   }
 
+  //大类
   Widget _buildMajor(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -264,6 +252,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //小类
   Widget _buildCategory(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -296,6 +285,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //加工数量
   Widget _buildProcessCount(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -321,6 +311,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //期望价格
   Widget _buildExpectPrice(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -346,6 +337,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //交货时间
   Widget _buildDeliveryDate(BuildContext context){
     return GestureDetector(
         child: Container(
@@ -378,6 +370,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //送货地址
   Widget _buildAddress(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -420,6 +413,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
     );
   }
 
+  //是否展开更多
   Widget _buildHideTips(BuildContext context){
     return GestureDetector(
         child: Container(
@@ -467,6 +461,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //加工类型
   Widget _buildCooperationModes(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -492,6 +487,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //验货方式
   Widget _buildInspectionMethod(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -517,6 +513,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //是否提供样衣
   Widget _buildSampleProduct(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -542,6 +539,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //是否开具发票
   Widget _buildInvoice(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -567,6 +565,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //订单备注
   Widget _buildRemarks(BuildContext context) {
     return GestureDetector(
         child: Container(
