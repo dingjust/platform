@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/search/existing_product_search.dart';
 import 'package:b2b_commerce/src/common/screen_conditions.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +36,6 @@ class _ExistingProductState extends State<ExistingProduct> {
         children: List.generate(16, (index) {
           return GestureDetector(
             child: Container(
-              margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
-              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: Center(
                 child: Column(
                   children: <Widget>[
@@ -74,7 +73,14 @@ class _ExistingProductState extends State<ExistingProduct> {
                 borderRadius: BorderRadius.circular(5),
               ),
             ),
-            onTap: () {},
+            onTap: () {
+//              Navigator.push(
+//                context,
+//                MaterialPageRoute(
+//                  builder: (context) => RequirementOrderFrom(),
+//                ),
+//              );
+            },
           );
         }),
       ),
