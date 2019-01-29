@@ -49,16 +49,24 @@ class ProductionItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Text('采购订单号：' + order.code),
+                child: Text(
+                  '采购订单号：' + order.code,
+                  style: TextStyle(fontSize: 14),
+                ),
               ),
-              // 订单类型
+              // TODO : 订单类型枚举和对应颜色
               // Text(
               //   RequirementOrderStatusLocalizedMap[order.status],
               //   style: TextStyle(color: _statusColors[order.status])
               // )
+              Text(
+                '线上订单',
+                style: TextStyle(color: Colors.green, fontSize: 14),
+              )
             ],
           ),
         ],
