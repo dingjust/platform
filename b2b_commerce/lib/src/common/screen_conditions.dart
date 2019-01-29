@@ -66,6 +66,33 @@ final List<EnumModel> processingTypeList = [
   }),
 ];
 
+final List<EnumModel> technologyList = [
+  EnumModel.fromJson({
+    'code':'全工艺',
+    'name':'全工艺'
+  }),
+  EnumModel.fromJson({
+    'code':'打板',
+    'name':'打板'
+  }),
+  EnumModel.fromJson({
+    'code':'车缝',
+    'name':'车缝'
+  }),
+  EnumModel.fromJson({
+    'code':'裁剪',
+    'name':'裁剪'
+  }),
+  EnumModel.fromJson({
+    'code':'印花',
+    'name':'印花'
+  }),
+  EnumModel.fromJson({
+    'code':'后枕',
+    'name':'后枕'
+  }),
+];
+
 class ScreenConditions extends StatefulWidget {
   _ScreenConditionsState createState() => _ScreenConditionsState();
 }
@@ -74,6 +101,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
   List<CategoryModel> _mojarSelected = [];
   List<CategoryModel> _categorySelected = [];
   List<EnumModel> _processingTypeSelected = [];
+  List<EnumModel> _technologySelected = [];
   String mojar = '点击选取';
   String category = '点击选取';
   bool _isShowA = false;
@@ -85,6 +113,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
   bool _isShowMore = true;
   String address = '点击选取';
   String processingType = '点击选取';
+  String technology = '点击选取';
 
   @override
   void initState() {
@@ -427,30 +456,35 @@ class _ScreenConditionsState extends State<ScreenConditions> {
   }
 
   Widget _buildTechnology(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(20,10,20,10),
-      child: ListTile(
-        leading: Text(
-          "工艺",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+    return GestureDetector(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+          child: ListTile(
+            leading: Text(
+              "工艺",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              technology,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.black12,
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
-        trailing: Text(
-          "点击选取",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-      decoration: BoxDecoration(
-        color: Colors.black12,
-        borderRadius: BorderRadius.circular(16),
-      ),
-    );
+        onTap: () {
+          _showTechnologySelect();
+        });
   }
+
 
   Widget _buildCommitButton(BuildContext context) {
     return Container(
@@ -470,13 +504,14 @@ class _ScreenConditionsState extends State<ScreenConditions> {
               borderRadius: BorderRadius.all(Radius.circular(20))
           ),
           onPressed: () {
+
           },
         )
     );
   }
 
 
-
+  //大类
   void _showMajorCategorySelect() async {
     showModalBottomSheet(
       context: context,
@@ -505,6 +540,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
 
   }
 
+  //小类
   void _showCategorySelect() async {
     showModalBottomSheet(
       context: context,
@@ -531,6 +567,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
     });
   }
 
+  //加工类型
   void _showTypeSelect() async {
     showModalBottomSheet(
       context: context,
@@ -556,6 +593,33 @@ class _ScreenConditionsState extends State<ScreenConditions> {
     });
   }
 
+  //工艺
+  void _showTechnologySelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: EnumSelection(
+            enumModels: technologyList,
+            multiple: true,
+            enumSelect: _technologySelected,
+          ),
+        );
+      },
+    ).then((val){
+      technology = '';
+      if(_technologySelected.isNotEmpty){
+        for(int i=0;i<_technologySelected.length;i++){
+          technology += _technologySelected[i].name + ',';
+        }
+      }
+      setState(() {
+        technology = technology;
+      });
+    });
+  }
+
+  //数量
   Future<void> _neverSatisfied(BuildContext context) async {
     inputNumber = TextEditingController();
     return showDialog<void>(
@@ -587,6 +651,41 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                     requestCount = inputNumber.text;
                   });
                 }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //最后确认提交
+  Future<void> _showResult(BuildContext context) async {
+    inputNumber = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('筛选条件'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller:inputNumber,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: '请输入数量',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
