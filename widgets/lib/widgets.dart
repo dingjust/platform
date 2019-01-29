@@ -23,3 +23,4 @@ export 'src/commons/icon/b2b_commerce_icons.dart';
 export 'src/commons/easy_grid/easy_grid.dart';
 export 'src/commons/advance_icon_button/advance_icon_button.dart';
 export 'src/commons/select/category_select.dart';
+export 'src/commons/select/enum_selection.dart';

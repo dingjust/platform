@@ -33,6 +33,12 @@ class B2BIcons {
       const IconData(0xe64c, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData delay =
       const IconData(0xe6a8, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData brand =
+      const IconData(0xe6ad, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData factory =
+      const IconData(0xe6ac, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData purchase =
+      const IconData(0xe6ab, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

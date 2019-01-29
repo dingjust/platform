@@ -96,7 +96,11 @@ flutter:
     - packages/assets/temp/common/find_factory.png
     - packages/assets/temp/common/idle_capacity.png
     - packages/assets/temp/common/order.png
+    - data/province.json
     - packages/assets/temp/login_background.png
+    - packages/assets/temp/production/fab_add.png
+    - packages/assets/temp/production/fab_create.png
+    - packages/assets/temp/production/fab_only.png
 
   fonts:
     - family: b2bIcons

@@ -50,6 +50,9 @@
 </template>
 
 <script>
+  import { createNamespacedHelpers } from 'vuex';
+  const { mapGetters, mapActions } = createNamespacedHelpers('SizesModule');
+
   import axios from "axios";
   import autoHeight from 'mixins/autoHeight'
   import SizeForm from "./SizeForm";
@@ -59,8 +62,11 @@
     name: "SizePage",
     mixins: [autoHeight],
     methods: {
+      ...mapActions({
+        search: "search"
+      }),
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onNew() {
         this.fn.openSlider('新增', SizeForm, {
@@ -77,12 +83,10 @@
       },
       onPageSizeChanged(val) {
         this.reset();
-
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -90,19 +94,8 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-
-        axios.get("/djbackoffice/product/size", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error(error.response.data);
-        });
+        const keyword = this.text;
+        this.search({keyword, page, size});
       },
       onUpdate(item) {
         axios.put("/djbackoffice/product/size", item)
@@ -114,23 +107,14 @@
         );
       }
     },
-    watch: {
-      '$store.state.sideSliderState': function (value) {
-        if (!value) {
-          this.onSearch();
-        }
-      }
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
     },
     data() {
       return {
-        text: '',
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
+        text: this.$store.state.SizesModule.keyword,
       }
     }
   }
