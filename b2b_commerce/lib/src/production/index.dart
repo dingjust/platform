@@ -35,28 +35,10 @@ class _ProductionPageState extends State<ProductionPage> {
             ],
           ),
           body: ProductionListView(),
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {},
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     crossAxisAlignment: CrossAxisAlignment.center,
-          //     children: <Widget>[
-          //       Text(
-          //         '添加',
-          //         style: TextStyle(color: Colors.white, fontSize: 12),
-          //       ),
-          //       Text(
-          //         '线下订单',
-          //         style: TextStyle(color: Colors.white, fontSize: 12),
-          //       )
-          //     ],
-          //   ),
-          // ),
           floatingActionButton: SpeedDial(
             // animatedIcon: AnimatedIcons.menu_close,
             animatedIconTheme: IconThemeData(size: 22.0),
             // this is ignored if animatedIcon is non null
-            // child: Icon(Icons.add),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,7 +61,7 @@ class _ProductionPageState extends State<ProductionPage> {
             onClose: () => print('DIAL CLOSED'),
             tooltip: 'Speed Dial',
             heroTag: 'speed-dial-hero-tag',
-            backgroundColor: Colors.orange,
+            // backgroundColor: Colors.orange,
             foregroundColor: Colors.black,
             elevation: 8.0,
             shape: CircleBorder(),
@@ -92,8 +74,6 @@ class _ProductionPageState extends State<ProductionPage> {
                   ),
                 ),
                 backgroundColor: Colors.blue,
-                // label: '唯一码',
-                // labelStyle: TextTheme(fontSize: 18.0),
                 onTap: () => print('SECOND CHILD'),
               ),
               SpeedDialChild(
@@ -104,8 +84,6 @@ class _ProductionPageState extends State<ProductionPage> {
                     ),
                   ),
                   backgroundColor: Colors.red,
-                  // label: '创建',
-                  // labelStyle: TextTheme(fontSize: 18.0),
                   onTap: () => print('FIRST CHILD')),
             ],
           ),

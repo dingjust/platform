@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:widgets/widgets.dart';
 
 class RegisterPage extends StatefulWidget {
   _RegisterPageState createState() => _RegisterPageState();
@@ -26,6 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: const Text('注册'),
       ),
@@ -35,8 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: ListView(
           padding: const EdgeInsets.all(10.0),
           children: <Widget>[
-            Card(
-                child: Container(
+            Container(
               padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
               child: Column(
                 children: <Widget>[
@@ -44,16 +45,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       autofocus: false,
                       controller: _phoneController,
                       decoration: InputDecoration(
-                          labelText: '手机号码',
-                          hintText: '请输入',
-                          suffixIcon: FlatButton(
-                            onPressed: () {},
-                            color: Colors.grey[200],
-                            child: Text(
-                              '发送验证码',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          )),
+                        labelText: '手机号码',
+                        hintText: '请输入',
+                      ),
                       // 校验用户名
                       validator: (v) {
                         return v.trim().length > 0 ? null : '手机号码不能为空';
@@ -63,9 +57,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       keyboardType: TextInputType.phone,
                       controller: _captchaController,
                       decoration: InputDecoration(
-                        labelText: '验证码',
-                        hintText: '请输入',
-                      ),
+                          labelText: '验证码',
+                          hintText: '请输入',
+                          suffixIcon: FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            color: Colors.orange,
+                            onPressed: () {},
+                            child: Text(
+                              '发送验证码',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )),
                       // 校验用户名
                       validator: (v) {
                         return v.trim().length > 0 ? null : '验证码不能为空';
@@ -111,32 +114,36 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   Container(
                     child: UserTypeSelector(
-                      groupValue: ['brand', 'factory', 'customer'],
+                      userTypeEntries: [
+                        UserTypeEntry(
+                            value: 'brand',
+                            label: '品牌商',
+                            icon: Icon(
+                              B2BIcons.brand,
+                              size: 40,
+                              color: Color.fromRGBO(255, 184, 2, 1.0),
+                            )),
+                        UserTypeEntry(
+                            value: 'factory',
+                            label: '工厂',
+                            icon: Icon(
+                              B2BIcons.factory,
+                              size: 40,
+                              color: Color.fromRGBO(111, 142, 244, 1.0),
+                            )),
+                        UserTypeEntry(
+                            value: 'purchase',
+                            label: '采购商',
+                            icon: Icon(
+                              B2BIcons.purchase,
+                              size: 40,
+                              color: Color.fromRGBO(62, 185, 254, 1.0),
+                            ))
+                      ],
                       onChanged: _handleUserTypeChanged,
                       value: _userType,
                     ),
                   ),
-                ],
-              ),
-            )),
-            Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    '已经阅读或同意《衣加衣协议》',
-                    style: TextStyle(
-                        color: _isAgree ? Colors.orange : Colors.black54),
-                  ),
-                  Checkbox(
-                    onChanged: (v) {
-                      setState(() {
-                        _isAgree = v;
-                      });
-                    },
-                    value: _isAgree,
-                  )
                 ],
               ),
             ),
@@ -144,10 +151,34 @@ class _RegisterPageState extends State<RegisterPage> {
               onPressed: () {
                 _nextStep();
               },
-              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              color: Colors.orange,
+              padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 '下一步',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Checkbox(
+                    onChanged: (v) {
+                      setState(() {
+                        _isAgree = v;
+                      });
+                    },
+                    value: _isAgree,
+                  ),
+                  Text(
+                    '已经阅读或同意《衣加衣协议》',
+                    style: TextStyle(
+                        color: _isAgree ? Colors.orange : Colors.black54),
+                  ),
+                ],
               ),
             ),
           ],
@@ -164,20 +195,28 @@ class _RegisterPageState extends State<RegisterPage> {
       case 'factory':
         Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_FACTORY);
         break;
-      case 'customer':
+      case 'purchase':
         Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_CUSTOMER);
         break;
     }
   }
 }
 
+class UserTypeEntry {
+  final String label;
+  final String value;
+  final Icon icon;
+
+  UserTypeEntry({this.label, this.value, this.icon});
+}
+
 class UserTypeSelector extends StatelessWidget {
   const UserTypeSelector(
-      {Key key, @required this.value, this.groupValue, this.onChanged})
+      {Key key, @required this.value, this.userTypeEntries, this.onChanged})
       : super(key: key);
 
   final String value;
-  final List<String> groupValue;
+  final List<UserTypeEntry> userTypeEntries;
 
   final ValueChanged<String> onChanged;
 
@@ -187,19 +226,25 @@ class UserTypeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetList = groupValue
+    List<Widget> widgetList = userTypeEntries
         .map((v) => GestureDetector(
               onTap: () {
-                _handleTap(v);
+                _handleTap(v.value);
               },
               child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: v.icon,
+                    ),
                     Text(
-                      v,
+                      v.label,
                       style: TextStyle(
-                          color: v == value ? Colors.orange : Colors.black54),
+                          color: v.value == value
+                              ? Colors.orange
+                              : Colors.black54),
                     )
                   ],
                 ),
