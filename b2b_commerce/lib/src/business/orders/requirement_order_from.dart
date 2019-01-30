@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -93,49 +96,40 @@ final List<EnumModel> technologyList = [
   }),
 ];
 
-class ScreenConditions extends StatefulWidget {
-  _ScreenConditionsState createState() => _ScreenConditionsState();
+
+class RequirementOrderFrom extends StatefulWidget{
+  _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
 
-class _ScreenConditionsState extends State<ScreenConditions> {
+class _RequirementOrderFromState extends State<RequirementOrderFrom>{
   List<CategoryModel> _mojarSelected = [];
   List<CategoryModel> _categorySelected = [];
   List<EnumModel> _processingTypeSelected = [];
   List<EnumModel> _technologySelected = [];
   String mojar = '点击选取';
   String category = '点击选取';
-  bool _isShowA = false;
-  bool _isShowB = false;
-  bool _isShowC = false;
-  bool _isShowD = false;
-  String requestCount = '输入';
+  String processCount = '输入';
+  String expectPrice = '输入';
   TextEditingController inputNumber;
   bool _isShowMore = true;
   String address = '点击选取';
   String processingType = '点击选取';
   String technology = '点击选取';
-
-  @override
-  void initState() {
-    _isShowA = false;
-    _isShowB = false;
-    _isShowC = false;
-    _isShowD = false;
-    super.initState();
-  }
+  String deliveryDate = '点击选取';
+  String remarks = '输入';
+  List<File> _normalImages ;
+  List<String> normal ;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('要生产什么'),
+          title: Text('需求发布'),
         ),
         body: Container(
             child: ListView(
               children: <Widget>[
                 _buildBody(context),
-                _buildHideBody(context),
-                _buildCommitButton(context),
               ],
             )
         )
@@ -144,14 +138,25 @@ class _ScreenConditionsState extends State<ScreenConditions> {
 
   Widget _buildBody(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: Center(
         child: Column(
           children: <Widget>[
-            _buildTips(context),
+            _buildPic(context),
+            new Divider(),
             _buildMajor(context),
+            new Divider(),
             _buildCategory(context),
-            _buildRequestCount(context),
+            new Divider(),
+            _buildProcessCount(context),
+            new Divider(),
+            _buildExpectPrice(context),
+            new Divider(),
+            _buildDeliveryDate(context),
+            new Divider(),
             _buildAddress(context),
+            _isShowMore?Container():new Divider(),
+            _buildHideBody(context),
             _buildHideTips(context),
           ],
         ),
@@ -166,58 +171,80 @@ class _ScreenConditionsState extends State<ScreenConditions> {
           child: Center(
             child: Column(
               children: <Widget>[
-                _buildScreenFactory(context),
                 _buildCooperationModes(context),
-                _buildTechnology(context),
+                new Divider(),
+                _buildInspectionMethod(context),
+                new Divider(),
+                _buildSampleProduct(context),
+                new Divider(),
+                _buildInvoice(context),
+                new Divider(),
+                _buildRemarks(context),
               ],
             ),
           ),
         ));
   }
 
-  Widget _buildTips(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(20),
-      child: Text(
-        "描述需求可以帮您更快速的找到合适的工厂",
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
+  //图片
+  Widget _buildPic(BuildContext context){
+    return Column(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+          child: Row(
+            children: <Widget>[
+              Text(
+                '参考图片',
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                '（若无图片可不上传）',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 14
+                ),
+              )
+            ],
+          ),
         ),
-      ),
+        AlbumsAndCameras(
+          images: _normalImages,
+          height: 100,
+          width: 100,
+          iconSize: 100,
+          count: 5,
+        ),
+      ],
     );
   }
 
+  //大类
   Widget _buildMajor(BuildContext context) {
     return GestureDetector(
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: ListTile(
-            leading: Text(
-              "大类",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+              leading: Text(
+                '产品大类',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            trailing: Container(
-                width: 150,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                      mojar,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis
-                  ),
-                )
-            )
-          ),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(16),
+              trailing: Container(
+                  width: 150,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                        mojar,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis
+                    ),
+                  )
+              )
           ),
         ),
         onTap: () {
@@ -225,80 +252,131 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         });
   }
 
+  //小类
   Widget _buildCategory(BuildContext context) {
     return GestureDetector(
         child: Container(
-            margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
             child: ListTile(
-              leading: Text(
-                "小类",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              trailing: Container(
-                width: 150,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                      category,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis
+                leading: Text(
+                  '产品小类',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
+                ),
+                trailing: Container(
+                    width: 150,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                          category,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.ellipsis
+                      ),
+                    )
                 )
-              )
             ),
-            decoration: BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.circular(16),
-            )
         ),
         onTap: () {
           _showCategorySelect();
         });
   }
 
-  Widget _buildRequestCount(BuildContext context) {
+  //加工数量
+  Widget _buildProcessCount(BuildContext context) {
     return GestureDetector(
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: ListTile(
             leading: Text(
-              "需求数量",
+              '加工数量',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
             trailing: Text(
-              requestCount,
+              processCount,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
           ),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(16),
-          ),
         ),
         onTap: () {
-          _neverSatisfied(context);
+          _neverProcessCount(context);
         });
   }
 
+  //期望价格
+  Widget _buildExpectPrice(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '期望价格',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              expectPrice,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          _neverExpectPrice(context);
+        });
+  }
+
+  //交货时间
+  Widget _buildDeliveryDate(BuildContext context){
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+              leading: Text(
+                '需求交货时间',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              trailing: Container(
+                  width: 150,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                        deliveryDate,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis
+                    ),
+                  )
+              )
+          ),
+        ),
+        onTap: () {
+          _showDatePicker();
+        });
+  }
+
+  //送货地址
   Widget _buildAddress(BuildContext context) {
     return GestureDetector(
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: ListTile(
             leading: Text(
-              "生产地区",
+              '送货地址',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -311,10 +389,6 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-          ),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(16),
           ),
         ),
         onTap: () {
@@ -339,19 +413,29 @@ class _ScreenConditionsState extends State<ScreenConditions> {
     );
   }
 
+  //是否展开更多
   Widget _buildHideTips(BuildContext context){
     return GestureDetector(
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: Align(
               alignment: Alignment.centerRight,
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text(""),
+                    child: Text(''),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      '继续完善需求信息，更加精准匹配工厂',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
                   Text(
-                    "更多条件",
+                    '更多条件',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.orangeAccent,
@@ -365,6 +449,10 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                 ],
               )
           ),
+          decoration: BoxDecoration(
+            color: Colors.black12,
+            borderRadius: BorderRadius.circular(5),
+          ),
         ),
         onTap: () {
           setState(() {
@@ -373,65 +461,13 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         });
   }
 
-
-  Widget _buildScreenFactory(BuildContext context) {
-    return  Container(
-      margin: EdgeInsets.fromLTRB(20,10,20,10),
-      height:90,
-      child: GridView.count(
-        childAspectRatio: 10 / 2.5,
-        physics: NeverScrollableScrollPhysics(),
-        crossAxisCount: 2,
-        children: <Widget>[
-          CheckboxListTile(
-            title: Text('品牌工厂'),
-            value: _isShowA,
-            onChanged: (T) {
-              setState(() {
-                _isShowA = !_isShowA;
-              });
-            },
-          ),
-          CheckboxListTile(
-            title: Text('担保交易'),
-            value: _isShowB,
-            onChanged: (T) {
-              setState(() {
-                _isShowB = !_isShowB;
-              });
-            },
-          ),
-          CheckboxListTile(
-            title: Text('免费打样'),
-            value: _isShowC,
-            onChanged: (T) {
-              setState(() {
-                _isShowC = !_isShowC;
-              });
-            },
-          ),
-          CheckboxListTile(
-            title: Text('认证工厂'),
-            value: _isShowD,
-            onChanged: (T) {
-              setState(() {
-                _isShowD = !_isShowD;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-
-  }
-
+  //加工类型
   Widget _buildCooperationModes(BuildContext context) {
     return GestureDetector(
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: ListTile(
             leading: Text(
-              "加工类型",
+              '加工类型',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -445,71 +481,115 @@ class _ScreenConditionsState extends State<ScreenConditions> {
               ),
             ),
           ),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(16),
-          ),
         ),
         onTap: () {
           _showTypeSelect();
         });
   }
 
-  Widget _buildTechnology(BuildContext context) {
+  //验货方式
+  Widget _buildInspectionMethod(BuildContext context) {
     return GestureDetector(
         child: Container(
-          margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: ListTile(
             leading: Text(
-              "工艺",
+              '验货方式',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
             trailing: Text(
-              technology,
+              '点击选取',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
           ),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(16),
-          ),
         ),
         onTap: () {
-          _showTechnologySelect();
+          null;
         });
   }
 
-
-  Widget _buildCommitButton(BuildContext context) {
-    return Container(
-        height: 50,
-        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-        child: RaisedButton(
-          color: Colors.orange,
-          child: Text(
-            '确定',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
+  //是否提供样衣
+  Widget _buildSampleProduct(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '是否提供样衣',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              '点击选取',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))
-          ),
-          onPressed: () {
-
-          },
-        )
-    );
+        ),
+        onTap: () {
+          null;
+        });
   }
 
+  //是否开具发票
+  Widget _buildInvoice(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '是否开具发票',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              '点击选取',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          null;
+        });
+  }
+
+  //订单备注
+  Widget _buildRemarks(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '订单备注',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              remarks,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          _neverOrderRemarks(context);
+        });
+  }
 
   //大类
   void _showMajorCategorySelect() async {
@@ -567,6 +647,110 @@ class _ScreenConditionsState extends State<ScreenConditions> {
     });
   }
 
+  //加工数量
+  Future<void> _neverProcessCount(BuildContext context) async {
+    inputNumber = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('请输入加工数量'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller:inputNumber,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: '请输入加工数量',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                if(inputNumber.text != null){
+                  print(inputNumber.text);
+                  setState(() {
+                    processCount = inputNumber.text;
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //期望价格
+  Future<void> _neverExpectPrice(BuildContext context) async {
+    inputNumber = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('请输入加工数量'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller:inputNumber,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: '请输入加工数量',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                if(inputNumber.text != null){
+                  print(inputNumber.text);
+                  setState(() {
+                    expectPrice = inputNumber.text;
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //打开日期选择器
+  void _showDatePicker() {
+    _selectDate(context);
+  }
+
+  //生成日期选择器
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime _picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: new DateTime(1990),
+        lastDate: new DateTime(2999)
+    );
+
+    if(_picked != null){
+      print(_picked);
+      setState(() {
+        deliveryDate = DateFormatUtil.format(_picked);
+      });
+    }
+  }
+
   //加工类型
   void _showTypeSelect() async {
     showModalBottomSheet(
@@ -593,41 +777,15 @@ class _ScreenConditionsState extends State<ScreenConditions> {
     });
   }
 
-  //工艺
-  void _showTechnologySelect() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          child: EnumSelection(
-            enumModels: technologyList,
-            multiple: true,
-            enumSelect: _technologySelected,
-          ),
-        );
-      },
-    ).then((val){
-      technology = '';
-      if(_technologySelected.isNotEmpty){
-        for(int i=0;i<_technologySelected.length;i++){
-          technology += _technologySelected[i].name + ',';
-        }
-      }
-      setState(() {
-        technology = technology;
-      });
-    });
-  }
-
-  //数量
-  Future<void> _neverSatisfied(BuildContext context) async {
+  //订单备注
+  Future<void> _neverOrderRemarks(BuildContext context) async {
     inputNumber = TextEditingController();
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('请输入数量'),
+          title: Text('备注'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -635,7 +793,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                   controller:inputNumber,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: '请输入数量',
+                    labelText: '请输入订单备注',
                   ),
                 ),
               ],
@@ -648,7 +806,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                 if(inputNumber.text != null){
                   print(inputNumber.text);
                   setState(() {
-                    requestCount = inputNumber.text;
+                    remarks = inputNumber.text;
                   });
                 }
                 Navigator.of(context).pop();
@@ -659,40 +817,4 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       },
     );
   }
-
-  //最后确认提交
-  Future<void> _showResult(BuildContext context) async {
-    inputNumber = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('筛选条件'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextField(
-                  controller:inputNumber,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: '请输入数量',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
 }
