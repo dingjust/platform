@@ -15,7 +15,7 @@ class NormalPictureField extends StatefulWidget {
 }
 
 class _NormalPictureFieldState extends State<NormalPictureField> {
-  List<File> _normalImages = [];
+ static List<File> _normalImages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +44,12 @@ class _NormalPictureFieldState extends State<NormalPictureField> {
           iconSize: 100,
           count: 5,
         ),
+        FlatButton(
+          onPressed: () {
+            print('${_normalImages.length}');
+          },
+          child: Text('asdads'),
+        )
       ],
     );
   }

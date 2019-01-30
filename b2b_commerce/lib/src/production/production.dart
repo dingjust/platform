@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -18,9 +19,12 @@ class ProductionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => RequirementOrderDetailPage(order: order)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PurchaseOrderDetailPage(order: order),
+          ),
+        );
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),

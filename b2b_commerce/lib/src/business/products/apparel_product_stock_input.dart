@@ -2,36 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class ApparelProductStockInputPage extends StatelessWidget {
-  final Map<ColorModel, List<SizeStockItem>> items =
-  <ColorModel, List<SizeStockItem>>{
+  static Map<ColorModel, List<SizeStockItem>> items =
+      <ColorModel, List<SizeStockItem>>{
     ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'): <SizeStockItem>[
-      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL'),available: 35,maxPreOrder: 55),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+      SizeStockItem(
+          size: SizeModel(code: 'S01', name: 'XL'),
+          available: 35,
+          maxPreOrder: 55),
+      SizeStockItem(
+        size: SizeModel(code: 'S012', name: 'XXL'),
+      ),
     ],
-    ColorModel(code: 'C02', name: '海军蓝', colorCode: '0066FF'):
-    <SizeStockItem>[
+    ColorModel(code: 'C02', name: '海军蓝', colorCode: '0066FF'): <SizeStockItem>[
       SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
       SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-    ],
-    ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
-    <SizeStockItem>[
-      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
-    ],
-    ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
-    <SizeStockItem>[
-      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
-    ],
-    ColorModel(code: 'C02', name: '浅紫色', colorCode: 'CC99CC'):
-    <SizeStockItem>[
-      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL'))
     ],
   };
 
@@ -109,7 +93,7 @@ class ApparelProductStockInputPage extends StatelessWidget {
                   ],
                 ),
               ),
-              ApparelProductStockInputItem(items:items),
+              ApparelProductStockInputItem(items: items),
 //            ApparelProductStockInputItem(),
             ],
           ),
@@ -118,8 +102,8 @@ class ApparelProductStockInputPage extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         child: RaisedButton(
           onPressed: () {
-            items.values.forEach((item){
-              item.forEach((it){
+            items.values.forEach((item) {
+              item.forEach((it) {
                 print(it.availableController.text);
               });
             });
@@ -142,21 +126,24 @@ class SizeStockItem {
     this.size,
     this.available = 0,
     this.maxPreOrder = 0,
-  }){
-    this.availableController = TextEditingController(text: this.available == 0 ?null: this.available.toString());
-    this.maxPreOrderController = TextEditingController(text: this.maxPreOrder == 0 ?null:this.maxPreOrder.toString());
+  }) {
+    this.availableController = new TextEditingController(
+        text: this.available == 0 ? null : this.available.toString());
+    this.maxPreOrderController = new TextEditingController(
+        text: this.maxPreOrder == 0 ? null : this.maxPreOrder.toString());
   }
 }
 
 class ApparelProductStockInputItem extends StatefulWidget {
-  final Map<ColorModel,List<SizeStockItem>> items;
+  final Map<ColorModel, List<SizeStockItem>> items;
   ApparelProductStockInputItem({this.items});
 
   ApparelProductStockInputItemState createState() =>
       ApparelProductStockInputItemState();
 }
 
-class ApparelProductStockInputItemState extends State<ApparelProductStockInputItem>{
+class ApparelProductStockInputItemState
+    extends State<ApparelProductStockInputItem> {
   Map<ColorModel, List<SizeStockItem>> items;
 
   @override
@@ -169,16 +156,15 @@ class ApparelProductStockInputItemState extends State<ApparelProductStockInputIt
 
   @override
   Widget build(BuildContext context) {
-
-    Widget buildRow(
-        BuildContext context, MapEntry<ColorModel, List<SizeStockItem>> row,int index) {
+    Widget buildRow(BuildContext context,
+        MapEntry<ColorModel, List<SizeStockItem>> row, int index) {
 //      print(index);
       final List<TableRow> _subRows = row.value.map((item) {
         return TableRow(children: <TableCell>[
           TableCell(
             child: Center(
                 child: Text(
-              item.size.name,
+              '${item.size.name}',
               style: TextStyle(fontSize: 14),
             )),
           ),
@@ -256,7 +242,7 @@ class ApparelProductStockInputItemState extends State<ApparelProductStockInputIt
         shrinkWrap: true,
         itemCount: items.length,
         itemBuilder: (context, index) {
-          return buildRow(context, items.entries.toList()[index],index);
+          return buildRow(context, items.entries.toList()[index], index);
         },
       ),
     );
