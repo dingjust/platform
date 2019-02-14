@@ -8,7 +8,7 @@ class CategorySelect extends StatefulWidget {
   List<CategoryModel> categorySelect;
 
 
-  CategorySelect({@required this.categorys,this.multiple = false,this.verticalDividerOpacity = 0,this.categorySelect});
+  CategorySelect({@required this.categorys,this.multiple = true,this.verticalDividerOpacity = 1,this.categorySelect});
 
   CategorySelectState createState() => CategorySelectState();
 }
