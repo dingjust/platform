@@ -35,7 +35,6 @@ class ProductionItem extends StatelessWidget {
             Column(
               children: _buildEntries(),
             ),
-            _buildStep()
           ],
         ),
         decoration: BoxDecoration(
@@ -131,64 +130,25 @@ class ProductionItem extends StatelessWidget {
                               Text(
                                 '共${order.totalQuantity}件商品   合计: ￥${order.totalPrice}',
                                 style:
-                                    TextStyle(color: Colors.red, fontSize: 14),
+                                    TextStyle(color: Colors.red, fontSize: 12),
                               )
                             ],
                           )
                         ],
                       ),
                     ),
+                  ),
+                  Container(
+                    width: 80,
+                    height: 80,
+                    child: ProductionCircleStep(
+                      size: 30,
+                      currentPhase: order.currentPhase,
+                    ),
                   )
                 ],
               ),
             ))
         .toList();
-  }
-
-  Widget _buildStep() {
-    //TODO 查询订单生产进度
-    final List<OrderStatusModel> _statusList = [
-      OrderStatusModel.fromJson({
-        'code': 'WAIT_FOR_PROCESSING',
-        'name': '待处理',
-        'sort': 1,
-      }),
-      OrderStatusModel.fromJson({
-        'code': 'PENDING_APPROVAL',
-        'name': '待确认',
-        'sort': 2,
-      }),
-      OrderStatusModel.fromJson({
-        'code': 'IN_PRODUCTION',
-        'name': '生产中',
-        'sort': 3,
-      }),
-      OrderStatusModel.fromJson({
-        'code': 'OUT_OF_STORE',
-        'name': '已出库',
-        'sort': 4,
-      }),
-      OrderStatusModel.fromJson({
-        'code': 'COMPLETED',
-        'name': '已完成',
-        'sort': 5,
-      }),
-    ];
-
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: StatusStep(
-              width: 300,
-              list: _statusList,
-              currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
-              isScroll: false,
-            ),
-          )
-        ],
-      ),
-    );
   }
 }

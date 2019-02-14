@@ -51,7 +51,7 @@ class ProductionBLoC extends BLoCBase {
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),
             'expectedDeliveryDate': DateTime.now().toString(),
-            'currentPhase': 'SAMPLE_CONFIRM',
+            'currentPhase': 'AFTER_FINISHING',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
             'attachments': [
@@ -260,7 +260,7 @@ class ProductionBLoC extends BLoCBase {
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),
             'expectedDeliveryDate': DateTime.now().toString(),
-            'currentPhase': 'SAMPLE_CONFIRM',
+            'currentPhase': 'INSPECTION',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
             'attachments': [
@@ -469,7 +469,7 @@ class ProductionBLoC extends BLoCBase {
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),
             'expectedDeliveryDate': DateTime.now().toString(),
-            'currentPhase': 'SAMPLE_CONFIRM',
+            'currentPhase': 'MATERIAL_PREPARATION',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
             'attachments': [
@@ -678,7 +678,7 @@ class ProductionBLoC extends BLoCBase {
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),
             'expectedDeliveryDate': DateTime.now().toString(),
-            'currentPhase': 'SAMPLE_CONFIRM',
+            'currentPhase': 'CUTTING',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
             'attachments': [
@@ -880,7 +880,7 @@ class ProductionBLoC extends BLoCBase {
               }
             ],
           }),
-        ];
+       ];
       }));
     }
     _controller.sink.add(_purchaseOrders);

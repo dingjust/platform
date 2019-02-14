@@ -17,6 +17,7 @@ export 'src/commons/snakebar/snake_bar.dart';
 export 'src/commons/splash/splash.dart';
 export 'src/commons/stars/stars.dart';
 export 'src/report/site_statistics_section.dart';
+export 'src/commons/stepbar/production_circle_step.dart';
 export 'src/commons/stepbar/status_step.dart';
 export 'src/commons/filterTabBar/filter_bar.dart';
 export 'src/commons/icon/b2b_commerce_icons.dart';
