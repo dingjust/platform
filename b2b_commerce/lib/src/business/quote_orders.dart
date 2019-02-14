@@ -239,12 +239,12 @@ class QuoteOrderItem extends StatelessWidget {
             children: <Widget>[
               Text(
                 '工厂：${order.order.belongTo.name}',
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 18),
               ),
               RichText(
                 text: TextSpan(
                     text: '报价',
-                    style: TextStyle(fontSize: 15, color: Colors.black),
+                    style: TextStyle(fontSize: 18, color: Colors.black),
                     children: <TextSpan>[
                       TextSpan(
                           text: '${order.order.totalPrice}',
@@ -254,16 +254,7 @@ class QuoteOrderItem extends StatelessWidget {
               ),
               Text(QuoteStateLocalizedMap[order.order.state],
                   style: TextStyle(
-                      color: _statusColors[order.order.state], fontSize: 15))
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '报价单号：${order.order.code}',
-                style: TextStyle(fontSize: 15),
-              ),
+                      color: _statusColors[order.order.state], fontSize: 18))
             ],
           ),
           Row(
@@ -340,10 +331,6 @@ class QuoteOrderItem extends StatelessWidget {
                       )
                     ],
                   ),
-                  Text(
-                    '需求订单号：${order.order.requirementOrderCode}',
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
-                  )
                 ],
               ),
             ),
