@@ -25,7 +25,8 @@ class SalesOrdersPage extends StatelessWidget {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: () => showSearch(context: context, delegate: SalesOrderSearchDelegate()),
+              onPressed: () => showSearch(
+                  context: context, delegate: SalesOrderSearchDelegate()),
             ),
           ],
         ),
@@ -38,11 +39,18 @@ class SalesOrdersPage extends StatelessWidget {
               tabs: statuses.map((status) {
                 return Tab(text: status.name);
               }).toList(),
-              labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black),
               isScrollable: true,
             ),
             body: TabBarView(
-              children: statuses.map((status) => SalesOrderList(status: status,)).toList(),
+              children: statuses
+                  .map((status) => SalesOrderList(
+                        status: status,
+                      ))
+                  .toList(),
             ),
           ),
         ),
@@ -64,7 +72,8 @@ class SalesOrderList extends StatelessWidget {
     final bloc = BLoCProvider.of<SalesOrderBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(status.code);
       }
@@ -99,7 +108,8 @@ class SalesOrderList extends StatelessWidget {
           StreamBuilder<List<SalesOrderModel>>(
             stream: bloc.stream,
             initialData: null,
-            builder: (BuildContext context, AsyncSnapshot<List<SalesOrderModel>> snapshot) {
+            builder: (BuildContext context,
+                AsyncSnapshot<List<SalesOrderModel>> snapshot) {
               if (snapshot.data == null) {
                 bloc.filterByStatuses(status.code);
                 return Padding(
@@ -139,14 +149,14 @@ class SalesOrderList extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               return snapshot.data
                   ? Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                child: Center(
-                  child: Text(
-                    "┑(￣Д ￣)┍ 已经到底了",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ),
-              )
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                      child: Center(
+                        child: Text(
+                          "┑(￣Д ￣)┍ 已经到底了",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    )
                   : Container();
             },
           )
@@ -176,7 +186,8 @@ class SalesOrderItem extends StatelessWidget {
           _buildSummary(context),
         ],
       ),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(5)),
     );
   }
 
@@ -201,7 +212,7 @@ class SalesOrderItem extends StatelessWidget {
           ),
           Text(
             '订单创建时间：${order.creationTime}',
-            style: TextStyle(fontSize: 16.0),
+            style: TextStyle(fontSize: 14.0),
           ),
         ],
       ),
@@ -239,20 +250,24 @@ class SalesOrderItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
+                Container(
                   padding: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
+                  height: 100,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         '${entry.product.name}',
-                        style: TextStyle(fontSize: 16.0, color: Color(0xFF323232)),
+                        style:
+                            TextStyle(fontSize: 16.0, color: Color(0xFF323232)),
                       ),
                       Container(
                         padding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
                         child: Text(
                           '货号：${entry.product.skuID}',
-                          style: TextStyle(fontSize: 14.0, color: Color(0xFF969696)),
+                          style: TextStyle(
+                              fontSize: 14.0, color: Color(0xFF969696)),
                         ),
                         decoration: BoxDecoration(
                           color: Color(0xFFF0F0F0),
@@ -281,9 +296,10 @@ class SalesOrderItem extends StatelessWidget {
           style: TextStyle(color: Color(0xFFFF4444), fontSize: 16.0),
         ),
         RaisedButton(
-          child: Text('支付'),
-          onPressed: (){
-             WechatServiceImpl.instance.pay(order.code);
+          child: Text('支付',style: TextStyle(color: Colors.white),),
+          color: Colors.blue,
+          onPressed: () {
+            WechatServiceImpl.instance.pay(order.code);
           },
         )
       ],
@@ -302,15 +318,15 @@ class _ToTopBtn extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return snapshot.data
               ? FloatingActionButton(
-            child: Icon(
-              Icons.arrow_upward,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              bloc.returnToTop();
-            },
-            backgroundColor: Colors.blue,
-          )
+                  child: Icon(
+                    Icons.arrow_upward,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    bloc.returnToTop();
+                  },
+                  backgroundColor: Colors.blue,
+                )
               : Container();
         });
   }
