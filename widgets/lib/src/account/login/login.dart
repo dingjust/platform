@@ -22,7 +22,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  GlobalKey _formKey = new GlobalKey<FormState>();
+  final GlobalKey _formKey = GlobalKey<FormState>();
 
   String _verifyStr = '获取验证码';
   int _seconds = 0;
@@ -150,7 +150,8 @@ class _LoginPageState extends State<LoginPage> {
             color: Colors.orange,
             child: Text(
               '$_verifyStr',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                  color: (_seconds == 0) ? Colors.white : Colors.black45),
             ),
           ),
         ),
@@ -246,15 +247,19 @@ class _LoginPageState extends State<LoginPage> {
             margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: RaisedButton(
-              onPressed: () {
-                bloc
-                    .login(username: 'nbyjy', password: 'z123456')
-                    .then((success) {
-                  if (success) {
-                    Navigator.pop(context);
-                  }
-                });
-              },
+              onPressed: (_formKey.currentState as FormState) == null
+                  ? null
+                  : (_formKey.currentState as FormState).validate()
+                      ? () {
+                          bloc
+                              .login(username: 'nbyjy', password: 'z123456')
+                              .then((success) {
+                            if (success) {
+                              Navigator.pop(context);
+                            }
+                          });
+                        }
+                      : null,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)),
               color: Colors.orange,

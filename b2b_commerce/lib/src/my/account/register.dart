@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
@@ -16,11 +18,36 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _isAgree = true;
   String _userType = "brand";
+  String _verifyStr = '获取验证码';
+  int _seconds = 0;
+  Timer _timer;
 
   void _handleUserTypeChanged(String value) {
     setState(() {
       _userType = value;
     });
+  }
+
+  _startTimer() {
+    _seconds = 60;
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_seconds == 0) {
+        _cancelTimer();
+        return;
+      }
+
+      _seconds--;
+      _verifyStr = '$_seconds(s)';
+      setState(() {});
+      if (_seconds == 0) {
+        _verifyStr = '重新发送';
+      }
+    });
+  }
+
+  _cancelTimer() {
+    _timer?.cancel();
   }
 
   @override
@@ -54,7 +81,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       }),
                   TextFormField(
                       autofocus: false,
-                      keyboardType: TextInputType.phone,
                       controller: _captchaController,
                       decoration: InputDecoration(
                           labelText: '验证码',
@@ -63,10 +89,19 @@ class _RegisterPageState extends State<RegisterPage> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50)),
                             color: Colors.orange,
-                            onPressed: () {},
+                            onPressed: (_seconds == 0)
+                                ? () {
+                                    setState(() {
+                                      _startTimer();
+                                    });
+                                  }
+                                : null,
                             child: Text(
-                              '发送验证码',
-                              style: TextStyle(color: Colors.white),
+                              '$_verifyStr',
+                              style: TextStyle(
+                                  color: (_seconds == 0)
+                                      ? Colors.white
+                                      : Colors.black45),
                             ),
                           )),
                       // 校验用户名
@@ -75,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       }),
                   TextFormField(
                       autofocus: false,
-                      keyboardType: TextInputType.phone,
+                      obscureText: true,
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: '密码',
@@ -87,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       }),
                   TextFormField(
                       autofocus: false,
-                      keyboardType: TextInputType.phone,
+                      obscureText: true,
                       controller: _passwordAgainController,
                       decoration: InputDecoration(
                         labelText: '确认密码',
@@ -148,9 +183,13 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
             RaisedButton(
-              onPressed: () {
-                _nextStep();
-              },
+              onPressed: (_formKey.currentState as FormState) == null
+                  ? null
+                  : (_formKey.currentState as FormState).validate()
+                      ? () {
+                          _nextStep();
+                        }
+                      : null,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)),
               color: Colors.orange,
