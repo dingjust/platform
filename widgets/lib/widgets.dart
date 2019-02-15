@@ -20,6 +20,7 @@ export 'src/report/site_statistics_section.dart';
 export 'src/commons/stepbar/production_circle_step.dart';
 export 'src/commons/stepbar/status_step.dart';
 export 'src/commons/filterTabBar/filter_bar.dart';
+export 'src/commons/filterTabBar/production_filter_bar.dart';
 export 'src/commons/icon/b2b_commerce_icons.dart';
 export 'src/commons/easy_grid/easy_grid.dart';
 export 'src/commons/advance_icon_button/advance_icon_button.dart';

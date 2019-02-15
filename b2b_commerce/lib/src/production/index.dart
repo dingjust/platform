@@ -34,7 +34,29 @@ class _ProductionPageState extends State<ProductionPage> {
               ),
             ],
           ),
-          body: ProductionListView(),
+          body: Scaffold(
+            appBar: AppBar(
+              elevation: 0.5,
+              bottom: ProductionFilterBar(
+                leading: IconButton(
+                  icon: Icon(Icons.category),
+                  onPressed: (){},
+                ),
+                entries: <FilterConditionEntry>[
+                  FilterConditionEntry(
+                      label: '综合', value: 'comprehensive', checked: true),
+                  FilterConditionEntry(label: '星级', value: 'starLevel'),
+                ],
+                action: IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: () {},
+                ),
+                streamController:
+                    QuickReactionFactoryBLoC.instance.conditionController,
+              ),
+            ),
+            body: ProductionListView(),
+          ),
           floatingActionButton: SpeedDial(
             // animatedIcon: AnimatedIcons.menu_close,
             animatedIconTheme: IconThemeData(size: 22.0),
