@@ -21,7 +21,7 @@ class _ProductionPageState extends State<ProductionPage> {
         bloc: ProductionBLoC.instance,
         child: Scaffold(
           appBar: AppBar(
-            elevation: 0.5,
+            elevation: 0,
             title: HomeSearchInputBox(),
             brightness: Brightness.dark,
             actions: <Widget>[
@@ -35,25 +35,21 @@ class _ProductionPageState extends State<ProductionPage> {
             ],
           ),
           body: Scaffold(
-            appBar: AppBar(
-              elevation: 0.5,
-              bottom: ProductionFilterBar(
-                leading: IconButton(
-                  icon: Icon(Icons.category),
-                  onPressed: (){},
-                ),
-                entries: <FilterConditionEntry>[
-                  FilterConditionEntry(
-                      label: '综合', value: 'comprehensive', checked: true),
-                  FilterConditionEntry(label: '星级', value: 'starLevel'),
-                ],
-                action: IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: () {},
-                ),
-                streamController:
-                    QuickReactionFactoryBLoC.instance.conditionController,
+            appBar: ProductionFilterBar(
+              leading: IconButton(
+                icon: Icon(B2BIcons.calendar),
+                onPressed: () {},
               ),
+              entries: <FilterConditionEntry>[
+                FilterConditionEntry(
+                    label: '当前生产', value: 'comprehensive', checked: true),
+                FilterConditionEntry(label: '延期预警', value: 'starLevel'),
+              ],
+              action: IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {},
+              ),
+              streamController: ProductionBLoC.instance.conditionController,
             ),
             body: ProductionListView(),
           ),
@@ -116,12 +112,23 @@ class _ProductionPageState extends State<ProductionPage> {
 class ProductionListView extends StatelessWidget {
   ScrollController _scrollController = new ScrollController();
 
+  ///当前选中条件
+  FilterConditionEntry currentCondition = FilterConditionEntry(
+      label: '当前生产', value: 'comprehensive', checked: true);
+
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<ProductionBLoC>(context);
 
+    //监听筛选条件更改
+    bloc.conditionStream.listen((condition) {
+      this.currentCondition = condition;
+      //清空数据
+      bloc.clear();
+    });
+
     return Container(
-        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
         color: Colors.grey[200],
         child: RefreshIndicator(
           onRefresh: () async {
@@ -129,24 +136,6 @@ class ProductionListView extends StatelessWidget {
           },
           child: ListView(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                          text: '———',
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: '正在生产',
-                                style: TextStyle(color: Colors.black)),
-                            TextSpan(text: '———')
-                          ]),
-                    ),
-                  )
-                ],
-              ),
               StreamBuilder<List<PurchaseOrderModel>>(
                   stream: bloc.stream,
                   builder: (BuildContext context,

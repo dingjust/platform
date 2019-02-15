@@ -37,6 +37,11 @@ class ProductionBLoC extends BLoCBase {
 
   Stream<List<FactoryModel>> get factoryStream => _recommendController.stream;
 
+  var conditionController = StreamController<FilterConditionEntry>.broadcast();
+
+  Stream<FilterConditionEntry> get conditionStream =>
+      conditionController.stream;
+
   getData() async {
     //若没有数据则查询
     if (_purchaseOrders.isEmpty) {
@@ -954,6 +959,12 @@ class ProductionBLoC extends BLoCBase {
       ]);
     }
     _recommendController.sink.add(_recommendFactories);
+  }
+
+  clear() async {
+    //清空
+    _purchaseOrders.clear();
+    _controller.sink.add(null);
   }
 
   //下拉刷新

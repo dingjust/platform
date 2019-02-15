@@ -14,7 +14,10 @@ class ProductionFilterBar extends StatefulWidget
       this.color = Colors.orange,
       @required this.streamController,
       @required this.action,
-      @required this.leading})
+      @required this.leading,
+      this.height = 40,
+      this.indicatorWidth = 20,
+      this.indicatorHeight = 2})
       : super(key: key);
 
   _ProductionFilterBarState createState() => _ProductionFilterBarState();
@@ -27,10 +30,13 @@ class ProductionFilterBar extends StatefulWidget
   final Widget leading;
   final Widget action;
   final StreamController streamController;
+  final double indicatorWidth;
+  final double indicatorHeight;
+  final double height;
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => null;
+  Size get preferredSize => Size.fromHeight(height);
 }
 
 class _ProductionFilterBarState extends State<ProductionFilterBar> {
@@ -38,61 +44,64 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
   Widget build(BuildContext context) {
     return PreferredSize(
         preferredSize: Size(widget.itemWidth, widget.itemHeight),
-        child: Row(
-          children: <Widget>[
-            widget.leading,
-            Expanded(
-                child: Container(
-              height: widget.itemHeight,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: widget.entries
-                    .map((entry) => FlatButton(
-                          onPressed: () {
-                            setState(() {
-                              if (entry.checked) {
-                                entry.isDESC = !entry.isDESC;
-                                //stream通知状态更改
-                                widget.streamController.add(entry);
-                              } else {
-                                widget.entries.forEach((entry) {
-                                  if (entry.checked) {
-                                    entry.checked = !entry.checked;
-                                  }
-                                });
-                                entry.checked = !entry.checked;
-                                //stream通知状态更改
-                                widget.streamController.add(entry);
-                              }
-                            });
-                          },
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                '${entry.label}',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: entry.checked
-                                        ? widget.color
-                                        : widget.unselectedColor),
-                              ),
-                              Icon(
-                                entry.isDESC
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                                color: entry.checked
-                                    ? widget.color
-                                    : widget.unselectedColor,
-                              )
-                            ],
-                          ),
-                        ))
-                    .toList(),
-              ),
-            )),
-            widget.action
-          ],
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: _buildBody(),
+          ),
         ));
+  }
+
+  List<Widget> _buildBody() {
+    List<Widget> body = [widget.leading];
+    body.addAll(widget.entries
+        .map((entry) => FlatButton(
+              onPressed: () {
+                setState(() {
+                  widget.entries.forEach((entry) {
+                    if (entry.checked) {
+                      entry.checked = !entry.checked;
+                    }
+                  });
+                  entry.checked = !entry.checked;
+                  //stream通知状态更改
+                  widget.streamController.add(entry);
+                });
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '${entry.label}',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: entry.checked
+                            ? widget.color
+                            : widget.unselectedColor),
+                  ),
+                  entry.checked
+                      ? Container(
+                          height: widget.indicatorHeight,
+                          width: widget.indicatorWidth,
+                          margin: EdgeInsets.only(top: 3),
+                          decoration: BoxDecoration(
+                              color: widget.color,
+                              borderRadius: BorderRadius.circular(2)),
+                        )
+                      : Container(
+                          height: widget.indicatorHeight,
+                          width: widget.indicatorWidth,
+                          margin: EdgeInsets.only(top: 3),
+                        )
+                ],
+              ),
+            ))
+        .toList());
+    body.add(widget.action);
+    return body;
   }
 }

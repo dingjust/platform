@@ -39,6 +39,8 @@ class B2BIcons {
       const IconData(0xe6ac, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData purchase =
       const IconData(0xe6ab, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData calendar =
+      const IconData(0xe6ae, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {
