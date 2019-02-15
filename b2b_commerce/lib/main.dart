@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/production/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -59,23 +60,32 @@ class _MyAppState extends State<MyApp> {
           accentColor: Colors.orangeAccent[400],
           bottomAppBarColor: Colors.grey,
         ),
-        home: Scaffold(
-          key: const Key('__appPage__'),
-          body: widget.modules[_currentIndex],
-          bottomNavigationBar: BottomNavigation(
-            currentIndex: _currentIndex,
-            onChanged: _handleNavigation,
-          ),
-          floatingActionButton: FloatingActionButton(
-            tooltip: '发布需求',
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            onPressed: null,
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+        home: Builder(
+          builder: (context) => Scaffold(
+                key: const Key('__appPage__'),
+                body: widget.modules[_currentIndex],
+                bottomNavigationBar: BottomNavigation(
+                  currentIndex: _currentIndex,
+                  onChanged: _handleNavigation,
+                ),
+                floatingActionButton: FloatingActionButton(
+                  tooltip: '发布需求',
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RequirementOrderFrom(),
+                      ),
+                    );
+                  },
+                ),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+              ),
         ),
         routes: AppRoutes.allRoutes,
       ),
