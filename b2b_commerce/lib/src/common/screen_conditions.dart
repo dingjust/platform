@@ -504,7 +504,22 @@ class _ScreenConditionsState extends State<ScreenConditions> {
               borderRadius: BorderRadius.all(Radius.circular(20))
           ),
           onPressed: () {
-
+            String _selected = '';
+            if(_isShowA){
+              _selected += '品牌工厂,';
+            }
+            if(_isShowB){
+              _selected += '担保交易,';
+            }
+            if(_isShowC){
+              _selected += '免费打样,';
+            }
+            if(_isShowD){
+              _selected += '认证工厂,';
+            }
+            print('大类：'+mojar+'\n小类：'+category+
+                '\n需求数量：'+requestCount+'\n生产地区：'+address+
+            '\n勾选条件：'+_selected+'\n加工类型：'+processingType+'\n工艺：'+technology);
           },
         )
     );
@@ -668,7 +683,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('筛选条件'),
+          title: Text('结果'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
