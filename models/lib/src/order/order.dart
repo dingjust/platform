@@ -105,6 +105,9 @@ enum ProductionProgressPhase {
   /// 车缝
   STITCHING,
 
+  /// 后整
+  AFTER_FINISHING,
+
   /// 验货
   INSPECTION,
 
@@ -118,6 +121,7 @@ const ProductionProgressPhaseLocalizedMap = {
   ProductionProgressPhase.SAMPLE_CONFIRM: "产前样衣确认",
   ProductionProgressPhase.CUTTING: "裁剪",
   ProductionProgressPhase.STITCHING: "车缝",
+  ProductionProgressPhase.AFTER_FINISHING: "后整",
   ProductionProgressPhase.INSPECTION: "验货",
   ProductionProgressPhase.DELIVERY: "发货"
 };
@@ -173,9 +177,11 @@ class OrderModel extends AbstractOrderModel {
           remarks: remarks,
         );
 
-  factory OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
+  factory OrderModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrderModel model) => _$OrderModelToJson(model);
+  static Map<String, dynamic> toJson(OrderModel model) =>
+      _$OrderModelToJson(model);
 }
 
 @JsonSerializable()
@@ -199,9 +205,11 @@ class AbstractOrderEntryModel extends ItemModel {
     this.totalPrice,
   });
 
-  factory AbstractOrderEntryModel.fromJson(Map<String, dynamic> json) => _$AbstractOrderEntryModelFromJson(json);
+  factory AbstractOrderEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$AbstractOrderEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AbstractOrderEntryModel model) => _$AbstractOrderEntryModelToJson(model);
+  static Map<String, dynamic> toJson(AbstractOrderEntryModel model) =>
+      _$AbstractOrderEntryModelToJson(model);
 }
 
 @JsonSerializable()
@@ -218,9 +226,11 @@ class OrderEntryModel extends AbstractOrderEntryModel {
           totalPrice: totalPrice,
         );
 
-  factory OrderEntryModel.fromJson(Map<String, dynamic> json) => _$OrderEntryModelFromJson(json);
+  factory OrderEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrderEntryModel model) => _$OrderEntryModelToJson(model);
+  static Map<String, dynamic> toJson(OrderEntryModel model) =>
+      _$OrderEntryModelToJson(model);
 }
 
 @JsonSerializable()
@@ -247,9 +257,11 @@ class CartModel extends AbstractOrderModel {
           remarks: remarks,
         );
 
-  factory CartModel.fromJson(Map<String, dynamic> json) => _$CartModelFromJson(json);
+  factory CartModel.fromJson(Map<String, dynamic> json) =>
+      _$CartModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CartModel model) => _$CartModelToJson(model);
+  static Map<String, dynamic> toJson(CartModel model) =>
+      _$CartModelToJson(model);
 }
 
 @JsonSerializable()
@@ -271,9 +283,11 @@ class CartEntryModel extends AbstractOrderEntryModel {
           totalPrice: totalPrice,
         );
 
-  factory CartEntryModel.fromJson(Map<String, dynamic> json) => _$CartEntryModelFromJson(json);
+  factory CartEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$CartEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CartEntryModel model) => _$CartEntryModelToJson(model);
+  static Map<String, dynamic> toJson(CartEntryModel model) =>
+      _$CartEntryModelToJson(model);
 }
 
 /// 发货
@@ -298,9 +312,11 @@ class ConsignmentModel extends ItemModel {
     this.consignmentEntries,
   });
 
-  factory ConsignmentModel.fromJson(Map<String, dynamic> json) => _$ConsignmentModelFromJson(json);
+  factory ConsignmentModel.fromJson(Map<String, dynamic> json) =>
+      _$ConsignmentModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ConsignmentModel model) => _$ConsignmentModelToJson(model);
+  static Map<String, dynamic> toJson(ConsignmentModel model) =>
+      _$ConsignmentModelToJson(model);
 }
 
 @JsonSerializable()
@@ -313,9 +329,11 @@ class ConsignmentEntryModel extends ItemModel {
     this.consignment,
   });
 
-  factory ConsignmentEntryModel.fromJson(Map<String, dynamic> json) => _$ConsignmentEntryModelFromJson(json);
+  factory ConsignmentEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$ConsignmentEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ConsignmentEntryModel model) => _$ConsignmentEntryModelToJson(model);
+  static Map<String, dynamic> toJson(ConsignmentEntryModel model) =>
+      _$ConsignmentEntryModelToJson(model);
 }
 
 /// 需求订单
@@ -373,9 +391,11 @@ class RequirementOrderModel extends OrderModel {
           remarks: remarks,
         );
 
-  factory RequirementOrderModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderModelFromJson(json);
+  factory RequirementOrderModel.fromJson(Map<String, dynamic> json) =>
+      _$RequirementOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(RequirementOrderModel model) => _$RequirementOrderModelToJson(model);
+  static Map<String, dynamic> toJson(RequirementOrderModel model) =>
+      _$RequirementOrderModelToJson(model);
 }
 
 /// 需求订单行
@@ -398,9 +418,11 @@ class RequirementOrderEntryModel extends OrderEntryModel {
           totalPrice: totalPrice,
         );
 
-  factory RequirementOrderEntryModel.fromJson(Map<String, dynamic> json) => _$RequirementOrderEntryModelFromJson(json);
+  factory RequirementOrderEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$RequirementOrderEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(RequirementOrderEntryModel model) => _$RequirementOrderEntryModelToJson(model);
+  static Map<String, dynamic> toJson(RequirementOrderEntryModel model) =>
+      _$RequirementOrderEntryModelToJson(model);
 }
 
 /// 采购订单
@@ -461,9 +483,11 @@ class PurchaseOrderModel extends OrderModel {
           remarks: remarks,
         );
 
-  factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) => _$PurchaseOrderModelFromJson(json);
+  factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
+      _$PurchaseOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(PurchaseOrderModel model) => _$PurchaseOrderModelToJson(model);
+  static Map<String, dynamic> toJson(PurchaseOrderModel model) =>
+      _$PurchaseOrderModelToJson(model);
 }
 
 /// 采购订单行
@@ -486,9 +510,11 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
           totalPrice: totalPrice,
         );
 
-  factory PurchaseOrderEntryModel.fromJson(Map<String, dynamic> json) => _$PurchaseOrderEntryModelFromJson(json);
+  factory PurchaseOrderEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$PurchaseOrderEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(PurchaseOrderEntryModel model) => _$PurchaseOrderEntryModelToJson(model);
+  static Map<String, dynamic> toJson(PurchaseOrderEntryModel model) =>
+      _$PurchaseOrderEntryModelToJson(model);
 }
 
 /// 销售订单
@@ -517,9 +543,11 @@ class SalesOrderModel extends OrderModel {
           remarks: remarks,
         );
 
-  factory SalesOrderModel.fromJson(Map<String, dynamic> json) => _$SalesOrderModelFromJson(json);
+  factory SalesOrderModel.fromJson(Map<String, dynamic> json) =>
+      _$SalesOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SalesOrderModel model) => _$SalesOrderModelToJson(model);
+  static Map<String, dynamic> toJson(SalesOrderModel model) =>
+      _$SalesOrderModelToJson(model);
 }
 
 /// 销售订单行
@@ -542,9 +570,11 @@ class SalesOrderEntryModel extends OrderEntryModel {
           totalPrice: totalPrice,
         );
 
-  factory SalesOrderEntryModel.fromJson(Map<String, dynamic> json) => _$SalesOrderEntryModelFromJson(json);
+  factory SalesOrderEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$SalesOrderEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SalesOrderEntryModel model) => _$SalesOrderEntryModelToJson(model);
+  static Map<String, dynamic> toJson(SalesOrderEntryModel model) =>
+      _$SalesOrderEntryModelToJson(model);
 }
 
 /// 报价单
@@ -610,9 +640,11 @@ class QuoteModel extends AbstractOrderModel {
           remarks: remarks,
         );
 
-  factory QuoteModel.fromJson(Map<String, dynamic> json) => _$QuoteModelFromJson(json);
+  factory QuoteModel.fromJson(Map<String, dynamic> json) =>
+      _$QuoteModelFromJson(json);
 
-  static Map<String, dynamic> toJson(QuoteModel model) => _$QuoteModelToJson(model);
+  static Map<String, dynamic> toJson(QuoteModel model) =>
+      _$QuoteModelToJson(model);
 }
 
 /// 报价单行
@@ -635,9 +667,11 @@ class QuoteEntryModel extends AbstractOrderEntryModel {
           totalPrice: totalPrice,
         );
 
-  factory QuoteEntryModel.fromJson(Map<String, dynamic> json) => _$QuoteEntryModelFromJson(json);
+  factory QuoteEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$QuoteEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(QuoteEntryModel model) => _$QuoteEntryModelToJson(model);
+  static Map<String, dynamic> toJson(QuoteEntryModel model) =>
+      _$QuoteEntryModelToJson(model);
 }
 
 /// 生产进度
@@ -667,20 +701,21 @@ class ProductionProgressModel extends ItemModel {
   /// 采购订单
   PurchaseOrderModel order;
 
-  ProductionProgressModel({
-    this.phase,
-    this.quantity,
-    this.medias,
-    this.sequence,
-    this.estimatedDate,
-    this.finishDate,
-    this.order,
-    this.remarks
-  });
+  ProductionProgressModel(
+      {this.phase,
+      this.quantity,
+      this.medias,
+      this.sequence,
+      this.estimatedDate,
+      this.finishDate,
+      this.order,
+      this.remarks});
 
-  factory ProductionProgressModel.fromJson(Map<String, dynamic> json) => _$ProductionProgressModelFromJson(json);
+  factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>
+      _$ProductionProgressModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProductionProgressModel model) => _$ProductionProgressModelToJson(model);
+  static Map<String, dynamic> toJson(ProductionProgressModel model) =>
+      _$ProductionProgressModelToJson(model);
 }
 
 //订单状态model，用于订单状态控件的List传入
@@ -696,8 +731,9 @@ class OrderStatusModel extends ItemModel {
     this.sort,
   });
 
-  factory OrderStatusModel.fromJson(Map<String, dynamic> json) => _$OrderStatusModelFromJson(json);
+  factory OrderStatusModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderStatusModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrderStatusModel model) => _$OrderStatusModelToJson(model);
-
+  static Map<String, dynamic> toJson(OrderStatusModel model) =>
+      _$OrderStatusModelToJson(model);
 }

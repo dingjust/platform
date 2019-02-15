@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import '../product_category.dart';
 
 class MinorCategoryField extends StatefulWidget {
   MinorCategoryField(this.item);
@@ -30,13 +31,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
             EnumModel category = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => EnumSelectPage(
-                      title: '选择分类',
-                      items: <EnumModel>[
-                        EnumModel('R001', '男装'),
-                        EnumModel('R002', '女装'),
-                      ],
-                    ),
+                builder: (context) => ProductCategorySelectPage()
               ),
             );
 

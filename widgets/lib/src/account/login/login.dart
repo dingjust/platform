@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:services/services.dart' show UserBLoC;
@@ -23,7 +22,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  GlobalKey _formKey = new GlobalKey<FormState>();
+  final GlobalKey _formKey = GlobalKey<FormState>();
 
   String _verifyStr = '获取验证码';
   int _seconds = 0;
@@ -35,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isRemember = true;
   bool _isPasswordHide = true;
-  bool _isPasswordLogin = true;
+  bool _isPasswordLogin = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,34 +71,39 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildServiceRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, widget.registerRoute);
-          },
-          child: Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
-            child: Text(
-              '注册',
-              style: TextStyle(color: Colors.blue),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          _isPasswordLogin
+              ? GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, widget.forgetPasswordRoute);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
+                    child: Text(
+                      '忘记密码',
+                      style: TextStyle(color: Colors.red, fontSize: 15),
+                    ),
+                  ),
+                )
+              : Container(),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, widget.registerRoute);
+            },
+            child: Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
+              child: Text(
+                '注册',
+                style: TextStyle(color: Colors.orange, fontSize: 15),
+              ),
             ),
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, widget.forgetPasswordRoute);
-          },
-          child: Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
-            child: Text(
-              '忘记密码',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ),
-        )
-      ],
+        ],
+      ),
     );
   }
 
@@ -117,7 +121,10 @@ class _LoginPageState extends State<LoginPage> {
                   _isPasswordHide = !_isPasswordHide;
                 });
               },
-              child: Icon(_isPasswordHide ? B2BIcons.eye_not_see : Icons.remove_red_eye),
+              child: Icon(
+                _isPasswordHide ? B2BIcons.eye_not_see : Icons.remove_red_eye,
+                color: Colors.black54,
+              ),
             )),
         // 校验用户名
         validator: (v) {
@@ -128,29 +135,32 @@ class _LoginPageState extends State<LoginPage> {
         autofocus: false,
         controller: _smsCaptchaController,
         decoration: InputDecoration(
-            labelText: '验证码',
-            hintText: '请输入',
-            suffixIcon: FlatButton(
-              onPressed: (_seconds == 0)
-                  ? () {
-                      setState(() {
-                        _startTimer();
-                      });
-                    }
-                  : null,
-              color: Colors.grey[200],
-              child: Text(
-                '$_verifyStr',
-                style: TextStyle(color: Colors.grey),
-              ),
-            )),
+          labelText: '验证码',
+          hintText: '请输入',
+          suffixIcon: FlatButton(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            onPressed: (_seconds == 0)
+                ? () {
+                    setState(() {
+                      _startTimer();
+                    });
+                  }
+                : null,
+            color: Colors.orange,
+            child: Text(
+              '$_verifyStr',
+              style: TextStyle(
+                  color: (_seconds == 0) ? Colors.white : Colors.black45),
+            ),
+          ),
+        ),
         // 校验用户名
         validator: (v) {
           return v.trim().length > 0 ? null : '密码不能为空';
         });
 
-    return Card(
-        child: Container(
+    return Container(
       padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
       child: Column(
         children: <Widget>[
@@ -171,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
               validator: (v) {
                 return v.trim().length > 0 ? null : '手机号不能为空';
               }),
-          _isPasswordLogin ? _smsCaptchaField : _passwordField,
+          _isPasswordLogin ? _passwordField : _smsCaptchaField,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -182,13 +192,18 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 },
                 child: Text(
-                  _isPasswordLogin ? '账号密码登陆' : '短信验证码登陆',
-                  style: TextStyle(color: Colors.blue),
+                  _isPasswordLogin ? '短信验证码登陆' : '密码登陆',
+                  style: TextStyle(color: Colors.orange, fontSize: 15),
                 ),
               ),
               Row(
                 children: <Widget>[
-                  Text('记住账号'),
+                  Text(
+                    '记住账号',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: _isRemember ? Colors.orange : Colors.black54),
+                  ),
                   Checkbox(
                     onChanged: (v) {
                       setState(() {
@@ -203,40 +218,61 @@ class _LoginPageState extends State<LoginPage> {
           )
         ],
       ),
-    ));
+    );
   }
 
   Widget _buildLogo() {
-    return Container(padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20), child: widget.logo);
+    return Container(
+        padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20), child: widget.logo);
   }
 
   Widget _buildBody(BuildContext context) {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
-      children: <Widget>[
-        _buildLogo(),
-        _buildInputArea(),
-        Container(
-          margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-          child: RaisedButton(
-            onPressed: () {
-              bloc.login(username: 'nbyjy', password: 'z123456').then((success) {
-                if (success) {
-                  Navigator.pop(context);
-                }
-              });
-            },
-            color: Colors.blue,
-            child: Text(
-              '登陆',
-              style: TextStyle(color: Colors.white),
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage(
+          'temp/login_background.png',
+          package: "assets",
+        ),
+        fit: BoxFit.fitWidth,
+      )),
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
+        children: <Widget>[
+          _buildLogo(),
+          _buildInputArea(),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: RaisedButton(
+              onPressed: (_formKey.currentState as FormState) == null
+                  ? null
+                  : (_formKey.currentState as FormState).validate()
+                      ? () {
+                          bloc
+                              .login(username: 'nbyjy', password: 'z123456')
+                              .then((success) {
+                            if (success) {
+                              Navigator.pop(context);
+                            }
+                          });
+                        }
+                      : null,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              color: Colors.orange,
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                '登陆',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
             ),
           ),
-        ),
-        _buildServiceRow()
-      ],
+          _buildServiceRow()
+        ],
+      ),
     );
   }
 }

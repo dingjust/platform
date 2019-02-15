@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -18,9 +19,12 @@ class ProductionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => RequirementOrderDetailPage(order: order)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PurchaseOrderDetailPage(order: order),
+          ),
+        );
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -31,7 +35,6 @@ class ProductionItem extends StatelessWidget {
             Column(
               children: _buildEntries(),
             ),
-            _buildStep()
           ],
         ),
         decoration: BoxDecoration(
@@ -49,16 +52,24 @@ class ProductionItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Text('采购订单号：' + order.code),
+                child: Text(
+                  '采购订单号：' + order.code,
+                  style: TextStyle(fontSize: 14),
+                ),
               ),
-              // 订单类型
+              // TODO : 订单类型枚举和对应颜色
               // Text(
               //   RequirementOrderStatusLocalizedMap[order.status],
               //   style: TextStyle(color: _statusColors[order.status])
               // )
+              Text(
+                '线上订单',
+                style: TextStyle(color: Colors.green, fontSize: 14),
+              )
             ],
           ),
         ],
@@ -119,64 +130,25 @@ class ProductionItem extends StatelessWidget {
                               Text(
                                 '共${order.totalQuantity}件商品   合计: ￥${order.totalPrice}',
                                 style:
-                                    TextStyle(color: Colors.red, fontSize: 14),
+                                    TextStyle(color: Colors.red, fontSize: 12),
                               )
                             ],
                           )
                         ],
                       ),
                     ),
+                  ),
+                  Container(
+                    width: 80,
+                    height: 80,
+                    child: ProductionCircleStep(
+                      size: 30,
+                      currentPhase: order.currentPhase,
+                    ),
                   )
                 ],
               ),
             ))
         .toList();
-  }
-
-  Widget _buildStep() {
-    //TODO 查询订单生产进度
-    final List<OrderStatusModel> _statusList = [
-      OrderStatusModel.fromJson({
-        'code': 'WAIT_FOR_PROCESSING',
-        'name': '待处理',
-        'sort': 1,
-      }),
-      OrderStatusModel.fromJson({
-        'code': 'PENDING_APPROVAL',
-        'name': '待确认',
-        'sort': 2,
-      }),
-      OrderStatusModel.fromJson({
-        'code': 'IN_PRODUCTION',
-        'name': '生产中',
-        'sort': 3,
-      }),
-      OrderStatusModel.fromJson({
-        'code': 'OUT_OF_STORE',
-        'name': '已出库',
-        'sort': 4,
-      }),
-      OrderStatusModel.fromJson({
-        'code': 'COMPLETED',
-        'name': '已完成',
-        'sort': 5,
-      }),
-    ];
-
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: StatusStep(
-              width: 300,
-              list: _statusList,
-              currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
-              isScroll: false,
-            ),
-          )
-        ],
-      ),
-    );
   }
 }

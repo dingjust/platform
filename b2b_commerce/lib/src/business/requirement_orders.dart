@@ -238,13 +238,18 @@ class RequirementOrderItem extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Text('需求订单号：' + order.code),
+                child:
+                    Text('需求订单号：' + order.code, style: TextStyle(fontSize: 16)),
               ),
               Text(RequirementOrderStatusLocalizedMap[order.status],
-                  style: TextStyle(color: _statusColors[order.status]))
+                  style: TextStyle(
+                      color: _statusColors[order.status], fontSize: 16))
             ],
           ),
-          Text('发布时间: ${DateFormatUtil.format(order.creationTime)}'),
+          Text(
+            '发布时间: ${DateFormatUtil.format(order.creationTime)}',
+            style: TextStyle(fontSize: 14),
+          ),
         ],
       ),
     );

@@ -36,7 +36,7 @@ class EnumModel {
       _$EnumModelToJson(model);
 }
 
-
+///根据code获取name
 String enumMap(dynamic enumModels,String code){
   EnumModel model = enumModels.firstWhere((enumModel) => enumModel.code == code,orElse: () => EnumModel('',''));
   return model.name;

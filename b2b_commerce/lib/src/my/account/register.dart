@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:widgets/widgets.dart';
 
 class RegisterPage extends StatefulWidget {
   _RegisterPageState createState() => _RegisterPageState();
@@ -15,6 +18,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _isAgree = true;
   String _userType = "brand";
+  String _verifyStr = '获取验证码';
+  int _seconds = 0;
+  Timer _timer;
 
   void _handleUserTypeChanged(String value) {
     setState(() {
@@ -22,10 +28,33 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+  _startTimer() {
+    _seconds = 60;
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_seconds == 0) {
+        _cancelTimer();
+        return;
+      }
+
+      _seconds--;
+      _verifyStr = '$_seconds(s)';
+      setState(() {});
+      if (_seconds == 0) {
+        _verifyStr = '重新发送';
+      }
+    });
+  }
+
+  _cancelTimer() {
+    _timer?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: const Text('注册'),
       ),
@@ -35,8 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: ListView(
           padding: const EdgeInsets.all(10.0),
           children: <Widget>[
-            Card(
-                child: Container(
+            Container(
               padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
               child: Column(
                 children: <Widget>[
@@ -44,35 +72,45 @@ class _RegisterPageState extends State<RegisterPage> {
                       autofocus: false,
                       controller: _phoneController,
                       decoration: InputDecoration(
-                          labelText: '手机号码',
-                          hintText: '请输入',
-                          suffixIcon: FlatButton(
-                            onPressed: () {},
-                            color: Colors.grey[200],
-                            child: Text(
-                              '发送验证码',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          )),
+                        labelText: '手机号码',
+                        hintText: '请输入',
+                      ),
                       // 校验用户名
                       validator: (v) {
                         return v.trim().length > 0 ? null : '手机号码不能为空';
                       }),
                   TextFormField(
                       autofocus: false,
-                      keyboardType: TextInputType.phone,
                       controller: _captchaController,
                       decoration: InputDecoration(
-                        labelText: '验证码',
-                        hintText: '请输入',
-                      ),
+                          labelText: '验证码',
+                          hintText: '请输入',
+                          suffixIcon: FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            color: Colors.orange,
+                            onPressed: (_seconds == 0)
+                                ? () {
+                                    setState(() {
+                                      _startTimer();
+                                    });
+                                  }
+                                : null,
+                            child: Text(
+                              '$_verifyStr',
+                              style: TextStyle(
+                                  color: (_seconds == 0)
+                                      ? Colors.white
+                                      : Colors.black45),
+                            ),
+                          )),
                       // 校验用户名
                       validator: (v) {
                         return v.trim().length > 0 ? null : '验证码不能为空';
                       }),
                   TextFormField(
                       autofocus: false,
-                      keyboardType: TextInputType.phone,
+                      obscureText: true,
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: '密码',
@@ -84,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       }),
                   TextFormField(
                       autofocus: false,
-                      keyboardType: TextInputType.phone,
+                      obscureText: true,
                       controller: _passwordAgainController,
                       decoration: InputDecoration(
                         labelText: '确认密码',
@@ -111,24 +149,61 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   Container(
                     child: UserTypeSelector(
-                      groupValue: ['brand', 'factory', 'customer'],
+                      userTypeEntries: [
+                        UserTypeEntry(
+                            value: 'brand',
+                            label: '品牌商',
+                            icon: Icon(
+                              B2BIcons.brand,
+                              size: 40,
+                              color: Color.fromRGBO(255, 184, 2, 1.0),
+                            )),
+                        UserTypeEntry(
+                            value: 'factory',
+                            label: '工厂',
+                            icon: Icon(
+                              B2BIcons.factory,
+                              size: 40,
+                              color: Color.fromRGBO(111, 142, 244, 1.0),
+                            )),
+                        UserTypeEntry(
+                            value: 'purchase',
+                            label: '采购商',
+                            icon: Icon(
+                              B2BIcons.purchase,
+                              size: 40,
+                              color: Color.fromRGBO(62, 185, 254, 1.0),
+                            ))
+                      ],
                       onChanged: _handleUserTypeChanged,
                       value: _userType,
                     ),
                   ),
                 ],
               ),
-            )),
+            ),
+            RaisedButton(
+              onPressed: (_formKey.currentState as FormState) == null
+                  ? null
+                  : (_formKey.currentState as FormState).validate()
+                      ? () {
+                          _nextStep();
+                        }
+                      : null,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              color: Colors.orange,
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                '下一步',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
             Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    '已经阅读或同意《衣加衣协议》',
-                    style: TextStyle(
-                        color: _isAgree ? Colors.orange : Colors.black54),
-                  ),
                   Checkbox(
                     onChanged: (v) {
                       setState(() {
@@ -136,18 +211,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       });
                     },
                     value: _isAgree,
-                  )
+                  ),
+                  Text(
+                    '已经阅读或同意《衣加衣协议》',
+                    style: TextStyle(
+                        color: _isAgree ? Colors.orange : Colors.black54),
+                  ),
                 ],
-              ),
-            ),
-            RaisedButton(
-              onPressed: () {
-                _nextStep();
-              },
-              color: Colors.blue,
-              child: Text(
-                '下一步',
-                style: TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -164,20 +234,28 @@ class _RegisterPageState extends State<RegisterPage> {
       case 'factory':
         Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_FACTORY);
         break;
-      case 'customer':
+      case 'purchase':
         Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_CUSTOMER);
         break;
     }
   }
 }
 
+class UserTypeEntry {
+  final String label;
+  final String value;
+  final Icon icon;
+
+  UserTypeEntry({this.label, this.value, this.icon});
+}
+
 class UserTypeSelector extends StatelessWidget {
   const UserTypeSelector(
-      {Key key, @required this.value, this.groupValue, this.onChanged})
+      {Key key, @required this.value, this.userTypeEntries, this.onChanged})
       : super(key: key);
 
   final String value;
-  final List<String> groupValue;
+  final List<UserTypeEntry> userTypeEntries;
 
   final ValueChanged<String> onChanged;
 
@@ -187,19 +265,25 @@ class UserTypeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetList = groupValue
+    List<Widget> widgetList = userTypeEntries
         .map((v) => GestureDetector(
               onTap: () {
-                _handleTap(v);
+                _handleTap(v.value);
               },
               child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: v.icon,
+                    ),
                     Text(
-                      v,
+                      v.label,
                       style: TextStyle(
-                          color: v == value ? Colors.orange : Colors.black54),
+                          color: v.value == value
+                              ? Colors.orange
+                              : Colors.black54),
                     )
                   ],
                 ),

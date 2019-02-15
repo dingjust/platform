@@ -194,6 +194,7 @@ class PurchaseOrderItem extends StatelessWidget {
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        padding: EdgeInsets.fromLTRB(0, 0, 5, 10),
         child: Column(
           children: <Widget>[
             _buildOrderHeader(context),
@@ -259,16 +260,22 @@ class PurchaseOrderItem extends StatelessWidget {
           padding: EdgeInsets.all(10),
           child: Row(
             children: <Widget>[
-              Image.network(
-                entry.product.thumbnail,
-                width: 110,
-                height: 110,
-                fit: BoxFit.fill,
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: NetworkImage(entry.product.thumbnail),
+                      fit: BoxFit.cover,
+                    )),
               ),
               Expanded(
                   child: Container(
                       padding: EdgeInsets.all(5),
+                      height: 100,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Align(
                               alignment: Alignment.topLeft,
@@ -279,10 +286,21 @@ class PurchaseOrderItem extends StatelessWidget {
                               )),
                           Align(
                               alignment: Alignment.topLeft,
-                              child: Text(
-                                '货号：' + entry.product.skuID,
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w500),
+                              // child: Text(
+                              //   '货号：' + entry.product.skuID,
+                              //   style: TextStyle(
+                              //       fontSize: 14, fontWeight: FontWeight.w500),
+                              // ))
+                              child: Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Text(
+                                  '货号：' + entry.product.skuID,
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
+                                ),
                               ))
                         ],
                       )))

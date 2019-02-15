@@ -8,7 +8,7 @@ class CategorySelect extends StatefulWidget {
   List<CategoryModel> categorySelect;
 
 
-  CategorySelect({@required this.categorys,this.multiple = false,this.verticalDividerOpacity = 0,this.categorySelect});
+  CategorySelect({@required this.categorys,this.multiple = true,this.verticalDividerOpacity = 1,this.categorySelect});
 
   CategorySelectState createState() => CategorySelectState();
 }
@@ -46,18 +46,25 @@ class CategorySelectState extends State<CategorySelect> {
         }else{
           _color = Colors.black;
         }
-        return Container(
-          padding: EdgeInsets.all(20),
-          child: GestureDetector(
-            onTap: () {
-              if(!(_selectLeft == key.code)){
-                setState(() {
-                  widget.categorySelect.clear();
-                  _selectLeft = key.code;
-                });
-              }
-            },
-            child: Text(key.name,style: TextStyle(color: _color),),
+        return GestureDetector(
+          onTap: () {
+            if(!(_selectLeft == key.code)){
+              setState(() {
+                widget.categorySelect.clear();
+                _selectLeft = key.code;
+              });
+            }
+          },
+          child: Container(
+            width: 60,
+          color: Colors.white10,
+          padding: EdgeInsets.fromLTRB(20,10,20,0),
+          child: Container(
+              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+              height: 40,
+              child: Text(key.name,style: TextStyle(color: _color),
+            ),
+            ),
           ),
         );
       }).toList();

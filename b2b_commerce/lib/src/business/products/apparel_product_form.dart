@@ -1,10 +1,9 @@
+import 'package:b2b_commerce/src/business/products/form/detail_picture_field.dart';
+import 'package:b2b_commerce/src/business/products/form/normal_picture_field.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'form/detail_picture_field.dart';
-import 'form/normal_picture_field.dart';
 import 'form/minor_category_field.dart';
 import 'form/name_field.dart';
 import 'form/sku_id_field.dart';
@@ -28,6 +27,8 @@ class ApparelProductFormPage extends StatefulWidget {
 class ApparelProductFormState extends State<ApparelProductFormPage> {
   final GlobalKey _apparelProductForm = GlobalKey<FormState>();
 
+  List<MediaModel> mediaModels=[];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -43,6 +44,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 //        initialData: bloc.currentProduct,
 //        builder: (BuildContext context,
 //            AsyncSnapshot<ApparelProductModel> snapshot) {
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -53,8 +55,13 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         autovalidate: false,
         child: ListView(
           children: <Widget>[
-            NormalPictureField(widget.item),
-            DetailPictureField(widget.item),
+            // NormalPictureField(widget.item),
+            // DetailPictureField(
+            //   widget.item,
+            // ),
+            EditableAttachments(
+                list: mediaModels,
+              ),
             NameField(widget.item),
             SkuIDField(widget.item),
             MinorCategoryField(widget.item),
