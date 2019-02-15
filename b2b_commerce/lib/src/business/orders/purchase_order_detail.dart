@@ -335,7 +335,36 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
+      child: _index==0?Column(
+        children: <Widget>[
+          _buildProductionProgress(
+              context, order.productionProgresses[_index], true),
+          _buildProductionProgress(
+              context, order.productionProgresses[_index + 1], false),
+          Container(
+              width: double.infinity,
+              padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
+              child: RaisedButton(
+                elevation: 0,
+                color: Colors.white,
+                child: Text(
+                  '查看全部',
+                  style: TextStyle(color: Colors.orange),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ProductionProgressesPage(order: order),
+                    ),
+                  );
+                },
+              ))
+        ],
+      )
+      :
+      Column(
         children: <Widget>[
           _buildProductionProgress(
               context, order.productionProgresses[_index - 1], false),
