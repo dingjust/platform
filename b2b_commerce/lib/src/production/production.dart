@@ -142,7 +142,7 @@ class ProductionItem extends StatelessWidget {
                     width: 80,
                     height: 80,
                     child: ProductionCircleStep(
-                      size: 30,
+                      size: 25,
                       currentPhase: order.currentPhase,
                     ),
                   )

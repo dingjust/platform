@@ -53,8 +53,8 @@ class ProductionCircleStep extends StatelessWidget {
               radius: size,
               thickness: thickness,
               color: ProductionStepConstants[i]['color'],
-              startAngle: (i - 2.5) * 2 * pi / ProductionStepConstants.length,
-              endAngle: (i - 2.5) * 2 * pi / ProductionStepConstants.length +
+              startAngle: (i - 1.5) * 2 * pi / ProductionStepConstants.length,
+              endAngle: (i - 1.5) * 2 * pi / ProductionStepConstants.length +
                   2 * pi / ProductionStepConstants.length),
         ));
         break;
@@ -64,8 +64,8 @@ class ProductionCircleStep extends StatelessWidget {
               radius: size,
               thickness: thickness,
               color: ProductionStepConstants[i]['color'],
-              startAngle: (i - 2.5) * 2 * pi / ProductionStepConstants.length,
-              endAngle: (i - 2.5) * 2 * pi / ProductionStepConstants.length +
+              startAngle: (i - 1.5) * 2 * pi / ProductionStepConstants.length,
+              endAngle: (i - 1.5) * 2 * pi / ProductionStepConstants.length +
                   2 * pi / ProductionStepConstants.length),
         ));
       }
@@ -119,29 +119,43 @@ class CircleStepItem {
   final Color color;
 }
 
+//带颜色区分进度，勿删除
+
+// const ProductionStepConstants = [
+//   {
+//     "phase": ProductionProgressPhase.MATERIAL_PREPARATION,
+//     "color": Color.fromRGBO(255, 108, 108, 1)
+//   },
+//   {
+//     "phase": ProductionProgressPhase.CUTTING,
+//     "color": Color.fromRGBO(255, 194, 108, 1)
+//   },
+//   {
+//     "phase": ProductionProgressPhase.STITCHING,
+//     "color": Color.fromRGBO(89, 205, 145, 1)
+//   },
+//   {
+//     "phase": ProductionProgressPhase.AFTER_FINISHING,
+//     "color": Color.fromRGBO(61, 171, 248, 1)
+//   },
+//   {
+//     "phase": ProductionProgressPhase.INSPECTION,
+//     "color": Color.fromRGBO(223, 122, 234, 1)
+//   },
+//   {
+//     "phase": ProductionProgressPhase.DELIVERY,
+//     "color": Color.fromRGBO(196, 213, 114, 1)
+//   }
+// ];
+
 const ProductionStepConstants = [
   {
     "phase": ProductionProgressPhase.MATERIAL_PREPARATION,
-    "color": Color.fromRGBO(255, 108, 108, 1)
+    "color": Colors.orange
   },
-  {
-    "phase": ProductionProgressPhase.CUTTING,
-    "color": Color.fromRGBO(255, 194, 108, 1)
-  },
-  {
-    "phase": ProductionProgressPhase.STITCHING,
-    "color": Color.fromRGBO(89, 205, 145, 1)
-  },
-  {
-    "phase": ProductionProgressPhase.AFTER_FINISHING,
-    "color": Color.fromRGBO(61, 171, 248, 1)
-  },
-  {
-    "phase": ProductionProgressPhase.INSPECTION,
-    "color": Color.fromRGBO(223, 122, 234, 1)
-  },
-  {
-    "phase": ProductionProgressPhase.DELIVERY,
-    "color": Color.fromRGBO(196, 213, 114, 1)
-  }
+  {"phase": ProductionProgressPhase.CUTTING, "color": Colors.orange},
+  {"phase": ProductionProgressPhase.STITCHING, "color": Colors.orange},
+  {"phase": ProductionProgressPhase.AFTER_FINISHING, "color": Colors.orange},
+  {"phase": ProductionProgressPhase.INSPECTION, "color": Colors.orange},
+  {"phase": ProductionProgressPhase.DELIVERY, "color": Colors.orange}
 ];
