@@ -22,52 +22,50 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                      @size-change="onPageSizeChanged"
-                      @current-change="onCurrentPageChanged"
-                      :current-page="page.number + 1"
-                      :page-size="page.size"
-                      :page-count="page.totalPages"
-                      :total="page.totalElements">
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('FabricProductsModule');
+
   import autoHeight from 'mixins/autoHeight'
   import {FabricProductForm, FabricProductDetailsPage} from "./";
 
   export default {
     name: "FabricProductPage",
     mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
+    },
     methods: {
-      numberFormatter(val){
-        if(val.price !== null && val.price !== '' && val.price !== 'undefined'){
-          let prices = parseFloat(val.price).toFixed(2);
-          return prices;
-        }else{
-          return ;
+      ...mapActions({
+        search: "search"
+      }),
+      numberFormatter(val) {
+        if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
+          return parseFloat(val.price).toFixed(2);
         }
       },
       onSearch() {
         this._onSearch(0, this.page.size);
       },
       onNew() {
-        this.fn.openSlider("创建面辅料", FabricProductForm, {
-          id: null,
-          code: "",
-          name: "",
-          price: 0,
-          colors: [],
-          belongTo: {
-            uid: "",
-            name: ""
-          }
-        });
+        this.fn.openSlider("创建面辅料", FabricProductForm, this.formData);
       },
       onDetails(item) {
-        console.log(item);
+        // console.log(item);
         this.fn.openSlider("面辅料明细", FabricProductDetailsPage, item);
       },
       onPageSizeChanged(val) {
@@ -85,39 +83,18 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          code: this.text,
-          page: page,
-          size: size
-        };
-
-        axios.get("/djbackoffice/product/fabric", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error(error.response.data);
-        });
-      }
-    },
-    watch: {
-      "$store.state.sideSliderState": function (value) {
-        if (!value) {
-          this.onSearch();
-        }
+        const keyword = this.text;
+        this.search({keyword, page, size});
       }
     },
     data() {
       return {
-        text: "",
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
+        text: this.$store.state.FabricProductsModule.keyword,
+        formData: this.$store.state.FabricProductsModule.formData
       };
+    },
+    created() {
+      this.search({keyword: "", page: 0});
     }
   };
 </script>

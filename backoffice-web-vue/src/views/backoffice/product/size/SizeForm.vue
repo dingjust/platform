@@ -48,6 +48,9 @@
           return true;
         });
       },
+      onCancel() {
+        this.fn.closeSlider();
+      },
       async _onSubmit() {
         const results = await this.$http.post("/djbackoffice/product/size", this.slotData);
         if (results["errors"]) {
@@ -59,9 +62,6 @@
         this.refresh();
 
         this.fn.closeSlider(true);
-      },
-      onCancel() {
-        this.fn.closeSlider();
       }
     },
     computed: {
