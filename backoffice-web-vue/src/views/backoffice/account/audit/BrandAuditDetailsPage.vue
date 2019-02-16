@@ -71,14 +71,16 @@
           <el-col :span="6">
             <el-form-item label="价位段（春夏）" prop="priceRange1">
               <el-select v-model="slotData.priceRange1s" class="w-100" multiple>
-                <el-option v-for="item in priceRanges" :key="item.code" :label="item.name" :value="item.code"></el-option>
+                <el-option v-for="item in priceRanges" :key="item.code" :label="item.name"
+                           :value="item.code"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="价位段（秋冬）" prop="priceRange2">
               <el-select v-model="slotData.priceRange2s" class="w-100" multiple>
-                <el-option v-for="item in priceRanges" :key="item.code" :label="item.name" :value="item.code"></el-option>
+                <el-option v-for="item in priceRanges" :key="item.code" :label="item.name"
+                           :value="item.code"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -96,7 +98,8 @@
           <el-col :span="6">
             <el-form-item label="产值规模" prop="scale">
               <el-select v-model="slotData.scaleRange" class="w-100">
-                <el-option v-for="item in scaleRanges" :key="item.code" :label="item.name" :value="item.code"></el-option>
+                <el-option v-for="item in scaleRanges" :key="item.code" :label="item.name"
+                           :value="item.code"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -115,10 +118,10 @@
       <div slot="header" class="clearfix">
         <span>认证信息</span>
       </div>
-      <el-form ref="form" label-position="top"  :disabled="true">
+      <el-form ref="form" label-position="top" :disabled="true">
         <el-row :gutter="10">
           <el-col :span="8">
-            <el-form-item label="注册时间" >
+            <el-form-item label="注册时间">
               <el-date-picker class="w-100" type="month" placeholder="选择日期"
                               v-model="slotData.registrationDate"
                               :value-format="defaultDateValueFormat">
@@ -126,7 +129,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="税号" >
+            <el-form-item label="税号">
               <el-input v-model="slotData.taxNumber"></el-input>
             </el-form-item>
           </el-col>
@@ -138,7 +141,7 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :span="8">
-            <el-form-item label="认证证件" >
+            <el-form-item label="认证证件">
               <img v-model="slotData.certificate"></img>
             </el-form-item>
           </el-col>
@@ -162,68 +165,69 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('AuditBrandsModule');
+
   import CompanyMixin from "mixins/commerce/CompanyMixin";
 
   export default {
     name: "BrandAuditDetailsPage",
     props: ["slotData", "isNewlyCreated"],
     components: {},
-    mixins:[CompanyMixin],
+    mixins: [CompanyMixin],
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onApprove() {
         //调用审核通过接口
         this.$confirm("确认账号审核通过, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(() => {
-          axios.put("/djbackoffice/b2bUnit/approve", {
-            uid: this.slotData.uid
-          }).then(() => {
-            this.$message.success("确认成功");
-
-            this.fn.closeSlider(true);
-          }).catch(error => {
-            this.$message.error("通过失败，原因：" + error.response.data);
-          });
+        }).then(() => this._onApprove());
+      },
+      async _onApprove() {
+        const result = await this.$http.put("/djbackoffice/b2bUnit/approve", {
+          uid: this.slotData.uid
         });
+
+        if (result["errors"]) {
+          this.$message.error("通过失败，原因：" + result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("确认成功");
+        this.refresh();
+        this.fn.closeSlider(true);
       },
       onReject() {
         //调用审核拒绝接口
         this.$prompt("请输认不通过原因", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消"
-        }).then(({value}) => {
-          axios.put("/djbackoffice/b2bUnit/reject", {
-            uid: this.slotData.uid,
-            comment: value
-          }).then(() => {
-            this.$message.success("拒绝成功");
-
-            this.fn.closeSlider(true);
-          }).catch(error => {
-            this.$message.error("拒绝失败");
-          });
+        }).then(({value}) => this._onReject(value));
+      },
+      async _onReject(value) {
+        const result = await this.$http.put("/djbackoffice/b2bUnit/reject", {
+          uid: this.slotData.uid,
+          comment: value
         });
+
+        if (result["errors"]) {
+          this.$message.error("拒绝失败");
+          return;
+        }
+        this.$message.success("拒绝成功");
+        this.refresh();
+        this.fn.closeSlider(true);
       },
-      getStyles() {
-        axios.get("/djbackoffice/product/style/all")
-          .then(response => {
-            this.styles = response.data;
-          }).catch(error => {
-          this.$message.error(error.response.data);
-        })
+      async getStyles() {
+        this.styles = await this.$http.get("/djbackoffice/product/style/all");
       },
-      getCategories() {
-        axios
-          .get("/djbackoffice/product/category/majors")
-          .then(response => {
-            this.adeptAtCategories = response.data;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
+      async getCategories() {
+        this.adeptAtCategories = await this.$http.get("/djbackoffice/product/category/majors");
       }
     },
     data() {
@@ -232,7 +236,7 @@
         adeptAtCategories: [],
       };
     },
-    created(){
+    created() {
       this.getStyles();
       this.getCategories();
     }
