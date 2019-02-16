@@ -226,7 +226,6 @@
       },
       onPageSizeChanged(val) {
         this.reset();
-        this.page.size = val;
         if (this.advancedSearch) {
           this._onAdvancedSearch(0, val);
         } else {
