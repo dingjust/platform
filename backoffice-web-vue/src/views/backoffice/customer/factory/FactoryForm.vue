@@ -42,8 +42,9 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import Bus from "common/js/bus.js";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('FactoriesModule');
 
   import FactoryBaseForm from "./FactoryBaseForm";
   import FactoryAccountForm from "./FactoryAccountForm";
@@ -54,6 +55,9 @@
     components: {FactoryCertificateForm, FactoryAccountForm, FactoryBaseForm},
     props: ["slotData"],
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onSubmit() {
         const accountForm = this.$refs["accountForm"];
         accountForm.validate(valid => {
@@ -67,24 +71,8 @@
               return false;
             }
 
-            let request = axios.post;
-            if (!this.isNewlyCreated) {
-              request = axios.put;
-            }
-            request("/djfactory/factory", accountForm.getValue())
-              .then(() => {
-                Bus.$emit("refreshVal", "");
-                this.$message({
-                  type: "success",
-                  message: "创建成功，请在待审核页面查看"
-                });
-                this.fn.closeSlider();
-                // 刷新主体数据
-              })
-              .catch(error => {
-                this.$message.error(error.response.data);
-              }).finally(() => {
-            });
+            this._onSubmit(accountForm.getValue());
+
             return true;
           });
 
@@ -92,6 +80,20 @@
         });
       },
       onCancel() {
+        this.fn.closeSlider();
+      },
+      async _onSubmit(value) {
+        let request = this.$http.post;
+        if (!this.isNewlyCreated) {
+          request = this.$http.put;
+        }
+        const result = await request("/djfactory/factory", value);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.$message.success("创建成功，请在待审核页面查看");
+        this.refresh();
         this.fn.closeSlider();
       }
     },

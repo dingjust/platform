@@ -3,6 +3,8 @@ import UsersModule from './user/users';
 import UserGroupsModule from './user/user-groups';
 import RolesModule from './user/roles';
 import EmployeesModule from './user/employees';
+import FactoriesModule from './user/factories';
+import BrandsModule from './user/brands';
 import AuditFactoriesModule from './user/audit-factories';
 import AuditBrandsModule from './user/audit-brands';
 import ColorsModule from './product/colors';
@@ -18,6 +20,8 @@ export {
   UserGroupsModule,
   RolesModule,
   EmployeesModule,
+  FactoriesModule,
+  BrandsModule,
   AuditFactoriesModule,
   AuditBrandsModule,
   ColorsModule,

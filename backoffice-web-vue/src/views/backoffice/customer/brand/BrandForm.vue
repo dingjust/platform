@@ -25,8 +25,8 @@
         <span>认证信息</span>
       </div>
       <brand-certificate-form ref="certificateForm"
-      :slot-data="slotData"
-      :is-newly-created="isNewlyCreated">
+                              :slot-data="slotData"
+                              :is-newly-created="isNewlyCreated">
       </brand-certificate-form>
     </el-card>
 
@@ -45,7 +45,9 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('BrandsModule');
 
   import BrandBaseForm from "./BrandBaseForm";
   import BrandAccountForm from "./BrandAccountForm";
@@ -56,6 +58,9 @@
     components: {BrandAccountForm, BrandBaseForm, BrandCertificateForm},
     props: ["slotData"],
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onSubmit() {
         const accountForm = this.$refs["accountForm"];
         accountForm.validate(valid => {
@@ -69,29 +74,8 @@
               return false;
             }
 
-            //const certificateForm = this.$refs["certificateForm"];
+            this._onSubmit(accountForm.getValue());
 
-            let request = axios.post;
-            if (!this.isNewlyCreated) {
-              request = axios.put;
-            }
-
-            request("/djbrand/brand", accountForm.getValue())
-              .then(response => {
-                this.$message.success("创建成功，请在待审核页面查看");
-
-                this.$set(this.slotData,"uid",response.data.uid);
-
-                console.log(this.slotData);
-
-                this.$refs.certificateForm.onSubmit();
-
-                // 刷新主体数据
-                this.fn.closeSlider(true);
-              }).catch(error => {
-                this.$message.error(error.response.data);
-              }
-            );
             return true;
           });
 
@@ -100,6 +84,26 @@
       },
       onCancel() {
         this.fn.closeSlider();
+      },
+      async _onSubmit(value) {
+        let request = this.$http.post;
+        if (!this.isNewlyCreated) {
+          request = this.$http.put;
+        }
+
+        const result = await request("/djbrand/brand", value);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("创建成功，请在待审核页面查看");
+        this.$set(this.slotData, "uid", result.uid);
+        this.$refs.certificateForm.onSubmit();
+
+        // 刷新主体数据
+        this.refresh();
+        this.fn.closeSlider(true);
       }
     },
     computed: {
@@ -107,17 +111,8 @@
         return this.slotData.id === null;
       }
     },
-    watch: {
-      "$store.state.sideSliderState": function (value) {
-        if (!value) {
-          this.onSearch();
-        }
-      }
-    },
     data() {
-      return {
-
-      };
+      return {};
     }
   };
 </script>

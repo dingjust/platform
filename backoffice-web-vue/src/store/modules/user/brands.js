@@ -10,6 +10,30 @@ const state = {
     totalPages: 1, // 总页数
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
+  },
+  formData: {
+    id: null,
+    uid: "",
+    name: "",
+    registrationDate: null,
+    scaleRange: "",
+    address: "",
+    styles: [],
+    brand: "",
+    ageRanges: [],
+    priceRange1s: [],
+    priceRange2s: [],
+    adeptAtCategories: [],
+    contactPhone: "",
+    contactPerson: "",
+    accountUid: "",
+    password: "",
+    confirmPassword: "",
+    email: "",
+    taxNumber: "",
+    bankOfDeposit: "",
+    phone: "",
+    cooperativeBrand: ""
   }
 };
 
@@ -28,7 +52,7 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.get("/djfactory/factory/audit", {
+    const response = await http.get("/djbrand/brand", {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
