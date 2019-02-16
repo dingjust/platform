@@ -44,12 +44,14 @@ let http = {
   /** post 请求
    * @param  {接口地址} url
    * @param  {请求参数} data
+   * @param  {headers参数} params
    */
-  post: function (url, data) {
+  post: function (url, data, params) {
     setAuthorization();
     return new Promise((resolve, reject) => {
-      axios.post(url, data)
-        .then((response) => resolve(response.data))
+      axios.post(url, data, {
+        params: params
+      }).then((response) => resolve(response.data))
         .catch((error) => resolve(error.response.data));
     });
   },

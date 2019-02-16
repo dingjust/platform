@@ -4,6 +4,7 @@ import SizesModule from './product/sizes';
 import StylesModule from './product/styles';
 import CategoriesModule from './product/categories';
 import FabricProductsModule from './product/fabric-products';
+import ApparelProductsModule from './product/apparel-products';
 
 export {
   UsersModule,
@@ -11,5 +12,6 @@ export {
   SizesModule,
   StylesModule,
   CategoriesModule,
-  FabricProductsModule
+  FabricProductsModule,
+  ApparelProductsModule
 }

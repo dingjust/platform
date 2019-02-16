@@ -15,17 +15,17 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <el-form-item label="供应商商品编号">
-                <el-input v-model="query.skuID"></el-input>
+                <el-input v-model="queryFormData.skuID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="商品名称">
-                <el-input v-model="query.name"></el-input>
+                <el-input v-model="queryFormData.name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="商品状态（上下架）">
-                <el-select v-model="query.approvalStatuses" placeholder="请选择"
+                <el-select v-model="queryFormData.approvalStatuses" placeholder="请选择"
                            multiple class="w-100">
                   <el-option
                     v-for="item in approvalStatuses"
@@ -40,7 +40,7 @@
           <el-row :gutter="10">
             <el-col :span="12">
               <el-form-item label="产品分类">
-                <el-select v-model="query.categories" placeholder="请选择" class="w-100"
+                <el-select v-model="queryFormData.categories" placeholder="请选择" class="w-100"
                            filterable reserve-keyword clearable
                            multiple>
                   <el-option-group
@@ -61,7 +61,7 @@
               <el-form-item label="商家">
                 <el-select class="w-100" filterable remote reserve-keyword clearable
                            placeholder="请输入商家名称查询"
-                           v-model="query.belongTos"
+                           v-model="queryFormData.belongTos"
                            :remote-method="onFilterCompanies"
                            multiple>
                   <el-option v-for="item in companies"
@@ -119,32 +119,48 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                      @size-change="onPageSizeChanged"
-                      @current-change="onCurrentPageChanged"
-                      :current-page="page.number + 1"
-                      :page-size="page.size"
-                      :page-count="page.totalPages"
-                      :total="page.totalElements">
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('ApparelProductsModule');
+
   import axios from "axios";
   import autoHeight from 'mixins/autoHeight'
-  import {ProductForm, ProductDetailsPage, ProductReviewForm} from "./";
+  import {ProductForm, ProductDetailsPage} from "./";
 
   export default {
     name: "ProductPage",
     mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      }),
+      // 批量上下架code数组
+      codes: function () {
+        return this.multipleSelection.map((item, number, any) => {
+          return item.code;
+        });
+      }
+    },
     methods: {
-      numberFormatter(val){
-        if(val.price !== null && val.price !== '' && val.price !== 'undefined'){
-          let prices = parseFloat(val.price).toFixed(2);
-          return prices;
-        }else{
-          return ;
+      ...mapActions({
+        search: "search",
+        searchAdvanced: "searchAdvanced"
+      }),
+      numberFormatter(val) {
+        if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
+          return parseFloat(val.price).toFixed(2);
         }
       },
       onSearch() {
@@ -156,38 +172,7 @@
         this._onAdvancedSearch(0, this.page.size)
       },
       onNew() {
-        this.fn.openSlider("创建产品", ProductForm, {
-          id: null,
-          code: "",
-          name: "",
-          price: 0.00,
-          suggestedPrice: 0.00,
-          price1: 0.00,
-          price2: 0.00,
-          price3: 0.00,
-          categories: [],
-          staircasePrices: [],
-          startingAmount: "",
-          skuID: "",
-          year: "",
-          season: "",
-          placeOfOrigin: "",
-          brand: "",
-          style: {
-            id: null,
-            code: "",
-            name: ""
-          },
-          material: "",
-          content: "",
-          belongTo: {
-            uid: "",
-            name: ""
-          },
-          postageFree: true,
-          gramWeight: 0.0,
-          variants: []
-        });
+        this.fn.openSlider("创建产品", ProductForm, this.formData);
       },
       onBatchLaunch() {
         if (this.multipleSelection.length < 1) {
@@ -232,16 +217,6 @@
           this.$message.error(error.response.data);
         });
       },
-      onReview(item) {
-        this.fn.openSlider("评价", ProductReviewForm,
-          {
-            product: item.code,
-            headline: '',
-            comment: '',
-            rating: 0
-          }
-        );
-      },
       onPageSizeChanged(val) {
         this.reset();
 
@@ -284,40 +259,17 @@
         });
       },
       _onSearch(page, size) {
-        const params = {
-          code: this.text,
-          page: page,
-          size: size
-        };
-
-        axios.get("/djbackoffice/product", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        const keyword = this.text;
+        this.search({keyword, page, size});
       },
       _onAdvancedSearch(page, size) {
-        const params = {
-          page: page,
-          size: size
-        };
-
-        axios.post("/djbackoffice/product/advancedSearch", this.query, {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        const query = this.queryFormData;
+        this.searchAdvanced({query, page, size});
       },
       changeShelfStatus(row) {
         let request = axios.put;
-        if(row.approvalStatus === "approved"){
-          request=axios.post;
+        if (row.approvalStatus === "approved") {
+          request = axios.post;
         }
         let message = "上架";
         if (row.approvalStatus === "approved") {
@@ -371,38 +323,11 @@
         );
       }
     },
-    watch: {
-      "$store.state.sideSliderState": function (value) {
-        if (!value) {
-          this.onSearch();
-        }
-      }
-    },
-    computed: {
-      // 批量上下架code数组
-      codes: function () {
-        return this.multipleSelection.map((item, number, any) => {
-          return item.code;
-        });
-      }
-    },
     data() {
       return {
         text: "",
-        query: {
-          skuID: "",
-          name: "",
-          approvalStatuses: [],
-          categories: [],
-          belongTos: []
-        },
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        },
+        formData: this.$store.state.ApparelProductsModule.formData,
+        queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
         advancedSearch: false,
         multipleSelection: [],
         categories: [],
@@ -416,7 +341,8 @@
         }]
       };
     },
-    created(){
+    created() {
+      this.search({keyword: "", page: 0});
       this.getCategories("");
       this.getCompanies("");
     }
