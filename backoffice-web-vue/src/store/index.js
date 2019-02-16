@@ -3,10 +3,10 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import users from './modules/users';
-import colors from './modules/colors';
-import sizes from './modules/sizes';
-import styles from './modules/styles';
+import users from './modules/user/users';
+import colors from './modules/product/colors';
+import sizes from './modules/product/sizes';
+import styles from './modules/product/styles';
 
 // 状态管理
 const state = {

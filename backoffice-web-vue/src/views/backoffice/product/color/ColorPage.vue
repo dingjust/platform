@@ -55,7 +55,8 @@
 </template>
 
 <script>
-  import {mapGetters, mapActions} from 'vuex';
+  import {createNamespacedHelpers} from 'vuex';
+  const { mapGetters, mapActions } = createNamespacedHelpers('ColorsModule');
 
   import autoHeight from 'mixins/autoHeight'
   import ColorForm from "./ColorForm";
@@ -66,7 +67,7 @@
     mixins: [autoHeight],
     methods: {
       ...mapActions({
-        search: "ColorsModule/search"
+        search: "search"
       }),
       onSearch() {
         this._onSearch(0);
@@ -103,12 +104,12 @@
     },
     computed: {
       ...mapGetters({
-        page: "ColorsModule/page"
+        page: "page"
       })
     },
     data() {
       return {
-        text: ''
+        text: this.$store.state.ColorsModule.keyword,
       }
     }
   }

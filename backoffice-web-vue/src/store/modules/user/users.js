@@ -1,6 +1,6 @@
 import axios from "axios";
-import http from "../../common/js/http";
-import router from "../../router";
+import http from "../../../common/js/http";
+import router from "../../../router";
 
 const CLIENT_ID = "asm";
 const CLIENT_SECRET = "password";

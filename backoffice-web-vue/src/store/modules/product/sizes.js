@@ -1,4 +1,4 @@
-import http from "../../common/js/http";
+import http from "../../../common/js/http";
 
 const state = {
   keyword: "",
@@ -28,13 +28,13 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.get("/djbackoffice/product/color", {
+    const response = await http.get("/djbackoffice/product/size", {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
+    console.log(JSON.stringify(response));
     if (!response["errors"]) {
       commit("page", response);
     }
