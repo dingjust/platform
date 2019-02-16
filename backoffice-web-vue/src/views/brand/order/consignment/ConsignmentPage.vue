@@ -28,6 +28,21 @@
                 <el-input v-model="query.skuID"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="12">
+              <el-form-item label="商家">
+                <el-select class="w-100" filterable remote reserve-keyword clearable
+                           placeholder="请输入商家名称查询"
+                           v-model="query.belongTos"
+                           :remote-method="onFilterBrands"
+                           multiple>
+                  <el-option v-for="item in brands"
+                             :key="item.uid"
+                             :label="item.name"
+                             :value="item.uid">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :span="12">
@@ -230,6 +245,25 @@
           });
         }
       },
+      onFilterBrands(query) {
+        this.companies = [];
+        if (query && query !== "") {
+          setTimeout(() => {
+            this.getBrands(query);
+          }, 200);
+        }
+      },
+      getBrands(query) {
+        axios.get("/djbrand/brand", {
+          params: {
+            text: query.trim()
+          }
+        }).then(response => {
+          this.brands = response.data.content;
+        }).catch(error => {
+          this.$message.error(error.response.data);
+        });
+      },
       onAdvancedSearch() {
         this.advancedSearch = true;
         this._onAdvancedSearch(0, this.page.size)
@@ -326,7 +360,9 @@
           expectedDeliveryDateTo: null,
           createdDateFrom: null,
           createdDateTo: null,
+          belongTos:[],
         },
+        brands:[],
         companies: [],
         advancedSearch: false,
         statuses: [
