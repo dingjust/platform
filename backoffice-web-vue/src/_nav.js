@@ -182,26 +182,6 @@ export default {
       icon: "icon-puzzle",
       children: [
         {
-          name: "销售订单报表",
-          url: "/backoffice/report/sales-orders",
-          icon: "iconNone",
-        },
-        {
-          name: "品牌产品报表",
-          url: "/backoffice/report/brand-products",
-          icon: "iconNone",
-        },
-        {
-          name: "品牌会员报表",
-          url: "/backoffice/report/brand-members",
-          icon: "iconNone",
-        },
-        {
-          name: "品牌关注报表",
-          url: "/backoffice/report/brand-followers",
-          icon: "iconNone",
-        },
-        {
           name: "生产进度报表",
           url: "/backoffice/report/production-progress",
           icon: "iconNone",

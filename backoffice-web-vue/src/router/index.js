@@ -207,26 +207,6 @@ const router = new Router({
           },
           children: [
             {
-              path: "sales-orders",
-              name: "销售订单报表",
-              component: () => import(/* webpackChunkName: "tenant-reports" */ 'backoffice/report/salesorders/SalesOrdersPage')
-            },
-            {
-              path: "brand-products",
-              name: "品牌产品报表",
-              component: () => import(/* webpackChunkName: "tenant-reports" */ 'backoffice/report/brandproducts/BrandProductsPage')
-            },
-            {
-              path: "brand-members",
-              name: "品牌会员报表",
-              component: () => import(/* webpackChunkName: "tenant-reports" */ 'backoffice/report/brandmember/BrandMembersPage')
-            },
-            {
-              path: "brand-followers",
-              name: "品牌关注报表",
-              component: () => import(/* webpackChunkName: "tenant-reports" */ 'backoffice/report/brandfollower/BrandFollowersPage')
-            },
-            {
               path: "production-progress",
               name: "生产进度报表",
               component: () => import(/* webpackChunkName: "tenant-reports" */ 'backoffice/report/productprogress/ProductionProgressPage')
