@@ -23,7 +23,9 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('ColorsModule');
 
   import ColorBaseForm from "./ColorBaseForm";
 
@@ -33,7 +35,7 @@
     props: ["slotData"],
     methods: {
       ...mapActions({
-        refresh: "ColorsModule/refresh"
+        refresh: "refresh"
       }),
       onSubmit() {
         this.$refs["baseForm"].validate(valid => {
@@ -41,7 +43,7 @@
             return false;
           }
 
-          this._create(this.slotData);
+          this._onSubmit(this.slotData);
 
           return true;
         });
@@ -49,8 +51,8 @@
       onCancel() {
         this.fn.closeSlider();
       },
-      async _create(item) {
-        const response = await this.$http.post("/djbackoffice/product/color", item);
+      async _onSubmit() {
+        const response = await this.$http.post("/djbackoffice/product/color", this.slotData);
         if (response["errors"]) {
           this.$message.error(response["errors"][0].message);
           return;

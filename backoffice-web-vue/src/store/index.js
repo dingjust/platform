@@ -3,10 +3,13 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import users from './modules/user/users';
-import colors from './modules/product/colors';
-import sizes from './modules/product/sizes';
-import styles from './modules/product/styles';
+import {
+  UsersModule,
+  ColorsModule,
+  SizesModule,
+  StylesModule,
+  CategoriesModule
+} from './modules';
 
 // 状态管理
 const state = {
@@ -33,13 +36,14 @@ const actions = {
 
 export default new Vuex.Store({
   modules: {
-    UsersModule: users,
-    ColorsModule: colors,
-    SizesModule: sizes,
-    StylesModule: styles,
+    UsersModule: UsersModule,
+    ColorsModule: ColorsModule,
+    SizesModule: SizesModule,
+    StylesModule: StylesModule,
+    CategoriesModule: CategoriesModule
   },
   state,
   getters,
   mutations,
   actions
-})
+});

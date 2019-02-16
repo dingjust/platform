@@ -23,7 +23,10 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('SizesModule');
+
   import SizeBaseForm from "./SizeBaseForm";
 
   export default {
@@ -31,22 +34,31 @@
     components: {SizeBaseForm},
     props: ["slotData"],
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onSubmit() {
         this.$refs["baseForm"].validate(valid => {
           if (!valid) {
             return false;
           }
 
-          axios.post("/djbackoffice/product/size", this.slotData)
-            .then(() => {
-              this.$message.success("保存成功");
-              this.fn.closeSlider(true);
-            }).catch(error => {
-              this.$message.error(error.response.data);
-            }
-          );
+          this._onSubmit();
+
           return true;
         });
+      },
+      async _onSubmit() {
+        const results = await this.$http.post("/djbackoffice/product/size", this.slotData);
+        if (results["errors"]) {
+          this.$message.error(results["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("保存成功");
+        this.refresh();
+
+        this.fn.closeSlider(true);
       },
       onCancel() {
         this.fn.closeSlider();

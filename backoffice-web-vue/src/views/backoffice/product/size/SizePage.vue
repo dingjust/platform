@@ -54,8 +54,8 @@
 
   const {mapGetters, mapActions} = createNamespacedHelpers('SizesModule');
 
-  import axios from "axios";
   import autoHeight from 'mixins/autoHeight'
+
   import SizeForm from "./SizeForm";
   import SizeDetailsPage from "./SizeDetailsPage";
 
