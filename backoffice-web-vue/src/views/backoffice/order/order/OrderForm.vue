@@ -29,7 +29,10 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('SalesOrdersModule');
+
   import OrderBaseForm from './OrderBaseForm';
   import OrderEntriesForm from "./OrderEntriesForm";
   import OrderDeliveryAddressForm from "./OrderDeliveryAddressForm";
@@ -40,6 +43,9 @@
     components: {OrderBaseForm, OrderEntriesForm, OrderDeliveryAddressForm, OrderDetailsPage},
     props: ['slotData'],
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onCancel() {
         this.fn.closeSlider();
       },
@@ -96,20 +102,7 @@
                   return false;
                 }
 
-                let formData = this.slotData;
-
-                axios.post('/djbackoffice/salesOrder', formData)
-                  .then(response => {
-                    console.log(JSON.stringify(response.data));
-
-                    this.$message.success("订单创建成功，订单编号： " + response.data);
-
-                    this.fn.closeSlider(true);
-                  }).catch(error => {
-                    console.log(JSON.stringify(error));
-                    this.$message.error(error.response.data);
-                  }
-                );
+                this._onSubmit();
 
                 return true;
               }
@@ -121,6 +114,19 @@
           return false;
         });
       }
+    },
+    async _onSubmit() {
+      let formData = this.slotData;
+
+      const result = await this.$http.post('/djbackoffice/salesOrder', formData);
+      if (result["errors"]) {
+        this.$message.error(result["errors"][0].message);
+        return;
+      }
+
+      this.$message.success("订单创建成功，订单编号： " + result);
+      this.refresh();
+      this.fn.closeSlider(true);
     },
     computed: {
       isNewlyCreated: function () {
