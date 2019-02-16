@@ -6,6 +6,7 @@ Vue.use(Vuex);
 import {
   EnumsModule,
   UsersModule,
+  UserGroupsModule,
   EmployeesModule,
   ColorsModule,
   SizesModule,
@@ -42,6 +43,7 @@ export default new Vuex.Store({
   modules: {
     EnumsModule,
     UsersModule,
+    UserGroupsModule,
     EmployeesModule,
     ColorsModule,
     SizesModule,
