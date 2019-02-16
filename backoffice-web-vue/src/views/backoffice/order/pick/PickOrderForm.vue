@@ -49,7 +49,10 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('PickOrdersModule');
+
   import PickOrderBaseForm from './PickOrderBaseForm';
   import PickOrderEntriesForm from "./PickOrderEntriesForm";
   import PickOrderDetailsPage from "./PickOrderDetailsPage";
@@ -59,6 +62,9 @@
     components: {PickOrderBaseForm, PickOrderEntriesForm, PickOrderDetailsPage},
     props: ['slotData'],
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onCancel() {
         this.fn.closeSlider();
       },
@@ -81,15 +87,18 @@
         if (!this.$refs['entriesForm'].validate()) {
           return;
         }
-        axios.post('/djbackoffice/pickOrder', this.slotData)
-          .then(response => {
-            this.$message.success("发料单创建成功，编号： " + response.data);
 
-            this.fn.closeSlider(true);
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        this._onComplete();
+      },
+      _onComplete() {
+        const result = this.$http.post('/djbackoffice/pickOrder', this.slotData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("发料单创建成功，编号： " + result);
+        this.fn.closeSlider(true);
       }
     },
     computed: {
