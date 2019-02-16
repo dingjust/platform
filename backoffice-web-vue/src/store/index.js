@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 import {
+  EnumsModule,
   UsersModule,
   ColorsModule,
   SizesModule,
@@ -38,6 +39,7 @@ const actions = {
 
 export default new Vuex.Store({
   modules: {
+    EnumsModule,
     UsersModule,
     ColorsModule,
     SizesModule,
