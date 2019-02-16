@@ -162,17 +162,6 @@ const ENUMS = {
       name: "已完成"
     }
   },
-  // 论坛帖子状态
-  ForumPostStatus: {
-    SAVED: {
-      code: "SAVED",
-      name: "已保存"
-    },
-    PUBLISHED: {
-      code: "PUBLISHED",
-      name: "已发布"
-    }
-  },
   //是否延期状态
   DelayStatus:{
     true:{

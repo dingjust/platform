@@ -146,22 +146,6 @@ export default {
         }
       ]
     }, {
-      name: "论坛管理",
-      url: "/backoffice/account",
-      icon: "icon-puzzle",
-      children: [
-        {
-          name: "分类",
-          url: "/backoffice/forum/category",
-          icon: "iconNone"
-        },
-        {
-          name: "帖子",
-          url: "/backoffice/forum/post",
-          icon: "iconNone"
-        }
-      ]
-    }, {
       name: "系统配置管理",
       url: "/backoffice/system/carousel",
       icon: "icon-puzzle",
@@ -192,7 +176,7 @@ export default {
           icon: "iconNone"
         },
       ]
-    },{
+    }, {
       name: "报表管理",
       url: "/backoffice/report",
       icon: "icon-puzzle",
