@@ -30,65 +30,53 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper" @size-change="onPageSizeChanged"
-                      @current-change="onCurrentPageChanged" :current-page="page.number + 1" :page-size="page.size"
-                      :page-count="page.totalPages" :total="page.totalElements">
+      <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged" :current-page="page.number + 1" :page-size="page.size"
+                     :page-count="page.totalPages" :total="page.totalElements">
       </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
-  import axios from "axios";
-  import {Bus} from "common";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandsModule');
+
+  import autoHeight from 'mixins/autoHeight';
+
   import ApprovalStatus from "components/custom/ApprovalStatus.vue";
   import {BrandForm, BrandDetailsPage} from "./";
-  import autoHeight from 'mixins/autoHeight'
 
   export default {
     name: "BrandPage",
     mixins: [autoHeight],
     components: {BrandForm, ApprovalStatus},
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
+    },
     methods: {
+      ...mapActions({
+        search: "search"
+      }),
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("添加品牌商", BrandForm, {
-          id: null,
-          uid: "",
-          name: "",
-          registrationDate: null,
-          scaleRange: "",
-          address: "",
-          styles: [],
-          brand: "",
-          ageRanges: [],
-          priceRange1s: [],
-          priceRange2s: [],
-          adeptAtCategories: [],
-          contactPhone: "",
-          contactPerson: "",
-          accountUid: "",
-          password: "",
-          confirmPassword: "",
-          email: "",
-          taxNumber: "",
-          bankOfDeposit: "",
-          phone: "",
-          cooperativeBrand: ""
-        });
+        this.fn.openSlider("添加品牌商", BrandForm, this.formData);
       },
       onDetails(item) {
         this.fn.openSlider("品牌商明细", BrandDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -96,74 +84,37 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        let params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-        axios
-          .get("/djbrand/brand", {
-            params: params
-          })
-          .then(response => {
-            this.page = response.data;
-          })
-          .catch(error => {
-            this.$message.error("获取数据失败");
-          });
+        const keyword = this.text;
+        this.search({keyword, page, size});
       },
-      changeActiveStatus(row) {
-        axios
-          .delete("/djbrand/brand/" + row.uid)
-          .then(response => {
-            if (row.active) {
-              this.$message({
-                type: "success",
-                message: "激活成功"
-              });
-            } else {
-              this.$message({
-                type: "success",
-                message: "禁用成功"
-              });
-            }
-          })
-          .catch(error => {
-            row.active = !row.active;
-            if (row.active) {
-              this.$message({
-                type: "error",
-                message: "激活失败"
-              });
-            } else {
-              this.$message({
-                type: "error",
-                message: "禁用失败"
-              });
-            }
-          });
+      async changeActiveStatus(row) {
+        const result = await this.$http.delete("/djbrand/brand/" + row.uid);
+        if (result["errors"]) {
+          row.active = !row.active;
+          if (row.active) {
+            this.$message.error("激活失败");
+          } else {
+            this.$message.error("禁用失败");
+          }
+
+          return;
+        }
+
+        if (row.active) {
+          this.$message.success("激活成功");
+        } else {
+          this.$message.success("禁用成功");
+        }
       }
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        this._onSearch(0, this.page.size);
-        Bus.$on("refreshVal", data => {
-          this._onSearch(0, this.page.size);
-        });
-      });
     },
     data() {
       return {
-        uid: "",
-        text: "",
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
+        text: this.$store.state.BrandsModule.keyword,
+        formData: this.$store.state.BrandsModule.formData
       };
+    },
+    created() {
+      this.onSearch();
     }
   };
 </script>

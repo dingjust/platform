@@ -64,13 +64,12 @@
 <script>
   import axios from "axios";
   import BrandBaseForm from "./BrandBaseForm";
-  import MembersRequestPage from "./MembersRequestPage";
   import BrandCertificateForm from "./BrandCertificateForm";
 
   export default {
     name: "BrandDetailsPage",
     props: ["slotData","isNewlyCreated"],
-    components: {BrandCertificateForm, BrandBaseForm, MembersRequestPage},
+    components: {BrandCertificateForm, BrandBaseForm},
     methods: {
       onUpdateBrand() {
         this.brandFormDialogVisible = true;
