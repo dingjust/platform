@@ -56,15 +56,22 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  const { mapGetters, mapActions } = createNamespacedHelpers('ColorsModule');
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('ColorsModule');
 
   import autoHeight from 'mixins/autoHeight'
+
   import ColorForm from "./ColorForm";
   import ColorDetailsPage from "./ColorDetailsPage";
 
   export default {
     name: "ColorPage",
     mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
+    },
     methods: {
       ...mapActions({
         search: "search"
@@ -73,14 +80,7 @@
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider('新增', ColorForm, {
-          id: null,
-          code: "",
-          name: "",
-          description: "",
-          sequence: 0,
-          active: true
-        });
+        this.fn.openSlider('新增', ColorForm, this.formData);
       },
       onDetails(item) {
         this.fn.openSlider('明细', ColorDetailsPage, item);
@@ -100,17 +100,25 @@
       _onSearch(page, size) {
         const keyword = this.text;
         this.search({keyword, page, size});
+      },
+      async onUpdate(item) {
+        const result = await this.$http.put("/djbackoffice/product/color", item);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("保存成功");
       }
-    },
-    computed: {
-      ...mapGetters({
-        page: "page"
-      })
     },
     data() {
       return {
         text: this.$store.state.ColorsModule.keyword,
+        formData: this.$store.state.ColorsModule.formData
       }
+    },
+    created() {
+      this.search({keyword: "", page: 0});
     }
   }
 </script>

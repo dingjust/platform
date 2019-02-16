@@ -10,6 +10,14 @@ const state = {
     totalPages: 1, // 总页数
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
+  },
+  formData: {
+    id: null,
+    code: "",
+    name: "",
+    description: "",
+    sequence: 0,
+    active: true
   }
 };
 
