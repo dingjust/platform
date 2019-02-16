@@ -28,7 +28,7 @@
                 <el-select v-model="queryFormData.statuses" placeholder="请选择"
                            multiple class="w-100">
                   <el-option
-                    v-for="item in statuses"
+                    v-for="item in statusOptions"
                     :key="item.value"
                     :label="item.text"
                     :value="item.value">
@@ -172,7 +172,8 @@
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: "search",
+        searchAdvanced: "searchAdvanced"
       }),
       handleFilterChange(val) {
         this.statuses = val.status;
