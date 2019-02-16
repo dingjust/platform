@@ -18,7 +18,8 @@ import {
   StylesModule,
   CategoriesModule,
   FabricProductsModule,
-  ApparelProductsModule
+  ApparelProductsModule,
+  RequirementOrdersModule
 } from './modules';
 
 // 状态管理
@@ -60,7 +61,8 @@ export default new Vuex.Store({
     StylesModule,
     CategoriesModule,
     FabricProductsModule,
-    ApparelProductsModule
+    ApparelProductsModule,
+    RequirementOrdersModule
   },
   state,
   getters,

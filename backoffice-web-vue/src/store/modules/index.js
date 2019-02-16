@@ -13,6 +13,7 @@ import StylesModule from './product/styles';
 import CategoriesModule from './product/categories';
 import FabricProductsModule from './product/fabric-products';
 import ApparelProductsModule from './product/apparel-products';
+import RequirementOrdersModule from './order/requirement-orders';
 
 export {
   EnumsModule,
@@ -29,5 +30,6 @@ export {
   StylesModule,
   CategoriesModule,
   FabricProductsModule,
-  ApparelProductsModule
+  ApparelProductsModule,
+  RequirementOrdersModule
 }

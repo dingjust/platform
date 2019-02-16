@@ -78,7 +78,10 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('RequirementOrdersModule');
+
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
   import RequirementOrderMediaUploadForm from "./RequirementOrderMediaUploadForm";
   import RequirementOrderDeliveryAddressForm from './RequirementOrderDeliveryAddressForm';
@@ -98,6 +101,9 @@
     },
     props: ['slotData'],
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onSubmit() {
         this.$refs['deliveryAddressForm'].validate((valid) => {
             if (!valid) {
@@ -119,20 +125,7 @@
                   return false;
                 }
 
-                let formData = this.slotData;
-                axios.post('/djbackoffice/requirementOrder/new', formData)
-                  .then(response => {
-                    this.$message.success("需求订单创建成功，订单编号： " + response.data);
-
-                    this.$set(this.slotData, 'code', response.data);
-
-                    this.active = 1;
-
-                    this.$refs['detailsPage'].refresh();
-                  }).catch(error => {
-                    this.$message.error(error.response.data);
-                  }
-                );
+                this._onSubmit();
 
                 return true;
               }
@@ -141,6 +134,20 @@
             return true;
           }
         );
+      },
+      async _onSubmit() {
+        let formData = this.slotData;
+        const result = await this.$http.post('/djbackoffice/requirementOrder/new', formData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("需求订单创建成功，订单编号： " + result);
+        this.$set(this.slotData, 'code', result);
+        this.active = 1;
+        // this.refresh();
+        this.$refs['detailsPage'].refresh();
       },
       onMediaUpload() {
         this.$refs['mediaUploadForm'].onSubmit();
