@@ -1,6 +1,7 @@
 import EnumsModule from './shared/enums';
 import UsersModule from './user/users';
 import UserGroupsModule from './user/user-groups';
+import RolesModule from './user/roles';
 import EmployeesModule from './user/employees';
 import ColorsModule from './product/colors';
 import SizesModule from './product/sizes';
@@ -13,6 +14,7 @@ export {
   EnumsModule,
   UsersModule,
   UserGroupsModule,
+  RolesModule,
   EmployeesModule,
   ColorsModule,
   SizesModule,
