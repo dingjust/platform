@@ -125,7 +125,6 @@
   import BrandCardLineChart from './dashboard/BrandCardLineChart';
   import FactoryCardLineChart from './dashboard/FactoryCardLineChart';
   import TrafficStatisticsChart from './dashboard/TrafficStatisticsChart';
-  import axios from 'axios';
 
   export default {
     name: 'BackofficeDashboard',

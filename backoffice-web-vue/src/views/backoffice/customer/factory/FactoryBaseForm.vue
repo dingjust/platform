@@ -51,7 +51,8 @@
       <el-col :span="6">
         <el-form-item label="月均产能" prop="monthlyCapacityRange">
           <el-select v-model="slotData.monthlyCapacityRange" class="w-100">
-            <el-option v-for="item in monthlyCapacityRanges" :key="item.code" :label="item.name" :value="item.code"></el-option>
+            <el-option v-for="item in monthlyCapacityRanges" :key="item.code" :label="item.name"
+                       :value="item.code"></el-option>
           </el-select>
         </el-form-item>
       </el-col>
@@ -65,7 +66,8 @@
       <el-col :span="6">
         <el-form-item label="合作方式" prop="cooperationModes">
           <el-select v-model="slotData.cooperationModes" class="w-100" multiple>
-            <el-option v-for="item in cooperationModes" :key="item.code" :label="item.name" :value="item.code"></el-option>
+            <el-option v-for="item in cooperationModes" :key="item.code" :label="item.name"
+                       :value="item.code"></el-option>
           </el-select>
         </el-form-item>
       </el-col>
@@ -91,7 +93,6 @@
 
 <script>
   import {CompanyMixin} from '@/mixins';
-  import axios from 'axios';
 
   export default {
     name: 'FactoryBaseForm',
@@ -121,15 +122,14 @@
 
         return baseData;
       },
-      getCategories() {
-        axios
-          .get('/djbackoffice/product/category/majors')
-          .then(response => {
-            this.categories = response.data;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
+      async getCategories() {
+        const result = await this.$http.get('/djbackoffice/product/category/majors');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.categories = result;
       }
     },
     computed: {},
@@ -141,8 +141,12 @@
         rules: {
           name: [{required: true, message: '必填', trigger: 'blur'}],
           address: [{required: true, message: '必填', trigger: 'blur'}],
-          email:[
-            {message: '邮箱格式不正确', trigger: 'blur', pattern: /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/}
+          email: [
+            {
+              message: '邮箱格式不正确',
+              trigger: 'blur',
+              pattern: /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
+            }
           ],
           contactPhone: [
             {required: false, message: '手机号码不正确', trigger: 'blur', pattern: 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/}

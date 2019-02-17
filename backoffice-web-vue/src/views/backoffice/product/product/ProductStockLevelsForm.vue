@@ -12,8 +12,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'ProductStockLevelsForm',
     props: ['slotData', 'readOnly', 'isNewlyCreated'],
@@ -23,17 +21,15 @@
           this.doRefresh();
         }
       },
-      doRefresh() {
-        axios.get('/djbackoffice/product/inventories/' + this.slotData.code)
-          .then(response => {
-            this.stockLevels = response.data;
-          }).catch(error => {
-          console.log(JSON.stringify(error));
-          this.$message.error(error.response.data);
-        });
+      async doRefresh() {
+        const result = await this.$http.get('/djbackoffice/product/inventories/' + this.slotData.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.stockLevels = result;
       }
     },
-    computed: {},
     data() {
       return {
         stockLevels: []

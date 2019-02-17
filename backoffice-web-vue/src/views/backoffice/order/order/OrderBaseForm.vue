@@ -31,7 +31,6 @@
 
 <script>
   import {OrderMixin} from '@/mixins';
-  import axios from 'axios';
 
   export default {
     name: 'OrderBaseForm',
@@ -49,20 +48,19 @@
           }, 200);
         }
       },
-      getCompanies(query) {
-        axios.get('/djbrand/brand', {
-          params: {
-            text: query.trim()
-          }
-        }).then(response => {
-          this.companies = response.data.content;
-          console.log(this.companies);
-        }).catch(error => {
-          this.$message.error(error.response.data);
+      async getCompanies(query) {
+        const result = await this.$http.get('/djbrand/brand', {
+          text: query.trim()
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.companies = result.content;
       }
     },
-    computed: {},
     data() {
       return {
         companies: []

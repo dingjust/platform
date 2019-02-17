@@ -31,28 +31,22 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'ProductReviewForm',
     components: {},
     props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
-      onSubmit() {
-        console.log(this.slotData.product);
+      async onSubmit() {
         let formData = Object.assign({}, this.slotData);
-        console.log(formData);
-        axios.post('/djbackoffice/product/reviews', formData)
-          .then(response => {
-            this.$message.success('创建成功，产品编码：');
+        const result = await this.$http.post('/djbackoffice/product/reviews', formData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        this.$message.success('创建成功');
       }
     },
-    computed: {},
     data() {
       return {};
     },

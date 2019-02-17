@@ -59,11 +59,12 @@ let http = {
    * @param  {接口地址} url
    * @param  {请求参数} data
    */
-  put: function (url, data) {
+  put: function (url, data, params) {
     setAuthorization();
     return new Promise((resolve, reject) => {
-      axios.put(url, data)
-        .then((response) => resolve(response.data))
+      axios.put(url, data, {
+        params: params
+      }).then((response) => resolve(response.data))
         .catch((error) => resolve(error.response.data));
     });
   },

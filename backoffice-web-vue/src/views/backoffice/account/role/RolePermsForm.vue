@@ -22,8 +22,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'RolePermsForm',
     props: ['slotData', 'isNewlyCreated', 'readOnly'],
@@ -37,14 +35,13 @@
       }
     },
     methods: {
-      onSearch() {
-        axios.get('/djbackoffice/role/perms')
-          .then(response => {
-            this.results = response.data;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+      async onSearch() {
+        const result = await this.$http.get('/djbackoffice/role/perms');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.results = result;
       },
       getValue() {
         return this.$refs['tree'].getCheckedKeys();
@@ -58,9 +55,11 @@
           label: 'name'
         }
       };
-    },
+    }
+    ,
     created() {
       this.onSearch();
     }
-  };
+  }
+  ;
 </script>

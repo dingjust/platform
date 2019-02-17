@@ -36,7 +36,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import PickOrderBaseForm from './PickOrderBaseForm';
   import PickOrderEntriesForm from './PickOrderEntriesForm';
   import PickOrderStatusBar from './PickOrderStatusBar';
@@ -57,20 +56,20 @@
         }
         let formData = this.slotData;
         formData.entries = this.entriesData.entries;
-        console.log(formData);
-        axios.put('/djbackoffice/pickOrder', formData)
-          .then(response => {
 
-            this.$message.success('物料单行修改成功!');
+        this._onSubmitBaseForm(formData);
+      },
+      async _onSubmitBaseForm(formData) {
+        const result = await this.$http.put('/djbackoffice/pickOrder', formData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.fn.closeSlider(true);
-          }).catch(error => {
-            this.$message.success('物料单行修改失败!');
-          }
-        );
+        this.$message.success('物料单行修改成功!');
+        this.fn.closeSlider(true);
       }
     },
-    computed: {},
     data() {
       return {
         entriesFormDialogVisible: false,

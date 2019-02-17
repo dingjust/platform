@@ -25,24 +25,25 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.delete('/djbrand/product/media/' + item.id, {
-            params: {
-              code: this.slotData.code
-            }
-          }).then(() => {
-            this.refresh();
-            this.$message.success('图片删除成功');
-          }).catch(error => {
-            this.$message.error('图片删除失败');
-          });
+        }).then(() => this._delete(item));
+      },
+      async _delete(item) {
+        const result = await this.$http.delete('/djbrand/product/media/' + item.id, {
+          code: this.slotData.code
         });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.refresh();
+        this.$message.success('图片删除成功');
       },
       isPicture(group) {
         return !(group.name === 'contracts');
       },
       getGroupName(group) {
-        var result = '';
+        let result = '';
         switch (group) {
           case 'contracts':
             result = '合同';

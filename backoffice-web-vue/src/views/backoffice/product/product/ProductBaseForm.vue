@@ -174,7 +174,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import ProductMediaEntryUploadForm from './ProductMediaEntryUploadForm';
   import ProductPricesEntriesForm from './ProductPricesEntriesForm';
 
@@ -213,14 +212,14 @@
           }, 200);
         }
       },
-      getCategories(query) {
-        axios.get('/djbackoffice/product/category/cascaded')
-          .then(response => {
-            this.categories = response.data;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+      async getCategories(query) {
+        const result = await this.$http.get('/djbackoffice/product/category/cascaded');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.categories = result;
       },
       onFilterCompanies(query) {
         this.companies = [];
@@ -230,36 +229,36 @@
           }, 200);
         }
       },
-      getCompanies(query) {
-        axios.get('/djbrand/brand', {
-          params: {
-            text: query.trim()
-          }
-        }).then(response => {
-          this.companies = response.data.content;
-        }).catch(error => {
-          this.$message.error(error.response.data);
+      async getCompanies(query) {
+        const result = await this.$http.get('/djbrand/brand', {
+          text: query.trim()
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.companies = result.content;
       },
-      getStyles() {
-        axios.get('/djbackoffice/product/style/all')
-          .then(response => {
-            this.styles = response.data;
-          }).catch(error => {
-          this.$message.error(error.response.data);
-        })
+      async getStyles() {
+        const result = await this.$http.get('/djbackoffice/product/style/all');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.styles = result;
       },
       onClickRadio(val) {
         alert(val);
       }
     },
-    computed: {},
     data() {
       return {
         loading: false,
         rules: {
-          name: [{required: true, message: '必填', trigger: 'blur'}
-          ],
+          name: [{required: true, message: '必填', trigger: 'blur'}],
           skuID: [{required: true, message: '必填', trigger: 'blur'}],
           categories: [{required: true, message: '必填', trigger: 'blur'}],
           material: [{required: true, message: '必填', trigger: 'blur'}],

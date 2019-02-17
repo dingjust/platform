@@ -115,8 +115,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   function removeRow(array, row) {
     const length = array.length;
     for (let i = 0; i < length; i++) {
@@ -188,31 +186,28 @@
       onRemoveRow(row) {
         removeRow(this.slotData.entries, row);
       },
-      getUnits() {
-        axios.get('/djbackoffice/product/unit')
-          .then(response => {
-            this.units = response.data;
-          }).catch(error => {
-            this.$message.error(error.response.statusText);
-          }
-        );
+      async getUnits() {
+        const result = await this.$http.get('/djbackoffice/product/unit');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.units = result;
       },
-      onFilterProducts(query) {
+      async onFilterProducts(query) {
         this.products = [];
         if (query !== '') {
-          axios.get('/djbackoffice/product/fabric', {
-            params: {
-              code: query
-            }
-          }).then(response => {
-            this.products = response.data.content;
-
-          }).catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result = await this.$http.get('/djbackoffice/product/fabric', {
+            code: query
           });
+
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.products = result.content;
         }
       },
       _validateRows() {

@@ -41,8 +41,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'RequirementOrderMediaUploadForm',
     props: ['slotData', 'orderData', 'isNewlyCreated'],
@@ -75,16 +73,17 @@
       onUploading(event, file, files) {
         this.$message('正在上传，请稍等');
       },
-      refresh() {
-        axios.get('/djbackoffice/requirementOrder/contracts', {
-          params: {
-            code: this.slotData.code
-          }
-        }).then(response => {
-          this.$set(this.orderData, 'contracts', response.data);
-        }).catch(error => {
-          this.$message.error('更新需求信息失败，原因：' + error.response.data);
+      async refresh() {
+        const result = await this.$http.get('/djbackoffice/requirementOrder/contracts', {
+          code: this.slotData.code
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$set(this.orderData, 'contracts', result);
       }
     },
     computed: {

@@ -31,8 +31,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   import OrderDetailsPage from '../order/OrderDetailsPage';
 
   export default {
@@ -43,21 +41,18 @@
       validate(callback) {
         this.$refs['form'].validate(callback);
       },
-      onFilter(query) {
+      async onFilter(query) {
         this.orders = [];
         if (query !== '') {
-          axios.get('/djbackoffice/order', {
-            params: {
-              code: query
-            }
-          }).then(response => {
-            this.orders = response.data.content;
-          }).catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result = await this.$http.get('/djbackoffice/order', {
+            code: query
           });
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.orders = result.content;
         }
       },
       onOrderSelected(current) {

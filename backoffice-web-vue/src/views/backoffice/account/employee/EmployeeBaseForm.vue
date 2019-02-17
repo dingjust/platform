@@ -42,11 +42,10 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'EmployeeBaseForm',
     props: ['slotData', 'isNewlyCreated', 'readOnly'],
+    computed: {},
     methods: {
       validate(callback) {
         this.$refs['form'].validate(callback);
@@ -54,22 +53,19 @@
       getValue() {
         return this.slotData;
       },
-      getRoles() {
-        axios
-          .get('/djbackoffice/role?text=')
-          .then(response => {
-            console.log(response.data.content);
-            this.roles = response.data.content;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
+      async getRoles() {
+        const results = await this.$http.get('/djbackoffice/role?text=');
+        if (results["errors"]) {
+          this.$message.error(results["errors"][0].message);
+          return;
+        }
+
+        this.roles = results.content;
       }
     },
     created() {
       this.getRoles();
     },
-    computed: {},
     data() {
       //密码校验
       const validatePass = (rule, value, callback) => {

@@ -111,8 +111,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   import ProductBaseForm from './ProductBaseForm';
   import ProductStockLevelsForm from './ProductStockLevelsForm';
   import ProductMediasForm from './ProductMediasForm';
@@ -177,40 +175,44 @@
               return false;
             }
 
-            axios.put('/djbackoffice/product', formData)
-              .then(response => {
-                const product = response.data;
-                this.$message.success('更新成功，产品编码：' + product.code);
-
-                this.baseFormDialogVisible = false;
-                this.$set(this.slotData, 'name', this.baseData.name);
-                this.$set(this.slotData, 'categories', this.baseData.categories);
-                this.$set(this.slotData, 'belongTo', this.baseData.belongTo);
-                this.$set(this.slotData, 'material', this.baseData.material);
-                this.$set(this.slotData, 'content', this.baseData.content);
-                this.$set(this.slotData, 'startingAmount', this.baseData.startingAmount);
-                this.$set(this.slotData, 'skuID', this.baseData.skuID);
-                this.$set(this.slotData, 'year', this.baseData.year);
-                this.$set(this.slotData, 'season', this.baseData.season);
-                this.$set(this.slotData, 'placeOfOrigin', this.baseData.placeOfOrigin);
-                this.$set(this.slotData, 'brand', this.baseData.brand);
-                this.$set(this.slotData, 'price', this.baseData.price);
-                this.$set(this.slotData, 'style', this.baseData.style);
-                this.$set(this.slotData, 'postageFree', this.baseData.postageFree);
-                this.$set(this.slotData, 'gramWeight', this.baseData.gramWeight);
-                this.$set(this.slotData, 'staircasePrices', this.baseData.staircasePrices);
-
-                this.refresh();
-              }).catch(error => {
-                this.$message.error(error.response.data);
-              }
-            );
+            this._onSubmitBaseForm(formData);
 
             return true;
           }
 
           return false;
         });
+      },
+      async _onSubmitBaseForm(formData) {
+        const result = await this.$http.put('/djbackoffice/product', formData);
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        const product = result;
+        this.$message.success('更新成功，产品编码：' + product.code);
+
+        this.baseFormDialogVisible = false;
+        this.$set(this.slotData, 'name', this.baseData.name);
+        this.$set(this.slotData, 'categories', this.baseData.categories);
+        this.$set(this.slotData, 'belongTo', this.baseData.belongTo);
+        this.$set(this.slotData, 'material', this.baseData.material);
+        this.$set(this.slotData, 'content', this.baseData.content);
+        this.$set(this.slotData, 'startingAmount', this.baseData.startingAmount);
+        this.$set(this.slotData, 'skuID', this.baseData.skuID);
+        this.$set(this.slotData, 'year', this.baseData.year);
+        this.$set(this.slotData, 'season', this.baseData.season);
+        this.$set(this.slotData, 'placeOfOrigin', this.baseData.placeOfOrigin);
+        this.$set(this.slotData, 'brand', this.baseData.brand);
+        this.$set(this.slotData, 'price', this.baseData.price);
+        this.$set(this.slotData, 'style', this.baseData.style);
+        this.$set(this.slotData, 'postageFree', this.baseData.postageFree);
+        this.$set(this.slotData, 'gramWeight', this.baseData.gramWeight);
+        this.$set(this.slotData, 'staircasePrices', this.baseData.staircasePrices);
+
+        this.refresh();
       },
       onUpdateVariants() {
         this.variantsData.code = this.slotData.code;
@@ -233,18 +235,19 @@
           })
         }
 
-        axios.put('/djbackoffice/product/variants', formData)
-          .then(() => {
-            this.$message.success('更新成功');
+        this._onSubmitVariantsForm(formData);
+      },
+      async _onSubmitVariantsForm(formData) {
+        const result = await this.$http.put('/djbackoffice/product/variants', formData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.$refs['variantsForm'].doRefresh();
-            this.$refs['productVariantsForm'].doRefresh();
-
-            this.variantsFormDialogVisible = false;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        this.$message.success('更新成功');
+        this.$refs['variantsForm'].doRefresh();
+        this.$refs['productVariantsForm'].doRefresh();
+        this.variantsFormDialogVisible = false;
       },
       onUpdateInventory() {
         this.inventoryData.code = this.slotData.code;
@@ -259,8 +262,8 @@
       onSubmitMediasForm() {
         this.$refs['mediasForm'].onSubmit();
       },
-      closeMediasForm(){
-        if(this.slotData.code != null && this.slotData.code !== ''){
+      closeMediasForm() {
+        if (this.slotData.code != null && this.slotData.code !== '') {
           this.$refs['productMediasForm'].refresh();
           this.mediasFormDialogVisible = false;
         }

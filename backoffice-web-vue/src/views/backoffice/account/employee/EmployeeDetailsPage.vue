@@ -102,7 +102,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import EmployeeBaseForm from './EmployeeBaseForm';
 
   export default {
@@ -115,27 +114,34 @@
           if (!valid) {
             return false;
           }
-          axios.post('/djbackoffice/user/resetPassword', {
-            uid: this.slotData.uid,
-            password: this.resetFormData.password
-          }).then(() => {
-            this.$message.success('重置密码成功');
-            this.resetFormDialogVisible = false;
-          }).catch(() => {
-            this.$message.error('重置密码失败');
-          });
+
+          this._resetPassword();
 
           return true;
         });
       },
-      getUserGroups() {
-        axios.get('/djbackoffice/group/platform/all')
-          .then(response => {
-            this.userGroups = response.data.members;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+      async _resetPassword() {
+        const result = await this.$http.post('/djbackoffice/user/resetPassword', {
+          uid: this.slotData.uid,
+          password: this.resetFormData.password
+        });
+
+        if (result["errors"]) {
+          this.$message.error('重置密码失败，原因：' + result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('重置密码成功');
+        this.resetFormDialogVisible = false;
+      },
+      async getUserGroups() {
+        const result = await this.$http.get('/djbackoffice/group/platform/all');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.userGroups = result.members;
       },
       onNewGroup() {
         this.newGroup = '';
@@ -147,24 +153,24 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.delete('/djbackoffice/group/members', {
-            params: {
-              employeeUid: this.slotData.uid,
-              groupUid: group.uid
-            }
-          }).then(() => {
-            this.slotData.groups.splice(
-              this.slotData.groups.indexOf(group),
-              1
-            );
-            this.$message.success('退出用户组成功');
-          }).catch(error => {
-            this.$message.error(error.response.data);
+        }).then(() => this._onRemove(group))
+          .catch(() => {
+            this.$message.info('已取消退出');
           });
-        }).catch(() => {
-          this.$message.info('已取消退出');
+      },
+      async _onRemove(group) {
+        const result = await this.$http.delete('/djbackoffice/group/members', {
+          employeeUid: this.slotData.uid,
+          groupUid: group.uid
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.slotData.groups.splice(this.slotData.groups.indexOf(group), 1);
+        this.$message.success('退出用户组成功');
       },
       showInput(inputName) {
         this.inputVisible = true;
@@ -172,50 +178,44 @@
           this.$refs.saveTagInput.$refs.input.focus();
         });
       },
-      onJoin() {
-        axios.post('/djbackoffice/group/members?employeeUid=' +
+      async onJoin() {
+        const result = await this.$http.post('/djbackoffice/group/members?employeeUid=' +
           this.slotData.uid +
           '&groupUid=' +
           this.newGroup
-        ).then(response => {
-          if (response.data !== '') {
-            this.slotData.groups.push({
-              id: response.data.id,
-              uid: response.data.uid,
-              name: response.data.name
-            });
-          }
-          this.inputVisible = false;
-          this.$message.success('加入用户组成功');
-        }).catch(error => {
-          this.$message.error(error.response.data);
-        });
-      },
-      getRoles() {
-        axios
-          .get('/djbackoffice/role?text=')
-          .then(response => {
-            this.roles = response.data.content;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
-      },
-      onUpdateRole() {
-        console.log(this.slotData);
-        let entityDate = {
-          uid: this.slotData.uid,
-          roles: this.slotData.roles
-        }
-        axios.put('/djbackoffice/employee', this.slotData)
-          .then(() => {
-            this.$message.success('保存成功');
-            this.fn.closeSlider(true);
-            //刷新主体数据
-          }).catch(error => {
-            this.$message.error('保存失败，原因：' + error.response.data.message);
-          }
         );
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        if (result !== '') {
+          this.slotData.groups.push({
+            id: result.id,
+            uid: result.uid,
+            name: result.name
+          });
+        }
+        this.inputVisible = false;
+        this.$message.success('加入用户组成功');
+      },
+      async getRoles() {
+        const result = await this.$http.get('/djbackoffice/role?text=');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.roles = result.content;
+      },
+      async onUpdateRole() {
+        const result = this.$http.put('/djbackoffice/employee', this.slotData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.fn.closeSlider(true);
       }
     },
     data() {

@@ -36,20 +36,20 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                      @size-change="onPageSizeChanged"
-                      @current-change="onCurrentPageChanged"
-                      :current-page="page.number + 1"
-                      :page-size="page.size"
-                      :page-count="page.totalPages"
-                      :total="page.totalElements">
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
-  import axios from 'axios';
-  import autoHeight from 'mixins/autoHeight'
+  import autoHeight from '@/mixins/autoHeight';
+
   import HotProductsForm from './HotProductsForm';
   import HotProductsDetailsPage from './HotProductsDetailsPage';
 
@@ -57,6 +57,14 @@
     name: 'HotProductsPage',
     mixins: [autoHeight],
     components: {},
+    computed: {},
+    watch: {
+      '$store.state.sideSliderState': function (value) {
+        if (!value) {
+          this.onSearch();
+        }
+      }
+    },
     methods: {
       onSearch() {
         this._onSearch(0, this.page.size);
@@ -87,22 +95,22 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      _onSearch(page, size) {
+      async _onSearch(page, size) {
         const params = {
           text: this.text,
           page: page,
           size: size
         };
-        axios.get('/djbackoffice/system/hot-products', {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error('获取数据失败');
-        });
+        const result = await this.$http.get('/djbackoffice/system/hot-products', params);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.page = result;
       },
-      changeShelfStatus(row) {
-        let request = axios.put;
+      async changeShelfStatus(row) {
+        let request = this.$http.put;
         let message = '启用';
         let url = '/djbackoffice/system/hot-products/enable/';
         if (row.active === false) {
@@ -110,30 +118,18 @@
           url = '/djbackoffice/system/hot-products/disable/';
         }
 
-        request(url + row.id)
-          .then(() => {
-            this.$message.success(message + '成功');
+        const result = await request(url + row.id);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.onSearch();
-          }).catch(error => {
-            this.$message({
-              type: 'error',
-              message: message + '失败， 原因：' + error.response.data
-            });
-          }
-        );
+        this.$message.success(message + '成功');
+        this.onSearch();
       },
     },
-    created(){
+    created() {
       this.onSearch();
-    },
-    computed: {},
-    watch: {
-      '$store.state.sideSliderState': function (value) {
-        if (!value) {
-          this.onSearch();
-        }
-      }
     },
     data() {
       return {

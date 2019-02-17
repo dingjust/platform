@@ -100,14 +100,13 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   import {CompanyMixin} from '@/mixins';
 
   export default {
     name: 'BrandBaseForm',
     props: ['slotData', 'isNewlyCreated', 'readOnly'],
     mixins: [CompanyMixin],
+    computed: {},
     methods: {
       validate(callback) {
         return this.$refs['form'].validate(callback);
@@ -131,26 +130,25 @@
         baseData.cooperativeBrand = this.slotData.cooperativeBrand;
         return baseData;
       },
-      getStyles() {
-        axios.get('/djbackoffice/product/style/all')
-          .then(response => {
-            this.styles = response.data;
-          }).catch(error => {
-          this.$message.error(error.response.data);
-        })
+      async getStyles() {
+        const result = await this.$http.get('/djbackoffice/product/style/all');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.styles = result;
       },
-      getCategories() {
-        axios
-          .get('/djbackoffice/product/category/majors')
-          .then(response => {
-            this.adeptAtCategories = response.data;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
+      async getCategories() {
+        const result = await this.$http.get('/djbackoffice/product/category/majors');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.adeptAtCategories = result;
       }
     },
-    computed: {},
     data() {
       return {
         styles: [],

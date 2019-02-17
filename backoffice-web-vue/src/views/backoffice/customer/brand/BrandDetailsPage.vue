@@ -63,7 +63,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import BrandBaseForm from './BrandBaseForm';
   import BrandCertificateForm from './BrandCertificateForm';
 
@@ -78,43 +77,29 @@
       onUpdateBrandCertificate() {
         this.brandCertificateFormDialogVisible = true;
       },
-      onSubmitBaseForm(data) {
+      async onSubmitBaseForm(data) {
         const baseForm = this.$refs['BrandBaseForm'];
-        // console.log(baseForm.getValue());
-        // console.log(this.slotData);
-        axios.put('/djbrand/brand/uploadBase', baseForm.getValue())
-          .then(() => {
-            // Bus.$emit('refreshVal', '');
-            this.$message({
-              type: 'success',
-              message: '保存成功'
-            });
-            this.fn.closeSlider();
-            // 刷新主体数据
-          })
-          .catch(error => {
-            this.$message.error(error.response);
-          });
+        const result = await this.$http.put('/djbrand/brand/uploadBase', baseForm.getValue());
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.fn.closeSlider();
       },
-      onSubmitCertificateForm(data) {
+      async onSubmitCertificateForm(data) {
         const certificateForm = this.$refs['BrandCertificateForm'];
 
-        axios.put('/djbrand/brand/uploadCertificate', certificateForm.getValue())
-          .then(() => {
-            // Bus.$emit('refreshVal', '');
-            this.$message({
-              type: 'success',
-              message: '保存成功'
-            });
+        const result = await this.$http.put('/djbrand/brand/uploadCertificate', certificateForm.getValue());
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.$refs.BrandCertificateForm.onSubmit();
-
-            this.fn.closeSlider();
-            // 刷新主体数据
-          })
-          .catch(error => {
-            this.$message.error(error.response);
-          });
+        this.$message.success('保存成功');
+        this.$refs.BrandCertificateForm.onSubmit();
+        this.fn.closeSlider();
       },
       onClose() {
         this.fn.closeSlider();

@@ -110,8 +110,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'RequirementOrderRequestForm',
     props: ['slotData', 'readOnly'],
@@ -119,14 +117,25 @@
       validate(callback) {
         this.$refs['form'].validate(callback);
       },
-      getMinorCategories() {
-        return axios.get('/djbackoffice/product/category/cascaded');
+      async getMinorCategories() {
+        const result = await this.$http.get('/djbackoffice/product/category/cascaded');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.categories = result;
       },
-      getMajorCategories() {
-        return axios.get('/djbackoffice/product/category/majors');
+      async getMajorCategories() {
+        const result = await this.$http.get('/djbackoffice/product/category/majors');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.majorCategories = result;
       }
     },
-    computed: {},
     data() {
       return {
         categories: [],
@@ -146,12 +155,8 @@
       }
     },
     created() {
-      const _this = this;
-      axios.all([this.getMinorCategories(), this.getMajorCategories()])
-        .then(axios.spread(function (minors, majors) {
-          _this.categories = minors.data;
-          _this.majorCategories = majors.data;
-        }));
+      this.getMinorCategories();
+      this.getMajorCategories();
     }
   }
 </script>

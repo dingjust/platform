@@ -65,7 +65,6 @@
 <script>
   import CarouselBaseForm from './CarouselBaseForm';
   import CarouselMediaForm from './CarouselMediaForm';
-  import axios from 'axios';
 
   export default {
     name: 'CarouselDetailsPage',
@@ -82,19 +81,17 @@
         //this.mediasData.code = this.slotData.code;
         this.mediasFormDialogVisible = true;
       },
-      onSubmitBaseForm() {
+      async onSubmitBaseForm() {
         this.formDialogVisible = false;
         const baseForm = this.$refs['baseForm'];
-        console.log(baseForm.getValue());
-        axios.put('/djbackoffice/system/carousel', baseForm.getValue())
-          .then(() => {
-            this.$message.success('保存成功');
-            this.fn.closeSlider(true);
-            //刷新主体数据
-          }).catch(error => {
-            this.$message.error('保存失败，原因：' + error.response.data.message);
-          }
-        );
+        const result = await this.$http.put('/djbackoffice/system/carousel', baseForm.getValue());
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.fn.closeSlider(true);
       },
       onSubmitMediaForm() {
         this.$refs['mediaForm'].onSubmit();

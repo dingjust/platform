@@ -19,8 +19,9 @@
           <el-button type="primary" size="mini" @click="onUpdateCertificateFactory">编辑</el-button>
         </span>
       </div>
-      <factory-certificate-form :slot-data="slotData" :read-only="true" :is-newly-created="false"></factory-certificate-form>
-      <el-carousel :interval="4000" type="card" >
+      <factory-certificate-form :slot-data="slotData" :read-only="true"
+                                :is-newly-created="false"></factory-certificate-form>
+      <el-carousel :interval="4000" type="card">
         <el-carousel-item v-for="media in slotData.certificate" :key="media.url">
           <img style="width:100%;height: 100%" :src="media.url">
         </el-carousel-item>
@@ -65,7 +66,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import FactoryBaseForm from './FactoryBaseForm';
   import FactoryCertificateForm from './FactoryCertificateForm';
 
@@ -82,42 +82,29 @@
         //Object.assign(this.slotData, this.slotData);
         this.factoryCertificateFormDialogVisible = true;
       },
-      onSubmitBaseForm(data) {
+      async onSubmitBaseForm(data) {
         const baseForm = this.$refs['FactoryBaseForm'];
-        console.log(baseForm.getValue());
-        axios.put('/djfactory/factory/updateBase', baseForm.getValue())
-          .then(() => {
-            // Bus.$emit('refreshVal', '');
-            this.$message({
-              type: 'success',
-              message: '保存成功'
-            });
-            this.fn.closeSlider();
-            // 刷新主体数据
-          })
-          .catch(error => {
-            this.$message.error('保存失败');
-          });
+        const result = await this.$http.put('/djfactory/factory/updateBase', baseForm.getValue());
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.fn.closeSlider();
       },
-      onSubmitCertificateForm(data) {
+      async onSubmitCertificateForm(data) {
         const certificateForm = this.$refs['FactoryCertificateForm'];
 
-        axios.put('/djfactory/factory/updateCertificate', certificateForm.getValue())
-          .then(() => {
-            // Bus.$emit('refreshVal', '');
-            this.$message({
-              type: 'success',
-              message: '保存成功'
-            });
+        const result = await this.$http.put('/djfactory/factory/updateCertificate', certificateForm.getValue());
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.$refs.FactoryCertificateForm.onSubmit();
-
-            this.fn.closeSlider();
-            // 刷新主体数据
-          })
-          .catch(error => {
-            this.$message.error('保存失败');
-          });
+        this.$message.success('保存成功');
+        this.$refs.FactoryCertificateForm.onSubmit();
+        this.fn.closeSlider();
       },
       onClose() {
         this.fn.closeSlider();
