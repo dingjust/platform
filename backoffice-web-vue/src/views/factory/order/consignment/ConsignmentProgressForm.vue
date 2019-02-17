@@ -17,14 +17,17 @@
         </template>
 
         <template slot="description">
-          数量：<el-input-number  v-model="item.quantity" @change="quantityChange(item)" :min="0" label="描述文字"></el-input-number><br/>
+          数量：
+          <el-input-number v-model="item.quantity" @change="quantityChange(item)" :min="0"
+                           label="描述文字"></el-input-number>
+          <br/>
           <consignment-progress-medias-upload-form ref="consignmentProgressMediasUploadForm"
                                                    :slot-data="item"
                                                    :read-only="false">
 
           </consignment-progress-medias-upload-form>
           <el-tabs>
-            <el-row :gutter="20" >
+            <el-row :gutter="20">
               <el-col :span="6" v-for="media in item.medias" :key="media.url">
                 <img style="width:100%;height: 100%" :src="media.url"/>
                 <div style="text-align: center;padding-top: 2px;">
@@ -42,66 +45,77 @@
 
 <script>
   import {ConsignmentMixin} from '@/mixins';
-  import axios from 'axios';
+
   import ConsignmentProgressMediasUploadForm from './ConsignmentProgressMediasUploadForm';
 
   export default {
     name: 'ConsignmentProgressForm',
-    provide(){
-      return{
+    provide() {
+      return {
         //提供给子页面调用的方法
-        refresh:this.refresh
+        refresh: this.refresh
       }
     },
     components: {ConsignmentProgressMediasUploadForm},
     props: ['slotData', 'readOnly'],
-    component:{ConsignmentProgressMediasUploadForm},
+    component: {ConsignmentProgressMediasUploadForm},
     methods: {
-      onUpdateEstimatedDate(item) {
-        axios.put('/djbackoffice/consignment/updateEstimateDate', {
+      async onUpdateEstimatedDate(item) {
+        const result = await this.$http.put('/djbackoffice/consignment/updateEstimateDate', {
           id: item.id,
           estimatedDate: item.estimatedDate
-        }).then(() => {
-          this.$message.success('预计日期修改成功');
-        }).catch(error => {
-          this.$message.error('预计日期修改失败，原因：' + error.response.data.message);
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('预计日期修改成功');
       },
-      isShow(item){
+      isShow(item) {
         return item.phase != 'SAMPLE_CONFIRM';
       },
-      quantityChange(item){
-        axios.put('/djbackoffice/consignment/updateQuantity', {
+      async quantityChange(item) {
+        const result = await this.$http.put('/djbackoffice/consignment/updateQuantity', {
           id: item.id,
           quantity: item.quantity
-        }).then(() => {
-          this.$message.success('数量修改成功');
-        }).catch(error => {
-          this.$message.error('数量修改失败，原因：' + error.response.data.message);
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('数量修改成功');
       },
-      onDelete(item,media){
+      onDelete(item, media) {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           center: true
-        }).then(() =>{
-          axios.delete('/djbackoffice/consignment/progress/media?progressId='+item.id+'&mediaId='+media.id,).then(() => {
-            this.$message.success('图片删除成功');
-            this.refresh();
-          }).catch(error => {
-            this.$message.error('图片删除失败，原因：' + error.response.data.message);
-          });
-        })
+        }).then(() => this._onDelete(item, media))
       },
-      refresh(){
-        axios.get('/djbackoffice/consignment/progresses?code='+this.slotData.code,)
-          .then((response) => {
-            this.progresses = response.data;
-          }).catch(error => {
-          this.$message.error('原因：' + error.response.data.message);
-        });
+      async _onDelete(item, media) {
+        const result = await this.$http.delete('/djbackoffice/consignment/progress/media?progressId=' + item.id + '&mediaId=' + media.id,);
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('图片删除成功');
+        this.refresh();
+      },
+      async refresh() {
+        const result = await this.$http.get('/djbackoffice/consignment/progresses?code=' + this.slotData.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.progresses = result;
       }
     },
     computed: {
@@ -118,7 +132,7 @@
         }
         return 0;
       },
-      isUpdate:function () {
+      isUpdate: function () {
         // :disabled='isUpdate'
         return this.slotData.status != 'WAIT_FOR_PURCHASE';
       },
@@ -131,7 +145,7 @@
         progresses: [],
       }
     },
-    created(){
+    created() {
       this.progresses = this.slotData.progresses;
       // this.refresh();
     }

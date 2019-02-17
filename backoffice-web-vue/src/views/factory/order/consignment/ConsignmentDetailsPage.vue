@@ -1,6 +1,7 @@
 <template>
   <div class="animated fadeIn">
-    <consignment-status-bar :status="slotData.status" :status-map="statusMap" :statu-days-map="statuDaysMap"></consignment-status-bar>
+    <consignment-status-bar :status="slotData.status" :status-map="statusMap"
+                            :statu-days-map="statuDaysMap"></consignment-status-bar>
     <div v-show="isPendingPurchase" class="pt-2"></div>
     <el-row v-show="isPendingPurchase" :gutter="10">
       <el-col :span="24">
@@ -50,18 +51,18 @@
       </div>
       <consignment-entries-form :slot-data="slotData" :read-only="true"></consignment-entries-form>
     </el-card>
-   <!-- <div class="pt-2"></div>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>分配工厂</span>
-        <span class="float-right" v-show="!readOnly">
-           <el-button type="primary" size="mini" @click="onUpdateFactory">编辑</el-button>
-        </span>
-      </div>
-      <consignment-factory-base-form :slot-data="slotData.assignedTo"
-                                     :read-only="true">
-      </consignment-factory-base-form>
-    </el-card>-->
+    <!-- <div class="pt-2"></div>
+     <el-card class="box-card">
+       <div slot="header" class="clearfix">
+         <span>分配工厂</span>
+         <span class="float-right" v-show="!readOnly">
+            <el-button type="primary" size="mini" @click="onUpdateFactory">编辑</el-button>
+         </span>
+       </div>
+       <consignment-factory-base-form :slot-data="slotData.assignedTo"
+                                      :read-only="true">
+       </consignment-factory-base-form>
+     </el-card>-->
     <div class="pt-2"></div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
@@ -179,7 +180,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import ConsignmentBaseForm from './ConsignmentBaseForm';
   import ConsignmentFactorySearchForm from './ConsignmentFactorySearchForm';
   import ConsignmentEntriesForm from './ConsignmentEntriesForm';
@@ -210,34 +210,32 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.put('/djfactory/processes/consignment/completeGivingOut/' + this.slotData.code)
-            .then(response => {
-              this.$message.success('备料完成成功');
-              this.$set(this.slotData, 'status', response.data);
-            }).catch(error => {
-              this.$message.error('备料完成失败，原因：' + error.response.data);
-            }
-          );
-        }).catch(() => {
-        });
+        }).then(() => this._onCompleteGivingOut());
+      },
+      async _onCompleteGivingOut() {
+        const result = await this.$http.put('/djfactory/processes/consignment/completeGivingOut/' + this.slotData.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.$message.success('备料完成成功');
+        this.$set(this.slotData, 'status', result);
       },
       onCompleteCutting() {
         this.$confirm('是否确认裁剪完成', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.put('/djfactory/processes/consignment/completeCutting/' + this.slotData.code)
-            .then(response => {
-              this.$message.success('裁剪完成成功');
-              this.$set(this.slotData, 'status', response.data);
-            }).catch(error => {
-              this.$message.error('裁剪完成失败，原因：' + error.response.data);
-            }
-          );
-        }).catch(() => {
-        });
+        }).then(() => this._onCompleteCutting());
+      },
+      async _onCompleteCutting() {
+        const result = await this.$http.put('/djfactory/processes/consignment/completeCutting/' + this.slotData.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.$message.success('裁剪完成成功');
+        this.$set(this.slotData, 'status', result);
       },
       onCompleteStitching() {
         // 车缝完成
@@ -245,17 +243,17 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.put('/djfactory/processes/consignment/completeStitching/' + this.slotData.code)
-            .then(response => {
-              this.$message.success('车缝完成成功');
-              this.$set(this.slotData, 'status', response.data);
-            }).catch(error => {
-              this.$message.error('车缝完成失败，原因：' + error.response.data);
-            }
-          );
-        }).catch(() => {
-        });
+        }).then(() => this._onCompleteStitching());
+      },
+      async _onCompleteStitching() {
+        const result = await this.$http.put('/djfactory/processes/consignment/completeStitching/' + this.slotData.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('车缝完成成功');
+        this.$set(this.slotData, 'status', result);
       },
       onCompleteShipping() {
         this.expressDialogVisible = true;
@@ -265,39 +263,37 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.put('/djfactory/processes/consignment/completeShipping/' + this.slotData.code, this.express)
-            .then(response => {
-              this.$message.success('完成发货成功');
-              this.$set(this.slotData, 'status', response.data);
-              this.expressDialogVisible = false;
-            }).catch(error => {
-              this.$message.error('完成发货失败，原因：' + error.response.data);
-              this.expressDialogVisible = false;
-            }
-          );
-        }).catch(() => {
-        });
+        }).then(() => this._onSubmitExpressOrder());
+      },
+      async _onSubmitExpressOrder() {
+        const result = await this.$http.put('/djfactory/processes/consignment/completeShipping/' + this.slotData.code, this.express);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
+        this.$message.success('完成发货成功');
+        this.$set(this.slotData, 'status', result);
+        this.expressDialogVisible = false;
       },
       onUpdateStatus() {
         Object.assign(this.statusData, this.slotData);
         this.statusFormDialogVisible = true;
       },
-      onSubmitStatusForm() {
-        axios.put('/djfactory/consignment/status', {
+      async onSubmitStatusForm() {
+        const result = await this.$http.put('/djfactory/consignment/status', {
           code: this.slotData.code,
           status: this.statusData.status
-        }).then(() => {
-          this.$message.success('更新状态成功');
-
-          this.$set(this.slotData, 'status', this.statusData.status);
-
-          this.statusFormDialogVisible = false;
-        }).catch(error => {
-          console.log(JSON.stringify(error));
-          this.$message.error('更新状态失败，原因：' + error.response.data);
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('更新状态成功');
+        this.$set(this.slotData, 'status', this.statusData.status);
+        this.statusFormDialogVisible = false;
       },
       onUpdateFactory() {
         Object.assign(this.factoryData.assignedTo, this.slotData.assignedTo);
@@ -306,16 +302,7 @@
       onSubmitFactoryForm() {
         this.$refs['factoryForm'].validate((valid) => {
           if (valid) {
-            axios.put('/djfactory/consignment/factory', {
-              code: this.slotData.code,
-              assignedTo: this.factoryData.assignedTo.uid
-            }).then(() => {
-              this.factoryFormDialogVisible = false;
-              this.$message.success('更新生产订单的工厂成功')
-            }).catch(error => {
-              console.log(JSON.stringify(error));
-              this.$message.error('更新生产订单的工厂失败，原因：' + error.response.data);
-            });
+            this._onSubmitFactoryForm();
 
             return true;
           }
@@ -323,24 +310,42 @@
           return false;
         })
       },
+      async _onSubmitFactoryForm() {
+        const result = await this.$http.put('/djfactory/consignment/factory', {
+          code: this.slotData.code,
+          assignedTo: this.factoryData.assignedTo.uid
+        });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.factoryFormDialogVisible = false;
+        this.$message.success('更新生产订单的工厂成功');
+      },
       onUpdateEntries() {
         Object.assign(this.entriesData.consignmentEntries, this.slotData.consignmentEntries);
         this.entriesFormDialogVisible = true;
       },
       onSubmitEntriesForm() {
         if (this.$refs['entriesForm'].validate()) {
-          axios.put('/djfactory/consignment/entries', {
-            code: this.slotData.code,
-            consignmentEntries: this.entriesData.consignmentEntries
-          }).then(() => {
-            this.$message.success('更新订单行成功');
-
-            this.entriesFormDialogVisible = false;
-          }).catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error('更新订单行失败，原因：' + error.response.data.message);
-          });
+          this._onSubmitEntriesForm();
         }
+      },
+      async _onSubmitEntriesForm() {
+        const result = await this.$http.put('/djfactory/consignment/entries', {
+          code: this.slotData.code,
+          consignmentEntries: this.entriesData.consignmentEntries
+        });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('更新订单行成功');
+        this.entriesFormDialogVisible = false;
       },
       onUpdateContracts() {
         this.contractsFormDialogVisible = true;
@@ -365,28 +370,28 @@
       isPendingDelivery: function () {
         return this.slotData.status === 'PENDING_DELIVERY';
       },
-      statusMap:function () {
+      statusMap: function () {
         let map = {};
         this.slotData.progresses.map(progress => {
-          this.$set(map,progress.phase,progress.estimatedDate);
+          this.$set(map, progress.phase, progress.estimatedDate);
         });
         return map;
       },
-      statuDaysMap:function () {
+      statuDaysMap: function () {
         let map = {};
         this.slotData.progresses.map(progress => {
           let days = 0;
-          if(progress.estimatedDate != null){
+          if (progress.estimatedDate != null) {
             const estimated = progress.estimatedDate;
             let finish;
-            if(progress.finishDate != null){
+            if (progress.finishDate != null) {
               finish = progress.finishDate;
-            }else{
+            } else {
               finish = new Date().getTime();
             }
             days = parseInt((finish - estimated) / (1000 * 60 * 60 * 24));
           }
-          this.$set(map,progress.phase,days);
+          this.$set(map, progress.phase, days);
         });
         return map;
       }

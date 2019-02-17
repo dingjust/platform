@@ -25,8 +25,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'ConsignmentFactorySearchForm',
     props: ['slotData'],
@@ -35,21 +33,19 @@
       validate(callback) {
         this.$refs['form'].validate(callback);
       },
-      onFilter(query) {
+      async onFilter(query) {
         this.companies = [];
         if (query !== '') {
-          axios.get('/djfactory/b2bFactory', {
-            params: {
-              name: query
-            }
-          }).then(response => {
-            this.companies = response.data.content;
-          }).catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result = await this.$http.get('/djfactory/b2bFactory', {
+            name: query
           });
+
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.companies = result.content;
         }
       },
       onSelected(current) {
@@ -70,7 +66,6 @@
         showDetails: false,
         company: {},
         companies: [],
-        loading: false
       }
     }
   }

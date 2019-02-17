@@ -35,7 +35,6 @@
 
 <script>
   import OrgBaseForm from './OrgBaseForm';
-  import axios from 'axios';
 
   export default {
     name: 'OrgDetailsPage',
@@ -48,20 +47,18 @@
       onUpdateInfo() {
         this.formDialogVisible = true;
       },
-      onSubmitBaseForm() {
+      async onSubmitBaseForm() {
         this.formDialogVisible = false;
-        axios.put('/djfactory/org', this.slotData)
-          .then(() => {
-            this.$message.success('保存成功');
-            this.fn.closeSlider(true);
-            //刷新主体数据
-          }).catch(error => {
-            this.$message.error('保存失败，原因：' + error.response.data.message);
-          }
-        );
+        const result = await this.$http.put('/djfactory/org', this.slotData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.fn.closeSlider(true);
       }
     },
-    computed: {},
     data() {
       return {
         formDialogVisible: false

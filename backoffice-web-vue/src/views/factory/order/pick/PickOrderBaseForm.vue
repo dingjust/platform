@@ -15,7 +15,7 @@
           <el-form-item label="生产单号" prop="order">
             <el-select placeholder="请输入订单编号查询" style="width: 100%"
                        filterable remote reserve-keyword v-model="slotData.order.code"
-                       :remote-method="onFilter" :loading="loading" @change="onOrderSelected">
+                       :remote-method="onFilter" @change="onOrderSelected">
               <el-option v-for="item in orders" :key="item.code" :label="item.code" :value="item.code">
               </el-option>
             </el-select>
@@ -27,8 +27,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'PickOrderBaseForm',
     props: ['slotData', 'readOnly'],
@@ -54,21 +52,19 @@
           this.$set(slotData, 'order', order);
         });
       },
-      onFilter(query) {
+      async onFilter(query) {
         this.orders = [];
         if (query !== '') {
-          axios.get('/djfactory/consignment', {
-            params: {
-              text: query
-            }
-          }).then(response => {
-            this.orders = response.data.content;
-          }).catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result = await this.$http.get('/djfactory/consignment', {
+            text: query
           });
+
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.orders = result.content;
         }
       }
     },
@@ -76,7 +72,6 @@
     data() {
       return {
         active: 0,
-        loading: false,
         order: {},
         orders: [],
         rules: {
