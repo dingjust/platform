@@ -1,4 +1,4 @@
-import http from '../../../../common/js/http';
+import http from '@/common/js/http';
 
 const state = {
   statusOptions: [

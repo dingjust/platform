@@ -49,7 +49,7 @@
   import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
   import RequirementOrderEntriesForm from './RequirementOrderEntriesForm';
 
-  import {OrderMixin} from '../../../../mixins';
+  import {OrderMixin} from '@/mixins';
 
   export default {
     name: 'RequirementOrderFrom',

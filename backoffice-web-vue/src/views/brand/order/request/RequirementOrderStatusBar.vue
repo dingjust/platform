@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import {OrderMixin} from '../../../../mixins';
+  import {OrderMixin} from '@/mixins';
 
   export default {
     name: 'RequirementOrderStatusBar',

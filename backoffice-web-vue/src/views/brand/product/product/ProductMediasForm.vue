@@ -35,7 +35,7 @@
 
 <script>
   import axios from 'axios';
-  import MediaFileList from '../../../../components/custom/MediaFileList.vue';
+  import MediaFileList from '@/components/custom/MediaFileList.vue';
 
   export default {
     name: 'ProductMediasForm',

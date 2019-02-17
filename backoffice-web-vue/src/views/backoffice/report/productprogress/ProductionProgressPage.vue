@@ -179,7 +179,7 @@
 <script>
   import axios from 'axios';
   import autoHeight from 'mixins/autoHeight'
-  import {ExcelExportMixin, ExcelImportMixin} from 'mixins';
+  import {ExcelExportMixin} from '@/mixins';
 
   export default {
     name: 'ProductionProgressPage',

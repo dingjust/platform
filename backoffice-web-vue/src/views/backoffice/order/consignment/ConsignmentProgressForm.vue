@@ -41,7 +41,7 @@
 </template>
 
 <script>
-  import {ConsignmentMixin} from 'mixins';
+  import {ConsignmentMixin} from '@/mixins';
   import axios from 'axios';
   import ConsignmentProgressMediasUploadForm from './ConsignmentProgressMediasUploadForm';
 

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import {ConsignmentMixin} from 'mixins';
+  import {ConsignmentMixin} from '@/mixins';
 
   export default {
     name: 'ConsignmentUpdateStatusForm',

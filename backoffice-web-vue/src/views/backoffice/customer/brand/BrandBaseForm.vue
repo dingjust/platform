@@ -102,7 +102,7 @@
 <script>
   import axios from 'axios';
 
-  import {CompanyMixin} from 'mixins';
+  import {CompanyMixin} from '@/mixins';
 
   export default {
     name: 'BrandBaseForm',

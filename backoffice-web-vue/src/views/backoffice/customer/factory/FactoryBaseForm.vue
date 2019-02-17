@@ -90,7 +90,7 @@
 </template>
 
 <script>
-  import {CompanyMixin} from 'mixins';
+  import {CompanyMixin} from '@/mixins';
   import axios from 'axios';
 
   export default {
