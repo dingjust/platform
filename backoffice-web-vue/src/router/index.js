@@ -376,23 +376,6 @@ const router = new Router({
           ]
         },
         {
-          path: 'factory/report',
-          redirect: '/factory/report/schedule',
-          name: '报表管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: 'schedule',
-              name: '生产进度报表',
-              component: () => import(/* webpackChunkName: "factory-reports" */ 'factory/report/schedule/WorkSchedulePage'),
-            }
-          ]
-        },
-        {
           path: 'factory/account',
           redirect: '/factory/account/factory',
           name: '工厂管理',
