@@ -70,14 +70,13 @@
           this.doRefresh();
         }
       },
-      doRefresh() {
-        axios.get('/djbrand/product/variants/' + this.slotData.code)
-          .then(response => {
-            this.variants = response.data;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+      async doRefresh() {
+        const result = await this.$http.get('/djbrand/product/variants/' + this.slotData.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.variants = result;
       },
       getValue() {
         return this.variants;

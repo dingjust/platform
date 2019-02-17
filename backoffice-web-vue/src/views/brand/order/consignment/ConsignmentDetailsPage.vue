@@ -1,6 +1,7 @@
 <template>
   <div class="animated fadeIn">
-    <consignment-status-bar :status="slotData.status" :status-map="statusMap" :statu-days-map="statuDaysMap"></consignment-status-bar>
+    <consignment-status-bar :status="slotData.status" :status-map="statusMap"
+                            :statu-days-map="statuDaysMap"></consignment-status-bar>
     <!--<div v-show="isCuttingCompleted" class="pt-2"></div>
     <el-row v-show="isCuttingCompleted" :gutter="10">
       <el-col :span="24">
@@ -71,7 +72,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import OrderBaseForm from '../order/OrderBaseForm';
   import ConsignmentBaseForm from './ConsignmentBaseForm';
   import ConsignmentEntriesForm from './ConsignmentEntriesForm';
@@ -99,18 +99,17 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.put('/djbrand/processes/consignment/cuttingConfirm/' + this.slotData.code)
-            .then(response => {
-              this.$message.success('裁剪确认成功');
+        }).then(() => this._onCuttingCompleted());
+      },
+      async _onCuttingCompleted() {
+        const result = await this.$http.put('/djbrand/processes/consignment/cuttingConfirm/' + this.slotData.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-              this.$set(this.slotData, 'status', response.data);
-            }).catch(error => {
-              this.$message.error('裁剪确认失败，原因：' + error.response.data);
-            }
-          );
-        }).catch(() => {
-        });
+        this.$message.success('裁剪确认成功');
+        this.$set(this.slotData, 'status', result);
       }
     },
     computed: {
@@ -120,28 +119,28 @@
       isCuttingCompleted: function () {
         return this.slotData.status === 'COMPLETE_CUTTING';
       },
-      statusMap:function () {
+      statusMap: function () {
         let map = {};
         this.slotData.progresses.map(progress => {
-          this.$set(map,progress.phase,progress.estimatedDate);
+          this.$set(map, progress.phase, progress.estimatedDate);
         });
         return map;
       },
-      statuDaysMap:function () {
+      statuDaysMap: function () {
         let map = {};
         this.slotData.progresses.map(progress => {
           let days = 0;
-          if(progress.estimatedDate != null){
+          if (progress.estimatedDate != null) {
             const estimated = progress.estimatedDate;
             let finish;
-            if(progress.finishDate != null){
+            if (progress.finishDate != null) {
               finish = progress.finishDate;
-            }else{
+            } else {
               finish = new Date().getTime();
             }
             days = parseInt((finish - estimated) / (1000 * 60 * 60 * 24));
           }
-          this.$set(map,progress.phase,days);
+          this.$set(map, progress.phase, days);
         });
         return map;
       }

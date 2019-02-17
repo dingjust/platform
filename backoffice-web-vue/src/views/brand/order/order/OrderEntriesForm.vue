@@ -69,7 +69,6 @@
                    reserve-keyword
                    placeholder="请输入产品编码"
                    :remote-method="onFilterProducts"
-                   :loading="loading"
                    :disabled="readOnly">
           <el-option
             v-for="item in products"
@@ -87,8 +86,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   function removeRow(array, row) {
     const length = array.length;
     for (let i = 0; i < length; i++) {
@@ -173,22 +170,20 @@
       },
       onRemoveRow(row) {
         removeRow(this.slotData.entries, row);
-      }
-      ,
-      onFilterProducts(query) {
+      },
+      async onFilterProducts(query) {
         this.products = [];
         if (query !== '') {
-          axios.get('/djbrand/product/variant', {
-            params: {
-              code: query
-            }
-          }).then(response => {
-            this.products = response.data.content;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result = await this.$http.get('/djbrand/product/variant', {
+            code: query
           });
+
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.products = result.content;
         }
       }
       ,
@@ -237,7 +232,6 @@
     ,
     data() {
       return {
-        loading: false,
         product: null,
         products: []
       }

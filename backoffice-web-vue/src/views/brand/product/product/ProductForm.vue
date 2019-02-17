@@ -73,8 +73,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   import ProductBaseForm from './ProductBaseForm';
   import ProductMediaUploadForms from './ProductMediaUploadForms';
   import ProductSpecificationForm from './ProductSpecificationForm';
@@ -127,42 +125,45 @@
               return false;
             }
 
-            let request = axios.post;
-            if (!this.isNewlyCreated) {
-              request = axios.put;
-            }
-
-            let form = this.$refs['productVariantsForm'];
-
-            const _entries = form.getValue();
-            for (let i = 0; i < _entries.length; i++) {
-              formData.variants.push({
-                color: _entries[i].color.code,
-                size: _entries[i].size.code
-              })
-            }
-
-            request('/djbrand/product', formData)
-              .then(response => {
-                const product = response.data;
-                this.$message.success('创建成功，产品编码：' + product.code);
-
-                this.$set(this.slotData, 'id', product.id);
-                this.$set(this.slotData, 'code', product.code);
-
-                this.next(1);
-
-                this.$refs['productDetailsPage'].refresh();
-              }).catch(error => {
-                this.$message.error(error.response.data);
-              }
-            );
+            this._onSubmit(formData);
 
             return true;
           }
 
           return false;
         });
+      },
+      async _onSubmit(formData) {
+        let request = this.$http.post;
+        if (!this.isNewlyCreated) {
+          request = this.$http.put;
+        }
+
+        let form = this.$refs['productVariantsForm'];
+
+        const _entries = form.getValue();
+        for (let i = 0; i < _entries.length; i++) {
+          formData.variants.push({
+            color: _entries[i].color.code,
+            size: _entries[i].size.code
+          })
+        }
+
+        const result = await request('/djbrand/product', formData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        const product = result;
+        this.$message.success('创建成功，产品编码：' + product.code);
+
+        this.$set(this.slotData, 'id', product.id);
+        this.$set(this.slotData, 'code', product.code);
+
+        this.next(1);
+
+        this.$refs['productDetailsPage'].refresh();
       },
       onCancel() {
         this.fn.closeSlider();
@@ -189,19 +190,18 @@
           })
         }
 
-        axios.put('/djbrand/product/variants', formData)
-          .then(() => {
-            this.$message({
-              type: 'success',
-              message: '更新颜色/尺码成功，产品编码：' + formData.code
-            });
+        this._onInventoryUpdate(formData);
+      },
+      async _onInventoryUpdate(formData) {
+        const result = await this.$http.put('/djbrand/product/variants', formData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.$refs['productDetailsPage'].refresh();
-
-            this.next(3);
-          }).catch(error => {
-          this.$message.error(error.response.data);
-        });
+        this.$message.success('更新颜色/尺码成功，产品编码：' + formData.code);
+        this.$refs['productDetailsPage'].refresh();
+        this.next(3);
       },
       onClose() {
         this.fn.closeSlider(true);

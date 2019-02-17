@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import RoleBaseForm from './RoleBaseForm';
   import RolePermsForm from './RolePermsForm';
 
@@ -48,21 +47,18 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.put('/djbrand/role/' + this.slotData.uid + '/perms', perms)
-            .then(() => {
-              this.$message.success('更新权限成功');
-            }).catch(error => {
-              console.log(JSON.stringify(error.response.data));
-            }
-          )
-        }).catch(() => {
-        });
+        }).then(() => this._onUpdatePerms(perms));
+      },
+      async _onUpdatePerms(perms) {
+        const result = await this.$http.put('/djbrand/role/' + this.slotData.uid + '/perms', perms);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-
+        this.$message.success('更新权限成功');
       }
     },
-    computed: {},
     data() {
       return {}
     }

@@ -158,7 +158,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import ProductMediaEntryUploadForm from './ProductMediaEntryUploadForm';
   import ProductPricesEntriesForm from './ProductPricesEntriesForm';
 
@@ -187,25 +186,23 @@
       getValue() {
         return this.slotData;
       },
-      getCategories(query) {
-        axios.get('/djbackoffice/product/category/cascaded')
-          .then(response => {
-            this.categories = response.data;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+      async getCategories(query) {
+        const result = await this.$http.get('/djbackoffice/product/category/cascaded');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.categories = result;
       },
-      getStyles() {
-        axios.get('/djbackoffice/product/style/all')
-          .then(response => {
-            this.styles = response.data;
-          }).catch(error => {
-          this.$message.error(error.response.data);
-        })
+      async getStyles() {
+        const result = await this.$http.get('/djbackoffice/product/style/all');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.styles = result;
       }
     },
-    computed: {},
     data() {
       return {
         loading: false,

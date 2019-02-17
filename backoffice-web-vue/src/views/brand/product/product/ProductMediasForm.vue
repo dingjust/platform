@@ -34,7 +34,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import MediaFileList from '@/components/custom/MediaFileList.vue';
 
   export default {
@@ -47,35 +46,35 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.delete('/djbrand/product/media/' + item.id, {
-            params: {
-              code: this.slotData.code
-            }
-          }).then(() => {
-            this.refresh();
-            this.$message.success('图片删除成功');
-          }).catch(error => {
-            this.$message.error('图片删除失败');
-          });
+        }).then(() => this._onDelete(item));
+      },
+      async _onDelete(item) {
+        const result = await this.$http.delete('/djbrand/product/media/' + item.id, {
+          code: this.slotData.code
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.refresh();
+        this.$message.success('图片删除成功');
       },
       refresh() {
         if (this.slotData.code) {
           this.doRefresh();
         }
       },
-      doRefresh() {
+      async doRefresh() {
         if (this.slotData.code != null && this.slotData.code !== '') {
-          axios
-            .get('/djbrand/product/mediaGroups/' + this.slotData.code)
-            .then(response => {
-              this.groups = response.data;
-            })
-            .catch(error => {
-              console.log(JSON.stringify(error));
-              this.$message.error(error.response.statusText);
-            });
+          const result = await this.$http.get('/djbrand/product/mediaGroups/' + this.slotData.code);
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.groups = result;
         }
       },
       isPicture(group) {

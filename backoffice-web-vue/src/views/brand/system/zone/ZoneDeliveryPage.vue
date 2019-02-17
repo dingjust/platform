@@ -37,7 +37,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import ZoneDeliveryForm from './ZoneDeliveryForm';
   import ZoneDeliveryDetailsPage from './ZoneDeliveryDetailsPage';
 
@@ -74,22 +73,21 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      _onSearch(page, size) {
+      async _onSearch(page, size) {
         const params = {
           text: this.text,
           page: page,
           size: size
         };
-        axios.get('/djbrand/zoneDelivery', {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error('获取数据失败');
-        });
+        const result = await this.$http.get('/djbrand/zoneDelivery', params);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.page = result;
       }
     },
-    computed: {},
     watch: {
       '$store.state.sideSliderState': function (value) {
         if (!value) {

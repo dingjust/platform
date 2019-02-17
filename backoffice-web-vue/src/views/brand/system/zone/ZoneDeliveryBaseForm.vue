@@ -40,17 +40,25 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'ZoneDeliveryBaseForm',
     props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
       validate(callback) {
         this.$refs['form'].validate(callback);
+      },
+      async getRegions() {
+        const result = this.$http.get('/djbackoffice/address/getRegionsForDefaultCountry');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.regions = result;
+        if (this.deliveryAddress.region && this.deliveryAddress.region.isocode) {
+          this.onRegionChanged(this.deliveryAddress.region.isocode);
+        }
       }
     },
-    // computed: {},
     data() {
       return {
         rules: {
@@ -64,16 +72,7 @@
     },
     created() {
       this.deliveryAddress = this.slotData.deliveryAddress;
-      axios.get('/djbackoffice/address/getRegionsForDefaultCountry')
-        .then(response => {
-          this.regions = response.data;
-          if (this.deliveryAddress.region && this.deliveryAddress.region.isocode) {
-            this.onRegionChanged(this.deliveryAddress.region.isocode);
-          }
-        }).catch(error => {
-          // this.$message.error(error.response);
-        }
-      );
+      this.getRegions();
     }
   };
 </script>

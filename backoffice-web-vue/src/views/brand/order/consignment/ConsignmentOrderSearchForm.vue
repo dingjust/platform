@@ -10,7 +10,6 @@
                    reserve-keyword
                    v-model="slotData.order.code"
                    :remote-method="onFilter"
-                   :loading="loading"
                    @change="onOrderSelected">
           <el-option
             v-for="item in orders"
@@ -31,8 +30,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   import OrderDetailsPage from '../order/OrderDetailsPage';
 
   export default {
@@ -43,19 +40,19 @@
       validate(callback) {
         this.$refs['form'].validate(callback);
       },
-      onFilter(query) {
+      async onFilter(query) {
         this.orders = [];
         if (query !== '') {
-          axios.post('/djbrand/requirementOrder', {
+          const result = await this.$http.post('/djbrand/requirementOrder', {
             code: query
-          }).then(response => {
-            this.orders = response.data.content;
-          }).catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
           });
+
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.orders = result.content;
         }
       },
       onOrderSelected(current) {
@@ -114,7 +111,6 @@
           }
         },
         orders: [],
-        loading: false
       }
     }
   }

@@ -85,51 +85,68 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
-
     name: 'AddressBaseForm',
     props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
-      getValue(){
+      getValue() {
         return this.slotData;
       },
       validate(callback) {
         this.$refs['form'].validate(callback);
       },
+      async getRegions() {
+        const result = await this.$http.get('/djbackoffice/address/getRegionsForDefaultCountry');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.regions = result;
+        if (this.deliveryAddress.region && this.deliveryAddress.region.isocode) {
+          this.onRegionChanged(this.deliveryAddress.region.isocode);
+        }
+      },
       onRegionChanged(current) {
         if (!current) {
           return;
         }
-        axios.get('/djbackoffice/address/getCitiesForRegion', {
-          params: {
-            regionCode: current
-          }
-        }).then(response => {
-          this.cities = response.data;
 
-          if (this.deliveryAddress.city && this.deliveryAddress.city.code) {
-            this.onCityChanged(this.deliveryAddress.city.code);
-          }
-        }).catch(error => {
-          this.$message.error(error.response.data.message);
+        this._onRegionChanged(current);
+      },
+      async _onRegionChanged(current) {
+        const result = await this.$http.get('/djbackoffice/address/getCitiesForRegion', {
+          regionCode: current
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.cities = result;
+        if (this.deliveryAddress.city && this.deliveryAddress.city.code) {
+          this.onCityChanged(this.deliveryAddress.city.code);
+        }
       },
       onCityChanged(current) {
         if (!current) {
           return;
         }
 
-        axios.get('/djbackoffice/address/getDistrictsForCity', {
-          params: {
-            cityCode: current
-          }
-        }).then(response => {
-          this.cityDistricts = response.data;
-        }).catch(error => {
-          this.$message.error(error.response.data);
+        this._onCityChanged(current);
+      },
+      async _onCityChanged(current) {
+        const result = await this.$http.get('/djbackoffice/address/getDistrictsForCity', {
+          cityCode: current
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.cityDistricts = result;
       },
       refresh() {
         this.onRegionChanged(this.slotData.deliveryAddress.region);
@@ -138,24 +155,7 @@
     },
     created() {
       this.deliveryAddress = this.slotData.deliveryAddress;
-      axios.get('/djbackoffice/address/getRegionsForDefaultCountry')
-        .then(response => {
-          this.regions = response.data;
-          console.log(this.deliveryAddress.region.isocode);
-          if (this.deliveryAddress.region && this.deliveryAddress.region.isocode) {
-            this.onRegionChanged(this.deliveryAddress.region.isocode);
-          }
-        }).catch(error => {
-          console.log(JSON.stringify(error));
-          this.$message.error(error.response.data);
-        }
-      );
-      /*axios.get('/djbackoffice/address/getTitles').then(response => {
-        this.titles = response.data;
-      }).catch(error => {
-        console.log(JSON.stringify(error));
-        this.$message.error(error.response.data);
-      });*/
+      this.getRegions();
     },
     computed: {},
     data() {

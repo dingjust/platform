@@ -8,18 +8,18 @@
         </span>
       </div>
       <address-base-form ref="baseForm"
-                          :slot-data="slotData"
-                          :read-only="true"
-                          :is-newly-created="isNewlyCreated">
+                         :slot-data="slotData"
+                         :read-only="true"
+                         :is-newly-created="isNewlyCreated">
       </address-base-form>
     </el-card>
 
     <el-dialog title="更新基本信息" width="90%"
                :visible.sync="formDialogVisible" :close-on-click-modal="false" :modal="false">
       <address-base-form ref="AddressForm"
-                     :slot-data="slotData"
-                     :read-only="false"
-                     :is-newly-created="false">
+                         :slot-data="slotData"
+                         :read-only="false"
+                         :is-newly-created="false">
       </address-base-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onSubmitBaseForm(slotData)">确 定</el-button>
@@ -36,8 +36,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   import AddressForm from './AddressForm';
   import AddressBaseForm from './AddressBaseForm';
 
@@ -46,7 +44,7 @@
     components: {AddressBaseForm, AddressForm},
     props: ['slotData', 'isNewlyCreated', 'preview'],
     methods: {
-      getValue(){
+      getValue() {
         return this.slotData;
       },
       onClose() {
@@ -64,22 +62,21 @@
 
           this.formDialogVisible = false;
 
-          axios.put('/djbrand/system/address',baseForm.getValue())
-            .then(() => {
-              this.$message.success('保存成功');
-
-              //刷新主体数据
-              this.fn.closeSlider();
-            }).catch(error => {
-              this.$message.error('保存失败，原因：' + error.response);
-            }
-          );
-
+          this._onSubmitBaseForm(baseForm.getValue());
         });
+      },
+      async _onSubmitBaseForm(value) {
+        const result = await this.$http.put('/djbrand/system/address', value);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
+        this.$message.success('保存成功');
+        //刷新主体数据
+        this.fn.closeSlider();
       }
     },
-    computed: {},
     data() {
       return {
         formDialogVisible: false,

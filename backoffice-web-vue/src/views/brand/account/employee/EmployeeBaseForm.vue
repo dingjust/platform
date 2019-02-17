@@ -44,8 +44,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'EmployeeBaseForm',
     props: ['slotData', 'isNewlyCreated', 'readOnly'],
@@ -56,16 +54,14 @@
       getValue() {
         return this.slotData;
       },
-      getRoles() {
-        axios
-          .get('/djbrand/role?text=')
-          .then(response => {
-            console.log(response.data.content);
-            this.roles = response.data.content;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
+      async getRoles() {
+        const result = await this.$http.get('/djbrand/role?text=');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.roles = result.content;
       }
     },
     created() {
@@ -106,8 +102,10 @@
         rules: {
           password: [{validator: validatePass, trigger: 'blur'},
             {
-              required: true, message: '密码格式不正确，必须包含数字,字母,特殊符号两种或以上组合，且长度为6-16位',
-              trigger: 'blur', pattern: '^(?![0-9]+$)(?![a-zA-Z]+$)(?!([^(0-9a-zA-Z)]|[\\(\\)])+$)([^(0-9a-zA-Z)]|[\\(\\)]|[a-zA-Z]|[0-9]){6,16}$'
+              required: true,
+              message: '密码格式不正确，必须包含数字,字母,特殊符号两种或以上组合，且长度为6-16位',
+              trigger: 'blur',
+              pattern: '^(?![0-9]+$)(?![a-zA-Z]+$)(?!([^(0-9a-zA-Z)]|[\\(\\)])+$)([^(0-9a-zA-Z)]|[\\(\\)]|[a-zA-Z]|[0-9]){6,16}$'
             }],
           confirmPassword: [{validator: validatePass2, trigger: 'blur'}],
           name: [{required: true, message: '必填', trigger: 'blur'}],
