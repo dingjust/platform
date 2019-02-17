@@ -25,6 +25,10 @@ import {
   PickOrdersModule
 } from './modules';
 
+import {
+  BrandEmployeesModule
+} from './brand/modules';
+
 // 状态管理
 const state = {
   sideSliderState: false,
@@ -51,6 +55,7 @@ const actions = {
 export default new Vuex.Store({
   modules: {
     EnumsModule,
+    // tenant
     UsersModule,
     UserGroupsModule,
     RolesModule,
@@ -68,7 +73,9 @@ export default new Vuex.Store({
     RequirementOrdersModule,
     SalesOrdersModule,
     ProductionOrdersModule,
-    PickOrdersModule
+    PickOrdersModule,
+    // brand
+    BrandEmployeesModule
   },
   state,
   getters,
