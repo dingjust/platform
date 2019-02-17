@@ -23,41 +23,50 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('FactoryOrgsModule');
+
   import OrgBaseForm from "./OrgBaseForm";
 
   export default {
     name: "OrgForm",
     components: {OrgBaseForm},
     props: ["slotData"],
+    computed: {
+      isNewlyCreated: function () {
+        return this.slotData.id === null;
+      }
+    },
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onSubmit() {
         const baseForm = this.$refs["baseForm"];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
           }
-          axios.post("/djfactory/org", this.slotData)
-            .then(() => {
-              this.$message.success("保存成功");
-              this.fn.closeSlider(true);
-              //刷新主体数据
-            }).catch(error => {
-              this.$message.error("保存失败，原因：" + error.response.data.message);
-            }
-          );
+
+          this._onSubmit();
 
           return true;
         });
       },
       onCancel() {
         this.fn.closeSlider();
-      }
-    },
-    computed: {
-      isNewlyCreated: function () {
-        return this.slotData.id === null;
-      }
+      },
+      async _onSubmit() {
+        const result = await this.$http.post("/djfactory/org", this.slotData);
+        if (result["errors"]) {
+          this.$message.error("保存失败，原因：" + result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("保存成功");
+        this.fn.closeSlider(true);
+      },
     },
     data() {
       return {};
