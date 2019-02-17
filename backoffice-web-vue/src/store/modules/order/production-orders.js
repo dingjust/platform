@@ -1,4 +1,4 @@
-import http from "../../../common/js/http";
+import http from '../../../common/js/http';
 
 const state = {
   statusOptions: [
@@ -12,7 +12,7 @@ const state = {
     {text: '已发货', value: 'DELIVERING'},
     {text: '已完成', value: 'DELIVERY_COMPLETED'}
   ],
-  keyword: "",
+  keyword: '',
   statuses: [],
   currentPageNumber: 0,
   currentPageSize: 10,
@@ -36,33 +36,33 @@ const state = {
       name: ''
     },
     shippingAddress: {
-      fullname: "",
+      fullname: '',
       title: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
       region: {
-        isocode: "",
-        name: ""
+        isocode: '',
+        name: ''
       },
       city: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
       cityDistrict: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
-      line1: "",
-      remarks: ""
+      line1: '',
+      remarks: ''
     },
     consignmentEntries: [],
     namedDeliveryDate: null
   },
   queryFormData: {
-    productionOrderCode: "",
-    requirementOrderCode: "",
-    skuID: "",
+    productionOrderCode: '',
+    requirementOrderCode: '',
+    skuID: '',
     statuses: [],
     factory: [],
     expectedDeliveryDateFrom: null,
@@ -83,38 +83,38 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {keyword, statuses, page, size}) {
-    commit("keyword", keyword);
-    commit("currentPageNumber", page);
+    commit('keyword', keyword);
+    commit('currentPageNumber', page);
     if (size) {
-      commit("currentPageSize", size);
+      commit('currentPageSize', size);
     }
 
-    const response = await http.get("/djbackoffice/consignment", {
+    const response = await http.get('/djbackoffice/consignment', {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
     // console.log(JSON.stringify(response));
-    if (!response["errors"]) {
-      commit("page", response);
+    if (!response['errors']) {
+      commit('page', response);
     }
   },
   async searchAdvanced({dispatch, commit, state}, {query, page, size}) {
-    commit("queryFormData", query);
-    commit("currentPageNumber", page);
+    commit('queryFormData', query);
+    commit('currentPageNumber', page);
     if (size) {
-      commit("currentPageSize", size);
+      commit('currentPageSize', size);
     }
 
-    const response = await http.post("/djbackoffice/consignment/advancedSearch", query, {
+    const response = await http.post('/djbackoffice/consignment/advancedSearch', query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
     // console.log(JSON.stringify(response));
-    if (!response["errors"]) {
-      commit("page", response);
+    if (!response['errors']) {
+      commit('page', response);
     }
   },
   refresh({dispatch, commit, state}) {
@@ -122,7 +122,7 @@ const actions = {
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch("search", {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 

@@ -1,16 +1,16 @@
-import http from "../../../common/js/http";
+import http from '../../../common/js/http';
 
 const state = {
   items: [], // 数据,
   formData: {
     id: null,
-    code: "",
-    name: "",
-    group: "",
-    description: "",
+    code: '',
+    name: '',
+    group: '',
+    description: '',
     parent: {
-      code: "",
-      name: ""
+      code: '',
+      name: ''
     }
   }
 };
@@ -21,15 +21,15 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}) {
-    const response = await http.get("/djbackoffice/product/category/categories");
+    const response = await http.get('/djbackoffice/product/category/categories');
 
     // console.log(JSON.stringify(response));
-    if (!response["errors"]) {
-      commit("items", response);
+    if (!response['errors']) {
+      commit('items', response);
     }
   },
   refresh({dispatch, commit, state}) {
-    dispatch("search");
+    dispatch('search');
   }
 };
 

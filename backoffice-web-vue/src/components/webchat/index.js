@@ -9,7 +9,7 @@ export default {
   },
   methods: {
     initInstanceChat() {
-      const WebChatConstructor = Vue.extend(WebChat)
+      const WebChatConstructor = Vue.extend(WebChat);
       this.instanceChat = new WebChatConstructor({
         el: document.createElement('div'),
         store: this.$store

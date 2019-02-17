@@ -10,8 +10,8 @@
 </template>
 <script>
   export default {
-    name: "MediaFileList",
-    props: ["file"],
+    name: 'MediaFileList',
+    props: ['file'],
     methods: {
       onDelete(item) {
         this.$emit('onDelete', item);

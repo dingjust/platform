@@ -4,17 +4,17 @@
       return {
         pickOrderStatuses: [
           {
-            code: "WAIT_FOR_CONFIRM",
-            name: "待处理"
+            code: 'WAIT_FOR_CONFIRM',
+            name: '待处理'
           },
           {
-            code: "CONFIRMED",
-            name: "已确认"
+            code: 'CONFIRMED',
+            name: '已确认'
           }
         ],
         pickOrderStatusProcessFlow: {
-          "WAIT_FOR_CONFIRM": 0, // 待处理
-          "CONFIRMED": 1,//已确认
+          'WAIT_FOR_CONFIRM': 0, // 待处理
+          'CONFIRMED': 1,//已确认
         }
       }
     }

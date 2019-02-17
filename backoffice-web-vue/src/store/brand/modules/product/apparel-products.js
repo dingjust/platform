@@ -1,7 +1,7 @@
-import http from "../../../../common/js/http";
+import http from '../../../../common/js/http';
 
 const state = {
-  keyword: "",
+  keyword: '',
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -13,8 +13,8 @@ const state = {
   },
   formData: {
     id: null,
-    code: "",
-    name: "",
+    code: '',
+    name: '',
     price: 0.00,
     suggestedPrice: 0.00,
     price1: 0.00,
@@ -22,30 +22,30 @@ const state = {
     price3: 0.00,
     categories: [],
     staircasePrices: [],
-    startingAmount: "",
-    skuID: "",
-    year: "",
-    season: "",
-    placeOfOrigin: "",
-    brand: "",
+    startingAmount: '',
+    skuID: '',
+    year: '',
+    season: '',
+    placeOfOrigin: '',
+    brand: '',
     style: {
       id: null,
-      code: "",
-      name: ""
+      code: '',
+      name: ''
     },
-    material: "",
-    content: "",
+    material: '',
+    content: '',
     belongTo: {
-      uid: "",
-      name: ""
+      uid: '',
+      name: ''
     },
     postageFree: true,
     gramWeight: 0.0,
     variants: []
   },
   queryFormData: {
-    skuID: "",
-    name: "",
+    skuID: '',
+    name: '',
     approvalStatuses: [],
     categories: []
   }
@@ -61,38 +61,38 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {keyword, page, size}) {
-    commit("keyword", keyword);
-    commit("currentPageNumber", page);
+    commit('keyword', keyword);
+    commit('currentPageNumber', page);
     if (size) {
-      commit("currentPageSize", size);
+      commit('currentPageSize', size);
     }
 
-    const response = await http.get("/djbrand/product", {
+    const response = await http.get('/djbrand/product', {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
     // console.log(JSON.stringify(response));
-    if (!response["errors"]) {
-      commit("page", response);
+    if (!response['errors']) {
+      commit('page', response);
     }
   },
   async searchAdvanced({dispatch, commit, state}, {query, page, size}) {
-    commit("queryFormData", query);
-    commit("currentPageNumber", page);
+    commit('queryFormData', query);
+    commit('currentPageNumber', page);
     if (size) {
-      commit("currentPageSize", size);
+      commit('currentPageSize', size);
     }
 
-    const response = await http.post("/djbrand/product/advancedSearch", query, {
+    const response = await http.post('/djbrand/product/advancedSearch', query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
     // console.log(JSON.stringify(response));
-    if (!response["errors"]) {
-      commit("page", response);
+    if (!response['errors']) {
+      commit('page', response);
     }
   },
   refresh({dispatch, commit, state}) {
@@ -100,7 +100,7 @@ const actions = {
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch("search", {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 

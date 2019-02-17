@@ -1,4 +1,4 @@
-import http from "../../../common/js/http";
+import http from '../../../common/js/http';
 
 const state = {
   statusOptions: [
@@ -10,7 +10,7 @@ const state = {
     {text: '已出库', value: 'OUT_OF_STORE'},
     {text: '已签收', value: 'COMPLETED'}
   ],
-  keyword: "",
+  keyword: '',
   statuses: [],
   currentPageNumber: 0,
   currentPageSize: 10,
@@ -23,9 +23,9 @@ const state = {
   },
   formData: {
     id: null,
-    code: "",
-    name: "",
-    description: "",
+    code: '',
+    name: '',
+    description: '',
     depositPaid: false,
     depositAmount: 0,
     retainagePaid: false,
@@ -33,35 +33,35 @@ const state = {
     entries: [],
     contracts: [],
     deliveryAddress: {
-      fullname: "",
+      fullname: '',
       title: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
       region: {
-        isocode: "",
-        name: ""
+        isocode: '',
+        name: ''
       },
       city: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
       cityDistrict: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
-      line1: "",
-      remarks: ""
+      line1: '',
+      remarks: ''
     },
     details: {
       minorCategories: [],
       category: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
       majorCategory: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
       expectedMachiningQuantity: 0,
       machiningType: null,
@@ -69,17 +69,17 @@ const state = {
       maxExpectedPrice: 0,
       invoiceNeeded: false,
       samplesNeeded: false,
-      contactPerson: "",
-      contactPhone: ""
+      contactPerson: '',
+      contactPhone: ''
     },
     belongTo: {
-      uid: "",
-      name: ""
+      uid: '',
+      name: ''
     }
   },
   queryFormData: {
-    code: "",
-    skuID: "",
+    code: '',
+    skuID: '',
     statuses: [],
     belongTos: [],
     expectedDeliveryDateFrom: null,
@@ -100,14 +100,14 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {keyword, statuses, page, size}) {
-    commit("keyword", keyword);
-    commit("statuses", statuses);
-    commit("currentPageNumber", page);
+    commit('keyword', keyword);
+    commit('statuses', statuses);
+    commit('currentPageNumber', page);
     if (size) {
-      commit("currentPageSize", size);
+      commit('currentPageSize', size);
     }
 
-    const response = await http.post("/djbackoffice/requirementOrder", {
+    const response = await http.post('/djbackoffice/requirementOrder', {
       code: state.keyword,
       statuses: state.statuses
     }, {
@@ -116,25 +116,25 @@ const actions = {
     });
 
     // console.log(JSON.stringify(response));
-    if (!response["errors"]) {
-      commit("page", response);
+    if (!response['errors']) {
+      commit('page', response);
     }
   },
   async searchAdvanced({dispatch, commit, state}, {query, page, size}) {
-    commit("queryFormData", query);
-    commit("currentPageNumber", page);
+    commit('queryFormData', query);
+    commit('currentPageNumber', page);
     if (size) {
-      commit("currentPageSize", size);
+      commit('currentPageSize', size);
     }
 
-    const response = await http.post("/djbackoffice/requirementOrder/advancedSearch", query, {
+    const response = await http.post('/djbackoffice/requirementOrder/advancedSearch', query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
     // console.log(JSON.stringify(response));
-    if (!response["errors"]) {
-      commit("page", response);
+    if (!response['errors']) {
+      commit('page', response);
     }
   },
   refresh({dispatch, commit, state}) {
@@ -143,7 +143,7 @@ const actions = {
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch("search", {keyword, statuses, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {keyword, statuses, page: currentPageNumber, size: currentPageSize});
   }
 };
 

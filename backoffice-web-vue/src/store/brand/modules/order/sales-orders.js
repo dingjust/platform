@@ -1,7 +1,7 @@
-import http from "../../../../common/js/http";
+import http from '../../../../common/js/http';
 
 const state = {
-  keyword: "",
+  keyword: '',
   statuses: [],
   currentPageNumber: 0,
   currentPageSize: 10,
@@ -14,30 +14,30 @@ const state = {
   },
   formData: {
     id: null,
-    code: "",
-    name: "",
-    description: "",
+    code: '',
+    name: '',
+    description: '',
     entries: [],
     deliveryAddress: {
-      fullname: "",
+      fullname: '',
       title: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
       region: {
-        isocode: "",
-        name: ""
+        isocode: '',
+        name: ''
       },
       city: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
       cityDistrict: {
-        code: "",
-        name: ""
+        code: '',
+        name: ''
       },
-      line1: "",
-      remarks: ""
+      line1: '',
+      remarks: ''
     }
   }
 };
@@ -51,21 +51,21 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {keyword, page, size}) {
-    commit("keyword", keyword);
-    commit("currentPageNumber", page);
+    commit('keyword', keyword);
+    commit('currentPageNumber', page);
     if (size) {
-      commit("currentPageSize", size);
+      commit('currentPageSize', size);
     }
 
-    const response = await http.get("/djbrand/salesOrder", {
+    const response = await http.get('/djbrand/salesOrder', {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
     // console.log(JSON.stringify(response));
-    if (!response["errors"]) {
-      commit("page", response);
+    if (!response['errors']) {
+      commit('page', response);
     }
   },
   refresh({dispatch, commit, state}) {
@@ -73,7 +73,7 @@ const actions = {
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch("search", {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 

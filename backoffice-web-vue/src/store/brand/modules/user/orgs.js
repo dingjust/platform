@@ -1,7 +1,7 @@
-import http from "../../../../common/js/http";
+import http from '../../../../common/js/http';
 
 const state = {
-  keyword: "",
+  keyword: '',
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -12,12 +12,12 @@ const state = {
     content: [] // 当前页数据
   },
   formData: {
-    uid: "",
-    name: "",
-    comment: "",
+    uid: '',
+    name: '',
+    comment: '',
     active: true,
-    path: "",
-    parent: ""
+    path: '',
+    parent: ''
   }
 };
 
@@ -30,21 +30,21 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {keyword, page, size}) {
-    commit("keyword", keyword);
-    commit("currentPageNumber", page);
+    commit('keyword', keyword);
+    commit('currentPageNumber', page);
     if (size) {
-      commit("currentPageSize", size);
+      commit('currentPageSize', size);
     }
 
-    const response = await http.get("/djbrand/org", {
+    const response = await http.get('/djbrand/org', {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
     // console.log(JSON.stringify(response));
-    if (!response["errors"]) {
-      commit("page", response);
+    if (!response['errors']) {
+      commit('page', response);
     }
   },
   refresh({dispatch, commit, state}) {
@@ -52,7 +52,7 @@ const actions = {
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch("search", {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 

@@ -1,10 +1,10 @@
 const state = {
   approvalStatuses: [{
-    code: "approved",
-    name: "上架"
+    code: 'approved',
+    name: '上架'
   }, {
-    code: "unapproved",
-    name: "下架"
+    code: 'unapproved',
+    name: '下架'
   }]
 };
 
