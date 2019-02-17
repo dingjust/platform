@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-table stripe :data="page.content">
+    <el-table stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
       <el-table-column label="会员名称" prop="customer.name"></el-table-column>
       <el-table-column label="手机号码" prop="customer.mobileNumber"></el-table-column>
       <el-table-column label="电子邮箱" prop="customer.email"></el-table-column>
@@ -23,9 +23,13 @@
     </el-table>
     <div class="pt-2"></div>
     <div class="float-right">
-      <el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="onPageSizeChanged"
-                     @current-change="onCurrentPageChanged" :current-page="page.number + 1" :page-size="page.size"
-                     :page-count="page.totalPages" :total="page.totalElements">
+      <el-pagination layout="total, sizes, prev, pager, next, jumper"
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </div>
     <div class="clearfix"></div>
@@ -33,34 +37,36 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandMembersModule');
+
+  import autoHeight from 'mixins/autoHeight';
 
   export default {
     name: "MembersPage",
     props: ["slotData"],
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
+    },
     methods: {
+      ...mapActions({
+        search: "search"
+      }),
       onPageSizeChanged(val) {
         this.reset();
 
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       _onSearch(page, size) {
-        const params = {
-          text: "",
-          page: page,
-          size: size
-        };
-        axios.get("/djbrand/membership", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error(error.response.data);
-        });
+        const keyword = "";
+        this.search({keyword, page, size});
       },
       onRelieve(row) {
         // 调用审核拒绝接口
@@ -68,44 +74,29 @@
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(() => {
-          axios
-            .delete("/djbrand/membership", {
-              params: {
-                customerUid: row.customer.uid
-              }
-            })
-            .then(response => {
-              this.$message({
-                type: "success",
-                message: "移除成功"
-              });
-              this._onSearch(0, this.page.size);
-            })
-            .catch(error => {
-              this.$message({
-                type: "error",
-                message: "移除失败"
-              });
-            });
+        }).then(() => this._onRelieve(row));
+      },
+      async _onRelieve(row) {
+        const result = await this.$http.delete("/djbrand/membership", {
+          customerUid: row.customer.uid
         });
-      }
-    },
-    data() {
-      return {
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
+
+        if (result["errors"]) {
+          this.$message.error("移除失败，原因：" + result["errors"][0].message);
+          return;
         }
-      };
+
+        this.$message.success("移除成功");
+        this._onSearch(0);
+      }
     },
     mounted: function () {
       this.$nextTick(function () {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       });
+    },
+    data() {
+      return {};
     }
   };
 </script>

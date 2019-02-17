@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table ref="resultTable" stripe :data="page.content">
+    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
       <el-table-column label="会员UID" prop="customer.uid"></el-table-column>
       <el-table-column label="会员名称" prop="customer.name"></el-table-column>
       <el-table-column label="会员手机号" prop="customer.mobileNumber"></el-table-column>
@@ -27,34 +27,34 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandMemberRequestsModule');
+
+  import autoHeight from 'mixins/autoHeight';
 
   export default {
     name: "MemberRequestPage",
     props: ["slotData"],
-    data() {
-      return {
-        text: "",
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
-      };
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
     },
     methods: {
+      ...mapActions({
+        search: "search"
+      }),
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onPageSizeChanged(val) {
         this.reset();
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -62,17 +62,8 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          page: page,
-          size: size
-        };
-        axios.get("/djbrand/memberRequest", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(() => {
-          this.$message.error("获取数据失败");
-        });
+        const keyword = "";
+        this.search({keyword, page, size});
       },
       onApprove(row) {
         // 调用审核通过接口
@@ -80,42 +71,53 @@
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(() => {
-          axios.put("/djbrand/memberRequest/approve", {
-            customer: {uid: row.customer.uid},
-            company: {uid: row.company.uid}
-          }).then(() => {
-            this.$message.success("确认成功");
-            this._onSearch(0, this.page.size);
-          }).catch(() => {
-            this.$message.error("通过失败");
-          });
+        }).then(() => this._onApprove(row));
+      },
+      async _onApprove(row) {
+        const result = await this.$http.put("/djbrand/memberRequest/approve", {
+          customer: {uid: row.customer.uid},
+          company: {uid: row.company.uid}
         });
+
+        if (result["errors"]) {
+          this.$message.error("通过失败，原因：" + result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("确认成功");
+        this._onSearch(0);
       },
       onReject(row) {
         //调用审核拒绝接口
         this.$prompt("请输入拒绝原因", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消"
-        }).then(({value}) => {
-          axios.put("/djbrand/memberRequest/reject", {
-            customer: {uid: row.customer.uid},
-            company: {uid: row.company.uid},
-            remarks: value
-          }).then(response => {
-            this.$message.success("拒绝成功");
-            this._onSearch(0, this.page.size);
-          }).catch(() => {
-            this.$message.error("拒绝失败");
-          });
+        }).then(() => this._onReject(row));
+      },
+      async _onReject(row) {
+        const result = await this.$http.put("/djbrand/memberRequest/reject", {
+          customer: {uid: row.customer.uid},
+          company: {uid: row.company.uid},
+          remarks: value
         });
+
+        if (result["errors"]) {
+          this.$message.error("拒绝失败，原因：" + result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("拒绝成功");
+        this._onSearch(0);
       }
     },
     mounted: function () {
       this.$nextTick(function () {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       });
-    }
+    },
+    data() {
+      return {};
+    },
   };
 </script>
 

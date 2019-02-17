@@ -1,4 +1,7 @@
-import MembersPage from "./MembersPage.vue";
-import MemberRequestPage from "./MemberRequestPage.vue";
+import MembersPage from "./MembersPage";
+import MemberRequestsPage from "./MemberRequestsPage";
 
-export {MembersPage, MemberRequestPage};
+export {
+  MembersPage,
+  MemberRequestsPage
+};

@@ -74,8 +74,9 @@ let http = {
   delete: function (url, params) {
     setAuthorization();
     return new Promise((resolve, reject) => {
-      axios.delete(url, params)
-        .then((response) => resolve(response.data))
+      axios.delete(url, {
+        params: params
+      }).then((response) => resolve(response.data))
         .catch((error) => resolve(error.response.data));
     });
   }
