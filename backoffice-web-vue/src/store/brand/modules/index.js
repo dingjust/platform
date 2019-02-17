@@ -7,6 +7,8 @@ import BrandRolesModule from './user/roles';
 import BrandRequirementOrdersModule from './order/requirement-orders';
 import BrandSalesOrdersModule from './order/sales-orders';
 import BrandProductionOrdersModule from './order/production-orders';
+import BrandApparelProductsModule from './product/apparel-products';
+import BrandDeletedApparelProductsModule from './product/deleted-apparel-products';
 
 export {
   BrandEmployeesModule,
@@ -18,4 +20,6 @@ export {
   BrandRequirementOrdersModule,
   BrandSalesOrdersModule,
   BrandProductionOrdersModule,
+  BrandApparelProductsModule,
+  BrandDeletedApparelProductsModule,
 }

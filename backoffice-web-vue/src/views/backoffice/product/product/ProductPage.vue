@@ -81,10 +81,10 @@
           <el-button type="primary" slot="reference">高级查询</el-button>
         </el-popover>
       </el-form>
-      <el-table v-if="isHeightComputed" ref="resultTable" stripe
+      <el-table ref="resultTable" stripe
                 :data="page.content"
                 @selection-change="handleSelectionChange"
-                :height="autoHeight">
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column type="selection" width="32" fixed></el-table-column>
         <el-table-column label="编码" prop="code" width="120" fixed></el-table-column>
         <el-table-column label="供应商产品编码" prop="skuID" width="120" fixed></el-table-column>
@@ -165,7 +165,7 @@
       },
       onSearch() {
         this.advancedSearch = false;
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       _onSearchDelegated() {
         if (this.advancedSearch) {
@@ -176,7 +176,7 @@
       },
       onAdvancedSearch() {
         this.advancedSearch = true;
-        this._onAdvancedSearch(0, this.page.size)
+        this._onAdvancedSearch(0)
       },
       onNew() {
         this.fn.openSlider("创建产品", ProductForm, this.formData);
@@ -232,7 +232,6 @@
       onPageSizeChanged(val) {
         this.reset();
 
-        this.page.size = val;
         if (this.advancedSearch) {
           this._onAdvancedSearch(0, val);
         } else {
@@ -241,9 +240,9 @@
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
-          this._onAdvancedSearch(val - 1, this.page.size);
+          this._onAdvancedSearch(val - 1);
         } else {
-          this._onSearch(val - 1, this.page.size);
+          this._onSearch(val - 1);
         }
       },
       reset() {
@@ -303,6 +302,7 @@
         } else {
           this.$set(row, "approvalStatus", "approved")
         }
+
         this.$message.success(message + "成功");
       },
       async changeRecommendedStatus(row) {
@@ -328,7 +328,7 @@
     },
     data() {
       return {
-        text: "",
+        text: this.$store.state.ApparelProductsModule.keyword,
         approvalStatuses: this.$store.state.EnumsModule.approvalStatuses,
         formData: this.$store.state.ApparelProductsModule.formData,
         queryFormData: this.$store.state.ApparelProductsModule.queryFormData,

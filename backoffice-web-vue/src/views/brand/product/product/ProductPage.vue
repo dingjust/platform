@@ -15,19 +15,19 @@
           <el-row :gutter="10">
             <el-col :span="12">
               <el-form-item label="供应商商品编号">
-                <el-input v-model="query.skuID"></el-input>
+                <el-input v-model="queryFormData.skuID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="商品名称">
-                <el-input v-model="query.name"></el-input>
+                <el-input v-model="queryFormData.name"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :span="12">
               <el-form-item label="商品状态（上下架）">
-                <el-select v-model="query.approvalStatuses" placeholder="请选择"
+                <el-select v-model="queryFormData.approvalStatuses" placeholder="请选择"
                            multiple class="w-100">
                   <el-option
                     v-for="item in approvalStatuses"
@@ -40,7 +40,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="产品分类">
-                <el-select v-model="query.categories" placeholder="请选择" class="w-100"
+                <el-select v-model="queryFormData.categories" placeholder="请选择" class="w-100"
                            filterable reserve-keyword clearable
                            multiple>
                   <el-option-group
@@ -68,12 +68,13 @@
       </el-form>
       <el-table ref="resultTable" stripe
                 :data="page.content"
-                @selection-change="handleSelectionChange">
+                @selection-change="handleSelectionChange"
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column type="selection" width="32"></el-table-column>
         <el-table-column label="编码" prop="code" width="160"></el-table-column>
         <el-table-column label="供应商产品编码" prop="skuID"></el-table-column>
         <el-table-column label="名称" prop="name" width="480"></el-table-column>
-        <el-table-column label="价格" prop="price"  :formatter="numberFormatter"></el-table-column>
+        <el-table-column label="价格" prop="price" :formatter="numberFormatter"></el-table-column>
         <el-table-column label="上下架">
           <template slot-scope="scope">
             <el-switch active-color="#13ce66" inactive-color="#ff4949"
@@ -109,8 +110,8 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pt-2 "></div>
-      <div class="float-right ">
+      <div class="pt-2"></div>
+      <div class="float-right">
         <el-pagination layout="total, sizes, prev, pager, next, jumper"
                        @size-change="onPageSizeChanged"
                        @current-change="onCurrentPageChanged"
@@ -120,68 +121,54 @@
                        :total="page.totalElements">
         </el-pagination>
       </div>
-      <div class="clearfix "></div>
+      <div class="clearfix"></div>
     </el-card>
   </div>
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandApparelProductsModule');
+
+  import autoHeight from 'mixins/autoHeight';
 
   import {ProductForm, ProductDetailsPage} from "./";
 
   export default {
     name: "ProductPage",
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      }),
+      // 批量上下架code数组
+      codes: function () {
+        return this.multipleSelection.map((item, number, any) => {
+          return item.code;
+        });
+      }
+    },
     methods: {
-      numberFormatter(val){
-        if(val.price !== null && val.price !== '' && val.price !== 'undefined'){
-          let prices = parseFloat(val.price).toFixed(2);
-          return prices;
-        }else{
-          return ;
+      ...mapActions({
+        search: "search",
+        searchAdvanced: "searchAdvanced"
+      }),
+      numberFormatter(val) {
+        if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
+          return parseFloat(val.price).toFixed(2);
         }
       },
       onSearch() {
         this.advancedSearch = false;
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onAdvancedSearch() {
         this.advancedSearch = true;
-        this._onAdvancedSearch(0, this.page.size)
+        this._onAdvancedSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建产品", ProductForm, {
-          id: null,
-          code: "",
-          name: "",
-          price: 0.00,
-          suggestedPrice: 0.00,
-          price1: 0.00,
-          price2: 0.00,
-          price3: 0.00,
-          categories: [],
-          staircasePrices: [],
-          startingAmount: "",
-          skuID: "",
-          year: "",
-          season: "",
-          placeOfOrigin: "",
-          brand: "",
-          style: {
-            id: null,
-            code: "",
-            name: ""
-          },
-          material: "",
-          content: "",
-          belongTo: {
-            uid: "",
-            name: ""
-          },
-          postageFree: true,
-          gramWeight: 0.0,
-          variants: []
-        });
+        this.fn.openSlider("创建产品", ProductForm, this.formData);
       },
       onBatchLaunch() {
         if (this.multipleSelection.length < 1) {
@@ -190,15 +177,17 @@
           return;
         }
 
-        axios.put("/djbrand/product/shelf/list", this.codes)
-          .then(() => {
-            this.$message.success("批量上架成功");
+        this._onBatchLaunch();
+      },
+      async _onBatchLaunch() {
+        const result = await this.$http.put("/djbrand/product/shelf/list", this.codes);
+        if (result["errors"]) {
+          this.$message.error("批量上架失败，原因：" + result["errors"][0].message);
+          return;
+        }
 
-            this.onSearch();
-          }).catch(error => {
-            this.$message.error("批量上架失败，原因：" + error.response.data);
-          }
-        );
+        this.$message.success("批量上架成功");
+        this._onSearchDelegated();
       },
       onBatchWithdraw() {
         if (this.multipleSelection.length < 1) {
@@ -207,30 +196,31 @@
           return;
         }
 
-        axios.post("/djbrand/product/shelf/list", this.codes)
-          .then(() => {
-            this.$message.success("批量下架成功");
-
-            this.onSearch();
-          }).catch(error => {
-            this.$message.error("批量下架失败，原因：" + error.response.data);
-          }
-        );
+        this._onBatchWithdraw();
       },
-      onDetails(item) {
-        axios.get("/djbrand/product/details/" + item.code)
-          .then(response => {
-            // console.log(response.data);
-            this.fn.openSlider("产品明细", ProductDetailsPage, response.data);
-          })
-          .catch(error => {
-            this.$message.error(error.response.data);
-          });
+      async _onBatchWithdraw() {
+        const result = await this.$http.post("/djbrand/product/shelf/list", this.codes);
+        if (result["errors"]) {
+          this.$message.error("批量下架失败，原因：" + result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("批量下架成功");
+
+        this._onSearchDelegated();
+      },
+      async onDetails(item) {
+        const result = await this.$http.get("/djbrand/product/details/" + item.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.fn.openSlider("产品明细", ProductDetailsPage, result);
       },
       onPageSizeChanged(val) {
         this.reset();
 
-        this.page.size = val;
         if (this.advancedSearch) {
           this._onAdvancedSearch(0, val);
         } else {
@@ -239,9 +229,9 @@
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
-          this._onAdvancedSearch(val - 1, this.page.size);
+          this._onAdvancedSearch(val - 1);
         } else {
-          this._onSearch(val - 1, this.page.size);
+          this._onSearch(val - 1);
         }
       },
       reset() {
@@ -250,156 +240,93 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-
-        axios.get("/djbrand/product", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-          console.log(this.page.content);
-        }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        const keyword = this.text;
+        this.search({keyword, page, size});
       },
       _onAdvancedSearch(page, size) {
-        const params = {
-          page: page,
-          size: size
-        };
-
-        axios.post("/djbrand/product/advancedSearch", this.query, {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        const query = this.queryFormData;
+        this.searchAdvanced({query, page, size});
       },
       onDeleted(row) {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          axios.put("/djbrand/product/deleted/" + row.code)
-            .then(() => {
-              this.$message.success("删除产品成功，产品将在30天后彻底删除！");
-
-              this.onSearch();
-            }).catch(error => {
-            this.$message({
-              type: "error",
-              message: "失败， 原因：" + error.response.data
-            });
-          });
-        });
+        }).then(() => this._onDeleted(row));
       },
-      changeShelfStatus(row) {
-        let request = axios.put;
+      async _onDeleted(row) {
+        const result = await this.$http.put("/djbrand/product/deleted/" + row.code);
+        if (result["errors"]) {
+          this.$message.error("失败， 原因：" + result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("删除产品成功，产品将在30天后彻底删除！");
+
+        this.onSearch();
+      },
+      async getCategories() {
+        const results = await this.$http.get("/djbackoffice/product/category/cascaded");
+        if (!results["errors"]) {
+          this.categories = results;
+        }
+      },
+      async changeShelfStatus(row) {
+        let request = this.$http.put;
         let message = "上架";
         if (row.approvalStatus === "approved") {
-          request = axios.post;
+          request = this.$http.post;
           message = "下架";
         }
 
-        request("/djbrand/product/shelf/" + row.code)
-          .then(() => {
-            this.$message.success(message + "成功");
+        const result = await request("/djbrand/product/shelf/" + row.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.onSearch();
-          }).catch(error => {
-            this.$message({
-              type: "error",
-              message: message + "失败， 原因：" + error.response.data
-            });
-          }
-        );
+        if (row.approvalStatus === "approved") {
+          this.$set(row, "approvalStatus", "unapproved")
+        } else {
+          this.$set(row, "approvalStatus", "approved")
+        }
+
+        this.$message.success(message + "成功");
       },
-      changeRecommendedStatus(row) {
-        let request = axios.put;
+      async changeRecommendedStatus(row) {
+        let request = this.$http.put;
         let message = "推荐";
-        console.log(row);
         if (!row.recommended) {
-          request = axios.post;
+          request = this.$http.post;
           message = "取消推荐";
         }
 
-        request("/djbrand/product/recommended/" + row.code)
-          .then(() => {
-            this.$message.success(message + "成功");
+        const result = await request("/djbrand/product/recommended/" + row.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.onSearch();
-          }).catch(error => {
-            this.$message({
-              type: "error",
-              message: message + "失败， 原因：" + error.response.data
-            });
-          }
-        );
+        this.$set(row, "recommended", row.recommended);
+        this.$message.success(message + "成功");
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
-      },
-      getCategories(query) {
-        axios.get("/djbackoffice/product/category/cascaded")
-          .then(response => {
-            this.categories = response.data;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
-      }
-    },
-    watch: {
-      "$store.state.sideSliderState": function (value) {
-        if (!value) {
-          this.onSearch();
-        }
-      }
-    },
-    computed: {
-      // 批量上下架code数组
-      codes: function () {
-        return this.multipleSelection.map((item, number, any) => {
-          return item.code;
-        });
       }
     },
     data() {
       return {
-        text: "",
-        query: {
-          skuID: "",
-          name: "",
-          approvalStatuses: [],
-          categories: []
-        },
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        },
+        text: this.$store.state.BrandApparelProductsModule.keyword,
+        approvalStatuses: this.$store.state.EnumsModule.approvalStatuses,
+        formData: this.$store.state.BrandApparelProductsModule.formData,
+        queryFormData: this.$store.state.BrandApparelProductsModule.queryFormData,
         advancedSearch: false,
         multipleSelection: [],
-        categories: [],
-        approvalStatuses: [{
-          code: "approved",
-          name: "上架"
-        }, {
-          code: "unapproved",
-          name: "下架"
-        }]
+        categories: []
       };
     },
-    created(){
+    created() {
+      this.search({keyword: "", page: 0});
       this.getCategories("");
     }
   };
