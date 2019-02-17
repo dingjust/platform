@@ -23,7 +23,10 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('FactoryEmployeesModule');
+
   import EmployeeBaseForm from './EmployeeBaseForm';
 
   export default {
@@ -31,32 +34,38 @@
     components: {EmployeeBaseForm},
     props: ['slotData'],
     methods: {
-      onSubmit () {
+      ...mapActions({
+        refresh: "refresh"
+      }),
+      onSubmit() {
         const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
           }
-          let request = axios.post;
-          if (!this.isNewlyCreated) {
-            request = axios.put;
-          }
-          request('/djfactory/employee', baseForm.getValue())
-            .then(() => {
-              this.$message.success('保存成功');
 
-              this.fn.closeSlider(true);
-              //刷新主体数据
-            }).catch(error => {
-              this.$message.error('保存失败，原因：' + error.response.data.message);
-            }
-          );
+          this._onSubmit(baseForm.getValue());
 
           return true;
         });
       },
-      onCancel () {
+      onCancel() {
         this.fn.closeSlider();
+      },
+      async _onSubmit(formData) {
+        let request = this.$http.post;
+        if (!this.isNewlyCreated) {
+          request = this.$http.put;
+        }
+        const result = await request("/djfactory/employee", formData);
+        if (result["errors"]) {
+          this.$message.error("保存失败，原因：" + result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("保存成功");
+        this.refresh();
+        this.fn.closeSlider(true);
       }
     },
     computed: {
@@ -64,7 +73,7 @@
         return this.slotData.id === null;
       }
     },
-    data () {
+    data() {
       return {};
     }
   };

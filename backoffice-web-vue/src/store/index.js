@@ -40,6 +40,16 @@ import {
   BrandApparelProductStocksModule,
 } from './brand/modules';
 
+import {
+  FactoryEmployeesModule,
+  FactoryOrgsModule,
+  FactoryRolesModule,
+  FactoryFabricProductsModule,
+  FactoryFabricProductStocksModule,
+  FactoryProductionOrdersModule,
+  FactoryPickOrdersModule,
+} from './factory/modules';
+
 // 状态管理
 const state = {
   sideSliderState: false,
@@ -98,6 +108,14 @@ export default new Vuex.Store({
     BrandApparelProductsModule,
     BrandDeletedApparelProductsModule,
     BrandApparelProductStocksModule,
+    // factory
+    FactoryEmployeesModule,
+    FactoryOrgsModule,
+    FactoryRolesModule,
+    FactoryFabricProductsModule,
+    FactoryFabricProductStocksModule,
+    FactoryProductionOrdersModule,
+    FactoryPickOrdersModule,
   },
   state,
   getters,
