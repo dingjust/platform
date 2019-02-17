@@ -10,7 +10,8 @@
           <el-button type="primary" icon="el-icon-plus" @click="onNew">创建</el-button>
         </el-button-group>
       </el-form>
-      <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
+      <el-table ref="resultTable" stripe :data="page.content"
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="编码" prop="code"></el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="价格" prop="price" :formatter="numberFormatter"></el-table-column>
@@ -71,11 +72,10 @@
       onPageSizeChanged(val) {
         this.reset();
 
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();

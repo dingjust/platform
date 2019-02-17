@@ -1,4 +1,4 @@
-import http from "../../../common/js/http";
+import http from "../../../../common/js/http";
 
 const state = {
   keyword: "",
@@ -39,8 +39,8 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.get("/djbackoffice/product/fabric", {
-      code: state.keyword, // TODO: RENAME TO text
+    const response = await http.get("/djfactory/fabricProduct", {
+      text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

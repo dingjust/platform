@@ -39,7 +39,9 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('FactoryFabricProductsModule');
 
   import FabricProductBaseForm from './FabricProductBaseForm';
   import FabricProductDetailsPage from './FabricProductDetailsPage';
@@ -49,27 +51,14 @@
     props: ['slotData'],
     components: {FabricProductBaseForm, FabricProductDetailsPage},
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onSubmit() {
         let formData = Object.assign({}, this.slotData);
         this.$refs['fabricProductBaseForm'].validate(valid => {
           if (valid) {
-            let request = axios.post;
-            if (!this.isNewlyCreated) {
-              request = axios.put;
-            }
-
-            request('/djfactory/fabricProduct', formData)
-              .then(response => {
-                const code = response.data;
-                this.$message.success('创建成功，产品编码：' + code);
-
-                this.$set(this.slotData, 'code', code);
-
-                this.next(1);
-              }).catch(error => {
-                this.$message.error(error.response.data);
-              }
-            );
+            this._onSubmit();
 
             return true;
           }
@@ -85,6 +74,24 @@
       },
       next(active) {
         this.active = active;
+      },
+      async _onSubmit() {
+        let formData = Object.assign({}, this.slotData);
+
+        let request = this.$http.post;
+        if (!this.isNewlyCreated) {
+          request = this.$http.put;
+        }
+
+        const result = await request("/djfactory/fabricProduct", formData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('创建成功，产品编码：' + result);
+        this.$set(this.slotData, 'code', result);
+        this.next(1);
       }
     },
     computed: {
