@@ -38,10 +38,6 @@ const state = {
       },
       line1: "",
       remarks: ""
-    },
-    belongTo: {
-      uid: "",
-      name: ""
     }
   }
 };
@@ -61,7 +57,7 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.get("/djbackoffice/salesOrder", {
+    const response = await http.get("/djbrand/salesOrder", {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
