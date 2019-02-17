@@ -9,8 +9,8 @@
           <el-button type='primary' icon='el-icon-search' @click='onSearch'></el-button>
         </el-button-group>
       </el-form>
-      <el-table ref='resultTable' stripe
-                :data='page.content'>
+      <el-table ref='resultTable' stripe :data='page.content'
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column type='expand'>
           <template slot-scope='props'>
             <el-table stripe :data='props.row.stockLevels' row-key='code'>
@@ -45,7 +45,7 @@
       <div class='clearfix'></div>
     </el-card>
     <el-dialog title='调整库存' width='70%'
-               :visible.sync='formDialogVisible'  :close-on-click-modal="false" :modal='false'>
+               :visible.sync='formDialogVisible' :close-on-click-modal="false" :modal='false'>
       <inventory-base-form ref='InventoryBaseForm'
                            :slot-data='rowData'
                            :read-only='false'
@@ -60,32 +60,42 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('FactoryFabricProductStocksModule');
+
+  import autoHeight from 'mixins/autoHeight';
+
   import InventoryBaseForm from './InventoryBaseForm';
 
   export default {
     name: 'InventoryPage',
     components: {InventoryBaseForm},
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
+    },
     methods: {
-      numberFormatter(val){
-        if(val.price !== null && val.price !== '' && val.price !== 'undefined'){
-          let prices = parseFloat(val.price).toFixed(2);
-          return prices;
-        }else{
-          return ;
+      ...mapActions({
+        search: "search"
+      }),
+      numberFormatter(val) {
+        if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
+          return parseFloat(val.price).toFixed(2);
         }
       },
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onPageSizeChanged(val) {
         this.reset();
 
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -93,24 +103,10 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-
-        axios.get('/djfactory/fabric/stockLevel', {
-          params: params
-        }).then(response => {
-          console.log(response.data);
-          this.page = response.data;
-        }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        const keyword = this.text;
+        this.search({keyword, page, size});
       },
       onUpdateInventory(item) {
-        console.log(item);
         this.rowData = {
           code: item.code,
           color: item.color,
@@ -122,43 +118,28 @@
         };
         this.formDialogVisible = true;
       },
-      onSubmitBaseForm() {
+      async onSubmitBaseForm() {
         const baseForm = this.$refs['InventoryBaseForm'];
-        console.log(baseForm.slotData);
-        axios.put('/djfactory/fabric/stockLevel', baseForm.slotData)
-          .then(() => {
-            this.$message({
-              type: 'success',
-              message: '调整库存成功'
-            });
-            this.formDialogVisible = false;
-            this.onSearch();
-          }).catch(error => {
-          this.$message.error('调整库存失败');
-        });
-      }
-    },
-    watch: {
-      '$store.state.sideSliderState': function (value) {
-        if (!value) {
-          this.onSearch();
+        const result = await this.$http.put('/djfactory/fabric/stockLevel', baseForm.slotData);
+        if (result["errors"]) {
+          this.$message.error("调整库存失败，原因：" + result["errors"][0].message);
+          return;
         }
+        this.$message.success("调整库存成功");
+        this.formDialogVisible = false;
+        this.onSearch();
       }
     },
-    computed: {},
     data() {
       return {
-        text: "",
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        },
+        text: this.$store.state.FactoryFabricProductStocksModule.keyword,
+        formData: this.$store.state.FactoryFabricProductStocksModule.formData,
         formDialogVisible: false,
         rowData: null
       };
+    },
+    created() {
+      this.onSearch();
     }
   };
 </script>

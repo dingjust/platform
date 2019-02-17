@@ -139,6 +139,9 @@
         formDialogVisible: false,
         rowData: null
       };
+    },
+    created() {
+      this.onSearch();
     }
   };
 </script>

@@ -37,7 +37,7 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.get("/djbrand/stockLevel", {
+    const response = await http.get("/djfactory/fabric/stockLevel", {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
