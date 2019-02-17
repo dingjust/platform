@@ -118,7 +118,6 @@
         this.active = 2;
       },
       async onAddEntries() {
-        // TODO: validate and submit
         // console.log("all data: " + JSON.stringify(this.slotData));
         let formData = {
           code: this.slotData.code,
@@ -147,7 +146,7 @@
         this.fn.closeSlider(true);
       },
       async refreshProgresses() {
-        const result = await this.$http.get("/djbackoffice/consignment/progresses", {
+        const result = await this.$http.get("/djbrand/consignment/progresses", {
           code: this.slotData.code
         });
         if (result["errors"]) {

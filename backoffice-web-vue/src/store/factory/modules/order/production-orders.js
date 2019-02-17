@@ -63,7 +63,6 @@ const state = {
     requirementOrderCode: "",
     skuID: "",
     statuses: [],
-    factory: [],
     expectedDeliveryDateFrom: null,
     expectedDeliveryDateTo: null,
     createdDateFrom: null,
@@ -88,7 +87,7 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.get("/djbrand/consignment", {
+    const response = await http.get("/djfactory/consignment", {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -106,7 +105,7 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.post("/djbrand/consignment/advancedSearch", query, {
+    const response = await http.post("/djfactory/consignment/advancedSearch", query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

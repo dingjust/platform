@@ -181,6 +181,7 @@
   const {mapGetters, mapActions} = createNamespacedHelpers('BrandProductionOrdersModule');
 
   import autoHeight from 'mixins/autoHeight';
+
   import {ConsignmentForm, ConsignmentDetailsForm} from './';
 
   export default {
