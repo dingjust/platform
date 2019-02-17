@@ -5,16 +5,16 @@ axios.defaults.baseURL = '';
 setAuthorization();
 
 function setAuthorization() {
-  const token = sessionStorage.getItem("token");
-  // console.log("token: " + token);
+  const token = sessionStorage.getItem('token');
+  // console.log('token: ' + token);
   if (token) {
-    axios.defaults.headers.common['Authorization'] = "Bearer " + token;
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
   }
 
-  const currentUser = sessionStorage.getItem("currentUser");
+  const currentUser = sessionStorage.getItem('currentUser');
   if (currentUser) {
     const userJson = JSON.parse(currentUser);
-    axios.defaults.headers.common['company'] = userJson["companyCode"];
+    axios.defaults.headers.common['company'] = userJson['companyCode'];
   }
 }
 

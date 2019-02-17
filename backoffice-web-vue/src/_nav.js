@@ -2,35 +2,35 @@ export default {
   items: [
     {
       title: true,
-      name: "平台",
-      class: "",
+      name: '平台',
+      class: '',
       wrapper: {
-        element: "span",
+        element: 'span',
         attributes: {}
       }
     },
     {
-      name: "仪表盘",
-      url: "/backoffice/dashboard",
-      icon: "icon-speedometer"
+      name: '仪表盘',
+      url: '/backoffice/dashboard',
+      icon: 'icon-speedometer'
     },
     {
-      name: "产品管理",
-      url: "/backoffice/product",
-      icon: "icon-puzzle",
+      name: '产品管理',
+      url: '/backoffice/product',
+      icon: 'icon-puzzle',
       children: [
         {
-          name: "分类",
-          url: "/backoffice/product/category",
-          icon: "iconNone"
+          name: '分类',
+          url: '/backoffice/product/category',
+          icon: 'iconNone'
         },
         {
-          name: "产品",
-          url: "/backoffice/product/product",
-          icon: "iconNone"
+          name: '产品',
+          url: '/backoffice/product/product',
+          icon: 'iconNone'
         },
         {
-          name: "面辅料",
+          name: '面辅料',
           url: "/backoffice/product/fabric",
           icon: "iconNone"
         },
