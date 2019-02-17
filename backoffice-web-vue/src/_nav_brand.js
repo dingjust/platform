@@ -66,28 +66,6 @@ export default {
       ]
     },
     {
-      name: "报表管理",
-      url: "/brand/report",
-      icon: "icon-puzzle",
-      children: [
-        {
-          name: "销售报表",
-          url: "/brand/report/sales",
-          icon: "iconNone"
-        },
-        {
-          name: "库存报表",
-          url: "/brand/report/inventory",
-          icon: "iconNone"
-        },
-        {
-          name: "订单报表",
-          url: "/brand/report/order",
-          icon: "iconNone"
-        }
-      ]
-    },
-    {
       name: "店铺管理",
       url: "/brand/account",
       icon: "icon-puzzle",

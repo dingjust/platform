@@ -268,33 +268,6 @@ const router = new Router({
           ]
         },
         {
-          path: "brand/report",
-          redirect: "/brand/report/sales",
-          name: "报表管理",
-          component: {
-            render(c) {
-              return c("router-view");
-            }
-          },
-          children: [
-            {
-              path: "sales",
-              name: "销售报表",
-              component: () => import(/* webpackChunkName: "brand-reports" */ 'brand/report/sales/SalesReportPage'),
-            },
-            {
-              path: "inventory",
-              name: "库存报表",
-              component: () => import(/* webpackChunkName: "brand-reports" */ 'brand/report/inventory/InventoryReportPage'),
-            },
-            {
-              path: "order",
-              name: "订单报表",
-              component: () => import(/* webpackChunkName: "brand-reports" */ 'brand/report/order/OrderReportPage'),
-            }
-          ]
-        },
-        {
           path: "brand/account",
           redirect: "/brand/account/employee",
           name: "店铺管理",
