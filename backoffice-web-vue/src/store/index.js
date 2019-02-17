@@ -37,6 +37,7 @@ import {
   BrandProductionOrdersModule,
   BrandApparelProductsModule,
   BrandDeletedApparelProductsModule,
+  BrandApparelProductStocksModule,
 } from './brand/modules';
 
 // 状态管理
@@ -96,6 +97,7 @@ export default new Vuex.Store({
     BrandProductionOrdersModule,
     BrandApparelProductsModule,
     BrandDeletedApparelProductsModule,
+    BrandApparelProductStocksModule,
   },
   state,
   getters,
