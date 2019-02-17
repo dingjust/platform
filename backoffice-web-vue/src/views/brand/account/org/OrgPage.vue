@@ -10,7 +10,7 @@
           <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
         </el-button-group>
       </el-form>
-      <el-table ref="resultTable" stripe :data="page.content">
+      <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="UID" prop="uid"></el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="描述" prop="comment"></el-table-column>
@@ -19,7 +19,7 @@
             <el-button type="text " icon="el-icon-edit " @click="onDetails(scope.row) ">
               明细
             </el-button>
-            <el-button type="text " icon="el-icon-edit " @click="onAddChrild(scope.row) ">
+            <el-button type="text " icon="el-icon-edit " @click="onAddChild(scope.row) ">
               添加子部门
             </el-button>
           </template>
@@ -40,30 +40,38 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandOrgsModule');
+
+  import autoHeight from 'mixins/autoHeight';
+
   import OrgForm from "./OrgForm";
   import OrgDetailsPage from "./OrgDetailsPage";
 
   export default {
     name: "OrgPage",
     components: {},
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
+    },
     methods: {
+      ...mapActions({
+        search: "search"
+      }),
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建部门", OrgForm, {
-          uid: "",
-          name: "",
-          comment: "",
-          active: true
-        });
+        this.fn.openSlider("创建部门", OrgForm, this.formData);
       },
       onDetails(item) {
-        console.log(item);
         this.fn.openSlider("部门明细", OrgDetailsPage, item);
       },
-      onAddChrild(item) {
+      onAddChild(item) {
         this.fn.openSlider("创建部门", OrgForm, {
           uid: "",
           name: "",
@@ -75,11 +83,10 @@
       },
       onPageSizeChanged(val) {
         this.reset();
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -87,40 +94,18 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-        axios.get("/djbrand/org", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error("获取数据失败");
-        });
-      }
-    },
-    computed: {},
-    watch: {
-      "$store.state.sideSliderState": function (value) {
-        if (!value) {
-          this.onSearch();
-        }
+        const keyword = this.text;
+        this.search({keyword, page, size});
       }
     },
     data() {
       return {
-        text: "",
-        items: [],
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
+        text: this.$store.state.BrandOrgsModule.keyword,
+        formData: this.$store.state.BrandOrgsModule.formData
       }
+    },
+    created(){
+      this._onSearch(0);
     }
   }
 </script>
