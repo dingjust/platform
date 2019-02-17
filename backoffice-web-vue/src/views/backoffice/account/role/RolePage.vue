@@ -10,7 +10,7 @@
           <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
         </el-button-group>
       </el-form>
-      <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
+      <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="UID" prop="uid"></el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="描述" prop="description"></el-table-column>
@@ -39,7 +39,7 @@
 
   const {mapGetters, mapActions} = createNamespacedHelpers('RolesModule');
 
-  import autoHeight from 'mixins/autoHeight'
+  import autoHeight from 'mixins/autoHeight';
 
   import RoleForm from "./RoleForm";
   import RoleDetailsPage from "./RoleDetailsPage";
@@ -90,14 +90,14 @@
         this.search({keyword, page, size});
       }
     },
-    created() {
-      this.onSearch();
-    },
     data() {
       return {
         text: this.$store.state.RolesModule.keyword,
         formData: this.$store.state.RolesModule.formData,
       }
+    },
+    created() {
+      this.onSearch();
     }
   }
 </script>

@@ -30,7 +30,8 @@ import {
   BrandFollowersModule,
   BrandMembersModule,
   BrandMemberRequestsModule,
-  BrandOrgsModule
+  BrandOrgsModule,
+  BrandRolesModule
 } from './brand/modules';
 
 // 状态管理
@@ -83,7 +84,8 @@ export default new Vuex.Store({
     BrandFollowersModule,
     BrandMembersModule,
     BrandMemberRequestsModule,
-    BrandOrgsModule
+    BrandOrgsModule,
+    BrandRolesModule
   },
   state,
   getters,
