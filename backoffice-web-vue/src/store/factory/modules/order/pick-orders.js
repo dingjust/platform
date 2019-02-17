@@ -40,7 +40,7 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.get("/djbackoffice/pickOrder", {
+    const response = await http.get("/djfactory/pickOrder", {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize

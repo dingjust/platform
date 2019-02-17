@@ -51,7 +51,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('PickOrdersModule');
+  const {mapActions} = createNamespacedHelpers('PickOrdersModule');
 
   import PickOrderBaseForm from './PickOrderBaseForm';
   import PickOrderEntriesForm from "./PickOrderEntriesForm";
@@ -90,8 +90,8 @@
 
         this._onComplete();
       },
-      _onComplete() {
-        const result = this.$http.post('/djbackoffice/pickOrder', this.slotData);
+      async _onComplete() {
+        const result = await this.$http.post('/djbackoffice/pickOrder', this.slotData);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
