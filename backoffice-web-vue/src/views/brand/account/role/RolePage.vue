@@ -10,7 +10,8 @@
           <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
         </el-button-group>
       </el-form>
-      <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
+      <el-table ref="resultTable" stripe :data="page.content"
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="UID" prop="uid"></el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="描述" prop="description"></el-table-column>

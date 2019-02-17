@@ -33,6 +33,11 @@
     name: "RoleForm",
     components: {RoleBaseForm},
     props: ["slotData"],
+    computed: {
+      isNewlyCreated: function () {
+        return this.slotData.id === null;
+      }
+    },
     methods: {
       ...mapActions({
         refresh: "refresh"
@@ -66,11 +71,6 @@
         this.$message.success("保存成功");
         this.refresh();
         this.fn.closeSlider(true);
-      }
-    },
-    computed: {
-      isNewlyCreated: function () {
-        return this.slotData.id === null;
       }
     },
     data() {
