@@ -126,7 +126,7 @@
           <el-button type="primary" slot="reference">高级查询</el-button>
         </el-popover>
       </el-form>
-      <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
+      <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="生产订单编号" prop="code" fixed>
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
