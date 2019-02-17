@@ -13,20 +13,20 @@
           <el-row :gutter="10">
             <el-col :span="6">
               <el-form-item label="订单编号">
-                <el-input v-model="query.code"></el-input>
+                <el-input v-model="queryFormData.code"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="供应商商品编号">
-                <el-input v-model="query.skuID"></el-input>
+                <el-input v-model="queryFormData.skuID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="状态">
-                <el-select v-model="query.statuses" placeholder="请选择"
+                <el-select v-model="queryFormData.statuses" placeholder="请选择"
                            multiple class="w-100">
                   <el-option
-                    v-for="item in statuses"
+                    v-for="item in statusOptions"
                     :key="item.value"
                     :label="item.text"
                     :value="item.value">
@@ -39,7 +39,7 @@
             <el-col :span="12">
               <el-form-item label="创建时间从">
                 <el-date-picker
-                  v-model="query.createdDateFrom"
+                  v-model="queryFormData.createdDateFrom"
                   value-format="yyyy-MM-dd"
                   type="date"
                   placeholder="请选择生产订单创建时间">
@@ -49,7 +49,7 @@
             <el-col :span="12">
               <el-form-item label="创建时间到">
                 <el-date-picker
-                  v-model="query.createdDateTo"
+                  v-model="queryFormData.createdDateTo"
                   value-format="yyyy-MM-dd"
                   type="date"
                   placeholder="请选择生产订单创建时间">
@@ -61,7 +61,7 @@
             <el-col :span="12">
               <el-form-item label="交货时间从">
                 <el-date-picker
-                  v-model="query.expectedDeliveryDateFrom"
+                  v-model="queryFormData.expectedDeliveryDateFrom"
                   value-format="yyyy-MM-dd"
                   type="date"
                   placeholder="请选择客户交期">
@@ -71,7 +71,7 @@
             <el-col :span="12">
               <el-form-item label="交货时间到">
                 <el-date-picker
-                  v-model="query.expectedDeliveryDateTo"
+                  v-model="queryFormData.expectedDeliveryDateTo"
                   value-format="yyyy-MM-dd"
                   type="date"
                   placeholder="请选择客户交期">
@@ -87,7 +87,8 @@
           <el-button type="primary" slot="reference">高级查询</el-button>
         </el-popover>
       </el-form>
-      <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange">
+      <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange"
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="订单编号" prop="code" width="250">
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
@@ -138,181 +139,97 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandRequirementOrdersModule');
+
+  import autoHeight from 'mixins/autoHeight';
 
   import RequirementOrderForm from './RequirementOrderForm';
   import RequirementOrderDetailsPage from "./RequirementOrderDetailsPage"
 
-  const DEFAULT_ORDER_TYPE = "REQUIREMENT_ORDER";
   export default {
     name: "RequirementOrderPage",
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
+    },
     methods: {
+      ...mapActions({
+        search: "search",
+        searchAdvanced: "searchAdvanced"
+      }),
       handleFilterChange(val) {
-        this.orderStatus = val.status;
+        this.statuses = val.status;
         this.onSearch();
       },
       //如只需当前页面筛选不需调后台查询的使用该方法！
       filterTag(value, row) {
-      //   return row.status === value;
+        //   return row.status === value;
       },
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onAdvancedSearch() {
         this.advancedSearch = true;
-        this._onAdvancedSearch(0, this.page.size)
+        this._onAdvancedSearch(0)
       },
       _onSearch(page, size) {
-        axios.post("/djbrand/requirementOrder?page=" + page + "&size=" + size, {
-          text: this.text,
-          statuses: this.orderStatus
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-            this.$message.error(error.response.data);
-          });
+        const keyword = this.text;
+        const statuses = this.statuses;
+        this.search({keyword, statuses, page, size});
       },
       _onAdvancedSearch(page, size) {
-        const params = {
-          page: page,
-          size: size
-        };
-
-        axios.post("/djbrand/requirementOrder/advancedSearch", this.query, {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        const query = this.queryFormData;
+        this.searchAdvanced({query, page, size});
       },
       reset() {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(item) {
-        axios.get("/djbrand/requirementOrder/" + item.code)
-          .then(response => {
-            this.fn.openSlider("需求订单明细", RequirementOrderDetailsPage, response.data);
-          })
-          .catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          });
+      async onDetails(item) {
+        const result = await this.$http.get("/djbrand/requirementOrder/" + item.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.fn.openSlider("需求订单明细", RequirementOrderDetailsPage, result);
       },
       onNew() {
-        this.fn.openSlider("发布需求", RequirementOrderForm, {
-          id: null,
-          code: "",
-          name: "",
-          type: DEFAULT_ORDER_TYPE,
-          description: "",
-          depositPaid: false,
-          depositAmount: 0,
-          retainagePaid: false,
-          retainageAmount: 0,
-          entries: [],
-          contracts: [],
-          deliveryAddress: {
-            fullname: "",
-            title: {
-              code: "",
-              name: ""
-            },
-            region: {
-              isocode: "",
-              name: ""
-            },
-            city: {
-              code: "",
-              name: ""
-            },
-            cityDistrict: {
-              code: "",
-              name: ""
-            },
-            line1: "",
-            remarks: ""
-          },
-          details: {
-            minorCategories: [],
-            category: {
-              code: "",
-              name: ""
-            },
-            majorCategory: {
-              code: "",
-              name: ""
-            },
-            expectedMachiningQuantity: 0,
-            machiningType: null,
-            expectedDeliveryDate: null,
-            maxExpectedPrice: 0,
-            invoiceNeeded: false,
-            samplesNeeded: false,
-            contactPerson: "",
-            contactPhone: ""
-          }
-        });
+        this.fn.openSlider("发布需求", RequirementOrderForm, this.formData);
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
-          this._onAdvancedSearch(val - 1, this.page.size);
+          this._onAdvancedSearch(val - 1);
         } else {
-          this._onSearch(val - 1, this.page.size);
+          this._onSearch(val - 1);
         }
       },
       onPageSizeChanged(val) {
         this.reset();
-        this.page.size = val;
         if (this.advancedSearch) {
           this._onAdvancedSearch(0, val);
         } else {
           this._onSearch(0, val);
         }
       },
-
-    },
-    watch: {
-      "$store.state.sideSliderState": function (value) {
-        if (!value) {
-          this.onSearch();
-        }
-      }
     },
     data() {
       return {
-        text: "",
-        query: {
-          code: "",
-          skuID: "",
-          statuses: [],
-          expectedDeliveryDateFrom: null,
-          expectedDeliveryDateTo: null,
-          createdDateFrom: null,
-          createdDateTo: null,
-        },
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        },
+        text: this.$store.state.BrandRequirementOrdersModule.keyword,
+        statuses: this.$store.state.BrandRequirementOrdersModule.statuses,
+        formData: this.$store.state.BrandRequirementOrdersModule.formData,
+        queryFormData: this.$store.state.BrandRequirementOrdersModule.queryFormData,
+        statusOptions: this.$store.state.BrandRequirementOrdersModule.statusOptions,
         advancedSearch: false,
-        orderStatus: [],
-        statuses: [
-          {text: '待处理', value: 'WAIT_FOR_PROCESSING'},
-          {text: '待确认', value: 'PENDING_APPROVAL'},
-          {text: '已确认', value: 'APPROVED'},
-          {text: '待分配', value: 'WAIT_FOR_ALLOCATION'},
-          {text: '待出库', value: 'WAIT_FOR_OUT_OF_STORE'},
-          {text: '已出库', value: 'OUT_OF_STORE'},
-          {text: '已签收', value: 'COMPLETED'}
-        ]
       };
+    },
+    created() {
+      this.onSearch();
     }
   };
 </script>

@@ -71,17 +71,12 @@ const state = {
       samplesNeeded: false,
       contactPerson: "",
       contactPhone: ""
-    },
-    belongTo: {
-      uid: "",
-      name: ""
     }
   },
   queryFormData: {
     code: "",
     skuID: "",
     statuses: [],
-    belongTos: [],
     expectedDeliveryDateFrom: null,
     expectedDeliveryDateTo: null,
     createdDateFrom: null,
@@ -107,7 +102,7 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.post("/djbackoffice/requirementOrder", {
+    const response = await http.post("/djbrand/requirementOrder", {
       code: state.keyword,
       statuses: state.statuses
     }, {
@@ -127,7 +122,7 @@ const actions = {
       commit("currentPageSize", size);
     }
 
-    const response = await http.post("/djbackoffice/requirementOrder/advancedSearch", query, {
+    const response = await http.post("/djbrand/requirementOrder/advancedSearch", query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

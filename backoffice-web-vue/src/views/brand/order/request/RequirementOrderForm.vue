@@ -38,7 +38,10 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('BrandRequirementOrdersModule');
+
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
   import RequirementOrderMediaUploadForm from "./RequirementOrderMediaUploadForm";
   import RequirementOrderDeliveryAddressForm from './RequirementOrderDeliveryAddressForm';
@@ -61,6 +64,9 @@
     mixins: [OrderMixin],
     props: ['slotData'],
     methods: {
+      ...mapActions({
+        refresh: "refresh"
+      }),
       onSubmit() {
         this.$refs['deliveryAddressForm'].validate((valid) => {
             if (!valid) {
@@ -82,18 +88,7 @@
                   return false;
                 }
 
-                let formData = this.slotData;
-                axios.post('/djbrand/processes/requirementOrder/publish/nosku', formData)
-                  .then(response => {
-                    this.$message.success("发布需求成功，订单编号： " + response.data);
-
-                    this.$set(this.slotData, 'code', response.data);
-
-                    this.fn.closeSlider(true);
-                  }).catch(error => {
-                    this.$message.error(error.response.data);
-                  }
-                );
+                this._onSubmit();
 
                 return true;
               }
@@ -105,6 +100,18 @@
       },
       onCancel() {
         this.fn.closeSlider();
+      },
+      async _onSubmit() {
+        let formData = this.slotData;
+        const result = await this.$http.post('/djbrand/processes/requirementOrder/publish/nosku', formData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success("发布需求成功，订单编号： " + result);
+        this.$set(this.slotData, 'code', result);
+        this.fn.closeSlider(true);
       }
     },
     computed: {

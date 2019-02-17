@@ -104,8 +104,10 @@
           <el-button type="primary" slot="reference">高级查询</el-button>
         </el-popover>
       </el-form>
-      <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content"
-                @filter-change="handleFilterChange" :height="autoHeight">
+      <el-table ref="resultTable" stripe
+                :data="page.content"
+                @filter-change="handleFilterChange"
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="订单编号" prop="code" width="250" fixed>
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
