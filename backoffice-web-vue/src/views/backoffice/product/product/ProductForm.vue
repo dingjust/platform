@@ -73,18 +73,18 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
-  import ProductBaseForm from "./ProductBaseForm";
-  import ProductMediaUploadForms from "./ProductMediaUploadForms";
-  import ProductSpecificationForm from "./ProductSpecificationForm";
-  import ProductVariantsForm from "./ProductVariantsForm";
-  import ProductMediasForm from "./ProductMediasForm";
-  import ProductDetailsPage from "./ProductDetailsPage";
+  import ProductBaseForm from './ProductBaseForm';
+  import ProductMediaUploadForms from './ProductMediaUploadForms';
+  import ProductSpecificationForm from './ProductSpecificationForm';
+  import ProductVariantsForm from './ProductVariantsForm';
+  import ProductMediasForm from './ProductMediasForm';
+  import ProductDetailsPage from './ProductDetailsPage';
 
   export default {
-    name: "ProductForm",
-    props: ["slotData"],
+    name: 'ProductForm',
+    props: ['slotData'],
     components: {
       ProductVariantsForm,
       ProductBaseForm,
@@ -113,25 +113,25 @@
         if (len > 1) {
           for (let i = 0; i < len - 1; i++) {
             if (staircasePrices[i].maxQuantity > staircasePrices[i + 1].minQuantity) {
-              this.$message.error("阶梯价格定义不符合规则【不允许有重叠价格区间】");
+              this.$message.error('阶梯价格定义不符合规则【不允许有重叠价格区间】');
               return false;
             }
           }
         }
         for (let i = 0; i < len; i++) {
           if (staircasePrices[i].maxQuantity === '' || typeof(staircasePrices[i].maxQuantity) === 'undefined' || staircasePrices[i].minQuantity === '' || typeof(staircasePrices[i].minQuantity) === 'undefined') {
-            this.$message.error("阶梯价格定义不符合规则【不允许有空值】");
+            this.$message.error('阶梯价格定义不符合规则【不允许有空值】');
             return false;
           }
           if (staircasePrices[i].maxQuantity === 0 && staircasePrices[i].minQuantity === 0) {
-            this.$message.error("阶梯价格定义不符合规则【最大与最小值不允许同时为0】");
+            this.$message.error('阶梯价格定义不符合规则【最大与最小值不允许同时为0】');
             return false;
           }
         }
-        this.$refs["productBaseForm"].validate(valid => {
+        this.$refs['productBaseForm'].validate(valid => {
           if (valid) {
             if (formData.price <= 0) {
-              this.$message.error("供货价必须大于0");
+              this.$message.error('供货价必须大于0');
               return false;
             }
 
@@ -140,7 +140,7 @@
               request = axios.put;
             }
 
-            let form = this.$refs["productVariantsForm"];
+            let form = this.$refs['productVariantsForm'];
 
             const _entries = form.getValue();
             for (let i = 0; i < _entries.length; i++) {
@@ -150,17 +150,17 @@
               })
             }
 
-            request("/djbackoffice/product", formData)
+            request('/djbackoffice/product', formData)
               .then(response => {
                 const product = response.data;
-                this.$message.success("创建成功，产品编码：" + product.code);
+                this.$message.success('创建成功，产品编码：' + product.code);
 
-                this.$set(this.slotData, "id", product.id);
-                this.$set(this.slotData, "code", product.code);
+                this.$set(this.slotData, 'id', product.id);
+                this.$set(this.slotData, 'code', product.code);
 
                 this.next(1);
 
-                this.$refs["productDetailsPage"].refresh();
+                this.$refs['productDetailsPage'].refresh();
               }).catch(error => {
                 this.$message.error(error.response.data);
               }
@@ -176,13 +176,13 @@
         this.fn.closeSlider();
       },
       onMediaUpload() {
-        this.$refs["productMediaUploadForm"].onSubmit();
+        this.$refs['productMediaUploadForm'].onSubmit();
         setTimeout(() => {
-          this.$refs["productMediasForm"].refresh()
+          this.$refs['productMediasForm'].refresh()
         }, 2000);
       },
       onInventoryUpdate() {
-        let form = this.$refs["productVariantsForm"];
+        let form = this.$refs['productVariantsForm'];
 
         let formData = {
           code: this.slotData.code,
@@ -197,16 +197,16 @@
           })
         }
 
-        axios.put("/djbackoffice/product/variants", formData)
+        axios.put('/djbackoffice/product/variants', formData)
           .then(() => {
             this.$message({
-              type: "success",
-              message: "更新颜色/尺码成功，产品编码：" + formData.code
+              type: 'success',
+              message: '更新颜色/尺码成功，产品编码：' + formData.code
             });
 
             this.next(3);
 
-            this.$refs["productDetailsPage"].refresh();
+            this.$refs['productDetailsPage'].refresh();
           }).catch(error => {
           this.$message.error(error.response.data);
         });

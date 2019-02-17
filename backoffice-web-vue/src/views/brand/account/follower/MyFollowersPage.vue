@@ -38,18 +38,18 @@
   import autoHeight from 'mixins/autoHeight';
 
   export default {
-    name: "MyFollowersPage",
+    name: 'MyFollowersPage',
     props: [],
     components: {},
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);

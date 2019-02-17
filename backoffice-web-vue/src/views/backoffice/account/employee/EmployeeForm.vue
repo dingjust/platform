@@ -27,18 +27,18 @@
 
   const {mapActions} = createNamespacedHelpers('EmployeesModule');
 
-  import EmployeeBaseForm from "./EmployeeBaseForm";
+  import EmployeeBaseForm from './EmployeeBaseForm';
 
   export default {
-    name: "EmployeeForm",
+    name: 'EmployeeForm',
     components: {EmployeeBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
@@ -57,13 +57,13 @@
         if (!this.isNewlyCreated) {
           request = this.$http.put;
         }
-        const result = await request("/djbackoffice/employee", formData);
-        if (result["errors"]) {
-          this.$message.error("保存失败，原因：" + result["errors"][0].message);
+        const result = await request('/djbackoffice/employee', formData);
+        if (result['errors']) {
+          this.$message.error('保存失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("保存成功");
+        this.$message.success('保存成功');
         this.refresh();
         this.fn.closeSlider(true);
       }

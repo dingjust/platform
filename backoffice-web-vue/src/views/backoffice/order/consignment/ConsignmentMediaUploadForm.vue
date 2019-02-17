@@ -41,7 +41,7 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
     name: 'ConsignmentMediaUploadForm',
@@ -77,16 +77,16 @@
       },
       refresh() {
         console.log(this.slotData);
-        axios.get("/djbackoffice/consignment/contracts", {
+        axios.get('/djbackoffice/consignment/contracts', {
           params: {
             code: this.slotData.code
           }
         }).then(response => {
 
-          // this.$set(this.slotData, "contracts", response.data);
-          this.$set(this.orderData, "contracts", response.data);
+          // this.$set(this.slotData, 'contracts', response.data);
+          this.$set(this.orderData, 'contracts', response.data);
         }).catch(error => {
-          this.$message.error("更新需求信息失败，原因：" + error.response.data);
+          this.$message.error('更新需求信息失败，原因：' + error.response.data);
         });
       }
     },

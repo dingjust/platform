@@ -90,16 +90,16 @@
 </template>
 
 <script>
-  import {CompanyMixin} from "mixins";
-  import axios from "axios";
+  import {CompanyMixin} from 'mixins';
+  import axios from 'axios';
 
   export default {
-    name: "FactoryBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'FactoryBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     mixins: [CompanyMixin],
     methods: {
       validate(callback) {
-        return this.$refs["form"].validate(callback);
+        return this.$refs['form'].validate(callback);
       },
       getValue() {
         let baseData = {};
@@ -123,7 +123,7 @@
       },
       getCategories() {
         axios
-          .get("/djbackoffice/product/category/majors")
+          .get('/djbackoffice/product/category/majors')
           .then(response => {
             this.categories = response.data;
           })
@@ -139,8 +139,8 @@
     data() {
       return {
         rules: {
-          name: [{required: true, message: "必填", trigger: "blur"}],
-          address: [{required: true, message: "必填", trigger: "blur"}],
+          name: [{required: true, message: '必填', trigger: 'blur'}],
+          address: [{required: true, message: '必填', trigger: 'blur'}],
           email:[
             {message: '邮箱格式不正确', trigger: 'blur', pattern: /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/}
           ],

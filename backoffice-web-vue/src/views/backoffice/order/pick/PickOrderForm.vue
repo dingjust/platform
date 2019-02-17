@@ -54,8 +54,8 @@
   const {mapActions} = createNamespacedHelpers('PickOrdersModule');
 
   import PickOrderBaseForm from './PickOrderBaseForm';
-  import PickOrderEntriesForm from "./PickOrderEntriesForm";
-  import PickOrderDetailsPage from "./PickOrderDetailsPage";
+  import PickOrderEntriesForm from './PickOrderEntriesForm';
+  import PickOrderDetailsPage from './PickOrderDetailsPage';
 
   export default {
     name: 'PickOrderForm',
@@ -63,7 +63,7 @@
     props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onCancel() {
         this.fn.closeSlider();
@@ -92,12 +92,12 @@
       },
       async _onComplete() {
         const result = await this.$http.post('/djbackoffice/pickOrder', this.slotData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success("发料单创建成功，编号： " + result);
+        this.$message.success('发料单创建成功，编号： ' + result);
         this.fn.closeSlider(true);
       }
     },

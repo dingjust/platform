@@ -102,34 +102,34 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import EmployeeBaseForm from "./EmployeeBaseForm";
+  import axios from 'axios';
+  import EmployeeBaseForm from './EmployeeBaseForm';
 
   export default {
-    name: "EmployeeDetailsPage",
-    props: ["slotData"],
+    name: 'EmployeeDetailsPage',
+    props: ['slotData'],
     components: {EmployeeBaseForm},
     methods: {
       onResetPassword() {
-        this.$refs["resetForm"].validate(valid => {
+        this.$refs['resetForm'].validate(valid => {
           if (!valid) {
             return false;
           }
-          axios.post("/djbackoffice/user/resetPassword", {
+          axios.post('/djbackoffice/user/resetPassword', {
             uid: this.slotData.uid,
             password: this.resetFormData.password
           }).then(() => {
-            this.$message.success("重置密码成功");
+            this.$message.success('重置密码成功');
             this.resetFormDialogVisible = false;
           }).catch(() => {
-            this.$message.error("重置密码失败");
+            this.$message.error('重置密码失败');
           });
 
           return true;
         });
       },
       getUserGroups() {
-        axios.get("/djbackoffice/group/platform/all")
+        axios.get('/djbackoffice/group/platform/all')
           .then(response => {
             this.userGroups = response.data.members;
           }).catch(error => {
@@ -138,17 +138,17 @@
         );
       },
       onNewGroup() {
-        this.newGroup = "";
+        this.newGroup = '';
         this.inputVisible = true;
       },
       onRemove(group) {
         //调用推出该用户组接口
-        this.$confirm("此操作将退出该用户组, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+        this.$confirm('此操作将退出该用户组, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }).then(() => {
-          axios.delete("/djbackoffice/group/members", {
+          axios.delete('/djbackoffice/group/members', {
             params: {
               employeeUid: this.slotData.uid,
               groupUid: group.uid
@@ -158,12 +158,12 @@
               this.slotData.groups.indexOf(group),
               1
             );
-            this.$message.success("退出用户组成功");
+            this.$message.success('退出用户组成功');
           }).catch(error => {
             this.$message.error(error.response.data);
           });
         }).catch(() => {
-          this.$message.info("已取消退出");
+          this.$message.info('已取消退出');
         });
       },
       showInput(inputName) {
@@ -173,12 +173,12 @@
         });
       },
       onJoin() {
-        axios.post("/djbackoffice/group/members?employeeUid=" +
+        axios.post('/djbackoffice/group/members?employeeUid=' +
           this.slotData.uid +
-          "&groupUid=" +
+          '&groupUid=' +
           this.newGroup
         ).then(response => {
-          if (response.data !== "") {
+          if (response.data !== '') {
             this.slotData.groups.push({
               id: response.data.id,
               uid: response.data.uid,
@@ -186,14 +186,14 @@
             });
           }
           this.inputVisible = false;
-          this.$message.success("加入用户组成功");
+          this.$message.success('加入用户组成功');
         }).catch(error => {
           this.$message.error(error.response.data);
         });
       },
       getRoles() {
         axios
-          .get("/djbackoffice/role?text=")
+          .get('/djbackoffice/role?text=')
           .then(response => {
             this.roles = response.data.content;
           })
@@ -207,38 +207,35 @@
           uid: this.slotData.uid,
           roles: this.slotData.roles
         }
-        axios.put("/djbackoffice/employee", this.slotData)
+        axios.put('/djbackoffice/employee', this.slotData)
           .then(() => {
-            this.$message.success("保存成功");
+            this.$message.success('保存成功');
             this.fn.closeSlider(true);
             //刷新主体数据
           }).catch(error => {
-            this.$message.error("保存失败，原因：" + error.response.data.message);
+            this.$message.error('保存失败，原因：' + error.response.data.message);
           }
         );
       }
     },
-    created() {
-      this.getRoles();
-    },
     data() {
       // 重置密码校验
       const validateResetPass = (rule, value, callback) => {
-        if (value === "") {
-          callback(new Error("请输入密码"));
+        if (value === '') {
+          callback(new Error('请输入密码'));
         } else {
-          if (this.resetFormData.confirmPassword !== "") {
-            this.$refs["resetForm"].validateField("confirmPassword");
+          if (this.resetFormData.confirmPassword !== '') {
+            this.$refs['resetForm'].validateField('confirmPassword');
           }
           callback();
         }
       };
       // 重置密码校验
       const validateResetPass2 = (rule, value, callback) => {
-        if (value === "") {
-          callback(new Error("请再次输入密码"));
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
         } else if (value !== this.resetFormData.password) {
-          callback(new Error("两次输入密码不一致!"));
+          callback(new Error('两次输入密码不一致!'));
         } else {
           callback();
         }
@@ -247,25 +244,25 @@
         resetFormDialogVisible: false,
         updateRoleDialogVisible: false,
         resetFormData: {
-          password: "",
-          confirmPassword: ""
+          password: '',
+          confirmPassword: ''
         },
         resetPasswordRules: {
-          password: [{validator: validateResetPass, trigger: "blur"},
+          password: [{validator: validateResetPass, trigger: 'blur'},
             {
               required: true,
               message: '密码格式不正确，必须包含数字,字母,特殊符号两种或以上组合，且长度为6-16位',
               trigger: 'blur',
               pattern: '^(?![0-9]+$)(?![a-zA-Z]+$)(?!([^(0-9a-zA-Z)]|[\\(\\)])+$)([^(0-9a-zA-Z)]|[\\(\\)]|[a-zA-Z]|[0-9]){6,16}$'
             }],
-          confirmPassword: [{validator: validateResetPass2, trigger: "blur"}]
+          confirmPassword: [{validator: validateResetPass2, trigger: 'blur'}]
         },
         userGroups: [],
         //动态标签
         // tags:tagData,
         inputVisible: false,
-        inputValue: "",
-        newGroup: "",
+        inputValue: '',
+        newGroup: '',
         roles: []
       };
     },

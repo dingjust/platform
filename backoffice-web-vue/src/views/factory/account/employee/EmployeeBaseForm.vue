@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
     name: 'EmployeeBaseForm',
@@ -56,7 +56,7 @@
       },
       getRoles() {
         axios
-          .get("/djfactory/role/?text=")
+          .get('/djfactory/role/?text=')
           .then(response => {
             console.log(response.data.content);
             this.roles = response.data.content;

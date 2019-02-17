@@ -62,12 +62,12 @@
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
@@ -95,17 +95,17 @@
         this.search({keyword, page, size});
       },
       async changeActiveStatus(row) {
-        const result = this.$http.put("/djfactory/user/active", {
+        const result = this.$http.put('/djfactory/user/active', {
           uid: row.uid
         });
 
-        if (result["errors"]) {
-          this.$message.error("修改失败，原因：" + result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error('修改失败，原因：' + result['errors'][0].message);
           return;
         }
 
         this.onSearch();
-        this.$message.success("修改成功");
+        this.$message.success('修改成功');
       }
     },
     data() {
@@ -115,7 +115,7 @@
       };
     },
     created() {
-      this.search({keyword: "", page: 0});
+      this.search({keyword: '', page: 0});
     }
   };
 </script>

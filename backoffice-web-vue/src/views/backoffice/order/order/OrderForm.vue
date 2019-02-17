@@ -34,9 +34,9 @@
   const {mapActions} = createNamespacedHelpers('SalesOrdersModule');
 
   import OrderBaseForm from './OrderBaseForm';
-  import OrderEntriesForm from "./OrderEntriesForm";
-  import OrderDeliveryAddressForm from "./OrderDeliveryAddressForm";
-  import OrderDetailsPage from "./OrderDetailsPage";
+  import OrderEntriesForm from './OrderEntriesForm';
+  import OrderDeliveryAddressForm from './OrderDeliveryAddressForm';
+  import OrderDetailsPage from './OrderDetailsPage';
 
   export default {
     name: 'OrderForm',
@@ -44,7 +44,7 @@
     props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onCancel() {
         this.fn.closeSlider();
@@ -98,7 +98,7 @@
 
                 const address = this.slotData.deliveryAddress;
                 if (!address.region.isocode || !address.city.code) {
-                  this.$message.error("请输入省份和市区");
+                  this.$message.error('请输入省份和市区');
                   return false;
                 }
 
@@ -119,12 +119,12 @@
       let formData = this.slotData;
 
       const result = await this.$http.post('/djbackoffice/salesOrder', formData);
-      if (result["errors"]) {
-        this.$message.error(result["errors"][0].message);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
         return;
       }
 
-      this.$message.success("订单创建成功，订单编号： " + result);
+      this.$message.success('订单创建成功，订单编号： ' + result);
       this.refresh();
       this.fn.closeSlider(true);
     },

@@ -142,13 +142,13 @@
       },
       onAddRow() {
         // 验证之前添加的行是否齐全
-        console.log("adding row....");
+        console.log('adding row....');
         if (!this._validateRows()) {
           return;
         }
 
         if (!this.product) {
-          this.$message.error("请先选择产品");
+          this.$message.error('请先选择产品');
           return;
         }
         this.product.todoAdd = true;

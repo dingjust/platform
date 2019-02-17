@@ -48,20 +48,20 @@
 
   import autoHeight from 'mixins/autoHeight';
 
-  import {ProductDetailsPage} from "./";
+  import {ProductDetailsPage} from './';
 
   export default {
-    name: "ProductDeletedPage",
+    name: 'ProductDeletedPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       }),
     },
     methods: {
       ...mapActions({
-        search: "search",
-        searchAdvanced: "searchAdvanced"
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
       }),
       numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
@@ -72,13 +72,13 @@
         this._onSearch(0);
       },
       async onDetails(item) {
-        const result = await this.$http.get("/djbrand/product/details/" + item.code);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.get('/djbrand/product/details/' + item.code);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider("产品明细", ProductDetailsPage, result);
+        this.fn.openSlider('产品明细', ProductDetailsPage, result);
       },
       onPageSizeChanged(val) {
         this.reset();

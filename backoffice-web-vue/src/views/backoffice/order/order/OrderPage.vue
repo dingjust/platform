@@ -55,34 +55,34 @@
 
   import autoHeight from 'mixins/autoHeight'
 
-  import {OrderForm, OrderDetailsPage} from "./";
+  import {OrderForm, OrderDetailsPage} from './';
 
   export default {
-    name: "OrderPage",
+    name: 'OrderPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建订单", OrderForm, this.formData);
+        this.fn.openSlider('创建订单', OrderForm, this.formData);
       },
       async onDetails(item) {
-        const result = await this.$http.get("/djbackoffice/salesOrder/" + item.code);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.get('/djbackoffice/salesOrder/' + item.code);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider("订单明细", OrderDetailsPage, result);
+        this.fn.openSlider('订单明细', OrderDetailsPage, result);
       },
       onPageSizeChanged(val) {
         this.reset();

@@ -23,16 +23,16 @@
 </template>
 <script>
   export default {
-    name: "ConsignmentProgressMediasUploadForm",
-    props: ["slotData", "isNewlyCreated"],
+    name: 'ConsignmentProgressMediasUploadForm',
+    props: ['slotData', 'isNewlyCreated'],
     inject:['refresh'],
     methods: {
       onSubmit() {
         this.$refs.uploadForm.submit();
       },
       onUploadSuccess(response, file, files) {
-        if (response === "") {
-          this.$message.success("上传成功");
+        if (response === '') {
+          this.$message.success('上传成功');
           this.$refs.uploadForm.clearFiles();
           setTimeout(() => {
             this.refresh();
@@ -40,23 +40,23 @@
         }
       },
       onUploadError(error, file, files) {
-        let msg = "";
+        let msg = '';
         /*if (file.size >= (1024 * 200)) {
-          msg = "，上传的文件不能超过200KB"
+          msg = '，上传的文件不能超过200KB'
         }*/
-        this.$message.error("上传失败" + msg);
+        this.$message.error('上传失败' + msg);
       },
       onUploading(event, file, files) {
-        this.$message("正在上传，请稍等");
+        this.$message('正在上传，请稍等');
       },
       /*beforeUpload(file) {
         let flat = true;
-        if (file.type != "image/png" && file.type != "image/jpeg") {
-          this.$message.error("只能上传jpg/png文件");
+        if (file.type != 'image/png' && file.type != 'image/jpeg') {
+          this.$message.error('只能上传jpg/png文件');
           flat = false;
         }
         if (file.size > 1024*200) {
-          this.$message.error("上传的文件不能超过200KB");
+          this.$message.error('上传的文件不能超过200KB');
           flat = false;
         }
         return flat;
@@ -72,7 +72,7 @@
     },
     data() {
       return {
-        uploadUrl: "/djbackoffice/consignment/progress/media/upload",
+        uploadUrl: '/djbackoffice/consignment/progress/media/upload',
         files: []
       }
     }

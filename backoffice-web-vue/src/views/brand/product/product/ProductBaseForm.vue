@@ -158,14 +158,14 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import ProductMediaEntryUploadForm from "./ProductMediaEntryUploadForm";
-  import ProductPricesEntriesForm from "./ProductPricesEntriesForm";
+  import axios from 'axios';
+  import ProductMediaEntryUploadForm from './ProductMediaEntryUploadForm';
+  import ProductPricesEntriesForm from './ProductPricesEntriesForm';
 
   export default {
-    name: "ProductBaseForm",
+    name: 'ProductBaseForm',
     components: {ProductPricesEntriesForm, ProductMediaEntryUploadForm},
-    props: ["slotData", "readOnly", "isNewlyCreated"],
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       checkAndSetData(value) {
         if (this.slotData.suggestedPrice <= 0) {
@@ -188,7 +188,7 @@
         return this.slotData;
       },
       getCategories(query) {
-        axios.get("/djbackoffice/product/category/cascaded")
+        axios.get('/djbackoffice/product/category/cascaded')
           .then(response => {
             this.categories = response.data;
           }).catch(error => {
@@ -197,7 +197,7 @@
         );
       },
       getStyles() {
-        axios.get("/djbackoffice/product/style/all")
+        axios.get('/djbackoffice/product/style/all')
           .then(response => {
             this.styles = response.data;
           }).catch(error => {
@@ -210,27 +210,27 @@
       return {
         loading: false,
         rules: {
-          name: [{required: true, message: "必填", trigger: "blur"}],
-          skuID: [{required: true, message: "必填", trigger: "blur"}],
-          categories: [{required: true, message: "必填", trigger: "blur"}],
-          material: [{required: true, message: "必填", trigger: "blur"}],
-          content: [{required: true, message: "必填", trigger: "blur"}],
-          minQuantity: [{required: true, message: "必填", trigger: "blur"}],
-          maxQuantity: [{required: true, message: "必填", trigger: "blur"}],
-          price: [{required: true, message: "必填", trigger: "blur"}]
+          name: [{required: true, message: '必填', trigger: 'blur'}],
+          skuID: [{required: true, message: '必填', trigger: 'blur'}],
+          categories: [{required: true, message: '必填', trigger: 'blur'}],
+          material: [{required: true, message: '必填', trigger: 'blur'}],
+          content: [{required: true, message: '必填', trigger: 'blur'}],
+          minQuantity: [{required: true, message: '必填', trigger: 'blur'}],
+          maxQuantity: [{required: true, message: '必填', trigger: 'blur'}],
+          price: [{required: true, message: '必填', trigger: 'blur'}]
         },
         categories: [],
         companies: [],
         styles: [],
         categoryProps: {
-          label: "name",
-          value: "code",
-          children: "children"
+          label: 'name',
+          value: 'code',
+          children: 'children'
         }
       };
     },
     created() {
-      this.getCategories("");
+      this.getCategories('');
       this.getStyles();
     }
   };

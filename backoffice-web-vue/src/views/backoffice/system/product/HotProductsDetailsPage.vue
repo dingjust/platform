@@ -63,9 +63,9 @@
 </template>
 
 <script>
-  import HotProductsBaseForm from "./HotProductsBaseForm";
-  import HotProductsMediaForm from "./HotProductsMediaForm";
-  import axios from "axios";
+  import HotProductsBaseForm from './HotProductsBaseForm';
+  import HotProductsMediaForm from './HotProductsMediaForm';
+  import axios from 'axios';
 
   export default {
     name: 'HotProductsDetailsPage',
@@ -85,13 +85,13 @@
         this.formDialogVisible = false;
         const baseForm = this.$refs['baseForm'];
         console.log(baseForm.getValue());
-        axios.put("/djbackoffice/system/hot-products", baseForm.getValue())
+        axios.put('/djbackoffice/system/hot-products', baseForm.getValue())
           .then(() => {
-            this.$message.success("保存成功");
+            this.$message.success('保存成功');
             this.fn.closeSlider(true);
             //刷新主体数据
           }).catch(error => {
-            this.$message.error("保存失败，原因：" + error.response.data.message);
+            this.$message.error('保存失败，原因：' + error.response.data.message);
           }
         );
       },

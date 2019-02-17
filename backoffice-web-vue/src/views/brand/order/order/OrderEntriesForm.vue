@@ -147,7 +147,7 @@
         }
 
         if (!this.product) {
-          this.$message.error("请先选择产品");
+          this.$message.error('请先选择产品');
           return;
         }
         this.product.todoAdd = true;

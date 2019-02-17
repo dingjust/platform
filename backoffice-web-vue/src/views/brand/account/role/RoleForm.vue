@@ -27,12 +27,12 @@
 
   const {mapActions} = createNamespacedHelpers('BrandRolesModule');
 
-  import RoleBaseForm from "./RoleBaseForm";
+  import RoleBaseForm from './RoleBaseForm';
 
   export default {
-    name: "RoleForm",
+    name: 'RoleForm',
     components: {RoleBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     computed: {
       isNewlyCreated: function () {
         return this.slotData.id === null;
@@ -40,10 +40,10 @@
     },
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
@@ -62,13 +62,13 @@
         if (!this.isNewlyCreated) {
           request = this.$http.put;
         }
-        const result = await request("/djbrand/role", this.slotData);
-        if (result["errors"]) {
-          this.$message.error("保存失败，原因：" + result["errors"][0].message);
+        const result = await request('/djbrand/role', this.slotData);
+        if (result['errors']) {
+          this.$message.error('保存失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("保存成功");
+        this.$message.success('保存成功');
         this.refresh();
         this.fn.closeSlider(true);
       }

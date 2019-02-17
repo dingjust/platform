@@ -63,9 +63,9 @@
 </template>
 
 <script>
-  import CarouselBaseForm from "./CarouselBaseForm";
-  import CarouselMediaForm from "./CarouselMediaForm";
-  import axios from "axios";
+  import CarouselBaseForm from './CarouselBaseForm';
+  import CarouselMediaForm from './CarouselMediaForm';
+  import axios from 'axios';
 
   export default {
     name: 'CarouselDetailsPage',
@@ -86,13 +86,13 @@
         this.formDialogVisible = false;
         const baseForm = this.$refs['baseForm'];
         console.log(baseForm.getValue());
-        axios.put("/djbackoffice/system/carousel", baseForm.getValue())
+        axios.put('/djbackoffice/system/carousel', baseForm.getValue())
           .then(() => {
-            this.$message.success("保存成功");
+            this.$message.success('保存成功');
             this.fn.closeSlider(true);
             //刷新主体数据
           }).catch(error => {
-            this.$message.error("保存失败，原因：" + error.response.data.message);
+            this.$message.error('保存失败，原因：' + error.response.data.message);
           }
         );
       },

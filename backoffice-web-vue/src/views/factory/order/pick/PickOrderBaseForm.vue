@@ -27,11 +27,11 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "PickOrderBaseForm",
-    props: ["slotData", "readOnly"],
+    name: 'PickOrderBaseForm',
+    props: ['slotData', 'readOnly'],
     methods: {
       validate() {
         if (this.slotData.order.code == null || this.slotData.order.code == '') {
@@ -51,7 +51,7 @@
         }).forEach(order => {
           this.showDetails = true;
           this.order = order;
-          this.$set(slotData, "order", order);
+          this.$set(slotData, 'order', order);
         });
       },
       onFilter(query) {
@@ -80,7 +80,7 @@
         order: {},
         orders: [],
         rules: {
-          order: [{required: true, message: "必填", trigger: "blur"}]
+          order: [{required: true, message: '必填', trigger: 'blur'}]
         }
       }
     }

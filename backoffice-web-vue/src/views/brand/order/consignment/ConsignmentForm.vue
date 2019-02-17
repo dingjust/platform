@@ -83,15 +83,15 @@
 
   const {mapActions} = createNamespacedHelpers('BrandProductionOrdersModule');
 
-  import ConsignmentOrderSearchForm from "./ConsignmentOrderSearchForm";
-  import ConsignmentFactorySearchForm from "./ConsignmentFactorySearchForm";
-  import ConsignmentBaseForm from "./ConsignmentBaseForm";
-  import ConsignmentEntriesForm from "./ConsignmentEntriesForm";
-  import ConsignmentMediaUploadForm from "./ConsignmentMediaUploadForm";
-  import ConsignmentDetailsPage from "./ConsignmentDetailsPage";
+  import ConsignmentOrderSearchForm from './ConsignmentOrderSearchForm';
+  import ConsignmentFactorySearchForm from './ConsignmentFactorySearchForm';
+  import ConsignmentBaseForm from './ConsignmentBaseForm';
+  import ConsignmentEntriesForm from './ConsignmentEntriesForm';
+  import ConsignmentMediaUploadForm from './ConsignmentMediaUploadForm';
+  import ConsignmentDetailsPage from './ConsignmentDetailsPage';
 
   export default {
-    name: "ConsignmentForm",
+    name: 'ConsignmentForm',
     components: {
       ConsignmentBaseForm,
       ConsignmentFactorySearchForm,
@@ -100,10 +100,10 @@
       ConsignmentMediaUploadForm,
       ConsignmentDetailsPage
     },
-    props: ["slotData", "readOnly"],
+    props: ['slotData', 'readOnly'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onCancel() {
         this.fn.closeSlider();
@@ -118,7 +118,7 @@
         this.active = 2;
       },
       async onAddEntries() {
-        // console.log("all data: " + JSON.stringify(this.slotData));
+        // console.log('all data: ' + JSON.stringify(this.slotData));
         let formData = {
           code: this.slotData.code,
           order: {
@@ -128,14 +128,14 @@
           consignmentEntries: this.slotData.consignmentEntries
         };
 
-        const result = await this.$http.post("/djbrand/consignment/new", formData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.post('/djbrand/consignment/new', formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success("生产订单创建成功，编号： " + response.data);
-        this.$set(this.slotData, "code", response.data);
+        this.$message.success('生产订单创建成功，编号： ' + result);
+        this.$set(this.slotData, 'code', result);
         this.refreshProgresses();
         this.active = 3;
       },
@@ -146,15 +146,15 @@
         this.fn.closeSlider(true);
       },
       async refreshProgresses() {
-        const result = await this.$http.get("/djbrand/consignment/progresses", {
+        const result = await this.$http.get('/djbrand/consignment/progresses', {
           code: this.slotData.code
         });
-        if (result["errors"]) {
-          this.$message.error("更新需求信息失败，原因：" + result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error('更新需求信息失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$set(this.slotData, "progresses", result);
+        this.$set(this.slotData, 'progresses', result);
       }
     },
     computed: {

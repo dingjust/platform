@@ -71,17 +71,17 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import OrderBaseForm from "../order/OrderBaseForm";
-  import ConsignmentBaseForm from "./ConsignmentBaseForm";
-  import ConsignmentEntriesForm from "./ConsignmentEntriesForm";
-  import ConsignmentFactoryBaseForm from "./ConsignmentFactoryBaseForm";
-  import ConsignmentStatusBar from "./ConsignmentStatusBar";
-  import ConsignmentContractsForm from "./ConsignmentContractsForm";
-  import ConsignmentProgressForm from "./ConsignmentProgressForm";
+  import axios from 'axios';
+  import OrderBaseForm from '../order/OrderBaseForm';
+  import ConsignmentBaseForm from './ConsignmentBaseForm';
+  import ConsignmentEntriesForm from './ConsignmentEntriesForm';
+  import ConsignmentFactoryBaseForm from './ConsignmentFactoryBaseForm';
+  import ConsignmentStatusBar from './ConsignmentStatusBar';
+  import ConsignmentContractsForm from './ConsignmentContractsForm';
+  import ConsignmentProgressForm from './ConsignmentProgressForm';
 
   export default {
-    name: "ConsignmentDetailsPage",
+    name: 'ConsignmentDetailsPage',
     components: {
       ConsignmentStatusBar,
       OrderBaseForm,
@@ -91,7 +91,7 @@
       ConsignmentContractsForm,
       ConsignmentProgressForm
     },
-    props: ["slotData", "readOnly"],
+    props: ['slotData', 'readOnly'],
     methods: {
       onCuttingCompleted() {
         // 裁剪完成后的确认动作
@@ -104,7 +104,7 @@
             .then(response => {
               this.$message.success('裁剪确认成功');
 
-              this.$set(this.slotData, "status", response.data);
+              this.$set(this.slotData, 'status', response.data);
             }).catch(error => {
               this.$message.error('裁剪确认失败，原因：' + error.response.data);
             }
@@ -118,7 +118,7 @@
         return this.slotData.id === null;
       },
       isCuttingCompleted: function () {
-        return this.slotData.status === "COMPLETE_CUTTING";
+        return this.slotData.status === 'COMPLETE_CUTTING';
       },
       statusMap:function () {
         let map = {};

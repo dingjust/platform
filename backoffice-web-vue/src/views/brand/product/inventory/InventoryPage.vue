@@ -68,20 +68,20 @@
 
   import autoHeight from 'mixins/autoHeight';
 
-  import InventoryBaseForm from "./InventoryBaseForm";
+  import InventoryBaseForm from './InventoryBaseForm';
 
   export default {
-    name: "InventoryPage",
+    name: 'InventoryPage',
     components: {InventoryBaseForm},
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
@@ -113,21 +113,21 @@
           code: item.code,
           color: item.color,
           size: item.size,
-          available: "",
-          maxPreOrder: "",
+          available: '',
+          maxPreOrder: '',
           beforeAvailable: item.available,
           beforeMaxPreOrder: item.maxPreOrder
         };
         this.formDialogVisible = true;
       },
       async onSubmitBaseForm() {
-        const baseForm = this.$refs["InventoryBaseForm"];
-        const result = await this.$http.put("/djbrand/stockLevel", baseForm.slotData);
-        if (result["errors"]) {
-          this.$message.error("调整库存失败，原因：" + result["errors"][0].message);
+        const baseForm = this.$refs['InventoryBaseForm'];
+        const result = await this.$http.put('/djbrand/stockLevel', baseForm.slotData);
+        if (result['errors']) {
+          this.$message.error('调整库存失败，原因：' + result['errors'][0].message);
           return;
         }
-        this.$message.success("调整库存成功");
+        this.$message.success('调整库存成功');
         this.formDialogVisible = false;
         this.onSearch();
       }

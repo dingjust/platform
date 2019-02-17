@@ -21,12 +21,12 @@
 </template>
 
 <script>
-  import StyleBaseForm from "./StyleBaseForm";
+  import StyleBaseForm from './StyleBaseForm';
 
   export default {
-    name: "StyleDetailsPage",
+    name: 'StyleDetailsPage',
     components: {StyleBaseForm},
-    props: ["slotData", "isNewlyCreated", "preview"],
+    props: ['slotData', 'isNewlyCreated', 'preview'],
     methods: {
       onChangeState() {
         // TODO: 启用/禁用

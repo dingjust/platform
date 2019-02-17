@@ -63,9 +63,9 @@
 </template>
 
 <script>
-  import PartnersBaseForm from "./PartnersBaseForm";
-  import PartnersMediaForm from "./PartnersMediaForm";
-  import axios from "axios";
+  import PartnersBaseForm from './PartnersBaseForm';
+  import PartnersMediaForm from './PartnersMediaForm';
+  import axios from 'axios';
 
   export default {
     name: 'PartnersDetailsPage',
@@ -85,13 +85,13 @@
         this.formDialogVisible = false;
         const baseForm = this.$refs['baseForm'];
         console.log(baseForm.getValue());
-        axios.put("/djbackoffice/system/partners", baseForm.getValue())
+        axios.put('/djbackoffice/system/partners', baseForm.getValue())
           .then(() => {
-            this.$message.success("保存成功");
+            this.$message.success('保存成功');
             this.fn.closeSlider(true);
             //刷新主体数据
           }).catch(error => {
-            this.$message.error("保存失败，原因：" + error.response.data.message);
+            this.$message.error('保存失败，原因：' + error.response.data.message);
           }
         );
       },

@@ -33,11 +33,11 @@
 <script>
   import axios from 'axios';
 
-  import OrderDetailsPage from "../order/OrderDetailsPage";
+  import OrderDetailsPage from '../order/OrderDetailsPage';
 
   export default {
     name: 'ConsignmentOrderSearchForm',
-    props: ["slotData"],
+    props: ['slotData'],
     components: {OrderDetailsPage},
     methods: {
       validate(callback) {
@@ -65,7 +65,7 @@
         }).forEach(order => {
           this.showDetails = true;
           this.order = order;
-          this.$set(slotData, "order", order);
+          this.$set(slotData, 'order', order);
 
           let consignmentEntries = [];
 
@@ -79,9 +79,9 @@
             });
           });
 
-          console.log("consignmentEntries: " + JSON.stringify(consignmentEntries));
+          console.log('consignmentEntries: ' + JSON.stringify(consignmentEntries));
 
-          this.$set(slotData, "consignmentEntries", consignmentEntries);
+          this.$set(slotData, 'consignmentEntries', consignmentEntries);
         });
       }
     },
@@ -92,25 +92,25 @@
         showDetails: false,
         order: {
           deliveryAddress: {
-            fullname: "",
+            fullname: '',
             title: {
-              code: "",
-              name: ""
+              code: '',
+              name: ''
             },
             region: {
-              isocode: "",
-              name: ""
+              isocode: '',
+              name: ''
             },
             city: {
-              code: "",
-              name: ""
+              code: '',
+              name: ''
             },
             cityDistrict: {
-              code: "",
-              name: ""
+              code: '',
+              name: ''
             },
-            line1: "",
-            remarks: ""
+            line1: '',
+            remarks: ''
           }
         },
         orders: [],

@@ -148,20 +148,20 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import OrderBaseForm from "../order/OrderBaseForm";
-  import ConsignmentBaseForm from "./ConsignmentBaseForm";
-  import ConsignmentFactorySearchForm from "./ConsignmentFactorySearchForm";
-  import ConsignmentEntriesForm from "./ConsignmentEntriesForm";
-  import ConsignmentFactoryBaseForm from "./ConsignmentFactoryBaseForm";
-  import ConsignmentStatusBar from "./ConsignmentStatusBar";
-  import ConsignmentMediaUploadForm from "./ConsignmentMediaUploadForm";
-  import ConsignmentContractsForm from "./ConsignmentContractsForm";
-  import ConsignmentUpdateStatusForm from "./ConsignmentUpdateStatusForm";
-  import ConsignmentProgressForm from "./ConsignmentProgressForm";
+  import axios from 'axios';
+  import OrderBaseForm from '../order/OrderBaseForm';
+  import ConsignmentBaseForm from './ConsignmentBaseForm';
+  import ConsignmentFactorySearchForm from './ConsignmentFactorySearchForm';
+  import ConsignmentEntriesForm from './ConsignmentEntriesForm';
+  import ConsignmentFactoryBaseForm from './ConsignmentFactoryBaseForm';
+  import ConsignmentStatusBar from './ConsignmentStatusBar';
+  import ConsignmentMediaUploadForm from './ConsignmentMediaUploadForm';
+  import ConsignmentContractsForm from './ConsignmentContractsForm';
+  import ConsignmentUpdateStatusForm from './ConsignmentUpdateStatusForm';
+  import ConsignmentProgressForm from './ConsignmentProgressForm';
 
   export default {
-    name: "ConsignmentDetailsPage",
+    name: 'ConsignmentDetailsPage',
     components: {
       ConsignmentUpdateStatusForm,
       ConsignmentMediaUploadForm,
@@ -174,7 +174,7 @@
       ConsignmentContractsForm,
       ConsignmentProgressForm
     },
-    props: ["slotData", "readOnly"],
+    props: ['slotData', 'readOnly'],
     methods: {
       onSampleConfirm() {
         if(this.slotData.assignedTo.uid == null){
@@ -192,7 +192,7 @@
             .then(response => {
               this.isDisabled = true;
               this.$message.success('样衣确认成功');
-              this.$set(this.slotData, "status", response.data);
+              this.$set(this.slotData, 'status', response.data);
             }).catch(error => {
             this.$message.error('样衣确认失败，原因：' + error.response.data);
             }
@@ -210,7 +210,7 @@
             .then(response => {
               this.$message.success('验货确认成功');
 
-              this.$set(this.slotData, "status", response.data);
+              this.$set(this.slotData, 'status', response.data);
             }).catch(error => {
               this.$message.error('验货确认失败，原因：' + error.response.data);
             }
@@ -223,19 +223,19 @@
         this.statusFormDialogVisible = true;
       },
       onSubmitStatusForm() {
-        axios.put("/djbackoffice/consignment/status", {
+        axios.put('/djbackoffice/consignment/status', {
           code: this.slotData.code,
           status: this.statusData.status
         }).then(() => {
-          this.$message.success("更新状态成功");
+          this.$message.success('更新状态成功');
 
-          this.$set(this.slotData, "status", this.statusData.status);
-          this.$set(this.slotData, "assignedTo", this.factoryData.assignedTo);
+          this.$set(this.slotData, 'status', this.statusData.status);
+          this.$set(this.slotData, 'assignedTo', this.factoryData.assignedTo);
 
           this.statusFormDialogVisible = false;
         }).catch(error => {
           console.log(JSON.stringify(error));
-          this.$message.error("更新状态失败，原因：" + error.response.data);
+          this.$message.error('更新状态失败，原因：' + error.response.data);
         });
       },
       onUpdateFactory() {
@@ -243,21 +243,21 @@
         this.factoryFormDialogVisible = true;
       },
       onSubmitFactoryForm() {
-        this.$refs["factoryForm"].validate((valid) => {
+        this.$refs['factoryForm'].validate((valid) => {
           if (valid) {
-            axios.put("/djbackoffice/consignment/factory", {
+            axios.put('/djbackoffice/consignment/factory', {
               code: this.slotData.code,
               assignedTo: this.factoryData.assignedTo.uid
             }).then(response => {
               console.log(response.data);
               this.factoryFormDialogVisible = false;
               this.slotData.assignedTo = response.data;
-              this.$set(this.slotData, "status", "WAIT_FOR_PURCHASE");
+              this.$set(this.slotData, 'status', 'WAIT_FOR_PURCHASE');
 
-              this.$message.success("指定工厂成功");
+              this.$message.success('指定工厂成功');
             }).catch(error => {
               console.log(JSON.stringify(error));
-              this.$message.error("指定工厂失败，原因：" + error.response.data);
+              this.$message.error('指定工厂失败，原因：' + error.response.data);
             });
 
             return true;
@@ -271,17 +271,17 @@
         this.entriesFormDialogVisible = true;
       },
       onSubmitEntriesForm() {
-        if (this.$refs["entriesForm"].validate()) {
-          axios.put("/djbackoffice/consignment/entries", {
+        if (this.$refs['entriesForm'].validate()) {
+          axios.put('/djbackoffice/consignment/entries', {
             code: this.slotData.code,
             consignmentEntries: this.entriesData.consignmentEntries
           }).then(() => {
-            this.$message.success("更新订单行成功");
+            this.$message.success('更新订单行成功');
 
             this.entriesFormDialogVisible = false;
           }).catch(error => {
             console.log(JSON.stringify(error));
-            this.$message.error("更新订单行失败，原因：" + error.response.data);
+            this.$message.error('更新订单行失败，原因：' + error.response.data);
           });
         }
       },
@@ -289,7 +289,7 @@
         this.contractsFormDialogVisible = true;
       },
       onSubmitContractsForm() {
-        this.$refs["contractsForm"].onSubmit();
+        this.$refs['contractsForm'].onSubmit();
         this.contractsFormDialogVisible = false;
       }
     },
@@ -298,16 +298,16 @@
         return this.slotData.id === null;
       },
       isWaitForAllocation: function () {
-        return this.slotData.status === "WAIT_FOR_ALLOCATION";
+        return this.slotData.status === 'WAIT_FOR_ALLOCATION';
       },
       needSampleConfirmed: function () {
         // 待分配，备料中，待裁剪 时都可以确认样衣
-        return ["WAIT_FOR_ALLOCATION", "WAIT_FOR_PURCHASE", "PENDING_CUTTING"].some(value => {
+        return ['WAIT_FOR_ALLOCATION', 'WAIT_FOR_PURCHASE', 'PENDING_CUTTING'].some(value => {
           return value === this.slotData.status;
         });
       },
       needQC: function() {
-        return this.slotData.status === "QC";
+        return this.slotData.status === 'QC';
       },
       statusMap:function () {
         let map = {};
@@ -348,8 +348,8 @@
           id: null,
           code: this.slotData.code,
           assignedTo: {
-            uid: "",
-            name: ""
+            uid: '',
+            name: ''
           }
         },
         entriesFormDialogVisible: false,

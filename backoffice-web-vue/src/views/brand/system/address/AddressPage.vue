@@ -39,43 +39,43 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import AddressForm from "./AddressForm";
-  import AddressDetailsPage from "./AddressDetailsPage";
+  import axios from 'axios';
+  import AddressForm from './AddressForm';
+  import AddressDetailsPage from './AddressDetailsPage';
 
   export default {
-    name: "AddressPage",
+    name: 'AddressPage',
     components: {},
     methods: {
       onSearch() {
         this._onSearch(0, this.page.size);
       },
       onNew() {
-        this.fn.openSlider("添加地址", AddressForm, {
+        this.fn.openSlider('添加地址', AddressForm, {
           id:null,
-          fullname:"",
-          cellphone:"",
+          fullname:'',
+          cellphone:'',
           region: {
-            isocode: "",
-            name: ""
+            isocode: '',
+            name: ''
           },
           city: {
-            code: "",
-            name: ""
+            code: '',
+            name: ''
           },
           cityDistrict: {
-            code: "",
-            name: ""
+            code: '',
+            name: ''
           },
-          line1: ""
+          line1: ''
         });
       },
       onDetails(item) {
         console.log(item);
-        axios.get("/djbrand/system/address/getAddressById/" + item.id)
+        axios.get('/djbrand/system/address/getAddressById/' + item.id)
           .then(response => {
             console.log(response.data);
-            this.fn.openSlider("地址明细", AddressDetailsPage, response.data);
+            this.fn.openSlider('地址明细', AddressDetailsPage, response.data);
           })
           .catch(error => {
             console.log(JSON.stringify(error));
@@ -101,32 +101,32 @@
           page: page,
           size: size
         };
-        axios.get("/djbrand/system/address", {
+        axios.get('/djbrand/system/address', {
           params: params
         }).then(response => {
           this.page = response.data;
         }).catch(error => {
-          this.$message.error("获取数据失败");
+          this.$message.error('获取数据失败');
         });
       },
       changeShelfStatus(row) {
         let request = axios.put;
-        let message = "启用";
-        let url = "/djbrand/system/address/enable/"
+        let message = '启用';
+        let url = '/djbrand/system/address/enable/'
         if (row.active === false) {
-          message = "禁用";
-          url = "/djbrand/system/address/disable/"
+          message = '禁用';
+          url = '/djbrand/system/address/disable/'
         }
 
         request(url + row.id)
           .then(() => {
-            this.$message.success(message + "成功");
+            this.$message.success(message + '成功');
 
             this.onSearch();
           }).catch(error => {
             this.$message({
-              type: "error",
-              message: message + "失败， 原因：" + error.response.data
+              type: 'error',
+              message: message + '失败， 原因：' + error.response.data
             });
           }
         );
@@ -134,7 +134,7 @@
     },
     computed: {},
     watch: {
-      "$store.state.sideSliderState": function (value) {
+      '$store.state.sideSliderState': function (value) {
         if (!value) {
           this.onSearch();
         }
@@ -142,7 +142,7 @@
     },
     data() {
       return {
-        text: "",
+        text: '',
         items: [],
         page: {
           number: 0, // 当前页，从0开始

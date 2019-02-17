@@ -96,19 +96,19 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import OrderBaseForm from "./OrderBaseForm";
-  import OrderEntriesForm from "./OrderEntriesForm";
-  import OrderDeliveryAddressForm from "./OrderDeliveryAddressForm";
-  import OrderStatusBar from "./OrderStatusBar";
+  import axios from 'axios';
+  import OrderBaseForm from './OrderBaseForm';
+  import OrderEntriesForm from './OrderEntriesForm';
+  import OrderDeliveryAddressForm from './OrderDeliveryAddressForm';
+  import OrderStatusBar from './OrderStatusBar';
 
   export default {
-    name: "OrderDetailsPage",
-    props: ["slotData", "readOnly"],
+    name: 'OrderDetailsPage',
+    props: ['slotData', 'readOnly'],
     components: {OrderStatusBar, OrderBaseForm, OrderDeliveryAddressForm, OrderEntriesForm},
     methods: {
       refresh() {
-        this.$refs["orderDeliveryAddressForm"].refresh();
+        this.$refs['orderDeliveryAddressForm'].refresh();
       },
       onUpdateBase() {
         Object.assign(this.baseData, this.slotData);
@@ -117,14 +117,14 @@
       onSubmitBaseForm() {
         this.baseFormDialogVisible = false;
 
-        if (this.$refs["baseForm"].validate()) {
-          axios.put("/djbrand/salesOrder/base", {
+        if (this.$refs['baseForm'].validate()) {
+          axios.put('/djbrand/salesOrder/base', {
             code: this.slotData.code
           }).then(() => {
-            this.$message.success("更新基本信息成功")
+            this.$message.success('更新基本信息成功')
           }).catch(error => {
             console.log(JSON.stringify(error));
-            this.$message.error("更新基本信息失败，原因：" + error.response.data);
+            this.$message.error('更新基本信息失败，原因：' + error.response.data);
           });
         }
       },
@@ -133,18 +133,18 @@
         this.addressFormDialogVisible = true;
       },
       onSubmitAddressForm() {
-        this.$refs["addressForm"].validate((valid) => {
+        this.$refs['addressForm'].validate((valid) => {
           if (valid) {
-            axios.put("/djbrand/salesOrder/deliveryAddress", {
+            axios.put('/djbrand/salesOrder/deliveryAddress', {
               code: this.slotData.code,
               deliveryAddress: this.addressData.deliveryAddress
             }).then(() => {
-              this.$message.success("更新地址成功");
+              this.$message.success('更新地址成功');
 
               this.addressFormDialogVisible = false;
             }).catch(error => {
               console.log(JSON.stringify(error));
-              this.$message.error("更新地址失败，原因：" + error.response.data);
+              this.$message.error('更新地址失败，原因：' + error.response.data);
             });
 
             return true;
@@ -160,17 +160,17 @@
       onSubmitEntriesForm() {
         this.entriesFormDialogVisible = false;
 
-        if (this.$refs["entriesForm"].validate()) {
-          axios.put("/djbrand/salesOrder/entries", {
+        if (this.$refs['entriesForm'].validate()) {
+          axios.put('/djbrand/salesOrder/entries', {
             code: this.slotData.code,
             entries: this.entriesData.entries
           }).then(() => {
-            this.$message.success("更新订单行成功");
+            this.$message.success('更新订单行成功');
 
-            this.$set(this.slotData, "entries", this.entriesData.entries);
+            this.$set(this.slotData, 'entries', this.entriesData.entries);
           }).catch(error => {
             console.log(JSON.stringify(error));
-            this.$message.error("更新订单行失败，原因：" + error.response.data);
+            this.$message.error('更新订单行失败，原因：' + error.response.data);
           });
         }
       },
@@ -185,19 +185,19 @@
         });
       },
       /*onQueryPayment() {
-        axios.get("/djstorefront/checkout/multi/summary/wechat/query", {
+        axios.get('/djstorefront/checkout/multi/summary/wechat/query', {
           params: {
             code: this.slotData.code
           }
         }).then(response => {
-          this.$message.success("支付成功！");
+          this.$message.success('支付成功！');
         });
       },*/
       onPayment() {
         // TODO: 查询订单，如果为已支付，更新状态为待发货
         let retryTimes = 3;
         const timer = setInterval(function () {
-          axios.get("/djstorefront/checkout/multi/summary/wechat/query", {
+          axios.get('/djstorefront/checkout/multi/summary/wechat/query', {
             params: {
               code: this.slotData.code
             }
@@ -206,13 +206,13 @@
               if (!response) {
                 retryTimes--;
                 if (retryTimes === 0) {
-                  this.$message.info("未支付或支付失败！");
+                  this.$message.info('未支付或支付失败！');
                   clearInterval(timer);
 
                   this.payDialogVisible = false;
                 }
               } else {
-                this.$message.success("支付成功！");
+                this.$message.success('支付成功！');
                 clearInterval(timer);
 
                 this.payDialogVisible = false;
@@ -226,7 +226,7 @@
         return this.slotData.id === null;
       },
       isPendingPayment: function () {
-        return this.slotData.status === "PENDING_PAYMENT";
+        return this.slotData.status === 'PENDING_PAYMENT';
       }
     },
     data() {
@@ -249,7 +249,7 @@
           entries: []
         },
         payDialogVisible: false,
-        barcode: ""
+        barcode: ''
       }
     }
   }

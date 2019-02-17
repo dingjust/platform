@@ -65,13 +65,13 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import FactoryBaseForm from "./FactoryBaseForm";
-  import FactoryCertificateForm from "./FactoryCertificateForm";
+  import axios from 'axios';
+  import FactoryBaseForm from './FactoryBaseForm';
+  import FactoryCertificateForm from './FactoryCertificateForm';
 
   export default {
-    name: "FactoryDetailsPage",
-    props: ["slotData", "isNewlyCreated", "preview"],
+    name: 'FactoryDetailsPage',
+    props: ['slotData', 'isNewlyCreated', 'preview'],
     components: {FactoryBaseForm, FactoryCertificateForm},
     methods: {
       onUpdateBaseFactory() {
@@ -83,31 +83,31 @@
         this.factoryCertificateFormDialogVisible = true;
       },
       onSubmitBaseForm(data) {
-        const baseForm = this.$refs["FactoryBaseForm"];
+        const baseForm = this.$refs['FactoryBaseForm'];
         console.log(baseForm.getValue());
-        axios.put("/djfactory/factory/updateBase", baseForm.getValue())
+        axios.put('/djfactory/factory/updateBase', baseForm.getValue())
           .then(() => {
-            // Bus.$emit("refreshVal", "");
+            // Bus.$emit('refreshVal', '');
             this.$message({
-              type: "success",
-              message: "保存成功"
+              type: 'success',
+              message: '保存成功'
             });
             this.fn.closeSlider();
             // 刷新主体数据
           })
           .catch(error => {
-            this.$message.error("保存失败");
+            this.$message.error('保存失败');
           });
       },
       onSubmitCertificateForm(data) {
-        const certificateForm = this.$refs["FactoryCertificateForm"];
+        const certificateForm = this.$refs['FactoryCertificateForm'];
 
-        axios.put("/djfactory/factory/updateCertificate", certificateForm.getValue())
+        axios.put('/djfactory/factory/updateCertificate', certificateForm.getValue())
           .then(() => {
-            // Bus.$emit("refreshVal", "");
+            // Bus.$emit('refreshVal', '');
             this.$message({
-              type: "success",
-              message: "保存成功"
+              type: 'success',
+              message: '保存成功'
             });
 
             this.$refs.FactoryCertificateForm.onSubmit();
@@ -116,7 +116,7 @@
             // 刷新主体数据
           })
           .catch(error => {
-            this.$message.error("保存失败");
+            this.$message.error('保存失败');
           });
       },
       onClose() {

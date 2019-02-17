@@ -29,7 +29,7 @@
 
   export default {
     name: 'ConsignmentFactorySearchForm',
-    props: ["slotData"],
+    props: ['slotData'],
     components: {},
     methods: {
       validate(callback) {
@@ -59,7 +59,7 @@
         }).forEach(company => {
           this.showDetails = true;
           this.company = company;
-          this.$set(slotData, "assignedTo", company);
+          this.$set(slotData, 'assignedTo', company);
         });
       }
     },

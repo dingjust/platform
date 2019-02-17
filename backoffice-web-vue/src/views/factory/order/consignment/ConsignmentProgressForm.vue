@@ -41,12 +41,12 @@
 </template>
 
 <script>
-  import {ConsignmentMixin} from "../../../../mixins";
-  import axios from "axios";
-  import ConsignmentProgressMediasUploadForm from "./ConsignmentProgressMediasUploadForm";
+  import {ConsignmentMixin} from '../../../../mixins';
+  import axios from 'axios';
+  import ConsignmentProgressMediasUploadForm from './ConsignmentProgressMediasUploadForm';
 
   export default {
-    name: "ConsignmentProgressForm",
+    name: 'ConsignmentProgressForm',
     provide(){
       return{
         //提供给子页面调用的方法
@@ -54,11 +54,11 @@
       }
     },
     components: {ConsignmentProgressMediasUploadForm},
-    props: ["slotData", "readOnly"],
+    props: ['slotData', 'readOnly'],
     component:{ConsignmentProgressMediasUploadForm},
     methods: {
       onUpdateEstimatedDate(item) {
-        axios.put("/djbackoffice/consignment/updateEstimateDate", {
+        axios.put('/djbackoffice/consignment/updateEstimateDate', {
           id: item.id,
           estimatedDate: item.estimatedDate
         }).then(() => {
@@ -68,10 +68,10 @@
         });
       },
       isShow(item){
-        return item.phase != "SAMPLE_CONFIRM";
+        return item.phase != 'SAMPLE_CONFIRM';
       },
       quantityChange(item){
-        axios.put("/djbackoffice/consignment/updateQuantity", {
+        axios.put('/djbackoffice/consignment/updateQuantity', {
           id: item.id,
           quantity: item.quantity
         }).then(() => {
@@ -87,7 +87,7 @@
           type: 'warning',
           center: true
         }).then(() =>{
-          axios.delete("/djbackoffice/consignment/progress/media?progressId="+item.id+"&mediaId="+media.id,).then(() => {
+          axios.delete('/djbackoffice/consignment/progress/media?progressId='+item.id+'&mediaId='+media.id,).then(() => {
             this.$message.success('图片删除成功');
             this.refresh();
           }).catch(error => {
@@ -96,7 +96,7 @@
         })
       },
       refresh(){
-        axios.get("/djbackoffice/consignment/progresses?code="+this.slotData.code,)
+        axios.get('/djbackoffice/consignment/progresses?code='+this.slotData.code,)
           .then((response) => {
             this.progresses = response.data;
           }).catch(error => {
@@ -109,18 +109,18 @@
         let active = 0;
         const status = this.slotData.status;
         switch (status) {
-          case "WAIT_FOR_PURCHASE":
+          case 'WAIT_FOR_PURCHASE':
             active = 0;
             break;
-          case "SAMPLE_CONFIRM":
+          case 'SAMPLE_CONFIRM':
             active = 0;
             break;
         }
         return 0;
       },
       isUpdate:function () {
-        // :disabled="isUpdate"
-        return this.slotData.status != "WAIT_FOR_PURCHASE";
+        // :disabled='isUpdate'
+        return this.slotData.status != 'WAIT_FOR_PURCHASE';
       },
     },
     mixins: [ConsignmentMixin],

@@ -174,14 +174,14 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import ProductMediaEntryUploadForm from "./ProductMediaEntryUploadForm";
-  import ProductPricesEntriesForm from "./ProductPricesEntriesForm";
+  import axios from 'axios';
+  import ProductMediaEntryUploadForm from './ProductMediaEntryUploadForm';
+  import ProductPricesEntriesForm from './ProductPricesEntriesForm';
 
   export default {
-    name: "ProductBaseForm",
+    name: 'ProductBaseForm',
     components: {ProductPricesEntriesForm, ProductMediaEntryUploadForm},
-    props: ["slotData", "readOnly", "isNewlyCreated"],
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       checkAndSetData(value) {
         if (this.slotData.suggestedPrice <= 0) {
@@ -205,7 +205,7 @@
       },
       onFilterCategories(query) {
         this.categories = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           this.loading = true;
           setTimeout(() => {
             this.loading = false;
@@ -214,7 +214,7 @@
         }
       },
       getCategories(query) {
-        axios.get("/djbackoffice/product/category/cascaded")
+        axios.get('/djbackoffice/product/category/cascaded')
           .then(response => {
             this.categories = response.data;
           }).catch(error => {
@@ -224,14 +224,14 @@
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
         }
       },
       getCompanies(query) {
-        axios.get("/djbrand/brand", {
+        axios.get('/djbrand/brand', {
           params: {
             text: query.trim()
           }
@@ -242,7 +242,7 @@
         });
       },
       getStyles() {
-        axios.get("/djbackoffice/product/style/all")
+        axios.get('/djbackoffice/product/style/all')
           .then(response => {
             this.styles = response.data;
           }).catch(error => {
@@ -258,29 +258,29 @@
       return {
         loading: false,
         rules: {
-          name: [{required: true, message: "必填", trigger: "blur"}
+          name: [{required: true, message: '必填', trigger: 'blur'}
           ],
-          skuID: [{required: true, message: "必填", trigger: "blur"}],
-          categories: [{required: true, message: "必填", trigger: "blur"}],
-          material: [{required: true, message: "必填", trigger: "blur"}],
-          content: [{required: true, message: "必填", trigger: "blur"}],
-          minQuantity: [{required: true, message: "必填", trigger: "blur"}],
-          maxQuantity: [{required: true, message: "必填", trigger: "blur"}],
-          price: [{required: true, message: "必填", trigger: "blur"}]
+          skuID: [{required: true, message: '必填', trigger: 'blur'}],
+          categories: [{required: true, message: '必填', trigger: 'blur'}],
+          material: [{required: true, message: '必填', trigger: 'blur'}],
+          content: [{required: true, message: '必填', trigger: 'blur'}],
+          minQuantity: [{required: true, message: '必填', trigger: 'blur'}],
+          maxQuantity: [{required: true, message: '必填', trigger: 'blur'}],
+          price: [{required: true, message: '必填', trigger: 'blur'}]
         },
         categories: [],
         companies: [],
         styles: [],
         categoryProps: {
-          label: "name",
-          value: "code",
-          children: "children"
+          label: 'name',
+          value: 'code',
+          children: 'children'
         }
       };
     },
     created() {
-      this.getCategories("");
-      this.getCompanies("");
+      this.getCategories('');
+      this.getCompanies('');
       this.getStyles();
     }
   };

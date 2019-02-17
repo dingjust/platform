@@ -103,7 +103,7 @@
     props: ['slotData', 'readOnly'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onCancel() {
         this.fn.closeSlider();
@@ -130,8 +130,8 @@
         // console.log('submitted data: ' + JSON.stringify(formData));
 
         const result = await this.$http.post('/djfactory/consignment', formData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
@@ -147,15 +147,15 @@
         this.fn.closeSlider(true);
       },
       async refreshProgresses() {
-        const result = await this.$http.get("/djfactory/consignment/progresses", {
+        const result = await this.$http.get('/djfactory/consignment/progresses', {
           code: this.slotData.code
         });
-        if (result["errors"]) {
-          this.$message.error("更新需求信息失败，原因：" + result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error('更新需求信息失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$set(this.slotData, "progresses", result);
+        this.$set(this.slotData, 'progresses', result);
       }
     },
     computed: {

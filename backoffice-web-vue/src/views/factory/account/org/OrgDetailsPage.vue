@@ -34,8 +34,8 @@
 </template>
 
 <script>
-  import OrgBaseForm from "./OrgBaseForm";
-  import axios from "axios";
+  import OrgBaseForm from './OrgBaseForm';
+  import axios from 'axios';
 
   export default {
     name: 'OrgDetailsPage',
@@ -50,13 +50,13 @@
       },
       onSubmitBaseForm() {
         this.formDialogVisible = false;
-        axios.put("/djfactory/org", this.slotData)
+        axios.put('/djfactory/org', this.slotData)
           .then(() => {
-            this.$message.success("保存成功");
+            this.$message.success('保存成功');
             this.fn.closeSlider(true);
             //刷新主体数据
           }).catch(error => {
-            this.$message.error("保存失败，原因：" + error.response.data.message);
+            this.$message.error('保存失败，原因：' + error.response.data.message);
           }
         );
       }

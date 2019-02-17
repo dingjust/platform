@@ -159,7 +159,7 @@
         }
 
         if (!this.product) {
-          this.$message.error("请先选择产品");
+          this.$message.error('请先选择产品');
           return;
         }
 
@@ -189,7 +189,7 @@
         removeRow(this.slotData.entries, row);
       },
       getUnits() {
-        axios.get("/djbackoffice/product/unit")
+        axios.get('/djbackoffice/product/unit')
           .then(response => {
             this.units = response.data;
           }).catch(error => {
@@ -250,11 +250,11 @@
         units: [],
         unit: null,
         rules: {
-          order: [{required: true, message: "必填", trigger: "blur"}],
-          unit: [{required: true, message: "必选", trigger: "blur"}],
-          part: [{required: true, message: "必填", trigger: "blur"}],
-          width: [{required: true, message: "必填", trigger: "blur"}],
-          color1: [{required: true, message: "必填", trigger: "blur"}]
+          order: [{required: true, message: '必填', trigger: 'blur'}],
+          unit: [{required: true, message: '必选', trigger: 'blur'}],
+          part: [{required: true, message: '必填', trigger: 'blur'}],
+          width: [{required: true, message: '必填', trigger: 'blur'}],
+          color1: [{required: true, message: '必填', trigger: 'blur'}]
         }
       }
     },

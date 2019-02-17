@@ -52,7 +52,7 @@
     components: {FabricProductBaseForm, FabricProductDetailsPage},
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
         let formData = Object.assign({}, this.slotData);
@@ -83,9 +83,9 @@
           request = this.$http.put;
         }
 
-        const result = await request("/djfactory/fabricProduct", formData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await request('/djfactory/fabricProduct', formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 

@@ -56,20 +56,20 @@
 
   import autoHeight from 'mixins/autoHeight'
 
-  import SizeForm from "./SizeForm";
-  import SizeDetailsPage from "./SizeDetailsPage";
+  import SizeForm from './SizeForm';
+  import SizeDetailsPage from './SizeDetailsPage';
 
   export default {
-    name: "SizePage",
+    name: 'SizePage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
@@ -97,13 +97,13 @@
         this.search({keyword, page, size});
       },
       async onUpdate(item) {
-        const result = await this.$http.put("/djbackoffice/product/size", item);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.put('/djbackoffice/product/size', item);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success("保存成功");
+        this.$message.success('保存成功');
       }
     },
     data() {
@@ -113,7 +113,7 @@
       }
     },
     created() {
-      this.search({keyword: "", page: 0});
+      this.search({keyword: '', page: 0});
     }
   }
 </script>

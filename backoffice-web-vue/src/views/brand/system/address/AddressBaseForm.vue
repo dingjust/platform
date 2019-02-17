@@ -85,12 +85,12 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
 
-    name: "AddressBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'AddressBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
       getValue(){
         return this.slotData;

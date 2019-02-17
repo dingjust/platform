@@ -37,29 +37,29 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import ZoneDeliveryForm from "./ZoneDeliveryForm";
-  import ZoneDeliveryDetailsPage from "./ZoneDeliveryDetailsPage";
+  import axios from 'axios';
+  import ZoneDeliveryForm from './ZoneDeliveryForm';
+  import ZoneDeliveryDetailsPage from './ZoneDeliveryDetailsPage';
 
   export default {
-    name: "ZoneDeliveryPage",
+    name: 'ZoneDeliveryPage',
     components: {},
     methods: {
       onSearch() {
         this._onSearch(0, this.page.size);
       },
       onNew() {
-        this.fn.openSlider("添加运费模板", ZoneDeliveryForm, {
-          id: "",
-          minimum: "",
-          value: "",
-          firstWeight: "",
+        this.fn.openSlider('添加运费模板', ZoneDeliveryForm, {
+          id: '',
+          minimum: '',
+          value: '',
+          firstWeight: '',
           zoneCode: []
         });
       },
       onDetails(item) {
         console.log(item);
-        this.fn.openSlider("模板详情", ZoneDeliveryDetailsPage, item);
+        this.fn.openSlider('模板详情', ZoneDeliveryDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
@@ -80,18 +80,18 @@
           page: page,
           size: size
         };
-        axios.get("/djbrand/zoneDelivery", {
+        axios.get('/djbrand/zoneDelivery', {
           params: params
         }).then(response => {
           this.page = response.data;
         }).catch(error => {
-          this.$message.error("获取数据失败");
+          this.$message.error('获取数据失败');
         });
       }
     },
     computed: {},
     watch: {
-      "$store.state.sideSliderState": function (value) {
+      '$store.state.sideSliderState': function (value) {
         if (!value) {
           this.onSearch();
         }
@@ -99,7 +99,7 @@
     },
     data() {
       return {
-        text: "",
+        text: '',
         items: [],
         page: {
           number: 0, // 当前页，从0开始

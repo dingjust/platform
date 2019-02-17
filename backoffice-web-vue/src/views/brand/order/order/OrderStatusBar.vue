@@ -12,11 +12,11 @@
 </template>
 
 <script>
-  import {OrderMixin} from "../../../../mixins";
+  import {OrderMixin} from '../../../../mixins';
 
   export default {
-    name: "OrderStatusBar",
-    props: ["status"],
+    name: 'OrderStatusBar',
+    props: ['status'],
     mixins: [OrderMixin],
     methods: {},
     computed: {

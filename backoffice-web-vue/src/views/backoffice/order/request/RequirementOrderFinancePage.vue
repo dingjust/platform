@@ -181,20 +181,20 @@
 
   import autoHeight from 'mixins/autoHeight'
   import RequirementOrderForm from './RequirementOrderForm';
-  import RequirementOrderDetailsPage from "./RequirementOrderDetailsPage"
+  import RequirementOrderDetailsPage from './RequirementOrderDetailsPage'
 
   export default {
-    name: "RequirementOrderFinancePage",
+    name: 'RequirementOrderFinancePage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search",
-        searchAdvanced: "searchAdvanced"
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
       }),
       handleFilterChange(val) {
         this.statuses = val.status;
@@ -227,16 +227,16 @@
         this.$refs.resultTable.clearSelection();
       },
       async onDetails(item) {
-        const result = await this.$http.get("/djbackoffice/requirementOrder/" + item.code);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.get('/djbackoffice/requirementOrder/' + item.code);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider("需求订单明细", RequirementOrderDetailsPage, result);
+        this.fn.openSlider('需求订单明细', RequirementOrderDetailsPage, result);
       },
       onNew() {
-        this.fn.openSlider("创建需求订单", RequirementOrderForm, this.formData);
+        this.fn.openSlider('创建需求订单', RequirementOrderForm, this.formData);
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
@@ -259,14 +259,14 @@
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
         }
       },
       async getCompanies(keyword) {
-        this.companies = await this.$http.get("/djbrand/brand", {
+        this.companies = await this.$http.get('/djbrand/brand', {
           text: keyword.trim()
         });
       },
@@ -284,7 +284,7 @@
     },
     created() {
       this.onSearch();
-      this.getCompanies("");
+      this.getCompanies('');
     }
   };
 </script>

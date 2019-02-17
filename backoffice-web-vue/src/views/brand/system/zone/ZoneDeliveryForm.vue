@@ -23,28 +23,28 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import ZoneDeliveryBaseForm from "./ZoneDeliveryBaseForm";
+  import axios from 'axios';
+  import ZoneDeliveryBaseForm from './ZoneDeliveryBaseForm';
 
   export default {
-    name: "ZoneDeliveryForm",
+    name: 'ZoneDeliveryForm',
     components: {ZoneDeliveryBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     methods: {
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         console.log(this.slotData);
         baseForm.validate(valid => {
           if (!valid) {
             return false;
           }
-          axios.post("/djbrand/zoneDelivery", this.slotData)
+          axios.post('/djbrand/zoneDelivery', this.slotData)
             .then(() => {
-              this.$message.success("保存成功");
+              this.$message.success('保存成功');
               this.fn.closeSlider(true);
               //刷新主体数据
             }).catch(error => {
-              this.$message.error("保存失败，原因：" + error.response.data.message);
+              this.$message.error('保存失败，原因：' + error.response.data.message);
             }
           );
 

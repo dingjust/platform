@@ -17,10 +17,10 @@
   import {
     MemberRequestsPage,
     MembersPage
-  } from "./";
+  } from './';
 
   export default {
-    name: "MemberPage",
+    name: 'MemberPage',
     components: {MemberRequestsPage, MembersPage},
     data() {
       return {};

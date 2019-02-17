@@ -30,27 +30,27 @@
 </template>
 
 <script>
-  import {OrderMixin} from "mixins";
-  import axios from "axios";
+  import {OrderMixin} from 'mixins';
+  import axios from 'axios';
 
   export default {
-    name: "OrderBaseForm",
-    props: ["slotData", "readOnly"],
+    name: 'OrderBaseForm',
+    props: ['slotData', 'readOnly'],
     mixins: [OrderMixin],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
         }
       },
       getCompanies(query) {
-        axios.get("/djbrand/brand", {
+        axios.get('/djbrand/brand', {
           params: {
             text: query.trim()
           }
@@ -69,7 +69,7 @@
       }
     },
     created() {
-      this.getCompanies("");
+      this.getCompanies('');
     }
   }
 </script>

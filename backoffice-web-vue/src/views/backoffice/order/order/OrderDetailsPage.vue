@@ -73,19 +73,19 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import OrderBaseForm from "./OrderBaseForm";
-  import OrderEntriesForm from "./OrderEntriesForm";
-  import OrderDeliveryAddressForm from "./OrderDeliveryAddressForm";
-  import OrderStatusBar from "./OrderStatusBar";
+  import axios from 'axios';
+  import OrderBaseForm from './OrderBaseForm';
+  import OrderEntriesForm from './OrderEntriesForm';
+  import OrderDeliveryAddressForm from './OrderDeliveryAddressForm';
+  import OrderStatusBar from './OrderStatusBar';
 
   export default {
-    name: "OrderDetailsPage",
-    props: ["slotData", "readOnly"],
+    name: 'OrderDetailsPage',
+    props: ['slotData', 'readOnly'],
     components: {OrderStatusBar, OrderBaseForm, OrderDeliveryAddressForm, OrderEntriesForm},
     methods: {
       refresh() {
-        this.$refs["orderDeliveryAddressForm"].refresh();
+        this.$refs['orderDeliveryAddressForm'].refresh();
       },
       onUpdateBase() {
         Object.assign(this.baseData, this.slotData);
@@ -94,14 +94,14 @@
       onSubmitBaseForm() {
         this.baseFormDialogVisible = false;
 
-        if (this.$refs["baseForm"].validate()) {
-          axios.put("/djbackoffice/salesOrder/base", {
+        if (this.$refs['baseForm'].validate()) {
+          axios.put('/djbackoffice/salesOrder/base', {
             code: this.slotData.code
           }).then(() => {
-            this.$message.success("更新基本信息成功")
+            this.$message.success('更新基本信息成功')
           }).catch(error => {
             console.log(JSON.stringify(error));
-            this.$message.error("更新基本信息失败，原因：" + error.response.data);
+            this.$message.error('更新基本信息失败，原因：' + error.response.data);
           });
         }
       },
@@ -110,18 +110,18 @@
         this.addressFormDialogVisible = true;
       },
       onSubmitAddressForm() {
-        this.$refs["addressForm"].validate((valid) => {
+        this.$refs['addressForm'].validate((valid) => {
           if (valid) {
-            axios.put("/djbackoffice/salesOrder/deliveryAddress", {
+            axios.put('/djbackoffice/salesOrder/deliveryAddress', {
               code: this.slotData.code,
               deliveryAddress: this.addressData.deliveryAddress
             }).then(() => {
-              this.$message.success("更新地址成功");
+              this.$message.success('更新地址成功');
 
               this.addressFormDialogVisible = false;
             }).catch(error => {
               console.log(JSON.stringify(error));
-              this.$message.error("更新地址失败，原因：" + error.response.data);
+              this.$message.error('更新地址失败，原因：' + error.response.data);
             });
 
             return true;
@@ -137,17 +137,17 @@
       onSubmitEntriesForm() {
         this.entriesFormDialogVisible = false;
 
-        if (this.$refs["entriesForm"].validate()) {
-          axios.put("/djbackoffice/salesOrder/entries", {
+        if (this.$refs['entriesForm'].validate()) {
+          axios.put('/djbackoffice/salesOrder/entries', {
             code: this.slotData.code,
             entries: this.entriesData.entries
           }).then(() => {
-            this.$message.success("更新订单行成功");
+            this.$message.success('更新订单行成功');
 
-            this.$set(this.slotData, "entries", this.entriesData.entries);
+            this.$set(this.slotData, 'entries', this.entriesData.entries);
           }).catch(error => {
             console.log(JSON.stringify(error));
-            this.$message.error("更新订单行失败，原因：" + error.response.data);
+            this.$message.error('更新订单行失败，原因：' + error.response.data);
           });
         }
       }

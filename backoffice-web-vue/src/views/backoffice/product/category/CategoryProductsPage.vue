@@ -64,13 +64,13 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "CategoryProductsPage",
+    name: 'CategoryProductsPage',
     components: {},
     mixins: [],
-    props: ["slotData", "readOnly"],
+    props: ['slotData', 'readOnly'],
     methods: {
       onPageSizeChanged(val) {
         this.reset();
@@ -87,7 +87,7 @@
         this.$refs.resultTable.clearSelection();
       },
       onSearch(page, size) {
-        axios.get("/djbackoffice/product/category/products/" + this.slotData.code, {
+        axios.get('/djbackoffice/product/category/products/' + this.slotData.code, {
           params: {
             page: page,
             size: size
@@ -120,7 +120,7 @@
       },
       searchAllProducts(page,size) {
         this.productsVialogVisible = true;
-        axios.get("/djbackoffice/product",{
+        axios.get('/djbackoffice/product',{
           params:{
             code:this.text,
             page:page,
@@ -140,7 +140,7 @@
           type: 'warning',
           center: true
         }).then(() => {
-          axios.put("/djbackoffice/product/category/removeProduct", null, {
+          axios.put('/djbackoffice/product/category/removeProduct', null, {
             params: {
               categoryCode: this.slotData.code,
               productCode: item.code
@@ -155,17 +155,17 @@
       },
       saveProducts() {
         console.log(this.codes);
-        axios.put("/djbackoffice/product/category/addProducts", {
+        axios.put('/djbackoffice/product/category/addProducts', {
           categoryCode: this.slotData.code,
           productCodes: this.codes
         }).then(() => {
-          this.$message.success("添加产品成功");
+          this.$message.success('添加产品成功');
           this.productsVialogVisible = false;
           this.onSearch();
         }).catch(() => {
           this.$message({
-            type: "error",
-            message: "添加产品失败， 原因：" + error.response.data
+            type: 'error',
+            message: '添加产品失败， 原因：' + error.response.data
           });
         });
       },
@@ -183,7 +183,7 @@
       return {
         productsVialogVisible: false,
         multipleSelection: [],
-        text: "",
+        text: '',
         page: {
           number: 0, // 当前页，从0开始
           size: 10, // 每页显示条数

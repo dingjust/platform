@@ -35,7 +35,7 @@
     props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
         const baseForm = this.$refs['baseForm'];
@@ -57,13 +57,13 @@
         if (!this.isNewlyCreated) {
           request = this.$http.put;
         }
-        const result = await request("/djfactory/employee", formData);
-        if (result["errors"]) {
-          this.$message.error("保存失败，原因：" + result["errors"][0].message);
+        const result = await request('/djfactory/employee', formData);
+        if (result['errors']) {
+          this.$message.error('保存失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("保存成功");
+        this.$message.success('保存成功');
         this.refresh();
         this.fn.closeSlider(true);
       }

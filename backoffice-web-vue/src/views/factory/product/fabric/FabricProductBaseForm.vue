@@ -41,16 +41,16 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
   export default {
     name: 'FabricProductBaseForm',
     props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
       getColors() {
-        axios.get("/djbackoffice/product/color/all")
+        axios.get('/djbackoffice/product/color/all')
           .then(response => {
             this.colors = response.data;
           })

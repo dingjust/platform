@@ -45,15 +45,15 @@
 
 <script>
   export default {
-    name: "FactoryCertificateForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'FactoryCertificateForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
       onSubmit() {
         console.log(this.slotData);
         this.$refs.uploadForm.submit();
       },
       validate(callback) {
-        return this.$refs["form"].validate(callback);
+        return this.$refs['form'].validate(callback);
       },
       getValue() {
         let certificateData = {};
@@ -64,21 +64,21 @@
         return certificateData;
       },
       onUploadSuccess(response, file, files) {
-        if (response === "") {
-          this.$message.success("上传成功");
+        if (response === '') {
+          this.$message.success('上传成功');
           this.$refs.uploadForm.clearFiles();
           this.fn.closeSlider();
         }
       },
       onUploadError(error, file, files) {
-        let msg = "";
+        let msg = '';
         if (file.size >= (1024 * 1024 * 5)) {
-          msg = "，上传的文件不能超过5MB"
+          msg = '，上传的文件不能超过5MB'
         }
-        this.$message.error("上传失败" + msg);
+        this.$message.error('上传失败' + msg);
       },
       onUploading(event, file, files) {
-        this.$message("正在上传，请稍等");
+        this.$message('正在上传，请稍等');
       }
     },
     computed: {
@@ -91,7 +91,7 @@
     data() {
       return {
         rules: {},
-        uploadUrl: "/djfactory/factory/media/upload",
+        uploadUrl: '/djfactory/factory/media/upload',
         files: []
       };
     }

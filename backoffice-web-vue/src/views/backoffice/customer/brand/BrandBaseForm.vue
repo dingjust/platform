@@ -100,17 +100,17 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
-  import {CompanyMixin} from "mixins";
+  import {CompanyMixin} from 'mixins';
 
   export default {
-    name: "BrandBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'BrandBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     mixins: [CompanyMixin],
     methods: {
       validate(callback) {
-        return this.$refs["form"].validate(callback);
+        return this.$refs['form'].validate(callback);
       },
       getValue() {
         let baseData = {};
@@ -132,7 +132,7 @@
         return baseData;
       },
       getStyles() {
-        axios.get("/djbackoffice/product/style/all")
+        axios.get('/djbackoffice/product/style/all')
           .then(response => {
             this.styles = response.data;
           }).catch(error => {
@@ -141,7 +141,7 @@
       },
       getCategories() {
         axios
-          .get("/djbackoffice/product/category/majors")
+          .get('/djbackoffice/product/category/majors')
           .then(response => {
             this.adeptAtCategories = response.data;
           })
@@ -156,9 +156,9 @@
         styles: [],
         adeptAtCategories: [],
         rules: {
-          name: [{required: true, message: "必填", trigger: "blur"}],
-          address: [{required: true, message: "请输入经营地址", trigger: "blur"}],
-          contactPerson: [{required: true, message: "请输入联系人", trigger: "blur"}],
+          name: [{required: true, message: '必填', trigger: 'blur'}],
+          address: [{required: true, message: '请输入经营地址', trigger: 'blur'}],
+          contactPerson: [{required: true, message: '请输入联系人', trigger: 'blur'}],
           email: [
             {
               message: '邮箱格式不正确',

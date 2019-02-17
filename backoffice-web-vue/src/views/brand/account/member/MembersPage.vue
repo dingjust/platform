@@ -44,17 +44,17 @@
   import autoHeight from 'mixins/autoHeight';
 
   export default {
-    name: "MembersPage",
-    props: ["slotData"],
+    name: 'MembersPage',
+    props: ['slotData'],
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onPageSizeChanged(val) {
         this.reset();
@@ -65,28 +65,28 @@
         this._onSearch(val - 1);
       },
       _onSearch(page, size) {
-        const keyword = "";
+        const keyword = '';
         this.search({keyword, page, size});
       },
       onRelieve(row) {
         // 调用审核拒绝接口
-        this.$confirm("确认移除会员, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+        this.$confirm('确认移除会员, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }).then(() => this._onRelieve(row));
       },
       async _onRelieve(row) {
-        const result = await this.$http.delete("/djbrand/membership", {
+        const result = await this.$http.delete('/djbrand/membership', {
           customerUid: row.customer.uid
         });
 
-        if (result["errors"]) {
-          this.$message.error("移除失败，原因：" + result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error('移除失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("移除成功");
+        this.$message.success('移除成功');
         this._onSearch(0);
       }
     },

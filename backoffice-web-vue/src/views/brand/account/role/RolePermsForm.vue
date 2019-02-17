@@ -22,11 +22,11 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "RolePermsForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'RolePermsForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     computed: {
       defaultCheckedKeys: function () {
         let result = [];
@@ -37,7 +37,7 @@
       }
     },
     watch: {
-      "$store.state.sideSliderState": function (value) {
+      '$store.state.sideSliderState': function (value) {
         if (!value) {
           this.onSearch();
         }
@@ -45,7 +45,7 @@
     },
     methods: {
       onSearch() {
-        axios.get("/djbrand/role/perms")
+        axios.get('/djbrand/role/perms')
           .then(response => {
             this.results = response.data;
           }).catch(error => {
@@ -54,15 +54,15 @@
         );
       },
       getValue() {
-        return this.$refs["tree"].getCheckedKeys();
+        return this.$refs['tree'].getCheckedKeys();
       }
     },
     data() {
       return {
         results: [],
         defaultProps: {
-          children: "children",
-          label: "name"
+          children: 'children',
+          label: 'name'
         }
       };
     },

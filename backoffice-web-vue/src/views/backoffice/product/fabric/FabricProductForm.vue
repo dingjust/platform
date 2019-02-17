@@ -52,7 +52,7 @@
     components: {FabricProductBaseForm, FabricProductDetailsPage},
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
         this.$refs['fabricProductBaseForm'].validate(valid => {
@@ -85,9 +85,9 @@
           request = this.$http.put;
         }
 
-        const result = await request("/djbackoffice/product/fabric", formData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await request('/djbackoffice/product/fabric', formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 

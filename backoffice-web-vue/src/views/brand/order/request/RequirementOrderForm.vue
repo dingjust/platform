@@ -43,13 +43,13 @@
   const {mapActions} = createNamespacedHelpers('BrandRequirementOrdersModule');
 
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
-  import RequirementOrderMediaUploadForm from "./RequirementOrderMediaUploadForm";
+  import RequirementOrderMediaUploadForm from './RequirementOrderMediaUploadForm';
   import RequirementOrderDeliveryAddressForm from './RequirementOrderDeliveryAddressForm';
-  import RequirementOrderRequestForm from "./RequirementOrderRequestForm";
+  import RequirementOrderRequestForm from './RequirementOrderRequestForm';
   import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
-  import RequirementOrderEntriesForm from "./RequirementOrderEntriesForm";
+  import RequirementOrderEntriesForm from './RequirementOrderEntriesForm';
 
-  import {OrderMixin} from "../../../../mixins";
+  import {OrderMixin} from '../../../../mixins';
 
   export default {
     name: 'RequirementOrderFrom',
@@ -65,7 +65,7 @@
     props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
         this.$refs['deliveryAddressForm'].validate((valid) => {
@@ -75,7 +75,7 @@
 
             const address = this.slotData.deliveryAddress;
             if (!address.region.isocode || !address.city.code) {
-              this.$message.error("请输入省份和市区");
+              this.$message.error('请输入省份和市区');
               return false;
             }
 
@@ -104,12 +104,12 @@
       async _onSubmit() {
         let formData = this.slotData;
         const result = await this.$http.post('/djbrand/processes/requirementOrder/publish/nosku', formData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success("发布需求成功，订单编号： " + result);
+        this.$message.success('发布需求成功，订单编号： ' + result);
         this.$set(this.slotData, 'code', result);
         this.fn.closeSlider(true);
       }

@@ -63,18 +63,18 @@
     CategoryDetailPage,
     CategoryIconForm,
     CategoryProductsPage
-  } from "./";
+  } from './';
 
   export default {
     components: {CategoryIconForm, CategoryProductsPage},
     computed: {
       ...mapGetters({
-        items: "items"
+        items: 'items'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onFilter(value, data) {
         if (!value) {
@@ -88,15 +88,15 @@
       },
       onAppend(data) {
         if (!data.children) {
-          this.$set(data, "children", []);
+          this.$set(data, 'children', []);
         }
 
-        this.formData["parent"] = {
+        this.formData['parent'] = {
           code: data.code,
           name: data.name
         };
 
-        this.fn.openSlider("添加分类", CategoryForm, this.formData);
+        this.fn.openSlider('添加分类', CategoryForm, this.formData);
       },
       onUpdateIcon(data) {
         // console.log(data);
@@ -105,16 +105,16 @@
       },
       onDetail(data) {
         // console.log(data);
-        this.fn.openSlider("详情", CategoryDetailPage, data);
+        this.fn.openSlider('详情', CategoryDetailPage, data);
       },
       onSubmitIconForm(rowData) {
         // console.log(rowData);
-        this.$refs["iconForm"].onSubmit();
+        this.$refs['iconForm'].onSubmit();
         this.iconFormDialogVisible = false;
         this.fn.closeSlider();
       },
       onProducts(data) {
-        this.fn.openSlider("查看产品", CategoryProductsPage, data);
+        this.fn.openSlider('查看产品', CategoryProductsPage, data);
       }
     },
     watch: {
@@ -124,10 +124,10 @@
     },
     data() {
       return {
-        filterText: "",
+        filterText: '',
         defaultProps: {
-          children: "children",
-          label: "name"
+          children: 'children',
+          label: 'name'
         },
         iconFormDialogVisible: false,
         formData: this.$store.state.CategoriesModule.formData,

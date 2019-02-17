@@ -30,7 +30,7 @@
     components: {AddressBaseForm},
     methods: {
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
@@ -41,9 +41,9 @@
           }
 
           console.log(JSON.stringify(this.slotData));
-          request("/djbrand/system/address", this.slotData)
+          request('/djbrand/system/address', this.slotData)
             .then(() => {
-              this.$message.success("创建成功");
+              this.$message.success('创建成功');
 
               // 刷新主体数据
               this.fn.closeSlider(true);

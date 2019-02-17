@@ -68,12 +68,12 @@
 
 <script>
   export default {
-    name: "CarouselForm",
+    name: 'CarouselForm',
     components: {},
-    props: ["slotData", "readOnly"],
+    props: ['slotData', 'readOnly'],
     methods: {
       onSubmit() {
-        const carouselForm = this.$refs["carouselForm"];
+        const carouselForm = this.$refs['carouselForm'];
         carouselForm.validate(valid => {
           if (!valid) {
             return false;
@@ -83,33 +83,33 @@
         });
       },
       onUploadSuccess(response, file, files) {
-        if (response === "") {
-          this.$message.success("上传成功");
+        if (response === '') {
+          this.$message.success('上传成功');
           this.$refs.uploadForm.clearFiles();
           this.fn.closeSlider();
         }
       },
       onUploadError(error, file, files) {
-        let msg = "";
+        let msg = '';
         if (file.size >= (1024 * 200)) {
-          msg = "，上传的文件不能超过200KB"
+          msg = '，上传的文件不能超过200KB'
         }
-        this.$message.error("上传失败" + msg);
+        this.$message.error('上传失败' + msg);
       },
       onUploading(event, file, files) {
-        this.$message("正在上传，请稍等");
+        this.$message('正在上传，请稍等');
       },
       onCancel() {
         this.fn.closeSlider();
       },
       beforeUpload(file) {
         let flat = true;
-        if (file.type != "image/png" && file.type != "image/jpeg") {
-          this.$message.error("只能上传jpg/png文件");
+        if (file.type != 'image/png' && file.type != 'image/jpeg') {
+          this.$message.error('只能上传jpg/png文件');
           flat = false;
         }
         if (file.size > 1024*200) {
-          this.$message.error("上传的文件不能超过200KB");
+          this.$message.error('上传的文件不能超过200KB');
           flat = false;
         }
         return flat;
@@ -133,10 +133,10 @@
     data() {
       return {
         rules: {
-          name: [{required: true, message: "必填", trigger: "blur"}],
-          action: [{required: true, message: "必填", trigger: "blur"}]
+          name: [{required: true, message: '必填', trigger: 'blur'}],
+          action: [{required: true, message: '必填', trigger: 'blur'}]
         },
-        uploadUrl: "/djbackoffice/system/carousel",
+        uploadUrl: '/djbackoffice/system/carousel',
         files: []
       };
     }

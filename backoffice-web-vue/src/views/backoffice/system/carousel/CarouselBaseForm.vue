@@ -32,8 +32,8 @@
 
 <script>
   export default {
-    name: "CarouselBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'CarouselBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
       getValue(){
         let baseData= {};
@@ -52,7 +52,7 @@
     data() {
       return {
         rules: {
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         }
       };
     }

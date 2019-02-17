@@ -178,14 +178,14 @@
         }
 
         if (!this.product) {
-          this.$message.error("请先选择产品");
+          this.$message.error('请先选择产品');
           return;
         }
 
         if (this.slotData.entries && this.slotData.entries.length) {
           const item = this.slotData.entries[0];
           if (item.product.baseProduct !== this.product) {
-            this.$message.error("只允许选择一款产品");
+            this.$message.error('只允许选择一款产品');
             return;
           }
         }
@@ -292,7 +292,7 @@
         return pass;
       },
       onSetPrice() {
-        this.$set(this.slotData, "entries", [...this.slotData.entries]);
+        this.$set(this.slotData, 'entries', [...this.slotData.entries]);
         for (const index in this.slotData.entries) {
           this.slotData.entries[index].basePrice = this.price;
         }

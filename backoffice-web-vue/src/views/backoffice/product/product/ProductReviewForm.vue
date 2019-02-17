@@ -31,12 +31,12 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "ProductReviewForm",
+    name: 'ProductReviewForm',
     components: {},
-    props: ["slotData", "readOnly", "isNewlyCreated"],
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       onSubmit() {
         console.log(this.slotData.product);

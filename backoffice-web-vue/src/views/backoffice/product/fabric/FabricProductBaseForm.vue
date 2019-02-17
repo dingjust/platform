@@ -55,17 +55,17 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
     name: 'FabricProductBaseForm',
     props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
       getColors() {
-        axios.get("/djbackoffice/product/color/all")
+        axios.get('/djbackoffice/product/color/all')
           .then(response => {
             this.colors = response.data;
           })
@@ -75,14 +75,14 @@
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
         }
       },
       getCompanies(query) {
-        axios.get("/djfactory/factory", {
+        axios.get('/djfactory/factory', {
           params: {
             text: query.trim()
           }

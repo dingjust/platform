@@ -42,21 +42,21 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "EmployeeBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'EmployeeBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
       getValue() {
         return this.slotData;
       },
       getRoles() {
         axios
-          .get("/djbackoffice/role?text=")
+          .get('/djbackoffice/role?text=')
           .then(response => {
             console.log(response.data.content);
             this.roles = response.data.content;
@@ -74,11 +74,11 @@
       //密码校验
       const validatePass = (rule, value, callback) => {
         if (this.isNewlyCreated) {
-          if (value === "") {
-            callback(new Error("请输入密码"));
+          if (value === '') {
+            callback(new Error('请输入密码'));
           } else {
-            if (this.slotData.confirmPassword !== "") {
-              this.$refs.form.validateField("confirmPassword");
+            if (this.slotData.confirmPassword !== '') {
+              this.$refs.form.validateField('confirmPassword');
             }
             callback();
           }
@@ -88,10 +88,10 @@
       }; //密码校验
       const validatePass2 = (rule, value, callback) => {
         if (this.isNewlyCreated) {
-          if (value === "") {
-            callback(new Error("请再次输入密码"));
+          if (value === '') {
+            callback(new Error('请再次输入密码'));
           } else if (value !== this.slotData.password) {
-            callback(new Error("两次输入密码不一致!"));
+            callback(new Error('两次输入密码不一致!'));
           } else {
             callback();
           }
@@ -102,16 +102,16 @@
 
       return {
         rules: {
-          password: [{validator: validatePass, trigger: "blur"}, {
+          password: [{validator: validatePass, trigger: 'blur'}, {
             required: true,
             message: '密码格式不正确，必须包含数字,字母,特殊符号两种或以上组合，且长度为6-16位',
             trigger: 'blur',
             pattern: '^(?![0-9]+$)(?![a-zA-Z]+$)(?!([^(0-9a-zA-Z)]|[\\(\\)])+$)([^(0-9a-zA-Z)]|[\\(\\)]|[a-zA-Z]|[0-9]){6,16}$'
           }],
-          confirmPassword: [{validator: validatePass2, trigger: "blur"}],
-          name: [{required: true, message: "必填", trigger: "blur"}],
-          uid: [{required: true, message: "必填", trigger: "blur"}],
-          mobileNumber: [{required: true, message: "必填", trigger: "blur"}]
+          confirmPassword: [{validator: validatePass2, trigger: 'blur'}],
+          name: [{required: true, message: '必填', trigger: 'blur'}],
+          uid: [{required: true, message: '必填', trigger: 'blur'}],
+          mobileNumber: [{required: true, message: '必填', trigger: 'blur'}]
         },
         roles: []
       };

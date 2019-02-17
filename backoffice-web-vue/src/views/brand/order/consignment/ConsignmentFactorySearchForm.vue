@@ -32,11 +32,11 @@
 <script>
   import axios from 'axios';
 
-  import ConsignmentFactoryBaseForm from "./ConsignmentFactoryBaseForm";
+  import ConsignmentFactoryBaseForm from './ConsignmentFactoryBaseForm';
 
   export default {
     name: 'ConsignmentFactorySearchForm',
-    props: ["slotData"],
+    props: ['slotData'],
     components: {ConsignmentFactoryBaseForm},
     methods: {
       validate(callback) {
@@ -66,7 +66,7 @@
         }).forEach(company => {
           this.showDetails = true;
           this.company = company;
-          this.$set(slotData, "assignedTo", company);
+          this.$set(slotData, 'assignedTo', company);
         });
       }
     },

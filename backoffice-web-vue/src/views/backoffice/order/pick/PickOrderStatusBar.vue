@@ -10,11 +10,11 @@
 </template>
 
 <script>
-  import {PickOrderMixin} from "mixins";
+  import {PickOrderMixin} from 'mixins';
 
   export default {
-    name: "PickOrderStatusBar",
-    props: ["status"],
+    name: 'PickOrderStatusBar',
+    props: ['status'],
     mixins: [PickOrderMixin],
     methods: {},
     computed: {

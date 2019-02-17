@@ -47,36 +47,36 @@
 
   import autoHeight from 'mixins/autoHeight';
 
-  import OrgForm from "./OrgForm";
-  import OrgDetailsPage from "./OrgDetailsPage";
+  import OrgForm from './OrgForm';
+  import OrgDetailsPage from './OrgDetailsPage';
 
   export default {
-    name: "OrgPage",
+    name: 'OrgPage',
     components: {},
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建部门", OrgForm, this.formData);
+        this.fn.openSlider('创建部门', OrgForm, this.formData);
       },
       onDetails(item) {
-        this.fn.openSlider("部门明细", OrgDetailsPage, item);
+        this.fn.openSlider('部门明细', OrgDetailsPage, item);
       },
       onAddChild(item) {
-        this.fn.openSlider("创建部门", OrgForm, {
-          uid: "",
-          name: "",
-          comment: "",
+        this.fn.openSlider('创建部门', OrgForm, {
+          uid: '',
+          name: '',
+          comment: '',
           active: true,
           path: item.path,
           parent: item.name

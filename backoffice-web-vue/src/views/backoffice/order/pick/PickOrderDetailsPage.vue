@@ -38,12 +38,12 @@
 <script>
   import axios from 'axios';
   import PickOrderBaseForm from './PickOrderBaseForm';
-  import PickOrderEntriesForm from "./PickOrderEntriesForm";
-  import PickOrderStatusBar from "./PickOrderStatusBar";
+  import PickOrderEntriesForm from './PickOrderEntriesForm';
+  import PickOrderStatusBar from './PickOrderStatusBar';
 
   export default {
-    name: "PickOrderDetailsPage",
-    props: ["slotData", "readOnly"],
+    name: 'PickOrderDetailsPage',
+    props: ['slotData', 'readOnly'],
     components: {PickOrderStatusBar, PickOrderBaseForm, PickOrderEntriesForm},
     methods: {
       onUpdateOrAddEntries() {
@@ -61,11 +61,11 @@
         axios.put('/djbackoffice/pickOrder', formData)
           .then(response => {
 
-            this.$message.success("物料单行修改成功!");
+            this.$message.success('物料单行修改成功!');
 
             this.fn.closeSlider(true);
           }).catch(error => {
-            this.$message.success("物料单行修改失败!");
+            this.$message.success('物料单行修改失败!');
           }
         );
       }

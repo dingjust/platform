@@ -34,17 +34,17 @@
   import autoHeight from 'mixins/autoHeight';
 
   export default {
-    name: "MemberRequestPage",
-    props: ["slotData"],
+    name: 'MemberRequestPage',
+    props: ['slotData'],
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
@@ -62,51 +62,51 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const keyword = "";
+        const keyword = '';
         this.search({keyword, page, size});
       },
       onApprove(row) {
         // 调用审核通过接口
-        this.$confirm("确认会员申请, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+        this.$confirm('确认会员申请, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }).then(() => this._onApprove(row));
       },
       async _onApprove(row) {
-        const result = await this.$http.put("/djbrand/memberRequest/approve", {
+        const result = await this.$http.put('/djbrand/memberRequest/approve', {
           customer: {uid: row.customer.uid},
           company: {uid: row.company.uid}
         });
 
-        if (result["errors"]) {
-          this.$message.error("通过失败，原因：" + result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error('通过失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("确认成功");
+        this.$message.success('确认成功');
         this._onSearch(0);
       },
       onReject(row) {
         //调用审核拒绝接口
-        this.$prompt("请输入拒绝原因", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消"
+        this.$prompt('请输入拒绝原因', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
         }).then(() => this._onReject(row));
       },
       async _onReject(row) {
-        const result = await this.$http.put("/djbrand/memberRequest/reject", {
+        const result = await this.$http.put('/djbrand/memberRequest/reject', {
           customer: {uid: row.customer.uid},
           company: {uid: row.company.uid},
           remarks: value
         });
 
-        if (result["errors"]) {
-          this.$message.error("拒绝失败，原因：" + result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error('拒绝失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("拒绝成功");
+        this.$message.success('拒绝成功');
         this._onSearch(0);
       }
     },

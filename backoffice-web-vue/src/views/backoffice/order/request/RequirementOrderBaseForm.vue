@@ -59,25 +59,25 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "RequirementOrderBaseForm",
-    props: ["slotData", "readOnly", "belongToEditable"],
+    name: 'RequirementOrderBaseForm',
+    props: ['slotData', 'readOnly', 'belongToEditable'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
         }
       },
       getCompanies(query) {
-        axios.get("/djbrand/brand", {
+        axios.get('/djbrand/brand', {
           params: {
             text: query.trim()
           }
@@ -96,7 +96,7 @@
       }
     },
     created() {
-      this.getCompanies("");
+      this.getCompanies('');
     }
   }
 </script>

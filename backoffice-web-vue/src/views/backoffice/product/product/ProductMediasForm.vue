@@ -34,29 +34,29 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import MediaFileList from "components/custom/MediaFileList.vue";
+  import axios from 'axios';
+  import MediaFileList from 'components/custom/MediaFileList.vue';
 
   export default {
-    name: "ProductMediasForm",
-    props: ["slotData", "readOnly", "isNewlyCreated"],
+    name: 'ProductMediasForm',
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
     components: {MediaFileList},
     methods: {
       onDelete(item) {
-        this.$confirm("此操作将永久删除该图片, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+        this.$confirm('此操作将永久删除该图片, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }).then(() => {
-          axios.delete("/djbackoffice/product/media/" + item.id, {
+          axios.delete('/djbackoffice/product/media/' + item.id, {
             params: {
               code: this.slotData.code
             }
           }).then(() => {
             this.refresh();
-            this.$message.success("图片删除成功");
+            this.$message.success('图片删除成功');
           }).catch(error => {
-            this.$message.error("图片删除失败");
+            this.$message.error('图片删除失败');
           });
         });
       },
@@ -68,7 +68,7 @@
       doRefresh() {
         if (this.slotData.code != null && this.slotData.code !== '') {
           axios
-            .get("/djbackoffice/product/mediaGroups/" + this.slotData.code)
+            .get('/djbackoffice/product/mediaGroups/' + this.slotData.code)
             .then(response => {
               this.groups = response.data;
             })
@@ -79,25 +79,25 @@
         }
       },
       isPicture(group) {
-        return !(group.name === "bom" || group.name === "technicalDocuments");
+        return !(group.name === 'bom' || group.name === 'technicalDocuments');
       },
       getGroupName(group) {
-        var result = "";
+        var result = '';
         switch (group) {
-          case "masterPicture":
-            result = "缩略图";
+          case 'masterPicture':
+            result = '缩略图';
             break;
-          case "detailPicture":
-            result = "详细图";
+          case 'detailPicture':
+            result = '详细图';
             break;
-          case "normalPicture":
-            result = "主图";
+          case 'normalPicture':
+            result = '主图';
             break;
-          case "bom":
-            result = "BOM文件";
+          case 'bom':
+            result = 'BOM文件';
             break;
-          case "technicalDocuments":
-            result = "技术文件";
+          case 'technicalDocuments':
+            result = '技术文件';
             break;
           default:
             break;
@@ -109,7 +109,7 @@
     computed: {},
     data() {
       return {
-        activeName: "0",
+        activeName: '0',
         groups: []
       };
     },

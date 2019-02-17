@@ -205,21 +205,21 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import RequirementOrderBaseForm from "./RequirementOrderBaseForm";
-  import RequirementOrderDeliveryAddressForm from "./RequirementOrderDeliveryAddressForm";
-  import RequirementOrderRequestForm from "./RequirementOrderRequestForm";
-  import RequirementOrderEntriesForm from "./RequirementOrderEntriesForm";
-  import RequirementOrderUpdateStatusForm from "./RequirementOrderUpdateStatusForm";
-  import RequirementOrderContractsForm from "./RequirementOrderContractsForm";
-  import RequirementOrderMediaUploadForm from "./RequirementOrderMediaUploadForm";
-  import RequirementOrderStatusBar from "./RequirementOrderStatusBar";
-  import RequirementOrderBomForm from "./RequirementOrderBomForm";
-  import RequirementOrderBomUploadForm from "./RequirementOrderBomUploadForm";
+  import axios from 'axios';
+  import RequirementOrderBaseForm from './RequirementOrderBaseForm';
+  import RequirementOrderDeliveryAddressForm from './RequirementOrderDeliveryAddressForm';
+  import RequirementOrderRequestForm from './RequirementOrderRequestForm';
+  import RequirementOrderEntriesForm from './RequirementOrderEntriesForm';
+  import RequirementOrderUpdateStatusForm from './RequirementOrderUpdateStatusForm';
+  import RequirementOrderContractsForm from './RequirementOrderContractsForm';
+  import RequirementOrderMediaUploadForm from './RequirementOrderMediaUploadForm';
+  import RequirementOrderStatusBar from './RequirementOrderStatusBar';
+  import RequirementOrderBomForm from './RequirementOrderBomForm';
+  import RequirementOrderBomUploadForm from './RequirementOrderBomUploadForm';
 
   export default {
-    name: "RequirementOrderDetailsPage",
-    props: ["slotData", "readOnly", "preview"],
+    name: 'RequirementOrderDetailsPage',
+    props: ['slotData', 'readOnly', 'preview'],
     components: {
       RequirementOrderStatusBar,
       RequirementOrderMediaUploadForm,
@@ -235,7 +235,7 @@
     methods: {
       onRequirementAudit() {
         if (!this.slotData.entries || !this.slotData.entries.length) {
-          this.$message.error("订单行为空，不允许提交审核！");
+          this.$message.error('订单行为空，不允许提交审核！');
           return;
         }
         this.$confirm('是否确认提交审核', '提示', {
@@ -243,14 +243,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          axios.put("/djbackoffice/processes/requirementOrder/requirementAudit/" + this.slotData.code)
+          axios.put('/djbackoffice/processes/requirementOrder/requirementAudit/' + this.slotData.code)
             .then(response => {
-              this.$message.success("提交审核成功");
+              this.$message.success('提交审核成功');
 
               // 待确认
-              this.$set(this.slotData, "status", response.data);
+              this.$set(this.slotData, 'status', response.data);
             }).catch(error => {
-              this.$message.error("提交审核失败，原因：" + error.response.data.message);
+              this.$message.error('提交审核失败，原因：' + error.response.data.message);
             }
           );
         });
@@ -261,14 +261,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          axios.put("/djbackoffice/processes/requirementOrder/confirmProduction/" + this.slotData.code)
+          axios.put('/djbackoffice/processes/requirementOrder/confirmProduction/' + this.slotData.code)
             .then(response => {
-              this.$message.success("确认生产成功");
+              this.$message.success('确认生产成功');
 
               // 待出库
-              this.$set(this.slotData, "status", response.data);
+              this.$set(this.slotData, 'status', response.data);
             }).catch(error => {
-              this.$message.error("确认生产失败，原因：" + error.response.data.message);
+              this.$message.error('确认生产失败，原因：' + error.response.data.message);
             }
           );
         });
@@ -288,37 +288,37 @@
         this.baseFormDialogVisible = true;
       },
       onSubmitBaseForm() {
-        axios.put("/djbackoffice/requirementOrder/base", this.baseData)
+        axios.put('/djbackoffice/requirementOrder/base', this.baseData)
           .then(() => {
-            this.$message.success("更新基本信息成功");
+            this.$message.success('更新基本信息成功');
 
-            this.$set(this.slotData, "description", this.baseData.description);
-            this.$set(this.slotData, "depositPaid", this.baseData.depositPaid);
-            this.$set(this.slotData, "retainagePaid", this.baseData.retainagePaid);
-            this.$set(this.slotData, "depositAmount", this.baseData.depositAmount);
-            this.$set(this.slotData, "retainageAmount", this.baseData.retainageAmount);
+            this.$set(this.slotData, 'description', this.baseData.description);
+            this.$set(this.slotData, 'depositPaid', this.baseData.depositPaid);
+            this.$set(this.slotData, 'retainagePaid', this.baseData.retainagePaid);
+            this.$set(this.slotData, 'depositAmount', this.baseData.depositAmount);
+            this.$set(this.slotData, 'retainageAmount', this.baseData.retainageAmount);
 
             this.baseFormDialogVisible = false;
           }).catch(error => {
           console.log(JSON.stringify(error));
-          this.$message.error("更新基本信息失败，原因：" + error.response.data.message);
+          this.$message.error('更新基本信息失败，原因：' + error.response.data.message);
         });
       },
       onUpdateStatus() {
         this.statusFormDialogVisible = true;
       },
       onSubmitStatusForm() {
-        axios.put("/djbackoffice/requirementOrder/status", {
+        axios.put('/djbackoffice/requirementOrder/status', {
           code: this.slotData.code,
           status: this.statusData.status
         }).then(() => {
-          this.$message.success("更新订单状态成功");
+          this.$message.success('更新订单状态成功');
 
-          this.$set(this.slotData, "status", this.statusData.status);
+          this.$set(this.slotData, 'status', this.statusData.status);
 
           this.statusFormDialogVisible = false;
         }).catch(error => {
-          this.$message.error("更新订单状态失败，原因：" + error.response.data);
+          this.$message.error('更新订单状态失败，原因：' + error.response.data);
         });
       },
       onUpdateAddress() {
@@ -327,17 +327,17 @@
         this.addressFormDialogVisible = true;
       },
       onSubmitAddressForm() {
-        this.$refs["addressForm"].validate((valid) => {
+        this.$refs['addressForm'].validate((valid) => {
           if (valid) {
-            axios.put("/djbackoffice/requirementOrder/deliveryAddress", {
+            axios.put('/djbackoffice/requirementOrder/deliveryAddress', {
               code: this.slotData.code,
               deliveryAddress: this.addressData.deliveryAddress
             }).then(() => {
-              this.$message.success("更新地址成功");
+              this.$message.success('更新地址成功');
 
               this.addressFormDialogVisible = false;
             }).catch(error => {
-              this.$message.error("更新地址失败，原因：" + this.getErrorMessage(error));
+              this.$message.error('更新地址失败，原因：' + this.getErrorMessage(error));
             });
 
             return true;
@@ -352,18 +352,18 @@
         this.entriesFormDialogVisible = true;
       },
       onSubmitEntriesForm() {
-        if (this.$refs["entriesForm"].validate()) {
-          axios.put("/djbackoffice/requirementOrder/entries", {
+        if (this.$refs['entriesForm'].validate()) {
+          axios.put('/djbackoffice/requirementOrder/entries', {
             code: this.slotData.code,
             entries: this.entriesData.entries
           }).then(() => {
-            this.$message.success("更新订单行成功");
+            this.$message.success('更新订单行成功');
 
             // 避免保存后数据出错，重新给slotData赋值
-            this.$set(this.slotData, "entries", this.entriesData.entries);
+            this.$set(this.slotData, 'entries', this.entriesData.entries);
             this.entriesFormDialogVisible = false;
           }).catch(error => {
-            this.$message.error("更新订单行失败，原因：" + this.getErrorMessage(error));
+            this.$message.error('更新订单行失败，原因：' + this.getErrorMessage(error));
           });
         }
       },
@@ -372,20 +372,20 @@
         this.requestFormDialogVisible = true;
       },
       onSubmitRequestForm() {
-        this.$refs["requestForm"].validate((valid) => {
+        this.$refs['requestForm'].validate((valid) => {
           if (valid) {
-            axios.put("/djbackoffice/requirementOrder/request", {
+            axios.put('/djbackoffice/requirementOrder/request', {
               code: this.slotData.code,
               details: this.requestData.details
             }).then(() => {
-              this.$message.success("更新需求信息成功");
+              this.$message.success('更新需求信息成功');
 
-              this.$set(this.slotData, "details", this.requestData.details);
+              this.$set(this.slotData, 'details', this.requestData.details);
 
               this.requestFormDialogVisible = false;
             }).catch(error => {
               // console.log(JSON.stringify(error));
-              this.$message.error("更新需求信息失败，原因：" + this.getErrorMessage(error));
+              this.$message.error('更新需求信息失败，原因：' + this.getErrorMessage(error));
             });
 
             return true;
@@ -398,8 +398,8 @@
         this.contractsFormDialogVisible = true;
       },
       onSubmitContractsForm() {
-        this.$refs["contractsForm"].onSubmit();
-        //this.$refs["contractsForm"].refresh();
+        this.$refs['contractsForm'].onSubmit();
+        //this.$refs['contractsForm'].refresh();
         this.contractsFormDialogVisible = false;
       },
       onUpdateBom() {
@@ -408,14 +408,14 @@
     },
     computed: {
       isWaitForProcessing: function () {
-        return this.slotData.status === "WAIT_FOR_PROCESSING";
+        return this.slotData.status === 'WAIT_FOR_PROCESSING';
       },
       isApproved: function () {
-        return this.slotData.status === "APPROVED";
+        return this.slotData.status === 'APPROVED';
       },
       disableEdit: function () {
         // 只有待处理状态下才允许修改信息
-        return this.slotData.status !== "WAIT_FOR_PROCESSING";
+        return this.slotData.status !== 'WAIT_FOR_PROCESSING';
       }
     },
     data() {
@@ -454,20 +454,20 @@
           id: null,
           details: {
             category: {
-              code: "",
-              name: ""
+              code: '',
+              name: ''
             },
             majorCategory: {
-              code: "",
-              name: ""
+              code: '',
+              name: ''
             },
             expectedMachiningQuantity: 0,
             expectedDeliveryDate: null,
             maxExpectedPrice: 0,
-            machiningType: "",
+            machiningType: '',
             samplesNeeded: false,
-            contactPerson: "",
-            contactPHone: ""
+            contactPerson: '',
+            contactPHone: ''
           }
         },
         contractsFormDialogVisible: false,

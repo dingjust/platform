@@ -43,11 +43,11 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "ProductSpecificationForm",
-    props: ["slotData", "isNewlyCreated"],
+    name: 'ProductSpecificationForm',
+    props: ['slotData', 'isNewlyCreated'],
     methods: {
       onAdd(color) {
         if (!color) {
@@ -108,7 +108,7 @@
             });
 
             if (found && found.length > 0) {
-              results[color.code][size.code] = found[0]["available"];
+              results[color.code][size.code] = found[0]['available'];
             }
           });
         });
@@ -117,7 +117,7 @@
       },
       refreshInventories() {
         axios
-          .get("/djbrand/product/inventories/" + this.slotData.code)
+          .get('/djbrand/product/inventories/' + this.slotData.code)
           .then(response => {
             this.stockLevels = response.data;
             this.existedColors = this.getExistedColors(this.variants);
@@ -144,7 +144,7 @@
     },
     data() {
       return {
-        color: "",
+        color: '',
         existedColors: [],
         sizes: [],
         colors: [],
@@ -156,19 +156,19 @@
       axios
         .all([
           axios
-            .get("/djbackoffice/product/color/all")
+            .get('/djbackoffice/product/color/all')
             .then(response => {
               this.colors = response.data;
             }),
 
           axios
-            .get("/djbackoffice/product/size/all")
+            .get('/djbackoffice/product/size/all')
             .then(response => {
               this.sizes = response.data;
             }),
           !this.isNewlyCreated
             ? axios
-              .get("/djbrand/product/inventories/" + this.slotData.code)
+              .get('/djbrand/product/inventories/' + this.slotData.code)
               .then(response => {
                 this.stockLevels = response.data;
                 this.existedColors = this.getExistedColors(this.variants);

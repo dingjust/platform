@@ -31,11 +31,11 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
   import autoHeight from 'mixins/autoHeight'
 
   export default {
-    name: "SystemMediaPage",
+    name: 'SystemMediaPage',
     mixins: [autoHeight],
     components: {},
     methods: {
@@ -61,13 +61,13 @@
           page: page,
           size: size
         };
-        axios.get("/djbackoffice/system/media", {
+        axios.get('/djbackoffice/system/media', {
           params: params
         }).then(response => {
           console.log(response.data);
           this.page = response.data;
         }).catch(error => {
-          this.$message.error("获取数据失败");
+          this.$message.error('获取数据失败');
         });
       },
 
@@ -78,7 +78,7 @@
     computed: {
     },
     watch: {
-      "$store.state.sideSliderState": function (value) {
+      '$store.state.sideSliderState': function (value) {
         if (!value) {
           this.onSearch();
         }
@@ -86,7 +86,7 @@
     },
     data() {
       return {
-        text: "",
+        text: '',
         items: [],
         page: {
           number: 0, // 当前页，从0开始

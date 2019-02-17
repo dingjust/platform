@@ -66,15 +66,15 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import CategoryIconForm from "./CategoryIconForm";
-  import CategoryGroupMixin from "mixins/commerce/CategoryGroupMixin";
+  import axios from 'axios';
+  import CategoryIconForm from './CategoryIconForm';
+  import CategoryGroupMixin from 'mixins/commerce/CategoryGroupMixin';
 
   export default {
-    name: "CategoryForm",
+    name: 'CategoryForm',
     components: {CategoryIconForm},
     mixins:[CategoryGroupMixin],
-    props: ["slotData", "readOnly"],
+    props: ['slotData', 'readOnly'],
     methods: {
       onSubmit() {
         this.$refs.form.validate(valid => {
@@ -90,13 +90,13 @@
             group: this.slotData.group
           };
 
-          axios.put("/djbackoffice/product/category", formData)
+          axios.put('/djbackoffice/product/category', formData)
             .then(() => {
               this.$message({
-                type: "success",
-                message: "保存成功"
+                type: 'success',
+                message: '保存成功'
               });
-              this.$refs["CategoryIconForm"].onSubmit();
+              this.$refs['CategoryIconForm'].onSubmit();
 
               this.fn.closeSlider(true);
             }).catch(error => {
@@ -115,8 +115,8 @@
     data() {
       return {
         rules: {
-          code: [{required: true, message: "必填", trigger: "blur"}],
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          code: [{required: true, message: '必填', trigger: 'blur'}],
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         },
 
       };

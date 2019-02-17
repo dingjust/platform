@@ -52,28 +52,28 @@
   import autoHeight from 'mixins/autoHeight';
 
   import PickOrderForm from './PickOrderForm';
-  import PickOrderDetailsPage from "./PickOrderDetailsPage";
+  import PickOrderDetailsPage from './PickOrderDetailsPage';
 
   export default {
-    name: "PickOrderPage",
+    name: 'PickOrderPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建发料单", PickOrderForm, this.formData);
+        this.fn.openSlider('创建发料单', PickOrderForm, this.formData);
       },
       onDetails(item) {
-        this.fn.openSlider("订单明细", PickOrderDetailsPage, item);
+        this.fn.openSlider('订单明细', PickOrderDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();

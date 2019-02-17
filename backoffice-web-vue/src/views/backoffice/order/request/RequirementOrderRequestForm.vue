@@ -110,14 +110,14 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "RequirementOrderRequestForm",
-    props: ["slotData", "readOnly"],
+    name: 'RequirementOrderRequestForm',
+    props: ['slotData', 'readOnly'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
       getMinorCategories() {
         return axios.get('/djbackoffice/product/category/cascaded');
@@ -132,16 +132,16 @@
         categories: [],
         majorCategories: [],
         machiningTypes: [{
-          code: "LABOR_AND_MATERIAL",
-          name: "包工包料"
+          code: 'LABOR_AND_MATERIAL',
+          name: '包工包料'
         }, {
-          code: "LIGHT_PROCESSING",
-          name: "清加工"
+          code: 'LIGHT_PROCESSING',
+          name: '清加工'
         }],
         categoryProps: {
-          label: "name",
-          value: "code",
-          children: "children"
+          label: 'name',
+          value: 'code',
+          children: 'children'
         }
       }
     },

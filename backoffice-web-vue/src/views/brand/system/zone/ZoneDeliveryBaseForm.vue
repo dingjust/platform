@@ -43,8 +43,8 @@
   import axios from 'axios';
 
   export default {
-    name: "ZoneDeliveryBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'ZoneDeliveryBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
       validate(callback) {
         this.$refs['form'].validate(callback);
@@ -54,10 +54,10 @@
     data() {
       return {
         rules: {
-          zones: [{required: true, message: "必填", trigger: "blur"}],
-          minimum: [{required: true, message: "必填", trigger: "blur"}],
-          firstWeight: [{required: true, message: "必填", trigger: "blur"}],
-          value: [{required: true, message: "必填", trigger: "blur"}]
+          zones: [{required: true, message: '必填', trigger: 'blur'}],
+          minimum: [{required: true, message: '必填', trigger: 'blur'}],
+          firstWeight: [{required: true, message: '必填', trigger: 'blur'}],
+          value: [{required: true, message: '必填', trigger: 'blur'}]
         },
         regions: []
       };

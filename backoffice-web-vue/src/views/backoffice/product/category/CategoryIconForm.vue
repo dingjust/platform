@@ -23,8 +23,8 @@
 </template>
 <script>
   export default {
-    name: "CategoryIconForm",
-    props: ["slotData"],
+    name: 'CategoryIconForm',
+    props: ['slotData'],
     methods: {
       getValue() {
         return this.slotData;
@@ -34,21 +34,21 @@
         this.$refs.uploadForm.submit();
       },
       onUploadSuccess(response, file, files) {
-        if (response === "") {
-          this.$message.success("上传成功");
+        if (response === '') {
+          this.$message.success('上传成功');
           this.$refs.uploadForm.clearFiles();
           this.fn.closeSlider();
         }
       },
       onUploadError(error, file, files) {
-        let msg = "";
+        let msg = '';
         if (file.size >= (1024 * 1024 * 5)) {
-          msg = "，上传的文件不能超过5MB"
+          msg = '，上传的文件不能超过5MB'
         }
-        this.$message.error("上传失败" + msg);
+        this.$message.error('上传失败' + msg);
       },
       onUploading(event, file, files) {
-        this.$message("正在上传，请稍等");
+        this.$message('正在上传，请稍等');
       }
     },
     computed: {
@@ -60,7 +60,7 @@
     },
     data() {
       return {
-        uploadUrl: "/djbackoffice/product/category/uploadIcon",
+        uploadUrl: '/djbackoffice/product/category/uploadIcon',
         files: []
       }
     }

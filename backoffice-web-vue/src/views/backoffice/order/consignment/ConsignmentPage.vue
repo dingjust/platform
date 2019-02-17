@@ -184,13 +184,13 @@
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search",
-        searchAdvanced: "searchAdvanced"
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
       }),
       onSearch() {
         this._onSearch(0);
@@ -200,7 +200,7 @@
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
@@ -217,14 +217,14 @@
       },
       onFilterBrands(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getBrands(query);
           }, 200);
         }
       },
       async getBrands(query) {
-        const results = await this.$http.get("/djbrand/brand", {
+        const results = await this.$http.get('/djbrand/brand', {
           text: query.trim()
         });
 
@@ -239,13 +239,13 @@
         this.searchAdvanced({query, page, size});
       },
       async onDetails(item) {
-        const result = await this.$http.get("/djbackoffice/consignment/" + item.code);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.get('/djbackoffice/consignment/' + item.code);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider("生产订单明细", ConsignmentDetailsForm, result);
+        this.fn.openSlider('生产订单明细', ConsignmentDetailsForm, result);
       },
       onPageSizeChanged(val) {
         this.reset();

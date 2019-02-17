@@ -83,11 +83,11 @@
   const {mapActions} = createNamespacedHelpers('RequirementOrdersModule');
 
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
-  import RequirementOrderMediaUploadForm from "./RequirementOrderMediaUploadForm";
+  import RequirementOrderMediaUploadForm from './RequirementOrderMediaUploadForm';
   import RequirementOrderDeliveryAddressForm from './RequirementOrderDeliveryAddressForm';
-  import RequirementOrderRequestForm from "./RequirementOrderRequestForm";
-  import RequirementOrderDetailsPage from "./RequirementOrderDetailsPage";
-  import RequirementOrderEntriesForm from "./RequirementOrderEntriesForm";
+  import RequirementOrderRequestForm from './RequirementOrderRequestForm';
+  import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
+  import RequirementOrderEntriesForm from './RequirementOrderEntriesForm';
 
   export default {
     name: 'RequirementOrderFrom',
@@ -102,7 +102,7 @@
     props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
         this.$refs['deliveryAddressForm'].validate((valid) => {
@@ -112,7 +112,7 @@
 
             const address = this.slotData.deliveryAddress;
             if (!address.region.isocode || !address.city.code) {
-              this.$message.error("请输入省份和市区");
+              this.$message.error('请输入省份和市区');
               return false;
             }
 
@@ -138,12 +138,12 @@
       async _onSubmit() {
         let formData = this.slotData;
         const result = await this.$http.post('/djbackoffice/requirementOrder/new', formData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success("需求订单创建成功，订单编号： " + result);
+        this.$message.success('需求订单创建成功，订单编号： ' + result);
         this.$set(this.slotData, 'code', result);
         this.active = 1;
         // this.refresh();

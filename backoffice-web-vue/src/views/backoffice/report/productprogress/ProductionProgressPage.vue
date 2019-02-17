@@ -177,12 +177,12 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
   import autoHeight from 'mixins/autoHeight'
-  import {ExcelExportMixin, ExcelImportMixin} from "mixins";
+  import {ExcelExportMixin, ExcelImportMixin} from 'mixins';
 
   export default {
-    name: "ProductionProgressPage",
+    name: 'ProductionProgressPage',
     components: {},
     mixins: [autoHeight, ExcelExportMixin],
     methods: {
@@ -191,7 +191,7 @@
       },
       onDetails(item) {
         console.log(item);
-        // this.fn.openSlider("图片详情", CollectionsDetailsPage, item);
+        // this.fn.openSlider('图片详情', CollectionsDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
@@ -221,7 +221,7 @@
           page: page,
           size: size,
         };
-        axios.post("/djbackoffice/report/production/progress/search", params)
+        axios.post('/djbackoffice/report/production/progress/search', params)
           .then(response => {
             const data = response.data.content;
             const newData = [];
@@ -233,7 +233,7 @@
             this.page.content = newData;
             this.page.totalElements = newData.length;
           }).catch(error => {
-          this.$message.error("获取数据失败：" + error.response.data);
+          this.$message.error('获取数据失败：' + error.response.data);
         });
       },
       getBrands() {
@@ -245,7 +245,7 @@
         }).then(response => {
           this.brands = response.data.content;
         }).catch(error => {
-          this.$message.error("获取数据失败：" + error.response.data);
+          this.$message.error('获取数据失败：' + error.response.data);
         });
       },
       getFactories() {
@@ -257,7 +257,7 @@
         }).then(response => {
           this.factories = response.data.content;
         }).catch(error => {
-          this.$message.error("获取数据失败：" + error.response.data);
+          this.$message.error('获取数据失败：' + error.response.data);
         });
       },
       findBrand(item) {
@@ -279,7 +279,7 @@
       },
     },
     watch: {
-      "$store.state.sideSliderState": function (value) {
+      '$store.state.sideSliderState': function (value) {
         if (!value) {
           this.onSearch();
         }
@@ -288,9 +288,9 @@
     data() {
       return {
         URLS: {
-          exportUrl: "/djbackoffice/report/production/progress/export",
+          exportUrl: '/djbackoffice/report/production/progress/export',
         },
-        excelExportTemplateName: "生产进度报表" + new Date().getTime() + ".xlsx",
+        excelExportTemplateName: '生产进度报表' + new Date().getTime() + '.xlsx',
         page: {
           number: 0, // 当前页，从0开始
           size: 10, // 每页显示条数

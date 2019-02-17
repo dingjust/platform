@@ -63,9 +63,9 @@
 </template>
 
 <script>
-  import CollectionsBaseForm from "./CollectionsBaseForm";
-  import CollectionsMediaForm from "./CollectionsMediaForm";
-  import axios from "axios";
+  import CollectionsBaseForm from './CollectionsBaseForm';
+  import CollectionsMediaForm from './CollectionsMediaForm';
+  import axios from 'axios';
 
   export default {
     name: 'CollectionsDetailsPage',
@@ -85,13 +85,13 @@
         this.formDialogVisible = false;
         const baseForm = this.$refs['baseForm'];
         console.log(baseForm.getValue());
-        axios.put("/djbackoffice/system/collections", baseForm.getValue())
+        axios.put('/djbackoffice/system/collections', baseForm.getValue())
           .then(() => {
-            this.$message.success("保存成功");
+            this.$message.success('保存成功');
             this.fn.closeSlider(true);
             //刷新主体数据
           }).catch(error => {
-            this.$message.error("保存失败，原因：" + error.response.data.message);
+            this.$message.error('保存失败，原因：' + error.response.data.message);
           }
         );
       },

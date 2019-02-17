@@ -214,7 +214,7 @@
           axios.put('/djfactory/processes/consignment/completeGivingOut/' + this.slotData.code)
             .then(response => {
               this.$message.success('备料完成成功');
-              this.$set(this.slotData, "status", response.data);
+              this.$set(this.slotData, 'status', response.data);
             }).catch(error => {
               this.$message.error('备料完成失败，原因：' + error.response.data);
             }
@@ -231,7 +231,7 @@
           axios.put('/djfactory/processes/consignment/completeCutting/' + this.slotData.code)
             .then(response => {
               this.$message.success('裁剪完成成功');
-              this.$set(this.slotData, "status", response.data);
+              this.$set(this.slotData, 'status', response.data);
             }).catch(error => {
               this.$message.error('裁剪完成失败，原因：' + error.response.data);
             }
@@ -249,7 +249,7 @@
           axios.put('/djfactory/processes/consignment/completeStitching/' + this.slotData.code)
             .then(response => {
               this.$message.success('车缝完成成功');
-              this.$set(this.slotData, "status", response.data);
+              this.$set(this.slotData, 'status', response.data);
             }).catch(error => {
               this.$message.error('车缝完成失败，原因：' + error.response.data);
             }
@@ -269,7 +269,7 @@
           axios.put('/djfactory/processes/consignment/completeShipping/' + this.slotData.code, this.express)
             .then(response => {
               this.$message.success('完成发货成功');
-              this.$set(this.slotData, "status", response.data);
+              this.$set(this.slotData, 'status', response.data);
               this.expressDialogVisible = false;
             }).catch(error => {
               this.$message.error('完成发货失败，原因：' + error.response.data);

@@ -48,13 +48,13 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
   import autoHeight from 'mixins/autoHeight'
-  import HotProductsForm from "./HotProductsForm";
-  import HotProductsDetailsPage from "./HotProductsDetailsPage";
+  import HotProductsForm from './HotProductsForm';
+  import HotProductsDetailsPage from './HotProductsDetailsPage';
 
   export default {
-    name: "HotProductsPage",
+    name: 'HotProductsPage',
     mixins: [autoHeight],
     components: {},
     methods: {
@@ -62,17 +62,17 @@
         this._onSearch(0, this.page.size);
       },
       onNew() {
-        this.fn.openSlider("添加图片", HotProductsForm, {
-          name: "",
-          description: "",
+        this.fn.openSlider('添加图片', HotProductsForm, {
+          name: '',
+          description: '',
           active: true,
-          action: "",
-          media: ""
+          action: '',
+          media: ''
         });
       },
       onDetails(item) {
         console.log(item);
-        this.fn.openSlider("图片详情", HotProductsDetailsPage, item);
+        this.fn.openSlider('图片详情', HotProductsDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
@@ -93,32 +93,32 @@
           page: page,
           size: size
         };
-        axios.get("/djbackoffice/system/hot-products", {
+        axios.get('/djbackoffice/system/hot-products', {
           params: params
         }).then(response => {
           this.page = response.data;
         }).catch(error => {
-          this.$message.error("获取数据失败");
+          this.$message.error('获取数据失败');
         });
       },
       changeShelfStatus(row) {
         let request = axios.put;
-        let message = "启用";
-        let url = "/djbackoffice/system/hot-products/enable/";
+        let message = '启用';
+        let url = '/djbackoffice/system/hot-products/enable/';
         if (row.active === false) {
-          message = "禁用";
-          url = "/djbackoffice/system/hot-products/disable/";
+          message = '禁用';
+          url = '/djbackoffice/system/hot-products/disable/';
         }
 
         request(url + row.id)
           .then(() => {
-            this.$message.success(message + "成功");
+            this.$message.success(message + '成功');
 
             this.onSearch();
           }).catch(error => {
             this.$message({
-              type: "error",
-              message: message + "失败， 原因：" + error.response.data
+              type: 'error',
+              message: message + '失败， 原因：' + error.response.data
             });
           }
         );
@@ -129,7 +129,7 @@
     },
     computed: {},
     watch: {
-      "$store.state.sideSliderState": function (value) {
+      '$store.state.sideSliderState': function (value) {
         if (!value) {
           this.onSearch();
         }
@@ -137,7 +137,7 @@
     },
     data() {
       return {
-        text: "",
+        text: '',
         items: [],
         page: {
           number: 0, // 当前页，从0开始

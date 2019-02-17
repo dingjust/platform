@@ -91,7 +91,7 @@
       },
       getRoles() {
         axios
-          .get("/djfactory/role?text=")
+          .get('/djfactory/role?text=')
           .then(response => {
             console.log(response.data.content);
             this.roles = response.data.content;
@@ -102,13 +102,13 @@
       },
       onUpdateRole() {
         console.log(this.slotData);
-        axios.put("/djfactory/employee", this.slotData)
+        axios.put('/djfactory/employee', this.slotData)
           .then(() => {
-            this.$message.success("保存成功");
+            this.$message.success('保存成功');
             this.fn.closeSlider(true);
             //刷新主体数据
           }).catch(error => {
-            this.$message.error("保存失败，原因：" + error.response.data.message);
+            this.$message.error('保存失败，原因：' + error.response.data.message);
           }
         );
       }

@@ -49,26 +49,26 @@
 
   const {mapActions} = createNamespacedHelpers('BrandsModule');
 
-  import BrandBaseForm from "./BrandBaseForm";
-  import BrandAccountForm from "./BrandAccountForm";
-  import BrandCertificateForm from "./BrandCertificateForm";
+  import BrandBaseForm from './BrandBaseForm';
+  import BrandAccountForm from './BrandAccountForm';
+  import BrandCertificateForm from './BrandCertificateForm';
 
   export default {
-    name: "BrandForm",
+    name: 'BrandForm',
     components: {BrandAccountForm, BrandBaseForm, BrandCertificateForm},
-    props: ["slotData"],
+    props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
-        const accountForm = this.$refs["accountForm"];
+        const accountForm = this.$refs['accountForm'];
         accountForm.validate(valid => {
           if (!valid) {
             return false;
           }
 
-          const baseForm = this.$refs["baseForm"];
+          const baseForm = this.$refs['baseForm'];
           baseForm.validate(valid => {
             if (!valid) {
               return false;
@@ -91,14 +91,14 @@
           request = this.$http.put;
         }
 
-        const result = await request("/djbrand/brand", value);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await request('/djbrand/brand', value);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success("创建成功，请在待审核页面查看");
-        this.$set(this.slotData, "uid", result.uid);
+        this.$message.success('创建成功，请在待审核页面查看');
+        this.$set(this.slotData, 'uid', result.uid);
         this.$refs.certificateForm.onSubmit();
 
         // 刷新主体数据

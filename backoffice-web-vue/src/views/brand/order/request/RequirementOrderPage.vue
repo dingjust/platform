@@ -146,20 +146,20 @@
   import autoHeight from 'mixins/autoHeight';
 
   import RequirementOrderForm from './RequirementOrderForm';
-  import RequirementOrderDetailsPage from "./RequirementOrderDetailsPage"
+  import RequirementOrderDetailsPage from './RequirementOrderDetailsPage'
 
   export default {
-    name: "RequirementOrderPage",
+    name: 'RequirementOrderPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search",
-        searchAdvanced: "searchAdvanced"
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
       }),
       handleFilterChange(val) {
         this.statuses = val.status;
@@ -191,16 +191,16 @@
         this.$refs.resultTable.clearSelection();
       },
       async onDetails(item) {
-        const result = await this.$http.get("/djbrand/requirementOrder/" + item.code);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.get('/djbrand/requirementOrder/' + item.code);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider("需求订单明细", RequirementOrderDetailsPage, result);
+        this.fn.openSlider('需求订单明细', RequirementOrderDetailsPage, result);
       },
       onNew() {
-        this.fn.openSlider("发布需求", RequirementOrderForm, this.formData);
+        this.fn.openSlider('发布需求', RequirementOrderForm, this.formData);
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {

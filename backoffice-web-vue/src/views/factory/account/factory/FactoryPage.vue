@@ -158,22 +158,22 @@
     data() {
       return {
         slotData: {
-          address: "",
+          address: '',
           adeptAtCategories: [],
-          contactPerson: "",
-          contactPhone: "",
+          contactPerson: '',
+          contactPhone: '',
           id: null,
-          latheQuantity: "",
-          scaleRange: "",
-          monthlyCapacityRange: "",
+          latheQuantity: '',
+          scaleRange: '',
+          monthlyCapacityRange: '',
           cooperationModes: [],
-          name: "",
+          name: '',
           registrationDate: null,
-          uid: "",
-          taxNumber: "",
-          bankOfDeposit: "",
-          phone: "",
-          cooperativeBrand: ""
+          uid: '',
+          taxNumber: '',
+          bankOfDeposit: '',
+          phone: '',
+          cooperativeBrand: ''
         },
         categories: []
       };

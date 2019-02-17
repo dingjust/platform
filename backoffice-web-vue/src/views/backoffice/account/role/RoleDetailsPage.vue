@@ -29,9 +29,9 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import RoleBaseForm from "./RoleBaseForm";
-  import RolePermsForm from "./RolePermsForm";
+  import axios from 'axios';
+  import RoleBaseForm from './RoleBaseForm';
+  import RolePermsForm from './RolePermsForm';
 
   export default {
     name: 'RoleDetailsPage',
@@ -42,16 +42,16 @@
         this.fn.closeSlider();
       },
       onUpdatePerms() {
-        const perms = this.$refs["permsForm"].getValue();
+        const perms = this.$refs['permsForm'].getValue();
 
         this.$confirm('是否确认更新', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          axios.put("/djbackoffice/role/" + this.slotData.uid + "/perms", perms)
+          axios.put('/djbackoffice/role/' + this.slotData.uid + '/perms', perms)
             .then(() => {
-              this.$message.success("更新权限成功");
+              this.$message.success('更新权限成功');
             }).catch(error => {
               console.log(JSON.stringify(error.response.data));
             }

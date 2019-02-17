@@ -12,11 +12,11 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "ProductStockLevelsForm",
-    props: ["slotData", "readOnly", "isNewlyCreated"],
+    name: 'ProductStockLevelsForm',
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       refresh() {
         if (this.slotData.code) {
@@ -24,7 +24,7 @@
         }
       },
       doRefresh() {
-        axios.get("/djbackoffice/product/inventories/" + this.slotData.code)
+        axios.get('/djbackoffice/product/inventories/' + this.slotData.code)
           .then(response => {
             this.stockLevels = response.data;
           }).catch(error => {

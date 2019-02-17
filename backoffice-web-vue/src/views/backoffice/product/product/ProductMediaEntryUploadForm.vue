@@ -48,47 +48,47 @@
 
 <script>
   export default {
-    name: "ProductMediaEntryUploadEntry",
-    props: ["slotData", "isNewlyCreated"],
+    name: 'ProductMediaEntryUploadEntry',
+    props: ['slotData', 'isNewlyCreated'],
     methods: {
       onSubmit() {
         this.$refs.uploadForm.submit();
       },
       onUploadSuccess(response, file, files) {
-        if (response === "") {
-          this.$message.success("上传成功");
+        if (response === '') {
+          this.$message.success('上传成功');
           this.$refs.uploadForm.clearFiles();
         }
       },
       onUploadError(error, file, files) {
-        this.$message.error("上传失败" + "," + JSON.parse(error.message).message);
+        this.$message.error('上传失败' + ',' + JSON.parse(error.message).message);
       },
       onUploading(event, file, files) {
-        this.$message("正在上传，请稍等");
+        this.$message('正在上传，请稍等');
       },
       beforeUpload(file) {
         console.log(this.slotData.format.value);
         const formatValue = this.slotData.format.value;
         let flat = true;
 
-        if (formatValue == "normalPicture") {
-          if (file.type != "image/png" && file.type != "image/jpeg") {
-            this.$message.error("只能上传jpg/png文件");
+        if (formatValue == 'normalPicture') {
+          if (file.type != 'image/png' && file.type != 'image/jpeg') {
+            this.$message.error('只能上传jpg/png文件');
             flat = false;
           }
           if (file.size > 1024 * 400) {
-            this.$message.error("上传的文件不能超过400KB");
+            this.$message.error('上传的文件不能超过400KB');
             flat = false;
           }
         }
 
-        if (formatValue == "detailPicture") {
-          if (file.type != "image/png" && file.type != "image/jpeg") {
-            this.$message.error("只能上传jpg/png文件");
+        if (formatValue == 'detailPicture') {
+          if (file.type != 'image/png' && file.type != 'image/jpeg') {
+            this.$message.error('只能上传jpg/png文件');
             flat = false;
           }
           if (file.size > 1024 * 300) {
-            this.$message.error("上传的文件不能超过300KB");
+            this.$message.error('上传的文件不能超过300KB');
             flat = false;
           }
         }
@@ -105,13 +105,13 @@
         };
       },
       isPicture: function () {
-        return this.slotData.format.value !== "bom" &&
-          this.slotData.format.value !== "technicalDocuments";
+        return this.slotData.format.value !== 'bom' &&
+          this.slotData.format.value !== 'technicalDocuments';
       }
     },
     data() {
       return {
-        uploadUrl: "/djbackoffice/product/media/upload",
+        uploadUrl: '/djbackoffice/product/media/upload',
         files: []
       };
     }

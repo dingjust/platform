@@ -85,16 +85,16 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
-  import ProductBaseForm from "./ProductBaseForm";
-  import ProductStockLevelsForm from "./ProductStockLevelsForm";
-  import ProductMediasForm from "./ProductMediasForm";
-  import ProductMediaUploadForm from "./ProductMediaUploadForm";
-  import ProductVariantsForm from "./ProductVariantsForm";
+  import ProductBaseForm from './ProductBaseForm';
+  import ProductStockLevelsForm from './ProductStockLevelsForm';
+  import ProductMediasForm from './ProductMediasForm';
+  import ProductMediaUploadForm from './ProductMediaUploadForm';
+  import ProductVariantsForm from './ProductVariantsForm';
 
   export default {
-    name: "ProductDetailsPage",
+    name: 'ProductDetailsPage',
     components: {
       ProductVariantsForm,
       ProductMediaUploadForm,
@@ -102,11 +102,11 @@
       ProductMediasForm,
       ProductStockLevelsForm
     },
-    props: ["slotData", "isNewlyCreated", "preview"],
+    props: ['slotData', 'isNewlyCreated', 'preview'],
     methods: {
       refresh() {
-        this.$refs["productMediasForm"].refresh();
-        this.$refs["productVariantsForm"].refresh();
+        this.$refs['productMediasForm'].refresh();
+        this.$refs['productVariantsForm'].refresh();
       },
       onClose() {
         this.fn.closeSlider();
@@ -136,42 +136,42 @@
         if (len > 1) {
           for (let i = 0; i < len - 1; i++) {
             if (staircasePrices[i].maxQuantity > staircasePrices[i + 1].minQuantity) {
-              this.$message.error("阶梯价格定义不符合规则【不允许有重叠价格区间】");
+              this.$message.error('阶梯价格定义不符合规则【不允许有重叠价格区间】');
               return false;
             }
           }
         }
 
-        this.$refs["baseForm"].validate(valid => {
+        this.$refs['baseForm'].validate(valid => {
           if (valid) {
             if (formData.price <= 0) {
-              this.$message.error("供货价必须大于0");
+              this.$message.error('供货价必须大于0');
               return false;
             }
 
-            axios.put("/djbrand/product", formData)
+            axios.put('/djbrand/product', formData)
               .then(response => {
                 const product = response.data;
-                this.$message.success("更新成功，产品编码：" + product.code);
+                this.$message.success('更新成功，产品编码：' + product.code);
 
                 this.baseFormDialogVisible = false;
 
-                this.$set(this.slotData, "name", this.baseData.name);
-                this.$set(this.slotData, "categories", this.baseData.categories);
-                this.$set(this.slotData, "belongTo", this.baseData.belongTo);
-                this.$set(this.slotData, "material", this.baseData.material);
-                this.$set(this.slotData, "content", this.baseData.content);
-                this.$set(this.slotData, "startingAmount", this.baseData.startingAmount);
-                this.$set(this.slotData, "skuID", this.baseData.skuID);
-                this.$set(this.slotData, "year", this.baseData.year);
-                this.$set(this.slotData, "season", this.baseData.season);
-                this.$set(this.slotData, "placeOfOrigin", this.baseData.placeOfOrigin);
-                this.$set(this.slotData, "brand", this.baseData.brand);
-                this.$set(this.slotData, "price", this.baseData.price);
-                this.$set(this.slotData, "style", this.baseData.style);
-                this.$set(this.slotData, "postageFree", this.baseData.postageFree);
-                this.$set(this.slotData, "gramWeight", this.baseData.gramWeight);
-                this.$set(this.slotData, "staircasePrices", this.baseData.staircasePrices);
+                this.$set(this.slotData, 'name', this.baseData.name);
+                this.$set(this.slotData, 'categories', this.baseData.categories);
+                this.$set(this.slotData, 'belongTo', this.baseData.belongTo);
+                this.$set(this.slotData, 'material', this.baseData.material);
+                this.$set(this.slotData, 'content', this.baseData.content);
+                this.$set(this.slotData, 'startingAmount', this.baseData.startingAmount);
+                this.$set(this.slotData, 'skuID', this.baseData.skuID);
+                this.$set(this.slotData, 'year', this.baseData.year);
+                this.$set(this.slotData, 'season', this.baseData.season);
+                this.$set(this.slotData, 'placeOfOrigin', this.baseData.placeOfOrigin);
+                this.$set(this.slotData, 'brand', this.baseData.brand);
+                this.$set(this.slotData, 'price', this.baseData.price);
+                this.$set(this.slotData, 'style', this.baseData.style);
+                this.$set(this.slotData, 'postageFree', this.baseData.postageFree);
+                this.$set(this.slotData, 'gramWeight', this.baseData.gramWeight);
+                this.$set(this.slotData, 'staircasePrices', this.baseData.staircasePrices);
 
                 this.refresh();
               }).catch(error => {
@@ -191,7 +191,7 @@
         this.variantsFormDialogVisible = true;
       },
       onSubmitVariantsForm() {
-        let form = this.$refs["variantsForm"];
+        let form = this.$refs['variantsForm'];
 
         let formData = {
           code: this.slotData.code,
@@ -206,12 +206,12 @@
           })
         }
 
-        axios.put("/djbrand/product/variants", formData)
+        axios.put('/djbrand/product/variants', formData)
           .then(() => {
-            this.$message.success("更新成功");
+            this.$message.success('更新成功');
 
-            this.$refs["variantsForm"].doRefresh();
-            this.$refs["productVariantsForm"].doRefresh();
+            this.$refs['variantsForm'].doRefresh();
+            this.$refs['productVariantsForm'].doRefresh();
 
             this.variantsFormDialogVisible = false;
           }).catch(error => {
@@ -230,11 +230,11 @@
         this.mediasFormDialogVisible = true;
       },
       onSubmitMediasForm() {
-        this.$refs["mediasForm"].onSubmit();
+        this.$refs['mediasForm'].onSubmit();
       },
       closeMediasForm() {
         if (this.slotData.code != null && this.slotData.code !== '') {
-          this.$refs["productMediasForm"].refresh();
+          this.$refs['productMediasForm'].refresh();
           this.mediasFormDialogVisible = false;
         }
       }
@@ -244,25 +244,25 @@
       return {
         baseFormDialogVisible: false,
         baseData: {
-          id: "",
-          code: "",
-          name: "",
+          id: '',
+          code: '',
+          name: '',
           categories: [],
           belongTo: {
-            uid: "",
-            name: ""
+            uid: '',
+            name: ''
           },
-          material: "",
-          content: "",
-          stereotype: "",
+          material: '',
+          content: '',
+          stereotype: '',
           startingAmount: 0,
-          skuID: "",
-          year: "",
-          season: "",
-          placeOfOrigin: "",
-          brand: "",
-          style: "",
-          genderGroup: "",
+          skuID: '',
+          year: '',
+          season: '',
+          placeOfOrigin: '',
+          brand: '',
+          style: '',
+          genderGroup: '',
           price: 0,
           suggestedPrice: 0,
           price1: 0,
@@ -271,16 +271,16 @@
         },
         variantsFormDialogVisible: false,
         variantsData: {
-          code: ""
+          code: ''
         },
         inventoryFormDialogVisible: false,
         inventoryData: {
-          code: ""
+          code: ''
         },
         mediasFormDialogVisible: false,
         mediasData: {
-          code: "",
-          format: ""
+          code: '',
+          format: ''
         }
       };
     }

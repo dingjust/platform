@@ -27,12 +27,12 @@
 
   const {mapActions} = createNamespacedHelpers('FactoryOrgsModule');
 
-  import OrgBaseForm from "./OrgBaseForm";
+  import OrgBaseForm from './OrgBaseForm';
 
   export default {
-    name: "OrgForm",
+    name: 'OrgForm',
     components: {OrgBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     computed: {
       isNewlyCreated: function () {
         return this.slotData.id === null;
@@ -40,10 +40,10 @@
     },
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
@@ -58,13 +58,13 @@
         this.fn.closeSlider();
       },
       async _onSubmit() {
-        const result = await this.$http.post("/djfactory/org", this.slotData);
-        if (result["errors"]) {
-          this.$message.error("保存失败，原因：" + result["errors"][0].message);
+        const result = await this.$http.post('/djfactory/org', this.slotData);
+        if (result['errors']) {
+          this.$message.error('保存失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("保存成功");
+        this.$message.success('保存成功');
         this.fn.closeSlider(true);
       },
     },

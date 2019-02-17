@@ -27,18 +27,18 @@
 
   const {mapActions} = createNamespacedHelpers('SizesModule');
 
-  import SizeBaseForm from "./SizeBaseForm";
+  import SizeBaseForm from './SizeBaseForm';
 
   export default {
-    name: "SizeForm",
+    name: 'SizeForm',
     components: {SizeBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
-        this.$refs["baseForm"].validate(valid => {
+        this.$refs['baseForm'].validate(valid => {
           if (!valid) {
             return false;
           }
@@ -52,13 +52,13 @@
         this.fn.closeSlider();
       },
       async _onSubmit() {
-        const results = await this.$http.post("/djbackoffice/product/size", this.slotData);
-        if (results["errors"]) {
-          this.$message.error(results["errors"][0].message);
+        const results = await this.$http.post('/djbackoffice/product/size', this.slotData);
+        if (results['errors']) {
+          this.$message.error(results['errors'][0].message);
           return;
         }
 
-        this.$message.success("保存成功");
+        this.$message.success('保存成功');
         this.refresh();
 
         this.fn.closeSlider(true);
@@ -72,8 +72,8 @@
     data() {
       return {
         rules: {
-          code: [{required: true, message: "必填", trigger: "blur"}],
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          code: [{required: true, message: '必填', trigger: 'blur'}],
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         }
       };
     }

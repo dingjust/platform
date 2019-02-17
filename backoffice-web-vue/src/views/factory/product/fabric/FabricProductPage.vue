@@ -43,19 +43,19 @@
   const {mapGetters, mapActions} = createNamespacedHelpers('FactoryFabricProductsModule');
 
   import autoHeight from 'mixins/autoHeight';
-  import {FabricProductForm, FabricProductDetailsPage} from "./";
+  import {FabricProductForm, FabricProductDetailsPage} from './';
 
   export default {
-    name: "FabricProductPage",
+    name: 'FabricProductPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
@@ -66,10 +66,10 @@
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建面辅料", FabricProductForm, this.formData);
+        this.fn.openSlider('创建面辅料', FabricProductForm, this.formData);
       },
       onDetails(item) {
-        this.fn.openSlider("面辅料明细", FabricProductDetailsPage, item);
+        this.fn.openSlider('面辅料明细', FabricProductDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
@@ -96,7 +96,7 @@
       };
     },
     created() {
-      this.search({keyword: "", page: 0});
+      this.search({keyword: '', page: 0});
     }
   };
 </script>

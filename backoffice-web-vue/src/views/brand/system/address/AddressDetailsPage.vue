@@ -36,10 +36,10 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
-  import AddressForm from "./AddressForm";
-  import AddressBaseForm from "./AddressBaseForm";
+  import AddressForm from './AddressForm';
+  import AddressBaseForm from './AddressBaseForm';
 
   export default {
     name: 'AddressDetailsPage',
@@ -56,7 +56,7 @@
         this.formDialogVisible = true;
       },
       onSubmitBaseForm() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
@@ -64,14 +64,14 @@
 
           this.formDialogVisible = false;
 
-          axios.put("/djbrand/system/address",baseForm.getValue())
+          axios.put('/djbrand/system/address',baseForm.getValue())
             .then(() => {
-              this.$message.success("保存成功");
+              this.$message.success('保存成功');
 
               //刷新主体数据
               this.fn.closeSlider();
             }).catch(error => {
-              this.$message.error("保存失败，原因：" + error.response);
+              this.$message.error('保存失败，原因：' + error.response);
             }
           );
 

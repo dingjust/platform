@@ -70,17 +70,17 @@
 
   const {mapActions} = createNamespacedHelpers('CategoriesModule');
 
-  import CategoryIconForm from "./CategoryIconForm";
-  import CategoryGroupMixin from "mixins/commerce/CategoryGroupMixin";
+  import CategoryIconForm from './CategoryIconForm';
+  import CategoryGroupMixin from 'mixins/commerce/CategoryGroupMixin';
 
   export default {
-    name: "CategoryForm",
+    name: 'CategoryForm',
     components: {CategoryIconForm},
     mixins: [CategoryGroupMixin],
-    props: ["slotData", "readOnly"],
+    props: ['slotData', 'readOnly'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
         this.$refs.form.validate(valid => {
@@ -105,14 +105,14 @@
           group: this.slotData.group
         };
 
-        const result = await this.$http.post("/djbackoffice/product/category", formData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.post('/djbackoffice/product/category', formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success("保存成功");
-        this.$refs["CategoryIconForm"].onSubmit();
+        this.$message.success('保存成功');
+        this.$refs['CategoryIconForm'].onSubmit();
         this.refresh();
         this.fn.closeSlider(true);
       }
@@ -120,8 +120,8 @@
     data() {
       return {
         rules: {
-          code: [{required: true, message: "必填", trigger: "blur"}],
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          code: [{required: true, message: '必填', trigger: 'blur'}],
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         },
       };
     }

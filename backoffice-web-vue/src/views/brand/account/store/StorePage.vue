@@ -150,62 +150,62 @@
 </template>
 
 <script>
-  import CompanyMixin from "mixins/commerce/CompanyMixin";
+  import CompanyMixin from 'mixins/commerce/CompanyMixin';
 
   export default {
-    name: "StorePage",
+    name: 'StorePage',
     mixins: [CompanyMixin],
     methods: {
       async getStyles() {
-        this.styles = await this.$http.get("/djbackoffice/product/style/all");
+        this.styles = await this.$http.get('/djbackoffice/product/style/all');
       },
       async getCategories() {
-        this.adeptAtCategories = await this.$http.get("/djbackoffice/product/category/majors");
+        this.adeptAtCategories = await this.$http.get('/djbackoffice/product/category/majors');
       },
       async getBrand() {
-        this.slotData = await this.$http.get("/djbrand/brand/store");
+        this.slotData = await this.$http.get('/djbrand/brand/store');
       }
     },
     data() {
       return {
         slotData: {
-          name: "",
+          name: '',
           registrationDate: null,
-          email: "",
-          contactPerson: "",
-          contactPhone: "",
-          phone: "",
-          scaleRange: "",
+          email: '',
+          contactPerson: '',
+          contactPhone: '',
+          phone: '',
+          scaleRange: '',
           styles: [],
           ageRanges: [],
           adeptAtCategories: [],
           priceRange1s: [],
           priceRange2s: [],
-          address: "",
-          scale: "",
-          brand: "",
-          cooperativeBrand: "",
-          taxNumber: "",
-          bankOfDeposit: "",
-          certificate: "",
+          address: '',
+          scale: '',
+          brand: '',
+          cooperativeBrand: '',
+          taxNumber: '',
+          bankOfDeposit: '',
+          certificate: '',
           scaleRanges: []
         },
-        name: "",
+        name: '',
         registrationDate: null,
-        email: "",
-        contactPerson: "",
-        contactPhone: "",
-        phone: "",
-        scaleRange: "",
+        email: '',
+        contactPerson: '',
+        contactPhone: '',
+        phone: '',
+        scaleRange: '',
         styles: [],
         adeptAtCategories: [],
-        address: "",
-        scale: "",
-        brand: "",
-        cooperativeBrand: "",
-        taxNumber: "",
-        bankOfDeposit: "",
-        certificate: ""
+        address: '',
+        scale: '',
+        brand: '',
+        cooperativeBrand: '',
+        taxNumber: '',
+        bankOfDeposit: '',
+        certificate: ''
       };
     },
     created() {
