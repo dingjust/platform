@@ -12,7 +12,6 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      redirect: "/backoffice/dashboard",
       name: "首页",
       component: Full,
       children: [
@@ -214,6 +213,11 @@ const router = new Router({
           ]
         },
         {
+          path: "brand/dashboard",
+          name: "仪表盘",
+          component: () => import(/* webpackChunkName: "Dashboard" */ 'brand/Dashboard')
+        },
+        {
           path: "brand/product",
           redirect: "/brand/product/product",
           name: "产品管理",
@@ -330,6 +334,11 @@ const router = new Router({
               component: () => import(/* webpackChunkName: "brand-systems" */ 'brand/system/address/AddressPage'),
             }
           ]
+        },
+        {
+          path: "factory/dashboard",
+          name: "仪表盘",
+          component: () => import(/* webpackChunkName: "Dashboard" */ 'factory/Dashboard')
         },
         {
           path: 'factory/product',
