@@ -16,9 +16,13 @@
       </el-table>
       <div class="pt-2"></div>
       <div class="float-right">
-        <el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="onPageSizeChanged"
-                       @current-change="onCurrentPageChanged" :current-page="page.number + 1" :page-size="page.size"
-                       :page-count="page.totalPages" :total="page.totalElements">
+        <el-pagination layout="total, sizes, prev, pager, next, jumper"
+                       @size-change="onPageSizeChanged"
+                       @current-change="onCurrentPageChanged"
+                       :current-page="page.number + 1"
+                       :page-size="page.size"
+                       :page-count="page.totalPages"
+                       :total="page.totalElements">
         </el-pagination>
       </div>
       <div class="clearfix"></div>
@@ -27,45 +31,40 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandFollowersModule');
+
+  import autoHeight from 'mixins/autoHeight';
 
   export default {
     name: "MyFollowersPage",
     props: [],
     components: {},
-    computed: {},
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: "page"
+      })
+    },
     methods: {
+      ...mapActions({
+        search: "search"
+      }),
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       _onSearch(page, size) {
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-        axios.get("/djbrand/follower", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error("获取数据失败");
-        });
+        const keyword = this.text;
+        this.search({keyword, page, size});
       }
     },
     created() {
-      this._onSearch(0, this.page.size);
+      this.onSearch();
     },
     data() {
       return {
-        text:"",
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
+        text: this.$store.state.BrandFollowersModule.keyword,
       }
     }
   }
