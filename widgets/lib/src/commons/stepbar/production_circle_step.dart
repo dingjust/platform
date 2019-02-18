@@ -39,7 +39,7 @@ class ProductionCircleStep extends StatelessWidget {
       CustomPaint(
         painter: CircleStepPainter(
             radius: size,
-            thickness: 5,
+            thickness: thickness,
             color: Colors.grey[300],
             startAngle: -pi / 2,
             endAngle: -pi / 2 + 2 * pi),

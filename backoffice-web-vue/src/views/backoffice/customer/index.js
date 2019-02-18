@@ -1,5 +1,5 @@
-import BrandPage from "./brand/BrandPage";
-import FactoryPage from "./factory/FactoryPage";
+import BrandPage from './brand/BrandPage';
+import FactoryPage from './factory/FactoryPage';
 
 export {
   BrandPage,

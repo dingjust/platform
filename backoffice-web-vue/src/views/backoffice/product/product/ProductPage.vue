@@ -81,10 +81,10 @@
           <el-button type="primary" slot="reference">高级查询</el-button>
         </el-popover>
       </el-form>
-      <el-table v-if="isHeightComputed" ref="resultTable" stripe
+      <el-table ref="resultTable" stripe
                 :data="page.content"
                 @selection-change="handleSelectionChange"
-                :height="autoHeight">
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column type="selection" width="32" fixed></el-table-column>
         <el-table-column label="编码" prop="code" width="120" fixed></el-table-column>
         <el-table-column label="供应商产品编码" prop="skuID" width="120" fixed></el-table-column>
@@ -137,14 +137,14 @@
 
   import autoHeight from 'mixins/autoHeight';
 
-  import {ProductForm, ProductDetailsPage} from "./";
+  import {ProductForm, ProductDetailsPage} from './';
 
   export default {
-    name: "ProductPage",
+    name: 'ProductPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       }),
       // 批量上下架code数组
       codes: function () {
@@ -155,8 +155,8 @@
     },
     methods: {
       ...mapActions({
-        search: "search",
-        searchAdvanced: "searchAdvanced"
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
       }),
       numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
@@ -165,7 +165,7 @@
       },
       onSearch() {
         this.advancedSearch = false;
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       _onSearchDelegated() {
         if (this.advancedSearch) {
@@ -176,14 +176,14 @@
       },
       onAdvancedSearch() {
         this.advancedSearch = true;
-        this._onAdvancedSearch(0, this.page.size)
+        this._onAdvancedSearch(0)
       },
       onNew() {
-        this.fn.openSlider("创建产品", ProductForm, this.formData);
+        this.fn.openSlider('创建产品', ProductForm, this.formData);
       },
       onBatchLaunch() {
         if (this.multipleSelection.length < 1) {
-          this.$message.info("请选择产品");
+          this.$message.info('请选择产品');
 
           return;
         }
@@ -191,18 +191,18 @@
         this._onBatchLaunch();
       },
       async _onBatchLaunch() {
-        const result = await this.$http.put("/djbackoffice/product/shelf/list", this.codes);
-        if (result["errors"]) {
-          this.$message.error("批量上架失败，原因：" + result["errors"][0].message);
+        const result = await this.$http.put('/djbackoffice/product/shelf/list', this.codes);
+        if (result['errors']) {
+          this.$message.error('批量上架失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("批量上架成功");
+        this.$message.success('批量上架成功');
         this._onSearchDelegated();
       },
       onBatchWithdraw() {
         if (this.multipleSelection.length < 1) {
-          this.$message.info("请选择产品");
+          this.$message.info('请选择产品');
 
           return;
         }
@@ -210,29 +210,28 @@
         this._onBatchWithdraw();
       },
       async _onBatchWithdraw() {
-        const result = await this.$http.post("/djbackoffice/product/shelf/list", this.codes);
-        if (result["errors"]) {
-          this.$message.error("批量下架失败，原因：" + result["errors"][0].message);
+        const result = await this.$http.post('/djbackoffice/product/shelf/list', this.codes);
+        if (result['errors']) {
+          this.$message.error('批量下架失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("批量下架成功");
+        this.$message.success('批量下架成功');
 
         this._onSearchDelegated();
       },
       async onDetails(item) {
-        const result = await this.$http.get("/djbackoffice/product/details/" + item.code);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.get('/djbackoffice/product/details/' + item.code);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider("产品明细", ProductDetailsPage, result);
+        this.fn.openSlider('产品明细', ProductDetailsPage, result);
       },
       onPageSizeChanged(val) {
         this.reset();
 
-        this.page.size = val;
         if (this.advancedSearch) {
           this._onAdvancedSearch(0, val);
         } else {
@@ -241,9 +240,9 @@
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
-          this._onAdvancedSearch(val - 1, this.page.size);
+          this._onAdvancedSearch(val - 1);
         } else {
-          this._onSearch(val - 1, this.page.size);
+          this._onSearch(val - 1);
         }
       },
       reset() {
@@ -253,23 +252,23 @@
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
         }
       },
       async getCompanies(query) {
-        const results = await this.$http.get("/djbrand/brand", {
+        const results = await this.$http.get('/djbrand/brand', {
           text: query.trim()
         });
-        if (!results["errors"]) {
-          this.companies = results["content"];
+        if (!results['errors']) {
+          this.companies = results['content'];
         }
       },
       async getCategories() {
-        const results = await this.$http.get("/djbackoffice/product/category/cascaded");
-        if (!results["errors"]) {
+        const results = await this.$http.get('/djbackoffice/product/category/cascaded');
+        if (!results['errors']) {
           this.categories = results;
         }
       },
@@ -283,44 +282,45 @@
       },
       async changeShelfStatus(row) {
         let request = this.$http.put;
-        if (row.approvalStatus === "approved") {
+        if (row.approvalStatus === 'approved') {
           request = this.$http.post;
         }
-        let message = "上架";
-        if (row.approvalStatus === "approved") {
+        let message = '上架';
+        if (row.approvalStatus === 'approved') {
           request = this.$http.post;
-          message = "下架";
+          message = '下架';
         }
 
-        const result = await request("/djbackoffice/product/shelf/" + row.code);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await request('/djbackoffice/product/shelf/' + row.code);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        if (row.approvalStatus === "approved") {
-          this.$set(row, "approvalStatus", "unapproved")
+        if (row.approvalStatus === 'approved') {
+          this.$set(row, 'approvalStatus', 'unapproved')
         } else {
-          this.$set(row, "approvalStatus", "approved")
+          this.$set(row, 'approvalStatus', 'approved')
         }
-        this.$message.success(message + "成功");
+
+        this.$message.success(message + '成功');
       },
       async changeRecommendedStatus(row) {
         let request = this.$http.put;
-        let message = "推荐";
+        let message = '推荐';
         if (!row.recommended) {
           request = this.$http.post;
-          message = "取消推荐";
+          message = '取消推荐';
         }
 
-        const result = await request("/djbackoffice/product/recommended/" + row.code);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await request('/djbackoffice/product/recommended/' + row.code);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$set(row, "recommended", row.recommended);
-        this.$message.success(message + "成功");
+        this.$set(row, 'recommended', row.recommended);
+        this.$message.success(message + '成功');
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
@@ -328,7 +328,7 @@
     },
     data() {
       return {
-        text: "",
+        text: this.$store.state.ApparelProductsModule.keyword,
         approvalStatuses: this.$store.state.EnumsModule.approvalStatuses,
         formData: this.$store.state.ApparelProductsModule.formData,
         queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
@@ -339,9 +339,9 @@
       };
     },
     created() {
-      this.search({keyword: "", page: 0});
-      this.getCategories("");
-      this.getCompanies("");
+      this.search({keyword: '', page: 0});
+      this.getCategories('');
+      this.getCompanies('');
     }
   };
 </script>

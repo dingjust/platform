@@ -22,8 +22,8 @@
 
 <script>
   export default {
-    name: "GroupBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'GroupBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
       validate(callback) {
         this.$refs['form'].validate(callback);
@@ -33,7 +33,7 @@
     data() {
       return {
         rules: {
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         }
       };
     }

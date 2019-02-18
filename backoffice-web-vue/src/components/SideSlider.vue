@@ -33,6 +33,7 @@
     background-color: #f5f5f5;
     z-index: 1121;
     overflow: hidden;
+
     .side-slider-center {
       position: absolute;
       top: 54px;
@@ -46,11 +47,13 @@
       .el-card__body {
         padding: 10px;
       }
+
       .clear {
         width: 30px;
         height: 100%;
         cursor: pointer;
       }
+
       .title {
         text-align: center;
       }
@@ -106,11 +109,11 @@
         this.contentData = data;
         this.title = title;
         this.open = true;
-        this.$store.dispatch("sideSliderState_set", true);
+        this.$store.dispatch('sideSliderState_set', true);
       },
       closeSlider(refresh) {
         this.open = false;
-        this.$store.dispatch("sideSliderState_set", false);
+        this.$store.dispatch('sideSliderState_set', false);
       }
     },
     created() {

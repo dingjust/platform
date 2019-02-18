@@ -27,15 +27,15 @@
 </template>
 
 <script>
-  import {OrderMixin} from "../../../../mixins";
+  import {OrderMixin} from '@/mixins';
 
   export default {
-    name: "OrderBaseForm",
-    props: ["slotData", "readOnly"],
+    name: 'OrderBaseForm',
+    props: ['slotData', 'readOnly'],
     mixins: [OrderMixin],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       }
     },
     computed: {},

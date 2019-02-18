@@ -1,4 +1,4 @@
-import ProductionProgressPage from "@/views/backoffice/report/productprogress/ProductionProgressPage";
+import ProductionProgressPage from '@/views/backoffice/report/productprogress/ProductionProgressPage';
 
 export {
   ProductionProgressPage,

@@ -10,12 +10,13 @@
           <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
         </el-button-group>
       </el-form>
-      <el-table ref="resultTable" stripe :data="page.content">
+      <el-table ref="resultTable" stripe :data="page.content"
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="UID" prop="uid"></el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="描述" prop="description"></el-table-column>
         <el-table-column label="操作">
-          <template slot-scope="scope ">
+          <template slot-scope="scope">
             <el-button type="text " icon="el-icon-edit " @click="onDetails(scope.row) ">
               明细
             </el-button>
@@ -37,49 +38,51 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import RoleForm from "./RoleForm";
-  import RoleDetailsPage from "./RoleDetailsPage";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandRolesModule');
+
+  import autoHeight from 'mixins/autoHeight';
+
+  import RoleForm from './RoleForm';
+  import RoleDetailsPage from './RoleDetailsPage';
 
   export default {
-    name: "RolePage",
+    name: 'RolePage',
     components: {},
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: 'page'
+      })
+    },
     methods: {
+      ...mapActions({
+        search: 'search'
+      }),
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建角色", RoleForm, {
-          id: null,
-          uid: "",
-          name: "",
-          description: ""
-        });
+        this.fn.openSlider('创建角色', RoleForm, this.formData);
       },
-      onDetails(item) {
-        axios.get("/djbrand/role/" + item.uid + "/perms")
-          .then(response => {
-            this.$set(item, "perms", response.data);
-            /*this.$set(item, "perms", [{
-              id: null,
-              code: "PM00010203",
-              name: "生产订单",
-              children: []
-            }]);*/
+      async onDetails(item) {
+        const result = this.$http.get('/djbrand/role/' + item.uid + '/perms');
+        if (result['errors']) {
+          this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
+          return;
+        }
 
-            this.fn.openSlider("角色明细", RoleDetailsPage, item);
-          }).catch(error => {
-            this.$message.error("获取数据失败，原因：" + error.response.data);
-          }
-        );
+        this.$set(item, 'perms', result);
+
+        this.fn.openSlider('角色明细', RoleDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -87,40 +90,18 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-        axios.get("/djbrand/role", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error("获取数据失败，原因：" + error.response.data);
-        });
-      }
-    },
-    computed: {},
-    watch: {
-      "$store.state.sideSliderState": function (value) {
-        if (!value) {
-          this.onSearch();
-        }
+        const keyword = this.text;
+        this.search({keyword, page, size});
       }
     },
     data() {
       return {
-        text: "",
-        items: [],
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
+        text: this.$store.state.BrandRolesModule.keyword,
+        formData: this.$store.state.BrandRolesModule.formData,
       }
+    },
+    created() {
+      this.onSearch();
     }
   }
 </script>

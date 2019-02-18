@@ -41,25 +41,22 @@
 </template>
 
 <script>
-  import axios from "axios";
   export default {
     name: 'FabricProductBaseForm',
     props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
-      getColors() {
-        axios.get("/djbackoffice/product/color/all")
-          .then(response => {
-            this.colors = response.data;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
+      async getColors() {
+        const result = await this.$http.get('/djbackoffice/product/color/all');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.colors = result;
       }
     },
-    computed: {},
     created() {
       this.getColors();
       if (!this.isNewlyCreated) {

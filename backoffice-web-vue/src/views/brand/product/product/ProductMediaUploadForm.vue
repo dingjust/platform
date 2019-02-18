@@ -54,11 +54,11 @@
 
 <script>
   export default {
-    name: "ProductMediaUploadForm",
-    props: ["slotData", "isNewlyCreated"],
+    name: 'ProductMediaUploadForm',
+    props: ['slotData', 'isNewlyCreated'],
     methods: {
       onSubmit() {
-        this.$refs["form"].validate(valid => {
+        this.$refs['form'].validate(valid => {
           if (valid) {
             this.$refs.uploadForm.submit();
 
@@ -69,42 +69,42 @@
         });
       },
       onUploadSuccess(response, file, files) {
-        if (response === "") {
-          this.$message.success("上传成功");
+        if (response === '') {
+          this.$message.success('上传成功');
           this.$refs.uploadForm.clearFiles();
         }
       },
       onUploadError(error, file, files) {
-        let msg = "";
+        let msg = '';
         if (file.size >= (1024 * 1024 * 5)) {
-          msg = "，上传的文件不能超过5MB"
+          msg = '，上传的文件不能超过5MB'
         }
-        this.$message.error("上传失败" + msg);
+        this.$message.error('上传失败' + msg);
       },
       onUploading(event, file, files) {
-        this.$message("正在上传，请稍等");
+        this.$message('正在上传，请稍等');
       },
       beforeUpload(file) {
         let flat = true;
 
-        if (this.picture == "normalPicture") {
-          if (file.type != "image/png" && file.type != "image/jpeg") {
-            this.$message.error("只能上传jpg/png文件");
+        if (this.picture == 'normalPicture') {
+          if (file.type != 'image/png' && file.type != 'image/jpeg') {
+            this.$message.error('只能上传jpg/png文件');
             flat = false;
           }
           if (file.size > 1024 * 400) {
-            this.$message.error("上传的文件不能超过400KB");
+            this.$message.error('上传的文件不能超过400KB');
             flat = false;
           }
         }
 
-        if (this.picture == "detailPicture") {
-          if (file.type != "image/png" && file.type != "image/jpeg") {
-            this.$message.error("只能上传jpg/png文件");
+        if (this.picture == 'detailPicture') {
+          if (file.type != 'image/png' && file.type != 'image/jpeg') {
+            this.$message.error('只能上传jpg/png文件');
             flat = false;
           }
           if (file.size > 1024 * 300) {
-            this.$message.error("上传的文件不能超过300KB");
+            this.$message.error('上传的文件不能超过300KB');
             flat = false;
           }
         }
@@ -124,44 +124,44 @@
         };
       },
       isPicture: function () {
-        return this.formData.format !== "bom" ||
-          this.formData.format !== "technicalDocuments";
+        return this.formData.format !== 'bom' ||
+          this.formData.format !== 'technicalDocuments';
       }
     },
     data() {
       return {
-        uploadUrl: "/djbrand/product/media/upload",
+        uploadUrl: '/djbrand/product/media/upload',
         files: [],
         formData: {
           code: this.slotData.code,
-          format: "masterPicture"
+          format: 'masterPicture'
         },
         formats: [
           {
-            value: "masterPicture",
-            label: "缩略"
+            value: 'masterPicture',
+            label: '缩略'
           },
           {
-            value: "normalPicture",
-            label: "主图"
+            value: 'normalPicture',
+            label: '主图'
           },
           {
-            value: "detailPicture",
-            label: "详细图"
+            value: 'detailPicture',
+            label: '详细图'
           },
           {
-            value: "bom",
-            label: "BOM文件"
+            value: 'bom',
+            label: 'BOM文件'
           },
           {
-            value: "technicalDocuments",
-            label: "技术文件"
+            value: 'technicalDocuments',
+            label: '技术文件'
           }
         ],
         rules: {
-          format: [{required: true, message: "必填", trigger: "blur"}]
+          format: [{required: true, message: '必填', trigger: 'blur'}]
         },
-        picture: "masterPicture"
+        picture: 'masterPicture'
       };
     }
   };

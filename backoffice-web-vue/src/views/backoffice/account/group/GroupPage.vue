@@ -41,29 +41,29 @@
 
   import autoHeight from 'mixins/autoHeight'
 
-  import GroupForm from "./GroupForm";
-  import GroupDetailsPage from "./GroupDetailsPage";
+  import GroupForm from './GroupForm';
+  import GroupDetailsPage from './GroupDetailsPage';
 
   export default {
-    name: "GroupPage",
+    name: 'GroupPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建用户组", GroupForm, this.formData);
+        this.fn.openSlider('创建用户组', GroupForm, this.formData);
       },
       onDetails(item) {
-        this.fn.openSlider("用户组明细", GroupDetailsPage, item);
+        this.fn.openSlider('用户组明细', GroupDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();

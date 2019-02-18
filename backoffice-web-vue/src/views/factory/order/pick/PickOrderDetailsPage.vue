@@ -36,14 +36,13 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import PickOrderBaseForm from './PickOrderBaseForm';
-  import PickOrderEntriesForm from "./PickOrderEntriesForm";
-  import PickOrderStatusBar from "./PickOrderStatusBar";
+  import PickOrderEntriesForm from './PickOrderEntriesForm';
+  import PickOrderStatusBar from './PickOrderStatusBar';
 
   export default {
-    name: "PickOrderDetailsPage",
-    props: ["slotData", "readOnly"],
+    name: 'PickOrderDetailsPage',
+    props: ['slotData', 'readOnly'],
     components: {PickOrderStatusBar, PickOrderBaseForm, PickOrderEntriesForm},
     methods: {
       onUpdateOrAddEntries() {
@@ -55,22 +54,22 @@
         if (!this.$refs['PickOrderEntriesForm'].validate()) {
           return;
         }
+
+        this._onSubmitBaseForm();
+      },
+      async _onSubmitBaseForm() {
         let formData = this.slotData;
         formData.entries = this.entriesData.entries;
-        console.log(formData);
-        axios.put('/djfactory/pickOrder', formData)
-          .then(response => {
+        const result = await this.$http.put('/djfactory/pickOrder', formData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.$message.success("物料单行修改成功!");
-
-            this.fn.closeSlider(true);
-          }).catch(error => {
-            this.$message.success("物料单行修改失败!");
-          }
-        );
-      }
+        this.$message.success('物料单行修改成功!');
+        this.fn.closeSlider(true);
+      },
     },
-    computed: {},
     data() {
       return {
         entriesFormDialogVisible: false,

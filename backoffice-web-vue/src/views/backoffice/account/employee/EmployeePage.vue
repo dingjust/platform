@@ -48,37 +48,36 @@
   const {mapGetters, mapActions} = createNamespacedHelpers('EmployeesModule');
 
   import autoHeight from 'mixins/autoHeight';
-  import {EmployeeForm} from "./";
-  import EmployeeDetailsPage from "./EmployeeDetailsPage";
+  import {EmployeeForm} from './';
+  import EmployeeDetailsPage from './EmployeeDetailsPage';
 
   export default {
-    name: "EmployeePage",
+    name: 'EmployeePage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("添加员工", EmployeeForm, this.formData);
+        this.fn.openSlider('添加员工', EmployeeForm, this.formData);
       },
       onDetails(item) {
-        this.fn.openSlider("员工明细", EmployeeDetailsPage, item);
+        this.fn.openSlider('员工明细', EmployeeDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -90,17 +89,17 @@
         this.search({keyword, page, size});
       },
       async changeActiveStatus(row) {
-        const result = this.$http.put("/djbackoffice/user/active", {
+        const result = this.$http.put('/djbackoffice/user/active', {
           uid: row.uid
         });
 
-        if (result["errors"]) {
-          this.$message.error("修改失败，原因：" + result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error('修改失败，原因：' + result['errors'][0].message);
           return;
         }
 
         this.onSearch();
-        this.$message.success("修改成功");
+        this.$message.success('修改成功');
       }
     },
     data() {
@@ -110,7 +109,7 @@
       };
     },
     created() {
-      this.search({keyword: "", page: 0});
+      this.search({keyword: '', page: 0});
     }
   };
 </script>

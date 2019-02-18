@@ -144,6 +144,7 @@ class ProductionItem extends StatelessWidget {
                     child: ProductionCircleStep(
                       size: 25,
                       currentPhase: order.currentPhase,
+                      thickness: 3,
                     ),
                   )
                 ],

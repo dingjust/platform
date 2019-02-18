@@ -78,13 +78,16 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('RequirementOrdersModule');
+
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
-  import RequirementOrderMediaUploadForm from "./RequirementOrderMediaUploadForm";
+  import RequirementOrderMediaUploadForm from './RequirementOrderMediaUploadForm';
   import RequirementOrderDeliveryAddressForm from './RequirementOrderDeliveryAddressForm';
-  import RequirementOrderRequestForm from "./RequirementOrderRequestForm";
-  import RequirementOrderDetailsPage from "./RequirementOrderDetailsPage";
-  import RequirementOrderEntriesForm from "./RequirementOrderEntriesForm";
+  import RequirementOrderRequestForm from './RequirementOrderRequestForm';
+  import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
+  import RequirementOrderEntriesForm from './RequirementOrderEntriesForm';
 
   export default {
     name: 'RequirementOrderFrom',
@@ -98,6 +101,9 @@
     },
     props: ['slotData'],
     methods: {
+      ...mapActions({
+        refresh: 'refresh'
+      }),
       onSubmit() {
         this.$refs['deliveryAddressForm'].validate((valid) => {
             if (!valid) {
@@ -106,7 +112,7 @@
 
             const address = this.slotData.deliveryAddress;
             if (!address.region.isocode || !address.city.code) {
-              this.$message.error("请输入省份和市区");
+              this.$message.error('请输入省份和市区');
               return false;
             }
 
@@ -119,20 +125,7 @@
                   return false;
                 }
 
-                let formData = this.slotData;
-                axios.post('/djbackoffice/requirementOrder/new', formData)
-                  .then(response => {
-                    this.$message.success("需求订单创建成功，订单编号： " + response.data);
-
-                    this.$set(this.slotData, 'code', response.data);
-
-                    this.active = 1;
-
-                    this.$refs['detailsPage'].refresh();
-                  }).catch(error => {
-                    this.$message.error(error.response.data);
-                  }
-                );
+                this._onSubmit();
 
                 return true;
               }
@@ -141,6 +134,20 @@
             return true;
           }
         );
+      },
+      async _onSubmit() {
+        let formData = this.slotData;
+        const result = await this.$http.post('/djbackoffice/requirementOrder/new', formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('需求订单创建成功，订单编号： ' + result);
+        this.$set(this.slotData, 'code', result);
+        this.active = 1;
+        // this.refresh();
+        this.$refs['detailsPage'].refresh();
       },
       onMediaUpload() {
         this.$refs['mediaUploadForm'].onSubmit();

@@ -5,9 +5,9 @@
         <span>运费模板</span>
       </div>
       <zone-delivery-base-form ref="baseForm"
-                     :slot-data="slotData"
-                     :read-only="false"
-                     :is-newly-created="isNewlyCreated">
+                               :slot-data="slotData"
+                               :read-only="false"
+                               :is-newly-created="isNewlyCreated">
       </zone-delivery-base-form>
     </el-card>
     <div class="pt-2"></div>
@@ -23,36 +23,37 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import ZoneDeliveryBaseForm from "./ZoneDeliveryBaseForm";
+  import ZoneDeliveryBaseForm from './ZoneDeliveryBaseForm';
 
   export default {
-    name: "ZoneDeliveryForm",
+    name: 'ZoneDeliveryForm',
     components: {ZoneDeliveryBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     methods: {
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
-        console.log(this.slotData);
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
           }
-          axios.post("/djbrand/zoneDelivery", this.slotData)
-            .then(() => {
-              this.$message.success("保存成功");
-              this.fn.closeSlider(true);
-              //刷新主体数据
-            }).catch(error => {
-              this.$message.error("保存失败，原因：" + error.response.data.message);
-            }
-          );
+
+          this._onSubmit();
 
           return true;
         });
       },
       onCancel() {
         this.fn.closeSlider();
+      },
+      async _onSubmit() {
+        const result = await this.$http.post('/djbrand/zoneDelivery', this.slotData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.fn.closeSlider(true);
       }
     },
     computed: {

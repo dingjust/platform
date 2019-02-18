@@ -13,6 +13,10 @@ import StylesModule from './product/styles';
 import CategoriesModule from './product/categories';
 import FabricProductsModule from './product/fabric-products';
 import ApparelProductsModule from './product/apparel-products';
+import RequirementOrdersModule from './order/requirement-orders';
+import SalesOrdersModule from './order/sales-orders';
+import ProductionOrdersModule from './order/production-orders';
+import PickOrdersModule from './order/pick-orders';
 
 export {
   EnumsModule,
@@ -29,5 +33,9 @@ export {
   StylesModule,
   CategoriesModule,
   FabricProductsModule,
-  ApparelProductsModule
+  ApparelProductsModule,
+  RequirementOrdersModule,
+  SalesOrdersModule,
+  ProductionOrdersModule,
+  PickOrdersModule
 }

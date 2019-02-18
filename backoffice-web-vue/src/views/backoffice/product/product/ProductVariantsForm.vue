@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   function removeRow(array, row) {
     const length = array.length;
@@ -62,22 +62,22 @@
   }
 
   export default {
-    name: "ProductVariantsForm",
-    props: ["slotData", "readOnly", "isNewlyCreated"],
+    name: 'ProductVariantsForm',
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       refresh() {
         if (this.slotData.code) {
           this.doRefresh();
         }
       },
-      doRefresh() {
-        axios.get("/djbackoffice/product/variants/" + this.slotData.code)
-          .then(response => {
-            this.variants = response.data;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+      async doRefresh() {
+        const result = await this.$http.get('/djbackoffice/product/variants/' + this.slotData.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.variants = result;
       },
       getValue() {
         return this.variants;
@@ -85,14 +85,14 @@
       onAddRow() {
         // 验证之前添加的行是否齐全
         if (!this.color || !this.size) {
-          this.$message.error("请选择颜色和尺码");
+          this.$message.error('请选择颜色和尺码');
           return;
         }
 
         if (this.variants.some(entry => {
           return entry.color.code === this.color && entry.size.code === this.size;
         })) {
-          this.$message.error("颜色和尺码已经存在，请重新选择");
+          this.$message.error('颜色和尺码已经存在，请重新选择');
           return;
         }
 
@@ -114,8 +114,8 @@
     computed: {},
     data() {
       return {
-        color: "",
-        size: "",
+        color: '',
+        size: '',
         variants: [],
         colors: [],
         sizes: []
@@ -129,13 +129,13 @@
       axios
         .all([
           axios
-            .get("/djbackoffice/product/color/all")
+            .get('/djbackoffice/product/color/all')
             .then(response => {
               this.colors = response.data;
             }),
 
           axios
-            .get("/djbackoffice/product/size/all")
+            .get('/djbackoffice/product/size/all')
             .then(response => {
               this.sizes = response.data;
             })

@@ -3,7 +3,8 @@
     <el-card>
       <div slot="header" class="clearfix">
         <span>分类产品列表</span>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="searchAllProducts(0,allPage.size)">添加产品</el-button>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="searchAllProducts(0,allPage.size)">添加产品
+        </el-button>
       </div>
       <el-table ref="resultTable" stripe
                 :data="page.content"
@@ -21,12 +22,12 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                      @size-change="onPageSizeChanged"
-                      @current-change="onCurrentPageChanged"
-                      :current-page="page.number + 1"
-                      :page-size="page.size"
-                      :page-count="page.totalPages"
-                      :total="page.totalElements">
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </el-card>
 
@@ -48,12 +49,12 @@
         <el-table-column label="名称" prop="name"></el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                      @size-change="onAllPageSizeChanged"
-                      @current-change="onAllCurrentPageChanged"
-                      :current-page="allPage.number + 1"
-                      :page-size="allPage.size"
-                      :page-count="allPage.totalPages"
-                      :total="allPage.totalElements">
+                     @size-change="onAllPageSizeChanged"
+                     @current-change="onAllCurrentPageChanged"
+                     :current-page="allPage.number + 1"
+                     :page-size="allPage.size"
+                     :page-count="allPage.totalPages"
+                     :total="allPage.totalElements">
       </el-pagination>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="saveProducts()">确 定</el-button>
@@ -64,13 +65,19 @@
 </template>
 
 <script>
-  import axios from "axios";
-
   export default {
-    name: "CategoryProductsPage",
+    name: 'CategoryProductsPage',
     components: {},
     mixins: [],
-    props: ["slotData", "readOnly"],
+    props: ['slotData', 'readOnly'],
+    computed: {
+      codes: function () {
+        return this.multipleSelection.map((item, number, any) => {
+          console.log(item.code);
+          return item.code;
+        });
+      }
+    },
     methods: {
       onPageSizeChanged(val) {
         this.reset();
@@ -86,18 +93,19 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onSearch(page, size) {
-        axios.get("/djbackoffice/product/category/products/" + this.slotData.code, {
-          params: {
-            page: page,
-            size: size
-          }
-        }).then(response => {
-          console.log(response.data);
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error(error.response.data);
+      async onSearch(page, size) {
+        const result = await this.$http.get('/djbackoffice/product/category/products/' + this.slotData.code, {
+          page: page,
+          size: size
         });
+
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.page = result;
       },
       onAllPageSizeChanged(val) {
         this.allReset();
@@ -118,20 +126,20 @@
         console.log(selects);
         this.multipleSelection = selects;
       },
-      searchAllProducts(page,size) {
+      async searchAllProducts(page, size) {
         this.productsVialogVisible = true;
-        axios.get("/djbackoffice/product",{
-          params:{
-            code:this.text,
-            page:page,
-            size:size
-          }
-        }).then(response => {
-          console.log(response.data);
-          this.allPage = response.data;
-        }).catch(error => {
-          this.$message.error(error.response.data);
+        const result = await this.$http.get('/djbackoffice/product', {
+          code: this.text,
+          page: page,
+          size: size
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.allPage = result;
       },
       onDelete(item) {
         this.$confirm('是否删除该产品?', '提示', {
@@ -139,51 +147,43 @@
           cancelButtonText: '取消',
           type: 'warning',
           center: true
-        }).then(() => {
-          axios.put("/djbackoffice/product/category/removeProduct", null, {
-            params: {
-              categoryCode: this.slotData.code,
-              productCode: item.code
-            }
-          }).then(() => {
-            this.$message.success('产品删除成功');
-            this.onSearch();
-          }).catch(error => {
-            this.$message.error('产品删除失败，原因：' + error.response.data.message);
-          });
-        })
+        }).then(() => this._onDelete(item))
       },
-      saveProducts() {
-        console.log(this.codes);
-        axios.put("/djbackoffice/product/category/addProducts", {
+      async _onDelete(item) {
+        const result = await this.$http.put('/djbackoffice/product/category/removeProduct', null, {
+          categoryCode: this.slotData.code,
+          productCode: item.code
+        });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('产品删除成功');
+        this.onSearch();
+      },
+      async saveProducts() {
+        const result = await this.$http.put('/djbackoffice/product/category/addProducts', {
           categoryCode: this.slotData.code,
           productCodes: this.codes
-        }).then(() => {
-          this.$message.success("添加产品成功");
-          this.productsVialogVisible = false;
-          this.onSearch();
-        }).catch(() => {
-          this.$message({
-            type: "error",
-            message: "添加产品失败， 原因：" + error.response.data
-          });
         });
-      },
 
-    },
-    computed: {
-      codes: function () {
-        return this.multipleSelection.map((item, number, any) => {
-          console.log(item.code);
-          return item.code;
-        });
-      }
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('添加产品成功');
+        this.productsVialogVisible = false;
+        this.onSearch();
+      },
     },
     data() {
       return {
         productsVialogVisible: false,
         multipleSelection: [],
-        text: "",
+        text: '',
         page: {
           number: 0, // 当前页，从0开始
           size: 10, // 每页显示条数

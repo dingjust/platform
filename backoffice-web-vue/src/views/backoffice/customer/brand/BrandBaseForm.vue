@@ -100,17 +100,16 @@
 </template>
 
 <script>
-  import axios from "axios";
-
-  import {CompanyMixin} from "mixins";
+  import {CompanyMixin} from '@/mixins';
 
   export default {
-    name: "BrandBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'BrandBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     mixins: [CompanyMixin],
+    computed: {},
     methods: {
       validate(callback) {
-        return this.$refs["form"].validate(callback);
+        return this.$refs['form'].validate(callback);
       },
       getValue() {
         let baseData = {};
@@ -131,34 +130,33 @@
         baseData.cooperativeBrand = this.slotData.cooperativeBrand;
         return baseData;
       },
-      getStyles() {
-        axios.get("/djbackoffice/product/style/all")
-          .then(response => {
-            this.styles = response.data;
-          }).catch(error => {
-          this.$message.error(error.response.data);
-        })
+      async getStyles() {
+        const result = await this.$http.get('/djbackoffice/product/style/all');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.styles = result;
       },
-      getCategories() {
-        axios
-          .get("/djbackoffice/product/category/majors")
-          .then(response => {
-            this.adeptAtCategories = response.data;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
+      async getCategories() {
+        const result = await this.$http.get('/djbackoffice/product/category/majors');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.adeptAtCategories = result;
       }
     },
-    computed: {},
     data() {
       return {
         styles: [],
         adeptAtCategories: [],
         rules: {
-          name: [{required: true, message: "必填", trigger: "blur"}],
-          address: [{required: true, message: "请输入经营地址", trigger: "blur"}],
-          contactPerson: [{required: true, message: "请输入联系人", trigger: "blur"}],
+          name: [{required: true, message: '必填', trigger: 'blur'}],
+          address: [{required: true, message: '请输入经营地址', trigger: 'blur'}],
+          contactPerson: [{required: true, message: '请输入联系人', trigger: 'blur'}],
           email: [
             {
               message: '邮箱格式不正确',

@@ -32,8 +32,6 @@
 </template>
 
 <script>
-  import axios from "axios";
-
   export default {
     name: 'RequirementOrderBomUploadForm',
     props: ['slotData', 'isNewlyCreated'],

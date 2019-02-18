@@ -23,40 +23,36 @@
     </el-form>
     <div class="pt-2"></div>
     <consignment-factory-base-form v-show="showDetails"
-                       :slot-data="slotData.assignedTo"
-                       :read-only="true">
+                                   :slot-data="slotData.assignedTo"
+                                   :read-only="true">
     </consignment-factory-base-form>
   </div>
 </template>
 
 <script>
-  import axios from 'axios';
-
-  import ConsignmentFactoryBaseForm from "./ConsignmentFactoryBaseForm";
+  import ConsignmentFactoryBaseForm from './ConsignmentFactoryBaseForm';
 
   export default {
     name: 'ConsignmentFactorySearchForm',
-    props: ["slotData"],
+    props: ['slotData'],
     components: {ConsignmentFactoryBaseForm},
     methods: {
       validate(callback) {
         this.$refs['form'].validate(callback);
       },
-      onFilter(query) {
+      async onFilter(query) {
         this.companies = [];
         if (query !== '') {
-          axios.get('/djfactory/factory', {
-            params: {
-              text: query
-            }
-          }).then(response => {
-            this.companies = response.data.content;
-          }).catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result = await this.$http.get('/djfactory/factory', {
+            text: query
           });
+
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.companies = result.content;
         }
       },
       onSelected(current) {
@@ -66,7 +62,7 @@
         }).forEach(company => {
           this.showDetails = true;
           this.company = company;
-          this.$set(slotData, "assignedTo", company);
+          this.$set(slotData, 'assignedTo', company);
         });
       }
     },

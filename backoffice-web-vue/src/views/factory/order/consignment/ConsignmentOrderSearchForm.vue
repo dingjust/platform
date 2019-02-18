@@ -10,7 +10,6 @@
                    reserve-keyword
                    v-model="slotData.order.code"
                    :remote-method="onFilter"
-                   :loading="loading"
                    @change="onOrderSelected">
           <el-option
             v-for="item in orders"
@@ -25,8 +24,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'ConsignmentOrderSearchForm',
     props: ['slotData'],
@@ -35,21 +32,19 @@
       validate (callback) {
         this.$refs['form'].validate(callback);
       },
-      onFilter (query) {
+      async onFilter (query) {
         this.orders = [];
         if (query !== '') {
-          axios.get('/djbackoffice/order', {
-            params: {
-              code: query
-            }
-          }).then(response => {
-            this.orders = response.data.content;
-          }).catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result =await this.$http.get('/djbackoffice/order', {
+            code: query
           });
+
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.orders = result.content;
         }
       },
       onOrderSelected (current) {
@@ -108,7 +103,6 @@
           }
         },
         orders: [],
-        loading: false
       }
     }
   }

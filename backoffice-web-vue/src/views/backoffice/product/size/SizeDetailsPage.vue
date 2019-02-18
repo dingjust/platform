@@ -21,12 +21,12 @@
 </template>
 
 <script>
-  import SizeBaseForm from "./SizeBaseForm";
+  import SizeBaseForm from './SizeBaseForm';
 
   export default {
-    name: "SizeDetailsPage",
+    name: 'SizeDetailsPage',
     components: {SizeBaseForm},
-    props: ["slotData", "isNewlyCreated", "preview"],
+    props: ['slotData', 'isNewlyCreated', 'preview'],
     methods: {
       onChangeState() {
         // TODO: 启用/禁用

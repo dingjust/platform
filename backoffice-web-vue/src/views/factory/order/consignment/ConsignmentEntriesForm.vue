@@ -126,7 +126,7 @@
       },
       onSetPrice() {
         console.log(this.slotData);
-        //this.$set(this.slotData, "consignmentEntries", [...this.slotData.consignmentEntries]);
+        //this.$set(this.slotData, 'consignmentEntries', [...this.slotData.consignmentEntries]);
         for (const index in this.slotData.consignmentEntries) {
           this.slotData.consignmentEntries[index].price = this.price;
         }

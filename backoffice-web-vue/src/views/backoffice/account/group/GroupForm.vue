@@ -27,18 +27,18 @@
 
   const {mapActions} = createNamespacedHelpers('UserGroupsModule');
 
-  import GroupBaseForm from "./GroupBaseForm";
+  import GroupBaseForm from './GroupBaseForm';
 
   export default {
-    name: "GroupForm",
+    name: 'GroupForm',
     components: {GroupBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
@@ -53,13 +53,13 @@
         this.fn.closeSlider();
       },
       async _onSubmit() {
-        const result = await this.$http.post("/djbackoffice/group", this.slotData);
-        if (result["errors"]) {
-          this.$message.error("保存失败，原因：" + result["errors"][0].message);
+        const result = await this.$http.post('/djbackoffice/group', this.slotData);
+        if (result['errors']) {
+          this.$message.error('保存失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("保存成功");
+        this.$message.success('保存成功');
         this.refresh();
         this.fn.closeSlider(true);
       }

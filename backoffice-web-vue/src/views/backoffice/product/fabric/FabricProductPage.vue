@@ -10,7 +10,8 @@
           <el-button type="primary" icon="el-icon-plus" @click="onNew">创建</el-button>
         </el-button-group>
       </el-form>
-      <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
+      <el-table ref="resultTable" stripe :data="page.content"
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="编码" prop="code"></el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="价格" prop="price" :formatter="numberFormatter"></el-table-column>
@@ -39,19 +40,19 @@
   const {mapGetters, mapActions} = createNamespacedHelpers('FabricProductsModule');
 
   import autoHeight from 'mixins/autoHeight'
-  import {FabricProductForm, FabricProductDetailsPage} from "./";
+  import {FabricProductForm, FabricProductDetailsPage} from './';
 
   export default {
-    name: "FabricProductPage",
+    name: 'FabricProductPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
@@ -62,20 +63,19 @@
         this._onSearch(0, this.page.size);
       },
       onNew() {
-        this.fn.openSlider("创建面辅料", FabricProductForm, this.formData);
+        this.fn.openSlider('创建面辅料', FabricProductForm, this.formData);
       },
       onDetails(item) {
         // console.log(item);
-        this.fn.openSlider("面辅料明细", FabricProductDetailsPage, item);
+        this.fn.openSlider('面辅料明细', FabricProductDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
 
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -94,7 +94,7 @@
       };
     },
     created() {
-      this.search({keyword: "", page: 0});
+      this.search({keyword: '', page: 0});
     }
   };
 </script>

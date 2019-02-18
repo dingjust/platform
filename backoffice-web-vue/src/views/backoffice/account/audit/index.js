@@ -1,5 +1,5 @@
-import BrandAuditDetailsPage from "./BrandAuditDetailsPage";
-import FactoryAuditDetailsPage from "./FactoryAuditDetailsPage";
+import BrandAuditDetailsPage from './BrandAuditDetailsPage';
+import FactoryAuditDetailsPage from './FactoryAuditDetailsPage';
 
 export {
   BrandAuditDetailsPage,

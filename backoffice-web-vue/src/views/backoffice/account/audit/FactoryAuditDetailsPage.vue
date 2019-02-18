@@ -159,65 +159,65 @@
 
   const {mapActions} = createNamespacedHelpers('AuditFactoriesModule');
 
-  import CompanyMixin from "mixins/commerce/CompanyMixin";
+  import CompanyMixin from 'mixins/commerce/CompanyMixin';
 
   export default {
-    name: "FactoryAuditDetailsPage",
-    props: ["slotData", "isNewlyCreated"],
+    name: 'FactoryAuditDetailsPage',
+    props: ['slotData', 'isNewlyCreated'],
     components: {},
     mixins: [CompanyMixin],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onApprove() {
         //调用审核通过接口
-        this.$confirm("确认账号审核通过, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+        this.$confirm('确认账号审核通过, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }).then(() => this._onApprove());
       },
       async _onApprove() {
-        const result = await this.$http.put("/djbackoffice/b2bUnit/approve", {
+        const result = await this.$http.put('/djbackoffice/b2bUnit/approve', {
           uid: this.slotData.uid
         });
 
-        if (result["errors"]) {
-          this.$message.error("通过失败，原因：" + result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error('通过失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("确认成功");
+        this.$message.success('确认成功');
         this.refresh();
         this.fn.closeSlider(true);
       },
       onReject() {
         //调用审核拒绝接口
-        this.$prompt("请输认不通过原因", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消"
+        this.$prompt('请输认不通过原因', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
         }).then(({value}) => {
           this._onReject(value);
         });
       },
       async _onReject(value) {
-        const result = await this.$http.put("/djbackoffice/b2bUnit/reject", {
+        const result = await this.$http.put('/djbackoffice/b2bUnit/reject', {
           uid: this.slotData.uid,
           comment: value
         });
 
-        if (result["errors"]) {
-          this.$message.error("拒绝失败，原因：" + result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error('拒绝失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success("拒绝成功");
+        this.$message.success('拒绝成功');
         this.refresh();
         this.fn.closeSlider(true);
       },
       async getCategories() {
-        this.categories = await this.$http.get("/djbackoffice/product/category/majors");
+        this.categories = await this.$http.get('/djbackoffice/product/category/majors');
       }
     },
     created() {

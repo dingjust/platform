@@ -18,8 +18,37 @@ import {
   StylesModule,
   CategoriesModule,
   FabricProductsModule,
-  ApparelProductsModule
+  ApparelProductsModule,
+  RequirementOrdersModule,
+  SalesOrdersModule,
+  ProductionOrdersModule,
+  PickOrdersModule
 } from './modules';
+
+import {
+  BrandEmployeesModule,
+  BrandFollowersModule,
+  BrandMembersModule,
+  BrandMemberRequestsModule,
+  BrandOrgsModule,
+  BrandRolesModule,
+  BrandRequirementOrdersModule,
+  BrandSalesOrdersModule,
+  BrandProductionOrdersModule,
+  BrandApparelProductsModule,
+  BrandDeletedApparelProductsModule,
+  BrandApparelProductStocksModule,
+} from './brand/modules';
+
+import {
+  FactoryEmployeesModule,
+  FactoryOrgsModule,
+  FactoryRolesModule,
+  FactoryFabricProductsModule,
+  FactoryFabricProductStocksModule,
+  FactoryProductionOrdersModule,
+  FactoryPickOrdersModule,
+} from './factory/modules';
 
 // 状态管理
 const state = {
@@ -47,6 +76,7 @@ const actions = {
 export default new Vuex.Store({
   modules: {
     EnumsModule,
+    // tenant
     UsersModule,
     UserGroupsModule,
     RolesModule,
@@ -60,7 +90,32 @@ export default new Vuex.Store({
     StylesModule,
     CategoriesModule,
     FabricProductsModule,
-    ApparelProductsModule
+    ApparelProductsModule,
+    RequirementOrdersModule,
+    SalesOrdersModule,
+    ProductionOrdersModule,
+    PickOrdersModule,
+    // brand
+    BrandEmployeesModule,
+    BrandFollowersModule,
+    BrandMembersModule,
+    BrandMemberRequestsModule,
+    BrandOrgsModule,
+    BrandRolesModule,
+    BrandRequirementOrdersModule,
+    BrandSalesOrdersModule,
+    BrandProductionOrdersModule,
+    BrandApparelProductsModule,
+    BrandDeletedApparelProductsModule,
+    BrandApparelProductStocksModule,
+    // factory
+    FactoryEmployeesModule,
+    FactoryOrgsModule,
+    FactoryRolesModule,
+    FactoryFabricProductsModule,
+    FactoryFabricProductStocksModule,
+    FactoryProductionOrdersModule,
+    FactoryPickOrdersModule,
   },
   state,
   getters,

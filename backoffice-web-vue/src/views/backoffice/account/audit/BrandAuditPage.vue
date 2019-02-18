@@ -44,24 +44,24 @@
 
   import autoHeight from 'mixins/autoHeight'
 
-  import ApprovalStatus from "components/custom/ApprovalStatus.vue";
-  import BrandAuditDetailsPage from "./BrandAuditDetailsPage";
+  import ApprovalStatus from 'components/custom/ApprovalStatus.vue';
+  import BrandAuditDetailsPage from './BrandAuditDetailsPage';
 
   export default {
-    name: "BrandAuditPage",
+    name: 'BrandAuditPage',
     mixins: [autoHeight],
     components: {ApprovalStatus},
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onDetails(item) {
-        this.fn.openSlider("品牌审核资料明细", BrandAuditDetailsPage, item);
+        this.fn.openSlider('品牌审核资料明细', BrandAuditDetailsPage, item);
       },
       onSearch() {
         this._onSearch(0);

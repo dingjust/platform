@@ -21,12 +21,12 @@
 </template>
 
 <script>
-  import ColorBaseForm from "./ColorBaseForm";
+  import ColorBaseForm from './ColorBaseForm';
 
   export default {
-    name: "ColorDetailsPage",
+    name: 'ColorDetailsPage',
     components: {ColorBaseForm},
-    props: ["slotData", "isNewlyCreated", "preview"],
+    props: ['slotData', 'isNewlyCreated', 'preview'],
     methods: {
       onChangeState() {
         // TODO: 启用/禁用

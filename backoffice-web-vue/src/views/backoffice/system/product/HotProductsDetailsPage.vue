@@ -8,9 +8,9 @@
         </span>
       </div>
       <hot-products-base-form ref="baseForm"
-                          :slot-data="slotData"
-                          :read-only="true"
-                          :is-newly-created="isNewlyCreated">
+                              :slot-data="slotData"
+                              :read-only="true"
+                              :is-newly-created="isNewlyCreated">
       </hot-products-base-form>
     </el-card>
     <div class="pt-2"></div>
@@ -31,8 +31,8 @@
     <el-dialog title="更新基本信息" width="90%"
                :visible.sync="formDialogVisible" :close-on-click-modal="false" :modal="false">
       <hot-products-base-form :slot-data="slotData"
-                          :read-only="readOnly"
-                          :is-newly-created="isNewlyCreated">
+                              :read-only="readOnly"
+                              :is-newly-created="isNewlyCreated">
       </hot-products-base-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onSubmitBaseForm(slotData)">确 定</el-button>
@@ -49,9 +49,9 @@
     <el-dialog title="更新图片" width="90%"
                :visible.sync="mediasFormDialogVisible" :close-on-click-modal="false" :modal="false">
       <hot-products-media-form ref="mediaForm"
-                           :slot-data="slotData"
-                           :read-only="readOnly"
-                           :is-newly-created="isNewlyCreated">
+                               :slot-data="slotData"
+                               :read-only="readOnly"
+                               :is-newly-created="isNewlyCreated">
       </hot-products-media-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onSubmitMediaForm(slotData)">确 定</el-button>
@@ -63,9 +63,8 @@
 </template>
 
 <script>
-  import HotProductsBaseForm from "./HotProductsBaseForm";
-  import HotProductsMediaForm from "./HotProductsMediaForm";
-  import axios from "axios";
+  import HotProductsBaseForm from './HotProductsBaseForm';
+  import HotProductsMediaForm from './HotProductsMediaForm';
 
   export default {
     name: 'HotProductsDetailsPage',
@@ -81,25 +80,22 @@
       onUpdateMedias() {
         this.mediasFormDialogVisible = true;
       },
-      onSubmitBaseForm() {
+      async onSubmitBaseForm() {
         this.formDialogVisible = false;
         const baseForm = this.$refs['baseForm'];
-        console.log(baseForm.getValue());
-        axios.put("/djbackoffice/system/hot-products", baseForm.getValue())
-          .then(() => {
-            this.$message.success("保存成功");
-            this.fn.closeSlider(true);
-            //刷新主体数据
-          }).catch(error => {
-            this.$message.error("保存失败，原因：" + error.response.data.message);
-          }
-        );
+        const result = await this.$http.put('/djbackoffice/system/hot-products', baseForm.getValue());
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.fn.closeSlider(true);
       },
       onSubmitMediaForm() {
         this.$refs['mediaForm'].onSubmit();
       }
     },
-    computed: {},
     data() {
       return {
         formDialogVisible: false,

@@ -46,31 +46,31 @@
 
   import autoHeight from 'mixins/autoHeight'
 
-  import ApprovalStatus from "components/custom/ApprovalStatus.vue";
-  import {FactoryForm} from "./";
-  import FactoryDetailsPage from "./FactoryDetailsPage";
+  import ApprovalStatus from 'components/custom/ApprovalStatus.vue';
+  import {FactoryForm} from './';
+  import FactoryDetailsPage from './FactoryDetailsPage';
 
   export default {
-    name: "FactoryPage",
+    name: 'FactoryPage',
     mixins: [autoHeight],
     components: {FactoryForm, ApprovalStatus},
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("添加工厂", FactoryForm, this.formData);
+        this.fn.openSlider('添加工厂', FactoryForm, this.formData);
       },
       onDetails(item) {
-        this.fn.openSlider("工厂明细", FactoryDetailsPage, item);
+        this.fn.openSlider('工厂明细', FactoryDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
@@ -89,21 +89,21 @@
         this.search({keyword, page, size});
       },
       async changeActiveStatus(row) {
-        const result = await this.$http.delete("/djfactory/factory/" + row.uid);
-        if (result["errors"]) {
+        const result = await this.$http.delete('/djfactory/factory/' + row.uid);
+        if (result['errors']) {
           row.active = !row.active;
           if (row.active) {
-            this.$message.error("激活失败");
+            this.$message.error('激活失败');
           } else {
-            this.$message.error("禁用失败");
+            this.$message.error('禁用失败');
           }
           return;
         }
 
         if (row.active) {
-          this.$message.success("激活成功");
+          this.$message.success('激活成功');
         } else {
-          this.$message.success("禁用成功");
+          this.$message.success('禁用成功');
         }
       }
     },

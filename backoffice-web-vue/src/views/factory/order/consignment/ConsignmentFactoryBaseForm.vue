@@ -17,8 +17,8 @@
 
 <script>
   export default {
-    name: "ConsignmentFactoryBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'ConsignmentFactoryBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {},
     computed: {},
     data() {

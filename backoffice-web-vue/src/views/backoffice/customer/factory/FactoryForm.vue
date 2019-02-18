@@ -46,26 +46,26 @@
 
   const {mapActions} = createNamespacedHelpers('FactoriesModule');
 
-  import FactoryBaseForm from "./FactoryBaseForm";
-  import FactoryAccountForm from "./FactoryAccountForm";
-  import FactoryCertificateForm from "./FactoryCertificateForm";
+  import FactoryBaseForm from './FactoryBaseForm';
+  import FactoryAccountForm from './FactoryAccountForm';
+  import FactoryCertificateForm from './FactoryCertificateForm';
 
   export default {
-    name: "FactoryForm",
+    name: 'FactoryForm',
     components: {FactoryCertificateForm, FactoryAccountForm, FactoryBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
-        const accountForm = this.$refs["accountForm"];
+        const accountForm = this.$refs['accountForm'];
         accountForm.validate(valid => {
           if (!valid) {
             return false;
           }
 
-          const baseForm = this.$refs["baseForm"];
+          const baseForm = this.$refs['baseForm'];
           baseForm.validate(valid => {
             if (!valid) {
               return false;
@@ -87,12 +87,12 @@
         if (!this.isNewlyCreated) {
           request = this.$http.put;
         }
-        const result = await request("/djfactory/factory", value);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await request('/djfactory/factory', value);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success("创建成功，请在待审核页面查看");
+        this.$message.success('创建成功，请在待审核页面查看');
         this.refresh();
         this.fn.closeSlider();
       }

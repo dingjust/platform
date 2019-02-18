@@ -12,7 +12,8 @@
       </el-col>
       <el-col :span="4">
         <el-button type="primary" class="btn-block" @click="onSetPrice"
-                   :disabled="readOnly">统一设置供货价</el-button>
+                   :disabled="readOnly">统一设置供货价
+        </el-button>
       </el-col>
     </el-row>
     <el-table stripe show-summary
@@ -90,7 +91,6 @@
                    reserve-keyword
                    placeholder="请输入产品编码"
                    :remote-method="onFilterProducts"
-                   :loading="loading"
                    :disabled="readOnly">
           <el-option
             v-for="item in products"
@@ -108,8 +108,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   function removeRow(array, row) {
     const length = array.length;
     for (let i = 0; i < length; i++) {
@@ -177,82 +175,82 @@
         }
 
         if (!this.product) {
-          this.$message.error("请先选择产品");
+          this.$message.error('请先选择产品');
           return;
         }
 
         if (this.slotData.entries && this.slotData.entries.length) {
           const item = this.slotData.entries[0];
           if (item.product.baseProduct !== this.product) {
-            this.$message.error("只允许选择一款产品");
+            this.$message.error('只允许选择一款产品');
             return;
           }
         }
 
         if (this.product !== '') {
-          axios.get('/djbrand/product/variant', {
-            params: {
-              code: this.product
-            }
-          }).then(response => {
-            this.variants = response.data.content;
-            let formEntries = this.slotData.entries;
-            for (const item in this.variants) {
-              this.variants[item]['todo'] = true;
-              for (const form in formEntries) {
-                if (this.variants[item].code == formEntries[form].product.code) {
-                  this.variants[item]['todo'] = false;
-                  continue;
-                }
-              }
-            }
-            for (const item in this.variants) {
-              if (this.variants[item]['todo']) {
-                this.slotData.entries.push({
-                  basePrice: 0,
-                  quantity: 1,
-                  totalPrice: 0,
-                  product: {
-                    code: this.variants[item].code,
-                    skuID: this.variants[item].skuID,
-                    name: this.variants[item].name,
-                    color: this.variants[item].color,
-                    size: this.variants[item].size,
-                    price: this.variants[item].baseProduct.price,
-                    baseProduct: this.variants[item].baseProduct.code
-                  }
-                });
-              }
-            }
-
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
-          });
+          this._getProductVariants(this.product);
         }
 
         this.product = null;
       },
+      async _getProductVariants(product) {
+        const result = await this.$http.get('/djbrand/product/variant', {
+          code: product
+        });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.variants = result.content;
+        let formEntries = this.slotData.entries;
+        for (const item in this.variants) {
+          this.variants[item]['todo'] = true;
+          for (const form in formEntries) {
+            if (this.variants[item].code === formEntries[form].product.code) {
+              this.variants[item]['todo'] = false;
+              continue;
+            }
+          }
+        }
+        for (const item in this.variants) {
+          if (this.variants[item]['todo']) {
+            this.slotData.entries.push({
+              basePrice: 0,
+              quantity: 1,
+              totalPrice: 0,
+              product: {
+                code: this.variants[item].code,
+                skuID: this.variants[item].skuID,
+                name: this.variants[item].name,
+                color: this.variants[item].color,
+                size: this.variants[item].size,
+                price: this.variants[item].baseProduct.price,
+                baseProduct: this.variants[item].baseProduct.code
+              }
+            });
+          }
+        }
+      },
       onRemoveRow(row) {
         removeRow(this.slotData.entries, row);
       },
-      onFilterProducts(query) {
+      async onFilterProducts(query) {
         this.products = [];
         if (query !== '') {
-          axios.get('/djbrand/product', {
-            params: {
-              text: query,
-              page: 0,
-              size: 50
-            }
-          }).then(response => {
-            this.products = response.data.content;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result = await this.$http.get('/djbrand/product', {
+            text: query,
+            page: 0,
+            size: 50
           });
+
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.products = result.content;
         }
       },
       getSummaries(param) {
@@ -292,7 +290,7 @@
       },
       onSetPrice() {
         console.log(this.slotData.entries[0].basePrice);
-        this.$set(this.slotData, "entries", [...this.slotData.entries]);
+        this.$set(this.slotData, 'entries', [...this.slotData.entries]);
         for (const index in this.slotData.entries) {
           this.slotData.entries[index].basePrice = this.price;
         }
@@ -306,7 +304,6 @@
     },
     data() {
       return {
-        loading: false,
         product: null,
         products: [],
         variants: [],

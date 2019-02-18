@@ -9,6 +9,9 @@ description: Hybris B2B Commerce.
 # Read more about versioning at semver.org.
 version: 1.0.0+1
 
+flutter_localizations:
+    sdk: flutter
+
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
 

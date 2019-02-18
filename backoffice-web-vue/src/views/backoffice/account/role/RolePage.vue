@@ -10,7 +10,7 @@
           <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
         </el-button-group>
       </el-form>
-      <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
+      <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="UID" prop="uid"></el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="描述" prop="description"></el-table-column>
@@ -39,39 +39,39 @@
 
   const {mapGetters, mapActions} = createNamespacedHelpers('RolesModule');
 
-  import autoHeight from 'mixins/autoHeight'
+  import autoHeight from 'mixins/autoHeight';
 
-  import RoleForm from "./RoleForm";
-  import RoleDetailsPage from "./RoleDetailsPage";
+  import RoleForm from './RoleForm';
+  import RoleDetailsPage from './RoleDetailsPage';
 
   export default {
-    name: "RolePage",
+    name: 'RolePage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
-        page: "page"
+        page: 'page'
       })
     },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建角色", RoleForm, this.formData);
+        this.fn.openSlider('创建角色', RoleForm, this.formData);
       },
       async onDetails(item) {
-        const result = this.$http.get("/djbackoffice/role/" + item.uid + "/perms");
-        if (result["errors"]) {
-          this.$message.error("获取数据失败，原因：" + result["errors"][0].message);
+        const result = this.$http.get('/djbackoffice/role/' + item.uid + '/perms');
+        if (result['errors']) {
+          this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$set(item, "perms", result);
+        this.$set(item, 'perms', result);
 
-        this.fn.openSlider("角色明细", RoleDetailsPage, item);
+        this.fn.openSlider('角色明细', RoleDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
@@ -90,14 +90,14 @@
         this.search({keyword, page, size});
       }
     },
-    created() {
-      this.onSearch();
-    },
     data() {
       return {
         text: this.$store.state.RolesModule.keyword,
         formData: this.$store.state.RolesModule.formData,
       }
+    },
+    created() {
+      this.onSearch();
     }
   }
 </script>

@@ -5,8 +5,8 @@
 
 <script>
   export default {
-    name: "RequirementOrderBomForm",
-    props: ["slotData"],
+    name: 'RequirementOrderBomForm',
+    props: ['slotData'],
     methods: {
       onDelete(item) {
       },

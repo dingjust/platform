@@ -10,7 +10,8 @@
           <el-button type="primary" icon="el-icon-plus" @click="onNew">创建发料单</el-button>
         </el-button-group>
       </el-form>
-      <el-table ref="resultTable" stripe :data="page.content">
+      <el-table ref="resultTable" stripe :data="page.content"
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="编号" prop="code"></el-table-column>
         <el-table-column label="状态" prop="status">
           <template slot-scope="scope">
@@ -48,43 +49,43 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('FactoryPickOrdersModule');
+
+  import autoHeight from 'mixins/autoHeight';
+
   import PickOrderForm from './PickOrderForm';
   import PickOrderDetailsPage from './PickOrderDetailsPage';
 
-  const DEFAULT_ORDER_TYPE = 'WAIT_FOR_CONFIRM';
-
   export default {
     name: 'PickOrderPage',
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: 'page'
+      })
+    },
     methods: {
+      ...mapActions({
+        search: 'search'
+      }),
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider('创建发料单', PickOrderForm, {
-          id: null,
-          code: '',
-          order: {
-            id: '',
-            code: '',
-            entries: []
-          },
-          entries: [],
-          status: DEFAULT_ORDER_TYPE
-        });
+        this.fn.openSlider('创建发料单', PickOrderForm, this.formData);
       },
       onDetails(item) {
-        console.log(item);
         this.fn.openSlider('订单明细', PickOrderDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
 
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -92,40 +93,18 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-
-        axios.get('/djfactory/pickOrder', {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          console.log(JSON.stringify(error));
-          this.$message.error(error.response.data);
-        });
-      }
-    },
-    watch: {
-      '$store.state.sideSliderState': function (value) {
-        if (!value) {
-          this.onSearch();
-        }
+        const keyword = this.text;
+        this.search({keyword, page, size});
       }
     },
     data() {
       return {
-        text: '',
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
+        text: this.$store.state.FactoryPickOrdersModule.keyword,
+        formData: this.$store.state.FactoryPickOrdersModule.formData,
       };
+    },
+    created() {
+      this.onSearch();
     }
   };
 </script>

@@ -13,26 +13,26 @@
           <el-row :gutter="10">
             <el-col :span="12">
               <el-form-item label="生产订单编号">
-                <el-input v-model="query.productionOrderCode"></el-input>
+                <el-input v-model="queryFormData.productionOrderCode"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="需求订单编号">
-                <el-input v-model="query.requirementOrderCode"></el-input>
+                <el-input v-model="queryFormData.requirementOrderCode"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :span="12">
               <el-form-item label="供应商商品编号">
-                <el-input v-model="query.skuID"></el-input>
+                <el-input v-model="queryFormData.skuID"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="商家">
                 <el-select class="w-100" filterable remote reserve-keyword clearable
                            placeholder="请输入商家名称查询"
-                           v-model="query.belongTos"
+                           v-model="queryFormData.belongTos"
                            :remote-method="onFilterBrands"
                            multiple>
                   <el-option v-for="item in brands"
@@ -47,10 +47,10 @@
           <el-row :gutter="10">
             <el-col :span="12">
               <el-form-item label="状态">
-                <el-select v-model="query.statuses" placeholder="请选择"
+                <el-select v-model="queryFormData.statuses" placeholder="请选择"
                            multiple class="w-100">
                   <el-option
-                    v-for="item in statuses"
+                    v-for="item in statusOptions"
                     :key="item.value"
                     :label="item.text"
                     :value="item.value">
@@ -62,7 +62,7 @@
               <el-form-item label="工厂">
                 <el-select class="w-100" filterable remote reserve-keyword clearable
                            placeholder="请输入工厂名称查询"
-                           v-model="query.factory"
+                           v-model="queryFormData.factory"
                            :remote-method="onFilterCompanies"
                            multiple>
                   <el-option v-for="item in companies"
@@ -78,7 +78,7 @@
             <el-col :span="12">
               <el-form-item label="创建时间从">
                 <el-date-picker
-                  v-model="query.createdDateFrom"
+                  v-model="queryFormData.createdDateFrom"
                   value-format="yyyy-MM-dd"
                   type="date"
                   placeholder="请选择生产订单创建时间">
@@ -88,7 +88,7 @@
             <el-col :span="12">
               <el-form-item label="创建时间到">
                 <el-date-picker
-                  v-model="query.createdDateTo"
+                  v-model="queryFormData.createdDateTo"
                   value-format="yyyy-MM-dd"
                   type="date"
                   placeholder="请选择生产订单创建时间">
@@ -100,7 +100,7 @@
             <el-col :span="12">
               <el-form-item label="交货时间从">
                 <el-date-picker
-                  v-model="query.expectedDeliveryDateFrom"
+                  v-model="queryFormData.expectedDeliveryDateFrom"
                   value-format="yyyy-MM-dd"
                   type="date"
                   placeholder="请选择客户交期">
@@ -110,7 +110,7 @@
             <el-col :span="12">
               <el-form-item label="交货时间到">
                 <el-date-picker
-                  v-model="query.expectedDeliveryDateTo"
+                  v-model="queryFormData.expectedDeliveryDateTo"
                   value-format="yyyy-MM-dd"
                   type="date"
                   placeholder="请选择客户交期">
@@ -126,7 +126,7 @@
           <el-button type="primary" slot="reference">高级查询</el-button>
         </el-popover>
       </el-form>
-      <el-table ref="resultTable" stripe :data="page.content">
+      <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="生产订单编号" prop="code">
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
@@ -176,127 +176,90 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandProductionOrdersModule');
+
+  import autoHeight from 'mixins/autoHeight';
+
   import {ConsignmentForm, ConsignmentDetailsForm} from './';
 
   export default {
     name: 'ConsignmentPage',
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: 'page'
+      })
+    },
     methods: {
+      ...mapActions({
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
+      }),
       onSearch() {
         this._onSearch(0, this.page.size);
       },
       onNew() {
-        this.fn.openSlider('创建生产订单', ConsignmentForm, {
-          id: null,
-          code: '',
-          order: {
-            id: '',
-            code: '',
-            entries: []
-          },
-          assignedTo: {
-            uid: '',
-            name: ''
-          },
-          shippingAddress: {
-            fullname: "",
-            title: {
-              code: "",
-              name: ""
-            },
-            region: {
-              isocode: "",
-              name: ""
-            },
-            city: {
-              code: "",
-              name: ""
-            },
-            cityDistrict: {
-              code: "",
-              name: ""
-            },
-            line1: "",
-            remarks: ""
-          },
-          consignmentEntries: []
-        });
+        this.fn.openSlider('创建生产订单', ConsignmentForm, this.formData);
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
         }
       },
-      getCompanies(query) {
+      async getCompanies(query) {
         if (query !== '') {
-          axios.get('/djfactory/factory', {
-            params: {
-              text: query.trim()
-            }
-          }).then(response => {
-            this.companies = response.data.content;
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result = await this.$http.get('/djfactory/factory', {
+            text: query.trim()
           });
+
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+
+          this.companies = result.content;
         }
       },
       onFilterBrands(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getBrands(query);
           }, 200);
         }
       },
-      getBrands(query) {
-        axios.get("/djbrand/brand", {
-          params: {
-            text: query.trim()
-          }
-        }).then(response => {
-          this.brands = response.data.content;
-        }).catch(error => {
-          this.$message.error(error.response.data);
+      async getBrands(query) {
+        const results = await this.$http.get('/djbrand/brand', {
+          text: query.trim()
         });
+
+        this.brands = results.content;
       },
       onAdvancedSearch() {
         this.advancedSearch = true;
-        this._onAdvancedSearch(0, this.page.size)
+        this._onAdvancedSearch(0)
       },
       _onAdvancedSearch(page, size) {
-        const params = {
-          page: page,
-          size: size
-        };
-
-        axios.post("/djbrand/consignment/advancedSearch", this.query, {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+        const query = this.queryFormData;
+        this.searchAdvanced({query, page, size});
       },
-      onDetails(item) {
-        axios.get("/djbrand/consignment/" + item.code)
-          .then(response => {
-            this.fn.openSlider("生产订单明细", ConsignmentDetailsForm, response.data);
-          })
-          .catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          });
+      async onDetails(item) {
+        const result = await this.$http.get('/djbrand/consignment/' + item.code);
+        if (result['erorrs']) {
+          this.$message.error(result['erorrs'][0].message);
+          return;
+        }
+
+        this.fn.openSlider('生产订单明细', ConsignmentDetailsForm, result);
       },
       onPageSizeChanged(val) {
         this.reset();
 
-        this.page.size = val;
         if (this.advancedSearch) {
           this._onAdvancedSearch(0, val);
         } else {
@@ -305,9 +268,9 @@
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
-          this._onAdvancedSearch(val - 1, this.page.size);
+          this._onAdvancedSearch(val - 1);
         } else {
-          this._onSearch(val - 1, this.page.size);
+          this._onSearch(val - 1);
         }
       },
       reset() {
@@ -316,67 +279,24 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        console.log(this.text);
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-        console.log('params', JSON.stringify(params));
-        axios.get('/djbrand/consignment', {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          console.log(JSON.stringify(error));
-          this.$message.error(error.response.data);
-        });
-      }
-    },
-    watch: {
-      '$store.state.sideSliderState': function (value) {
-        if (!value) {
-          this.onSearch();
-        }
+        const keyword = this.text;
+        this.search({keyword, page, size});
       }
     },
     data() {
       return {
-        text: '',
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        },
-        query: {
-          productionOrderCode: "",
-          requirementOrderCode:"",
-          skuID: "",
-          statuses: [],
-          factory: [],
-          expectedDeliveryDateFrom: null,
-          expectedDeliveryDateTo: null,
-          createdDateFrom: null,
-          createdDateTo: null,
-          belongTos:[],
-        },
-        brands:[],
+        text: this.$store.state.BrandProductionOrdersModule.keyword,
+        statuses: this.$store.state.BrandProductionOrdersModule.statuses,
+        formData: this.$store.state.BrandProductionOrdersModule.formData,
+        queryFormData: this.$store.state.BrandProductionOrdersModule.queryFormData,
+        statusOptions: this.$store.state.BrandProductionOrdersModule.statusOptions,
+        brands: [],
         companies: [],
         advancedSearch: false,
-        statuses: [
-          {text: '待分配', value: 'WAIT_FOR_ALLOCATION'},
-          {text: '备料中', value: 'WAIT_FOR_PURCHASE'},
-          {text: '待裁剪', value: 'PENDING_CUTTING'},
-          {text: '裁剪中', value: 'CUTTING'},
-          {text: '车缝中', value: 'STITCHING'},
-          {text: '待验货', value: 'QC'},
-          {text: '待发货', value: 'PENDING_DELIVERY'},
-          {text: '已发货', value: 'DELIVERING'},
-          {text: '已完成', value: 'DELIVERY_COMPLETED'}
-        ],
       }
+    },
+    created() {
+      this.onSearch();
     }
   }
 </script>

@@ -17,8 +17,9 @@
           <el-button type="primary" size="mini" @click="onUpdateBrandCertificate">编辑</el-button>
         </span>
       </div>
-      <brand-certificate-form :slot-data="slotData" :read-only="true" :is-newly-created="false"></brand-certificate-form>
-      <el-carousel :interval="4000" type="card" >
+      <brand-certificate-form :slot-data="slotData" :read-only="true"
+                              :is-newly-created="false"></brand-certificate-form>
+      <el-carousel :interval="4000" type="card">
         <el-carousel-item v-for="media in slotData.certificate" :key="media.url">
           <img style="width:100%;height: 100%" :src="media.url">
         </el-carousel-item>
@@ -49,9 +50,9 @@
     <el-dialog title="更新认证信息" width="90%"
                :visible.sync="brandCertificateFormDialogVisible" :close-on-click-modal="false" :modal="false">
       <brand-certificate-form ref="BrandCertificateForm"
-                       :slot-data="slotData"
-                       :read-only="false"
-                       :is-newly-created="true">
+                              :slot-data="slotData"
+                              :read-only="false"
+                              :is-newly-created="true">
       </brand-certificate-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onSubmitCertificateForm(slotData)">确 定</el-button>
@@ -62,58 +63,43 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import BrandBaseForm from "./BrandBaseForm";
-  import BrandCertificateForm from "./BrandCertificateForm";
+  import BrandBaseForm from './BrandBaseForm';
+  import BrandCertificateForm from './BrandCertificateForm';
 
   export default {
-    name: "BrandDetailsPage",
-    props: ["slotData","isNewlyCreated"],
+    name: 'BrandDetailsPage',
+    props: ['slotData', 'isNewlyCreated'],
     components: {BrandCertificateForm, BrandBaseForm},
     methods: {
       onUpdateBrand() {
         this.brandFormDialogVisible = true;
       },
-      onUpdateBrandCertificate(){
+      onUpdateBrandCertificate() {
         this.brandCertificateFormDialogVisible = true;
       },
-      onSubmitBaseForm(data) {
-        const baseForm = this.$refs["BrandBaseForm"];
-        console.log(baseForm.getValue());
-        console.log(this.slotData);
-        axios.put("/djbrand/brand/uploadBase", baseForm.getValue())
-          .then(() => {
-            // Bus.$emit("refreshVal", "");
-            this.$message({
-              type: "success",
-              message: "保存成功"
-            });
-            this.fn.closeSlider();
-            // 刷新主体数据
-          })
-          .catch(error => {
-            this.$message.error(error.response);
-          });
+      async onSubmitBaseForm(data) {
+        const baseForm = this.$refs['BrandBaseForm'];
+        const result = await this.$http.put('/djbrand/brand/uploadBase', baseForm.getValue());
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.fn.closeSlider();
       },
-      onSubmitCertificateForm(data) {
-        const certificateForm = this.$refs["BrandCertificateForm"];
+      async onSubmitCertificateForm(data) {
+        const certificateForm = this.$refs['BrandCertificateForm'];
 
-        axios.put("/djbrand/brand/uploadCertificate", certificateForm.getValue())
-          .then(() => {
-            // Bus.$emit("refreshVal", "");
-            this.$message({
-              type: "success",
-              message: "保存成功"
-            });
+        const result = await this.$http.put('/djbrand/brand/uploadCertificate', certificateForm.getValue());
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-            this.$refs.BrandCertificateForm.onSubmit();
-
-            this.fn.closeSlider();
-            // 刷新主体数据
-          })
-          .catch(error => {
-            this.$message.error(error.response);
-          });
+        this.$message.success('保存成功');
+        this.$refs.BrandCertificateForm.onSubmit();
+        this.fn.closeSlider();
       },
       onClose() {
         this.fn.closeSlider();
@@ -122,7 +108,7 @@
     data() {
       return {
         brandFormDialogVisible: false,
-        brandCertificateFormDialogVisible:false
+        brandCertificateFormDialogVisible: false
       };
     }
   };

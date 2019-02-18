@@ -16,14 +16,14 @@
 </template>
 
 <script>
-  import {ConsignmentMixin} from "mixins";
+  import {ConsignmentMixin} from '@/mixins';
 
   export default {
-    name: "ConsignmentBaseForm",
-    props: ["slotData", "readOnly"],
+    name: 'ConsignmentBaseForm',
+    props: ['slotData', 'readOnly'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
       getValue() {
         return this.slotData;
