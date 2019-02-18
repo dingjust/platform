@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:b2b_commerce/src/my/my_client_services.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -96,6 +97,25 @@ final List<EnumModel> technologyList = [
   }),
 ];
 
+final List<EnumModel> productionAreaList = [
+  EnumModel.fromJson({
+    'code':'GuangDong',
+    'name':'广东省'
+  }),
+  EnumModel.fromJson({
+    'code':'BeiJing',
+    'name':'北京市'
+  }),
+  EnumModel.fromJson({
+    'code':'ZheJiang',
+    'name':'浙江省'
+  }),
+  EnumModel.fromJson({
+    'code':'ShangHai',
+    'name':'上海市'
+  }),
+];
+
 
 class RequirementOrderFrom extends StatefulWidget{
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
@@ -105,7 +125,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
   List<CategoryModel> _mojarSelected = [];
   List<CategoryModel> _categorySelected = [];
   List<EnumModel> _processingTypeSelected = [];
-  List<EnumModel> _technologySelected = [];
+  List<EnumModel> _productionAreaSelected = [];
   String mojar = '点击选取';
   String category = '点击选取';
   String processCount = '输入';
@@ -122,17 +142,30 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
   String isProvideSampleProduct = '点击选取';
   String isInvoice = '点击选取';
   String inspectionMethod = '点击选取';
+  bool _isRequirementPool = true;
+  String _productionArea = '点击选取';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('需求发布'),
+          actions: <Widget>[
+            GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Center(
+                    child: Text('导入商品'),
+                  ),
+                ),
+            )
+          ],
         ),
         body: Container(
             child: ListView(
               children: <Widget>[
                 _buildBody(context),
+                _buildCommitButton(context),
               ],
             )
         )
@@ -174,6 +207,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           child: Center(
             child: Column(
               children: <Widget>[
+                _buildProductionArea(context),
+                new Divider(),
                 _buildCooperationModes(context),
                 new Divider(),
                 _buildInspectionMethod(context),
@@ -457,13 +492,38 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           ),
           decoration: BoxDecoration(
             color: Colors.black12,
-            borderRadius: BorderRadius.circular(5),
           ),
         ),
         onTap: () {
           setState(() {
             _isShowMore = !_isShowMore;
           });
+        });
+  }
+
+  //生产地区倾向
+  Widget _buildProductionArea(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '生产地倾向',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              _productionArea,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          _showProductionAreaSelect();
         });
   }
 
@@ -595,6 +655,64 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         onTap: () {
           _neverOrderRemarks(context);
         });
+  }
+
+  //确认发布按钮
+  Widget _buildCommitButton(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+              height: 50,
+              margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              child: RaisedButton(
+                  color: Colors.orange,
+                  child: Text(
+                    '确定发布',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                  ),
+                  onPressed: () {
+
+                  }
+              )
+          ),
+          Container(
+            margin: EdgeInsets.all(0),
+            padding: EdgeInsets.all(0),
+            width: 200,
+            child: Center(
+              child: CheckboxListTile(
+                title: Text(
+                  '发布到需求池',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.grey
+                  ),
+                ),
+                value: _isRequirementPool,
+                onChanged: (T) {
+                  setState(() {
+                    _isRequirementPool = !_isRequirementPool;
+                  });
+                },
+              ),
+            ),
+          )
+        ],
+      ),
+      decoration: BoxDecoration(
+        color: Colors.black12,
+      ),
+    );
   }
 
   //大类
@@ -928,6 +1046,33 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         );
       },
     );
+  }
+
+  //生产地倾向
+  void _showProductionAreaSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 300,
+          child: EnumSelection(
+            enumModels: productionAreaList,
+            multiple: true,
+            enumSelect: _productionAreaSelected,
+          ),
+        );
+      },
+    ).then((val){
+      _productionArea = '';
+      if(_productionAreaSelected.isNotEmpty){
+        for(int i=0;i<_productionAreaSelected.length;i++){
+          _productionArea += _productionAreaSelected[i].name + ',';
+        }
+      }
+      setState(() {
+        _productionArea = _productionArea;
+      });
+    });
   }
 
 }
