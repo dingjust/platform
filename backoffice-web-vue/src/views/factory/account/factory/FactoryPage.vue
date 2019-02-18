@@ -140,9 +140,7 @@
 </template>
 
 <script>
-  import store from '../../../../store/index.js';
-  import axios from 'axios';
-  import CompanyMixin from '../../../../mixins/commerce/CompanyMixin';
+  import CompanyMixin from 'mixins/commerce/CompanyMixin';
 
   export default {
     name: 'FactoryPage',
@@ -150,49 +148,39 @@
     mixins: [CompanyMixin],
     components: {},
     methods: {
-      getCategories() {
-        axios
-          .get('/djbackoffice/product/category/majors')
-          .then(response => {
-            this.categories = response.data;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
+      async getCategories() {
+        this.categories = await this.$http.get('/djbackoffice/product/category/majors');
+      },
+      async getFactory() {
+        this.slotData = await this.$http.get('/djfactory/factory/findByUid');
       }
     },
     data() {
       return {
         slotData: {
-          address: "",
+          address: '',
           adeptAtCategories: [],
-          contactPerson: "",
-          contactPhone: "",
+          contactPerson: '',
+          contactPhone: '',
           id: null,
-          latheQuantity: "",
-          scaleRange: "",
-          monthlyCapacityRange: "",
+          latheQuantity: '',
+          scaleRange: '',
+          monthlyCapacityRange: '',
           cooperationModes: [],
-          name: "",
+          name: '',
           registrationDate: null,
-          uid: "",
-          taxNumber: "",
-          bankOfDeposit: "",
-          phone: "",
-          cooperativeBrand: ""
+          uid: '',
+          taxNumber: '',
+          bankOfDeposit: '',
+          phone: '',
+          cooperativeBrand: ''
         },
         categories: []
       };
     },
     created() {
       this.getCategories();
-      axios.get('/djfactory/factory/findByUid')
-        .then(response => {
-          this.slotData = response.data;
-        }).catch(error => {
-          this.$message.error('数据获取失败，原因：' + error.response.data.message);
-        }
-      );
+      this.getFactory();
     }
   };
 </script>

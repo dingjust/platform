@@ -55,45 +55,44 @@
 </template>
 
 <script>
-  import axios from "axios";
-
   export default {
     name: 'FabricProductBaseForm',
     props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
-      getColors() {
-        axios.get("/djbackoffice/product/color/all")
-          .then(response => {
-            this.colors = response.data;
-          })
-          .catch(error => {
-            this.$message.error(error.response.statusText);
-          });
+      async getColors() {
+        const result = await this.$http.get('/djbackoffice/product/color/all');
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.colors = result;
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
         }
       },
-      getCompanies(query) {
-        axios.get("/djfactory/factory", {
-          params: {
-            text: query.trim()
-          }
-        }).then(response => {
-          this.companies = response.data.content;
-        }).catch(error => {
-          this.$message.error(error.response.data);
+      async getCompanies(query) {
+        const result = await this.$http.get('/djfactory/factory', {
+          text: query.trim()
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.companies = result.content;
       }
     },
-    computed: {},
     created() {
       this.getColors();
       this.getCompanies();

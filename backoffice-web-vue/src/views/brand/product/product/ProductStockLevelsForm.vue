@@ -12,39 +12,34 @@
 </template>
 
 <script>
-import axios from "axios";
+  export default {
+    name: 'ProductStockLevelsForm',
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
+    methods: {
+      refresh() {
+        if (this.slotData.code) {
+          this.doRefresh();
+        }
+      },
+      async doRefresh() {
+        const result = await this.$http.get('/djbrand/product/inventories/' + this.slotData.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
 
-export default {
-  name: "ProductStockLevelsForm",
-  props: ["slotData", "readOnly", "isNewlyCreated"],
-  methods: {
-    refresh() {
-      if (this.slotData.code) {
-        this.doRefresh();
+        this.stockLevels = result;
       }
     },
-    doRefresh() {
-      axios
-        .get("/djbrand/product/inventories/" + this.slotData.code)
-        .then(response => {
-          this.stockLevels = response.data;
-        })
-        .catch(error => {
-          console.log(JSON.stringify(error));
-          this.$message.error(error.response.data);
-        });
+    data() {
+      return {
+        stockLevels: []
+      };
+    },
+    created() {
+      if (!this.isNewlyCreated) {
+        this.doRefresh();
+      }
     }
-  },
-  computed: {},
-  data() {
-    return {
-      stockLevels: []
-    };
-  },
-  created() {
-    if (!this.isNewlyCreated) {
-      this.doRefresh();
-    }
-  }
-};
+  };
 </script>

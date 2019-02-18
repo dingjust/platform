@@ -57,19 +57,19 @@
 </template>
 
 <script>
-  import {ConsignmentMixin} from "mixins";
+  import {ConsignmentMixin} from '@/mixins';
 
   export default {
-    name: "ConsignmentStatusBar",
-    props: ["status", "statusMap","statuDaysMap"],
+    name: 'ConsignmentStatusBar',
+    props: ['status', 'statusMap','statuDaysMap'],
     mixins: [ConsignmentMixin],
     methods: {
       showMaterial(statuDays){
         let flat = false;
         if(statuDays.MATERIAL_PREPARATION > 0){
-          if(this.status === "WAIT_FOR_PURCHASE" || this.status === "PENDING_CUTTING"){
+          if(this.status === 'WAIT_FOR_PURCHASE' || this.status === 'PENDING_CUTTING'){
             flat = true;
-          }else if(this.status === "CUTTING" && statuDays.CUTTING <= 0){
+          }else if(this.status === 'CUTTING' && statuDays.CUTTING <= 0){
             flat = true;
           }
         }
@@ -79,9 +79,9 @@
         let flat = false;
         console.log(statuDays);
         if(statuDays.CUTTING > 0){
-          if(this.status === "CUTTING"){
+          if(this.status === 'CUTTING'){
             flat = true;
-          }else if(this.status === "STITCHING" && statuDays.STITCHING <= 0){
+          }else if(this.status === 'STITCHING' && statuDays.STITCHING <= 0){
             flat = true;
           }
         }
@@ -90,9 +90,9 @@
       showStitching(statuDays){
         let flat = false;
         if(statuDays.STITCHING > 0){
-          if(this.status === "STITCHING"){
+          if(this.status === 'STITCHING'){
             flat = true;
-          }else if(this.status === "QC" && statuDays.INSPECTION <= 0){
+          }else if(this.status === 'QC' && statuDays.INSPECTION <= 0){
             flat = true;
           }
         }
@@ -101,9 +101,9 @@
       showInspection(statuDays){
         let flat = false;
         if(statuDays.INSPECTION > 0){
-          if(this.status === "QC"){
+          if(this.status === 'QC'){
             flat = true;
-          }else if(this.status === "PENDING_DELIVERY" && statuDays.DELIVERY <= 0){
+          }else if(this.status === 'PENDING_DELIVERY' && statuDays.DELIVERY <= 0){
             flat = true;
           }
         }
@@ -112,7 +112,7 @@
       showDelivery(statuDays){
         let flat = false;
         if(statuDays.DELIVERY > 0){
-          if(this.status === "PENDING_DELIVERY"){
+          if(this.status === 'PENDING_DELIVERY'){
             flat = true;
           }
         }

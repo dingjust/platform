@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import GroupBaseForm from "./GroupBaseForm";
+  import GroupBaseForm from './GroupBaseForm';
 
   export default {
     name: 'GroupDetailsPage',

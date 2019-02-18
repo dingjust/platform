@@ -36,8 +36,8 @@
 
 <script>
   export default {
-    name: "InventoryBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'InventoryBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
       validate(callback) {
         this.$refs['form'].validate(callback);
@@ -47,8 +47,8 @@
     data() {
       return {
         rules: {
-          available: [{required: true, message: "必填", trigger: "blur"}],
-          maxPreOrder: [{required: true, message: "必填", trigger: "blur"}]
+          available: [{required: true, message: '必填', trigger: 'blur'}],
+          maxPreOrder: [{required: true, message: '必填', trigger: 'blur'}]
         }
       };
     }

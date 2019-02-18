@@ -38,45 +38,38 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                      @size-change="onPageSizeChanged"
-                      @current-change="onCurrentPageChanged"
-                      :current-page="page.number + 1"
-                      :page-size="page.size"
-                      :page-count="page.totalPages"
-                      :total="page.totalElements">
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex';
-  const { mapGetters, mapActions } = createNamespacedHelpers('StylesModule');
+  import {createNamespacedHelpers} from 'vuex';
 
-  import axios from "axios";
+  const {mapGetters, mapActions} = createNamespacedHelpers('StylesModule');
+
   import autoHeight from 'mixins/autoHeight'
-  import StyleForm from "./StyleForm";
-  import StyleDetailsPage from "./StyleDetailsPage";
+  import StyleForm from './StyleForm';
+  import StyleDetailsPage from './StyleDetailsPage';
 
   export default {
-    name: "StylePage",
+    name: 'StylePage',
     mixins: [autoHeight],
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider('新增', StyleForm, {
-          id: null,
-          code: "",
-          name: "",
-          description: "",
-          sequence: 0,
-          active: true
-        });
+        this.fn.openSlider('新增', StyleForm, this.formData);
       },
       onDetails(item) {
         this.fn.openSlider('明细', StyleDetailsPage, item);
@@ -97,25 +90,29 @@
         const keyword = this.text;
         this.search({keyword, page, size});
       },
-      onUpdate(item) {
-        axios.put("/djbackoffice/product/style", item)
-          .then(() => {
-            this.$message.success("保存成功");
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+      async onUpdate(item) {
+        const result = await this.$http.put('/djbackoffice/product/style', item);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
       }
     },
     computed: {
       ...mapGetters({
-        page: "page",
+        page: 'page',
       }),
     },
     data() {
       return {
         text: this.$store.state.StylesModule.keyword,
+        formData: this.$store.state.StylesModule.formData
       }
+    },
+    created() {
+      this.search({keyword: '', page: 0});
     }
   }
 </script>

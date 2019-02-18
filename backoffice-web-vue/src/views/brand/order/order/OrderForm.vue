@@ -29,17 +29,23 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('BrandSalesOrdersModule');
+
   import OrderBaseForm from './OrderBaseForm';
-  import OrderEntriesForm from "./OrderEntriesForm";
-  import OrderDeliveryAddressForm from "./OrderDeliveryAddressForm";
-  import OrderDetailsPage from "./OrderDetailsPage";
+  import OrderEntriesForm from './OrderEntriesForm';
+  import OrderDeliveryAddressForm from './OrderDeliveryAddressForm';
+  import OrderDetailsPage from './OrderDetailsPage';
 
   export default {
     name: 'OrderForm',
     components: {OrderBaseForm, OrderEntriesForm, OrderDeliveryAddressForm, OrderDetailsPage},
     props: ['slotData'],
     methods: {
+      ...mapActions({
+        refresh: 'refresh'
+      }),
       onCancel() {
         this.fn.closeSlider();
       },
@@ -92,21 +98,11 @@
 
                 const address = this.slotData.deliveryAddress;
                 if (!address.region.isocode || !address.city.code) {
-                  this.$message.error("请输入省份和市区");
+                  this.$message.error('请输入省份和市区');
                   return false;
                 }
 
-                let formData = this.slotData;
-
-                axios.post('/djbrand/salesOrder', formData)
-                  .then(response => {
-                    this.$message.success("订单创建成功，订单编号： " + response.data);
-
-                    this.fn.closeSlider(true);
-                  }).catch(error => {
-                    this.$message.error(error.response.data);
-                  }
-                );
+                this._onSubmit();
 
                 return true;
               }
@@ -119,6 +115,19 @@
         });
       }
     },
+    async _onSubmit() {
+      let formData = this.slotData;
+
+      const result = await this.$http.post('/djbrand/salesOrder', formData);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+
+      this.$message.success('订单创建成功，订单编号： ' + result);
+      this.refresh();
+      this.fn.closeSlider(true);
+    },
     computed: {
       isNewlyCreated: function () {
         return this.slotData.id === null;
@@ -126,13 +135,6 @@
     },
     data() {
       return {
-        orderTypes: [{
-          code: 'SALES_ORDER',
-          name: '销售订单'
-        }, {
-          code: 'REQUIREMENT_ORDER',
-          name: '需求订单'
-        }],
         active: 0
       }
     }

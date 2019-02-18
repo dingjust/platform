@@ -66,59 +66,63 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import CategoryIconForm from "./CategoryIconForm";
-  import CategoryGroupMixin from "mixins/commerce/CategoryGroupMixin";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('CategoriesModule');
+
+  import CategoryIconForm from './CategoryIconForm';
+  import CategoryGroupMixin from 'mixins/commerce/CategoryGroupMixin';
 
   export default {
-    name: "CategoryForm",
+    name: 'CategoryForm',
     components: {CategoryIconForm},
-    mixins:[CategoryGroupMixin],
-    props: ["slotData", "readOnly"],
+    mixins: [CategoryGroupMixin],
+    props: ['slotData', 'readOnly'],
     methods: {
+      ...mapActions({
+        refresh: 'refresh'
+      }),
       onSubmit() {
         this.$refs.form.validate(valid => {
           if (!valid) {
             return false;
           }
 
-          let formData = {
-            name: this.slotData.name,
-            description: this.slotData.description,
-            parent: this.slotData.parent,
-            code: this.slotData.code,
-            group: this.slotData.group
-          };
-
-          axios.post("/djbackoffice/product/category", formData)
-            .then(() => {
-              this.$message({
-                type: "success",
-                message: "保存成功"
-              });
-              this.$refs["CategoryIconForm"].onSubmit();
-
-              this.fn.closeSlider(true);
-            }).catch(error => {
-              this.$message.error(error.response.data);
-            }
-          );
+          this._onSubmit();
 
           return true;
         });
       },
       onCancel() {
         this.fn.closeSlider(false);
+      },
+      async _onSubmit() {
+        let formData = {
+          name: this.slotData.name,
+          description: this.slotData.description,
+          parent: this.slotData.parent,
+          code: this.slotData.code,
+          group: this.slotData.group
+        };
+
+        const result = await this.$http.post('/djbackoffice/product/category', formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.$refs['CategoryIconForm'].onSubmit();
+        this.refresh();
+        this.fn.closeSlider(true);
       }
     },
-    computed: {},
     data() {
       return {
         rules: {
-          code: [{required: true, message: "必填", trigger: "blur"}],
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          code: [{required: true, message: '必填', trigger: 'blur'}],
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         },
-
       };
     }
   };

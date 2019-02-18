@@ -38,45 +38,44 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                      @size-change="onPageSizeChanged"
-                      @current-change="onCurrentPageChanged"
-                      :current-page="page.number + 1"
-                      :page-size="page.size"
-                      :page-count="page.totalPages"
-                      :total="page.totalElements">
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex';
-  const { mapGetters, mapActions } = createNamespacedHelpers('SizesModule');
+  import {createNamespacedHelpers} from 'vuex';
 
-  import axios from "axios";
+  const {mapGetters, mapActions} = createNamespacedHelpers('SizesModule');
+
   import autoHeight from 'mixins/autoHeight'
-  import SizeForm from "./SizeForm";
-  import SizeDetailsPage from "./SizeDetailsPage";
+
+  import SizeForm from './SizeForm';
+  import SizeDetailsPage from './SizeDetailsPage';
 
   export default {
-    name: "SizePage",
+    name: 'SizePage',
     mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: 'page'
+      })
+    },
     methods: {
       ...mapActions({
-        search: "search"
+        search: 'search'
       }),
       onSearch() {
         this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider('新增', SizeForm, {
-          id: null,
-          code: "",
-          name: "",
-          description: "",
-          sequence: 0,
-          active: true
-        });
+        this.fn.openSlider('新增', SizeForm, this.formData);
       },
       onDetails(item) {
         this.fn.openSlider('明细', SizeDetailsPage, item);
@@ -97,25 +96,24 @@
         const keyword = this.text;
         this.search({keyword, page, size});
       },
-      onUpdate(item) {
-        axios.put("/djbackoffice/product/size", item)
-          .then(() => {
-            this.$message.success("保存成功");
-          }).catch(error => {
-            this.$message.error(error.response.data);
-          }
-        );
+      async onUpdate(item) {
+        const result = await this.$http.put('/djbackoffice/product/size', item);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
       }
-    },
-    computed: {
-      ...mapGetters({
-        page: "page"
-      })
     },
     data() {
       return {
         text: this.$store.state.SizesModule.keyword,
+        formData: this.$store.state.SizesModule.formData
       }
+    },
+    created() {
+      this.search({keyword: '', page: 0});
     }
   }
 </script>

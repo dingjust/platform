@@ -8,8 +8,8 @@
 
 <script>
   export default {
-    name: "ConsignmentContractsForm",
-    props: ["slotData"],
+    name: 'ConsignmentContractsForm',
+    props: ['slotData'],
     methods: {},
     computed: {},
     data() {

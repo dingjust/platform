@@ -30,46 +30,44 @@
 </template>
 
 <script>
-  import {OrderMixin} from "mixins";
-  import axios from "axios";
+  import {OrderMixin} from '@/mixins';
 
   export default {
-    name: "OrderBaseForm",
-    props: ["slotData", "readOnly"],
+    name: 'OrderBaseForm',
+    props: ['slotData', 'readOnly'],
     mixins: [OrderMixin],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
       onFilterCompanies(query) {
         this.companies = [];
-        if (query && query !== "") {
+        if (query && query !== '') {
           setTimeout(() => {
             this.getCompanies(query);
           }, 200);
         }
       },
-      getCompanies(query) {
-        axios.get("/djbrand/brand", {
-          params: {
-            text: query.trim()
-          }
-        }).then(response => {
-          this.companies = response.data.content;
-          console.log(this.companies);
-        }).catch(error => {
-          this.$message.error(error.response.data);
+      async getCompanies(query) {
+        const result = await this.$http.get('/djbrand/brand', {
+          text: query.trim()
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.companies = result.content;
       }
     },
-    computed: {},
     data() {
       return {
         companies: []
       }
     },
     created() {
-      this.getCompanies("");
+      this.getCompanies('');
     }
   }
 </script>

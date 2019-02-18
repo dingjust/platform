@@ -24,8 +24,8 @@
 </template>
 <script>
   export default {
-    name: "CarouselMediaForm",
-    props: ["slotData", "isNewlyCreated"],
+    name: 'CarouselMediaForm',
+    props: ['slotData', 'isNewlyCreated'],
     methods: {
       getValue() {
         return this.slotData;
@@ -34,30 +34,30 @@
         this.$refs.uploadForm.submit();
       },
       onUploadSuccess(response, file, files) {
-        if (response === "") {
-          this.$message.success("上传成功");
+        if (response === '') {
+          this.$message.success('上传成功');
           this.$refs.uploadForm.clearFiles();
           this.fn.closeSlider();
         }
       },
       onUploadError(error, file, files) {
-        let msg = "";
+        let msg = '';
         if (file.size >= (1024 * 50)) {
-          msg = "，上传的文件不能超过50KB"
+          msg = '，上传的文件不能超过50KB'
         }
-        this.$message.error("上传失败" + msg);
+        this.$message.error('上传失败' + msg);
       },
       onUploading(event, file, files) {
-        this.$message("正在上传，请稍等");
+        this.$message('正在上传，请稍等');
       },
       beforeUpload(file) {
         let flat = true;
-        if (file.type != "image/png" && file.type != "image/jpeg") {
-          this.$message.error("只能上传jpg/png文件");
+        if (file.type != 'image/png' && file.type != 'image/jpeg') {
+          this.$message.error('只能上传jpg/png文件');
           flat = false;
         }
         if (file.size > 1024*50) {
-          this.$message.error("上传的文件不能超过50KB");
+          this.$message.error('上传的文件不能超过50KB');
           flat = false;
         }
         return flat;
@@ -72,7 +72,7 @@
     },
     data() {
       return {
-        uploadUrl: "/djbackoffice/system/partners/updateMedia",
+        uploadUrl: '/djbackoffice/system/partners/updateMedia',
         files: []
       }
     }

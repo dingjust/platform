@@ -2,12 +2,12 @@
   export default {
     methods: {
       getErrorMessage(error) {
-        const errors = error.response.data["errors"] || [];
+        const errors = error.response.data['errors'] || [];
         if (errors && errors.length) {
           return errors[0].message;
         }
 
-        return "";
+        return '';
       }
     },
     data() {

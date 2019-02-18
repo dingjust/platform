@@ -3,10 +3,52 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import users from './modules/users';
-import colors from './modules/colors';
-import sizes from './modules/sizes';
-import styles from './modules/styles';
+import {
+  EnumsModule,
+  UsersModule,
+  UserGroupsModule,
+  RolesModule,
+  EmployeesModule,
+  FactoriesModule,
+  BrandsModule,
+  AuditFactoriesModule,
+  AuditBrandsModule,
+  ColorsModule,
+  SizesModule,
+  StylesModule,
+  CategoriesModule,
+  FabricProductsModule,
+  ApparelProductsModule,
+  RequirementOrdersModule,
+  SalesOrdersModule,
+  ProductionOrdersModule,
+  PickOrdersModule
+} from './modules';
+
+import {
+  BrandEmployeesModule,
+  BrandFollowersModule,
+  BrandMembersModule,
+  BrandMemberRequestsModule,
+  BrandOrgsModule,
+  BrandRolesModule,
+  BrandRequirementOrdersModule,
+  BrandSalesOrdersModule,
+  BrandProductionOrdersModule,
+  BrandApparelProductsModule,
+  BrandDeletedApparelProductsModule,
+  BrandApparelProductStocksModule,
+} from './brand/modules';
+
+import {
+  FactoryEmployeesModule,
+  FactoryOrgsModule,
+  FactoryRolesModule,
+  FactoryFabricProductsModule,
+  FactoryFabricProductStocksModule,
+  FactoryProductionOrdersModule,
+  FactoryPickOrdersModule,
+} from './factory/modules';
 
 // 状态管理
 const state = {
@@ -33,13 +75,50 @@ const actions = {
 
 export default new Vuex.Store({
   modules: {
-    UsersModule: users,
-    ColorsModule: colors,
-    SizesModule: sizes,
-    StylesModule: styles,
+    EnumsModule,
+    // tenant
+    UsersModule,
+    UserGroupsModule,
+    RolesModule,
+    EmployeesModule,
+    FactoriesModule,
+    BrandsModule,
+    AuditFactoriesModule,
+    AuditBrandsModule,
+    ColorsModule,
+    SizesModule,
+    StylesModule,
+    CategoriesModule,
+    FabricProductsModule,
+    ApparelProductsModule,
+    RequirementOrdersModule,
+    SalesOrdersModule,
+    ProductionOrdersModule,
+    PickOrdersModule,
+    // brand
+    BrandEmployeesModule,
+    BrandFollowersModule,
+    BrandMembersModule,
+    BrandMemberRequestsModule,
+    BrandOrgsModule,
+    BrandRolesModule,
+    BrandRequirementOrdersModule,
+    BrandSalesOrdersModule,
+    BrandProductionOrdersModule,
+    BrandApparelProductsModule,
+    BrandDeletedApparelProductsModule,
+    BrandApparelProductStocksModule,
+    // factory
+    FactoryEmployeesModule,
+    FactoryOrgsModule,
+    FactoryRolesModule,
+    FactoryFabricProductsModule,
+    FactoryFabricProductStocksModule,
+    FactoryProductionOrdersModule,
+    FactoryPickOrdersModule,
   },
   state,
   getters,
   mutations,
   actions
-})
+});

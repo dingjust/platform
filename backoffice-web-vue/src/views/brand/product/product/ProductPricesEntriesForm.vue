@@ -54,7 +54,6 @@
 </template>
 
 <script>
-
   function removeRow(array, row) {
     const length = array.length;
     for (let i = 0; i < length; i++) {
@@ -80,7 +79,7 @@
     methods: {
       checkData(min, max) {
         if (max <= min) {
-          this.$message.error("非会员起订价（最大值）必须大于非会员起订价（最小值）");
+          this.$message.error('非会员起订价（最大值）必须大于非会员起订价（最小值）');
           return false;
         }
       },

@@ -23,25 +23,27 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex';
+  import {createNamespacedHelpers} from 'vuex';
 
-  import ColorBaseForm from "./ColorBaseForm";
+  const {mapActions} = createNamespacedHelpers('ColorsModule');
+
+  import ColorBaseForm from './ColorBaseForm';
 
   export default {
-    name: "ColorForm",
+    name: 'ColorForm',
     components: {ColorBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     methods: {
       ...mapActions({
-        refresh: "ColorsModule/refresh"
+        refresh: 'refresh'
       }),
       onSubmit() {
-        this.$refs["baseForm"].validate(valid => {
+        this.$refs['baseForm'].validate(valid => {
           if (!valid) {
             return false;
           }
 
-          this._create(this.slotData);
+          this._onSubmit(this.slotData);
 
           return true;
         });
@@ -49,14 +51,14 @@
       onCancel() {
         this.fn.closeSlider();
       },
-      async _create(item) {
-        const response = await this.$http.post("/djbackoffice/product/color", item);
-        if (response["errors"]) {
-          this.$message.error(response["errors"][0].message);
+      async _onSubmit() {
+        const response = await this.$http.post('/djbackoffice/product/color', this.slotData);
+        if (response['errors']) {
+          this.$message.error(response['errors'][0].message);
           return;
         }
 
-        this.$message.success("保存成功");
+        this.$message.success('保存成功');
         this.refresh();
         this.fn.closeSlider(true);
       }
@@ -69,8 +71,8 @@
     data() {
       return {
         rules: {
-          code: [{required: true, message: "必填", trigger: "blur"}],
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          code: [{required: true, message: '必填', trigger: 'blur'}],
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         }
       };
     }

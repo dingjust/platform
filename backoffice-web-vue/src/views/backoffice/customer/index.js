@@ -1,9 +1,7 @@
-import BrandPage from "./brand/BrandPage";
-import FactoryPage from "./factory/FactoryPage";
-import MembershipPage from "./member/MembershipPage";
+import BrandPage from './brand/BrandPage';
+import FactoryPage from './factory/FactoryPage';
 
 export {
   BrandPage,
-  FactoryPage,
-  MembershipPage
+  FactoryPage
 }

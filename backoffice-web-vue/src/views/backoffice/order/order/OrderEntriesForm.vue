@@ -87,8 +87,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   function removeRow(array, row) {
     const length = array.length;
     for (let i = 0; i < length; i++) {
@@ -142,13 +140,13 @@
       },
       onAddRow() {
         // 验证之前添加的行是否齐全
-        console.log("adding row....");
+        console.log('adding row....');
         if (!this._validateRows()) {
           return;
         }
 
         if (!this.product) {
-          this.$message.error("请先选择产品");
+          this.$message.error('请先选择产品');
           return;
         }
         this.product.todoAdd = true;
@@ -174,26 +172,22 @@
       },
       onRemoveRow(row) {
         removeRow(this.slotData.entries, row);
-      }
-      ,
-      onFilterProducts(query) {
+      },
+      async onFilterProducts(query) {
         this.products = [];
         if (query !== '') {
-          axios.get('/djbackoffice/product/variant', {
-            params: {
-              code: query
-            }
-          }).then(response => {
-            this.products = response.data.content;
-          }).catch(error => {
-            console.log(JSON.stringify(error));
-            this.$message.error(error.response.data);
-          }).finally(() => {
-            this.loading = false;
+          const result = await this.$http.get('/djbackoffice/product/variant', {
+            code: query
           });
+
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+
+          this.products = result.content;
         }
-      }
-      ,
+      },
       getSummaries(param) {
         const {columns, data} = param;
         const sums = [];

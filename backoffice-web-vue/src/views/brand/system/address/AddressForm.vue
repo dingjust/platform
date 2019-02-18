@@ -21,7 +21,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import AddressBaseForm from './AddressBaseForm';
 
   export default {
@@ -30,29 +29,32 @@
     components: {AddressBaseForm},
     methods: {
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
           }
-          let request = axios.post;
-          if (!this.isNewlyCreated) {
-            request = axios.put;
-          }
 
-          console.log(JSON.stringify(this.slotData));
-          request("/djbrand/system/address", this.slotData)
-            .then(() => {
-              this.$message.success("创建成功");
-
-              // 刷新主体数据
-              this.fn.closeSlider(true);
-            }).catch(error => {
-            this.$message.error(error.response.data);
-          });
+          this._onSubmit();
 
           return true;
         });
+      },
+      async _onSubmit() {
+        let request = this.$http.post;
+        if (!this.isNewlyCreated) {
+          request = this.$http.put;
+        }
+
+        const result = await request('/djbrand/system/address', this.slotData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('创建成功');
+        // 刷新主体数据
+        this.fn.closeSlider(true);
       },
       onCancel() {
         this.fn.closeSlider();
@@ -71,9 +73,7 @@
       }
     },
     data() {
-      return {
-
-      }
+      return {}
     }
   }
 </script>

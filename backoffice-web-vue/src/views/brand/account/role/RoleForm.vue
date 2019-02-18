@@ -23,44 +23,54 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import RoleBaseForm from "./RoleBaseForm";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('BrandRolesModule');
+
+  import RoleBaseForm from './RoleBaseForm';
 
   export default {
-    name: "RoleForm",
+    name: 'RoleForm',
     components: {RoleBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
+    computed: {
+      isNewlyCreated: function () {
+        return this.slotData.id === null;
+      }
+    },
     methods: {
+      ...mapActions({
+        refresh: 'refresh'
+      }),
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
           }
-          let request = axios.post;
-          if (!this.isNewlyCreated) {
-            request = axios.put;
-          }
-          request("/djbrand/role", this.slotData)
-            .then(() => {
-              this.$message.success("保存成功");
 
-              this.fn.closeSlider(true);
-            }).catch(error => {
-              this.$message.error("保存失败，原因：" + error.response.data.message);
-            }
-          );
+          this._onSubmit();
 
           return true;
         });
       },
       onCancel() {
         this.fn.closeSlider();
-      }
-    },
-    computed: {
-      isNewlyCreated: function () {
-        return this.slotData.id === null;
+      },
+      async _onSubmit() {
+        let request = this.$http.post;
+        if (!this.isNewlyCreated) {
+          request = this.$http.put;
+        }
+        const result = await request('/djbrand/role', this.slotData);
+        if (result['errors']) {
+          this.$message.error('保存失败，原因：' + result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.refresh();
+        this.fn.closeSlider(true);
       }
     },
     data() {

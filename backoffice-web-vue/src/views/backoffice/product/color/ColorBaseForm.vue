@@ -41,18 +41,18 @@
 
 <script>
   export default {
-    name: "ColorBaseForm",
-    props: ["slotData", "readOnly", "isNewlyCreated"],
+    name: 'ColorBaseForm',
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
     },
     data() {
       return {
         rules: {
-          code: [{required: true, message: "必填", trigger: "blur"}],
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          code: [{required: true, message: '必填', trigger: 'blur'}],
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         }
       };
     }

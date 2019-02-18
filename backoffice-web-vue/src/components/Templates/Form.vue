@@ -16,14 +16,14 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from 'axios';
 
   export default {
-    name: "XXXForm",
-    props: ["slotData"],
+    name: 'XXXForm',
+    props: ['slotData'],
     methods: {
       onSubmit() {
-        this.$refs["form"].validate(valid => {
+        this.$refs['form'].validate(valid => {
           if (!valid) {
             return false;
           }
@@ -32,11 +32,11 @@
             request = axios.put;
           }
           // TODO: url
-          request("/djbackoffice/xxx/xxx", this.slotData)
+          request('/djbackoffice/xxx/xxx', this.slotData)
             .then(() => {
               this.$message({
-                type: "success",
-                message: "保存成功"
+                type: 'success',
+                message: '保存成功'
               });
               this.fn.closeSlider(true);
             }).catch(error => {
@@ -58,7 +58,7 @@
     data() {
       return {
         rules: {
-          /*name: [{required: true, message: "必填", trigger: "blur"}]*/
+          /*name: [{required: true, message: '必填', trigger: 'blur'}]*/
         }
       };
     }

@@ -10,7 +10,6 @@ export default {
   },
 
   methods: {
-
     getAutoHeight (el, offsetTop) {
       let height = 0
 

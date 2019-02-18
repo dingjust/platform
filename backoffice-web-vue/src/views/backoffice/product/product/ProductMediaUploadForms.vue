@@ -44,19 +44,19 @@
 </template>
 
 <script>
-  import ProductMediaEntryUploadForm from "./ProductMediaEntryUploadForm";
+  import ProductMediaEntryUploadForm from './ProductMediaEntryUploadForm';
 
   export default {
-    name: "ProductMediaUploadForms",
+    name: 'ProductMediaUploadForms',
     components: {ProductMediaEntryUploadForm},
-    props: ["slotData", "readOnly", "isNewlyCreated"],
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       onSubmit() {
-        this.$refs["masterPictureForm"].onSubmit();
-        this.$refs["normalPictureForm"].onSubmit();
-        this.$refs["detailPictureForm"].onSubmit();
-        this.$refs["bomForm"].onSubmit();
-        this.$refs["technicalDocumentsForm"].onSubmit();
+        this.$refs['masterPictureForm'].onSubmit();
+        this.$refs['normalPictureForm'].onSubmit();
+        this.$refs['detailPictureForm'].onSubmit();
+        this.$refs['bomForm'].onSubmit();
+        this.$refs['technicalDocumentsForm'].onSubmit();
       }
     },
     computed: {
@@ -64,8 +64,8 @@
         return {
           code: this.slotData.code,
           format: {
-            value: "masterPicture",
-            label: "缩略图"
+            value: 'masterPicture',
+            label: '缩略图'
           }
         }
       },
@@ -73,8 +73,8 @@
         return {
           code: this.slotData.code,
           format: {
-            value: "normalPicture",
-            label: "主图"
+            value: 'normalPicture',
+            label: '主图'
           }
         }
       },
@@ -82,8 +82,8 @@
         return {
           code: this.slotData.code,
           format: {
-            value: "detailPicture",
-            label: "详细图"
+            value: 'detailPicture',
+            label: '详细图'
           }
         }
       },
@@ -91,8 +91,8 @@
         return {
           code: this.slotData.code,
           format: {
-            value: "bom",
-            label: "BOM文件"
+            value: 'bom',
+            label: 'BOM文件'
           }
         }
       },
@@ -100,8 +100,8 @@
         return {
           code: this.slotData.code,
           format: {
-            value: "technicalDocuments",
-            label: "技术文件"
+            value: 'technicalDocuments',
+            label: '技术文件'
           }
         }
       }

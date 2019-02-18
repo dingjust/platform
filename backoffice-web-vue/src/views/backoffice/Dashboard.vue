@@ -125,7 +125,6 @@
   import BrandCardLineChart from './dashboard/BrandCardLineChart';
   import FactoryCardLineChart from './dashboard/FactoryCardLineChart';
   import TrafficStatisticsChart from './dashboard/TrafficStatisticsChart';
-  import axios from "axios";
 
   export default {
     name: 'BackofficeDashboard',
@@ -146,7 +145,7 @@
       }
     },
     mounted() {
-      /*axios.get("/djbackoffice/report/statistics/dashboard")
+      /*axios.get('/djbackoffice/report/statistics/dashboard')
         .then(response =>{
           console.log(response.data);
           this.product = response.data.allProduct;
@@ -154,7 +153,7 @@
           this.brand = response.data.allBrand;
           this.factory = response.data.allFactory;
         }).catch(error =>{
-        this.$message.error("获取数据失败：" + error.response.data);
+        this.$message.error('获取数据失败：' + error.response.data);
       });*/
     },
   }

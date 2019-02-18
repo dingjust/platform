@@ -35,11 +35,11 @@
 </template>
 <script>
   export default {
-    name: "LoginPage",
+    name: 'LoginPage',
     data() {
       return {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       }
     },
     methods: {
@@ -47,7 +47,7 @@
         const username = this.username;
         const password = this.password;
 
-        this.$store.dispatch("login", {username, password});
+        this.$store.dispatch('login', {username, password});
       }
     }
   }

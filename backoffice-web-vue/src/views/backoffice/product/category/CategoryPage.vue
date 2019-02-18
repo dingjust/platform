@@ -12,7 +12,8 @@
     <el-card>
       <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
       <div class="pt-2"></div>
-      <el-tree ref="tree" node-key="id" :default-expand-all="true" :data="results" :props="defaultProps" :expand-on-click-node="false"
+      <el-tree ref="tree" node-key="id" :default-expand-all="true" :data="items" :props="defaultProps"
+               :expand-on-click-node="false"
                :filter-node-method="onFilter">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label }}</span>
@@ -35,103 +36,102 @@
     </el-card>
 
     <el-dialog title="更新图标" width="90%"
-               :visible.sync="IconFormDialogVisible" :close-on-click-modal="false" :modal="false">
+               :visible.sync="iconFormDialogVisible" :close-on-click-modal="false" :modal="false">
       <category-icon-form ref="iconForm"
-                          :slot-data="rowdata">
+                          :slot-data="rowData">
       </category-icon-form>
       <div>
-      <template>
-        <img :src="rowdata.thumbnail"/>
-      </template>
-    </div>
+        <template>
+          <img :src="rowData.thumbnail"/>
+        </template>
+      </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onSubmitIconForm(rowdata)">确 定</el-button>
-        <el-button @click="IconFormDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmitIconForm(rowData)">确 定</el-button>
+        <el-button @click="iconFormDialogVisible = false">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
 
-  import {CategoryForm,CategoryDetailPage} from "./";
-  import CategoryIconForm from "./CategoryIconForm";
-  import CategoryProductsPage from "./CategoryProductsPage";
+  const {mapGetters, mapActions} = createNamespacedHelpers('CategoriesModule');
+
+  import {
+    CategoryForm,
+    CategoryDetailPage,
+    CategoryIconForm,
+    CategoryProductsPage
+  } from './';
 
   export default {
-    components: {CategoryIconForm,CategoryProductsPage},
+    components: {CategoryIconForm, CategoryProductsPage},
+    computed: {
+      ...mapGetters({
+        items: 'items'
+      })
+    },
+    methods: {
+      ...mapActions({
+        search: 'search'
+      }),
+      onFilter(value, data) {
+        if (!value) {
+          return true;
+        }
+
+        return data.name.indexOf(value) !== -1;
+      },
+      onSearch() {
+        this.search();
+      },
+      onAppend(data) {
+        if (!data.children) {
+          this.$set(data, 'children', []);
+        }
+
+        this.formData['parent'] = {
+          code: data.code,
+          name: data.name
+        };
+
+        this.fn.openSlider('添加分类', CategoryForm, this.formData);
+      },
+      onUpdateIcon(data) {
+        // console.log(data);
+        this.rowData = data;
+        this.iconFormDialogVisible = true;
+      },
+      onDetail(data) {
+        // console.log(data);
+        this.fn.openSlider('详情', CategoryDetailPage, data);
+      },
+      onSubmitIconForm(rowData) {
+        // console.log(rowData);
+        this.$refs['iconForm'].onSubmit();
+        this.iconFormDialogVisible = false;
+        this.fn.closeSlider();
+      },
+      onProducts(data) {
+        this.fn.openSlider('查看产品', CategoryProductsPage, data);
+      }
+    },
     watch: {
       filterText(val) {
         this.$refs['tree'].filter(val);
       },
-      "$store.state.sideSliderState": function (value) {
-        if (!value) {
-          this.onSearch();
-        }
-      }
-    },
-    methods: {
-      onFilter(value, data) {
-        if (!value) return true;
-        return data.name.indexOf(value) !== -1;
-      },
-      onSearch() {
-        axios.get("/djbackoffice/product/category/categories")
-          .then(response => {
-            console.log(response.data);
-            this.results = response.data;
-          }).catch(error => {
-          console.error(JSON.stringify(error));
-          this.$message.error(error.response.statusText);
-        });
-      },
-      onAppend(data) {
-        if (!data.children) {
-          this.$set(data, "children", []);
-        }
-
-        this.fn.openSlider("添加分类", CategoryForm, {
-          id: null,
-          code: "",
-          name: "",
-          group: "",
-          description: "",
-          parent: {
-            code: data.code,
-            name: data.name
-          }
-        });
-      },
-      onUpdateIcon(data) {
-        console.log(data);
-        this.rowdata = data;
-        this.IconFormDialogVisible = true;
-      },
-      onDetail(data){
-        console.log(data);
-        this.fn.openSlider("详情", CategoryDetailPage, data);
-      },
-      onSubmitIconForm(rowdata) {
-        console.log(rowdata);
-        this.$refs["iconForm"].onSubmit();
-        this.IconFormDialogVisible = false;
-        this.fn.closeSlider();
-      },
-      onProducts(data){
-        this.fn.openSlider("查看产品", CategoryProductsPage, data);
-      }
     },
     data() {
       return {
-        filterText: "",
-        results: [],
+        filterText: '',
         defaultProps: {
-          children: "children",
-          label: "name"
+          children: 'children',
+          label: 'name'
         },
-        IconFormDialogVisible: false,
-        rowdata: []
+        iconFormDialogVisible: false,
+        formData: this.$store.state.CategoriesModule.formData,
+        rowData: []
       };
     },
     created() {

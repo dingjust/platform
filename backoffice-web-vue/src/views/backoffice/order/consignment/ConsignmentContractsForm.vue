@@ -17,38 +17,39 @@
 
 <script>
   export default {
-    name: "ConsignmentContractsForm",
-    props: ["slotData"],
+    name: 'ConsignmentContractsForm',
+    props: ['slotData'],
     methods: {
       onDelete(item) {
-        this.$confirm("此操作将永久删除该图片, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          axios.delete("/djbrand/product/media/" + item.id, {
-            params: {
-              code: this.slotData.code
-            }
-          }).then(() => {
-            this.refresh();
-            this.$message.success("图片删除成功");
-          }).catch(error => {
-            this.$message.error("图片删除失败");
-          });
+        this.$confirm('此操作将永久删除该图片, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => this._delete(item));
+      },
+      async _delete(item) {
+        const result = await this.$http.delete('/djbrand/product/media/' + item.id, {
+          code: this.slotData.code
         });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.refresh();
+        this.$message.success('图片删除成功');
       },
       isPicture(group) {
-        return !(group.name === "contracts");
+        return !(group.name === 'contracts');
       },
       getGroupName(group) {
-        var result = "";
+        let result = '';
         switch (group) {
-          case "contracts":
-            result = "合同";
+          case 'contracts':
+            result = '合同';
             break;
-          case "bom":
-            result = "BOM文件";
+          case 'bom':
+            result = 'BOM文件';
             break;
           default:
             break;
@@ -60,13 +61,13 @@
     computed: {},
     data() {
       return {
-        activeName: "0",
+        activeName: '0',
         groups: [
           {
             'name': 'contracts'
           },
           {
-            'name': "bom"
+            'name': 'bom'
           }
         ]
       };

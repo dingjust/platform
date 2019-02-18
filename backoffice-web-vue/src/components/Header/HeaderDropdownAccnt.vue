@@ -17,7 +17,7 @@
   </b-nav-item-dropdown>
 </template>
 <script>
-  import axios from "axios";
+  import axios from 'axios';
   import WebChat from '../webchat'
 
   export default {
@@ -25,13 +25,13 @@
     mixins: [WebChat],
     methods: {
       onChat() {
-        // this.fn.openSlider("在线客服", ChatPage);
+        // this.fn.openSlider('在线客服', ChatPage);
         this.openChat()
       },
       onLogout() {
-        axios.post("/logout")
+        axios.post('/logout')
           .finally(() => {
-            this.$router.push("/login");
+            this.$router.push('/login');
           });
       }
     },

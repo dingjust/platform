@@ -20,12 +20,12 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                    @size-change="onPageSizeChanged"
-                    @current-change="onCurrentPageChanged"
-                    :current-page="page.number + 1"
-                    :page-size="page.size"
-                    :page-count="page.totalPages"
-                    :total="page.totalElements">
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </el-card>
   </div>
@@ -75,7 +75,7 @@
         };
 
         // TODO: url
-        axios.get("/djbackoffice/xxx/xxx", {
+        axios.get('/djbackoffice/xxx/xxx', {
           params: params
         }).then(response => {
           this.page = response.data;

@@ -36,11 +36,11 @@
 
 <script>
   export default {
-    name: "StyleBaseForm",
-    props: ["slotData", "readOnly", "isNewlyCreated"],
+    name: 'StyleBaseForm',
+    props: ['slotData', 'readOnly', 'isNewlyCreated'],
     methods: {
       validate(callback) {
-        this.$refs["form"].validate(callback);
+        this.$refs['form'].validate(callback);
       },
     },
     computed: {
@@ -51,8 +51,8 @@
     data() {
       return {
         rules: {
-          code: [{required: true, message: "必填", trigger: "blur"}],
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          code: [{required: true, message: '必填', trigger: 'blur'}],
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         }
       };
     }

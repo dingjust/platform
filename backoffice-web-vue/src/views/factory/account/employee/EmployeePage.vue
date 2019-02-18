@@ -10,7 +10,8 @@
           <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
         </el-button-group>
       </el-form>
-      <el-table ref="resultTable" stripe :data="page.content">
+      <el-table ref="resultTable" stripe :data="page.content"
+                v-if="isHeightComputed" :height="autoHeight">
         <el-table-column label="账户ID" prop="uid"></el-table-column>
         <el-table-column label="姓名" prop="name"></el-table-column>
         <el-table-column label="电话号码" prop="mobileNumber"></el-table-column>
@@ -47,38 +48,42 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('FactoryEmployeesModule');
+
+  import autoHeight from 'mixins/autoHeight';
 
   import {EmployeeForm} from './';
   import EmployeeDetailsPage from './EmployeeDetailsPage';
 
   export default {
     name: 'EmployeePage',
+    mixins: [autoHeight],
+    computed: {
+      ...mapGetters({
+        page: 'page'
+      })
+    },
     methods: {
+      ...mapActions({
+        search: 'search'
+      }),
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider('添加员工', EmployeeForm, {
-          id: null,
-          uid: '',
-          name: '',
-          mobileNumber: '',
-          password: '',
-          confirmPassword: '',
-          roles: []
-        });
+        this.fn.openSlider('添加员工', EmployeeForm, this.formData);
       },
       onDetails(item) {
         this.fn.openSlider('员工明细', EmployeeDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -86,53 +91,31 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-        axios.get('/djfactory/employee', {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error('获取数据失败');
-        });
+        const keyword = this.text;
+        this.search({keyword, page, size});
       },
-      changeActiveStatus(row) {
-        axios.put('/djfactory/user/active', {
+      async changeActiveStatus(row) {
+        const result = this.$http.put('/djfactory/user/active', {
           uid: row.uid
-        }).then(() => {
-          this.onSearch();
-          this.$message.success('修改成功');
-        }).catch(error => {
-          this.$message.error('修改失败，原因：' + error.response.data);
         });
-      }
-    },
-    watch: {
-      '$store.state.sideSliderState': function (value) {
-        if (!value) {
-          this.onSearch();
+
+        if (result['errors']) {
+          this.$message.error('修改失败，原因：' + result['errors'][0].message);
+          return;
         }
+
+        this.onSearch();
+        this.$message.success('修改成功');
       }
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        this._onSearch(0, this.page.size);
-      });
     },
     data() {
       return {
-        text: '',
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
+        text: this.$store.state.FactoryEmployeesModule.keyword,
+        formData: this.$store.state.FactoryEmployeesModule.formData
       };
+    },
+    created() {
+      this.search({keyword: '', page: 0});
     }
   };
 </script>

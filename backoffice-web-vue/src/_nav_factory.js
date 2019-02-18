@@ -49,18 +49,6 @@ export default {
       ]
     },
     {
-      name: '报表管理',
-      url: '/factory/purchase',
-      icon: 'icon-puzzle',
-      children: [
-        {
-          name: '生产进度',
-          url: '/factory/report/schedule',
-          icon: 'iconNone'
-        }
-      ]
-    },
-    {
       name: '工厂管理',
       url: '/factory/account',
       icon: 'icon-puzzle',

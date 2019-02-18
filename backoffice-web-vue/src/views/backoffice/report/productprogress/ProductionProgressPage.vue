@@ -165,24 +165,23 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                      @size-change="onPageSizeChanged"
-                      @current-change="onCurrentPageChanged"
-                      :current-page="page.number + 1"
-                      :page-size="page.size"
-                      :page-count="page.totalPages"
-                      :total="page.totalElements">
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
-  import axios from "axios";
-  import autoHeight from 'mixins/autoHeight'
-  import {ExcelExportMixin, ExcelImportMixin} from "mixins";
+  import autoHeight from '@/mixins/autoHeight'
+  import {ExcelExportMixin} from '@/mixins';
 
   export default {
-    name: "ProductionProgressPage",
+    name: 'ProductionProgressPage',
     components: {},
     mixins: [autoHeight, ExcelExportMixin],
     methods: {
@@ -191,7 +190,7 @@
       },
       onDetails(item) {
         console.log(item);
-        // this.fn.openSlider("图片详情", CollectionsDetailsPage, item);
+        // this.fn.openSlider('图片详情', CollectionsDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
@@ -206,7 +205,7 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      _onSearch(page, size) {
+      async _onSearch(page, size) {
         const params = {
           requirementOrderCode: this.query.requirementOrderCode,
           productionOrderCode: this.query.productionOrderCode,
@@ -221,44 +220,45 @@
           page: page,
           size: size,
         };
-        axios.post("/djbackoffice/report/production/progress/search", params)
-          .then(response => {
-            const data = response.data.content;
-            const newData = [];
-            for (let i = 0; i < data.length; i++) {
-              if (data[i].isDelay === params.isDelay) {
-                newData.push(data[i]);
-              }
-            }
-            this.page.content = newData;
-            this.page.totalElements = newData.length;
-          }).catch(error => {
-          this.$message.error("获取数据失败：" + error.response.data);
-        });
-      },
-      getBrands() {
-        const url = '/djbrand/brand';
-        axios.get(url, {
-          params: {
-            text: '',
+        const result = await this.$http.post('/djbackoffice/report/production/progress/search', params);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        const data = result.content;
+        const newData = [];
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].isDelay === params.isDelay) {
+            newData.push(data[i]);
           }
-        }).then(response => {
-          this.brands = response.data.content;
-        }).catch(error => {
-          this.$message.error("获取数据失败：" + error.response.data);
-        });
+        }
+        this.page.content = newData;
+        this.page.totalElements = newData.length;
       },
-      getFactories() {
-        const url = '/djfactory/factory';
-        axios.get(url, {
-          params: {
-            text: '',
-          }
-        }).then(response => {
-          this.factories = response.data.content;
-        }).catch(error => {
-          this.$message.error("获取数据失败：" + error.response.data);
+      async getBrands() {
+        const result = await this.$http.get('/djbrand/brand', {
+          text: '',
         });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.brands = result.content;
+      },
+      async getFactories() {
+        const result = await this.$http.get('/djfactory/factory', {
+          text: '',
+        });
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.factories = result.content;
       },
       findBrand(item) {
         this.query.brand = item;
@@ -279,7 +279,7 @@
       },
     },
     watch: {
-      "$store.state.sideSliderState": function (value) {
+      '$store.state.sideSliderState': function (value) {
         if (!value) {
           this.onSearch();
         }
@@ -288,9 +288,9 @@
     data() {
       return {
         URLS: {
-          exportUrl: "/djbackoffice/report/production/progress/export",
+          exportUrl: '/djbackoffice/report/production/progress/export',
         },
-        excelExportTemplateName: "生产进度报表" + new Date().getTime() + ".xlsx",
+        excelExportTemplateName: '生产进度报表' + new Date().getTime() + '.xlsx',
         page: {
           number: 0, // 当前页，从0开始
           size: 10, // 每页显示条数

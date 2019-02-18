@@ -23,47 +23,54 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                    @size-change="onPageSizeChanged"
-                    @current-change="onCurrentPageChanged"
-                    :current-page="page.number + 1"
-                    :page-size="page.size"
-                    :page-count="page.totalPages"
-                    :total="page.totalElements">
+                     @size-change="onPageSizeChanged"
+                     @current-change="onCurrentPageChanged"
+                     :current-page="page.number + 1"
+                     :page-size="page.size"
+                     :page-count="page.totalPages"
+                     :total="page.totalElements">
       </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
-  import axios from "axios";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapActions} = createNamespacedHelpers('UserGroupsModule');
+
   import autoHeight from 'mixins/autoHeight'
-  import GroupForm from "./GroupForm";
-  import GroupDetailsPage from "./GroupDetailsPage";
+
+  import GroupForm from './GroupForm';
+  import GroupDetailsPage from './GroupDetailsPage';
 
   export default {
-    name: "GroupPage",
+    name: 'GroupPage',
     mixins: [autoHeight],
-    components: {},
+    computed: {
+      ...mapGetters({
+        page: 'page'
+      })
+    },
     methods: {
+      ...mapActions({
+        search: 'search'
+      }),
       onSearch() {
-        this._onSearch(0, this.page.size);
+        this._onSearch(0);
       },
       onNew() {
-        this.fn.openSlider("创建用户组", GroupForm, {
-          name: "",
-          description: ""
-        });
+        this.fn.openSlider('创建用户组', GroupForm, this.formData);
       },
       onDetails(item) {
-        this.fn.openSlider("用户组明细", GroupDetailsPage, item);
+        this.fn.openSlider('用户组明细', GroupDetailsPage, item);
       },
       onPageSizeChanged(val) {
         this.reset();
-        this.page.size = val;
         this._onSearch(0, val);
       },
       onCurrentPageChanged(val) {
-        this._onSearch(val - 1, this.page.size);
+        this._onSearch(val - 1);
       },
       reset() {
         this.$refs.resultTable.clearSort();
@@ -71,43 +78,18 @@
         this.$refs.resultTable.clearSelection();
       },
       _onSearch(page, size) {
-        const params = {
-          text: this.text,
-          page: page,
-          size: size
-        };
-        axios.get("/djbackoffice/group", {
-          params: params
-        }).then(response => {
-          this.page = response.data;
-        }).catch(error => {
-          this.$message.error("获取数据失败");
-        });
-      }
-    },
-    created(){
-      this.onSearch();
-    },
-    computed: {},
-    watch: {
-      "$store.state.sideSliderState": function (value) {
-        if (!value) {
-          this.onSearch();
-        }
+        const keyword = this.text;
+        this.search({keyword, page, size});
       }
     },
     data() {
       return {
-        text: "",
-        items: [],
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        }
+        text: this.$store.state.UserGroupsModule.keyword,
+        formData: this.$store.state.UserGroupsModule.formData,
       }
-    }
+    },
+    created() {
+      this.onSearch();
+    },
   }
 </script>

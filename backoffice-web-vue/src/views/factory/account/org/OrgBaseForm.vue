@@ -37,8 +37,8 @@
 
 <script>
   export default {
-    name: "OrgBaseForm",
-    props: ["slotData", "isNewlyCreated", "readOnly"],
+    name: 'OrgBaseForm',
+    props: ['slotData', 'isNewlyCreated', 'readOnly'],
     methods: {
       validate(callback) {
         this.$refs['form'].validate(callback);
@@ -48,7 +48,7 @@
     data() {
       return {
         rules: {
-          name: [{required: true, message: "必填", trigger: "blur"}]
+          name: [{required: true, message: '必填', trigger: 'blur'}]
         }
       };
     }

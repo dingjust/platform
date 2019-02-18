@@ -23,36 +23,45 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import GroupBaseForm from "./GroupBaseForm";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('UserGroupsModule');
+
+  import GroupBaseForm from './GroupBaseForm';
 
   export default {
-    name: "GroupForm",
+    name: 'GroupForm',
     components: {GroupBaseForm},
-    props: ["slotData"],
+    props: ['slotData'],
     methods: {
+      ...mapActions({
+        refresh: 'refresh'
+      }),
       onSubmit() {
-        const baseForm = this.$refs["baseForm"];
+        const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
             return false;
           }
-          axios.post("/djbackoffice/group", this.slotData)
-            .then(() => {
-              this.$message.success("保存成功");
 
-              this.fn.closeSlider(true);
-              //刷新主体数据
-            }).catch(error => {
-              this.$message.error("保存失败，原因：" + error.response.data.message);
-            }
-          );
+          this._onSubmit();
 
           return true;
         });
       },
       onCancel() {
         this.fn.closeSlider();
+      },
+      async _onSubmit() {
+        const result = await this.$http.post('/djbackoffice/group', this.slotData);
+        if (result['errors']) {
+          this.$message.error('保存失败，原因：' + result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('保存成功');
+        this.refresh();
+        this.fn.closeSlider(true);
       }
     },
     computed: {

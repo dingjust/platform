@@ -14,11 +14,11 @@
 </template>
 
 <script>
-  import {OrderMixin} from "../../../../mixins";
+  import {OrderMixin} from '@/mixins';
 
   export default {
-    name: "RequirementOrderStatusBar",
-    props: ["status"],
+    name: 'RequirementOrderStatusBar',
+    props: ['status'],
     mixins: [OrderMixin],
     methods: {},
     computed: {
