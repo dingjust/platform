@@ -15,7 +15,7 @@ class ProductionFilterBar extends StatefulWidget
       @required this.streamController,
       @required this.action,
       @required this.leading,
-      this.height = 40,
+      this.height = 55,
       this.indicatorWidth = 20,
       this.indicatorHeight = 2})
       : super(key: key);
@@ -70,34 +70,72 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                   widget.streamController.add(entry);
                 });
               },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '${entry.label}',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: entry.checked
-                            ? widget.color
-                            : widget.unselectedColor),
-                  ),
-                  entry.checked
-                      ? Container(
-                          height: widget.indicatorHeight,
-                          width: widget.indicatorWidth,
-                          margin: EdgeInsets.only(top: 3),
-                          decoration: BoxDecoration(
-                              color: widget.color,
-                              borderRadius: BorderRadius.circular(2)),
-                        )
-                      : Container(
-                          height: widget.indicatorHeight,
-                          width: widget.indicatorWidth,
-                          margin: EdgeInsets.only(top: 3),
-                        )
-                ],
+              child: Container(
+                width: 90,
+                height: widget.height,
+                child: Stack(
+                  // fit: StackFit.expand,
+                  children: <Widget>[
+                    Positioned(
+                      left: 0,
+                      top: 20,
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              '${entry.label}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: entry.checked
+                                      ? widget.color
+                                      : widget.unselectedColor),
+                            ),
+                            entry.checked
+                                ? Container(
+                                    height: widget.indicatorHeight,
+                                    width: widget.indicatorWidth,
+                                    margin: EdgeInsets.only(top: 3),
+                                    decoration: BoxDecoration(
+                                        color: widget.color,
+                                        borderRadius: BorderRadius.circular(2)),
+                                  )
+                                : Container(
+                                    height: widget.indicatorHeight,
+                                    width: widget.indicatorWidth,
+                                    margin: EdgeInsets.only(top: 3),
+                                  )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 12,
+                      top: 12,
+                      child: entry.onRemind
+                          ? Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                  color: Color.fromRGBO(255, 38, 38, 0.8),
+                                  shape: BoxShape.circle),
+                              child: Center(
+                                child: Text(
+                                  '${entry.remindNum}',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 12),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              width: 20,
+                              height: 20,
+                            ),
+                    )
+                  ],
+                ),
               ),
             ))
         .toList());
