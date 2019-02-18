@@ -4,6 +4,8 @@ class FilterConditionEntry {
   FilterConditionEntry(
       {@required this.label,
       this.value,
+      this.onRemind = false,
+      this.remindNum,
       this.checked = false,
       this.isDESC = false});
 
@@ -18,4 +20,10 @@ class FilterConditionEntry {
 
   ///是否降序
   bool isDESC;
+
+  ///是否有数字提醒
+  bool onRemind;
+
+  ///数字提醒;
+  int remindNum;
 }

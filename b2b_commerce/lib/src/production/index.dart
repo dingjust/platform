@@ -42,8 +42,12 @@ class _ProductionPageState extends State<ProductionPage> {
               ),
               entries: <FilterConditionEntry>[
                 FilterConditionEntry(
-                    label: '当前生产', value: 'comprehensive', checked: true),
-                FilterConditionEntry(label: '延期预警', value: 'starLevel'),
+                    label: '当前生产', value: 'producting', checked: true),
+                FilterConditionEntry(
+                    label: '延期预警',
+                    value: 'delayWarning',
+                    onRemind: true,
+                    remindNum: 12),
               ],
               action: IconButton(
                 icon: Icon(Icons.menu),
