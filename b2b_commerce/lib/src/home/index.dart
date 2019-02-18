@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
             SliverList(
                 delegate: SliverChildListDelegate(<Widget>[
               EasyGrid(
-                height: 160,
+                height: 163,
                 dataList: _gridItemList(),
               ),
               _buildInfoSection(),

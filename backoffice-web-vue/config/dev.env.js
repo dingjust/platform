@@ -1,12 +1,12 @@
 let merge = require('webpack-merge');
 let prodEnv = require('./prod.env');
 
-let obj = process.env.NODE_ENV == 'factory'
+let obj = process.env.NODE_ENV === 'factory'
   ? {
     NODE_ENV: '"development"',
     NAV: '"FACTORY"'
   }
-  : (process.env.NODE_ENV == 'brand' ? {
+  : (process.env.NODE_ENV === 'brand' ? {
     NODE_ENV: '"development"',
     NAV: '"BRAND"'
   } : {

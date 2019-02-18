@@ -2,7 +2,7 @@
 let path = require('path');
 
 // point to nginx web root
-const targetPath = '/usr/share/nginx/html';
+const targetPath = '../dist';
 
 module.exports = {
   build: {

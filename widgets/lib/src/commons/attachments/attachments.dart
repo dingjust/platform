@@ -246,7 +246,8 @@ class EditableAttachments extends StatefulWidget {
       this.imageWidth = 60,
       this.imageHeight = 60,
       this.maxNum = 5,
-      this.uploadURL, this.deleteURL})
+      this.uploadURL,
+      this.deleteURL})
       : super(key: key);
 
   final List<MediaModel> list;
@@ -335,7 +336,33 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
   }
 
   Widget _buildEditableAttachmentsListView(double width, BuildContext context) {
-    List<Widget> wigetList = widget.list.map(
+    List<Widget> widgetList = [];
+
+    //是否已达限制数量，添加图片按钮
+    if (widget.list.length < widget.maxNum) {
+      widgetList.add(GestureDetector(
+        onTap: () {
+          _selectPapersImages();
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          width: widget.imageWidth,
+          height: widget.imageHeight,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey[300], width: 1.0)),
+          child: Center(
+            child: Icon(
+              Icons.add,
+              size: widget.imageWidth,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      ));
+    }
+
+    widgetList.addAll(widget.list.map(
       (model) {
         // 附件类型
         switch (model.mediaType) {
@@ -396,31 +423,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
             );
         }
       },
-    ).toList();
-
-    //是否已达限制数量，添加图片按钮
-    if (widget.list.length < widget.maxNum) {
-      wigetList.add(GestureDetector(
-        onTap: () {
-          _selectPapersImages();
-        },
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 10),
-          width: widget.imageWidth,
-          height: widget.imageHeight,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey[300], width: 1.0)),
-          child: Center(
-            child: Icon(
-              Icons.add,
-              size: widget.imageWidth,
-              color: Colors.grey,
-            ),
-          ),
-        ),
-      ));
-    }
+    ).toList());
 
     return Container(
       padding: EdgeInsets.all(10),
@@ -429,7 +432,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
-        children: wigetList,
+        children: widgetList,
       ),
     );
   }
