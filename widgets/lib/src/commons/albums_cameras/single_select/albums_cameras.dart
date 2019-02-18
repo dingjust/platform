@@ -12,7 +12,7 @@ class AlbumsAndCameras extends StatefulWidget {
   int count;
 
   AlbumsAndCameras(
-      {this.images, this.height, this.width, this.iconSize, this.count,this.pictureUrls});
+      {this.images, this.height = 100, this.width = 100, this.iconSize = 100, this.count = 5,this.pictureUrls});
 
   AlbumsAndCamerasState createState() => AlbumsAndCamerasState();
 }
