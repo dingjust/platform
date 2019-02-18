@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
+import 'package:b2b_commerce/src/my/my_client_services.dart';
 import 'package:b2b_commerce/src/production/production.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -30,14 +31,21 @@ class _ProductionPageState extends State<ProductionPage> {
                 icon: const Icon(B2BIcons.message),
                 color: Colors.orange,
                 tooltip: 'message',
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyClientServicesPage(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
           body: Scaffold(
             appBar: ProductionFilterBar(
               leading: IconButton(
-                icon: Icon(B2BIcons.calendar),
+                icon: Icon(null),
                 onPressed: () {},
               ),
               entries: <FilterConditionEntry>[
@@ -163,7 +171,7 @@ class ProductionListView extends StatelessWidget {
                       return Text('${snapshot.error}');
                     }
                   }),
-              _buildRecommend(bloc)
+//              _buildRecommend(bloc)
             ],
           ),
         ));
