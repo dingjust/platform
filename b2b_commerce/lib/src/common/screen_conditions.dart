@@ -334,7 +334,9 @@ class _ScreenConditionsState extends State<ScreenConditions> {
               });
             },
           );
-
+          setState(() {
+            address = address;
+          });
         }
     );
   }
@@ -588,6 +590,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       context: context,
       builder: (BuildContext context) {
         return Container(
+          height: 300,
           child: EnumSelection(
             enumModels: processingTypeList,
             multiple: true,
@@ -614,6 +617,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       context: context,
       builder: (BuildContext context) {
         return Container(
+          height: 300,
           child: EnumSelection(
             enumModels: technologyList,
             multiple: true,
