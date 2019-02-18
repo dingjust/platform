@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:b2b_commerce/src/my/my_client_services.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
-
 
 final List<Map<CategoryModel, List<CategoryModel>>> _category = [
   {
@@ -51,61 +51,37 @@ final List<Map<CategoryModel, List<CategoryModel>>> _majorCategory = [
 ];
 
 final List<EnumModel> processingTypeList = [
-  EnumModel.fromJson({
-    'code':'FOB',
-    'name':'FOB'
-  }),
-  EnumModel.fromJson({
-    'code':'PURE_PROCESSING',
-    'name':'PURE_PROCESSING'
-  }),
-  EnumModel.fromJson({
-    'code':'ODM',
-    'name':'ODM'
-  }),
-  EnumModel.fromJson({
-    'code':'OEM',
-    'name':'OEM'
-  }),
+  EnumModel.fromJson({'code': 'FOB', 'name': 'FOB'}),
+  EnumModel.fromJson({'code': 'PURE_PROCESSING', 'name': 'PURE_PROCESSING'}),
+  EnumModel.fromJson({'code': 'ODM', 'name': 'ODM'}),
+  EnumModel.fromJson({'code': 'OEM', 'name': 'OEM'}),
 ];
 
 final List<EnumModel> technologyList = [
-  EnumModel.fromJson({
-    'code':'全工艺',
-    'name':'全工艺'
-  }),
-  EnumModel.fromJson({
-    'code':'打板',
-    'name':'打板'
-  }),
-  EnumModel.fromJson({
-    'code':'车缝',
-    'name':'车缝'
-  }),
-  EnumModel.fromJson({
-    'code':'裁剪',
-    'name':'裁剪'
-  }),
-  EnumModel.fromJson({
-    'code':'印花',
-    'name':'印花'
-  }),
-  EnumModel.fromJson({
-    'code':'后枕',
-    'name':'后枕'
-  }),
+  EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
+  EnumModel.fromJson({'code': '打板', 'name': '打板'}),
+  EnumModel.fromJson({'code': '车缝', 'name': '车缝'}),
+  EnumModel.fromJson({'code': '裁剪', 'name': '裁剪'}),
+  EnumModel.fromJson({'code': '印花', 'name': '印花'}),
+  EnumModel.fromJson({'code': '后枕', 'name': '后枕'}),
 ];
 
+final List<EnumModel> productionAreaList = [
+  EnumModel.fromJson({'code': 'GuangDong', 'name': '广东省'}),
+  EnumModel.fromJson({'code': 'BeiJing', 'name': '北京市'}),
+  EnumModel.fromJson({'code': 'ZheJiang', 'name': '浙江省'}),
+  EnumModel.fromJson({'code': 'ShangHai', 'name': '上海市'}),
+];
 
-class RequirementOrderFrom extends StatefulWidget{
+class RequirementOrderFrom extends StatefulWidget {
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
 
-class _RequirementOrderFromState extends State<RequirementOrderFrom>{
+class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   List<CategoryModel> _mojarSelected = [];
   List<CategoryModel> _categorySelected = [];
   List<EnumModel> _processingTypeSelected = [];
-  List<EnumModel> _technologySelected = [];
+  List<EnumModel> _productionAreaSelected = [];
   String mojar = '点击选取';
   String category = '点击选取';
   String processCount = '输入';
@@ -117,23 +93,37 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
   String technology = '点击选取';
   String deliveryDate = '点击选取';
   String remarks = '输入';
-  List<File> _normalImages ;
-  List<String> normal ;
+  List<File> _normalImages = [];
+  List<String> normal;
+  String isProvideSampleProduct = '点击选取';
+  String isInvoice = '点击选取';
+  String inspectionMethod = '点击选取';
+  bool _isRequirementPool = true;
+  String _productionArea = '点击选取';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('需求发布'),
+          actions: <Widget>[
+            GestureDetector(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Center(
+                  child: Text('导入商品'),
+                ),
+              ),
+            )
+          ],
         ),
         body: Container(
             child: ListView(
-              children: <Widget>[
-                _buildBody(context),
-              ],
-            )
-        )
-    );
+          children: <Widget>[
+            _buildBody(context),
+            _buildCommitButton(context),
+          ],
+        )));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -155,7 +145,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
             _buildDeliveryDate(context),
             new Divider(),
             _buildAddress(context),
-            _isShowMore?Container():new Divider(),
+            _isShowMore ? Container() : new Divider(),
             _buildHideBody(context),
             _buildHideTips(context),
           ],
@@ -171,6 +161,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           child: Center(
             child: Column(
               children: <Widget>[
+                _buildProductionArea(context),
+                new Divider(),
                 _buildCooperationModes(context),
                 new Divider(),
                 _buildInspectionMethod(context),
@@ -187,7 +179,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
   }
 
   //图片
-  Widget _buildPic(BuildContext context){
+  Widget _buildPic(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -200,20 +192,15 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
               ),
               Text(
                 '（若无图片可不上传）',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 14
-                ),
+                style: TextStyle(color: Colors.red, fontSize: 14),
               )
             ],
           ),
         ),
-        AlbumsAndCameras(
+        PhotoPicker(
           images: _normalImages,
-          height: 100,
-          width: 100,
-          iconSize: 100,
-          count: 5,
+          maxNum: 10,
+          width: 400,
         ),
       ],
     );
@@ -225,7 +212,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         child: Container(
           child: ListTile(
               leading: Text(
-                '产品大类',
+                '商品大类',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -235,17 +222,13 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(
-                        mojar,
+                    child: Text(mojar,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
-                        overflow: TextOverflow.ellipsis
-                    ),
-                  )
-              )
-          ),
+                        overflow: TextOverflow.ellipsis),
+                  ))),
         ),
         onTap: () {
           _showMajorCategorySelect();
@@ -256,29 +239,25 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
   Widget _buildCategory(BuildContext context) {
     return GestureDetector(
         child: Container(
-            child: ListTile(
-                leading: Text(
-                  '产品小类',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+          child: ListTile(
+              leading: Text(
+                '商品类目',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
-                trailing: Container(
-                    width: 150,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                          category,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          overflow: TextOverflow.ellipsis
-                      ),
-                    )
-                )
-            ),
+              ),
+              trailing: Container(
+                  width: 150,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(category,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis),
+                  ))),
         ),
         onTap: () {
           _showCategorySelect();
@@ -338,7 +317,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
   }
 
   //交货时间
-  Widget _buildDeliveryDate(BuildContext context){
+  Widget _buildDeliveryDate(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
@@ -353,17 +332,13 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(
-                        deliveryDate,
+                    child: Text(deliveryDate,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
-                        overflow: TextOverflow.ellipsis
-                    ),
-                  )
-              )
-          ),
+                        overflow: TextOverflow.ellipsis),
+                  ))),
         ),
         onTap: () {
           _showDatePicker();
@@ -392,7 +367,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           ),
         ),
         onTap: () {
-          address='';
+          address = '';
+          setState(() {
+            address = address;
+          });
           AddressPicker.showAddressPicker(
             context,
             selectProvince: (province) {
@@ -408,13 +386,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
               });
             },
           );
-
-        }
-    );
+        });
   }
 
   //是否展开更多
-  Widget _buildHideTips(BuildContext context){
+  Widget _buildHideTips(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: Align(
@@ -442,22 +418,48 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
                     ),
                   ),
                   Icon(
-                    _isShowMore?Icons.keyboard_arrow_up:Icons.keyboard_arrow_down,
+                    _isShowMore
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
                     color: Colors.orangeAccent,
                     size: 28,
                   ),
                 ],
-              )
-          ),
+              )),
           decoration: BoxDecoration(
             color: Colors.black12,
-            borderRadius: BorderRadius.circular(5),
           ),
         ),
         onTap: () {
           setState(() {
             _isShowMore = !_isShowMore;
           });
+        });
+  }
+
+  //生产地区倾向
+  Widget _buildProductionArea(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '生产地倾向',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              _productionArea,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          _showProductionAreaSelect();
         });
   }
 
@@ -500,7 +502,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
               ),
             ),
             trailing: Text(
-              '点击选取',
+              inspectionMethod,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -509,7 +511,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           ),
         ),
         onTap: () {
-          null;
+          _showInspectionMethodSelect();
         });
   }
 
@@ -526,7 +528,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
               ),
             ),
             trailing: Text(
-              '点击选取',
+              isProvideSampleProduct,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -535,7 +537,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           ),
         ),
         onTap: () {
-          null;
+          _showIsProvideSampleProductSelect();
         });
   }
 
@@ -552,7 +554,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
               ),
             ),
             trailing: Text(
-              '点击选取',
+              isInvoice,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -561,7 +563,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           ),
         ),
         onTap: () {
-          null;
+          _showIsInvoiceSelect();
         });
   }
 
@@ -591,6 +593,58 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         });
   }
 
+  //确认发布按钮
+  Widget _buildCommitButton(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Container(
+              width: double.infinity,
+              height: 50,
+              margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              child: RaisedButton(
+                  color: Colors.orange,
+                  child: Text(
+                    '确定发布',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  onPressed: () {})),
+          Container(
+            margin: EdgeInsets.all(0),
+            padding: EdgeInsets.all(0),
+            width: 200,
+            child: Center(
+              child: CheckboxListTile(
+                title: Text(
+                  '发布到需求池',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Colors.grey),
+                ),
+                value: _isRequirementPool,
+                onChanged: (T) {
+                  setState(() {
+                    _isRequirementPool = !_isRequirementPool;
+                  });
+                },
+              ),
+            ),
+          )
+        ],
+      ),
+      decoration: BoxDecoration(
+        color: Colors.black12,
+      ),
+    );
+  }
+
   //大类
   void _showMajorCategorySelect() async {
     showModalBottomSheet(
@@ -605,10 +659,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           ),
         );
       },
-    ).then((val){
+    ).then((val) {
       mojar = '';
-      if(_mojarSelected.isNotEmpty){
-        for(int i=0;i<_mojarSelected.length;i++){
+      if (_mojarSelected.isNotEmpty) {
+        for (int i = 0; i < _mojarSelected.length; i++) {
           mojar += _mojarSelected[i].name + ',';
         }
       }
@@ -616,8 +670,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         mojar = mojar;
       });
     });
-
-
   }
 
   //小类
@@ -634,10 +686,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           ),
         );
       },
-    ).then((val){
+    ).then((val) {
       category = '';
-      if(_categorySelected.isNotEmpty){
-        for(int i=0;i<_categorySelected.length;i++){
+      if (_categorySelected.isNotEmpty) {
+        for (int i = 0; i < _categorySelected.length; i++) {
           category += _categorySelected[i].name + ',';
         }
       }
@@ -660,7 +712,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
             child: ListBody(
               children: <Widget>[
                 TextField(
-                  controller:inputNumber,
+                  controller: inputNumber,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: '请输入加工数量',
@@ -673,7 +725,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
             FlatButton(
               child: Text('确定'),
               onPressed: () {
-                if(inputNumber.text != null){
+                if (inputNumber.text != null) {
                   print(inputNumber.text);
                   setState(() {
                     processCount = inputNumber.text;
@@ -701,7 +753,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
             child: ListBody(
               children: <Widget>[
                 TextField(
-                  controller:inputNumber,
+                  controller: inputNumber,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: '请输入加工数量',
@@ -714,7 +766,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
             FlatButton(
               child: Text('确定'),
               onPressed: () {
-                if(inputNumber.text != null){
+                if (inputNumber.text != null) {
                   print(inputNumber.text);
                   setState(() {
                     expectPrice = inputNumber.text;
@@ -740,10 +792,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         context: context,
         initialDate: DateTime.now(),
         firstDate: new DateTime(1990),
-        lastDate: new DateTime(2999)
-    );
+        lastDate: new DateTime(2999));
 
-    if(_picked != null){
+    if (_picked != null) {
       print(_picked);
       setState(() {
         deliveryDate = DateFormatUtil.format(_picked);
@@ -757,6 +808,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
       context: context,
       builder: (BuildContext context) {
         return Container(
+          height: 300,
           child: EnumSelection(
             enumModels: processingTypeList,
             multiple: true,
@@ -764,10 +816,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
           ),
         );
       },
-    ).then((val){
+    ).then((val) {
       processingType = '';
-      if(_processingTypeSelected.isNotEmpty){
-        for(int i=0;i<_processingTypeSelected.length;i++){
+      if (_processingTypeSelected.isNotEmpty) {
+        for (int i = 0; i < _processingTypeSelected.length; i++) {
           processingType += _processingTypeSelected[i].name + ',';
         }
       }
@@ -790,7 +842,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
             child: ListBody(
               children: <Widget>[
                 TextField(
-                  controller:inputNumber,
+                  controller: inputNumber,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: '请输入订单备注',
@@ -803,7 +855,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
             FlatButton(
               child: Text('确定'),
               onPressed: () {
-                if(inputNumber.text != null){
+                if (inputNumber.text != null) {
                   print(inputNumber.text);
                   setState(() {
                     remarks = inputNumber.text;
@@ -816,5 +868,134 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom>{
         );
       },
     );
+  }
+
+  //验货方式选项
+  void _showInspectionMethodSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text('品牌验货'),
+                  onTap: () async {
+                    setState(() {
+                      inspectionMethod = '品牌验货';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('工厂验货'),
+                  onTap: () async {
+                    setState(() {
+                      inspectionMethod = '工厂验货';
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
+      },
+    );
+  }
+
+  //是否提供样衣选项
+  void _showIsProvideSampleProductSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text('提供样衣'),
+                  onTap: () async {
+                    setState(() {
+                      isProvideSampleProduct = '提供样衣';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('不提供样衣'),
+                  onTap: () async {
+                    setState(() {
+                      isProvideSampleProduct = '不提供样衣';
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
+      },
+    );
+  }
+
+  //是否开具发票选项
+  void _showIsInvoiceSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text('开发票'),
+                  onTap: () async {
+                    setState(() {
+                      isInvoice = '开发票';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('不开发票'),
+                  onTap: () async {
+                    setState(() {
+                      isInvoice = '不开发票';
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
+      },
+    );
+  }
+
+  //生产地倾向
+  void _showProductionAreaSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 300,
+          child: EnumSelection(
+            enumModels: productionAreaList,
+            multiple: true,
+            enumSelect: _productionAreaSelected,
+          ),
+        );
+      },
+    ).then((val) {
+      _productionArea = '';
+      if (_productionAreaSelected.isNotEmpty) {
+        for (int i = 0; i < _productionAreaSelected.length; i++) {
+          _productionArea += _productionAreaSelected[i].name + ',';
+        }
+      }
+      setState(() {
+        _productionArea = _productionArea;
+      });
+    });
   }
 }

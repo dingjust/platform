@@ -104,7 +104,7 @@ class HomeTabSection extends StatelessWidget {
         ),
       ),
       AdvanceIconButton(
-        title: '企业集群',
+        title: '产业集群',
         icon: Icon(
           B2BIcons.industrial_cluster,
           color: Color.fromRGBO(5, 202, 150, 1.0),

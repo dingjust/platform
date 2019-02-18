@@ -56,7 +56,9 @@ class AdvanceMenu extends StatelessWidget {
       return AdvanceMenuItem(item.image, item.title, item.routeTo);
     }).toList();
 
-    return Card(
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(color: Colors.white),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
