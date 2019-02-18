@@ -87,6 +87,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   String remarks = '输入';
   List<File> _normalImages = [];
   List<String> normal;
+  String isProvideSampleProduct = '点击选取';
+  String isInvoice = '点击选取';
+  String inspectionMethod = '点击选取';
 
   @override
   Widget build(BuildContext context) {
@@ -172,10 +175,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ),
         ),
         PhotoPicker(
-          width: 400,
           images: _normalImages,
           maxNum: 10,
-        )
+          width: 400,
+        ),
       ],
     );
   }
@@ -186,7 +189,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Container(
           child: ListTile(
               leading: Text(
-                '产品大类',
+                '商品大类',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -215,7 +218,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Container(
           child: ListTile(
               leading: Text(
-                '产品小类',
+                '商品类目',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -342,6 +345,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         ),
         onTap: () {
           address = '';
+          setState(() {
+            address = address;
+          });
           AddressPicker.showAddressPicker(
             context,
             selectProvince: (province) {
@@ -448,7 +454,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               ),
             ),
             trailing: Text(
-              '点击选取',
+              inspectionMethod,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -457,7 +463,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ),
         ),
         onTap: () {
-          null;
+          _showInspectionMethodSelect();
         });
   }
 
@@ -474,7 +480,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               ),
             ),
             trailing: Text(
-              '点击选取',
+              isProvideSampleProduct,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -483,7 +489,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ),
         ),
         onTap: () {
-          null;
+          _showIsProvideSampleProductSelect();
         });
   }
 
@@ -500,7 +506,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               ),
             ),
             trailing: Text(
-              '点击选取',
+              isInvoice,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -509,7 +515,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ),
         ),
         onTap: () {
-          null;
+          _showIsInvoiceSelect();
         });
   }
 
@@ -702,6 +708,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       context: context,
       builder: (BuildContext context) {
         return Container(
+          height: 300,
           child: EnumSelection(
             enumModels: processingTypeList,
             multiple: true,
@@ -759,6 +766,108 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             ),
           ],
         );
+      },
+    );
+  }
+
+  //验货方式选项
+  void _showInspectionMethodSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text('品牌验货'),
+                  onTap: () async {
+                    setState(() {
+                      inspectionMethod = '品牌验货';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('工厂验货'),
+                  onTap: () async {
+                    setState(() {
+                      inspectionMethod = '工厂验货';
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
+      },
+    );
+  }
+
+  //是否提供样衣选项
+  void _showIsProvideSampleProductSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text('提供样衣'),
+                  onTap: () async {
+                    setState(() {
+                      isProvideSampleProduct = '提供样衣';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('不提供样衣'),
+                  onTap: () async {
+                    setState(() {
+                      isProvideSampleProduct = '不提供样衣';
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
+      },
+    );
+  }
+
+  //是否开具发票选项
+  void _showIsInvoiceSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text('开发票'),
+                  onTap: () async {
+                    setState(() {
+                      isInvoice = '开发票';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('不开发票'),
+                  onTap: () async {
+                    setState(() {
+                      isInvoice = '不开发票';
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
       },
     );
   }

@@ -24,11 +24,11 @@ class MyHomePage extends StatelessWidget {
       ]),
       Menu('', <MenuItem>[
         MenuItem(Icons.location_city, '地址管理', AppRoutes.ROUTE_MY_ADDRESSES),
-        MenuItem(Icons.shopping_cart, '购物车', AppRoutes.ROUTE_MY_CART),
+//        MenuItem(Icons.shopping_cart, '购物车', AppRoutes.ROUTE_MY_CART),
       ]),
       Menu('', <MenuItem>[
         MenuItem(Icons.collections, '发票管理', AppRoutes.ROUTE_MY_INVOICES),
-        MenuItem(Icons.collections, '我的收藏', AppRoutes.ROUTE_MY_COLLECTIONS),
+//        MenuItem(Icons.collections, '我的收藏', AppRoutes.ROUTE_MY_COLLECTIONS),
       ]),
       Menu('', <MenuItem>[
         MenuItem(Icons.call, '联系客服', AppRoutes.ROUTE_MY_CLIENT_SERVICES),

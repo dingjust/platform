@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'src/business/index.dart';
 import 'src/common/app_bloc.dart';
@@ -88,6 +89,16 @@ class _MyAppState extends State<MyApp> {
               ),
         ),
         routes: AppRoutes.allRoutes,
+        localizationsDelegates: [
+          //此处
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          //此处
+          const Locale('zh', 'CH'),
+          const Locale('en', 'US'),
+        ],
       ),
     );
   }
