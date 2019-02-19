@@ -65,10 +65,10 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
             AdvanceMenu('其他', <AdvanceMenuItem>[
               AdvanceMenuItem(MenuItemImage.supplier_manage, '供应商管理',
                   AppRoutes.ROUTE_SUPPLIERS),
-              AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣管理',
+              AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣借还',
                   AppRoutes.ROUTE_SAMPLE_GARMENTS),
-              AdvanceMenuItem(
-                  MenuItemImage.check_report, '报表查看', '/business/sales-orders'),
+//              AdvanceMenuItem(
+//                  MenuItemImage.check_report, '报表查看', '/business/sales-orders'),
               AdvanceMenuItem(
                   MenuItemImage.check_report, '运费管理', AppRoutes.ROUTE_DELIVERY),
             ]),

@@ -518,6 +518,9 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
 
   //联系方式
   String contactWay;
+  
+  //备注
+  String remake;
 
   DateTime creationDate;
 
@@ -531,6 +534,7 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
     this.contactWay,
     this.state,
     this.creationDate,
+    this.remake,
   });
 
   factory SampleBorrowReturnHistoryModel.fromJson(Map<String, dynamic> json) => _$SampleBorrowReturnHistoryModelFromJson(json);
