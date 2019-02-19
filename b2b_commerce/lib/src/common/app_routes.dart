@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/home/factory/hot_category.dart';
+import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +18,6 @@ import '../business/sales_orders.dart';
 import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
 import '../home/account/login.dart';
-import '../home/hot/hot_category.dart';
 import '../my/account/register.dart';
 import '../my/account/register_brand.dart';
 import '../my/account/register_customer.dart';
@@ -37,7 +38,8 @@ import '../business/delivery.dart';
 class AppRoutes with GlobalRoutes {
   static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
   static const ROUTE_MY_HOME = GlobalRoutes.ROUTE_MY_HOME;
-  static const ROUTE_HOT_CATEGORY = '/home/hot_category';
+  static const ROUTE_HOT_CATEGORY_FACTORY = '/home/factory/hot_category';
+  static const ROUTE_HOT_CATEGORY_PRODUCT = '/home/product/hot_category';
   static const ROUTE_EMPLOYEES = '/business/employees';
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
   static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
@@ -105,6 +107,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_REGISTER_CUSTOMER: (context) => RegisterCustomerPage(),
     ROUTE_REQUIREMENT_QUOTE_DETAIL: (context) => RequirementQuoteDetailPage(),
     ROUTE_DELIVERY: (context) => DeliveryPage(),
-    ROUTE_HOT_CATEGORY: (context) => HotCategoryPage()
+    ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
+    ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage()
   };
 }

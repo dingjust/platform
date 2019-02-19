@@ -49,7 +49,10 @@ class _EasyGridState extends State<EasyGrid> {
                           title: Text(
                             widget.dataList[index].title,
                             style: widget.titleFont == null
-                                ? TextStyle(fontSize: 16, color: Colors.black)
+                                ? TextStyle(
+                                    fontSize: 16,
+                                    color: Color.fromRGBO(32, 32, 32, 1),
+                                    fontWeight: FontWeight.bold)
                                 : widget.titleFont,
                           ),
                           subtitle: widget.dataList[index].subtitle != null
@@ -68,7 +71,7 @@ class _EasyGridState extends State<EasyGrid> {
                   ),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
                 onTap: widget.dataList[index].onPressed);

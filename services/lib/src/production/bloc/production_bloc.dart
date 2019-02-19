@@ -979,7 +979,7 @@ class ProductionBLoC extends BLoCBase {
         'totalPrice': 300,
         'creationtime': DateTime.now().toString(),
         'expectedDeliveryDate': DateTime.now().toString(),
-        'currentPhase': 'SAMPLE_CONFIRM',
+        'currentPhase': 'CUTTING',
         'machiningType': '包工包料',
         'invoiceNeeded': true,
         'attachments': [

@@ -24,7 +24,7 @@ class AdvanceIconButton extends StatelessWidget {
               child: Text(
                 title,
                 style: TextStyle(
-                  fontSize: 15.0,
+                  fontSize: 14.0,
                   fontWeight: FontWeight.w400,
                 ),
               ),

@@ -70,6 +70,7 @@ class _MyAppState extends State<MyApp> {
                   onChanged: _handleNavigation,
                 ),
                 floatingActionButton: FloatingActionButton(
+                  elevation: 0,
                   tooltip: '发布需求',
                   child: Icon(
                     Icons.add,

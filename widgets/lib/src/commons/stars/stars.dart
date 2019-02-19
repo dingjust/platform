@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 //星级
 class Stars extends StatelessWidget {
@@ -7,7 +8,7 @@ class Stars extends StatelessWidget {
       this.starLevel = 1,
       this.color = Colors.orange,
       this.highlightOnly = true,
-      this.size=20})
+      this.size = 20})
       : super(key: key);
 
   final int starLevel;
@@ -23,9 +24,9 @@ class Stars extends StatelessWidget {
 
     for (int i = 0; i < starLevel; i++) {
       stars.add(Container(
-        padding: EdgeInsets.fromLTRB(1, 2, 1, 2),
+        padding: EdgeInsets.fromLTRB(3, 2, 3, 2),
         child: Icon(
-          Icons.star,
+          B2BIcons.star,
           color: color,
           size: size,
         ),
@@ -35,9 +36,9 @@ class Stars extends StatelessWidget {
     if (!highlightOnly) {
       for (int i = 0; i < 5 - starLevel; i++) {
         stars.add(Container(
-          padding: EdgeInsets.fromLTRB(1, 2, 1, 2),
+          padding: EdgeInsets.fromLTRB(3, 2, 3, 2),
           child: Icon(
-            Icons.star,
+            B2BIcons.star,
             color: Colors.grey[300],
             size: size,
           ),

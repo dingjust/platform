@@ -24,28 +24,34 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
       key: _formKey,
       child: Container(
         margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+        padding: EdgeInsets.fromLTRB(8, 20, 8, 10),
         color: Colors.white,
         child: Column(
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  B2BIcons.left_quotation,
-                  color: Color.fromRGBO(255, 234, 234, 1),
-                  size: 12,
-                ),
-                Text(
-                  '   急速发布需求   ',
-                  style: TextStyle(color: Colors.red, fontSize: 18),
-                ),
-                Icon(
-                  B2BIcons.right_quotation,
-                  color: Color.fromRGBO(255, 234, 234, 1),
-                  size: 12,
-                )
-              ],
+            Container(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    B2BIcons.left_quotation,
+                    color: Color.fromRGBO(255, 234, 234, 1),
+                    size: 12,
+                  ),
+                  Text(
+                    '   急速发布需求   ',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Icon(
+                    B2BIcons.right_quotation,
+                    color: Color.fromRGBO(255, 234, 234, 1),
+                    size: 12,
+                  )
+                ],
+              ),
             ),
             GestureDetector(
               onTap: () {
@@ -62,11 +68,13 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                   children: <Widget>[
                     Text(
                       category,
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                          color: Color.fromRGBO(150, 150, 150, 1),
+                          fontSize: 15),
                     ),
                     Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.grey,
+                      Icons.keyboard_arrow_down,
+                      color: Color.fromRGBO(200, 200, 200, 1),
                     )
                   ],
                 ),
@@ -76,14 +84,14 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
               margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: Color.fromRGBO(248, 248, 248, 1),
                   borderRadius: BorderRadius.circular(5)),
               child: TextFormField(
                   autofocus: false,
                   controller: _requirementNumController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
                       contentPadding: EdgeInsets.symmetric(vertical: 0),
                       hintText: '填写需求数量',
                       border: InputBorder.none),
@@ -112,11 +120,11 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                           )
                         : Text(
                             '预计交货时间',
-                            style: TextStyle(color: Colors.grey, fontSize: 14),
+                            style: TextStyle(color: Colors.grey, fontSize: 15),
                           ),
                     Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.grey,
+                      Icons.keyboard_arrow_down,
+                      color: Color.fromRGBO(200, 200, 200, 1),
                     )
                   ],
                 ),
@@ -127,8 +135,8 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                 Expanded(
                   flex: 1,
                   child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    child: RaisedButton(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    child: FlatButton(
                         onPressed: () {
                           //清空数据
                           expectedDeliveryDate = null;
@@ -255,8 +263,8 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
         for (int i = 0; i < _categorySelected.length; i++) {
           category += _categorySelected[i].name + ',';
         }
-      }else{
-        category='点击选择分类';
+      } else {
+        category = '点击选择分类';
       }
       setState(() {
         category = category;

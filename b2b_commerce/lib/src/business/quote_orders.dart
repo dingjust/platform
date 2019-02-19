@@ -135,7 +135,7 @@ class QuoteOrdersList extends StatelessWidget {
                     return Column(
                       children: snapshot.data.map((order) {
                         return QuoteOrderItem(
-                          order: order,
+                          model: order,
                         );
                       }).toList(),
                     );
@@ -188,9 +188,9 @@ class QuoteOrdersList extends StatelessWidget {
 }
 
 class QuoteOrderItem extends StatelessWidget {
-  const QuoteOrderItem({Key key, this.order}) : super(key: key);
+  const QuoteOrderItem({Key key, this.model}) : super(key: key);
 
-  final QuoteEntryModel order;
+  final QuoteEntryModel model;
 
   static Map<QuoteState, MaterialColor> _statusColors = {
     QuoteState.SELLER_SUBMITTED: Colors.green,
@@ -205,7 +205,7 @@ class QuoteOrderItem extends StatelessWidget {
         // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => QuoteOrderDetailPage(
-                  item: order,
+                  item: model,
                 )));
       },
       child: Container(
@@ -215,7 +215,7 @@ class QuoteOrderItem extends StatelessWidget {
           children: <Widget>[
             _buildHeader(),
             _buildEntries(),
-            order.order.state == QuoteState.SELLER_SUBMITTED
+            model.order.state == QuoteState.SELLER_SUBMITTED
                 ? _buildSummary()
                 : Container()
           ],
@@ -237,34 +237,39 @@ class QuoteOrderItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                '工厂：${order.order.belongTo.name}',
-                style: TextStyle(fontSize: 18),
-              ),
               RichText(
                 text: TextSpan(
-                    text: '报价',
+                    text: '报价：',
                     style: TextStyle(fontSize: 18, color: Colors.black),
                     children: <TextSpan>[
                       TextSpan(
-                          text: '${order.order.totalPrice}',
+                          text: '￥',
+                          style: TextStyle(fontSize: 14, color: Colors.red)),
+                      TextSpan(
+                          text: '${model.order.totalPrice}',
                           style: TextStyle(color: Colors.red)),
-                      TextSpan(text: '元'),
                     ]),
               ),
-              Text(QuoteStateLocalizedMap[order.order.state],
+              Text(QuoteStateLocalizedMap[model.order.state],
                   style: TextStyle(
-                      color: _statusColors[order.order.state], fontSize: 18))
+                      color: _statusColors[model.order.state], fontSize: 18))
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '报价时间：${DateFormatUtil.format(order.order.creationTime)}',
-                style: TextStyle(fontSize: 15),
-              ),
-            ],
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '工厂：${model.order.belongTo.name}',
+                  style: TextStyle(fontSize: 15),
+                ),
+                Text(
+                  '报价时间：${DateFormatUtil.format(model.order.creationTime)}',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -276,33 +281,41 @@ class QuoteOrderItem extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: order.product.thumbnail != null
-                      ? NetworkImage(order.product.thumbnail)
-                      : AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ),
-                  fit: BoxFit.cover,
-                )),
-          ),
+          model.product.thumbnail != null
+              ? Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      image: DecorationImage(
+                        image: NetworkImage(model.product.thumbnail),
+                        fit: BoxFit.cover,
+                      )),
+                )
+              : Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Color.fromRGBO(243, 243, 243, 1)),
+                  child: Icon(
+                    B2BIcons.noPicture,
+                    color: Color.fromRGBO(200, 200, 200, 1),
+                    size: 25,
+                  ),
+                ),
           Expanded(
             flex: 1,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 100,
+              height: 80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  order.product.name != null
+                  model.product.name != null
                       ? Text(
-                          order.product.name,
+                          model.product.name,
                           style: TextStyle(fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         )
@@ -310,27 +323,30 @@ class QuoteOrderItem extends StatelessWidget {
                           '暂无产品',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
-                  order.product.skuID != null
+                  model.product.skuID != null
                       ? Container(
-                          padding: EdgeInsets.all(3),
+                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                           decoration: BoxDecoration(
                               color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(5)),
+                              borderRadius: BorderRadius.circular(10)),
                           child: Text(
-                            '货号：${order.product.skuID}',
+                            '货号：${model.product.skuID}',
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         )
                       : Container(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        "${order.order.totalQuantity}件",
-                        style: TextStyle(fontSize: 18, color: Colors.orange),
-                      )
-                    ],
-                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 243, 243, 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "${model.product.majorCategory.name}   ${model.product.minorCategory.name}   ${model.order.totalQuantity}件",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Color.fromRGBO(255, 133, 148, 1)),
+                    ),
+                  )
                 ],
               ),
             ),

@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       body: Container(
-        color: Colors.grey[200],
+        color: Color.fromRGBO(245, 245, 245, 1),
         child: CustomScrollView(
           controller: _scrollController,
           slivers: <Widget>[
@@ -119,7 +119,9 @@ class _HomePageState extends State<HomePage> {
               expandedHeight: _appBarHeight,
               pinned: true,
               elevation: 0.5,
-              title: HomeSearchInputBox(),
+              title: HomeSearchInputBox(
+                height: 35,
+              ),
               // centerTitle: true,
               brightness: Brightness.dark,
               actions: <Widget>[
@@ -164,12 +166,14 @@ class _HomePageState extends State<HomePage> {
       GridItem(
           title: '当季快反',
           onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY);
+            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_FACTORY);
           },
           pic: B2BImage.fast_factory(width: 60, height: 80)),
       GridItem(
           title: '看款下单',
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_PRODUCT);
+          },
           pic: B2BImage.order(width: 60, height: 80)),
       GridItem(
           title: '空闲产能',
@@ -184,16 +188,19 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildInfoSection() {
     return Container(
-      margin: EdgeInsets.fromLTRB(8, 2, 8, 5),
+      margin: EdgeInsets.fromLTRB(8, 2, 8, 10),
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          color: Colors.white, borderRadius: BorderRadius.circular(4)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
             '衣报送',
-            style: TextStyle(color: Colors.orange, fontSize: 16),
+            style: TextStyle(
+                color: Colors.orange,
+                fontSize: 16,
+                fontWeight: FontWeight.bold),
           ),
           HomeInfoItem(
             label: '接单工厂',
@@ -228,13 +235,13 @@ class _HomePageState extends State<HomePage> {
               Center(
                 child: RichText(
                   text: TextSpan(
-                      text: '———',
-                      style: TextStyle(fontSize: 15, color: Colors.grey),
+                      text: '-',
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
                       children: <TextSpan>[
                         TextSpan(
-                            text: '工厂推荐',
+                            text: '推荐工厂',
                             style: TextStyle(color: Colors.black)),
-                        TextSpan(text: '———')
+                        TextSpan(text: '-')
                       ]),
                 ),
               )

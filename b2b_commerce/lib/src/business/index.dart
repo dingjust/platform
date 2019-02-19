@@ -30,13 +30,13 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
       //   ],
       // ),
       body: Container(
-        color: Colors.grey[200],
+        color: Color.fromRGBO(245, 245, 245, 1),
         child: ListView(
           children: <Widget>[
             SiteStatisticsSection(<SiteStatisticsModel>[
-              SiteStatisticsModel('今日销售', '561件'),
-              SiteStatisticsModel('今日销量', '2500.00元'),
-              SiteStatisticsModel('在架商品', '15款')
+              SiteStatisticsModel('今日销售', '561', '件'),
+              SiteStatisticsModel('今日销量', '2500.00', '元'),
+              SiteStatisticsModel('在架商品', '15', '款')
             ]),
             AdvanceMenu('我的待办', <AdvanceMenuItem>[
               AdvanceMenuItem(
