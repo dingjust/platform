@@ -7,24 +7,27 @@ class CategorySelect extends StatefulWidget {
   final double verticalDividerOpacity;
   List<CategoryModel> categorySelect;
 
-
-  CategorySelect({@required this.categorys,this.multiple = true,this.verticalDividerOpacity = 1,this.categorySelect});
+  CategorySelect(
+      {@required this.categorys,
+      this.multiple = true,
+      this.verticalDividerOpacity = 1,
+      this.categorySelect});
 
   CategorySelectState createState() => CategorySelectState();
 }
 
 class CategorySelectState extends State<CategorySelect> {
-
   //透明度0到1
   double _verticalDivider;
+
   //是否多选
   bool _multiple;
   List<Widget> _keyItem;
   List<Widget> _valueItem = <Widget>[];
   String _selectLeft;
   Color _color;
-//  List<CategoryModel> _selectRights;
 
+//  List<CategoryModel> _selectRights;
 
   @override
   void initState() {
@@ -41,14 +44,14 @@ class CategorySelectState extends State<CategorySelect> {
   Widget build(BuildContext context) {
     widget.categorys.forEach((category) {
       _keyItem = category.keys.map((key) {
-        if(_selectLeft == key.code){
+        if (_selectLeft == key.code) {
           _color = Colors.orange;
-        }else{
+        } else {
           _color = Colors.black;
         }
         return GestureDetector(
           onTap: () {
-            if(!(_selectLeft == key.code)){
+            if (!(_selectLeft == key.code)) {
               setState(() {
                 widget.categorySelect.clear();
                 _selectLeft = key.code;
@@ -57,13 +60,15 @@ class CategorySelectState extends State<CategorySelect> {
           },
           child: Container(
             width: 60,
-          color: Colors.white10,
-          padding: EdgeInsets.fromLTRB(20,10,20,0),
-          child: Container(
+            color: Colors.white10,
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+            child: Container(
               padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
               height: 40,
-              child: Text(key.name,style: TextStyle(color: _color),
-            ),
+              child: Text(
+                key.name,
+                style: TextStyle(color: _color),
+              ),
             ),
           ),
         );
@@ -71,37 +76,37 @@ class CategorySelectState extends State<CategorySelect> {
     });
 
     widget.categorys.forEach((map) {
-      final entry = map.entries
-          .toList()
-          .firstWhere((entry) => _selectLeft == entry.key.code,
+      final entry = map.entries.toList().firstWhere(
+          (entry) => _selectLeft == entry.key.code,
           orElse: () => null);
-      if(entry != null){
-        _valueItem =
-            entry.value
-                .map((value) {
-              return Container(
-                width: 65,
-                child: ChoiceChip(
-                  selectedColor: Colors.orange,
-                  label: Text(value.name,style: TextStyle(color: Colors.black),),
-                  selected: widget.categorySelect.contains(value),
-                  onSelected: (select){
-                    if(select){
-                      setState(() {
-                        if(!_multiple){
-                          widget.categorySelect.clear();
-                        }
-                        widget.categorySelect.add(value);
-                      });
-                    }else{
-                      setState(() {
-                        widget.categorySelect.remove(value);
-                      });
+      if (entry != null) {
+        _valueItem = entry.value.map((value) {
+          return Container(
+            width: 65,
+            child: ChoiceChip(
+              selectedColor: Colors.orange,
+              label: Text(
+                value.name,
+                style: TextStyle(color: Colors.black),
+              ),
+              selected: widget.categorySelect.contains(value),
+              onSelected: (select) {
+                if (select) {
+                  setState(() {
+                    if (!_multiple) {
+                      widget.categorySelect.clear();
                     }
-                  },
-                ),
-              );
-            }).toList();
+                    widget.categorySelect.add(value);
+                  });
+                } else {
+                  setState(() {
+                    widget.categorySelect.remove(value);
+                  });
+                }
+              },
+            ),
+          );
+        }).toList();
       }
     });
 
@@ -122,13 +127,32 @@ class CategorySelectState extends State<CategorySelect> {
         ),
         Flexible(
           child: Padding(
-            padding:
-            const EdgeInsets.only(left: 10, top: 5),
+            padding: const EdgeInsets.only(left: 10, top: 5),
             child: ListView(
               children: <Widget>[
                 Wrap(
                   spacing: 5,
                   children: _valueItem,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Text('取消'),
+                      onPressed: () {
+                        setState(() {
+                          widget.categorySelect.clear();
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Text('确定'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -136,6 +160,5 @@ class CategorySelectState extends State<CategorySelect> {
         )
       ],
     );
-
   }
 }
