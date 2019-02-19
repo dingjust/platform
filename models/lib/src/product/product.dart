@@ -18,9 +18,6 @@ enum SampleProductReturnState {
 
   /// 已还
   RETURNED,
-
-  /// 异常
-  ABNORMAL,
 }
 
 ///借的类型
@@ -36,7 +33,6 @@ enum LendBorrowType {
 const SampleProductReturnStateLocalizedMap = {
   SampleProductReturnState.NO_RETURN: "未还",
   SampleProductReturnState.RETURNED: "已还",
-  SampleProductReturnState.ABNORMAL: "异常",
 };
 
 @JsonSerializable()
@@ -493,6 +489,7 @@ class SizeModel extends ItemModel {
 @JsonSerializable()
 class SampleProductModel extends ApparelProductModel {
   SampleProductModel({
+    String skuID,
     String code,
     String name,
     double price,
@@ -502,6 +499,7 @@ class SampleProductModel extends ApparelProductModel {
     MemberRating ratingIfPrivacy,
     List<CategoryModel> superCategories,
   }) : super(
+          skuID: skuID,
           code: code,
           name: name,
           price: price,
@@ -520,12 +518,15 @@ class SampleProductModel extends ApparelProductModel {
 }
 
 @JsonSerializable()
-class SampleLendingHistoryModel extends ItemModel {
+class SampleBorrowReturnHistoryModel extends ItemModel {
   //样衣产品
   SampleProductModel sampleProduct;
 
   //借的类型
   LendBorrowType type;
+
+  //归还状态
+  SampleProductReturnState state;
 
   //数量
   int quantity;
@@ -536,23 +537,35 @@ class SampleLendingHistoryModel extends ItemModel {
   //归还日期
   DateTime returnedDate;
 
-  //借方（归属）
-  String debtor;
+  //关联方
+  String relatedParty;
 
-  SampleLendingHistoryModel({
+  //联系方式
+  String contactWay;
+
+  //备注
+  String remake;
+
+  DateTime creationDate;
+
+  SampleBorrowReturnHistoryModel({
     this.sampleProduct,
     this.type,
     this.quantity,
     this.expectedReturnDate,
     this.returnedDate,
-    this.debtor,
+    this.relatedParty,
+    this.contactWay,
+    this.state,
+    this.creationDate,
+    this.remake,
   });
 
-  factory SampleLendingHistoryModel.fromJson(Map<String, dynamic> json) =>
-      _$SampleLendingHistoryModelFromJson(json);
+  factory SampleBorrowReturnHistoryModel.fromJson(Map<String, dynamic> json) =>
+      _$SampleBorrowReturnHistoryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SampleLendingHistoryModel model) =>
-      _$SampleLendingHistoryModelToJson(model);
+  static Map<String, dynamic> toJson(SampleBorrowReturnHistoryModel model) =>
+      _$SampleBorrowReturnHistoryModelToJson(model);
 }
 
 @JsonSerializable()

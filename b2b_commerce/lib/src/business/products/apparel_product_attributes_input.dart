@@ -167,6 +167,7 @@ class ApparelProductAttributesInputPageState
                       ),
                 ),
               );
+              print(result);
 
               if (result != null) {
                 _styleText = '';
@@ -176,7 +177,7 @@ class ApparelProductAttributesInputPageState
                     break;
                   }
 
-                  _styleText += result[i].name;
+                  _styleText += result[i]?.name;
 
                   if (i != result.length - 1) {
                     _styleText += '、';
