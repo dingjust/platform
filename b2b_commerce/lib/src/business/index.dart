@@ -30,13 +30,13 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
       //   ],
       // ),
       body: Container(
-        color: Colors.grey[200],
+        color: Color.fromRGBO(245, 245, 245, 1),
         child: ListView(
           children: <Widget>[
             SiteStatisticsSection(<SiteStatisticsModel>[
-              SiteStatisticsModel('今日销售', '561件'),
-              SiteStatisticsModel('今日销量', '2500.00元'),
-              SiteStatisticsModel('在架商品', '15款')
+              SiteStatisticsModel('今日销售', '561', '件'),
+              SiteStatisticsModel('今日销量', '2500.00', '元'),
+              SiteStatisticsModel('在架商品', '15', '款')
             ]),
             AdvanceMenu('我的待办', <AdvanceMenuItem>[
               AdvanceMenuItem(
@@ -65,10 +65,10 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
             AdvanceMenu('其他', <AdvanceMenuItem>[
               AdvanceMenuItem(MenuItemImage.supplier_manage, '供应商管理',
                   AppRoutes.ROUTE_SUPPLIERS),
-              AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣管理',
+              AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣借还',
                   AppRoutes.ROUTE_SAMPLE_GARMENTS),
-              AdvanceMenuItem(
-                  MenuItemImage.check_report, '报表查看', '/business/sales-orders'),
+//              AdvanceMenuItem(
+//                  MenuItemImage.check_report, '报表查看', '/business/sales-orders'),
               AdvanceMenuItem(
                   MenuItemImage.check_report, '运费管理', AppRoutes.ROUTE_DELIVERY),
             ]),

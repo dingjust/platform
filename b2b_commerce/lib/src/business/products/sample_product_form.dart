@@ -19,11 +19,20 @@ class SampleProductFormPageState extends State<SampleProductFormPage>{
   TextEditingController _skuIDController = TextEditingController();
 
   @override
+  void initState() {
+    _nameController.text = widget.item?.name;
+    _skuIDController.text = widget.item?.skuID;
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('新建样衣'),
+        title: Text('编辑样衣'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +41,10 @@ class SampleProductFormPageState extends State<SampleProductFormPage>{
             padding: const EdgeInsets.only(left:15.0,top: 10),
             child: Text('上传样衣图片'),
           ),
-          AlbumsAndCameras(images: _images,),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: PhotoPicker(images: _images,),
+          ),
           TextFieldComponent(
             focusNode: _nameFocusNode,
             controller: _nameController,

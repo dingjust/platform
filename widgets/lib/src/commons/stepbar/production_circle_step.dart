@@ -10,7 +10,7 @@ class ProductionCircleStep extends StatelessWidget {
       @required this.currentPhase,
       this.fontSize = 15,
       this.thickness = 5,
-      this.fontColor = Colors.black})
+      this.fontColor = const Color.fromRGBO(50, 50, 50, 1)})
       : super(key: key);
 
   final double size;
@@ -74,7 +74,8 @@ class ProductionCircleStep extends StatelessWidget {
     //当前步骤
     body.add(Text(
       '${ProductionProgressPhaseLocalizedMap[currentPhase]}',
-      style: TextStyle(color: fontColor, fontSize: fontSize),
+      style: TextStyle(
+          color: fontColor, fontSize: fontSize, fontWeight: FontWeight.bold),
     ));
     return body;
   }
@@ -151,11 +152,26 @@ class CircleStepItem {
 const ProductionStepConstants = [
   {
     "phase": ProductionProgressPhase.MATERIAL_PREPARATION,
-    "color": Colors.orange
+    "color": Color.fromRGBO(255, 194, 108, 1)
   },
-  {"phase": ProductionProgressPhase.CUTTING, "color": Colors.orange},
-  {"phase": ProductionProgressPhase.STITCHING, "color": Colors.orange},
-  {"phase": ProductionProgressPhase.AFTER_FINISHING, "color": Colors.orange},
-  {"phase": ProductionProgressPhase.INSPECTION, "color": Colors.orange},
-  {"phase": ProductionProgressPhase.DELIVERY, "color": Colors.orange}
+  {
+    "phase": ProductionProgressPhase.CUTTING,
+    "color": Color.fromRGBO(255, 194, 108, 1)
+  },
+  {
+    "phase": ProductionProgressPhase.STITCHING,
+    "color": Color.fromRGBO(255, 194, 108, 1)
+  },
+  {
+    "phase": ProductionProgressPhase.AFTER_FINISHING,
+    "color": Color.fromRGBO(255, 194, 108, 1)
+  },
+  {
+    "phase": ProductionProgressPhase.INSPECTION,
+    "color": Color.fromRGBO(255, 194, 108, 1)
+  },
+  {
+    "phase": ProductionProgressPhase.DELIVERY,
+    "color": Color.fromRGBO(255, 194, 108, 1)
+  }
 ];

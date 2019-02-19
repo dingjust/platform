@@ -37,7 +37,9 @@ class MenuItem extends StatelessWidget {
       onTap: () => Navigator.pushNamed(context, routeTo),
       child: ListTile(
         trailing: Icon(Icons.chevron_right),
-        title: Text(title),
+        title: Text(
+          title,
+        ),
         leading: Icon(icon),
       ),
     );
@@ -58,6 +60,7 @@ class AdvanceMenu extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(color: Colors.white),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -65,12 +68,16 @@ class AdvanceMenu extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(10.0, 5.0, 0, 5.0),
-            child: Text(title, style: TextStyle(fontSize: 16.0)),
+            child: Text(title,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Color.fromRGBO(0, 0, 0, 1)
+                )),
           ),
           Container(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
             child: Wrap(
-              spacing: 26.0,
+              spacing: 32.0,
               runSpacing: 20.0,
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -107,6 +114,7 @@ class AdvanceMenuItem extends StatelessWidget {
               child: Text(
                 title,
                 style: TextStyle(
+                  color: Color.fromRGBO(100, 100, 100, 1),
                   fontSize: 15.0,
                   fontWeight: FontWeight.w400,
                 ),

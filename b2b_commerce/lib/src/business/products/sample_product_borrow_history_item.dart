@@ -39,7 +39,7 @@ class SampleProductBorrowHistoryItem extends StatelessWidget {
             Expanded(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                height: 100,
+//                height: 100,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,9 +78,33 @@ class SampleProductBorrowHistoryItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
-                      '借出日期：' + item.creationDate.toString().substring(0, 10),
-                      style: TextStyle(color: Colors.grey),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            '借出日期：' + item.creationDate.toString().substring(0, 10),
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                        Offstage(
+                          offstage: item.state == SampleProductReturnState.NO_RETURN ? false : true,
+                          child:Container(
+                            padding:
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.orange[200],
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              '归还',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     item.state == SampleProductReturnState.RETURNED
                         ? Text(

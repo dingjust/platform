@@ -27,7 +27,8 @@ class FactoryItem extends StatelessWidget {
         //     builder: (context) => ));
       },
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+        margin: EdgeInsets.symmetric(horizontal: 15),
         child: Row(
           children: <Widget>[
             Container(
@@ -35,7 +36,7 @@ class FactoryItem extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
                     image: NetworkImage(model.profilePicture),
                     fit: BoxFit.cover,
@@ -48,8 +49,8 @@ class FactoryItem extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.black38,
                       borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(5)),
                     ),
                     child: Center(
                       child: Text(
@@ -64,29 +65,35 @@ class FactoryItem extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Container(
+                height: 80,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Stars(
-                          size: 15,
-                          color: Color.fromRGBO(255, 183, 0, 1),
-                          highlightOnly: false,
-                          starLevel: model.starLevel,
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 10),
-                          child: _buildCategoryTags(),
-                        )
-                      ],
+                    Container(
+                      padding: EdgeInsets.only(bottom: 5),
+                      // color: Colors.green,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Stars(
+                            size: 14,
+                            color: Color.fromRGBO(255, 183, 0, 1),
+                            highlightOnly: false,
+                            starLevel: model.starLevel,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 10),
+                            child: _buildCategoryTags(),
+                          )
+                        ],
+                      ),
                     ),
                     Container(
                       child: Text(
                         model.describe,
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Row(
@@ -99,7 +106,9 @@ class FactoryItem extends StatelessWidget {
                               children: <TextSpan>[
                                 TextSpan(
                                     text: '${model.historyOrdersCount}',
-                                    style: TextStyle(color: Colors.red)),
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold)),
                                 TextSpan(text: '单')
                               ]),
                         ),
@@ -173,7 +182,7 @@ class CategoryTag extends StatelessWidget {
   const CategoryTag(
       {Key key,
       this.width = 32,
-      this.height = 18,
+      this.height = 20,
       @required this.label,
       this.color = const Color.fromRGBO(244, 143, 177, 1.0),
       this.backgroundColor = const Color.fromRGBO(248, 187, 208, 0.3)})
@@ -188,13 +197,13 @@ class CategoryTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+      padding: EdgeInsets.fromLTRB(2, 1, 2, 1),
       height: height,
-      margin: EdgeInsets.symmetric(horizontal: 2),
+      margin: EdgeInsets.symmetric(horizontal: 5),
       child: Center(
         child: Text(
           label,
-          style: TextStyle(color: color, fontSize: 12),
+          style: TextStyle(color: color, fontSize: 14),
         ),
       ),
       decoration: BoxDecoration(

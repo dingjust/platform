@@ -74,7 +74,7 @@ class ApparelProductBLoC extends BLoCBase {
         'maxPreOrder': 120,
       },
       'attributes': {
-        'styles': ['A001', 'A002'],
+        'styles': ['FG0001', 'FG0002'],
         'fabricComposition': 'B001',
         'editionType': 'C001',
         'pattern': 'D001',
@@ -140,7 +140,7 @@ class ApparelProductBLoC extends BLoCBase {
             },
 
             'attributes': {
-              'styles': ['A001', 'A002'],
+              'styles': ['FG0001', 'FG0002'],
               'fabricComposition': 'B001',
               'editionType': 'C001',
               'pattern': 'D001',
@@ -183,7 +183,7 @@ class ApparelProductBLoC extends BLoCBase {
               'maxPreOrder': 122,
             },
             'attributes': {
-              'styles': ['A001', 'A002'],
+              'styles': ['FG0001', 'FG0002'],
               'fabricComposition': 'B001',
               'editionType': 'C001',
               'pattern': 'D001',
@@ -218,7 +218,7 @@ class ApparelProductBLoC extends BLoCBase {
               'maxPreOrder': 122,
             },
             'attributes': {
-              'styles': ['A001', 'A002'],
+              'styles': ['FG0001', 'FG0002'],
               'fabricComposition': 'B001',
               'editionType': 'C001',
               'pattern': 'D001',
@@ -252,7 +252,7 @@ class ApparelProductBLoC extends BLoCBase {
               'maxPreOrder': 122,
             },
             'attributes': {
-              'styles': ['A001', 'A002'],
+              'styles': ['FG0001', 'FG0002'],
               'fabricComposition': 'B001',
               'editionType': 'C001',
               'pattern': 'D001',
@@ -286,7 +286,7 @@ class ApparelProductBLoC extends BLoCBase {
               'maxPreOrder': 122,
             },
             'attributes': {
-              'styles': ['A001', 'A002'],
+              'styles': ['FG0001', 'FG0002'],
               'fabricComposition': 'B001',
               'editionType': 'C001',
               'pattern': 'D001',
@@ -330,7 +330,7 @@ class ApparelProductBLoC extends BLoCBase {
             'maxPreOrder': 122,
           },
           'attributes': {
-            'styles': ['A001', 'A002'],
+            'styles': ['FG0001', 'FG0002'],
             'fabricComposition': 'B001',
             'editionType': 'C001',
             'pattern': 'D001',
@@ -377,7 +377,7 @@ class ApparelProductBLoC extends BLoCBase {
           'maxPreOrder': 122,
         },
         'attributes': {
-          'styles': ['A001', 'A002'],
+          'styles': ['FG0001', 'FG0002'],
           'fabricComposition': 'B001',
           'editionType': 'C001',
           'pattern': 'D001',

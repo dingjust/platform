@@ -45,12 +45,13 @@ class HomeSearchInputBox extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Icon(
-              Icons.search,
+              B2BIcons.search,
               color: Colors.grey,
+              size: 18,
             ),
             Text(
-              '找点什么...',
-              style: TextStyle(color: Colors.grey, fontSize: 12),
+              '   找点什么...',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
             )
           ],
         ),
@@ -73,9 +74,17 @@ class HomeInfoItem extends StatelessWidget {
     return RichText(
       text: TextSpan(
           text: label,
-          style: TextStyle(fontSize: 12, color: Colors.black),
+          style: TextStyle(
+            fontSize: 13,
+            color: Color.fromRGBO(32, 32, 32, 1),
+          ),
           children: <TextSpan>[
-            TextSpan(text: value, style: TextStyle(color: Colors.red)),
+            TextSpan(
+                text: value,
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold)),
             TextSpan(text: '${end}')
           ]),
     );

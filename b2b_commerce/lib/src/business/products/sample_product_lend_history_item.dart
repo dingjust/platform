@@ -39,7 +39,7 @@ class SampleProductLendHistoryItem extends StatelessWidget {
             Expanded(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                height: 100,
+//                height: 100,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,13 +87,34 @@ class SampleProductLendHistoryItem extends StatelessWidget {
                           ),
                         ),*/
                         Text(
-                          '借出数量：',
+                          '借入数量：',
                           style: TextStyle(color: Colors.grey),
                         ),
-                        Text(
-                          item.quantity.toString(),
-                          style: TextStyle(color: Colors.orange),
-                        )
+                        Expanded(
+                          child: Text(
+                            item.quantity.toString(),
+                            style: TextStyle(color: Colors.orange),
+                          ),
+                        ),
+                        Offstage(
+                          offstage: item.state == SampleProductReturnState.NO_RETURN ? false : true,
+                          child:Container(
+                            padding:
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.orange[200],
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              '归还',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+
                       ],
                     ),
                     Text(

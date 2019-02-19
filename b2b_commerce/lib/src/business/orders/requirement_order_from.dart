@@ -106,12 +106,16 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     return Scaffold(
         appBar: AppBar(
           title: Text('需求发布'),
+          elevation: 0.5,
           actions: <Widget>[
             GestureDetector(
               child: Container(
                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 child: Center(
-                  child: Text('导入商品'),
+                  child: Text(
+                    '导入商品',
+                    style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                  ),
                 ),
               ),
             )
@@ -427,7 +431,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 ],
               )),
           decoration: BoxDecoration(
-            color: Colors.black12,
+            color: Color.fromRGBO(242, 242, 242, 1),
           ),
         ),
         onTap: () {
@@ -640,7 +644,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         ],
       ),
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: Color.fromRGBO(242, 242, 242, 1),
       ),
     );
   }
@@ -999,3 +1003,12 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     });
   }
 }
+
+// class InfoRow extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: child,
+//     );
+//   }
+// }

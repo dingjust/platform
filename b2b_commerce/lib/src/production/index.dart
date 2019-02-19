@@ -56,9 +56,17 @@ class _ProductionPageState extends State<ProductionPage> {
                     value: 'delayWarning',
                     onRemind: true,
                     remindNum: 12),
+                FilterConditionEntry(
+                  label: '已完成',
+                  value: 'complete',
+                )
               ],
               action: IconButton(
-                icon: Icon(Icons.menu),
+                icon: Icon(
+                  B2BIcons.menu,
+                  size: 12,
+                  color: Color.fromRGBO(50, 50, 50, 1),
+                ),
                 onPressed: () {},
               ),
               streamController: ProductionBLoC.instance.conditionController,
@@ -203,11 +211,12 @@ class ProductionListView extends StatelessWidget {
                 child: RichText(
                   text: TextSpan(
                       text: '———',
-                      style: TextStyle(fontSize: 15, color: Colors.grey),
+                      style: TextStyle(fontSize: 25, color: Colors.grey),
                       children: <TextSpan>[
                         TextSpan(
-                            text: '工厂推荐',
-                            style: TextStyle(color: Colors.black)),
+                            text: '推荐工厂',
+                            style:
+                                TextStyle(fontSize: 25, color: Colors.black)),
                         TextSpan(text: '———')
                       ]),
                 ),

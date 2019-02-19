@@ -68,7 +68,10 @@ class ProductionItem extends StatelessWidget {
               // )
               Text(
                 '线上订单',
-                style: TextStyle(color: Colors.green, fontSize: 14),
+                style: TextStyle(
+                    color: Color.fromRGBO(86, 194, 117, 1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
               )
             ],
           ),
@@ -80,15 +83,15 @@ class ProductionItem extends StatelessWidget {
   List<Widget> _buildEntries() {
     return order.entries
         .map((entry) => Container(
-              color: Colors.grey[100],
-              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+              color: Color.fromRGBO(250, 250, 250, 1),
+              padding: EdgeInsets.all(10),
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: 80,
+                    height: 80,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(5),
                         image: DecorationImage(
                           image: entry.product.thumbnail != null
                               ? NetworkImage(entry.product.thumbnail)
@@ -104,33 +107,42 @@ class ProductionItem extends StatelessWidget {
                     child: Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      height: 100,
+                      height: 80,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            entry.product.name,
-                            style: TextStyle(fontSize: 15),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Text(
-                              '货号：' + entry.product.skuID,
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.grey),
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                entry.product.name,
+                                style: TextStyle(fontSize: 15),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Text(
+                                  '货号：' + entry.product.skuID,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color.fromRGBO(150, 150, 150, 1)),
+                                ),
+                              )
+                            ],
                           ),
                           Row(
                             children: <Widget>[
                               Text(
                                 '共${order.totalQuantity}件商品   合计: ￥${order.totalPrice}',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(
+                                  color: Color.fromRGBO(150, 150, 150, 1),
+                                  fontSize: 14,
+                                ),
                               )
                             ],
                           )
@@ -145,6 +157,8 @@ class ProductionItem extends StatelessWidget {
                       size: 25,
                       currentPhase: order.currentPhase,
                       thickness: 3,
+                      fontColor: Color.fromRGBO(50, 50, 50, 1),
+                      fontSize: 13,
                     ),
                   )
                 ],
