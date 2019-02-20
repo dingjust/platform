@@ -106,7 +106,7 @@ class HomeTabSection extends StatelessWidget {
       AdvanceIconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(route: 'factoryMap',)));
+              builder: (context) => ScreenConditions(route: '地图找厂',)));
         },
         title: '地图找厂',
         icon: Icon(
@@ -129,7 +129,7 @@ class HomeTabSection extends StatelessWidget {
       AdvanceIconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(route: 'brandFactory',)));
+              builder: (context) => ScreenConditions(route: '品牌工厂',)));
         },
         title: '品牌工厂',
         icon: Icon(
@@ -141,7 +141,7 @@ class HomeTabSection extends StatelessWidget {
       AdvanceIconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(route: 'freeProofing',)));
+              builder: (context) => ScreenConditions(route: '免费打样',)));
         },
         title: '免费打样',
         icon: Icon(
@@ -153,7 +153,7 @@ class HomeTabSection extends StatelessWidget {
       AdvanceIconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(route: 'allFactory',)));
+              builder: (context) => ScreenConditions(route: '全部工厂',)));
         },
         title: '全部工厂',
         icon: Icon(
