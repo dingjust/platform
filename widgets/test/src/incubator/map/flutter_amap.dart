@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
+void main() => runApp(new MyMap());
+
 class MyMap extends StatelessWidget {
   // This widget is the root of your application.
   @override

@@ -74,9 +74,11 @@ class SaleOrderDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
+        centerTitle: true,
+        elevation: 0.5,
         title: Text('销售订单详情'),
       ),
       body: ListView(

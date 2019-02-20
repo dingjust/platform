@@ -14,6 +14,9 @@ class _SuppliersPageState extends State<SuppliersPage> {
     return SuppliersBlocProvider(
         child: Scaffold(
           appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: true,
+            elevation: 0.5,
             title: Text('供应商管理'),
             actions: <Widget>[
               IconButton(
@@ -178,7 +181,7 @@ class SuppliersItem extends StatelessWidget {
         ),
       ),
       subtitle: Text('合作单数：' + supplierModel.orderCount.toString(),
-          style: TextStyle(fontSize: 18, color: Colors.orange)),
+          style: TextStyle(fontSize: 18, color: Color(0xFFFF9516))),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

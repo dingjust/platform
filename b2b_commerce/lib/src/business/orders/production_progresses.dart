@@ -78,7 +78,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color: sequence <= _index ? Colors.orangeAccent : Colors.black45,
+            color: sequence <= _index ? Color(0xFFFF9516) : Colors.black45,
           ),
         ),
         Positioned(
@@ -93,7 +93,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               width: 16.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: sequence <= _index ? Colors.orange : Colors.black
+                  color: sequence <= _index ? Color(0xFFFF9516) : Colors.black
               ),
             ),
           ),
@@ -118,7 +118,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             title: Text(ProductionProgressPhaseLocalizedMap[progress.phase],
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: sequence <= _index ? Colors.orange : Colors.black54,
+                    color: sequence <= _index ? Color(0xFFFF9516) : Colors.black54,
                     fontSize: 18)),
             trailing: Text(
               '已延期2天',
@@ -143,7 +143,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           child:Align(
                             alignment: Alignment.centerRight,
                             child:
-                            Text('${DateFormatUtil.format(
+                            Text('${DateFormatUtil.formatYMD(
                                 progress.estimatedDate)}',
                                 style: TextStyle(fontWeight: FontWeight.w500)),
                           ),
@@ -168,7 +168,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('${DateFormatUtil.format(progress.finishDate)}', style: TextStyle(fontWeight: FontWeight.w500)),
+                        child: Text('${DateFormatUtil.formatYMD(progress.finishDate)}', style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                           alignment: Alignment.centerRight,
@@ -248,18 +248,15 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
               child: phase == currentPhase &&
-              (progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM ||
-                  progress.phase == ProductionProgressPhase.INSPECTION)
+              (progress.phase == ProductionProgressPhase.INSPECTION)
                   ? RaisedButton(
-                color: Colors.orange,
-                child: Text(
-                  progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
-                  '样衣确认':'验货完成',
+                color: Color(0xFFFF9516),
+                child: Text('验货完成',
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
-                  _showTipsDialog('样衣确认'):_showTipsDialog('验货');
+//                  progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
+                  _showTipsDialog('验货');
                 },
               )
                   : null)

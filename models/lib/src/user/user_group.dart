@@ -299,6 +299,10 @@ class FactoryModel extends B2BUnitModel {
   //现货商品
   List<ProductModel> products;
 
+  double locationX;
+
+  double locationY;
+
   FactoryModel({
     String profilePicture,
     String uid,
@@ -328,6 +332,8 @@ class FactoryModel extends B2BUnitModel {
     this.responseQuotedTime,
     this.products,
     this.adeptAtCategories,
+    this.locationX,
+    this.locationY,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -353,6 +359,32 @@ class FactoryModel extends B2BUnitModel {
 
   static Map<String, dynamic> toJson(FactoryModel model) =>
       _$FactoryModelToJson(model);
+}
+
+//产业集群
+@JsonSerializable()
+class IndustrialClusterFactoryModel {
+  FactoryModel factory;
+
+  //标签
+  String tip;
+
+  //地区
+  String area;
+
+  IndustrialClusterFactoryModel({
+    this.factory,
+    this.tip,
+    this.area,
+  }) : super(
+
+  );
+
+  factory IndustrialClusterFactoryModel.fromJson(Map<String, dynamic> json) =>
+      _$IndustrialClusterFactoryModelFromJson(json);
+
+  static Map<String, dynamic> toJson(IndustrialClusterFactoryModel model) =>
+      _$IndustrialClusterFactoryModelToJson(model);
 }
 
 //合作方式枚举
@@ -426,7 +458,7 @@ const ScaleRangesLocalizedMap = {
 };
 
 //年龄段
-enum AgeRanges{
+enum AgeRanges {
   AR001,
   AR002,
   AR003,
@@ -437,16 +469,16 @@ enum AgeRanges{
 }
 
 const AgeRangesLocalizedMap = {
-  AgeRanges.AR001 : '0-6',
-  AgeRanges.AR002 : '7-12',
-  AgeRanges.AR003 : '13-17',
-  AgeRanges.AR004 : '18-23',
-  AgeRanges.AR005 : '24-30',
-  AgeRanges.AR006:  '31-40',
-  AgeRanges.AR007 : '41以上',
+  AgeRanges.AR001: '0-6',
+  AgeRanges.AR002: '7-12',
+  AgeRanges.AR003: '13-17',
+  AgeRanges.AR004: '18-23',
+  AgeRanges.AR005: '24-30',
+  AgeRanges.AR006: '31-40',
+  AgeRanges.AR007: '41以上',
 };
 
-enum PriceRanges{
+enum PriceRanges {
   PR001,
   PR002,
   PR003,
@@ -456,12 +488,12 @@ enum PriceRanges{
 }
 
 const PriceRangesLocalizedMap = {
-  PriceRanges.PR001 : '0-60',
-  PriceRanges.PR002 : '61-120',
-  PriceRanges.PR003 : '121-200',
-  PriceRanges.PR004 : '201-300',
-  PriceRanges.PR005 : '301-500',
-  PriceRanges.PR006 : '500以上',
+  PriceRanges.PR001: '0-60',
+  PriceRanges.PR002: '61-120',
+  PriceRanges.PR003: '121-200',
+  PriceRanges.PR004: '201-300',
+  PriceRanges.PR005: '301-500',
+  PriceRanges.PR006: '500以上',
 };
 
 //供应商

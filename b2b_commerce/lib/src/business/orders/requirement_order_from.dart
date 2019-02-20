@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:b2b_commerce/src/business/orders/requirement_import_product.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
-import 'package:b2b_commerce/src/my/my_client_services.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -50,13 +50,6 @@ final List<Map<CategoryModel, List<CategoryModel>>> _majorCategory = [
   },
 ];
 
-final List<EnumModel> processingTypeList = [
-  EnumModel.fromJson({'code': 'FOB', 'name': 'FOB'}),
-  EnumModel.fromJson({'code': 'PURE_PROCESSING', 'name': 'PURE_PROCESSING'}),
-  EnumModel.fromJson({'code': 'ODM', 'name': 'ODM'}),
-  EnumModel.fromJson({'code': 'OEM', 'name': 'OEM'}),
-];
-
 final List<EnumModel> technologyList = [
   EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
   EnumModel.fromJson({'code': '打板', 'name': '打板'}),
@@ -80,26 +73,30 @@ class RequirementOrderFrom extends StatefulWidget {
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   List<CategoryModel> _mojarSelected = [];
   List<CategoryModel> _categorySelected = [];
-  List<EnumModel> _processingTypeSelected = [];
   List<EnumModel> _productionAreaSelected = [];
-  String mojar = '点击选取';
-  String category = '点击选取';
+  String mojar = '选取';
+  String category = '选取';
   String processCount = '输入';
   String expectPrice = '输入';
   TextEditingController inputNumber;
+  TextEditingController inputPerson;
   bool _isShowMore = true;
-  String address = '点击选取';
-  String processingType = '点击选取';
-  String technology = '点击选取';
-  String deliveryDate = '点击选取';
+  String address = '选取';
+  String processingType = '选取';
+  String technology = '选取';
+  String deliveryDate = '选取';
   String remarks = '输入';
   List<File> _normalImages = [];
   List<String> normal;
-  String isProvideSampleProduct = '点击选取';
-  String isInvoice = '点击选取';
-  String inspectionMethod = '点击选取';
+  String isProvideSampleProduct = '选取';
+  String isInvoice = '选取';
+  String inspectionMethod = '选取';
   bool _isRequirementPool = true;
-  String _productionArea = '点击选取';
+  String _productionArea = '选取';
+  String isProofing = '选取';
+  String contactInformation = '输入';
+  String contactPerson = '';
+  String contactPhone = '';
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +104,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         appBar: AppBar(
           title: Text('需求发布'),
           elevation: 0.5,
+          brightness: Brightness.light,
+          centerTitle: true,
           actions: <Widget>[
             GestureDetector(
               child: Container(
@@ -118,6 +117,14 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   ),
                 ),
               ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RequirementImportProduct(),
+                    ),
+                  );
+                }
             )
           ],
         ),
@@ -127,7 +134,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             _buildBody(context),
             _buildCommitButton(context),
           ],
-        )));
+        ))
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -137,19 +145,20 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Column(
           children: <Widget>[
             _buildPic(context),
-            new Divider(),
             _buildMajor(context),
-            new Divider(),
+            new Divider(height: 0,),
             _buildCategory(context),
-            new Divider(),
+            new Divider(height: 0,),
             _buildProcessCount(context),
-            new Divider(),
+            new Divider(height: 0,),
             _buildExpectPrice(context),
-            new Divider(),
+            new Divider(height: 0,),
             _buildDeliveryDate(context),
-            new Divider(),
+            new Divider(height: 0,),
+            _buildContactInformation(context),
+            new Divider(height: 0,),
             _buildAddress(context),
-            _isShowMore ? Container() : new Divider(),
+            _isShowMore ? Container() : new Divider(height: 0,),
             _buildHideBody(context),
             _buildHideTips(context),
           ],
@@ -166,15 +175,15 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             child: Column(
               children: <Widget>[
                 _buildProductionArea(context),
-                new Divider(),
+                new Divider(height: 0,),
                 _buildCooperationModes(context),
-                new Divider(),
-                _buildInspectionMethod(context),
-                new Divider(),
+                new Divider(height: 0,),
+                _buildProofing(context),
+                new Divider(height: 0,),
                 _buildSampleProduct(context),
-                new Divider(),
+                new Divider(height: 0,),
                 _buildInvoice(context),
-                new Divider(),
+                new Divider(height: 0,),
                 _buildRemarks(context),
               ],
             ),
@@ -230,6 +239,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
+                          color: Colors.grey
                         ),
                         overflow: TextOverflow.ellipsis),
                   ))),
@@ -259,6 +269,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
+                            color: Colors.grey
                         ),
                         overflow: TextOverflow.ellipsis),
                   ))),
@@ -285,6 +296,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                  color: Colors.grey
               ),
             ),
           ),
@@ -311,6 +323,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                  color: Colors.grey
               ),
             ),
           ),
@@ -326,7 +339,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Container(
           child: ListTile(
               leading: Text(
-                '需求交货时间',
+                '交货时间',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -340,12 +353,40 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
+                            color: Colors.grey
                         ),
                         overflow: TextOverflow.ellipsis),
                   ))),
         ),
         onTap: () {
           _showDatePicker();
+        });
+  }
+
+  //联系方式
+  Widget _buildContactInformation(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '联系方式',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Text(
+              contactInformation,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                  color: Colors.grey
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          _neverContactInformation(context);
         });
   }
 
@@ -366,6 +407,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                  color: Colors.grey
               ),
             ),
           ),
@@ -418,14 +460,14 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                     '更多条件',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.orangeAccent,
+                      color: Color(0xFFFF9516),
                     ),
                   ),
                   Icon(
                     _isShowMore
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: Colors.orangeAccent,
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_up,
+                    color: Color(0xFFFF9516),
                     size: 28,
                   ),
                 ],
@@ -447,7 +489,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Container(
           child: ListTile(
             leading: Text(
-              '生产地倾向',
+              '生产地区',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -458,6 +500,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                  color: Colors.grey
               ),
             ),
           ),
@@ -484,6 +527,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                  color: Colors.grey
               ),
             ),
           ),
@@ -493,29 +537,30 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         });
   }
 
-  //验货方式
-  Widget _buildInspectionMethod(BuildContext context) {
+  //是否需要打样
+  Widget _buildProofing(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
             leading: Text(
-              '验货方式',
+              '是否需要打样',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
             trailing: Text(
-              inspectionMethod,
+              isProofing,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                  color: Colors.grey
               ),
             ),
           ),
         ),
         onTap: () {
-          _showInspectionMethodSelect();
+          _showIsProofingSelect();
         });
   }
 
@@ -536,6 +581,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                  color: Colors.grey
               ),
             ),
           ),
@@ -562,6 +608,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                  color: Colors.grey
               ),
             ),
           ),
@@ -588,6 +635,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
+                  color: Colors.grey
               ),
             ),
           ),
@@ -607,7 +655,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               height: 50,
               margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
               child: RaisedButton(
-                  color: Colors.orange,
+                  color: Color(0xFFFF9516),
                   child: Text(
                     '确定发布',
                     style: TextStyle(
@@ -744,6 +792,55 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     );
   }
 
+  //联系方式
+  Future<void> _neverContactInformation(BuildContext context) async {
+    inputNumber = TextEditingController();
+    inputPerson = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('请输入联系方式'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller: inputPerson,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: '请输入联系人',
+                  ),
+                ),
+                TextField(
+                  controller: inputNumber,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: '请输入手机号码',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                if (inputNumber.text != null && inputPerson.text != null) {
+                  print(inputNumber.text);
+                  setState(() {
+                    contactInformation = inputPerson.text + ',' +inputNumber.text;
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   //期望价格
   Future<void> _neverExpectPrice(BuildContext context) async {
     inputNumber = TextEditingController();
@@ -801,7 +898,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     if (_picked != null) {
       print(_picked);
       setState(() {
-        deliveryDate = DateFormatUtil.format(_picked);
+        deliveryDate = DateFormatUtil.formatYMD(_picked);
       });
     }
   }
@@ -812,25 +909,32 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 300,
-          child: EnumSelection(
-            enumModels: processingTypeList,
-            multiple: true,
-            enumSelect: _processingTypeSelected,
-          ),
-        );
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text('清加工'),
+                  onTap: () async {
+                    setState(() {
+                      processingType = '清加工';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('包工包料'),
+                  onTap: () async {
+                    setState(() {
+                      processingType = '包工包料';
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
       },
-    ).then((val) {
-      processingType = '';
-      if (_processingTypeSelected.isNotEmpty) {
-        for (int i = 0; i < _processingTypeSelected.length; i++) {
-          processingType += _processingTypeSelected[i].name + ',';
-        }
-      }
-      setState(() {
-        processingType = processingType;
-      });
-    });
+    );
   }
 
   //订单备注
@@ -874,8 +978,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     );
   }
 
-  //验货方式选项
-  void _showInspectionMethodSelect() async {
+  //是否打样选项
+  void _showIsProofingSelect() async {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -885,19 +989,19 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  title: Text('品牌验货'),
+                  title: Text('需要打样'),
                   onTap: () async {
                     setState(() {
-                      inspectionMethod = '品牌验货';
+                      isProofing = '需要打样';
                     });
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
-                  title: Text('工厂验货'),
+                  title: Text('不需要打样'),
                   onTap: () async {
                     setState(() {
-                      inspectionMethod = '工厂验货';
+                      isProofing = '不需要打样';
                     });
                     Navigator.pop(context);
                   },
@@ -1002,13 +1106,5 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       });
     });
   }
-}
 
-// class InfoRow extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: child,
-//     );
-//   }
-// }
+}

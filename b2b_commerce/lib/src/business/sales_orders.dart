@@ -21,6 +21,9 @@ class SalesOrdersPage extends StatelessWidget {
       bloc: SalesOrderBLoC.instance,
       child: Scaffold(
         appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
           title: Text('销售订单'),
           actions: <Widget>[
             IconButton(

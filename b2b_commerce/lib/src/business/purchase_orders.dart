@@ -26,8 +26,10 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
         bloc: PurchaseOrderBLoC.instance,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('采购订单'),
+            brightness: Brightness.light,
+            centerTitle: true,
             elevation: 0.5,
+            title: Text('采购订单'),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.search),
@@ -243,16 +245,14 @@ class PurchaseOrderItem extends StatelessWidget {
                 )
               ],
             ),
-            Container(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '创建时间：${DateFormatUtil.format(order.creationTime)}',
-                      style: TextStyle(fontSize: 14),
-                    )
-                  ],
-                )),
+            Row(
+              children: <Widget>[
+                Text(
+                  '创建时间：${DateFormatUtil.formatYMD(order.creationTime)}',
+                  style: TextStyle(fontSize: 14),
+                )
+              ],
+            )
           ],
         ));
   }
@@ -264,10 +264,10 @@ class PurchaseOrderItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Container(
-                width: 80,
-                height: 80,
+                width: 100,
+                height: 100,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image: NetworkImage(entry.product.thumbnail),
                       fit: BoxFit.cover,
@@ -275,43 +275,36 @@ class PurchaseOrderItem extends StatelessWidget {
               ),
               Expanded(
                   child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      height: 80,
+                      padding: EdgeInsets.all(5),
+                      height: 100,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            entry.product.name,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                            decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              '货号：' + entry.product.skuID,
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.grey),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                            decoration: BoxDecoration(
-                                color: Color.fromRGBO(255, 243, 243, 1),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              "${entry.product.superCategories.first.name}   ${entry.product.majorCategory.name}",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color.fromRGBO(255, 133, 148, 1)),
-                            ),
-                          )
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                entry.product.name,
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
+                              )),
+                          Align(
+                              alignment: Alignment.topLeft,
+                              // child: Text(
+                              //   '货号：' + entry.product.skuID,
+                              //   style: TextStyle(
+                              //       fontSize: 14, fontWeight: FontWeight.w500),
+                              // ))
+                              child: Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Text(
+                                  '货号：' + entry.product.skuID,
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
+                                ),
+                              ))
                         ],
                       )))
             ],
