@@ -41,6 +41,16 @@ class B2BIcons {
       const IconData(0xe6ab, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData calendar =
       const IconData(0xe6ae, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData search =
+      const IconData(0xe684, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData star =
+      const IconData(0xe686, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData menu =
+      const IconData(0xe6af, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData add =
+      const IconData(0xe68d, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData noPicture =
+      const IconData(0xe689, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

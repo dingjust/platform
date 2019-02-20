@@ -71,6 +71,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
           title: Text('采购订单明细'),
           actions: <Widget>[
             IconButton(
@@ -287,7 +290,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ListTile(
             leading: Icon(
               Icons.add_location,
-              color: Colors.orange,
+              color: Color(0xFFFF9516),
             ),
             title: Row(
               children: <Widget>[
@@ -349,7 +352,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 color: Colors.white,
                 child: Text(
                   '查看全部',
-                  style: TextStyle(color: Colors.orange),
+                  style: TextStyle(color: Color(0xFFFF9516)),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -378,7 +381,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 color: Colors.white,
                 child: Text(
                   '查看全部',
-                  style: TextStyle(color: Colors.orange),
+                  style: TextStyle(color: Color(0xFFFF9516)),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -416,7 +419,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             height: double.infinity,
             width: 1.3,
             color:
-                isCurrentStatus == true ? Colors.orangeAccent : Colors.black45,
+                isCurrentStatus == true ? Color(0xFFFF9516) : Colors.black45,
           ),
         ),
         Positioned(
@@ -432,7 +435,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color:
-                      isCurrentStatus == true ? Colors.orange : Colors.black),
+                      isCurrentStatus == true ? Color(0xFFFF9516) : Colors.black),
             ),
           ),
         )
@@ -454,7 +457,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: isCurrentStatus == true
-                        ? Colors.orange
+                        ? Color(0xFFFF9516)
                         : Colors.black54,
                     fontSize: 18)),
             trailing: Text(
@@ -594,23 +597,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
               child: isCurrentStatus == true &&
                       (productionProgress.phase ==
-                              ProductionProgressPhase.SAMPLE_CONFIRM ||
-                          productionProgress.phase ==
                               ProductionProgressPhase.INSPECTION)
                   ? RaisedButton(
-                      color: Colors.orange,
+                      color: Color(0xFFFF9516),
                       child: Text(
-                        productionProgress.phase ==
-                                ProductionProgressPhase.SAMPLE_CONFIRM
-                            ? '样衣确认'
-                            : '验货完成',
+                        '验货完成',
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        productionProgress.phase ==
-                                ProductionProgressPhase.SAMPLE_CONFIRM
-                            ? _showTipsDialog('样衣确认')
-                            : _showTipsDialog('验货');
+                        _showTipsDialog('验货');
                       },
                     )
                   : null)

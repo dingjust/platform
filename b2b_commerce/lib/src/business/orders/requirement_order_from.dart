@@ -106,12 +106,18 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     return Scaffold(
         appBar: AppBar(
           title: Text('需求发布'),
+          elevation: 0.5,
+          brightness: Brightness.light,
+          centerTitle: true,
           actions: <Widget>[
             GestureDetector(
               child: Container(
                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 child: Center(
-                  child: Text('导入商品'),
+                  child: Text(
+                    '导入商品',
+                    style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                  ),
                 ),
               ),
             )
@@ -133,17 +139,16 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Column(
           children: <Widget>[
             _buildPic(context),
-            new Divider(),
             _buildMajor(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildCategory(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildProcessCount(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildExpectPrice(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildDeliveryDate(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildAddress(context),
             _isShowMore ? Container() : new Divider(),
             _buildHideBody(context),
@@ -162,15 +167,15 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             child: Column(
               children: <Widget>[
                 _buildProductionArea(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildCooperationModes(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildInspectionMethod(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildSampleProduct(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildInvoice(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildRemarks(context),
               ],
             ),
@@ -414,20 +419,20 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                     '更多条件',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.orangeAccent,
+                      color: Color(0xFFFF9516),
                     ),
                   ),
                   Icon(
                     _isShowMore
                         ? Icons.keyboard_arrow_up
                         : Icons.keyboard_arrow_down,
-                    color: Colors.orangeAccent,
+                    color: Color(0xFFFF9516),
                     size: 28,
                   ),
                 ],
               )),
           decoration: BoxDecoration(
-            color: Colors.black12,
+            color: Color.fromRGBO(242, 242, 242, 1),
           ),
         ),
         onTap: () {
@@ -603,7 +608,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               height: 50,
               margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
               child: RaisedButton(
-                  color: Colors.orange,
+                  color: Color(0xFFFF9516),
                   child: Text(
                     '确定发布',
                     style: TextStyle(
@@ -640,7 +645,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         ],
       ),
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: Color.fromRGBO(242, 242, 242, 1),
       ),
     );
   }
@@ -999,3 +1004,12 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     });
   }
 }
+
+// class InfoRow extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: child,
+//     );
+//   }
+// }

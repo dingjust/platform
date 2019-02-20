@@ -9,24 +9,36 @@ class SiteStatisticsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Column buildButtonColumn(String label, String amount) {
+    Column buildButtonColumn(String label, String amount, String unit) {
       Color color = Colors.red;
 
       return Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(label,style: TextStyle(fontSize: 15.0),),
+          Text(
+            label,
+            style: TextStyle(fontSize: 15.0),
+          ),
           Container(
             margin: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              amount,
-              style: TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.w400,
-                color: color,
-              ),
-            ),
+            child: RichText(
+                text: TextSpan(
+                    text: '${amount}',
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w500,
+                      color: color,
+                    ),
+                    children: <TextSpan>[
+                  TextSpan(
+                      text: unit,
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal,
+                        color: color,
+                      ))
+                ])),
           ),
         ],
       );
@@ -38,7 +50,7 @@ class SiteStatisticsSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: items.map((item) {
-          return buildButtonColumn(item.label, item.value);
+          return buildButtonColumn(item.label, item.value, item.unit);
         }).toList(),
       ),
     );

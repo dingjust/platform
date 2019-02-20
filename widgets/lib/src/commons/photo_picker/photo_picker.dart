@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:widgets/widgets.dart';
 
 class PhotoPicker extends StatefulWidget {
   ///图片文件列表
@@ -51,14 +52,18 @@ class _PhotoPickerState extends State<PhotoPicker> {
           width: widget.imageWidth,
           height: widget.height,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey[300], width: 1.0)),
+            // borderRadius: BorderRadius.circular(10),
+            color: Color.fromRGBO(242, 242, 242, 1),
+            // border: Border.all(color: Colors.grey[300], width: 1.0)
+          ),
           child: Center(
-            child: Icon(
+            child: 
+            Icon(
               Icons.add,
-              size: widget.imageWidth,
+              size: widget.imageWidth * 0.6,
               color: Colors.grey,
             ),
+
           ),
         ),
       ));

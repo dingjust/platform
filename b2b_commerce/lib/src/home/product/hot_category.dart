@@ -3,73 +3,67 @@ import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-class HotCategoryPage extends StatefulWidget {
-  _HotCategoryPageState createState() => _HotCategoryPageState();
+class ProductHotCategoryPage extends StatefulWidget {
+  _ProductHotCategoryPageState createState() => _ProductHotCategoryPageState();
 }
 
-class _HotCategoryPageState extends State<HotCategoryPage> {
-  //TODO:调用接口查询推荐工厂
-  List<FactoryModel> factories = <FactoryModel>[
-    FactoryModel(
-        historyOrdersCount: 214,
-        name: '广州旭日4',
-        starLevel: 4,
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
-    FactoryModel(
-        historyOrdersCount: 214,
-        name: '广州旭日3',
-        starLevel: 4,
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
-    FactoryModel(
-        historyOrdersCount: 214,
-        name: '广州旭日2',
-        starLevel: 4,
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
-    FactoryModel(
-        historyOrdersCount: 214,
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        name: '广州旭日1',
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        starLevel: 4,
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
-    FactoryModel(
-        historyOrdersCount: 214,
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        name: '广州旭日0',
-        starLevel: 4,
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
+class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
+  //TODO:调用接口查询推荐款式
+  List<ProductModel> recommendProducts = <ProductModel>[
+    ProductModel(
+        name: '冬季女棉服',
+        thumbnail:
+            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        minPrice: 99.0,
+        maxPrice: 500.0),
+    ProductModel(
+        name: '冬季女棉服',
+        thumbnail:
+            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        minPrice: 99.0,
+        maxPrice: 500.0),
+    ProductModel(
+        name: '冬季女棉服',
+        thumbnail:
+            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        minPrice: 99.0,
+        maxPrice: 500.0),
+    ProductModel(
+        name: '冬季女棉服',
+        thumbnail:
+            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        minPrice: 99.0,
+        maxPrice: 500.0),
+    ProductModel(
+        name: '冬季女棉服',
+        thumbnail:
+            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        minPrice: 99.0,
+        maxPrice: 500.0),
+    ProductModel(
+        name: '冬季女棉服',
+        thumbnail:
+            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        minPrice: 99.0,
+        maxPrice: 500.0),
+    ProductModel(
+        name: '冬季女棉服',
+        thumbnail:
+            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        minPrice: 99.0,
+        maxPrice: 500.0),
+    ProductModel(
+        name: '冬季女棉服',
+        thumbnail:
+            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        minPrice: 99.0,
+        maxPrice: 500.0),
+    ProductModel(
+        name: '冬季女棉服',
+        thumbnail:
+            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        minPrice: 99.0,
+        maxPrice: 500.0),
   ];
 
   @override
@@ -187,7 +181,7 @@ class _HotCategoryPageState extends State<HotCategoryPage> {
       color: Colors.grey[100],
       padding: EdgeInsets.only(top: 10),
       child: Container(
-        color: Colors.white,
+        color: Colors.green,
         margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
@@ -202,7 +196,7 @@ class _HotCategoryPageState extends State<HotCategoryPage> {
                         style: TextStyle(fontSize: 15, color: Colors.grey),
                         children: <TextSpan>[
                           TextSpan(
-                              text: '工厂推荐',
+                              text: '推荐款式',
                               style: TextStyle(color: Colors.black)),
                           TextSpan(text: '———')
                         ]),
@@ -211,10 +205,9 @@ class _HotCategoryPageState extends State<HotCategoryPage> {
               ],
             ),
             Column(
-              children: factories
-                  .map((item) => FactoryItem(
+              children: recommendProducts
+                  .map((item) => RecommendProductItem(
                         model: item,
-                        showButton: true,
                       ))
                   .toList(),
             )
@@ -264,6 +257,74 @@ class CategoryItem extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class RecommendProductItem extends StatelessWidget {
+  const RecommendProductItem(
+      {Key key,
+      this.model,
+      this.width = 150,
+      this.height = 230,
+      this.imageHeight = 160})
+      : super(key: key);
+
+  final ProductModel model;
+
+  final double width;
+
+  final double height;
+
+  final double imageHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: width,
+            height: imageHeight,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: NetworkImage(model.thumbnail),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              width: width - 10,
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('${model.name}'),
+                  RichText(
+                    text: TextSpan(
+                        text: '￥',
+                        style: TextStyle(color: Colors.red, fontSize: 14),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: '${model.minPrice}—${model.maxPrice}',
+                              style: TextStyle(fontSize: 16)),
+                        ]),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

@@ -8,7 +8,7 @@ class ProductionFilterBar extends StatefulWidget
   const ProductionFilterBar(
       {Key key,
       this.itemHeight = 20,
-      this.itemWidth = 100,
+      this.itemWidth = 75,
       @required this.entries,
       this.unselectedColor = Colors.black54,
       this.color = Colors.orange,
@@ -45,6 +45,7 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
     return PreferredSize(
         preferredSize: Size(widget.itemWidth, widget.itemHeight),
         child: Container(
+          color: Colors.white,
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +56,9 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
   }
 
   List<Widget> _buildBody() {
-    List<Widget> body = [widget.leading];
+    //头部Icon
+    // List<Widget> body = [widget.leading];
+    List<Widget> body = [];
     body.addAll(widget.entries
         .map((entry) => FlatButton(
               onPressed: () {
@@ -71,7 +74,7 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                 });
               },
               child: Container(
-                width: 90,
+                width: widget.itemWidth,
                 height: widget.height,
                 child: Stack(
                   // fit: StackFit.expand,
@@ -88,7 +91,8 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                               '${entry.label}',
                               style: TextStyle(
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight:
+                                      entry.checked ? FontWeight.bold : null,
                                   color: entry.checked
                                       ? widget.color
                                       : widget.unselectedColor),
@@ -112,7 +116,7 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                       ),
                     ),
                     Positioned(
-                      right: 12,
+                      right: 0,
                       top: 12,
                       child: entry.onRemind
                           ? Container(

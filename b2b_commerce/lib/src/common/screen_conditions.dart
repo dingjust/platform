@@ -1,4 +1,6 @@
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:b2b_commerce/src/common/find_factory_by_map.dart';
+import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -94,6 +96,10 @@ final List<EnumModel> technologyList = [
 ];
 
 class ScreenConditions extends StatefulWidget {
+  @required String route;
+
+  ScreenConditions({this.route});
+
   _ScreenConditionsState createState() => _ScreenConditionsState();
 }
 
@@ -128,6 +134,9 @@ class _ScreenConditionsState extends State<ScreenConditions> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
           title: Text('要生产什么'),
         ),
         body: Container(
@@ -522,6 +531,19 @@ class _ScreenConditionsState extends State<ScreenConditions> {
             print('大类：'+mojar+'\n小类：'+category+
                 '\n需求数量：'+requestCount+'\n生产地区：'+address+
             '\n勾选条件：'+_selected+'\n加工类型：'+processingType+'\n工艺：'+technology);
+
+            if(widget.route == 'factoryMap'){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FindFactoryByMap()),
+              );
+            }else{
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => QuickReactionFactoryPage()),
+              );
+            }
+
           },
         )
     );

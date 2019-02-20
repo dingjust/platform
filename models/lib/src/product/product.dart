@@ -5,7 +5,7 @@ import 'package:models/models.dart';
 part 'product.g.dart';
 
 ///产品状态
-enum ArticleApprovalStatus{
+enum ArticleApprovalStatus {
   CHECK,
   APPROVED,
   UNAPPROVED,
@@ -47,9 +47,11 @@ class CategoryModel extends ItemModel {
     this.parent,
   });
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) => _$CategoryModelFromJson(json);
+  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
+      _$CategoryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CategoryModel model) => _$CategoryModelToJson(model);
+  static Map<String, dynamic> toJson(CategoryModel model) =>
+      _$CategoryModelToJson(model);
 }
 
 @JsonSerializable()
@@ -66,9 +68,11 @@ class StaircasePriceModel extends ItemModel {
     this.product,
   });
 
-  factory StaircasePriceModel.fromJson(Map<String, dynamic> json) => _$StaircasePriceModelFromJson(json);
+  factory StaircasePriceModel.fromJson(Map<String, dynamic> json) =>
+      _$StaircasePriceModelFromJson(json);
 
-  static Map<String, dynamic> toJson(StaircasePriceModel model) => _$StaircasePriceModelToJson(model);
+  static Map<String, dynamic> toJson(StaircasePriceModel model) =>
+      _$StaircasePriceModelToJson(model);
 }
 
 /// 产品属性
@@ -142,6 +146,8 @@ class ProductModel extends ItemModel {
   String code;
   String name;
   double price;
+  double minPrice;
+  double maxPrice;
   String thumbnail;
   List<String> normal;
   List<String> detail;
@@ -151,7 +157,7 @@ class ProductModel extends ItemModel {
   bool privacy;
   @JsonKey(name: 'supercategories')
   List<CategoryModel> superCategories;
-  ArticleApprovalStatus  approvalStatus;
+  ArticleApprovalStatus approvalStatus;
 
   /// 对于会员可见性，A/B/C
   MemberRating ratingIfPrivacy;
@@ -163,6 +169,8 @@ class ProductModel extends ItemModel {
     this.code,
     this.name,
     this.price = 0.0,
+    this.minPrice = 0.0,
+    this.maxPrice = 0.0,
     this.thumbnail,
     this.staircasePrices,
     this.privacy,
@@ -176,9 +184,11 @@ class ProductModel extends ItemModel {
     this.master,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
+  factory ProductModel.fromJson(Map<String, dynamic> json) =>
+      _$ProductModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProductModel model) => _$ProductModelToJson(model);
+  static Map<String, dynamic> toJson(ProductModel model) =>
+      _$ProductModelToJson(model);
 }
 
 /// 变式产品
@@ -208,9 +218,11 @@ class VariantProductModel extends ProductModel {
           superCategories: superCategories,
         );
 
-  factory VariantProductModel.fromJson(Map<String, dynamic> json) => _$VariantProductModelFromJson(json);
+  factory VariantProductModel.fromJson(Map<String, dynamic> json) =>
+      _$VariantProductModelFromJson(json);
 
-  static Map<String, dynamic> toJson(VariantProductModel model) => _$VariantProductModelToJson(model);
+  static Map<String, dynamic> toJson(VariantProductModel model) =>
+      _$VariantProductModelToJson(model);
 }
 
 @JsonSerializable()
@@ -270,9 +282,11 @@ class ApparelProductModel extends ProductModel {
     this.name = '';
   }
 
-  factory ApparelProductModel.fromJson(Map<String, dynamic> json) => _$ApparelProductModelFromJson(json);
+  factory ApparelProductModel.fromJson(Map<String, dynamic> json) =>
+      _$ApparelProductModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ApparelProductModel model) => _$ApparelProductModelToJson(model);
+  static Map<String, dynamic> toJson(ApparelProductModel model) =>
+      _$ApparelProductModelToJson(model);
 }
 
 @JsonSerializable()
@@ -374,9 +388,11 @@ class FabricProductModel extends ProductModel {
           superCategories: superCategories,
         );
 
-  factory FabricProductModel.fromJson(Map<String, dynamic> json) => _$FabricProductModelFromJson(json);
+  factory FabricProductModel.fromJson(Map<String, dynamic> json) =>
+      _$FabricProductModelFromJson(json);
 
-  static Map<String, dynamic> toJson(FabricProductModel model) => _$FabricProductModelToJson(model);
+  static Map<String, dynamic> toJson(FabricProductModel model) =>
+      _$FabricProductModelToJson(model);
 }
 
 @JsonSerializable()
@@ -423,9 +439,11 @@ class StyleModel extends ItemModel {
     this.active,
   });
 
-  factory StyleModel.fromJson(Map<String, dynamic> json) => _$StyleModelFromJson(json);
+  factory StyleModel.fromJson(Map<String, dynamic> json) =>
+      _$StyleModelFromJson(json);
 
-  static Map<String, dynamic> toJson(StyleModel model) => _$StyleModelToJson(model);
+  static Map<String, dynamic> toJson(StyleModel model) =>
+      _$StyleModelToJson(model);
 }
 
 @JsonSerializable()
@@ -442,9 +460,11 @@ class ColorModel extends ItemModel {
     this.colorCode,
   });
 
-  factory ColorModel.fromJson(Map<String, dynamic> json) => _$ColorModelFromJson(json);
+  factory ColorModel.fromJson(Map<String, dynamic> json) =>
+      _$ColorModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ColorModel model) => _$ColorModelToJson(model);
+  static Map<String, dynamic> toJson(ColorModel model) =>
+      _$ColorModelToJson(model);
 }
 
 @JsonSerializable()
@@ -459,9 +479,11 @@ class SizeModel extends ItemModel {
     this.active,
   });
 
-  factory SizeModel.fromJson(Map<String, dynamic> json) => _$SizeModelFromJson(json);
+  factory SizeModel.fromJson(Map<String, dynamic> json) =>
+      _$SizeModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SizeModel model) => _$SizeModelToJson(model);
+  static Map<String, dynamic> toJson(SizeModel model) =>
+      _$SizeModelToJson(model);
 }
 
 @JsonSerializable()
@@ -477,7 +499,7 @@ class SampleProductModel extends ApparelProductModel {
     MemberRating ratingIfPrivacy,
     List<CategoryModel> superCategories,
   }) : super(
-          skuID:skuID,
+          skuID: skuID,
           code: code,
           name: name,
           price: price,
@@ -488,9 +510,11 @@ class SampleProductModel extends ApparelProductModel {
           superCategories: superCategories,
         );
 
-  factory SampleProductModel.fromJson(Map<String, dynamic> json) => _$SampleProductModelFromJson(json);
+  factory SampleProductModel.fromJson(Map<String, dynamic> json) =>
+      _$SampleProductModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SampleProductModel model) => _$SampleProductModelToJson(model);
+  static Map<String, dynamic> toJson(SampleProductModel model) =>
+      _$SampleProductModelToJson(model);
 }
 
 @JsonSerializable()
@@ -518,7 +542,7 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
 
   //联系方式
   String contactWay;
-  
+
   //备注
   String remake;
 
@@ -537,9 +561,11 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
     this.remake,
   });
 
-  factory SampleBorrowReturnHistoryModel.fromJson(Map<String, dynamic> json) => _$SampleBorrowReturnHistoryModelFromJson(json);
+  factory SampleBorrowReturnHistoryModel.fromJson(Map<String, dynamic> json) =>
+      _$SampleBorrowReturnHistoryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SampleBorrowReturnHistoryModel model) => _$SampleBorrowReturnHistoryModelToJson(model);
+  static Map<String, dynamic> toJson(SampleBorrowReturnHistoryModel model) =>
+      _$SampleBorrowReturnHistoryModelToJson(model);
 }
 
 @JsonSerializable()
@@ -559,9 +585,11 @@ class StockLevelModel extends ItemModel {
     this.maxPreOrder,
   });
 
-  factory StockLevelModel.fromJson(Map<String, dynamic> json) => _$StockLevelModelFromJson(json);
+  factory StockLevelModel.fromJson(Map<String, dynamic> json) =>
+      _$StockLevelModelFromJson(json);
 
-  static Map<String, dynamic> toJson(StockLevelModel model) => _$StockLevelModelToJson(model);
+  static Map<String, dynamic> toJson(StockLevelModel model) =>
+      _$StockLevelModelToJson(model);
 }
 
 @JsonSerializable()
@@ -585,9 +613,11 @@ class ZoneDeliveryModeValueModel extends ItemModel {
     this.address,
   });
 
-  factory ZoneDeliveryModeValueModel.fromJson(Map<String, dynamic> json) => _$ZoneDeliveryModeValueModelFromJson(json);
+  factory ZoneDeliveryModeValueModel.fromJson(Map<String, dynamic> json) =>
+      _$ZoneDeliveryModeValueModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ZoneDeliveryModeValueModel model) => _$ZoneDeliveryModeValueModelToJson(model);
+  static Map<String, dynamic> toJson(ZoneDeliveryModeValueModel model) =>
+      _$ZoneDeliveryModeValueModelToJson(model);
 }
 
 @JsonSerializable()
@@ -604,7 +634,9 @@ class ZoneDeliveryModeModel extends ItemModel {
     this.values,
   });
 
-  factory ZoneDeliveryModeModel.fromJson(Map<String, dynamic> json) => _$ZoneDeliveryModeModelFromJson(json);
+  factory ZoneDeliveryModeModel.fromJson(Map<String, dynamic> json) =>
+      _$ZoneDeliveryModeModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ZoneDeliveryModeModel model) => _$ZoneDeliveryModeModelToJson(model);
+  static Map<String, dynamic> toJson(ZoneDeliveryModeModel model) =>
+      _$ZoneDeliveryModeModelToJson(model);
 }
