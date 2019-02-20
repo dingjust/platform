@@ -50,9 +50,34 @@ class EnumSelectionState extends State<EnumSelection> {
       );
     }).toList();
 
-    return Wrap(
-      spacing: 5,
-      children: _chips,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Wrap(
+          spacing: 5,
+          children: _chips,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            IconButton(
+              icon: Text('取消'),
+              onPressed: () {
+                setState(() {
+                  widget.enumSelect.clear();
+                  Navigator.pop(context);
+                });
+              },
+            ),
+            IconButton(
+              icon: Text('确定'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

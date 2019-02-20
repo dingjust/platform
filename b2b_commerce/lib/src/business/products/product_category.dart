@@ -50,21 +50,21 @@ class ProductCategorySelectPageState extends State<ProductCategorySelectPage> {
       ),
       body: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 20,bottom: 20,left: 20,right: 30),
-                child: Text('大类'),
-              ),
-              Expanded(
-                child: EnumSelection(
-                  enumModels: widget._maxCategorys.map((category) => EnumModel(category.code, category.name)).toList(),
-                  enumSelect: _maxCategorySelect,
-                ),
-              )
-            ],
-          ),
-          Divider(height: 0,),
+//          Row(
+//            children: <Widget>[
+//              Padding(
+//                padding: const EdgeInsets.only(top: 20,bottom: 20,left: 20,right: 30),
+//                child: Text('大类'),
+//              ),
+//              Expanded(
+//                child: EnumSelection(
+//                  enumModels: widget._maxCategorys.map((category) => EnumModel(category.code, category.name)).toList(),
+//                  enumSelect: _maxCategorySelect,
+//                ),
+//              )
+//            ],
+//          ),
+//          Divider(height: 0,),
           Flexible(
             child: CategorySelect(
               categorys: widget._minCategorys,

@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import 'factory/industrial_cluster_factory.dart';
 
 /// 首页Banner
 class HomeBannerSection extends StatelessWidget {
@@ -115,6 +116,9 @@ class HomeTabSection extends StatelessWidget {
         ),
       ),
       AdvanceIconButton(
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => IndustrialClusterPage()));
+        },
         title: '产业集群',
         icon: Icon(
           B2BIcons.industrial_cluster,

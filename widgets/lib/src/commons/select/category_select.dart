@@ -114,6 +114,7 @@ class CategorySelectState extends State<CategorySelect> {
       children: <Widget>[
         Container(
           width: 70,
+          color: Colors.white,
           child: ListView(
             children: _keyItem,
           ),
@@ -125,10 +126,11 @@ class CategorySelectState extends State<CategorySelect> {
             color: Colors.grey[500],
           ),
         ),
-        Flexible(
+        Expanded(
           child: Padding(
             padding: const EdgeInsets.only(left: 10, top: 5),
-            child: ListView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Wrap(
                   spacing: 5,
