@@ -102,31 +102,6 @@ class PurchaseOrderBLoC extends BLoCBase {
                 ],
               },
               {
-                'phase': 'SAMPLE_CONFIRM',
-                'quantity': 70,
-                'sequence': 1,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
                 'phase': 'CUTTING',
                 'quantity': 70,
                 'sequence': 2,
@@ -259,7 +234,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),
             'expectedDeliveryDate': DateTime.now().toString(),
-            'currentPhase': 'SAMPLE_CONFIRM',
+            'currentPhase': 'CUTTING',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
             'attachments': [
@@ -289,31 +264,6 @@ class PurchaseOrderBLoC extends BLoCBase {
                 'phase': 'MATERIAL_PREPARATION',
                 'quantity': 70,
                 'sequence': 0,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'SAMPLE_CONFIRM',
-                'quantity': 70,
-                'sequence': 1,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -468,7 +418,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),
             'expectedDeliveryDate': DateTime.now().toString(),
-            'currentPhase': 'SAMPLE_CONFIRM',
+            'currentPhase': 'CUTTING',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
             'attachments': [
@@ -498,31 +448,6 @@ class PurchaseOrderBLoC extends BLoCBase {
                 'phase': 'MATERIAL_PREPARATION',
                 'quantity': 70,
                 'sequence': 0,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'SAMPLE_CONFIRM',
-                'quantity': 70,
-                'sequence': 1,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -677,7 +602,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),
             'expectedDeliveryDate': DateTime.now().toString(),
-            'currentPhase': 'SAMPLE_CONFIRM',
+            'currentPhase': 'CUTTING',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
             'attachments': [
@@ -707,31 +632,6 @@ class PurchaseOrderBLoC extends BLoCBase {
                 'phase': 'MATERIAL_PREPARATION',
                 'quantity': 70,
                 'sequence': 0,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'SAMPLE_CONFIRM',
-                'quantity': 70,
-                'sequence': 1,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -896,7 +796,7 @@ class PurchaseOrderBLoC extends BLoCBase {
           'totalPrice': 300,
           'creationtime': DateTime.now().toString(),
           'expectedDeliveryDate': DateTime.now().toString(),
-          'currentPhase': 'SAMPLE_CONFIRM',
+          'currentPhase': 'CUTTING',
           'machiningType': '包工包料',
           'invoiceNeeded': true,
           'attachments': [
@@ -926,31 +826,6 @@ class PurchaseOrderBLoC extends BLoCBase {
               'phase': 'MATERIAL_PREPARATION',
               'quantity': 70,
               'sequence': 0,
-              'estimatedDate': DateTime.now().toString(),
-              'finishDate': DateTime.now().toString(),
-              'remarks': '延期了12天',
-              'medias': [
-                {
-                  'url':
-                  'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                  'mediaType': 'jpg'
-                },
-                {
-                  'url':
-                  'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                  'mediaType': 'jpg'
-                },
-                {
-                  'url':
-                  'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                  'mediaType': 'jpg'
-                },
-              ],
-            },
-            {
-              'phase': 'SAMPLE_CONFIRM',
-              'quantity': 70,
-              'sequence': 1,
               'estimatedDate': DateTime.now().toString(),
               'finishDate': DateTime.now().toString(),
               'remarks': '延期了12天',
@@ -1118,7 +993,7 @@ class PurchaseOrderBLoC extends BLoCBase {
         'totalPrice': 300,
         'creationtime': DateTime.now().toString(),
         'expectedDeliveryDate': DateTime.now().toString(),
-        'currentPhase': 'SAMPLE_CONFIRM',
+        'currentPhase': 'CUTTING',
         'machiningType': '包工包料',
         'invoiceNeeded': true,
         'attachments': [
@@ -1148,31 +1023,6 @@ class PurchaseOrderBLoC extends BLoCBase {
             'phase': 'MATERIAL_PREPARATION',
             'quantity': 70,
             'sequence': 0,
-            'estimatedDate': DateTime.now().toString(),
-            'finishDate': DateTime.now().toString(),
-            'remarks': '延期了12天',
-            'medias': [
-              {
-                'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-          },
-          {
-            'phase': 'SAMPLE_CONFIRM',
-            'quantity': 70,
-            'sequence': 1,
             'estimatedDate': DateTime.now().toString(),
             'finishDate': DateTime.now().toString(),
             'remarks': '延期了12天',

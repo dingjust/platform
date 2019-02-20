@@ -13,6 +13,9 @@ class _ExistingProductState extends State<ExistingProduct> {
     return Scaffold(
         appBar: AppBar(
           title: Text('现款商品'),
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search),
@@ -74,12 +77,12 @@ class _ExistingProductState extends State<ExistingProduct> {
               ),
             ),
             onTap: () {
-//              Navigator.push(
-//                context,
-//                MaterialPageRoute(
-//                  builder: (context) => RequirementOrderFrom(),
-//                ),
-//              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ScreenConditions(),
+                ),
+              );
             },
           );
         }),

@@ -23,6 +23,9 @@ class _EmployeesPageState extends State<EmployeesPage> {
 
     return new Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
+        centerTitle: true,
+        elevation: 0.5,
         title: const Text('员工管理'),
         actions: <Widget>[
           IconButton(

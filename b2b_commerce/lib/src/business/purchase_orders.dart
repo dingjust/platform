@@ -26,6 +26,9 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
         bloc: PurchaseOrderBLoC.instance,
         child: Scaffold(
           appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: true,
+            elevation: 0.5,
             title: Text('采购订单'),
             actions: <Widget>[
               IconButton(

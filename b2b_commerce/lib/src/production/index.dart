@@ -179,7 +179,7 @@ class ProductionListView extends StatelessWidget {
                       return Text('${snapshot.error}');
                     }
                   }),
-//              _buildRecommend(bloc)
+              _buildRecommend(bloc)
             ],
           ),
         ));

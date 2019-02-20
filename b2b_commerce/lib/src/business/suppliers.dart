@@ -14,6 +14,9 @@ class _SuppliersPageState extends State<SuppliersPage> {
     return SuppliersBlocProvider(
         child: Scaffold(
           appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: true,
+            elevation: 0.5,
             title: Text('供应商管理'),
             actions: <Widget>[
               IconButton(

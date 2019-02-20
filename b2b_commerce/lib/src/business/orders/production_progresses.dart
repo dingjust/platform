@@ -248,18 +248,15 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
               child: phase == currentPhase &&
-              (progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM ||
-                  progress.phase == ProductionProgressPhase.INSPECTION)
+              (progress.phase == ProductionProgressPhase.INSPECTION)
                   ? RaisedButton(
                 color: Colors.orange,
-                child: Text(
-                  progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
-                  '样衣确认':'验货完成',
+                child: Text('验货完成',
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
-                  _showTipsDialog('样衣确认'):_showTipsDialog('验货');
+//                  progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
+                  _showTipsDialog('验货');
                 },
               )
                   : null)

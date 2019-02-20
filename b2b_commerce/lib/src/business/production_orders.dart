@@ -55,6 +55,9 @@ class _ProductionOrdersPage extends State<ProductionOrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
           title: Text('生产订单'),
         ),
         body: new DefaultTabController(

@@ -71,6 +71,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
           title: Text('采购订单明细'),
           actions: <Widget>[
             IconButton(
@@ -594,23 +597,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
               child: isCurrentStatus == true &&
                       (productionProgress.phase ==
-                              ProductionProgressPhase.SAMPLE_CONFIRM ||
-                          productionProgress.phase ==
                               ProductionProgressPhase.INSPECTION)
                   ? RaisedButton(
                       color: Colors.orange,
                       child: Text(
-                        productionProgress.phase ==
-                                ProductionProgressPhase.SAMPLE_CONFIRM
-                            ? '样衣确认'
-                            : '验货完成',
+                        '验货完成',
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        productionProgress.phase ==
-                                ProductionProgressPhase.SAMPLE_CONFIRM
-                            ? _showTipsDialog('样衣确认')
-                            : _showTipsDialog('验货');
+                        _showTipsDialog('验货');
                       },
                     )
                   : null)

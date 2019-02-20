@@ -20,6 +20,9 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
+        centerTitle: true,
+        elevation: 0.5,
         title: Text('供应商管理'),
         actions: <Widget>[
           IconButton(

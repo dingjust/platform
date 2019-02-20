@@ -107,6 +107,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         appBar: AppBar(
           title: Text('需求发布'),
           elevation: 0.5,
+          brightness: Brightness.light,
+          centerTitle: true,
           actions: <Widget>[
             GestureDetector(
               child: Container(

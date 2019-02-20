@@ -299,6 +299,10 @@ class FactoryModel extends B2BUnitModel {
   //现货商品
   List<ProductModel> products;
 
+  double locationX;
+
+  double locationY;
+
   FactoryModel({
     String profilePicture,
     String uid,
@@ -328,6 +332,8 @@ class FactoryModel extends B2BUnitModel {
     this.responseQuotedTime,
     this.products,
     this.adeptAtCategories,
+    this.locationX,
+    this.locationY,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
