@@ -110,7 +110,7 @@
         </el-table-column>
         <el-table-column label="创建时间" prop="createdTs">
           <template slot-scope="scope">
-            <span>{{scope.row.createdTs | formatDate}}</span>
+            <span>{{scope.row.creationtime | formatDate}}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
