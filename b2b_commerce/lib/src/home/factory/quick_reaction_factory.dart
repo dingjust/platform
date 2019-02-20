@@ -44,7 +44,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
           ),
           body: Scaffold(
             appBar: AppBar(
-              elevation: 0.5,
+              elevation: 0,
               bottom: FilterBar(
                 entries: <FilterConditionEntry>[
                   FilterConditionEntry(

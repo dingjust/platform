@@ -21,7 +21,7 @@ class _OrderByProductPageState extends State<OrderByProductPage> {
         appBar: AppBar(
           brightness: Brightness.light,
           centerTitle: true,
-          elevation: 0.5,
+          elevation: 0,
           title: Text(
             '看款下单',
             style: TextStyle(color: Colors.black),
@@ -63,7 +63,7 @@ class ProductsView extends StatelessWidget {
     //监听是否已经到底
     bloc.bottomStream.listen((isBottom) {
       if (isBottom) {
-        _scrollController.animateTo(_scrollController.offset - 80,
+        _scrollController.animateTo(_scrollController.offset - 70,
             duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
       }
     });
@@ -204,7 +204,7 @@ class ProductsView extends StatelessWidget {
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  height: 40,
+                  height: 30,
                 ),
               ),
             ],
