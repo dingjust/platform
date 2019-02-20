@@ -77,7 +77,7 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
       CategoryItem(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuickReactionFactoryPage()));
+              builder: (context) => OrderByProductPage()));
         },
         imageUrl:
             'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%8D%8A%E6%88%AA%E8%A3%99.png',
@@ -86,7 +86,7 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
       CategoryItem(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuickReactionFactoryPage()));
+              builder: (context) => OrderByProductPage()));
         },
         imageUrl:
             'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%A5%B3%E7%9A%AE%E8%A3%A4.png',
@@ -95,7 +95,7 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
       CategoryItem(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuickReactionFactoryPage()));
+              builder: (context) => OrderByProductPage()));
         },
         imageUrl:
             'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E6%AF%9B%E8%A1%A3.png',
@@ -104,7 +104,7 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
       CategoryItem(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuickReactionFactoryPage()));
+              builder: (context) => OrderByProductPage()));
         },
         imageUrl:
             'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E7%89%9B%E4%BB%94%E8%A3%A4.png',
@@ -113,7 +113,7 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
       CategoryItem(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuickReactionFactoryPage()));
+              builder: (context) => OrderByProductPage()));
         },
         imageUrl:
             'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E8%A1%AC%E8%A1%A3.png',
@@ -122,7 +122,7 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
       CategoryItem(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuickReactionFactoryPage()));
+              builder: (context) => OrderByProductPage()));
         },
         imageUrl:
             'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E9%A3%8E%E8%A1%A3.png',
@@ -131,7 +131,7 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
       CategoryItem(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuickReactionFactoryPage()));
+              builder: (context) => OrderByProductPage()));
         },
         imageUrl:
             'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%A5%B3%E5%A5%97%E8%A3%85.png',
