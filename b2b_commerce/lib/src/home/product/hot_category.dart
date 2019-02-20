@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
+import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -13,66 +14,62 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
     ProductModel(
         name: '冬季女棉服',
         thumbnail:
-            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         minPrice: 99.0,
         maxPrice: 500.0),
     ProductModel(
         name: '冬季女棉服',
         thumbnail:
-            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         minPrice: 99.0,
         maxPrice: 500.0),
     ProductModel(
         name: '冬季女棉服',
         thumbnail:
-            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         minPrice: 99.0,
         maxPrice: 500.0),
     ProductModel(
         name: '冬季女棉服',
         thumbnail:
-            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         minPrice: 99.0,
         maxPrice: 500.0),
     ProductModel(
         name: '冬季女棉服',
         thumbnail:
-            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         minPrice: 99.0,
         maxPrice: 500.0),
     ProductModel(
         name: '冬季女棉服',
         thumbnail:
-            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         minPrice: 99.0,
         maxPrice: 500.0),
     ProductModel(
         name: '冬季女棉服',
         thumbnail:
-            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         minPrice: 99.0,
         maxPrice: 500.0),
     ProductModel(
         name: '冬季女棉服',
         thumbnail:
-            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        minPrice: 99.0,
-        maxPrice: 500.0),
-    ProductModel(
-        name: '冬季女棉服',
-        thumbnail:
-            'https://img.alicdn.com/imgextra/i2/108689489/TB2JOp7FuuSBuNjSsziXXbq8pXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         minPrice: 99.0,
         maxPrice: 500.0),
   ];
 
+  //TODO:调用接口查询热门品类
+
   @override
   Widget build(BuildContext context) {
-    List<CategoryItem> categories = <CategoryItem>[
+    List<CategoryItem> categoriesItems = <CategoryItem>[
       CategoryItem(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuickReactionFactoryPage()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => OrderByProductPage()));
         },
         imageUrl: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/T%E6%81%A4.png',
         name: 'T恤',
@@ -142,6 +139,12 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
       ),
     ];
 
+    List<RecommendProductItem> recommendProductItems = recommendProducts
+        .map((product) => RecommendProductItem(
+              model: product,
+            ))
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -163,53 +166,42 @@ class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return categories[index];
-                }, childCount: categories.length),
+                  return categoriesItems[index];
+                }, childCount: categoriesItems.length),
               ),
             ),
-            SliverList(
-              delegate: SliverChildListDelegate(<Widget>[_buildRecommend()]),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRecommend() {
-    return Container(
-      color: Colors.grey[100],
-      padding: EdgeInsets.only(top: 10),
-      child: Container(
-        color: Colors.green,
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Center(
-                  child: RichText(
-                    text: TextSpan(
-                        text: '———',
-                        style: TextStyle(fontSize: 15, color: Colors.grey),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: '推荐款式',
-                              style: TextStyle(color: Colors.black)),
-                          TextSpan(text: '———')
-                        ]),
-                  ),
-                )
-              ],
+            SliverToBoxAdapter(
+              child: Container(
+                height: 10,
+                color: Color.fromRGBO(245, 245, 245, 1),
+              ),
             ),
-            Column(
-              children: recommendProducts
-                  .map((item) => RecommendProductItem(
-                        model: item,
-                      ))
-                  .toList(),
+            SliverToBoxAdapter(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                color: Colors.white,
+                child: Center(
+                  child: Text(
+                    '——推荐款式——',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, //Grid按两列显示
+                  mainAxisSpacing: 12.0,
+                  crossAxisSpacing: 10.0,
+                  childAspectRatio: 0.7,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return recommendProductItems[index];
+                }, childCount: recommendProductItems.length),
+              ),
             )
           ],
         ),
@@ -241,7 +233,8 @@ class CategoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10), color: Colors.white),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -264,70 +257,87 @@ class CategoryItem extends StatelessWidget {
 
 class RecommendProductItem extends StatelessWidget {
   const RecommendProductItem(
-      {Key key,
-      this.model,
-      this.width = 150,
-      this.height = 230,
-      this.imageHeight = 160,
-      this.showAddress = false})
+      {Key key, this.model, this.imageSize = 200, this.showAddress = false})
       : super(key: key);
 
   final ProductModel model;
 
-  final double width;
-
-  final double height;
-
-  final double imageHeight;
+  final double imageSize;
 
   final bool showAddress;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: width,
-            height: imageHeight,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: NetworkImage(model.thumbnail),
-                fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        //TODO: 跳转到产品详情页
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(5)),
+        child: Column(
+          children: <Widget>[
+            Container(
+              // width: imageSize,
+              height: imageSize,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+                image: DecorationImage(
+                  image: NetworkImage(model.thumbnail),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              width: width - 10,
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('${model.name}'),
-                  RichText(
-                    text: TextSpan(
-                        text: '￥',
-                        style: TextStyle(color: Colors.red, fontSize: 14),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: '${model.minPrice}—${model.maxPrice}',
-                              style: TextStyle(fontSize: 16)),
-                        ]),
-                  ),
-                ],
+            Expanded(
+              flex: 1,
+              child: Container(
+                width: imageSize,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('${model.name}',overflow: TextOverflow.ellipsis,),
+                    RichText(
+                      text: TextSpan(
+                          text: '￥',
+                          style: TextStyle(color: Colors.red, fontSize: 14),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: '${model.minPrice}—${model.maxPrice}',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                          ]),
+                    ),
+                    showAddress
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                '浙江杭州',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color.fromRGBO(149, 149, 149, 1)),
+                              ),
+                              Text(
+                                '800下单',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color.fromRGBO(149, 149, 149, 1)),
+                              )
+                            ],
+                          )
+                        : Container()
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
