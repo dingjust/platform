@@ -98,19 +98,7 @@ export default {
         {
           name: '需求订单',
           url: '/backoffice/order/request',
-          icon: 'fa fa-check',
-          children: [
-            {
-              name: '需求订单（全部）',
-              url: '/backoffice/order/request',
-              icon: 'iconNone'
-            },
-            {
-              name: '需求订单（财务）',
-              url: '/backoffice/order/request/finance',
-              icon: 'iconNone'
-            }
-          ]
+          icon: 'iconNone'
         },
         {
           name: '生产订单',

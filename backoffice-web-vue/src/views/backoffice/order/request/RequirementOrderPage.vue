@@ -111,7 +111,6 @@
         <el-table-column label="订单编号" prop="code" width="250" fixed>
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
-            <el-tag v-show="scope.row.delayDays !== 0" type="danger">已延期 {{scope.row.delayDays}}天</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="订单状态" prop="status" :column-key="'status'"
