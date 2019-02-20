@@ -79,6 +79,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   String processCount = '输入';
   String expectPrice = '输入';
   TextEditingController inputNumber;
+  TextEditingController inputPerson;
   bool _isShowMore = true;
   String address = '选取';
   String processingType = '选取';
@@ -94,6 +95,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   String _productionArea = '选取';
   String isProofing = '选取';
   String contactInformation = '输入';
+  String contactPerson = '';
+  String contactPhone = '';
 
   @override
   Widget build(BuildContext context) {
@@ -792,15 +795,23 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   //联系方式
   Future<void> _neverContactInformation(BuildContext context) async {
     inputNumber = TextEditingController();
+    inputPerson = TextEditingController();
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('请输入手机号码'),
+          title: Text('请输入联系方式'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                TextField(
+                  controller: inputPerson,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: '请输入联系人',
+                  ),
+                ),
                 TextField(
                   controller: inputNumber,
                   keyboardType: TextInputType.number,
@@ -815,10 +826,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             FlatButton(
               child: Text('确定'),
               onPressed: () {
-                if (inputNumber.text != null) {
+                if (inputNumber.text != null && inputPerson.text != null) {
                   print(inputNumber.text);
                   setState(() {
-                    contactInformation = inputNumber.text;
+                    contactInformation = inputPerson.text + ',' +inputNumber.text;
                   });
                 }
                 Navigator.of(context).pop();
