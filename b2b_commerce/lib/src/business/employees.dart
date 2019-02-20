@@ -73,6 +73,8 @@ class EmployeeItem extends StatelessWidget {
     return SizedBox(
       height: 75,
       child: Card(
+        elevation: 0,
+        margin: EdgeInsets.only(top: 5),
         child: ListTile(
           title: Text(
             item.name,

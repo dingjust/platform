@@ -121,7 +121,7 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
         ),
       ),
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => QuickReactionFactoryPage(industrialClusterArea: item.area,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => QuickReactionFactoryPage(route: item.area,)));
       },
     );
   }

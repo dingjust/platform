@@ -6,8 +6,8 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class QuickReactionFactoryPage extends StatefulWidget {
-  String industrialClusterArea;
-  QuickReactionFactoryPage({this.industrialClusterArea});
+  String route;
+  QuickReactionFactoryPage({this.route});
 
   _QuickReactionFactoryPageState createState() =>
       _QuickReactionFactoryPageState();
@@ -27,7 +27,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
             centerTitle: true,
             elevation: 0.5,
             title: Text(
-              widget.industrialClusterArea ?? '快反工厂',
+              widget.route ?? '快反工厂',
               style: TextStyle(color: Colors.black),
             ),
             actions: <Widget>[

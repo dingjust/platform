@@ -532,7 +532,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                 '\n需求数量：'+requestCount+'\n生产地区：'+address+
             '\n勾选条件：'+_selected+'\n加工类型：'+processingType+'\n工艺：'+technology);
 
-            if(widget.route == 'factoryMap'){
+            if(widget.route == '地图找厂'){
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => FindFactoryByMap()),
@@ -540,7 +540,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
             }else{
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => QuickReactionFactoryPage()),
+                MaterialPageRoute(builder: (context) => QuickReactionFactoryPage(route: widget.route,)),
               );
             }
 
