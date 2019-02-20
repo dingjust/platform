@@ -7,7 +7,7 @@
         </el-form-item>
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-          <el-button type="primary" icon="el-icon-plus" @click="onNew">创建需求订单</el-button>
+         <!-- <el-button type="primary" icon="el-icon-plus" @click="onNew">创建需求订单</el-button>-->
         </el-button-group>
         <el-popover placement="right" width="600" trigger="click">
           <el-row :gutter="10">
