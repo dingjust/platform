@@ -268,7 +268,8 @@ class RecommendProductItem extends StatelessWidget {
       this.model,
       this.width = 150,
       this.height = 230,
-      this.imageHeight = 160})
+      this.imageHeight = 160,
+      this.showAddress = false})
       : super(key: key);
 
   final ProductModel model;
@@ -278,6 +279,8 @@ class RecommendProductItem extends StatelessWidget {
   final double height;
 
   final double imageHeight;
+
+  final bool showAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -304,7 +307,7 @@ class RecommendProductItem extends StatelessWidget {
             child: Container(
               width: width - 10,
               color: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
