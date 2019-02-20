@@ -181,7 +181,7 @@ class SuppliersItem extends StatelessWidget {
         ),
       ),
       subtitle: Text('合作单数：' + supplierModel.orderCount.toString(),
-          style: TextStyle(fontSize: 18, color: Colors.orange)),
+          style: TextStyle(fontSize: 18, color: Color(0xFFFF9516))),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

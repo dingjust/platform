@@ -139,17 +139,16 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Column(
           children: <Widget>[
             _buildPic(context),
-            new Divider(),
             _buildMajor(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildCategory(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildProcessCount(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildExpectPrice(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildDeliveryDate(context),
-            new Divider(),
+            new Divider(height: 1,),
             _buildAddress(context),
             _isShowMore ? Container() : new Divider(),
             _buildHideBody(context),
@@ -168,15 +167,15 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             child: Column(
               children: <Widget>[
                 _buildProductionArea(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildCooperationModes(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildInspectionMethod(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildSampleProduct(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildInvoice(context),
-                new Divider(),
+                new Divider(height: 1,),
                 _buildRemarks(context),
               ],
             ),
@@ -420,14 +419,14 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                     '更多条件',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.orangeAccent,
+                      color: Color(0xFFFF9516),
                     ),
                   ),
                   Icon(
                     _isShowMore
                         ? Icons.keyboard_arrow_up
                         : Icons.keyboard_arrow_down,
-                    color: Colors.orangeAccent,
+                    color: Color(0xFFFF9516),
                     size: 28,
                   ),
                 ],
@@ -609,7 +608,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               height: 50,
               margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
               child: RaisedButton(
-                  color: Colors.orange,
+                  color: Color(0xFFFF9516),
                   child: Text(
                     '确定发布',
                     style: TextStyle(

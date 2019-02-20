@@ -78,7 +78,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color: sequence <= _index ? Colors.orangeAccent : Colors.black45,
+            color: sequence <= _index ? Color(0xFFFF9516) : Colors.black45,
           ),
         ),
         Positioned(
@@ -93,7 +93,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               width: 16.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: sequence <= _index ? Colors.orange : Colors.black
+                  color: sequence <= _index ? Color(0xFFFF9516) : Colors.black
               ),
             ),
           ),
@@ -118,7 +118,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             title: Text(ProductionProgressPhaseLocalizedMap[progress.phase],
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: sequence <= _index ? Colors.orange : Colors.black54,
+                    color: sequence <= _index ? Color(0xFFFF9516) : Colors.black54,
                     fontSize: 18)),
             trailing: Text(
               '已延期2天',
@@ -250,7 +250,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               child: phase == currentPhase &&
               (progress.phase == ProductionProgressPhase.INSPECTION)
                   ? RaisedButton(
-                color: Colors.orange,
+                color: Color(0xFFFF9516),
                 child: Text('验货完成',
                   style: TextStyle(color: Colors.white),
                 ),
