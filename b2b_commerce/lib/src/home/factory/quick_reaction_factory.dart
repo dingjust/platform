@@ -1,5 +1,5 @@
-import 'package:b2b_commerce/src/business/search/quick_reaction_factory_search.dart';
 import 'package:b2b_commerce/src/home/factory/factory.dart';
+import 'package:b2b_commerce/src/home/search/quick_reaction_factory_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -32,7 +32,10 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.search),
+                icon: Icon(
+                  B2BIcons.search,
+                  size: 22,
+                ),
                 onPressed: () => showSearch(
                     context: context,
                     delegate: QuickReactionFactorySearchDelegate()),
@@ -78,7 +81,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
 }
 
 class FactoriesListView extends StatelessWidget {
-  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollController = ScrollController();
 
   ///当前选中条件
   FilterConditionEntry currentCondition =

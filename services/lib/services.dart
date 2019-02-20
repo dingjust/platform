@@ -25,7 +25,8 @@ export 'src/user/region_repository_impl.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/wechat/wechat_service_impl.dart';
-export 'src/home/bloc/quick_reaction_factory_bloc.dart';
+export 'src/home/factory/bloc/quick_reaction_factory_bloc.dart';
+export 'src/home/product/bloc/order_product_bloc.dart';
 export 'src/production/bloc/production_bloc.dart';
 
 abstract class BLoCBase {
