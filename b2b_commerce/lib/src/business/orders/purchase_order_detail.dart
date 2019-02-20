@@ -183,11 +183,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           Align(
               alignment: Alignment.centerLeft,
               child:
-                  Text('订单生成时间：${DateFormatUtil.format(order.creationTime)}')),
+                  Text('订单生成时间：${DateFormatUtil.formatYMD(order.creationTime)}')),
           Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                  '预计交货时间：${DateFormatUtil.format(order.expectedDeliveryDate)}')),
+                  '预计交货时间：${DateFormatUtil.formatYMD(order.expectedDeliveryDate)}')),
         ],
       ),
       decoration: BoxDecoration(
@@ -480,7 +480,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                                '${DateFormatUtil.format(productionProgress.estimatedDate)}',
+                                '${DateFormatUtil.formatYMD(productionProgress.estimatedDate)}',
                                 style: TextStyle(fontWeight: FontWeight.w500)),
                           ),
                           onTap: () {
@@ -508,7 +508,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                  '${DateFormatUtil.format(productionProgress.finishDate)}',
+                                  '${DateFormatUtil.formatYMD(productionProgress.finishDate)}',
                                   style:
                                       TextStyle(fontWeight: FontWeight.w500)),
                             ),

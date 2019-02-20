@@ -855,7 +855,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
           ListTile(
             leading: Text('注册时间'),
             trailing:
-            Text('${DateFormatUtil.format(widget.supplierModel.factory.registrationDate)}'),
+            Text('${DateFormatUtil.formatYMD(widget.supplierModel.factory.registrationDate)}'),
           ),
           Divider(
             height: 5,
@@ -972,7 +972,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
             Row(
               children: <Widget>[
                 Text(
-                  '创建时间：${DateFormatUtil.format(widget.supplierModel.purchaseOrder.creationTime)}',
+                  '创建时间：${DateFormatUtil.formatYMD(widget.supplierModel.purchaseOrder.creationTime)}',
                   style: TextStyle(fontSize: 14),
                 )
               ],
@@ -1075,7 +1075,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '报价时间：${DateFormatUtil.format(widget.supplierModel.quoteOrder.order.creationTime)}',
+                '报价时间：${DateFormatUtil.formatYMD(widget.supplierModel.quoteOrder.order.creationTime)}',
                 style: TextStyle(fontSize: 15),
               ),
             ],

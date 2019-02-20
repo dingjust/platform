@@ -898,7 +898,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     if (_picked != null) {
       print(_picked);
       setState(() {
-        deliveryDate = DateFormatUtil.format(_picked);
+        deliveryDate = DateFormatUtil.formatYMD(_picked);
       });
     }
   }

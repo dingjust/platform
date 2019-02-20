@@ -448,7 +448,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           ListTile(
             leading: Text("注册时间"),
             trailing:
-                Text('${DateFormatUtil.format(brandModel?.registrationDate ?? DateTime.now())}'),
+                Text('${DateFormatUtil.formatYMD(brandModel?.registrationDate ?? DateTime.now())}'),
           ),
           Divider(
             height: 5,
@@ -672,7 +672,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
           ListTile(
             leading: Text("注册时间"),
             trailing:
-                Text('${DateFormatUtil.format(factoryModel.registrationDate)}'),
+                Text('${DateFormatUtil.formatYMD(factoryModel.registrationDate)}'),
           ),
           Divider(
             height: 5,
