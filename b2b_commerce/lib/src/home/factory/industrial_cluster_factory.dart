@@ -190,7 +190,7 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
               child: GridView(
             padding: EdgeInsets.zero,
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 150, childAspectRatio: 2 //宽高比为2
+                maxCrossAxisExtent: 250, childAspectRatio: 2 //宽高比为2
                 ),
             children: List.generate(_valueItem.length, (index) {
               return createIndustrialClusterItem(_valueItem[index]);
