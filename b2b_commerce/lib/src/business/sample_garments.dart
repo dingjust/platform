@@ -138,16 +138,11 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
                   delegate: ApparelProductSearchDelegate(),
                 ),
           ),
-          IconButton(
-            icon: Text('我的样衣'),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SampleProductsPage()));
-            },
-          )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductHistoryFormPage())),
       ),
       body: DefaultTabController(
         length: states.length,
@@ -175,7 +170,7 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
                             children: <Widget>[
                               Expanded(
                                 child: Text(
-                                  '新建记录',
+                                  '我的样衣',
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ),
@@ -186,8 +181,7 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
                         onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    SampleProductHistoryFormPage())),
+                                builder: (context) => SampleProductsPage())),
                       ),
                     ),
                   ),
