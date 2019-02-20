@@ -114,6 +114,7 @@ class CategorySelectState extends State<CategorySelect> {
       children: <Widget>[
         Container(
           width: 70,
+          color: Colors.white,
           child: ListView(
             children: _keyItem,
           ),
