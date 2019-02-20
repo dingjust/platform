@@ -197,7 +197,7 @@
           return;
         }
 
-        this.fn.openSlider('需求订单明细', RequirementOrderDetailsPage, result);
+        this.fn.openSlider('需求订单：' + item.code, RequirementOrderDetailsPage, result);
       },
       onNew() {
         this.fn.openSlider('发布需求', RequirementOrderForm, this.formData);

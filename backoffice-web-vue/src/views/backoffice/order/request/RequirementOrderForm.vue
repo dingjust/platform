@@ -18,20 +18,11 @@
                                      :belong-to-editable="isNewlyCreated">
         </requirement-order-base-form>
         <hr/>
-        <requirement-order-delivery-address-form ref="deliveryAddressForm"
-                                                 :slot-data="slotData"
-                                                 :read-only="false">
-        </requirement-order-delivery-address-form>
-        <hr/>
         <requirement-order-request-form ref="requestForm"
                                         :slot-data="slotData"
                                         :read-only="false">
         </requirement-order-request-form>
         <hr/>
-        <requirement-order-entries-form ref="entriesForm"
-                                        :slot-data="slotData"
-                                        :read-only="false">
-        </requirement-order-entries-form>
         <div class="pt-2"></div>
         <el-row :gutter="10">
           <el-col :span="12">
@@ -83,21 +74,15 @@
   const {mapActions} = createNamespacedHelpers('RequirementOrdersModule');
 
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
-  import RequirementOrderMediaUploadForm from './RequirementOrderMediaUploadForm';
-  import RequirementOrderDeliveryAddressForm from './RequirementOrderDeliveryAddressForm';
   import RequirementOrderRequestForm from './RequirementOrderRequestForm';
   import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
-  import RequirementOrderEntriesForm from './RequirementOrderEntriesForm';
 
   export default {
     name: 'RequirementOrderFrom',
     components: {
-      RequirementOrderMediaUploadForm,
       RequirementOrderBaseForm,
-      RequirementOrderDeliveryAddressForm,
       RequirementOrderRequestForm,
       RequirementOrderDetailsPage,
-      RequirementOrderEntriesForm
     },
     props: ['slotData'],
     methods: {
@@ -105,31 +90,12 @@
         refresh: 'refresh'
       }),
       onSubmit() {
-        this.$refs['deliveryAddressForm'].validate((valid) => {
+        this.$refs['requestForm'].validate((valid) => {
             if (!valid) {
               return false;
             }
 
-            const address = this.slotData.deliveryAddress;
-            if (!address.region.isocode || !address.city.code) {
-              this.$message.error('请输入省份和市区');
-              return false;
-            }
-
-            if (!this.$refs['entriesForm'].validate(true)) {
-              return false;
-            }
-
-            this.$refs['requestForm'].validate((valid) => {
-                if (!valid) {
-                  return false;
-                }
-
-                this._onSubmit();
-
-                return true;
-              }
-            );
+            this._onSubmit();
 
             return true;
           }
