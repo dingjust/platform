@@ -81,7 +81,7 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                   children: <Widget>[
                     Positioned(
                       left: 0,
-                      top: 20,
+                      top: 12,
                       child: Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,11 +117,11 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                     ),
                     Positioned(
                       right: 0,
-                      top: 12,
+                      top: 1,
                       child: entry.onRemind
                           ? Container(
-                              width: 20,
-                              height: 20,
+                              width: 18,
+                              height: 18,
                               decoration: BoxDecoration(
                                   color: Color.fromRGBO(255, 38, 38, 0.8),
                                   shape: BoxShape.circle),

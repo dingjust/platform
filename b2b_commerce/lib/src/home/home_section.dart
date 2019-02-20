@@ -28,8 +28,9 @@ class HomeSearchInputBox extends StatelessWidget {
   // final
   final double width;
   final double height;
+  final String tips;
 
-  const HomeSearchInputBox({Key key, this.width = 400, this.height = 30})
+  const HomeSearchInputBox({Key key, this.width = 400, this.height = 30, this.tips})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class HomeSearchInputBox extends StatelessWidget {
               size: 18,
             ),
             Text(
-              '   找点什么...',
+              tips==null?'   找点什么...':tips,
               style: TextStyle(color: Colors.grey, fontSize: 16),
             )
           ],
