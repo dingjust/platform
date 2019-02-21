@@ -111,8 +111,10 @@ class CategorySelectState extends State<CategorySelect> {
                   });
                 } else {
                   setState(() {
-                    widget.categorySelect.remove(value);
+                    widget.categorySelect.removeWhere((category) => category.code == value.code);
                     _selectRights.remove(value.code);
+                    print(widget.categorySelect);
+                    print(_selectRights);
                   });
                 }
               },
