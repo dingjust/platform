@@ -23,7 +23,7 @@ class MyHomePage extends StatelessWidget {
         MenuItem(Icons.business, '认证信息', AppRoutes.ROUTE_MY_COMPANY),
       ]),
       Menu('', <MenuItem>[
-        MenuItem(Icons.location_city, '地址管理', AppRoutes.ROUTE_MY_ADDRESSES),
+        MenuItem(Icons.pin_drop, '地址管理', AppRoutes.ROUTE_MY_ADDRESSES),
         MenuItem(Icons.collections, '发票管理', AppRoutes.ROUTE_MY_INVOICES),
 //        MenuItem(Icons.shopping_cart, '购物车', AppRoutes.ROUTE_MY_CART),
       ]),
