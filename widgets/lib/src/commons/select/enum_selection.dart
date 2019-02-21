@@ -49,7 +49,7 @@ class EnumSelectionState extends State<EnumSelection> {
               });
             }else{
               setState(() {
-                widget.enumSelect.remove(style);
+                widget.enumSelect.removeWhere((enumModel) => enumModel.code == style.code);
                 _enumCodeSelect.remove(style.code);
               });
             }
