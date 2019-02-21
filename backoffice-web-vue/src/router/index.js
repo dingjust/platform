@@ -120,11 +120,6 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/request/RequirementOrderPage')
             },
             {
-              path: 'request/finance',
-              name: '账务确认',
-              component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/request/RequirementOrderFinancePage')
-            },
-            {
               path: 'pick',
               name: '发料单',
               component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/pick/PickOrderPage')

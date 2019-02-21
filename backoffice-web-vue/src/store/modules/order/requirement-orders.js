@@ -24,35 +24,6 @@ const state = {
   formData: {
     id: null,
     code: '',
-    name: '',
-    description: '',
-    depositPaid: false,
-    depositAmount: 0,
-    retainagePaid: false,
-    retainageAmount: 0,
-    entries: [],
-    contracts: [],
-    deliveryAddress: {
-      fullname: '',
-      title: {
-        code: '',
-        name: ''
-      },
-      region: {
-        isocode: '',
-        name: ''
-      },
-      city: {
-        code: '',
-        name: ''
-      },
-      cityDistrict: {
-        code: '',
-        name: ''
-      },
-      line1: '',
-      remarks: ''
-    },
     details: {
       minorCategories: [],
       category: {

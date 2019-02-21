@@ -32,21 +32,21 @@ module.exports = {
     assetsPublicPath: '',
     proxyTable: {
       '/medias': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         "secure": false,
         pathRewrite: {
           '^/medias': 'djwebservices/medias'
         }
       },
       '/logout': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         "secure": false,
         pathRewrite: {
           '^/logout': 'djwebservices/logout'
         }
       },
       '/djbackoffice': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         "secure": false,
         changeOrigin: true,
         pathRewrite: {
@@ -54,7 +54,7 @@ module.exports = {
         }
       },
       '/djbrand': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         "secure": false,
         changeOrigin: true,
         pathRewrite: {
@@ -62,7 +62,7 @@ module.exports = {
         }
       },
       '/djfactory': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         "secure": false,
         changeOrigin: true,
         pathRewrite: {
@@ -70,7 +70,7 @@ module.exports = {
         }
       },
       '/authorizationserver': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
@@ -78,7 +78,7 @@ module.exports = {
         }
       },
       '/djwebservices': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {

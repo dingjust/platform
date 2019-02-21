@@ -1,13 +1,13 @@
-import 'package:b2b_commerce/src/business/search/quick_reaction_factory_search.dart';
 import 'package:b2b_commerce/src/home/factory/factory.dart';
+import 'package:b2b_commerce/src/home/search/quick_reaction_factory_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class QuickReactionFactoryPage extends StatefulWidget {
-  String industrialClusterArea;
-  QuickReactionFactoryPage({this.industrialClusterArea});
+  String route;
+  QuickReactionFactoryPage({this.route});
 
   _QuickReactionFactoryPageState createState() =>
       _QuickReactionFactoryPageState();
@@ -27,12 +27,15 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
             centerTitle: true,
             elevation: 0.5,
             title: Text(
-              widget.industrialClusterArea ?? '快反工厂',
+              widget.route ?? '快反工厂',
               style: TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.search),
+                icon: Icon(
+                  B2BIcons.search,
+                  size: 22,
+                ),
                 onPressed: () => showSearch(
                     context: context,
                     delegate: QuickReactionFactorySearchDelegate()),
@@ -41,7 +44,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
           ),
           body: Scaffold(
             appBar: AppBar(
-              elevation: 0.5,
+              elevation: 0,
               bottom: FilterBar(
                 entries: <FilterConditionEntry>[
                   FilterConditionEntry(
@@ -78,7 +81,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
 }
 
 class FactoriesListView extends StatelessWidget {
-  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollController = ScrollController();
 
   ///当前选中条件
   FilterConditionEntry currentCondition =
