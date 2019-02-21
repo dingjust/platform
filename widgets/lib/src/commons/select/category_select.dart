@@ -5,13 +5,16 @@ class CategorySelect extends StatefulWidget {
   final List<Map<CategoryModel, List<CategoryModel>>> categorys;
   final bool multiple;
   final double verticalDividerOpacity;
+  final bool hasButton;
   List<CategoryModel> categorySelect;
 
-  CategorySelect(
-      {@required this.categorys,
-      this.multiple = true,
-      this.verticalDividerOpacity = 1,
-      this.categorySelect});
+  CategorySelect({
+    @required this.categorys,
+    this.multiple = true,
+    this.verticalDividerOpacity = 1,
+    this.categorySelect,
+    this.hasButton = true,
+  });
 
   CategorySelectState createState() => CategorySelectState();
 }
@@ -26,6 +29,7 @@ class CategorySelectState extends State<CategorySelect> {
   List<Widget> _valueItem = <Widget>[];
   String _selectLeft;
   Color _color;
+  List<String> _selectRights = [];
 
 //  List<CategoryModel> _selectRights;
 
@@ -33,8 +37,13 @@ class CategorySelectState extends State<CategorySelect> {
   void initState() {
     _verticalDivider = widget.verticalDividerOpacity;
     _multiple = widget.multiple;
-    _selectLeft = widget.categorys[0].keys.toList()[0].code;
-//    _selectRights = widget.categorySelect;
+    if(widget.categorySelect != null && widget.categorySelect.length>0){
+      _selectLeft = widget.categorySelect[0].parent?.code;
+      _selectRights = widget.categorySelect.map((category) => category.code).toList();
+    }else {
+      _selectLeft = widget.categorys[0].keys.toList()[0].code;
+    }
+
     _color = Colors.black;
     // TODO: implement initState
     super.initState();
@@ -53,7 +62,7 @@ class CategorySelectState extends State<CategorySelect> {
           onTap: () {
             if (!(_selectLeft == key.code)) {
               setState(() {
-                widget.categorySelect.clear();
+//                widget.categorySelect.clear();
                 _selectLeft = key.code;
               });
             }
@@ -89,18 +98,21 @@ class CategorySelectState extends State<CategorySelect> {
                 value.name,
                 style: TextStyle(color: Colors.black),
               ),
-              selected: widget.categorySelect.contains(value),
+              selected: _selectRights.contains(value.code),
               onSelected: (select) {
                 if (select) {
                   setState(() {
                     if (!_multiple) {
                       widget.categorySelect.clear();
+                      _selectRights.clear();
                     }
                     widget.categorySelect.add(value);
+                    _selectRights.add(value.code);
                   });
                 } else {
                   setState(() {
                     widget.categorySelect.remove(value);
+                    _selectRights.remove(value.code);
                   });
                 }
               },
@@ -136,25 +148,28 @@ class CategorySelectState extends State<CategorySelect> {
                   spacing: 5,
                   children: _valueItem,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Text('取消'),
-                      onPressed: () {
-                        setState(() {
-                          widget.categorySelect.clear();
+                Offstage(
+                  offstage: widget.hasButton ? false:true,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Text('取消'),
+                        onPressed: () {
+                          setState(() {
+                            widget.categorySelect.clear();
+                            Navigator.pop(context);
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: Text('确定'),
+                        onPressed: () {
                           Navigator.pop(context);
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: Text('确定'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

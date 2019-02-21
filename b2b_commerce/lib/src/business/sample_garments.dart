@@ -158,12 +158,16 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
             children: states.map((state) {
               return ListView(
                 children: <Widget>[
-                  Card(
-                    elevation: 0,
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 15, right: 5),
-                      child: GestureDetector(
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SampleProductsPage())),
+                    child: Card(
+                      elevation: 0,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 15, right: 5),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
                           child: Row(
@@ -178,19 +182,24 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
                             ],
                           ),
                         ),
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SampleProductsPage())),
                       ),
                     ),
                   ),
-                  Card(
-                    elevation: 0,
-                    margin: EdgeInsets.only(bottom: 5),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 5),
-                      child: GestureDetector(
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (_type == LendBorrowType.BORROW) {
+                          _type = LendBorrowType.LEND;
+                        } else {
+                          _type = LendBorrowType.BORROW;
+                        }
+                      });
+                    },
+                    child: Card(
+                      elevation: 0,
+                      margin: EdgeInsets.only(bottom: 5),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 5),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
                           child: Row(
@@ -211,15 +220,6 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
                             ],
                           ),
                         ),
-                        onTap: () {
-                          setState(() {
-                            if (_type == LendBorrowType.BORROW) {
-                              _type = LendBorrowType.LEND;
-                            } else {
-                              _type = LendBorrowType.BORROW;
-                            }
-                          });
-                        },
                       ),
                     ),
                   ),

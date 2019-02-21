@@ -9,44 +9,40 @@ import 'package:widgets/widgets.dart';
 final List<Map<CategoryModel, List<CategoryModel>>> _category = [
   {
     CategoryModel(code: 'C01', name: '男装'): [
-      CategoryModel(code: 'C001', name: 'T恤'),
-      CategoryModel(code: 'C002', name: '衬衫'),
-      CategoryModel(code: 'C003', name: '卫衣'),
-      CategoryModel(code: 'C004', name: '卫裤'),
-      CategoryModel(code: 'C005', name: '卫裤'),
-      CategoryModel(code: 'C006', name: '卫裤'),
-      CategoryModel(code: 'C007', name: '卫裤'),
-      CategoryModel(code: 'C008', name: '卫裤'),
-      CategoryModel(code: 'C009', name: '羽绒服'),
-      CategoryModel(code: 'C010', name: '绒服地方'),
-      CategoryModel(code: 'C011', name: '卫裤'),
-      CategoryModel(code: 'C012', name: '卫裤'),
+      CategoryModel(code: 'C001', name: 'T恤',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C002', name: '衬衫',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C003', name: '卫衣',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C004', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C005', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C006', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C007', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C008', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C009', name: '羽绒服',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C010', name: '绒服地方',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C011', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(code: 'C012', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
     ],
     CategoryModel(code: 'C02', name: '女装'): [
-      CategoryModel(code: 'C013', name: '棉服服'),
-      CategoryModel(code: 'C014', name: '羽绒服地方'),
-      CategoryModel(code: 'C015', name: '背带裤'),
-      CategoryModel(code: 'C016', name: '牛仔裤'),
-      CategoryModel(code: 'C017', name: '牛仔裤'),
-      CategoryModel(code: 'C018', name: '牛仔裤'),
-      CategoryModel(code: 'C019', name: '牛仔裤'),
-      CategoryModel(code: 'C020', name: '牛仔裤'),
-      CategoryModel(code: 'C021', name: '牛仔裤'),
-      CategoryModel(code: 'C022', name: '牛仔裤裤'),
-      CategoryModel(code: 'C023', name: '牛仔裤'),
-      CategoryModel(code: 'C024', name: '牛仔裤'),
+      CategoryModel(code: 'C013', name: '棉服服',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C014', name: '羽绒服地方',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C015', name: '背带裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C016', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C017', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C018', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C019', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C020', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C021', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C022', name: '牛仔裤裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C023', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(code: 'C024', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
     ],
   },
 ];
 
-final List<Map<CategoryModel, List<CategoryModel>>> _majorCategory = [
-  {
-    CategoryModel(code: 'C1', name: '大类'): [
-      CategoryModel(code: 'C2', name: '针织'),
-      CategoryModel(code: 'C2', name: '针织'),
-      CategoryModel(code: 'C2', name: '针织'),
-    ]
-  },
+final List<CategoryModel> _majorCategory = [
+  CategoryModel(code: 'C2', name: '针织'),
+  CategoryModel(code: 'C3', name: '针织'),
+  CategoryModel(code: 'C4', name: '针织'),
 ];
 
 final List<EnumModel> processingTypeList = [
@@ -105,6 +101,7 @@ class ScreenConditions extends StatefulWidget {
 
 class _ScreenConditionsState extends State<ScreenConditions> {
   List<CategoryModel> _mojarSelected = [];
+  List<EnumModel> _mojarEnumSelected = [];
   List<CategoryModel> _categorySelected = [];
   List<EnumModel> _processingTypeSelected = [];
   List<EnumModel> _technologySelected = [];
@@ -556,16 +553,16 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          child: CategorySelect(
-            categorys: _majorCategory,
-            multiple: true,
-            verticalDividerOpacity: 1,
-            categorySelect: _mojarSelected,
+          child: EnumSelection(
+            enumModels: _majorCategory.map((category) => EnumModel(category.code, category.name)).toList(),
+            multiple: false,
+            enumSelect: _mojarEnumSelected,
           ),
         );
       },
     ).then((val){
       mojar = '';
+      _mojarSelected = _mojarEnumSelected.map((enumModel) => CategoryModel(code: enumModel.code,name: enumModel.name)).toList();
       if(_mojarSelected.isNotEmpty){
         for(int i=0;i<_mojarSelected.length;i++){
           mojar += _mojarSelected[i].name + ',';
@@ -587,7 +584,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         return Container(
           child: CategorySelect(
             categorys: _category,
-            multiple: true,
+            multiple: false,
             verticalDividerOpacity: 1,
             categorySelect: _categorySelected,
           ),
