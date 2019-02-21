@@ -52,7 +52,8 @@ Vue.prototype.CONFIG = {
 Vue.mixin({
   data(){
     return {
-      defaultDateValueFormat: "yyyy-MM-dd'T'HH:mm:ssZ"
+      defaultDateValueFormat: "yyyy-MM-dd'T'HH:mm:ssZ",
+      mediaUploadUrl: '/djwebservices/media/file/upload'
     }
   },
   methods: {
