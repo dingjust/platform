@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/home/product/product_color_size_select.dart';
+import 'package:b2b_commerce/src/home/product/product_num_select.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -163,6 +164,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget _buildColorSizeSection() {
+    String sizeColorString = '选择颜色尺寸';
+
+    //判断颜色是否有选择
+    if (!colorEntries.every((entry) {
+      return !entry.selected;
+    })) {
+      sizeColorString = "";
+      colorEntries.where((entry) => entry.selected).forEach((entry) {
+        sizeColorString = sizeColorString + " " + entry.colorModel.name;
+      });
+
+      //加上尺码字符
+      sizeColorString = sizeColorString + ' / ';
+
+      sizeEntries.where((entry) => entry.selected).forEach((entry) {
+        sizeColorString = sizeColorString + " " + entry.sizeModel.name;
+      });
+    }
+
     return Container(
       height: 70,
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -174,7 +194,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         children: <Widget>[
           BasicInfoRow(
             label: '规格',
-            value: '选择颜色尺寸',
+            value: '${sizeColorString}',
             action: Icon(
               B2BIcons.right,
               size: 12,
@@ -196,7 +216,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               size: 12,
               color: Color.fromRGBO(150, 150, 150, 1),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ProductNumSelectPage(
+                        colorEntries: colorEntries,
+                        sizeEntries: sizeEntries,
+                      )));
+            },
           ),
         ],
       ),
@@ -293,10 +319,14 @@ class BasicInfoRow extends StatelessWidget {
                         color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
                   ),
                 ),
-                Text(
-                  '${value}',
-                  style: TextStyle(
-                      color: Color.fromRGBO(51, 51, 51, 1), fontSize: 15),
+                Container(
+                  width: 200,
+                  child: Text(
+                    '${value}',
+                    style: TextStyle(
+                        color: Color.fromRGBO(51, 51, 51, 1), fontSize: 15),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 )
               ],
             ),

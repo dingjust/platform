@@ -91,7 +91,7 @@ class _ProductColorSizeSelectPageState
     return widget.sizeEntries
         .map((entry) => FilterChip(
               labelPadding: entry.selected ? EdgeInsets.only(right: 10) : null,
-              selectedColor: Colors.red,
+              selectedColor: Color.fromRGBO(255, 149, 22, 1),
               key: ValueKey<String>(entry.sizeModel.code),
               label: Text(entry.sizeModel.name),
               selected: entry.selected,
