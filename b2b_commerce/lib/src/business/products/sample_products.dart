@@ -6,6 +6,7 @@ import 'sample_product_detail.dart';
 
 class SampleProductsPage extends StatelessWidget {
   bool isHistoryCreate;
+
   SampleProductsPage({this.isHistoryCreate = false});
 
   List<SampleProductModel> _sampleProductList = [
@@ -36,45 +37,28 @@ class SampleProductsPage extends StatelessWidget {
         centerTitle: true,
         title: Text('我的样衣'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => SampleProductFormPage())),
+        child: Icon(Icons.add),
+      ),
       body: ListView(children: <Widget>[
-        Card(
-          elevation: 0,
-          margin: EdgeInsets.symmetric(vertical: 5),
-          child: Padding(
-            padding: EdgeInsets.only(left: 15, right: 5),
-            child: GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        '新建样衣',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Icon(Icons.chevron_right, color: Colors.grey),
-                  ],
-                ),
-              ),
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SampleProductFormPage())),
-            ),
-          ),
-        ),
         Column(
           children: _sampleProductList.map((sampleProduct) {
             return GestureDetector(
               child: SampleProductItem(
                 item: sampleProduct,
               ),
-              onTap: (){
-                if(isHistoryCreate){
-                  Navigator.pop(context,sampleProduct);
-                }else{
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductDetailPage(item: sampleProduct,)));
+              onTap: () {
+                if (isHistoryCreate) {
+                  Navigator.pop(context, sampleProduct);
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SampleProductDetailPage(
+                                item: sampleProduct,
+                              )));
                 }
               },
             );

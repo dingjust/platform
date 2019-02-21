@@ -48,6 +48,10 @@ const actions = {
       alert(response['errors'][0].message);
       return;
     }
+    if (!response['access_token']) {
+      alert("网络异常，请联系管理员");
+      return;
+    }
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response['access_token'];
 
     commit('token', response['access_token']);

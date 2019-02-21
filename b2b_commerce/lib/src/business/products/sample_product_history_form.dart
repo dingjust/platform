@@ -137,15 +137,13 @@ class SampleProductHistoryFormPageState
                         ),
                         title: Container(
                           padding: EdgeInsets.only(left: 43),
-                          child: GestureDetector(
-                            child: _nameText,
-                            onTap: () async{
-                              SampleProductModel model = await Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductsPage(isHistoryCreate : true)));
-                              _nameText = Text(model.name, style: TextStyle(color: Colors.black));
-                              _skuIDText = model.skuID;
-                            },
-                          ),
+                          child: _nameText,
                         ),
+                        onTap: () async{
+                          SampleProductModel model = await Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductsPage(isHistoryCreate : true)));
+                          _nameText = Text(model.name, style: TextStyle(color: Colors.black));
+                          _skuIDText = model.skuID;
+                        },
                       ),
                       Divider(height: 0,),
                       ListTile(

@@ -14,11 +14,16 @@ class MinorCategoryField extends StatefulWidget {
 
 class _MinorCategoryFieldState extends State<MinorCategoryField> {
   String _minorCategoryText;
+  List<CategoryModel> _minCategorySelect = [];
 
   @override
   void initState() {
     super.initState();
     _minorCategoryText = widget.item?.minorCategory?.name;
+    if(widget.item?.minorCategory != null){
+      _minCategorySelect = [widget.item?.minorCategory];
+    }
+
   }
 
   @override
@@ -27,15 +32,30 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: () async {
-            EnumModel category = await Navigator.push(
+          onTap: () async{
+             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductCategorySelectPage()
+                builder: (context) => ProductCategorySelectPage(minCategorySelect: _minCategorySelect,)
               ),
             );
 
-            _minorCategoryText = category?.name;
+            if (_minCategorySelect != null) {
+              _minorCategoryText = '';
+              for (int i = 0; i < _minCategorySelect.length; i++) {
+                if (i == 4) {
+                  _minorCategoryText += '...';
+                  break;
+                }
+
+                _minorCategoryText += _minCategorySelect[i]?.name;
+
+                if (i != _minCategorySelect.length - 1) {
+                  _minorCategoryText += '、';
+                }
+              }
+
+            }
           },
           child: ShowSelectTile(
             leadingText: '选择分类',

@@ -42,7 +42,8 @@ const state = {
       samplesNeeded: false,
       contactPerson: '',
       contactPhone: ''
-    }
+    },
+    attachments: []
   },
   queryFormData: {
     code: '',
