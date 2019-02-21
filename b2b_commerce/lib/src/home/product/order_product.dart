@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/home/product/hot_category.dart';
+import 'package:b2b_commerce/src/home/product/product.dart';
 import 'package:b2b_commerce/src/home/search/order_product_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';

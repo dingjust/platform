@@ -30,7 +30,8 @@ class HomeSearchInputBox extends StatelessWidget {
   final double height;
   final String tips;
 
-  const HomeSearchInputBox({Key key, this.width = 400, this.height = 30, this.tips})
+  const HomeSearchInputBox(
+      {Key key, this.width = 400, this.height = 30, this.tips})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class HomeSearchInputBox extends StatelessWidget {
               size: 18,
             ),
             Text(
-              tips==null?'   找点什么...':tips,
+              tips == null ? '   找点什么...' : tips,
               style: TextStyle(color: Colors.grey, fontSize: 16),
             )
           ],
@@ -106,7 +107,9 @@ class HomeTabSection extends StatelessWidget {
       AdvanceIconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(route: '地图找厂',)));
+              builder: (context) => ScreenConditions(
+                    route: '地图找厂',
+                  )));
         },
         title: '地图找厂',
         icon: Icon(
@@ -116,8 +119,9 @@ class HomeTabSection extends StatelessWidget {
         ),
       ),
       AdvanceIconButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => IndustrialClusterPage()));
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => IndustrialClusterPage()));
         },
         title: '产业集群',
         icon: Icon(
@@ -129,7 +133,9 @@ class HomeTabSection extends StatelessWidget {
       AdvanceIconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(route: '品牌工厂',)));
+              builder: (context) => ScreenConditions(
+                    route: '品牌工厂',
+                  )));
         },
         title: '品牌工厂',
         icon: Icon(
@@ -141,7 +147,9 @@ class HomeTabSection extends StatelessWidget {
       AdvanceIconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(route: '免费打样',)));
+              builder: (context) => ScreenConditions(
+                    route: '免费打样',
+                  )));
         },
         title: '免费打样',
         icon: Icon(
@@ -152,8 +160,10 @@ class HomeTabSection extends StatelessWidget {
       ),
       AdvanceIconButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(route: '全部工厂',)));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QuickReactionFactoryPage(route: '全部工厂',)),
+          );
         },
         title: '全部工厂',
         icon: Icon(
