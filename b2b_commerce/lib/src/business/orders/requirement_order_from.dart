@@ -729,7 +729,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         return Container(
           child: CategorySelect(
             categorys: _category,
-            multiple: true,
+            multiple: false,
             verticalDividerOpacity: 1,
             categorySelect: _categorySelected,
           ),

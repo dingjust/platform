@@ -20,6 +20,10 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
   void initState() {
     super.initState();
     _minorCategoryText = widget.item?.minorCategory?.name;
+    if(widget.item?.minorCategory != null){
+      _minCategorySelect = [widget.item?.minorCategory];
+    }
+
   }
 
   @override
@@ -28,15 +32,13 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: () async {
-            List<CategoryModel> categorys = await Navigator.push(
+          onTap: () async{
+             await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ProductCategorySelectPage(minCategorySelect: _minCategorySelect,)
               ),
             );
-
-            print(_minCategorySelect.hashCode);
 
             if (_minCategorySelect != null) {
               _minorCategoryText = '';
