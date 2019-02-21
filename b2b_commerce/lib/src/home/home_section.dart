@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/search/apparel_product_search.dart';
 import 'package:b2b_commerce/src/common/screen_conditions.dart';
+import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -159,10 +160,10 @@ class HomeTabSection extends StatelessWidget {
       ),
       AdvanceIconButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(
-                    route: '全部工厂',
-                  )));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QuickReactionFactoryPage(route: '全部工厂',)),
+          );
         },
         title: '全部工厂',
         icon: Icon(

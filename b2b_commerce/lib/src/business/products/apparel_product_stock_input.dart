@@ -121,7 +121,7 @@ class ApparelProductStockInputPage extends StatelessWidget {
 
 class ApparelProductStockInputItem extends StatefulWidget {
   final Map<ColorModel, List<SizeStockItem>> items;
-  ApparelProductStockInputItem({this.items});
+  ApparelProductStockInputItem({@required this.items});
 
   ApparelProductStockInputItemState createState() =>
       ApparelProductStockInputItemState();
