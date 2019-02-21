@@ -92,7 +92,6 @@
         <el-table-column label="订单编号" prop="code" width="250">
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
-            <el-tag v-show="scope.row.delayDays !== 0" type="danger">已延期 {{scope.row.delayDays}}天</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="订单状态" prop="status" :column-key="'status'"
@@ -111,7 +110,7 @@
         </el-table-column>
         <el-table-column label="创建时间" prop="createdTs">
           <template slot-scope="scope">
-            <span>{{scope.row.createdTs | formatDate}}</span>
+            <span>{{scope.row.creationtime | formatDate}}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -197,7 +196,7 @@
           return;
         }
 
-        this.fn.openSlider('需求订单明细', RequirementOrderDetailsPage, result);
+        this.fn.openSlider('需求订单：' + item.code, RequirementOrderDetailsPage, result);
       },
       onNew() {
         this.fn.openSlider('发布需求', RequirementOrderForm, this.formData);

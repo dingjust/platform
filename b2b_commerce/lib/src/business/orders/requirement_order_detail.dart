@@ -148,7 +148,7 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '预计交货时间',
             value: Text(
-              '报价时间：${DateFormatUtil.format(widget.order.expectedDeliveryDate)}',
+              '${DateFormatUtil.format(widget.order.expectedDeliveryDate)}',
               style: TextStyle(fontSize: 16),
             ),
             hasBottomBorder: false,

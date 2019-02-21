@@ -42,22 +42,8 @@ class ApparelProductAttributesInputPageState
 
   @override
   void initState() {
-    if (widget.item?.styles != null) {
-      _styleText = '';
-      for (int i = 0; i < widget.item.styles.length; i++) {
-        if (i == 4) {
-          _styleText += '...';
-          break;
-        }
-
-        _styleText += enumMap(StyleEnum, widget.item.styles[i]);
-
-        if (i != widget.item.styles.length - 1) {
-          _styleText += '、';
-        }
-      }
-      _styleCodes = widget.item?.styles;
-    }
+    _styleText = formatSelectText(widget.item?.styles,StyleEnum);
+    _styleCodes = widget.item?.styles;
 
     _fabricCompositionText =
         enumMap(FabricCompositionEnum, widget.item?.fabricComposition);
@@ -75,42 +61,11 @@ class ApparelProductAttributesInputPageState
     _sleeveLengthText = enumMap(SleeveLengthEnum, widget.item?.sleeveLength);
     _sleeveLengthCode = widget.item?.sleeveLength;
 
-    if (widget.item?.decorativePattern != null) {
-      _decorativePatternText = '';
-      for (int i = 0; i < widget.item?.decorativePattern.length; i++) {
-        if (i == 4) {
-          _decorativePatternText += '...';
-          break;
-        }
+    _decorativePatternText = formatSelectText(widget.item?.decorativePattern,DecorativePatternEnum);
+    _decorativePatternCodes = widget.item?.decorativePattern;
 
-        _decorativePatternText +=
-            enumMap(DecorativePatternEnum, widget.item?.decorativePattern[i]);
-
-        if (i != widget.item?.decorativePattern.length - 1) {
-          _decorativePatternText += '、';
-        }
-      }
-
-      _decorativePatternCodes = widget.item?.decorativePattern;
-    }
-    if (widget.item?.popularElements != null) {
-      _popularElementsText = '';
-      for (int i = 0; i < widget.item?.popularElements.length; i++) {
-        if (i == 4) {
-          _popularElementsText += '...';
-          break;
-        }
-
-        _popularElementsText +=
-            enumMap(PopularElementsEnum, widget.item?.popularElements[i]);
-
-        if (i != widget.item?.popularElements.length - 1) {
-          _popularElementsText += '、';
-        }
-      }
-
-      _popularElementsCodes = widget.item?.popularElements;
-    }
+    _popularElementsText = formatSelectText(widget.item?.popularElements,PopularElementsEnum);
+    _popularElementsCodes = widget.item?.popularElements;
 
     _fillerText = enumMap(FillerEnum, widget.item?.filler);
     _fillerCode = widget.item?.filler;
@@ -133,6 +88,32 @@ class ApparelProductAttributesInputPageState
 
     // TODO: implement initState
     super.initState();
+  }
+
+  String formatSelectText(List<Object> list,List<EnumModel> enumModels) {
+    String text = '';
+
+    if (list != null) {
+      text = '';
+      for (int i = 0; i < list.length; i++) {
+        if (i == 4) {
+          text += '...';
+          break;
+        }
+        if(list is List<EnumModel>){
+          text += list[i]?.name;
+        }else if(list is List<String>){
+          text += enumMap(enumModels, list[i]);
+        }
+
+
+        if (i != list.length - 1) {
+          text += '、';
+        }
+      }
+    }
+
+    return text;
   }
 
   @override
@@ -169,21 +150,8 @@ class ApparelProductAttributesInputPageState
               );
               print(result);
 
-              if (result != null) {
-                _styleText = '';
-                for (int i = 0; i < result.length; i++) {
-                  if (i == 4) {
-                    _styleText += '...';
-                    break;
-                  }
-
-                  _styleText += result[i]?.name;
-
-                  if (i != result.length - 1) {
-                    _styleText += '、';
-                  }
-                }
-
+              _styleText = formatSelectText(result,StyleEnum);
+              if(result != null){
                 _styleCodes = result.map((style) {
                   return style.code;
                 }).toList();
@@ -314,25 +282,10 @@ class ApparelProductAttributesInputPageState
                 ),
               );
 
-              if (result != null) {
-                _decorativePatternText = '';
-                for (int i = 0; i < result.length; i++) {
-                  if (i == 4) {
-                    _decorativePatternText += '...';
-                    break;
-                  }
-
-                  _decorativePatternText += result[i].name;
-
-                  if (i != result.length - 1) {
-                    _decorativePatternText += '、';
-                  }
-                }
-
-                _decorativePatternCodes = result.map((item) {
-                  return item.code;
-                }).toList();
-              }
+              _decorativePatternText = formatSelectText(result, DecorativePatternEnum);
+              _decorativePatternCodes = result.map((item) {
+                return item.code;
+              }).toList();
             },
             child: ShowSelectTile(
               leadingText: '图案',
@@ -354,25 +307,10 @@ class ApparelProductAttributesInputPageState
                 ),
               );
 
-              if (result != null) {
-                _popularElementsText = '';
-                for (int i = 0; i < result.length; i++) {
-                  if (i == 4) {
-                    _popularElementsText += '...';
-                    break;
-                  }
-
-                  _popularElementsText += result[i].name;
-
-                  if (i != result.length - 1) {
-                    _popularElementsText += '、';
-                  }
-                }
-
-                _popularElementsCodes = result.map((item) {
-                  return item.code;
-                }).toList();
-              }
+              _popularElementsText = formatSelectText(result, PopularElementsEnum);
+              _popularElementsCodes = result.map((item) {
+                return item.code;
+              }).toList();
             },
             child: ShowSelectTile(
               leadingText: '流行元素',

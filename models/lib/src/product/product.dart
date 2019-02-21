@@ -39,7 +39,7 @@ const SampleProductReturnStateLocalizedMap = {
 class CategoryModel extends ItemModel {
   String code;
   String name;
-  String parent;
+  CategoryModel parent;
 
   CategoryModel({
     this.code,

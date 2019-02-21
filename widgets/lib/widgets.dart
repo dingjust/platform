@@ -6,6 +6,7 @@ export 'src/commons/attachments/attachments.dart';
 export 'src/commons/bloc_provider.dart';
 export 'src/commons/button/button.dart';
 export 'src/commons/carousel/carousel.dart';
+export 'src/commons/carousel/product_detail_carousel.dart';
 export 'src/commons/chat/chat.dart';
 export 'src/commons/divider/divider.dart';
 export 'src/commons/form/show_select_tile.dart';

@@ -14,11 +14,16 @@ class EnumSelection extends StatefulWidget {
 class EnumSelectionState extends State<EnumSelection> {
   bool _multiple;
   List<EnumModel> _enumModels;
+  List<String> _enumCodeSelect = [];
 
   @override
   void initState() {
     _enumModels = widget.enumModels;
     _multiple = widget.multiple;
+    if(widget.enumSelect != null && widget.enumSelect.length>0){
+      _enumCodeSelect = widget.enumSelect?.map((enumModel) => enumModel.code)?.toList();
+    }
+
     // TODO: implement initState
     super.initState();
   }
@@ -31,18 +36,21 @@ class EnumSelectionState extends State<EnumSelection> {
         child: ChoiceChip(
           selectedColor: Colors.orange,
           label: Text(style.name,style: TextStyle(color: Colors.black),),
-          selected: widget.enumSelect.contains(style),
+          selected: _enumCodeSelect.contains(style.code),
           onSelected: (select){
             if(select){
               setState(() {
                 if(!_multiple){
                   widget.enumSelect.clear();
+                  _enumCodeSelect.clear();
                 }
                 widget.enumSelect.add(style);
+                _enumCodeSelect.add(style.code);
               });
             }else{
               setState(() {
                 widget.enumSelect.remove(style);
+                _enumCodeSelect.remove(style.code);
               });
             }
           },
@@ -65,6 +73,7 @@ class EnumSelectionState extends State<EnumSelection> {
               onPressed: () {
                 setState(() {
                   widget.enumSelect.clear();
+                  _enumCodeSelect.clear();
                   Navigator.pop(context);
                 });
               },

@@ -27,104 +27,108 @@ class FactoryItem extends StatelessWidget {
         //     builder: (context) => ));
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-        margin: EdgeInsets.symmetric(horizontal: 15),
-        child: Row(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  image: DecorationImage(
-                    image: NetworkImage(model.profilePicture),
-                    fit: BoxFit.cover,
-                  )),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: Colors.black38,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(5),
-                          bottomRight: Radius.circular(5)),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${model.name}',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+          // margin: EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                width: 80,
                 height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    image: DecorationImage(
+                      image: NetworkImage(model.profilePicture),
+                      fit: BoxFit.cover,
+                    )),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(bottom: 5),
-                      // color: Colors.green,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Stars(
-                            size: 14,
-                            color: Color.fromRGBO(255, 183, 0, 1),
-                            highlightOnly: false,
-                            starLevel: model.starLevel,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 10),
-                            child: _buildCategoryTags(),
-                          )
-                        ],
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(5),
+                            bottomRight: Radius.circular(5)),
                       ),
-                    ),
-                    Container(
-                      child: Text(
-                        model.describe,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        RichText(
-                          text: TextSpan(
-                              text: '历史接单',
-                              style: TextStyle(color: Colors.grey),
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: '${model.historyOrdersCount}',
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold)),
-                                TextSpan(text: '单')
-                              ]),
+                      child: Center(
+                        child: Text(
+                          '${model.name}',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
-                        _buildButton()
-                      ],
+                      ),
                     )
                   ],
                 ),
               ),
-            )
-          ],
+              Expanded(
+                flex: 1,
+                child: Container(
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(bottom: 5),
+                        // color: Colors.green,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Stars(
+                              size: 14,
+                              color: Color.fromRGBO(255, 183, 0, 1),
+                              highlightOnly: false,
+                              starLevel: model.starLevel,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 10),
+                              child: _buildCategoryTags(),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child: Text(
+                          model.describe,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          RichText(
+                            text: TextSpan(
+                                text: '历史接单',
+                                style: TextStyle(color: Colors.grey),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: '${model.historyOrdersCount}',
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(text: '单')
+                                ]),
+                          ),
+                          _buildButton()
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                  bottom: BorderSide(color: Colors.grey[300], width: 0.6))),
         ),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-                bottom: BorderSide(color: Colors.grey[300], width: 0.6))),
       ),
     );
   }

@@ -138,7 +138,6 @@ class ApparelProductBLoC extends BLoCBase {
               'available': 99,
               'maxPreOrder': 120,
             },
-
             'attributes': {
               'styles': ['FG0001', 'FG0002'],
               'fabricComposition': 'B001',
@@ -153,6 +152,14 @@ class ApparelProductBLoC extends BLoCBase {
               'thickness': 'K001',
               'season': 'L001',
               'placket': 'M001',
+            },
+            'minorCategory':{
+              'code':'W0106',
+              'name':'女式棉衣',
+              'parent':{
+                'code':'W01',
+                'name':'女装',
+              }
             }
           }),
           ApparelProductModel.fromJson({
