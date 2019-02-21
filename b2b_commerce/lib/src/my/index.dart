@@ -9,7 +9,7 @@ import '../common/app_routes.dart';
 class MyHomePage extends StatelessWidget {
   static const String ROUTE_SETTINGS = '/settings';
   static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final double _appBarHeight = 256.0;
+  final double _appBarHeight = 200.0;
 
   MyHomePage() :super(key: AppKeys.myHomePage);
 
@@ -51,7 +51,7 @@ class MyHomePage extends StatelessWidget {
               pinned: true,
               actions: <Widget>[
                 IconButton(
-                  icon: const Icon(Icons.create),
+                  icon: const Icon(Icons.menu),
                   tooltip: 'Edit',
                   onPressed: () {
                     // http test
@@ -71,32 +71,22 @@ class MyHomePage extends StatelessWidget {
                   initialData: bloc.currentUser,
                   builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
                     debugPrint('${snapshot.data.userType}');
-                    return Text(
-                      '${snapshot.data.name}',
-                      style: TextStyle(color: Colors.white),
+                    return Container(
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            '${snapshot.data.name}',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
                     );
                   },
                 ),
                 background: Stack(
-                  fit: StackFit.expand,
+//                  fit: StackFit.expand,
                   children: <Widget>[
-                    Image.asset(
-                      'temp/lake.jpg',
-                      package: 'assets',
-                      fit: BoxFit.cover,
-                      height: _appBarHeight,
-                    ),
-                    // This gradient ensures that the toolbar icons are distinct
-                    // against the background image.
-                    const DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment(0.0, -1.0),
-                          end: Alignment(0.0, -0.4),
-                          colors: <Color>[Color(0x60000000), Color(0x00000000)],
-                        ),
-                      ),
-                    ),
+                    _buildTopBackgroud(context),
                   ],
                 ),
               ),
@@ -109,4 +99,96 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildTopBackgroud(BuildContext context) {
+    return Container(
+//      constraints: BoxConstraints.expand(width: 300.0, height: 300.0,),
+      child: Row(
+        children: <Widget>[
+          _buildPortrait(context),
+          _buildInfomation(context),
+        ],
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [ Color.fromRGBO(255, 80, 1, 1),Color.fromRGBO(255, 140, 0, 1)]),
+      ),
+    );
+  }
+
+  Widget _buildPortrait(BuildContext context){
+    return Container(
+      margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
+      child: Container(
+          child: CircleAvatar(
+            backgroundImage: NetworkImage(
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'
+            ),
+            radius: 40.0,
+          ),
+          decoration: BoxDecoration(
+            border: new Border.all(
+                color: Colors.white,
+                width: 0.5
+            ),
+            color: Colors.white,
+            shape: BoxShape.rectangle,
+            borderRadius: new BorderRadius.circular((50.0)),
+          )
+      ),
+    );
+  }
+
+  Widget _buildInfomation(BuildContext context){
+    return Container(
+      margin: EdgeInsets.only(top: 85),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 210,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      child:Text(
+                        "欧阳娜娜",
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                        ),
+                      )
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(3),
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text(
+                      '采购员',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              child: Text(
+                '定制加（深圳）科技有限公司',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white
+                ),
+              ),
+            )
+          ],
+      ),
+    );
+  }
+
 }

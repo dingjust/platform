@@ -152,8 +152,10 @@ class HomeTabSection extends StatelessWidget {
       ),
       AdvanceIconButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(route: '全部工厂',)));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QuickReactionFactoryPage(route: '全部工厂',)),
+          );
         },
         title: '全部工厂',
         icon: Icon(
