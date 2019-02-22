@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/business/orders/requirement_import_product.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
 import 'package:core/core.dart';
@@ -26,16 +28,50 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
         title: Text('供应商管理'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.phone),
+            icon: Icon(Icons.message),
+            color: Color.fromRGBO(255, 149, 22, 1),
             onPressed: () =>
             _selectActionButton(widget.supplierModel.factory.contactPhone),
           ),
+          GestureDetector(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Center(
+                  child: Text(
+                    '联系厂家',
+                    style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                  ),
+                ),
+              ),
+              onTap: () {
+                _selectActionButton(widget.supplierModel.factory.contactPhone);
+              }
+          )
         ],
       ),
       body: Container(
         child:_buildSuppliersWidget(context)
       ),
-      floatingActionButton: _buildRequestOrderButton(context),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RequirementOrderFrom(),
+              ),
+            );
+          },
+          backgroundColor: Colors.orangeAccent,
+          child: Center(
+            child: Container(
+              width: 35,
+              child: Text(
+                '发布需求',
+                style: TextStyle(color: Colors.white, fontSize: 15),
+                overflow: TextOverflow.clip,
+              ),
+            ),
+          )),
     );
   }
 
@@ -70,9 +106,14 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
         Icons.add,
         color: Colors.white,
       ),
-      tooltip: '敬请期待',
       label: Text('发布需求'),
       onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RequirementOrderFrom(),
+          ),
+        );
       },
       backgroundColor: Colors.orangeAccent,
     );
@@ -128,6 +169,18 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          widget.supplierModel.factory.address,
+                          style: TextStyle(
+                              fontSize: 14
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
                       child: Row(
                         children: <Widget>[
                           Container(
@@ -157,17 +210,6 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                                 ),
                               )
                           ),
-                          Expanded(
-                            child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  widget.supplierModel.factory.address,
-                                  style: TextStyle(
-                                      fontSize: 14
-                                  ),
-                                )
-                            ),
-                          )
                         ],
                       ),
                     ),

@@ -53,6 +53,7 @@ class MyHomePage extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.menu),
                   tooltip: 'Edit',
+                  color: Colors.white,
                   onPressed: () {
                     // http test
                     http$.get('/apparel-zh/users/13234', context: context).then((response) {});
