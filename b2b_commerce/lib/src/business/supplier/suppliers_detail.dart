@@ -10,12 +10,14 @@ class SuppliersDetail extends StatefulWidget {
   final SupplierModel supplierModel;
   final bool isSupplier;
 
-  SuppliersDetail({Key key, @required this.supplierModel,@required this.isSupplier}) : super(key: key);
+  SuppliersDetail(
+      {Key key, @required this.supplierModel, @required this.isSupplier})
+      : super(key: key);
 
   _SuppliersDetailState createState() => _SuppliersDetailState();
 }
 
-class _SuppliersDetailState extends State<SuppliersDetail>{
+class _SuppliersDetailState extends State<SuppliersDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,29 +25,25 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
         brightness: Brightness.light,
         centerTitle: true,
         elevation: 0.5,
-        title: Text('供应商管理'),
+        title: Text(widget.isSupplier ? '供应商管理' : '工厂信息'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.phone),
             onPressed: () =>
-            _selectActionButton(widget.supplierModel.factory.contactPhone),
+                _selectActionButton(widget.supplierModel.factory.contactPhone),
           ),
         ],
       ),
-      body: Container(
-        child:_buildSuppliersWidget(context)
-      ),
+      body: Container(child: _buildSuppliersWidget(context)),
       floatingActionButton: _buildRequestOrderButton(context),
     );
   }
 
-  Widget _buildSuppliersWidget(BuildContext context){
-    return Container(
-        child:_buildSuppliersScorll(context)
-    );
+  Widget _buildSuppliersWidget(BuildContext context) {
+    return Container(child: _buildSuppliersScorll(context));
   }
 
-  Widget _buildSuppliersScorll(BuildContext context){
+  Widget _buildSuppliersScorll(BuildContext context) {
     return ListView(
       children: <Widget>[
         _buildTop(context),
@@ -64,7 +62,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   }
 
   //发布需求按钮
-  Widget _buildRequestOrderButton(BuildContext context){
+  Widget _buildRequestOrderButton(BuildContext context) {
     return FloatingActionButton.extended(
       icon: Icon(
         Icons.add,
@@ -72,14 +70,13 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
       ),
       tooltip: '敬请期待',
       label: Text('发布需求'),
-      onPressed: () {
-      },
+      onPressed: () {},
       backgroundColor: Colors.orangeAccent,
     );
   }
 
   //供应商明细头部显示
-  Widget _buildTop(BuildContext context){
+  Widget _buildTop(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 5, 0, 5),
       padding: EdgeInsets.all(10),
@@ -96,85 +93,77 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
           ),
           Expanded(
               child: Container(
-                margin: EdgeInsets.all(5),
-                padding: EdgeInsets.fromLTRB(5, 10, 0, 5),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: Align(
+            margin: EdgeInsets.all(5),
+            padding: EdgeInsets.fromLTRB(5, 10, 0, 5),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      widget.supplierModel.factory.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
+                  child: Row(
+                    children: <Widget>[
+                      Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          widget.supplierModel.factory.name,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        child: Row(
+                          children: _buildItemsStarIcon(
+                              context, widget.supplierModel.factory.starLevel),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children:
-                              _buildItemsStarIcon(context, widget.supplierModel.factory.starLevel),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                              padding: EdgeInsets.all(5),
-                              child: Image.network(
-                                'https://www.vvfeng.com/data/upload/ueditor/20170422/58fab741b57e7.jpg',
-                                width: 20,
-                                height: 20,
-                              )
-                          ),
-                          Container(
-                              padding: EdgeInsets.all(5),
-                              child: Image.network(
-                                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548234386864&di=8f02d11edaa58d5a881f7828d6300fd2&imgtype=0&src=http%3A%2F%2Fa3.mzstatic.com%2Fus%2Fr30%2FPurple111%2Fv4%2F5f%2Fc7%2Fff%2F5fc7ff3e-42b4-d629-462f-148b523a4702%2FCRV_AP_600x360.jpeg',
-                                width: 20,
-                                height: 20,
-                              )
-                          ),
-                          Container(
-                              padding: EdgeInsets.all(5),
-                              child: Text(
-                                '已认证',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.deepOrange
-                                ),
-                              )
-                          ),
-                          Expanded(
-                            child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  widget.supplierModel.factory.address,
-                                  style: TextStyle(
-                                      fontSize: 14
-                                  ),
-                                )
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              )
-          )
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.all(5),
+                          child: Image.network(
+                            'https://www.vvfeng.com/data/upload/ueditor/20170422/58fab741b57e7.jpg',
+                            width: 20,
+                            height: 20,
+                          )),
+                      Container(
+                          padding: EdgeInsets.all(5),
+                          child: Image.network(
+                            'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548234386864&di=8f02d11edaa58d5a881f7828d6300fd2&imgtype=0&src=http%3A%2F%2Fa3.mzstatic.com%2Fus%2Fr30%2FPurple111%2Fv4%2F5f%2Fc7%2Fff%2F5fc7ff3e-42b4-d629-462f-148b523a4702%2FCRV_AP_600x360.jpeg',
+                            width: 20,
+                            height: 20,
+                          )),
+                      Container(
+                          padding: EdgeInsets.all(5),
+                          child: Text(
+                            '已认证',
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.deepOrange),
+                          )),
+                      Expanded(
+                        child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              widget.supplierModel.factory.address,
+                              style: TextStyle(fontSize: 14),
+                            )),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ))
         ],
       ),
       decoration: BoxDecoration(
@@ -185,132 +174,120 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   }
 
   //报价单信息
-  Widget _buildQuoteInfo(BuildContext context){
-    return widget.isSupplier ?
-    Container(
-      margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
-                    child: RichText(
-                      text: TextSpan(
-                          text: '向我报价',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: '${widget.supplierModel.quoteCount}',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 16
-                                )),
-                            TextSpan(
-                                text: '次',
-                                style: TextStyle(
-                                    fontSize: 16
-                                )
-                            ),
-                          ]),
-                    ),
-                  )),
-              Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                  margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Row(
-                      children: <Widget>[
-                        Text("查看更多"),
-                        Icon(Icons.chevron_right)
-                      ],
-                    ),
-                  )
-              ),
-
-            ],
-          ),
-          Divider(
-            height: 3,
-            color: Colors.black,
-          ),
-          _buildQuoteHeader(),
-          _buildQuoteEntries(),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-    ) : Container();
+  Widget _buildQuoteInfo(BuildContext context) {
+    return widget.isSupplier
+        ? Container(
+            margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
+                      child: RichText(
+                        text: TextSpan(
+                            text: '向我报价',
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: '${widget.supplierModel.quoteCount}',
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 16)),
+                              TextSpan(
+                                  text: '次', style: TextStyle(fontSize: 16)),
+                            ]),
+                      ),
+                    )),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            children: <Widget>[
+                              Text("查看更多"),
+                              Icon(Icons.chevron_right)
+                            ],
+                          ),
+                        )),
+                  ],
+                ),
+                Divider(
+                  height: 3,
+                  color: Colors.black,
+                ),
+                _buildQuoteHeader(),
+                _buildQuoteEntries(),
+              ],
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          )
+        : Container();
   }
 
   //采购单信息
-  Widget _buildPurchaseOrderInfo(BuildContext context){
-      return widget.isSupplier?
-      Container(
-        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-        child: Column(
-          children: <Widget>[
-            Row(
+  Widget _buildPurchaseOrderInfo(BuildContext context) {
+    return widget.isSupplier
+        ? Container(
+            margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: Column(
               children: <Widget>[
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
-                  child: RichText(
-                    text: TextSpan(
-                        text: '订单合作',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: '${widget.supplierModel.orderCount}',
-                              style: TextStyle(
-                                  color: Colors.red,
-                                fontSize: 16
-                              )),
-                          TextSpan(
-                              text: '次',
-                            style: TextStyle(fontSize: 16)
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
+                      child: RichText(
+                        text: TextSpan(
+                            text: '订单合作',
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: '${widget.supplierModel.orderCount}',
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 16)),
+                              TextSpan(
+                                  text: '次', style: TextStyle(fontSize: 16)),
+                            ]),
+                      ),
+                    )),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            children: <Widget>[
+                              Text("查看更多"),
+                              Icon(Icons.chevron_right)
+                            ],
                           ),
-                        ]),
-                  ),
-                )),
-                Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    margin: EdgeInsets.fromLTRB(0, 0, 5, 5),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Row(
-                          children: <Widget>[
-                            Text("查看更多"),
-                            Icon(Icons.chevron_right)
-                          ],
-                        ),
-                      )
-                  ),
-
+                        )),
+                  ],
+                ),
+                Divider(
+                  height: 3,
+                  color: Colors.black,
+                ),
+                _buildPurchaseOrderHeader(context),
+                Column(
+                  children: _buildPurchaseOrderContent(context),
+                ),
+                _buildPurchaseOrderBottom(context),
               ],
             ),
-            Divider(
-              height: 3,
-              color: Colors.black,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
             ),
-            _buildPurchaseOrderHeader(context),
-            Column(
-              children: _buildPurchaseOrderContent(context),
-            ),
-            _buildPurchaseOrderBottom(context),
-          ],
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ):Container();
+          )
+        : Container();
   }
 
   Widget _buildFactoryInfo(BuildContext context) {
@@ -353,8 +330,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
           new Divider(),
           ListTile(
             title: Text('地址'),
-            trailing: Text(
-                widget.supplierModel.factory.address,
+            trailing: Text(widget.supplierModel.factory.address,
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -369,7 +345,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   }
 
   //历史订单信息
-  Widget _buildHistoryOrderCount(BuildContext context){
+  Widget _buildHistoryOrderCount(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -401,8 +377,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    )
-                ),
+                    )),
               )
             ],
           ),
@@ -432,8 +407,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    )
-                ),
+                    )),
               )
             ],
           ),
@@ -447,7 +421,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   }
 
   //工厂部分信息
-  Widget _buildFactory(BuildContext context){
+  Widget _buildFactory(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -469,18 +443,18 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.all(5),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      MonthlyCapacityRangesLocalizedMap[widget.supplierModel.factory.monthlyCapacityRanges],
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                    margin: EdgeInsets.all(5),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        MonthlyCapacityRangesLocalizedMap[
+                            widget.supplierModel.factory.monthlyCapacityRanges],
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                  )
-                ),
+                    )),
               )
             ],
           ),
@@ -500,19 +474,18 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.all(5),
+                    margin: EdgeInsets.all(5),
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        ScaleRangesLocalizedMap[widget.supplierModel.factory
-                            .scaleRange],
+                        ScaleRangesLocalizedMap[
+                            widget.supplierModel.factory.scaleRange],
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    )
-                ),
+                    )),
               )
             ],
           ),
@@ -551,7 +524,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   }
 
   //面辅料
-  Widget _buildFabric(BuildContext context){
+  Widget _buildFabric(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -573,12 +546,11 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.all(5),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.chevron_right),
-                  )
-                ),
+                    margin: EdgeInsets.all(5),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.chevron_right),
+                    )),
               )
             ],
           ),
@@ -618,8 +590,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Icon(Icons.chevron_right),
-                          )
-                      ),
+                          )),
                     )
                   ],
                 ),
@@ -635,44 +606,39 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                     children: List.generate(3, (index) {
                       return Container(
                           child: Center(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  child: Image.network(
-                                    widget.supplierModel.factory.products[index]
-                                        .normal[0],
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                                Container(
-                                  child: Text(
-                                    widget.supplierModel.factory.products[index]
-                                        .name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  child: Text(
-                                    '￥${widget.supplierModel.factory
-                                        .products[index].price} ～ ￥${widget
-                                        .supplierModel.factory.products[index]
-                                        .price}',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                )
-                              ],
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              child: Image.network(
+                                widget.supplierModel.factory.products[index]
+                                    .normal[0],
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.fill,
+                              ),
                             ),
-                          )
-                      );
-                    })
-                ),
+                            Container(
+                              child: Text(
+                                widget
+                                    .supplierModel.factory.products[index].name,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                '￥${widget.supplierModel.factory.products[index].price} ～ ￥${widget.supplierModel.factory.products[index].price}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ));
+                    })),
               )
             ],
           ),
@@ -692,7 +658,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   }
 
   //合作品牌
-  Widget _buildCooperativeBrand(BuildContext context){
+  Widget _buildCooperativeBrand(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Column(
@@ -718,13 +684,12 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Icon(Icons.chevron_right),
-                      )
-                  ),
+                      )),
                 )
               ],
             ),
           ),
-        /* Container(
+          /* Container(
              height: 200,
              width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -754,7 +719,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   }
 
   //工厂生产环境
-  Widget _buildFactoryWorkPicInfo(BuildContext context){
+  Widget _buildFactoryWorkPicInfo(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Column(
@@ -826,8 +791,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                     ),
                   ],
                 ),
-              )
-          ),
+              )),
         ],
       ),
       decoration: BoxDecoration(
@@ -854,15 +818,16 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
           ),
           ListTile(
             leading: Text('注册时间'),
-            trailing:
-            Text('${DateFormatUtil.formatYMD(widget.supplierModel.factory.registrationDate)}'),
+            trailing: Text(
+                '${DateFormatUtil.formatYMD(widget.supplierModel.factory.registrationDate)}'),
           ),
           Divider(
             height: 5,
           ),
           ListTile(
             leading: Text('车位数量'),
-            trailing: Text(widget.supplierModel.factory.latheQuantity.toString()),
+            trailing:
+                Text(widget.supplierModel.factory.latheQuantity.toString()),
           ),
           Divider(
             height: 5,
@@ -922,7 +887,8 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   }
 
   //转换枚举List显示
-  List<Widget> _buildItemsByEntityList(BuildContext context, List<dynamic> _list) {
+  List<Widget> _buildItemsByEntityList(
+      BuildContext context, List<dynamic> _list) {
     List<Widget> _widget = new List();
     if (_list.isNotEmpty) {
       for (int i = 0; i < _list.length; i++) {
@@ -932,11 +898,8 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
               alignment: Alignment.centerRight,
               child: Text(
                 _list[i].name,
-                style: TextStyle(
-                    fontSize: 16
-                ),
-              )
-          ),
+                style: TextStyle(fontSize: 16),
+              )),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
           ),
@@ -956,14 +919,15 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
               children: <Widget>[
                 Expanded(
                     child: Text(
-                      '采购订单号：' + widget.supplierModel.purchaseOrder.code,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    )),
+                  '采购订单号：' + widget.supplierModel.purchaseOrder.code,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                )),
                 Text(
-                  PurchaseOrderStatusLocalizedMap[widget.supplierModel.purchaseOrder.status],
+                  PurchaseOrderStatusLocalizedMap[
+                      widget.supplierModel.purchaseOrder.status],
                   textAlign: TextAlign.end,
                   style: TextStyle(fontSize: 16, color: Colors.green),
                 )
@@ -1030,15 +994,15 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
               alignment: Alignment.centerRight,
               child: Text(
                 '共' +
-                    widget.supplierModel.purchaseOrder.totalQuantity.toString() +
+                    widget.supplierModel.purchaseOrder.totalQuantity
+                        .toString() +
                     '件商品   合计： ￥' +
                     widget.supplierModel.purchaseOrder.totalPrice.toString(),
                 style: TextStyle(fontSize: 16, color: Colors.red),
               ),
             )
           ],
-        )
-    );
+        ));
   }
 
   Widget _buildQuoteHeader() {
@@ -1061,14 +1025,16 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                     style: TextStyle(fontSize: 15, color: Colors.black),
                     children: <TextSpan>[
                       TextSpan(
-                          text: '${widget.supplierModel.quoteOrder.order.totalPrice}',
+                          text:
+                              '${widget.supplierModel.quoteOrder.order.totalPrice}',
                           style: TextStyle(color: Colors.red)),
                       TextSpan(text: '元'),
                     ]),
               ),
-              Text(QuoteStateLocalizedMap[widget.supplierModel.quoteOrder.order.state],
-                  style: TextStyle(
-                      color: Colors.blue, fontSize: 15))
+              Text(
+                  QuoteStateLocalizedMap[
+                      widget.supplierModel.quoteOrder.order.state],
+                  style: TextStyle(color: Colors.blue, fontSize: 15))
             ],
           ),
           Row(
@@ -1097,12 +1063,14 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image: widget.supplierModel.quoteOrder.product.thumbnail != null
-                      ? NetworkImage(widget.supplierModel.quoteOrder.product.thumbnail)
-                      : AssetImage(
-                    'temp/picture.png',
-                    package: "assets",
-                  ),
+                  image:
+                      widget.supplierModel.quoteOrder.product.thumbnail != null
+                          ? NetworkImage(
+                              widget.supplierModel.quoteOrder.product.thumbnail)
+                          : AssetImage(
+                              'temp/picture.png',
+                              package: "assets",
+                            ),
                   fit: BoxFit.cover,
                 )),
           ),
@@ -1117,25 +1085,25 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                 children: <Widget>[
                   widget.supplierModel.quoteOrder.product.name != null
                       ? Text(
-                    widget.supplierModel.quoteOrder.product.name,
-                    style: TextStyle(fontSize: 15),
-                    overflow: TextOverflow.ellipsis,
-                  )
+                          widget.supplierModel.quoteOrder.product.name,
+                          style: TextStyle(fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
+                        )
                       : Text(
-                    '暂无产品',
-                    style: TextStyle(fontSize: 15, color: Colors.red),
-                  ),
+                          '暂无产品',
+                          style: TextStyle(fontSize: 15, color: Colors.red),
+                        ),
                   widget.supplierModel.quoteOrder.product.skuID != null
                       ? Container(
-                    padding: EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Text(
-                      '货号：${widget.supplierModel.quoteOrder.product.skuID}',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  )
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Text(
+                            '货号：${widget.supplierModel.quoteOrder.product.skuID}',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        )
                       : Container(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -1187,5 +1155,4 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
       },
     );
   }
-
 }

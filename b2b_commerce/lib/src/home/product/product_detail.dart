@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/products/apparel_product_size_stock_item.dart';
+import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:b2b_commerce/src/home/product/product_color_size_select.dart';
 import 'package:b2b_commerce/src/home/product/product_num_select.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,207 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
       minPrice: 99.00,
       maxPrice: 500.00,
-      belongTo: FactoryModel(name: '广州好运来服饰有限公司', address: '广东广州'));
+      belongTo: FactoryModel.fromJson({
+        'profilePicture':
+            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+        'uid': 'BB123456',
+        'name': '草帽工厂',
+        'starLevel': 5,
+        'historyOrdersCount': 35,
+        'responseQuotedTime': 50,
+        'email': 'monkey.D.luffy@163.com',
+        'phone': '020-12345678',
+        'cooperationModes': ['FOB'],
+        'developmentCapacity': true,
+        'monthlyCapacityRanges': 'MCR003',
+        'latheQuantity': 5,
+        'contactPerson': 'luffy',
+        'contactPhone': '13123456789',
+        'address': '广东省广州市海珠区广州大道南',
+        'contactAddress': {
+          'fullname': "张三",
+          'cellphone': '13123456789',
+          'region': {'isocode': 'R123', 'name': '广东省'},
+          'city': {'code': 'C123', 'name': '广州市'},
+          'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+          'line1': '广州大道南',
+        },
+        'categories': [
+          {
+            'code': '1001',
+            'name': '卫衣',
+          },
+          {
+            'code': '1002',
+            'name': '毛衣',
+          },
+        ],
+        'scaleRange': 'SR005',
+        'registrationDate': DateTime.now().toString(),
+        'taxNumber': '41553315446687844',
+        'bankOfDeposit': '中国工商银行',
+        'certificate': [
+          {
+            'url':
+                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+            'mediaType': 'jpg',
+          },
+          {
+            'url':
+                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+            'mediaType': 'jpg',
+          },
+          {
+            'url':
+                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+            'mediaType': 'jpg',
+          },
+        ],
+        'cooperativeBrands': [
+          {
+            'profilePicture':
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+            'uid': 'BB123456',
+            'name': '草帽工厂',
+            'starLevel': 5,
+            'email': 'monkey.D.luffy@163.com',
+            'phone': '020-12345678',
+            'cooperationModes': ['FOB'],
+            'developmentCapacity': true,
+            'monthlyCapacityRanges': 'MCR003',
+            'latheQuantity': 5,
+            'contactPerson': 'luffy',
+            'contactPhone': '13123456789',
+          },
+          {
+            'profilePicture':
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+            'uid': 'BB123456',
+            'name': '草帽工厂',
+            'starLevel': 5,
+            'email': 'monkey.D.luffy@163.com',
+            'phone': '020-12345678',
+            'cooperationModes': ['FOB'],
+            'developmentCapacity': true,
+            'monthlyCapacityRanges': 'MCR003',
+            'latheQuantity': 5,
+            'contactPerson': 'luffy',
+            'contactPhone': '13123456789',
+          },
+          {
+            'profilePicture':
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+            'uid': 'BB123456',
+            'name': '草帽工厂',
+            'starLevel': 5,
+            'email': 'monkey.D.luffy@163.com',
+            'phone': '020-12345678',
+            'cooperationModes': ['FOB'],
+            'developmentCapacity': true,
+            'monthlyCapacityRanges': 'MCR003',
+            'latheQuantity': 5,
+            'contactPerson': 'luffy',
+            'contactPhone': '13123456789',
+          },
+          {
+            'profilePicture':
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+            'uid': 'BB123456',
+            'name': '草帽工厂',
+            'starLevel': 5,
+            'email': 'monkey.D.luffy@163.com',
+            'phone': '020-12345678',
+            'cooperationModes': ['FOB'],
+            'developmentCapacity': true,
+            'monthlyCapacityRanges': 'MCR003',
+            'latheQuantity': 5,
+            'contactPerson': 'luffy',
+            'contactPhone': '13123456789',
+          },
+          {
+            'profilePicture':
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+            'uid': 'BB123456',
+            'name': '草帽工厂',
+            'starLevel': 5,
+            'email': 'monkey.D.luffy@163.com',
+            'phone': '020-12345678',
+            'cooperationModes': ['FOB'],
+            'developmentCapacity': true,
+            'monthlyCapacityRanges': 'MCR003',
+            'latheQuantity': 5,
+            'contactPerson': 'luffy',
+            'contactPhone': '13123456789',
+          },
+          {
+            'profilePicture':
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+            'uid': 'BB123456',
+            'name': '草帽工厂',
+            'starLevel': 5,
+            'email': 'monkey.D.luffy@163.com',
+            'phone': '020-12345678',
+            'cooperationModes': ['FOB'],
+            'developmentCapacity': true,
+            'monthlyCapacityRanges': 'MCR003',
+            'latheQuantity': 5,
+            'contactPerson': 'luffy',
+            'contactPhone': '13123456789',
+          },
+          {
+            'profilePicture':
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+            'uid': 'BB123456',
+            'name': '草帽工厂',
+            'starLevel': 5,
+            'email': 'monkey.D.luffy@163.com',
+            'phone': '020-12345678',
+            'cooperationModes': ['FOB'],
+            'developmentCapacity': true,
+            'monthlyCapacityRanges': 'MCR003',
+            'latheQuantity': 5,
+            'contactPerson': 'luffy',
+            'contactPhone': '13123456789',
+          },
+        ],
+        'products': [
+          {
+            'name': '春秋薄款卫衣',
+            'normal': [
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+            ],
+            'price': 33.3,
+          },
+          {
+            'name': '春秋薄款卫衣',
+            'normal': [
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+            ],
+            'price': 33.3,
+          },
+          {
+            'name': '春秋薄款卫衣',
+            'normal': [
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+            ],
+            'price': 33.3,
+          },
+          {
+            'name': '春秋薄款卫衣',
+            'normal': [
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+            ],
+            'price': 33.3,
+          },
+          {
+            'name': '春秋薄款卫衣',
+            'normal': [
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+            ],
+            'price': 33.3,
+          },
+        ]
+      }));
 
   //TODO 对应产品的颜色尺码数据
   List<ColorModel> mockColors = <ColorModel>[
@@ -80,7 +281,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     ///构建数量控制列
     colorEntries.forEach((color) {
       apparelProductStockInputItems[color] = sizeEntries
-          .map((size) => SizeStockItem(size: size.sizeModel,selectEntry: size))
+          .map((size) => SizeStockItem(size: size.sizeModel, selectEntry: size))
           .toList();
     });
   }
@@ -255,7 +456,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             value: '${product.belongTo.name}',
             action: JumpTo(
               label: '进厂',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SuppliersDetail(
+                          supplierModel: SupplierModel(
+                            factory: product.belongTo,
+                          ),
+                          isSupplier: false,
+                        ),
+                  ),
+                );
+              },
             ),
           ),
           BasicInfoRow(
