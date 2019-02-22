@@ -41,179 +41,21 @@ class QuickReactionFactoryBLoC extends BLoCBase {
       // TODO: 分页拿数据，response.data;
       _factories = (await Future.delayed(const Duration(seconds: 1), () {
         if (isDESC) {
-          return <FactoryModel>[
-            FactoryModel(
-                historyOrdersCount: 214,
-                name: '广州旭日4',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                name: '广州旭日3',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                name: '广州旭日2',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                name: '广州旭日1',
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                starLevel: 4,
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                name: '广州旭日0',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                name: '广州旭日-1',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                name: '广州旭日-2',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ])
-          ];
+          List<FactoryModel> list = [];
+          for (int i = 10; i >= 0; i--) {
+            FactoryModel model = FactoryModel.fromJson(mockFactory);
+            model.name = '草帽工厂${i}';
+            list.add(model);
+          }
+          return list;
         } else {
-          return <FactoryModel>[
-            FactoryModel(
-                historyOrdersCount: 214,
-                name: '广州旭日1',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                name: '广州旭日2',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                name: '广州旭日3',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                name: '广州旭日4',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                name: '广州旭日5',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                name: '广州旭日6',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ]),
-            FactoryModel(
-                historyOrdersCount: 214,
-                profilePicture:
-                    'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-                name: '广州旭日7',
-                starLevel: 4,
-                describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-                categories: [
-                  CategoryModel(name: '牛仔'),
-                  CategoryModel(name: '衬衫'),
-                  CategoryModel(name: '夹克'),
-                ])
-          ];
+          List<FactoryModel> list = [];
+          for (int i = 1; i <= 10; i++) {
+            FactoryModel model = FactoryModel.fromJson(mockFactory);
+            model.name = '草帽工厂${i}';
+            list.add(model);
+          }
+          return list;
         }
       }));
     }
@@ -222,20 +64,9 @@ class QuickReactionFactoryBLoC extends BLoCBase {
 
   loadingMoreByCondition({String condition, bool isDESC}) async {
     //模拟数据到底
-    if (_factories.length < 10) {
+    if (_factories.length < 15) {
       _factories.add(await Future.delayed(const Duration(seconds: 1), () {
-        return FactoryModel(
-            historyOrdersCount: 214,
-            name: '广州旭日',
-            starLevel: 4,
-            describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-            profilePicture:
-                'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-            categories: [
-              CategoryModel(name: '牛仔'),
-              CategoryModel(name: '衬衫'),
-              CategoryModel(name: '夹克'),
-            ]);
+        return FactoryModel.fromJson(mockFactory);
       }));
     } else {
       //通知显示已经到底部
@@ -254,20 +85,26 @@ class QuickReactionFactoryBLoC extends BLoCBase {
   //下拉刷新
   Future refreshData({String condition, bool isDESC}) async {
     _factories.clear();
-    _factories.add(await Future.delayed(const Duration(seconds: 1), () {
-      return FactoryModel(
-          historyOrdersCount: 214,
-          name: '广州旭日',
-          starLevel: 4,
-          describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-          profilePicture:
-              'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-          categories: [
-            CategoryModel(name: '牛仔'),
-            CategoryModel(name: '衬衫'),
-            CategoryModel(name: '夹克'),
-          ]);
+    _factories = (await Future.delayed(const Duration(seconds: 1), () {
+      if (isDESC) {
+        List<FactoryModel> list = [];
+        for (int i = 10; i >= 0; i--) {
+          FactoryModel model = FactoryModel.fromJson(mockFactory);
+          model.name = '草帽工厂${i}';
+          list.add(model);
+        }
+        return list;
+      } else {
+        List<FactoryModel> list = [];
+        for (int i = 1; i <= 10; i++) {
+          FactoryModel model = FactoryModel.fromJson(mockFactory);
+          model.name = '草帽工厂${i}';
+          list.add(model);
+        }
+        return list;
+      }
     }));
+
     _controller.sink.add(_factories);
   }
 
@@ -309,4 +146,207 @@ class QuickReactionFactoryBLoC extends BLoCBase {
   dispose() {
     _controller.close();
   }
+
+  ///TODO：mock数据待删除
+  Map<String, dynamic> mockFactory = {
+    'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+    'uid': 'BB123456',
+    'name': '草帽工厂',
+    'starLevel': 5,
+    'describe': '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
+    'historyOrdersCount': 35,
+    'responseQuotedTime': 50,
+    'email': 'monkey.D.luffy@163.com',
+    'phone': '020-12345678',
+    'cooperationModes': ['FOB'],
+    'developmentCapacity': true,
+    'monthlyCapacityRanges': 'MCR003',
+    'latheQuantity': 5,
+    'contactPerson': 'luffy',
+    'contactPhone': '13123456789',
+    'address': '广东省广州市海珠区广州大道南',
+    'contactAddress': {
+      'fullname': "张三",
+      'cellphone': '13123456789',
+      'region': {'isocode': 'R123', 'name': '广东省'},
+      'city': {'code': 'C123', 'name': '广州市'},
+      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+      'line1': '广州大道南',
+    },
+    'categories': [
+      {
+        'code': '1001',
+        'name': '卫衣',
+      },
+      {
+        'code': '1002',
+        'name': '毛衣',
+      },
+    ],
+    'scaleRange': 'SR005',
+    'registrationDate': DateTime.now().toString(),
+    'taxNumber': '41553315446687844',
+    'bankOfDeposit': '中国工商银行',
+    'certificate': [
+      {
+        'url':
+            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+        'mediaType': 'jpg',
+      },
+      {
+        'url':
+            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+        'mediaType': 'jpg',
+      },
+      {
+        'url':
+            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+        'mediaType': 'jpg',
+      },
+    ],
+    'cooperativeBrands': [
+      {
+        'profilePicture':
+            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+        'uid': 'BB123456',
+        'name': '草帽工厂',
+        'starLevel': 5,
+        'email': 'monkey.D.luffy@163.com',
+        'phone': '020-12345678',
+        'cooperationModes': ['FOB'],
+        'developmentCapacity': true,
+        'monthlyCapacityRanges': 'MCR003',
+        'latheQuantity': 5,
+        'contactPerson': 'luffy',
+        'contactPhone': '13123456789',
+      },
+      {
+        'profilePicture':
+            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+        'uid': 'BB123456',
+        'name': '草帽工厂',
+        'starLevel': 5,
+        'email': 'monkey.D.luffy@163.com',
+        'phone': '020-12345678',
+        'cooperationModes': ['FOB'],
+        'developmentCapacity': true,
+        'monthlyCapacityRanges': 'MCR003',
+        'latheQuantity': 5,
+        'contactPerson': 'luffy',
+        'contactPhone': '13123456789',
+      },
+      {
+        'profilePicture':
+            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+        'uid': 'BB123456',
+        'name': '草帽工厂',
+        'starLevel': 5,
+        'email': 'monkey.D.luffy@163.com',
+        'phone': '020-12345678',
+        'cooperationModes': ['FOB'],
+        'developmentCapacity': true,
+        'monthlyCapacityRanges': 'MCR003',
+        'latheQuantity': 5,
+        'contactPerson': 'luffy',
+        'contactPhone': '13123456789',
+      },
+      {
+        'profilePicture':
+            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+        'uid': 'BB123456',
+        'name': '草帽工厂',
+        'starLevel': 5,
+        'email': 'monkey.D.luffy@163.com',
+        'phone': '020-12345678',
+        'cooperationModes': ['FOB'],
+        'developmentCapacity': true,
+        'monthlyCapacityRanges': 'MCR003',
+        'latheQuantity': 5,
+        'contactPerson': 'luffy',
+        'contactPhone': '13123456789',
+      },
+      {
+        'profilePicture':
+            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+        'uid': 'BB123456',
+        'name': '草帽工厂',
+        'starLevel': 5,
+        'email': 'monkey.D.luffy@163.com',
+        'phone': '020-12345678',
+        'cooperationModes': ['FOB'],
+        'developmentCapacity': true,
+        'monthlyCapacityRanges': 'MCR003',
+        'latheQuantity': 5,
+        'contactPerson': 'luffy',
+        'contactPhone': '13123456789',
+      },
+      {
+        'profilePicture':
+            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+        'uid': 'BB123456',
+        'name': '草帽工厂',
+        'starLevel': 5,
+        'email': 'monkey.D.luffy@163.com',
+        'phone': '020-12345678',
+        'cooperationModes': ['FOB'],
+        'developmentCapacity': true,
+        'monthlyCapacityRanges': 'MCR003',
+        'latheQuantity': 5,
+        'contactPerson': 'luffy',
+        'contactPhone': '13123456789',
+      },
+      {
+        'profilePicture':
+            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+        'uid': 'BB123456',
+        'name': '草帽工厂',
+        'starLevel': 5,
+        'email': 'monkey.D.luffy@163.com',
+        'phone': '020-12345678',
+        'cooperationModes': ['FOB'],
+        'developmentCapacity': true,
+        'monthlyCapacityRanges': 'MCR003',
+        'latheQuantity': 5,
+        'contactPerson': 'luffy',
+        'contactPhone': '13123456789',
+      },
+    ],
+    'products': [
+      {
+        'name': '春秋薄款卫衣',
+        'normal': [
+          'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        ],
+        'price': 33.3,
+      },
+      {
+        'name': '春秋薄款卫衣',
+        'normal': [
+          'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        ],
+        'price': 33.3,
+      },
+      {
+        'name': '春秋薄款卫衣',
+        'normal': [
+          'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        ],
+        'price': 33.3,
+      },
+      {
+        'name': '春秋薄款卫衣',
+        'normal': [
+          'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        ],
+        'price': 33.3,
+      },
+      {
+        'name': '春秋薄款卫衣',
+        'normal': [
+          'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        ],
+        'price': 33.3,
+      },
+    ]
+  };
 }

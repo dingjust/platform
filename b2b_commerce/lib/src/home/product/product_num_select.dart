@@ -1,28 +1,40 @@
+import 'package:b2b_commerce/src/business/products/apparel_product_size_stock_item.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_stock_input.dart';
 import 'package:b2b_commerce/src/home/product/product_color_size_select.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class ProductNumSelectPage extends StatefulWidget {
-  List<ColorSelectEntry> colorEntries;
-  List<SizeSelectEntry> sizeEntries;
+  Map<ColorSelectEntry, List<SizeStockItem>> apparelProductStockInputItems;
 
-  ProductNumSelectPage(
-      {Key key, @required this.colorEntries, @required this.sizeEntries})
+  ProductNumSelectPage({Key key, @required this.apparelProductStockInputItems})
       : super(key: key);
 
   _ProductNumSelectPageState createState() => _ProductNumSelectPageState();
 }
 
 class _ProductNumSelectPageState extends State<ProductNumSelectPage> {
+  Map<ColorModel, List<SizeStockItem>> items;
 
-void initState() { 
-  super.initState();
-  
-}
+  void initState() {
+    super.initState();
+    items = Map<ColorModel, List<SizeStockItem>>();
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.apparelProductStockInputItems);
+
+    ///对apparelProductStockInputItems进行过滤,显示被选中的
+    items.clear();
+    widget.apparelProductStockInputItems.forEach((colorEntry, sizeStockItems) {
+      if (colorEntry.selected) {
+        items[colorEntry.colorModel] = sizeStockItems
+            .where((sizeStockItem) => sizeStockItem.selectEntry.selected)
+            .toList();
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -99,24 +111,12 @@ void initState() {
                 ),
               ),
               ApparelProductStockInputItem(
-                items: apparelProductStockInputItems,
+                items: items,
               )
             ],
           ),
         ),
       ),
     );
-  }
-
-  Map<ColorModel, List<SizeStockItem>> get apparelProductStockInputItems {
-    Map<ColorModel, List<SizeStockItem>> result =
-        Map<ColorModel, List<SizeStockItem>>();
-    widget.colorEntries.where((entry) => entry.selected).forEach((color) {
-      result[color.colorModel] = widget.sizeEntries
-          .where((entry) => entry.selected)
-          .map((size) => SizeStockItem(size: size.sizeModel))
-          .toList();
-    });
-    return result;
   }
 }

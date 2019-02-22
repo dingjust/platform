@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/products/apparel_product_size_stock_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -115,6 +116,8 @@ class ColorSelectEntry {
 class SizeSelectEntry {
   final SizeModel sizeModel;
   bool selected;
-
-  SizeSelectEntry({@required this.sizeModel, this.selected = false});
+  SizeSelectEntry({
+    @required this.sizeModel,
+    this.selected = false,
+  });
 }
