@@ -25,7 +25,7 @@ const state = {
     id: null,
     code: '',
     details: {
-      minorCategories: [],
+      pictures: [],
       category: {
         code: '',
         name: ''
@@ -74,7 +74,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/djbrand/requirementOrder', {
+    const response = await http.post('/djwebservices/orders/requirement', {
       code: state.keyword,
       statuses: state.statuses
     }, {

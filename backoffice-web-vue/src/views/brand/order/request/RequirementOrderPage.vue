@@ -190,7 +190,7 @@
         this.$refs.resultTable.clearSelection();
       },
       async onDetails(item) {
-        const result = await this.$http.get('/djbrand/requirementOrder/' + item.code);
+        const result = await this.$http.get('/djwebservices/orders/requirement/' + item.code);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

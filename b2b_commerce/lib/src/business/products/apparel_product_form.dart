@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/business/products/form/detail_picture_field.dart';
-import 'package:b2b_commerce/src/business/products/form/normal_picture_field.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';

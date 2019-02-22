@@ -47,28 +47,6 @@
     </el-row>
     <div class="pt-2"></div>
 
-    <el-dialog title="更新基本信息" :close-on-click-modal="false"
-               :visible.sync="baseFormDialogVisible" :modal="false">
-      <requirement-order-base-form ref="statusForm"
-                                   :slot-data="baseData"
-                                   :read-only="false">
-      </requirement-order-base-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="baseFormDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmitBaseForm">确 定</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog title="更新订单状态" width="240px"
-               :visible.sync="statusFormDialogVisible" :close-on-click-modal="false" :modal="false">
-      <requirement-order-update-status-form ref="statusForm"
-                                            :slot-data="statusData"
-                                            :read-only="false">
-      </requirement-order-update-status-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="statusFormDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmitStatusForm">确 定</el-button>
-      </div>
-    </el-dialog>
     <el-dialog title="更新需求信息" width="60%"
                :visible.sync="requestFormDialogVisible" :close-on-click-modal="false" :modal="false">
       <requirement-order-request-form ref="requestForm"
@@ -133,39 +111,6 @@
         this.$message.success('审核拒绝成功');
         this.$set(this.slotData, 'status', result);
       },
-      onUpdateBase() {
-        Object.assign(this.baseData, {
-          code: this.slotData.code,
-        });
-
-        this.baseFormDialogVisible = true;
-      },
-      async onSubmitBaseForm() {
-        const result = await this.$http.put('/djbrand/requirementOrder/base', this.baseData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.$message.success('更新基本信息成功');
-
-        this.baseFormDialogVisible = false;
-      },
-      async onSubmitStatusForm() {
-        const result = await this.$http.put('/djbrand/requirementOrder/status', {
-          code: this.slotData.code,
-          status: this.statusData.status
-        });
-
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.$message.success('更新订单状态成功');
-        this.$set(this.slotData, 'status', this.statusData.status);
-        this.statusFormDialogVisible = false;
-      },
       onUpdateRequest() {
         Object.assign(this.requestData.details, this.slotData.details);
         this.requestFormDialogVisible = true;
@@ -182,7 +127,7 @@
         })
       },
       async _onSubmitRequestForm() {
-        const result = await this.$http.put('/djbrand/requirementOrder/request', {
+        const result = await this.$http.put('/djwebservices/orders/requirement/' + this.slotData.code + '/request', {
           code: this.slotData.code,
           details: this.requestData.details
         });
@@ -204,20 +149,10 @@
     },
     data() {
       return {
-        baseFormDialogVisible: false,
-        baseData: {
-          id: null,
-          code: this.slotData.code,
-        },
-        statusFormDialogVisible: false,
-        statusData: {
-          id: null,
-          code: this.slotData.code,
-          status: this.slotData.status
-        },
         requestFormDialogVisible: false,
         requestData: {
           id: null,
+          code: '',
           details: {
             category: {
               code: '',
@@ -229,7 +164,6 @@
             },
             expectedMachiningQuantity: 0,
             expectedDeliveryDate: null,
-            minExpectedPrice: 0,
             maxExpectedPrice: 0,
             machiningType: '',
             samplesNeeded: false,
