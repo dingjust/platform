@@ -62,8 +62,53 @@ class MyAccountPage extends StatelessWidget {
 
   Widget _buildTopBackgroud(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: 120),
       child: Center(
-        child:  _buildMoney(context),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                          child: Text(
+                            "￥",
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white
+                            ),
+                          )
+                      ),
+                      Container(
+                          child: Text(
+                            "987652.00",
+                            style: TextStyle(
+                                fontSize: 44,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white
+                            ),
+                          )
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(3),
+                margin: EdgeInsets.only(left: 10),
+                child: Text(
+                  '余额',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white
+                  ),
+                ),
+              )
+            ],
+          )
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: [ Color.fromRGBO(255, 80, 1, 1),Color.fromRGBO(255, 140, 0, 1)]),
