@@ -12,6 +12,7 @@ class EmployeeFormPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: !newlyCreated ? Text('员工明细') : Text('添加员工'),
       ),

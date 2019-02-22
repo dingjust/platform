@@ -10,6 +10,7 @@ class _ProfileAboutPageState extends State<ProfileAboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: const Text('关于衣加衣'),
       ),

@@ -36,10 +36,11 @@ class _ProductColorSizeSelectPageState
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Text('选择颜色'),
             GridView.count(
+              primary: false,
               shrinkWrap: true,
               crossAxisCount: 5,
               padding: const EdgeInsets.all(5),
@@ -47,6 +48,7 @@ class _ProductColorSizeSelectPageState
             ),
             Text('选择尺码'),
             GridView.count(
+              primary: false,
               shrinkWrap: true,
               crossAxisCount: 5,
               padding: const EdgeInsets.all(5),

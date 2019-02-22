@@ -13,6 +13,7 @@ class MembershipForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: !newlyCreated ? Text('会员明细') : Text('添加会员'),
       ),

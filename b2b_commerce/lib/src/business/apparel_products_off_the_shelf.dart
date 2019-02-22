@@ -13,6 +13,7 @@ class OffTheShelfApparelProductsPage extends StatelessWidget {
       bloc: ApparelProductBLoC.instance,
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0.5,
           centerTitle: true,
           title: Text('下架商品'),
           actions: <Widget>[

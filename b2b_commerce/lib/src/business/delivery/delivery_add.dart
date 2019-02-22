@@ -6,6 +6,8 @@ class DeliveryAddPage extends StatelessWidget{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
+        centerTitle: true,
         title: Text('新建运费'),
       ),
       body: _buildMain(context),

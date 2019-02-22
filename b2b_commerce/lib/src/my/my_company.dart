@@ -123,6 +123,7 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
         appBar: AppBar(
           centerTitle: true,
           title: const Text('认证信息'),
+          elevation: 0.5,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.edit),

@@ -42,6 +42,7 @@ class InvoiceTitleFormState extends State<InvoiceTitleFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('编辑发票抬头'),
         actions: <Widget>[

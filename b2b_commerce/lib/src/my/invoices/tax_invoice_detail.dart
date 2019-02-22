@@ -17,6 +17,7 @@ class TaxInvoiceDetailPage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          elevation: 0.5,
           centerTitle: true,
           title: Text('发票详情'),
         ),

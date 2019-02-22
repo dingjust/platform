@@ -21,7 +21,7 @@ class _OrderByProductPageState extends State<OrderByProductPage> {
         appBar: AppBar(
           brightness: Brightness.light,
           centerTitle: true,
-          elevation: 0,
+          elevation: 0.5,
           title: Text(
             '看款下单',
             style: TextStyle(color: Colors.black),

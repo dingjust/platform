@@ -34,6 +34,7 @@ class ApparelProductStocksPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text('库存管理'),
+        elevation: 0.5,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),

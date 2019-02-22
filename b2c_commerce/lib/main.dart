@@ -29,6 +29,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
+        elevation: 0.5,
+        centerTitle: true,
         title: new Text(widget.title),
       ),
       body: new Center(
