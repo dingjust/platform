@@ -9,7 +9,7 @@
           :data="uploadFormData"
           :before-upload="onBeforeUpload"
           :on-success="onSuccess"
-          :file-list="files"
+          :file-list="slotData.details.pictures"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
@@ -25,13 +25,22 @@
              :disabled="readOnly">
       <el-row :gutter="10">
         <el-col :span="8">
-          <el-form-item label="产品类别" prop="minorCategories">
-            <el-cascader class="w-100"
-                         v-model="slotData.details.minorCategories"
-                         :options="categories"
-                         :props="categoryProps"
-                         :show-all-levels="false">
-            </el-cascader>
+          <el-form-item label="产品类别" prop="category">
+            <el-select class="w-100"
+                        placeholder="请选择"
+                        v-model="slotData.details.category.code">
+              <el-option-group
+                v-for="group in categories"
+                :key="group.code"
+                :label="group.name">
+                <el-option
+                  v-for="item in group.children"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code">
+                </el-option>
+              </el-option-group>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -59,7 +68,8 @@
             <el-date-picker class="w-100"
                             type="date"
                             v-model="slotData.details.expectedDeliveryDate"
-                            placeholder="选择日期">
+                            placeholder="选择日期"
+                            :value-format="defaultDateValueFormat">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -168,8 +178,9 @@
         return true;
       },
       onSuccess(response) {
-        // this.slotData.images.push(response);
-        // this.$set(this.slotData, "images", this.slotData.images);
+        console.log(JSON.stringify(response));
+        this.slotData.details.pictures.push(response);
+        this.$set(this.slotData.details, "pictures", this.slotData.details.pictures);
       },
       async handleRemove(file) {
         // console.log(JSON.stringify(file));
@@ -191,25 +202,13 @@
         return {
           fileFormat: 'DefaultFileFormat',
         };
-      },
+      }
     },
     data() {
       return {
         categories: [],
         majorCategories: [],
-        machiningTypes: [{
-          code: 'LABOR_AND_MATERIAL',
-          name: '包工包料'
-        }, {
-          code: 'LIGHT_PROCESSING',
-          name: '清加工'
-        }],
-        categoryProps: {
-          label: 'name',
-          value: 'code',
-          children: 'children'
-        },
-        files: [],
+        machiningTypes: this.$store.state.EnumsModule.machiningTypes,
         dialogImageUrl: '',
         dialogVisible: false
       }

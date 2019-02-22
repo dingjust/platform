@@ -71,7 +71,7 @@
       },
       async _onSubmit() {
         let formData = this.slotData;
-        const result = await this.$http.post('/djbrand/processes/requirementOrder/publish/nosku', formData);
+        const result = await this.$http.post('/djwebservices/orders/requirement/new', formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

@@ -5,7 +5,14 @@ const state = {
   }, {
     code: 'unapproved',
     name: '下架'
-  }]
+  }],
+  machiningTypes: [{
+    code: 'LABOR_AND_MATERIAL',
+    name: '包工包料'
+  }, {
+    code: 'LIGHT_PROCESSING',
+    name: '清加工'
+  }],
 };
 
 const mutations = {};
