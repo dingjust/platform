@@ -8,15 +8,6 @@
                                       :slot-data="slotData"
                                       :read-only="false">
       </requirement-order-request-form>
-      <div class="pt-2"></div>
-      <el-row :gutter="10">
-        <el-col :span="12">
-          <el-button class="btn-block" size="mini" type="primary" @click="onSubmit()">提交</el-button>
-        </el-col>
-        <el-col :span="12">
-          <el-button class="btn-block" size="mini" @click="onCancel">取消</el-button>
-        </el-col>
-      </el-row>
     </el-card>
     <div class="pt-2"></div>
     <el-card class="box-card">
@@ -27,6 +18,15 @@
                                           :read-only="false">
       </requirement-order-attachments-form>
     </el-card>
+    <div class="pt-2"></div>
+    <el-row :gutter="10">
+      <el-col :span="12">
+        <el-button class="btn-block" size="mini" type="primary" @click="onSubmit()">提交</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-button class="btn-block" size="mini" @click="onCancel">取消</el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
