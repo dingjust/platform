@@ -20,7 +20,7 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
       //   title: Text('生意'),
       //   actions: <Widget>[
       //     IconButton(
-      //       icon: Icon(Icons.search),
+      //       icon: Icon(B2BIcons.search,size: 20,),
       //       onPressed: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
       //     ),
       //     IconButton(
@@ -51,6 +51,8 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
                   AppRoutes.ROUTE_PURCHASE_ORDERS),
               AdvanceMenuItem(MenuItemImage.sale_order, '销售订单',
                   AppRoutes.ROUTE_SALES_ORDERS),
+              AdvanceMenuItem(MenuItemImage.sale_order, '打样订单',
+                  AppRoutes.ROUTE_PROOFING_ORDERS),
             ]),
             AdvanceMenu('店铺管理', <AdvanceMenuItem>[
               AdvanceMenuItem(MenuItemImage.product_manage, '商品管理',

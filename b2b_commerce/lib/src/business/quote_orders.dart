@@ -36,7 +36,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.search),
+                icon: Icon(B2BIcons.search,size: 20,),
                 onPressed: () => showSearch(
                     context: context, delegate: QuotesSearchDelegate()),
               ),

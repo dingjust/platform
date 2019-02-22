@@ -85,6 +85,28 @@ enum QuoteState {
   BUYER_REJECTED
 }
 
+///打样订单状态
+enum ProofingStatus {
+  /// 待付款
+  PENDING_PAYMENT,
+
+  /// 待发货
+  PENDING_DELIVERY,
+
+  /// 已发货
+  SHIPPED,
+
+  /// 已完成
+  COMPLETED,
+}
+// TODO: i18n处理
+const ProofingStatusLocalizedMap = {
+  ProofingStatus.PENDING_PAYMENT: "待付款",
+  ProofingStatus.PENDING_DELIVERY: "待发货",
+  ProofingStatus.SHIPPED: "已发货",
+  ProofingStatus.COMPLETED: "已完成"
+};
+
 // TODO: i18n处理
 const QuoteStateLocalizedMap = {
   QuoteState.SELLER_SUBMITTED: "待处理",
@@ -732,4 +754,48 @@ class OrderStatusModel extends ItemModel {
 
   static Map<String, dynamic> toJson(OrderStatusModel model) =>
       _$OrderStatusModelToJson(model);
+}
+
+///打样订单
+@JsonSerializable()
+class ProofingModel extends OrderModel {
+  /// 订单状态
+  ProofingStatus status;
+
+  ///发布者
+  CompanyModel belongTo;
+
+  ///生产工厂
+  FactoryModel factory;
+
+  ApparelProductModel product;
+
+  RequirementOrderModel order;
+
+  ProofingModel(
+      {String code,
+      this.status,
+      int totalQuantity,
+      double totalPrice,
+      this.belongTo,
+      this.factory,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      this.product,
+      this.order})
+      : super(
+          code: code,
+          totalQuantity: totalQuantity,
+          totalPrice: totalPrice,
+          creationTime: creationTime,
+          deliveryAddress: deliveryAddress,
+          remarks: remarks,
+        );
+
+  factory ProofingModel.fromJson(Map<String, dynamic> json) =>
+      _$ProofingModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ProofingModel model) =>
+      _$ProofingModelToJson(model);
 }

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/factory/hot_category.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:core/core.dart';
@@ -57,6 +58,7 @@ class AppRoutes with GlobalRoutes {
       '/business/orders/requirement_orders_detail';
   static const ROUTE_REQUIREMENT_QUOTE_DETAIL =
       '/business/orders/requirement_quote_detail';
+  static const ROUTE_PROOFING_ORDERS = '/business/proofing_orders';
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
   static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
@@ -108,6 +110,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_REQUIREMENT_QUOTE_DETAIL: (context) => RequirementQuoteDetailPage(),
     ROUTE_DELIVERY: (context) => DeliveryPage(),
     ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
-    ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage()
+    ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage(),
+    ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage()
   };
 }

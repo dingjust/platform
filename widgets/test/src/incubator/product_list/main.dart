@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:widgets/widgets.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -52,7 +53,7 @@ class _ProductPageState extends State<ProductPage> {
         elevation: 0.5,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(B2BIcons.search,size: 20,),
             onPressed: () {},
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 import 'employees/employee_form.dart';
 import 'search/employee_search.dart';
@@ -29,7 +30,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
         title: const Text('员工管理'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(B2BIcons.search,size: 20,),
             onPressed: () => showSearch(context: context, delegate: EmployeeSearchDelegate()),
           ),
         ],

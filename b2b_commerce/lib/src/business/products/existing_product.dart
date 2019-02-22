@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/search/existing_product_search.dart';
 import 'package:b2b_commerce/src/common/screen_conditions.dart';
 import 'package:flutter/material.dart';
+import 'package:widgets/widgets.dart';
 
 class ExistingProduct extends StatefulWidget {
   _ExistingProductState createState() => _ExistingProductState();
@@ -18,7 +19,7 @@ class _ExistingProductState extends State<ExistingProduct> {
           elevation: 0.5,
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.search),
+              icon: Icon(B2BIcons.search,size: 20,),
               onPressed: () => showSearch(
                   context: context, delegate: ExistingProductSearchDelegate()),
             ),
