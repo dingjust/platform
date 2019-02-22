@@ -1,5 +1,6 @@
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
-import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
+import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/business/search/proofing_search.dart';
+import 'package:b2b_commerce/src/business/search/quotes_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -8,38 +9,41 @@ import 'package:widgets/widgets.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
-  EnumModel('PENDING_QUOTE', '报价中'),
+  EnumModel('PENDING_PAYMENT', '待付款'),
+  EnumModel('PENDING_DELIVERY', '待发货'),
+  EnumModel('SHIPPED', '已发货'),
   EnumModel('COMPLETED', '已完成'),
-  EnumModel('CANCELLED', '已失效')
 ];
 
-class RequirementOrdersPage extends StatefulWidget {
-  _RequirementOrdersPageState createState() => _RequirementOrdersPageState();
+class ProofingOrdersPage extends StatefulWidget {
+  _ProofingOrdersPageState createState() => _ProofingOrdersPageState();
 }
 
-class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
-  GlobalKey _requirementOrderBlocProviderKey = GlobalKey();
+class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
+  GlobalKey _ProofingOrdersBLoCProviderKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return BLoCProvider<RequirementOrderBLoC>(
-        key: _requirementOrderBlocProviderKey,
-        bloc: RequirementOrderBLoC.instance,
+    return BLoCProvider<ProofingOrdersBLoC>(
+        key: _ProofingOrdersBLoCProviderKey,
+        bloc: ProofingOrdersBLoC.instance,
         child: Scaffold(
           appBar: AppBar(
             brightness: Brightness.light,
             centerTitle: true,
             elevation: 0.5,
             title: Text(
-              '需求订单管理',
+              '打样订单管理',
               style: TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(B2BIcons.search,size: 20,),
+                icon: Icon(
+                  B2BIcons.search,
+                  size: 20,
+                ),
                 onPressed: () => showSearch(
-                    context: context,
-                    delegate: RequirementOrderSearchDelegate()),
+                    context: context, delegate: ProofingSearchDelegate()),
               ),
             ],
           ),
@@ -57,11 +61,11 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                     color: Colors.black),
-                isScrollable: false,
+                isScrollable: true,
               ),
               body: TabBarView(
                 children: statuses
-                    .map((status) => RequirementOrderList(
+                    .map((status) => ProofingOrdersList(
                           status: status,
                         ))
                     .toList(),
@@ -73,8 +77,8 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
   }
 }
 
-class RequirementOrderList extends StatelessWidget {
-  RequirementOrderList({Key key, this.status}) : super(key: key);
+class ProofingOrdersList extends StatelessWidget {
+  ProofingOrdersList({Key key, this.status}) : super(key: key);
 
   final EnumModel status;
 
@@ -82,7 +86,7 @@ class RequirementOrderList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<RequirementOrderBLoC>(context);
+    var bloc = BLoCProvider.of<ProofingOrdersBLoC>(context);
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -121,11 +125,10 @@ class RequirementOrderList extends StatelessWidget {
             physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             children: <Widget>[
-              StreamBuilder<List<RequirementOrderModel>>(
+              StreamBuilder<List<ProofingModel>>(
                 stream: bloc.stream,
-                // initialData: null,
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
+                    AsyncSnapshot<List<ProofingModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses(status.code);
                     return Padding(
@@ -136,8 +139,8 @@ class RequirementOrderList extends StatelessWidget {
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((order) {
-                        return RequirementOrderItem(
-                          order: order,
+                        return ProofingOrderItem(
+                          model: order,
                         );
                       }).toList(),
                     );
@@ -189,15 +192,16 @@ class RequirementOrderList extends StatelessWidget {
   }
 }
 
-class RequirementOrderItem extends StatelessWidget {
-  const RequirementOrderItem({Key key, this.order}) : super(key: key);
+class ProofingOrderItem extends StatelessWidget {
+  const ProofingOrderItem({Key key, this.model}) : super(key: key);
 
-  final RequirementOrderModel order;
+  final ProofingModel model;
 
-  static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
-    RequirementOrderStatus.PENDING_QUOTE: Colors.green,
-    RequirementOrderStatus.COMPLETED: Colors.orange,
-    RequirementOrderStatus.CANCELLED: Colors.red
+  static Map<ProofingStatus, MaterialColor> _statusColors = {
+    ProofingStatus.PENDING_DELIVERY: Colors.green,
+    ProofingStatus.SHIPPED: Colors.blue,
+    ProofingStatus.PENDING_PAYMENT: Colors.red,
+    ProofingStatus.COMPLETED: Colors.orange
   };
 
   @override
@@ -205,8 +209,10 @@ class RequirementOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => RequirementOrderDetailPage(order: order)));
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => QuoteOrderDetailPage(
+        //           item: model,
+        //         )));
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -214,10 +220,10 @@ class RequirementOrderItem extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildHeader(),
-            Column(
-              children: _buildEntries(),
-            ),
-            _buildSummary()
+            _buildEntries(),
+            model.status == ProofingStatus.PENDING_PAYMENT
+                ? _buildSummary()
+                : Container()
           ],
         ),
         decoration: BoxDecoration(
@@ -235,22 +241,40 @@ class RequirementOrderItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Expanded(
-                flex: 1,
-                child:
-                    Text('需求订单号：' + order.code, style: TextStyle(fontSize: 16)),
+              RichText(
+                text: TextSpan(
+                    text: '￥',
+                    style: TextStyle(
+                        fontSize: 16, color: Color.fromRGBO(255, 45, 45, 1)),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '${model.totalPrice}',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Color.fromRGBO(255, 45, 45, 1))),
+                    ]),
               ),
-              Text(RequirementOrderStatusLocalizedMap[order.status],
+              Text(ProofingStatusLocalizedMap[model.status],
                   style: TextStyle(
-                      color: _statusColors[order.status], fontSize: 18))
+                      color: _statusColors[model.status], fontSize: 18))
             ],
           ),
           Container(
             padding: EdgeInsets.symmetric(vertical: 5),
-            child: Text(
-              '发布时间: ${DateFormatUtil.format(order.creationTime)}',
-              style: TextStyle(fontSize: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '工厂：${model.factory.name}',
+                  style: TextStyle(fontSize: 15),
+                ),
+                Text(
+                  '订单创建时间：${DateFormatUtil.format(model.creationTime)}',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ],
             ),
           ),
         ],
@@ -258,100 +282,111 @@ class RequirementOrderItem extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildEntries() {
-    return order.entries
-        .map((entry) => Container(
-              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-              child: Row(
+  Widget _buildEntries() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+      child: Row(
+        children: <Widget>[
+          model.product.thumbnail != null
+              ? Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      image: DecorationImage(
+                        image: NetworkImage(model.product.thumbnail),
+                        fit: BoxFit.cover,
+                      )),
+                )
+              : Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Color.fromRGBO(243, 243, 243, 1)),
+                  child: Icon(
+                    B2BIcons.noPicture,
+                    color: Color.fromRGBO(200, 200, 200, 1),
+                    size: 25,
+                  ),
+                ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              height: 80,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  entry.product.thumbnail != null
-                      ? Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              image: DecorationImage(
-                                image: NetworkImage(entry.product.thumbnail),
-                                fit: BoxFit.cover,
-                              )),
+                  model.product.name != null
+                      ? Text(
+                          model.product.name,
+                          style: TextStyle(fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
                         )
-                      : Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Color.fromRGBO(243, 243, 243, 1)),
-                          child: Icon(
-                            B2BIcons.noPicture,
-                            color: Color.fromRGBO(200, 200, 200, 1),
-                            size: 25,
-                          ),
+                      : Text(
+                          '暂无产品',
+                          style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          entry.product.name != null
-                              ? Text(
-                                  entry.product.name,
-                                  style: TextStyle(fontSize: 15),
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              : Text(
-                                  '暂无产品',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.red),
-                                ),
-                          entry.product.skuID != null
-                              ? Container(
-                                  padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Text(
-                                    '货号：' + entry.product.skuID,
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.grey),
-                                  ),
-                                )
-                              : Container(),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                            decoration: BoxDecoration(
-                                color: Color.fromRGBO(255, 243, 243, 1),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              "${entry.product.superCategories.first.name}   ${entry.product.majorCategory.name}   ${entry.entryNumber}件",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color.fromRGBO(255, 133, 148, 1)),
-                            ),
-                          )
-                        ],
-                      ),
+                  model.product.skuID != null
+                      ? Container(
+                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            '货号：${model.product.skuID}',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        )
+                      : Container(),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 243, 243, 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "${model.product.majorCategory.name}   ${model.product.minorCategory.name}   ${model.totalQuantity}件",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Color.fromRGBO(255, 133, 148, 1)),
                     ),
                   )
                 ],
               ),
-            ))
-        .toList();
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildSummary() {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Text(
-            '已报价 6',
-            style: TextStyle(color: Colors.red),
-          )
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Colors.red,
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '取消订单',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              )),
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 149, 22, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '  去支付  ',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              )),
         ],
       ),
     );
@@ -361,7 +396,7 @@ class RequirementOrderItem extends StatelessWidget {
 class _ToTopBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<RequirementOrderBLoC>(context);
+    var bloc = BLoCProvider.of<ProofingOrdersBLoC>(context);
 
     return StreamBuilder<bool>(
         stream: bloc.toTopBtnStream,

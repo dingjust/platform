@@ -32,7 +32,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
             title: Text('采购订单'),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.search),
+                icon: Icon(B2BIcons.search,size: 20,),
                 onPressed: () => showSearch(
                     context: context, delegate: PurchaseOrderSearchDelegate()),
               ),

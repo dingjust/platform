@@ -27,7 +27,7 @@ class SalesOrdersPage extends StatelessWidget {
           title: Text('销售订单'),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.search),
+              icon: Icon(B2BIcons.search,size: 20,),
               onPressed: () => showSearch(
                   context: context, delegate: SalesOrderSearchDelegate()),
             ),

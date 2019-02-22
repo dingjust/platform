@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/business/supplier/provider/suppliers_provider.d
 import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class SuppliersPage extends StatefulWidget{
   _SuppliersPageState createState() => _SuppliersPageState();
@@ -20,7 +21,7 @@ class _SuppliersPageState extends State<SuppliersPage> {
             title: Text('供应商管理'),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.search),
+                icon: Icon(B2BIcons.search,size: 20,),
                 onPressed: () =>
                     showSearch(
                         context: context, delegate: SuppliersSearchDelegate()),

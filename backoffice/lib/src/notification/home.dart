@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class NotificationHomePage extends StatefulWidget {
   final MessageRepository repository;
@@ -18,7 +19,7 @@ class _NotificationHomePageState extends State<NotificationHomePage> {
       actions: <Widget>[
         IconButton(
           tooltip: '搜索',
-          icon: Icon(Icons.search),
+          icon: Icon(B2BIcons.search,size: 20,),
           onPressed: () {},
         ),
         IconButton(

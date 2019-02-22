@@ -13,11 +13,12 @@ class OffTheShelfApparelProductsPage extends StatelessWidget {
       bloc: ApparelProductBLoC.instance,
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0.5,
           centerTitle: true,
           title: Text('下架商品'),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.search),
+              icon: Icon(B2BIcons.search,size: 20,),
               onPressed: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
             ),
           ],

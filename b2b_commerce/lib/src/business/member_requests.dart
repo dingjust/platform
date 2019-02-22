@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 import 'search/member_request_search.dart';
 
@@ -34,11 +35,12 @@ class MemberRequestsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('会员审核'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(B2BIcons.search,size: 20,),
             onPressed: () => showSearch(context: context, delegate: MemberRequestSearchDelegate()),
           ),
         ],

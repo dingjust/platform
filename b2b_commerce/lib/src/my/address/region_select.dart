@@ -28,6 +28,7 @@ class RegionSelectPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('选择省'),
       ),

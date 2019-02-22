@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widgets/widgets.dart';
 
 /// 论坛主页
 class ForumHomePage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _ForumHomePageState extends State<ForumHomePage> {
       appBar: AppBar(
         leading: new IconButton(
           tooltip: '搜索',
-          icon: Icon(Icons.search),
+          icon: Icon(B2BIcons.search,size: 20,),
           onPressed: () {},
         ),
       ),

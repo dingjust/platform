@@ -13,6 +13,7 @@ class InvoiceTitleDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('发票抬头'),
         actions: <Widget>[
@@ -25,7 +26,8 @@ class InvoiceTitleDetailPage extends StatelessWidget {
                 items: <PopupMenuItem<String>>[
                   PopupMenuItem(
                     child: GestureDetector(
-                      onTap: () {
+                      onTap: (){
+                        Navigator.pop(context);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

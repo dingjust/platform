@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 import 'products/sample_product_borrow_history_item.dart';
 import 'search/apparel_product_search.dart';
 import 'products/sample_products.dart';
@@ -129,10 +130,11 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        elevation: 0.5,
         title: Text(_type == LendBorrowType.BORROW ? '样衣借出' : '样衣借入'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(B2BIcons.search,size: 20,),
             onPressed: () => showSearch(
                   context: context,
                   delegate: ApparelProductSearchDelegate(),

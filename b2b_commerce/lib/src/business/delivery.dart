@@ -7,6 +7,8 @@ class DeliveryPage extends StatelessWidget{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
+        centerTitle: true,
         title: Text('运费模板'),
       ),
       body: Container(

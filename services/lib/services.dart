@@ -7,6 +7,7 @@ export 'src/order/bloc/requirement_order_bloc.dart';
 export 'src/order/bloc/requirement_quote_detail_bloc.dart';
 export 'src/order/bloc/sales_order_bloc.dart';
 export 'src/order/bloc/quote_orders_bloc.dart';
+export 'src/order/bloc/proofing_orders_bloc.dart';
 export 'src/product/bloc/apparel_product_bloc.dart';
 export 'src/supplier/bloc/suppliers_bloc.dart';
 export 'src/supplier/bloc/suppliers_bloc.dart';

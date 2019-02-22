@@ -204,10 +204,10 @@ const SeasonEnum = <EnumModel>[
 /// 门襟
 const PlacketEnum = <EnumModel>[
   EnumModel('M001','拉链'),
-  EnumModel('M001','单排扣'),
-  EnumModel('M001','双排扣'),
-  EnumModel('M001','暗扣'),
-  EnumModel('M001','牛角扣'),
+  EnumModel('M002','单排扣'),
+  EnumModel('M003','双排扣'),
+  EnumModel('M004','暗扣'),
+  EnumModel('M005','牛角扣'),
 ];
 
 /// 分页数据

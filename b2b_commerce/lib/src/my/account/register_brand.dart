@@ -23,6 +23,7 @@ class _RegisterBrandPageState extends State<RegisterBrandPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0.5,
           centerTitle: true,
           title: const Text('品牌注册'),
         ),

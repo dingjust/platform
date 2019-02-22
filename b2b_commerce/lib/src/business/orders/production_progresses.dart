@@ -29,6 +29,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        elevation: 0.5,
         title: Text('生产进度明细'),
       ),
       body: Container(

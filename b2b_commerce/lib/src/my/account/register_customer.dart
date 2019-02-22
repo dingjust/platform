@@ -17,6 +17,7 @@ class _RegisterCustomerPageState extends State<RegisterCustomerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0.5,
           centerTitle: true,
           title: const Text('采购商注册'),
         ),

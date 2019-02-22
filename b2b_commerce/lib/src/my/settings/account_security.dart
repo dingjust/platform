@@ -7,6 +7,7 @@ class AccountSecurityPage extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('账号与安全'),
       ),

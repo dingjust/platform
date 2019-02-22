@@ -1,31 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
-/// 查询示例
-class ProductSearchPage extends StatefulWidget {
-  @override
-  _ProductSearchPageState createState() => new _ProductSearchPageState();
-}
-
-class _ProductSearchPageState extends State<ProductSearchPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('查询'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(B2BIcons.search,size: 20,),
-            onPressed: () => showSearch(context: context, delegate: ProductSearchDelegate()),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ProductSearchDelegate extends SearchDelegate<ProductModel> {
+/// 打样订单搜索页
+class ProofingSearchDelegate extends SearchDelegate<ProofingModel> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -59,6 +36,6 @@ class ProductSearchDelegate extends SearchDelegate<ProductModel> {
   @override
   Widget buildSuggestions(BuildContext context) {
     // TODO: 输入提示信息
-    return Container(child: Text(query));
+    return Container(child: Text(''));
   }
 }
