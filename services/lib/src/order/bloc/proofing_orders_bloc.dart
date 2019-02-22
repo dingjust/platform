@@ -145,7 +145,7 @@ class ProofingOrdersBLoC extends BLoCBase {
 
   loadingMoreByStatuses(String status) async {
     //模拟数据到底
-    if (_quotesMap[status].length < 6) {
+    if (_quotesMap[status].length < 12) {
       _quotesMap[status]
           .add(await Future.delayed(const Duration(seconds: 1), () {
         return ProofingModel(
