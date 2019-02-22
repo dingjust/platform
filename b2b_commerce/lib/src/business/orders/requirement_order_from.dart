@@ -104,6 +104,17 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           brightness: Brightness.light,
           centerTitle: true,
           actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.play_for_work),
+              color: Color.fromRGBO(255, 149, 22, 1),
+              onPressed: () =>
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RequirementImportProduct(),
+                    ),
+                  )
+            ),
             GestureDetector(
               child: Container(
                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),

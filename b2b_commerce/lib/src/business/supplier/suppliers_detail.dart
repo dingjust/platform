@@ -10,14 +10,12 @@ class SuppliersDetail extends StatefulWidget {
   final SupplierModel supplierModel;
   final bool isSupplier;
 
-  SuppliersDetail(
-      {Key key, @required this.supplierModel, @required this.isSupplier})
-      : super(key: key);
+  SuppliersDetail({Key key, @required this.supplierModel,@required this.isSupplier}) : super(key: key);
 
   _SuppliersDetailState createState() => _SuppliersDetailState();
 }
 
-class _SuppliersDetailState extends State<SuppliersDetail> {
+class _SuppliersDetailState extends State<SuppliersDetail>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +26,25 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
         title: Text(widget.isSupplier ? '供应商管理' : '工厂信息'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.phone),
+            icon: Icon(Icons.message),
+            color: Color.fromRGBO(255, 149, 22, 1),
             onPressed: () =>
                 _selectActionButton(widget.supplierModel.factory.contactPhone),
           ),
+          GestureDetector(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Center(
+                  child: Text(
+                    '联系厂家',
+                    style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                  ),
+                ),
+              ),
+              onTap: () {
+                _selectActionButton(widget.supplierModel.factory.contactPhone);
+              }
+          )
         ],
       ),
       body: Container(child: _buildSuppliersWidget(context)),
