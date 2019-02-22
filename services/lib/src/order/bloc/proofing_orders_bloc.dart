@@ -60,7 +60,83 @@ class ProofingOrdersBLoC extends BLoCBase {
               majorCategory: CategoryModel(name: '针织'),
               minorCategory: CategoryModel(name: '女装-T恤'),
             ),
-          )
+          ),
+          ProofingModel(
+            code: '1232323232',
+            factory: FactoryModel.fromJson(mockFactory),
+            status: ProofingStatus.COMPLETED,
+            totalPrice: 54,
+            totalQuantity: 554,
+            order: RequirementOrderModel(
+              code: '39492523423',
+            ),
+            creationTime: DateTime.parse('2019-01-03'),
+            product: ApparelProductModel(
+              name: '山本风少女长裙复古气质秋冬流行新款',
+              skuID: 'NA89852631',
+              thumbnail:
+                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              majorCategory: CategoryModel(name: '针织'),
+              minorCategory: CategoryModel(name: '女装-T恤'),
+            ),
+          ),
+          ProofingModel(
+            code: '1232323232',
+            factory: FactoryModel.fromJson(mockFactory),
+            status: ProofingStatus.SHIPPED,
+            totalPrice: 54,
+            totalQuantity: 554,
+            order: RequirementOrderModel(
+              code: '39492523423',
+            ),
+            creationTime: DateTime.parse('2019-01-03'),
+            product: ApparelProductModel(
+              name: '山本风少女长裙复古气质秋冬流行新款',
+              skuID: 'NA89852631',
+              thumbnail:
+                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              majorCategory: CategoryModel(name: '针织'),
+              minorCategory: CategoryModel(name: '女装-T恤'),
+            ),
+          ),
+          ProofingModel(
+            code: '1232323232',
+            factory: FactoryModel.fromJson(mockFactory),
+            status: ProofingStatus.PENDING_PAYMENT,
+            totalPrice: 54,
+            totalQuantity: 554,
+            order: RequirementOrderModel(
+              code: '39492523423',
+            ),
+            creationTime: DateTime.parse('2019-01-03'),
+            product: ApparelProductModel(
+              name: '山本风少女长裙复古气质秋冬流行新款',
+              skuID: 'NA89852631',
+              thumbnail:
+                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              majorCategory: CategoryModel(name: '针织'),
+              minorCategory: CategoryModel(name: '女装-T恤'),
+            ),
+          ),
+          ProofingModel(
+            code: '1232323232',
+            factory: FactoryModel.fromJson(mockFactory),
+            status: ProofingStatus.PENDING_DELIVERY,
+            totalPrice: 54,
+            totalQuantity: 554,
+            order: RequirementOrderModel(
+              code: '39492523423',
+            ),
+            creationTime: DateTime.parse('2019-01-03'),
+            product: ApparelProductModel(
+              name: '山本风少女长裙复古气质秋冬流行新款',
+              skuID: 'NA89852631',
+              thumbnail:
+                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              majorCategory: CategoryModel(name: '针织'),
+              minorCategory: CategoryModel(name: '女装-T恤'),
+            ),
+          ),
         ];
       }));
     }
@@ -69,7 +145,7 @@ class ProofingOrdersBLoC extends BLoCBase {
 
   loadingMoreByStatuses(String status) async {
     //模拟数据到底
-    if (_quotesMap[status].length < 6) {
+    if (_quotesMap[status].length < 12) {
       _quotesMap[status]
           .add(await Future.delayed(const Duration(seconds: 1), () {
         return ProofingModel(
