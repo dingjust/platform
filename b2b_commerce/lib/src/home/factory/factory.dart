@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -23,8 +24,17 @@ class FactoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         //TODO 工厂跳转
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => ));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SuppliersDetail(
+                  supplierModel: SupplierModel(
+                    factory: model,
+                  ),
+                  isSupplier: false,
+                ),
+          ),
+        );
       },
       child: Container(
         color: Colors.white,
