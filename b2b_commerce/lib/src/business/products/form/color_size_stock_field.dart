@@ -26,13 +26,18 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
       children: <Widget>[
         InkWell(
           onTap: () async{
-            await Navigator.push(
+            dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) =>
                     ApparelProductVariantsInputPage(colorFilters: _colorFilters,sizeFilters: _sizeFilters,),
               ),
             );
+
+            if(result != null){
+              _colorFilters = result[0];
+              _sizeFilters = result[1];
+            }
 
             _colorSizeText = '';
             if(_colorFilters.length > 0){

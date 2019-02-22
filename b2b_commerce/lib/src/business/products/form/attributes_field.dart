@@ -12,22 +12,32 @@ class AttributesField extends StatefulWidget {
 }
 
 class _AttributesFieldState extends State<AttributesField> {
+  ApparelProductAttributesModel _attributesModel;
+
+  @override
+  void initState() {
+    _attributesModel = widget.item?.attributes;
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: () {
+          onTap: () async{
 //                  print(widget.item.attributes.styles);
-            Navigator.push(
+            ApparelProductAttributesModel attribute = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ApparelProductAttributesInputPage(
-                  item: widget.item?.attributes,
+                  item: _attributesModel,
                 ),
               ),
             );
+
+            _attributesModel = attribute;
           },
           child: ListTile(
             title: Text('属性'),

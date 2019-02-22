@@ -15,57 +15,16 @@ class ApparelProductVariantsInputState
     extends State<ApparelProductVariantsInputPage> {
   List<String> _colorCodes = [];
   List<String> _sizeCodes = [];
-//  final List<ColorModel> _colors = <ColorModel>[
-//    ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'),
-//    ColorModel(code: 'C02', name: '黄色', colorCode: 'FFCC00'),
-//    ColorModel(code: 'C03', name: '粉红', colorCode: 'FF9999'),
-//    ColorModel(code: 'C04', name: '海军蓝', colorCode: '0066FF'),
-//    ColorModel(code: 'C05', name: '浅紫', colorCode: 'CC99CC'),
-//    ColorModel(code: 'C06', name: '藏青', colorCode: '000033'),
-//  ];
-  final List<ColorModel> _colors = [
-    ColorModel.fromJson(
-      {
-        'code': 'C01',
-        'name':'红色',
-        'colorCode':'FF0033',
-      },
-    ),
-    ColorModel.fromJson(
-      {
-        'code': 'C02',
-        'name':'黄色',
-        'colorCode':'FFCC00',
-      },
-    ),
-    ColorModel.fromJson(
-      {
-        'code': 'C03',
-        'name':'粉红',
-        'colorCode':'FF9999',
-      },
-    ),
-    ColorModel.fromJson(
-      {
-        'code': 'C04',
-        'name':'海军蓝',
-        'colorCode':'0066FF',
-      },
-    ),
-    ColorModel.fromJson(
-      {
-        'code': 'C05',
-        'name':'浅紫',
-        'colorCode':'CC99CC',
-      },
-    ),
-    ColorModel.fromJson(
-      {
-        'code': 'C06',
-        'name':'藏青',
-        'colorCode':'000033',
-      },
-    ),
+  List<ColorModel> _beforeColors = [];
+  List<SizeModel> _beforeSizes = [];
+
+  final List<ColorModel> _colors = <ColorModel>[
+    ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'),
+    ColorModel(code: 'C02', name: '黄色', colorCode: 'FFCC00'),
+    ColorModel(code: 'C03', name: '粉红', colorCode: 'FF9999'),
+    ColorModel(code: 'C04', name: '海军蓝', colorCode: '0066FF'),
+    ColorModel(code: 'C05', name: '浅紫', colorCode: 'CC99CC'),
+    ColorModel(code: 'C06', name: '藏青', colorCode: '000033'),
   ];
   final List<SizeModel> _sizes = <SizeModel>[
     SizeModel(code: 'S01', name: 'XXXL'),
@@ -81,6 +40,9 @@ class ApparelProductVariantsInputState
   void initState() {
     _colorCodes = widget.colorFilters.map((color) => color.code).toList();
     _sizeCodes = widget.sizeFilters.map((size) => size.code).toList();
+    _beforeColors.addAll(widget.colorFilters);
+    _beforeSizes.addAll(widget.sizeFilters);
+
 
     // TODO: implement initState
     super.initState();
@@ -146,40 +108,47 @@ class ApparelProductVariantsInputState
       );
     }).toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('颜色/尺码'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.done,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Text('选择颜色'),
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 5,
-              padding: const EdgeInsets.all(5),
-              children: colorFilterChips,
-            ),
-            Text('选择尺码'),
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 5,
-              padding: const EdgeInsets.all(5),
-              children: sizeFilterChips,
-            ),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context,[_beforeColors,_beforeSizes]);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('颜色/尺码'),
+          leading: IconButton(icon: Text('取消'), onPressed: () => Navigator.pop(context,[_beforeColors,_beforeSizes])),
+          actions: <Widget>[
+            IconButton(
+              icon: Text('确定'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
           ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            children: <Widget>[
+              Text('选择颜色'),
+              GridView.count(
+                primary: false,
+                shrinkWrap: true,
+                crossAxisCount: 5,
+                padding: const EdgeInsets.all(5),
+                children: colorFilterChips,
+              ),
+              Text('选择尺码'),
+              GridView.count(
+                primary: false,
+                shrinkWrap: true,
+                crossAxisCount: 5,
+                padding: const EdgeInsets.all(5),
+                children: sizeFilterChips,
+              ),
+            ],
+          ),
         ),
       ),
     );
