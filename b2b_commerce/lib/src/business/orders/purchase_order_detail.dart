@@ -81,6 +81,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 Icons.menu,
                 color: Colors.white,
               ),
+              onPressed: null,
             )
           ],
         ),
