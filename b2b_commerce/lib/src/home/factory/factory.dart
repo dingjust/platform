@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
