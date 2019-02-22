@@ -2,121 +2,153 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class ApparelProductVariantsInputPage extends StatefulWidget {
+  List<ColorModel> colorFilters;
+  List<SizeModel> sizeFilters;
+
+  ApparelProductVariantsInputPage({this.colorFilters, this.sizeFilters});
+
   ApparelProductVariantsInputState createState() =>
       ApparelProductVariantsInputState();
 }
 
 class ApparelProductVariantsInputState
     extends State<ApparelProductVariantsInputPage> {
-  List<String> _colorFilters = <String>[];
-  List<String> _sizeFilters = <String>[];
+  List<String> _colorCodes = [];
+  List<String> _sizeCodes = [];
+  List<ColorModel> _beforeColors = [];
+  List<SizeModel> _beforeSizes = [];
 
-  List<Widget> get colorFilterChips {
-    return <ColorModel>[
-      ColorModel(code: 'C01', name: '红色',colorCode: 'FF0033'),
-      ColorModel(code: 'C02', name: '黄色',colorCode: 'FFCC00'),
-      ColorModel(code: 'C03', name: '粉红',colorCode: 'FF9999'),
-      ColorModel(code: 'C04', name: '海军蓝',colorCode: '0066FF'),
-      ColorModel(code: 'C05', name: '浅紫',colorCode: 'CC99CC'),
-      ColorModel(code: 'C06', name: '藏青',colorCode: '000033'),
-    ].map((ColorModel color) {
+  final List<ColorModel> _colors = <ColorModel>[
+    ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'),
+    ColorModel(code: 'C02', name: '黄色', colorCode: 'FFCC00'),
+    ColorModel(code: 'C03', name: '粉红', colorCode: 'FF9999'),
+    ColorModel(code: 'C04', name: '海军蓝', colorCode: '0066FF'),
+    ColorModel(code: 'C05', name: '浅紫', colorCode: 'CC99CC'),
+    ColorModel(code: 'C06', name: '藏青', colorCode: '000033'),
+  ];
+  final List<SizeModel> _sizes = <SizeModel>[
+    SizeModel(code: 'S01', name: 'XXXL'),
+    SizeModel(code: 'S02', name: 'XXL'),
+    SizeModel(code: 'S03', name: 'XL'),
+    SizeModel(code: 'S04', name: 'L'),
+    SizeModel(code: 'S05', name: 'M'),
+    SizeModel(code: 'S06', name: 'S'),
+    SizeModel(code: 'S07', name: 'XS')
+  ];
+
+  @override
+  void initState() {
+    _colorCodes = widget.colorFilters.map((color) => color.code).toList();
+    _sizeCodes = widget.sizeFilters.map((size) => size.code).toList();
+    _beforeColors.addAll(widget.colorFilters);
+    _beforeSizes.addAll(widget.sizeFilters);
+
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    List<Widget> colorFilterChips = _colors.map((ColorModel color) {
       return ChoiceChip(
-        avatar: _colorFilters.contains(color.code)?Icon(Icons.done,size: 18,color: Colors.white,):null,
-        labelPadding: _colorFilters.contains(color.code)
+        avatar: _colorCodes.contains(color.code)
+            ? Icon(
+                Icons.done,
+                size: 18,
+                color: Colors.white,
+              )
+            : null,
+        labelPadding: _colorCodes.contains(color)
             ? EdgeInsets.only(right: 10)
             : null,
-        backgroundColor: Color(int.parse('0xFF'+color.colorCode)),
-        selectedColor:  Color(int.parse('0xFF'+color.colorCode)),
+        backgroundColor: Color(int.parse('0xFF' + color.colorCode)),
+        selectedColor: Color(int.parse('0xFF' + color.colorCode)),
         key: ValueKey<String>(color.code),
-        label: Text(color.name,style: TextStyle(color: Colors.white),),
-        selected: _colorFilters.contains(color.code),
+        label: Text(
+          color.name,
+          style: TextStyle(color: Colors.white),
+        ),
+        selected: _colorCodes.contains(color.code),
         onSelected: (value) {
           setState(() {
             if (value) {
-              _colorFilters.add(color.code);
+              widget.colorFilters.add(color);
+              _colorCodes.add(color.code);
             } else {
-              _colorFilters.removeWhere((String code) {
-                return code == color.code;
-              });
+              widget.colorFilters.removeWhere((model) => model.code == color.code);
+              _colorCodes.remove(color.code);
             }
           });
         },
       );
     }).toList();
-  }
 
-  List<Widget> get sizeFilterChips {
-    return <SizeModel>[
-      SizeModel(code: 'S01', name: 'XXXL'),
-      SizeModel(code: 'S02', name: 'XXL'),
-      SizeModel(code: 'S03', name: 'XL'),
-      SizeModel(code: 'S04', name: 'L'),
-      SizeModel(code: 'S05', name: 'M'),
-      SizeModel(code: 'S06', name: 'S'),
-      SizeModel(code: 'S07', name: 'XS')
-    ].map((SizeModel size) {
+    List<Widget> sizeFilterChips = _sizes.map((SizeModel size) {
       return FilterChip(
-        labelPadding: _sizeFilters.contains(size.code)
+        labelPadding: _sizeCodes.contains(size.code)
             ? EdgeInsets.only(right: 10)
             : null,
         selectedColor: Colors.red,
         key: ValueKey<String>(size.code),
         label: Text(size.name),
-        selected: _sizeFilters.contains(size.code),
+        selected: _sizeCodes.contains(size.code),
         onSelected: (value) {
           setState(() {
             if (value) {
-              _sizeFilters.add(size.code);
+              widget.sizeFilters.add(size);
+              _sizeCodes.add(size.code);
             } else {
-              _sizeFilters.removeWhere((String code) {
-                return code == size.code;
-              });
+              widget.sizeFilters.removeWhere((model) => model.code == size.code);
+              _sizeCodes.remove(size.code);
             }
           });
         },
       );
     }).toList();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('颜色/尺码'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.done,
-            ),
-            onPressed: () {
-              Map<String,List<String>> map = Map();
-              map['colors'] = _colorFilters;
-              map['sizes'] = _sizeFilters;
-              Navigator.pop(context,map);
-            },
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Text('选择颜色'),
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 5,
-              padding: const EdgeInsets.all(5),
-              children: colorFilterChips,
-            ),
-            Text('选择尺码'),
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 5,
-              padding: const EdgeInsets.all(5),
-              children: sizeFilterChips,
-            ),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context,[_beforeColors,_beforeSizes]);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('颜色/尺码'),
+          leading: IconButton(icon: Text('取消'), onPressed: () => Navigator.pop(context,[_beforeColors,_beforeSizes])),
+          actions: <Widget>[
+            IconButton(
+              icon: Text('确定'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
           ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            children: <Widget>[
+              Text('选择颜色'),
+              GridView.count(
+                primary: false,
+                shrinkWrap: true,
+                crossAxisCount: 5,
+                padding: const EdgeInsets.all(5),
+                children: colorFilterChips,
+              ),
+              Text('选择尺码'),
+              GridView.count(
+                primary: false,
+                shrinkWrap: true,
+                crossAxisCount: 5,
+                padding: const EdgeInsets.all(5),
+                children: sizeFilterChips,
+              ),
+            ],
+          ),
         ),
       ),
     );

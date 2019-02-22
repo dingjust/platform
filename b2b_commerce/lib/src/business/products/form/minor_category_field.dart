@@ -33,28 +33,19 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
       children: <Widget>[
         InkWell(
           onTap: () async{
-             await Navigator.push(
+             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ProductCategorySelectPage(minCategorySelect: _minCategorySelect,)
               ),
             );
 
-            if (_minCategorySelect != null) {
+           if(result != null) _minCategorySelect = result;
+
+            if (_minCategorySelect.length > 0) {
+              _minorCategoryText = _minCategorySelect[0]?.name;
+            }else{
               _minorCategoryText = '';
-              for (int i = 0; i < _minCategorySelect.length; i++) {
-                if (i == 4) {
-                  _minorCategoryText += '...';
-                  break;
-                }
-
-                _minorCategoryText += _minCategorySelect[i]?.name;
-
-                if (i != _minCategorySelect.length - 1) {
-                  _minorCategoryText += '、';
-                }
-              }
-
             }
           },
           child: ShowSelectTile(

@@ -6,7 +6,6 @@ class EnumSelectPage extends StatefulWidget {
   EnumSelectPage({
     this.title,
     this.items,
-    this.code,
     this.codes,
     this.multiple = false,
   });
@@ -14,30 +13,17 @@ class EnumSelectPage extends StatefulWidget {
   final String title;
   final List<EnumModel> items;
   final bool multiple;
-  final String code;
   final List<String> codes;
 
   EnumSelectPageState createState() => EnumSelectPageState();
 }
 
 class EnumSelectPageState extends State<EnumSelectPage> {
-  List<EnumModel> _selects;
-  EnumModel _singleSelect;
+  List<String> _beforeModifyCodes = [];
 
   @override
   void initState() {
-    if (widget.codes != null && widget.codes.length > 0) {
-      _selects = widget.codes.map((code) {
-        return widget.items
-            .firstWhere((select) => select.code == code, orElse: () => null);
-      }).toList();
-    } else {
-      _selects = <EnumModel>[];
-    }
-
-    _singleSelect = widget.items
-        .firstWhere((select) => select.code == widget.code, orElse: () => null);
-
+    if(widget.codes != null) _beforeModifyCodes.addAll(widget.codes);
     // TODO: implement initState
     super.initState();
   }
@@ -45,55 +31,48 @@ class EnumSelectPageState extends State<EnumSelectPage> {
   @override
   Widget build(BuildContext context) {
     final List<dynamic> _items = widget.items.map((item) {
-      return widget.multiple
-          ? CheckboxListTile(
-              selected: _selects.contains(item),
+      return CheckboxListTile(
+              selected: widget.codes.contains(item.code),
               title: Text(item.name),
-              value: _selects.contains(item),
+              value: widget.codes.contains(item.code),
               onChanged: (value) {
                 setState(() {
                   if (value) {
-                    _selects.add(item);
+                    if(!widget.multiple){
+                      widget.codes.clear();
+                    }
+                    widget.codes.add(item.code);
                   } else {
-                    _selects.removeWhere((select) {
-                      return item.code == select.code;
-                    });
+                    widget.codes.remove(item.code);
                   }
-                });
-              },
-            )
-          : RadioListTile(
-              selected: _singleSelect?.code == item.code,
-              title: Text(item.name),
-              value: item.code,
-              groupValue: _singleSelect?.code,
-              onChanged: (T) {
-                setState(() {
-                  _singleSelect = item;
                 });
               },
             );
     }).toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(widget.title),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: () {
-              if (widget.multiple) {
-                Navigator.pop(context, _selects);
-              } else {
-                Navigator.pop(context, _singleSelect);
-              }
-            },
-          ),
-        ],
-      ),
-      body: ListView(
-        children: _items,
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context,_beforeModifyCodes);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.5,
+          centerTitle: true,
+          title: Text(widget.title),
+          leading: IconButton(icon: Text('取消'), onPressed: () => Navigator.pop(context,_beforeModifyCodes),),
+          actions: <Widget>[
+            IconButton(
+              icon: Text('确定'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+        body: ListView(
+          children: _items,
+        ),
       ),
     );
   }

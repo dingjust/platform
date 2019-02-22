@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'apparel_product_size_stock_item.dart';
 
 class ApparelProductStockInputPage extends StatelessWidget {
-  static Map<ColorModel, List<SizeStockItem>> items =
-      <ColorModel, List<SizeStockItem>>{
-    ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'): <SizeStockItem>[
-      SizeStockItem(
-          size: SizeModel(code: 'S01', name: 'XL'),
-          available: 35,
-          maxPreOrder: 55),
-      SizeStockItem(
-        size: SizeModel(code: 'S012', name: 'XXL'),
-      ),
-    ],
-    ColorModel(code: 'C02', name: '海军蓝', colorCode: '0066FF'): <SizeStockItem>[
-      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-    ],
-  };
+  Map<ColorModel, List<SizeStockItem>> items;
+  ApparelProductStockInputPage({this.items});
+
+//  static Map<ColorModel, List<SizeStockItem>> items =
+//      <ColorModel, List<SizeStockItem>>{
+//    ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'): <SizeStockItem>[
+//      SizeStockItem(
+//          size: SizeModel(code: 'S01', name: 'XL'),
+//          available: 35,
+//          maxPreOrder: 55),
+//      SizeStockItem(
+//        size: SizeModel(code: 'S012', name: 'XXL'),
+//      ),
+//    ],
+//    ColorModel(code: 'C02', name: '海军蓝', colorCode: '0066FF'): <SizeStockItem>[
+//      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
+//      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
+//    ],
+//  };
 
   @override
   Widget build(BuildContext context) {
@@ -115,28 +119,9 @@ class ApparelProductStockInputPage extends StatelessWidget {
   }
 }
 
-class SizeStockItem {
-  SizeModel size;
-  int available;
-  int maxPreOrder;
-  TextEditingController availableController;
-  TextEditingController maxPreOrderController;
-
-  SizeStockItem({
-    this.size,
-    this.available = 0,
-    this.maxPreOrder = 0,
-  }) {
-    this.availableController = new TextEditingController(
-        text: this.available == 0 ? null : this.available.toString());
-    this.maxPreOrderController = new TextEditingController(
-        text: this.maxPreOrder == 0 ? null : this.maxPreOrder.toString());
-  }
-}
-
 class ApparelProductStockInputItem extends StatefulWidget {
   final Map<ColorModel, List<SizeStockItem>> items;
-  ApparelProductStockInputItem({this.items});
+  ApparelProductStockInputItem({@required this.items});
 
   ApparelProductStockInputItemState createState() =>
       ApparelProductStockInputItemState();

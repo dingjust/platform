@@ -1,5 +1,24 @@
 <template>
   <div class="animated fadeIn">
+    <el-row :gutter="10">
+      <el-col :span="24">
+        <el-upload
+          name="file"
+          :action="mediaUploadUrl"
+          list-type="picture-card"
+          :data="uploadFormData"
+          :before-upload="onBeforeUpload"
+          :on-success="onSuccess"
+          :file-list="files"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="handleRemove">
+          <i class="el-icon-plus"></i>
+        </el-upload>
+        <el-dialog :visible.sync="dialogVisible" :modal="false">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+      </el-col>
+    </el-row>
     <el-form ref="form"
              label-position="top"
              :model="slotData"
@@ -133,7 +152,46 @@
         }
 
         this.majorCategories = result;
+      },
+      onBeforeUpload(file) {
+        if (file.type !== 'image/jpeg'
+          && file.type !== 'image/png'
+          && file.type !== 'image/gif') {
+          this.$message.error('只允许上传图片');
+          return false;
+        }
+        if (file.size > 1024 * 1024 * 10) {
+          this.$message.error('上传的文件不允许超过10M');
+          return false;
+        }
+
+        return true;
+      },
+      onSuccess(response) {
+        // this.slotData.images.push(response);
+        // this.$set(this.slotData, "images", this.slotData.images);
+      },
+      async handleRemove(file) {
+        // console.log(JSON.stringify(file));
+        const result = await this.$http.delete('/djwebservices/media/' + file.response.id);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success("删除成功");
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
       }
+    },
+    computed: {
+      uploadFormData: function () {
+        return {
+          fileFormat: 'DefaultFileFormat',
+        };
+      },
     },
     data() {
       return {
@@ -150,7 +208,10 @@
           label: 'name',
           value: 'code',
           children: 'children'
-        }
+        },
+        files: [],
+        dialogImageUrl: '',
+        dialogVisible: false
       }
     },
     created() {
