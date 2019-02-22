@@ -104,7 +104,7 @@ class ApparelProductAttributesInputPageState
       decorativePattern: _decorativePatternCodes,
       filler: _fillerCode.length > 0 ? _fillerCode[0] : null,
       taggable:
-          _taggableCode.length > 0 ? _taggableCode.contains('true') : null,
+          _taggableCode.length > 0 ? _taggableCode[0] == 'true' : null,
     );
     Navigator.pop(context, attributesModel);
     return Future.value(false);

@@ -3,10 +3,11 @@ import 'package:models/models.dart';
 
 class EnumSelection extends StatefulWidget {
   final bool multiple;
+  final bool hasButton;
   List<EnumModel> enumModels;
   List<EnumModel> enumSelect;
 
-  EnumSelection({this.multiple = false,@required this.enumSelect,this.enumModels});
+  EnumSelection({this.multiple = false,this.hasButton = false,@required this.enumSelect,this.enumModels});
 
   EnumSelectionState createState() => EnumSelectionState();
 }
@@ -65,26 +66,29 @@ class EnumSelectionState extends State<EnumSelection> {
           spacing: 5,
           children: _chips,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            IconButton(
-              icon: Text('取消'),
-              onPressed: () {
-                setState(() {
-                  widget.enumSelect.clear();
-                  _enumCodeSelect.clear();
+        Offstage(
+          offstage: widget.hasButton ? false:true,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              IconButton(
+                icon: Text('取消'),
+                onPressed: () {
+                  setState(() {
+                    widget.enumSelect.clear();
+                    _enumCodeSelect.clear();
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              IconButton(
+                icon: Text('确定'),
+                onPressed: () {
                   Navigator.pop(context);
-                });
-              },
-            ),
-            IconButton(
-              icon: Text('确定'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );

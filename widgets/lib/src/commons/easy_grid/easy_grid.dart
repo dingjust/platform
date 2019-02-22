@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class EasyGrid extends StatefulWidget {
   //传入数据List,只能是List<Map>格式，Map的key为：title,subtitle,pic(即图片url)
   final List<GridItem> dataList;
+
   //标题字体样式
   final TextStyle titleFont;
+
   //副标题字体样式
   final TextStyle subtitleFont;
 
@@ -14,12 +16,17 @@ class EasyGrid extends StatefulWidget {
   ///子项宽度
   final double itemWidth;
 
-  EasyGrid(
-      {@required this.dataList,
-      this.subtitleFont,
-      this.titleFont,
-      this.height = 300,
-      this.itemWidth = 240.0});
+  //组件是否滚动
+  final bool primary;
+
+  EasyGrid({
+    @required this.dataList,
+    this.subtitleFont,
+    this.titleFont,
+    this.height = 300,
+    this.itemWidth = 240.0,
+    this.primary = false,
+  });
 
   _EasyGridState createState() => _EasyGridState();
 }
@@ -31,6 +38,7 @@ class _EasyGridState extends State<EasyGrid> {
         height: widget.height,
         margin: EdgeInsets.all(5),
         child: GridView(
+          primary: widget.primary,
           padding: EdgeInsets.zero,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: widget.itemWidth,
