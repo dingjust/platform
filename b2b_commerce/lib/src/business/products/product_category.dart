@@ -11,6 +11,7 @@ class ProductCategorySelectPage extends StatefulWidget {
 }
 
 class ProductCategorySelectPageState extends State<ProductCategorySelectPage> {
+  List<CategoryModel> _beforeMinCategorySelect = [];
   final List<Map<CategoryModel, List<CategoryModel>>> _minCategorys = [
     {
       CategoryModel(code: 'W01', name: '女装'): [
@@ -35,30 +36,44 @@ class ProductCategorySelectPageState extends State<ProductCategorySelectPage> {
   ];
 
   @override
+  void initState() {
+    _beforeMinCategorySelect.addAll(widget.minCategorySelect);
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.5,
-        centerTitle: true,
-        title: Text('选择分类'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.done),
-            onPressed: () => Navigator.pop(context),
-          )
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          Flexible(
-            child: CategorySelect(
-              categorys: _minCategorys,
-              categorySelect: widget.minCategorySelect,
-              multiple: false,
-              hasButton: false,
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.pop(context,_beforeMinCategorySelect);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.5,
+          centerTitle: true,
+          title: Text('选择分类'),
+          leading: IconButton(icon: Text('取消'), onPressed: () => Navigator.pop(context,_beforeMinCategorySelect)),
+          actions: <Widget>[
+            IconButton(
+              icon: Text('确定'),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        ),
+        body: Column(
+          children: <Widget>[
+            Flexible(
+              child: CategorySelect(
+                categorys: _minCategorys,
+                categorySelect: widget.minCategorySelect,
+                multiple: false,
+                hasButton: false,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
