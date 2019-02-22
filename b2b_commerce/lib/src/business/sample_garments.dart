@@ -130,6 +130,7 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        elevation: 0.5,
         title: Text(_type == LendBorrowType.BORROW ? '样衣借出' : '样衣借入'),
         actions: <Widget>[
           IconButton(

@@ -42,6 +42,8 @@ class _MyCompanyFormPageState extends State<MyCompanyFormPage> {
     ));
     return Scaffold(
         appBar: AppBar(
+          title: Text('编辑公司信息'),
+          elevation: 0.5,
           centerTitle: true,
           actions: <Widget>[
             IconButton(

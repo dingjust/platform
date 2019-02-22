@@ -6,6 +6,8 @@ class MyCollectionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
+        centerTitle: true,
         title: Text('我的收藏'),
       ),
       body: Text('TODO: 我的收藏'),

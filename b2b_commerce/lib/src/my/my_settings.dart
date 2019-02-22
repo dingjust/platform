@@ -16,6 +16,7 @@ class _MySettingsPageState extends State<MySettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: const Text('设置'),
       ),

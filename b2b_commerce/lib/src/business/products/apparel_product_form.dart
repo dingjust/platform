@@ -47,6 +47,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('编辑商品'),
       ),

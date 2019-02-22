@@ -13,102 +13,64 @@ class ApparelProductAttributesInputPage extends StatefulWidget {
 
 class ApparelProductAttributesInputPageState
     extends State<ApparelProductAttributesInputPage> {
-  String _styleText;
-  String _fabricCompositionText;
-  String _editionTypeText;
-  String _patternText;
-  String _sleeveTypeText;
-  String _sleeveLengthText;
-  String _decorativePatternText;
-  String _popularElementsText;
-  String _fillerText;
-  String _thicknessText;
-  String _seasonText;
-  String _taggableText;
-  String _placketText;
-  List<String> _styleCodes;
-  String _fabricCompositionCode;
-  String _editionTypeCode;
-  String _patternCode;
-  String _sleeveTypeCode;
-  String _sleeveLengthCode;
-  List<String> _decorativePatternCodes;
-  List<String> _popularElementsCodes;
-  String _fillerCode;
-  String _thicknessCode;
-  String _seasonCode;
-  String _taggableCode;
-  String _placketCode;
+  List<String> _styleCodes = [];
+  List<String> _fabricCompositionCode = [];
+  List<String> _editionTypeCode = [];
+  List<String> _patternCode = [];
+  List<String> _sleeveTypeCode = [];
+  List<String> _sleeveLengthCode = [];
+  List<String> _decorativePatternCodes = [];
+  List<String> _popularElementsCodes = [];
+  List<String> _fillerCode = [];
+  List<String> _thicknessCode = [];
+  List<String> _seasonCode = [];
+  List<String> _taggableCode = [];
+  List<String> _placketCode = [];
 
   @override
   void initState() {
-    _styleText = formatSelectText(widget.item?.styles,StyleEnum);
-    _styleCodes = widget.item?.styles;
-
-    _fabricCompositionText =
-        enumMap(FabricCompositionEnum, widget.item?.fabricComposition);
-    _fabricCompositionCode = widget.item?.fabricComposition;
-
-    _editionTypeText = enumMap(EditionTypeEnum, widget.item?.editionType);
-    _editionTypeCode = widget.item?.editionType;
-
-    _patternText = enumMap(PatternEnum, widget.item?.pattern);
-    _patternCode = widget.item?.pattern;
-
-    _sleeveTypeText = enumMap(SleeveTypeEnum, widget.item?.sleeveType);
-    _sleeveTypeCode = widget.item?.sleeveType;
-
-    _sleeveLengthText = enumMap(SleeveLengthEnum, widget.item?.sleeveLength);
-    _sleeveLengthCode = widget.item?.sleeveLength;
-
-    _decorativePatternText = formatSelectText(widget.item?.decorativePattern,DecorativePatternEnum);
-    _decorativePatternCodes = widget.item?.decorativePattern;
-
-    _popularElementsText = formatSelectText(widget.item?.popularElements,PopularElementsEnum);
-    _popularElementsCodes = widget.item?.popularElements;
-
-    _fillerText = enumMap(FillerEnum, widget.item?.filler);
-    _fillerCode = widget.item?.filler;
-
-    _thicknessText = enumMap(ThicknessEnum, widget.item?.thickness);
-    _thicknessCode = widget.item?.thickness;
-
-    _seasonText = enumMap(SeasonEnum, widget.item?.season);
-    _seasonCode = widget.item?.season;
-
-    _placketText = enumMap(PlacketEnum, widget.item?.placket);
-    _placketCode = widget.item?.placket;
-
-    print(widget.item?.taggable);
-    if (widget.item?.taggable != null) {
-      print(widget.item?.taggable);
-      _taggableText = widget.item?.taggable ? '有' : '没有';
-      _taggableCode = widget.item?.taggable ? 'true' : 'false';
-    }
+    if (widget.item?.styles != null) _styleCodes.addAll(widget.item?.styles);
+    if (widget.item?.decorativePattern != null)
+      _decorativePatternCodes.addAll(widget.item?.decorativePattern);
+    if (widget.item?.popularElements != null)
+      _popularElementsCodes.addAll(widget.item?.popularElements);
+    if (widget.item?.fabricComposition != null)
+      _fabricCompositionCode.add(widget.item?.fabricComposition);
+    if (widget.item?.editionType != null)
+      _editionTypeCode.add(widget.item?.editionType);
+    if (widget.item?.pattern != null) _patternCode.add(widget.item?.pattern);
+    if (widget.item?.sleeveType != null)
+      _sleeveTypeCode.add(widget.item?.sleeveType);
+    if (widget.item?.sleeveLength != null)
+      _sleeveLengthCode.add(widget.item?.sleeveLength);
+    if (widget.item?.filler != null) _fillerCode.add(widget.item?.filler);
+    if (widget.item?.thickness != null)
+      _thicknessCode.add(widget.item?.thickness);
+    if (widget.item?.season != null) _seasonCode.add(widget.item?.season);
+    if (widget.item?.placket != null) _placketCode.add(widget.item?.placket);
+    if (widget.item?.taggable != null)
+      _taggableCode.add(widget.item?.taggable.toString());
 
     // TODO: implement initState
     super.initState();
   }
 
-  String formatSelectText(List<Object> list,List<EnumModel> enumModels) {
+  //格式选中的枚举（多选）
+  String formatSelectText(List<String> codes, List<EnumModel> enumModels) {
     String text = '';
 
-    if (list != null) {
+    if (codes != null) {
       text = '';
-      for (int i = 0; i < list.length; i++) {
-        if (i == 4) {
+      for (int i = 0; i < codes.length; i++) {
+        if (i > 3) {
           text += '...';
           break;
         }
-        if(list is List<EnumModel>){
-          text += list[i]?.name;
-        }else if(list is List<String>){
-          text += enumMap(enumModels, list[i]);
-        }
 
-
-        if (i != list.length - 1) {
-          text += '、';
+        if (i == codes.length - 1) {
+          text += enumMap(enumModels, codes[i]);
+        } else {
+          text += enumMap(enumModels, codes[i]) + '、';
         }
       }
     }
@@ -116,314 +78,346 @@ class ApparelProductAttributesInputPageState
     return text;
   }
 
+  //格式选中的枚举（单选）
+  String formatEnumSelectText(
+      List<EnumModel> enumModels, List<String> enumCode) {
+    String text = '';
+    if (enumCode != null && enumCode.length > 0)
+      text = enumMap(enumModels, enumCode[0]);
+    return text;
+  }
+
+  Future<bool> _requestPop() {
+    ApparelProductAttributesModel attributesModel =
+        ApparelProductAttributesModel(
+      styles: _styleCodes,
+      fabricComposition:
+          _fabricCompositionCode.length > 0 ? _fabricCompositionCode[0] : null,
+      editionType: _editionTypeCode.length > 0 ? _editionTypeCode[0] : null,
+      pattern: _patternCode.length > 0 ? _patternCode[0] : null,
+      placket: _placketCode.length > 0 ? _placketCode[0] : null,
+      sleeveType: _sleeveTypeCode.length > 0 ? _sleeveTypeCode[0] : null,
+      sleeveLength: _sleeveLengthCode.length > 0 ? _sleeveLengthCode[0] : null,
+      season: _seasonCode.length > 0 ? _seasonCode[0] : null,
+      thickness: _thicknessCode.length > 0 ? _thicknessCode[0] : null,
+      popularElements: _popularElementsCodes,
+      decorativePattern: _decorativePatternCodes,
+      filler: _fillerCode.length > 0 ? _fillerCode[0] : null,
+      taggable:
+          _taggableCode.length > 0 ? _taggableCode[0] == 'true' : null,
+    );
+    Navigator.pop(context, attributesModel);
+    return Future.value(false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('属性'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.done,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-      body: ListView(
-        children: <Widget>[
-          InkWell(
-            onTap: () async {
-              List<EnumModel> result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择风格',
-                        items: StyleEnum,
-                        codes: _styleCodes,
-                        multiple: true,
-                      ),
-                ),
-              );
-              print(result);
+    return WillPopScope(
+      //监听左上角返回和实体返回
+      onWillPop: _requestPop,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.5,
+          centerTitle: true,
+          title: Text('属性'),
+        ),
+        body: ListView(
+          children: <Widget>[
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择风格',
+                          items: StyleEnum,
+                          codes: _styleCodes,
+                          multiple: true,
+                        ),
+                  ),
+                );
 
-              _styleText = formatSelectText(result,StyleEnum);
-              if(result != null){
-                _styleCodes = result.map((style) {
-                  return style.code;
-                }).toList();
-              }
-            },
-            child: ShowSelectTile(
-              leadingText: '风格',
-              tralingText: _styleText,
-              tralingTextColor: Colors.orange,
+                if (result != null) {
+                  _styleCodes = result;
+                }
+              },
+              child: ShowSelectTile(
+                leadingText: '风格',
+                tralingText: formatSelectText(_styleCodes, StyleEnum),
+                tralingTextColor: Colors.orange,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () async {
-              EnumModel result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择面料',
-                        items: FabricCompositionEnum,
-                        code: _fabricCompositionCode,
-                      ),
-                ),
-              );
-              _fabricCompositionText = result.name;
-              _fabricCompositionCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '面料',
-              tralingText: _fabricCompositionText,
-              tralingTextColor: Colors.orange,
-            ),
-          ),
-          InkWell(
-            onTap: () async {
-              dynamic result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择版型',
-                        items: EditionTypeEnum,
-                        code: _editionTypeCode,
-                      ),
-                ),
-              );
-              _editionTypeText = result.name;
-              _editionTypeCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '版型',
-              tralingText: _editionTypeText,
-              tralingTextColor: Colors.orange,
-            ),
-          ),
-          InkWell(
-            onTap: () async {
-              dynamic result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择款式',
-                        items: PatternEnum,
-                        code: _patternCode,
-                      ),
-                ),
-              );
-              _patternText = result.name;
-              _patternCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '款式',
-              tralingText: _patternText,
-              tralingTextColor: Colors.orange,
-            ),
-          ),
-          InkWell(
-            onTap: () async {
-              dynamic result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择袖型',
-                        items: SleeveTypeEnum,
-                        code: _sleeveTypeCode,
-                      ),
-                ),
-              );
-              _sleeveTypeText = result.name;
-              _sleeveTypeCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '袖型',
-              tralingText: _sleeveTypeText,
-              tralingTextColor: Colors.orange,
-            ),
-          ),
-          InkWell(
-            onTap: () async {
-              dynamic result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择袖长/裤长',
-                        items: SleeveLengthEnum,
-                        code: _sleeveLengthCode,
-                      ),
-                ),
-              );
-              _sleeveLengthText = result.name;
-              _sleeveLengthCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '袖长/裤长',
-              tralingText: _sleeveLengthText,
-              tralingTextColor: Colors.orange,
-            ),
-          ),
-          InkWell(
-            onTap: () async {
-              List<EnumModel> result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择图案',
-                        items: DecorativePatternEnum,
-                        multiple: true,
-                        codes: _decorativePatternCodes,
-                      ),
-                ),
-              );
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择面料',
+                          items: FabricCompositionEnum,
+                          codes: _fabricCompositionCode,
+                        ),
+                  ),
+                );
 
-              _decorativePatternText = formatSelectText(result, DecorativePatternEnum);
-              _decorativePatternCodes = result.map((item) {
-                return item.code;
-              }).toList();
-            },
-            child: ShowSelectTile(
-              leadingText: '图案',
-              tralingText: _decorativePatternText,
-              tralingTextColor: Colors.orange,
-            ),
-          ),
-          InkWell(
-            onTap: () async {
-              List<EnumModel> result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择流行元素',
-                        items: PopularElementsEnum,
-                        multiple: true,
-                        codes: _popularElementsCodes,
-                      ),
+                if (result != null) _fabricCompositionCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '面料',
+                tralingText: formatEnumSelectText(
+                  FabricCompositionEnum,
+                  _fabricCompositionCode,
                 ),
-              );
+                tralingTextColor: Colors.orange,
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择版型',
+                          items: EditionTypeEnum,
+                          codes: _editionTypeCode,
+                        ),
+                  ),
+                );
 
-              _popularElementsText = formatSelectText(result, PopularElementsEnum);
-              _popularElementsCodes = result.map((item) {
-                return item.code;
-              }).toList();
-            },
-            child: ShowSelectTile(
-              leadingText: '流行元素',
-              tralingText: _popularElementsText,
-              tralingTextColor: Colors.orange,
+                if (result != null) _editionTypeCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '版型',
+                tralingText:
+                    formatEnumSelectText(EditionTypeEnum, _editionTypeCode),
+                tralingTextColor: Colors.orange,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () async {
-              dynamic result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择填充物',
-                        items: FillerEnum,
-                        code: _fillerCode,
-                      ),
-                ),
-              );
-              _fillerText = result.name;
-              _fillerCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '填充物',
-              tralingText: _fillerText,
-              tralingTextColor: Colors.orange,
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择款式',
+                          items: PatternEnum,
+                          codes: _patternCode,
+                        ),
+                  ),
+                );
+
+                if (result != null) _patternCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '款式',
+                tralingText: formatEnumSelectText(PatternEnum, _patternCode),
+                tralingTextColor: Colors.orange,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () async {
-              dynamic result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择厚薄',
-                        items: ThicknessEnum,
-                        code: _thicknessCode,
-                      ),
-                ),
-              );
-              _thicknessText = result.name;
-              _thicknessCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '厚薄',
-              tralingText: _thicknessText,
-              tralingTextColor: Colors.orange,
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择袖型',
+                          items: SleeveTypeEnum,
+                          codes: _sleeveTypeCode,
+                        ),
+                  ),
+                );
+
+                if (result != null) _sleeveTypeCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '袖型',
+                tralingText:
+                    formatEnumSelectText(SleeveTypeEnum, _sleeveTypeCode),
+                tralingTextColor: Colors.orange,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () async {
-              dynamic result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                      title: '选择季节', items: SeasonEnum, code: _seasonCode),
-                ),
-              );
-              _seasonText = result.name;
-              _fillerCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '季节',
-              tralingText: _seasonText,
-              tralingTextColor: Colors.orange,
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择袖长/裤长',
+                          items: SleeveLengthEnum,
+                          codes: _sleeveLengthCode,
+                        ),
+                  ),
+                );
+
+                if (result != null) _sleeveLengthCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '袖长/裤长',
+                tralingText:
+                    formatEnumSelectText(SleeveLengthEnum, _sleeveLengthCode),
+                tralingTextColor: Colors.orange,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () async {
-              dynamic result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择吊牌',
-                        items: <EnumModel>[
-                          EnumModel('true', '有'),
-                          EnumModel('false', '没有'),
-                        ],
-                        code: _taggableCode,
-                      ),
-                ),
-              );
-              _taggableText = result.name;
-              _taggableCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '吊牌',
-              tralingText: _taggableText,
-              tralingTextColor: Colors.orange,
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择图案',
+                          items: DecorativePatternEnum,
+                          multiple: true,
+                          codes: _decorativePatternCodes,
+                        ),
+                  ),
+                );
+
+                if (result != null) _decorativePatternCodes = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '图案',
+                tralingText: formatSelectText(
+                    _decorativePatternCodes, DecorativePatternEnum),
+                tralingTextColor: Colors.orange,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () async {
-              dynamic result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnumSelectPage(
-                        title: '选择门襟',
-                        items: PlacketEnum,
-                        code: _placketCode,
-                      ),
-                ),
-              );
-              _placketText = result.name;
-              _placketCode = result.code;
-            },
-            child: ShowSelectTile(
-              leadingText: '门襟',
-              tralingText: _placketText,
-              tralingTextColor: Colors.orange,
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择流行元素',
+                          items: PopularElementsEnum,
+                          multiple: true,
+                          codes: _popularElementsCodes,
+                        ),
+                  ),
+                );
+
+                if (result != null) _popularElementsCodes = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '流行元素',
+                tralingText: formatSelectText(
+                    _popularElementsCodes, PopularElementsEnum),
+                tralingTextColor: Colors.orange,
+              ),
             ),
-          ),
-        ],
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择填充物',
+                          items: FillerEnum,
+                          codes: _fillerCode,
+                        ),
+                  ),
+                );
+
+                if (result != null) _fillerCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '填充物',
+                tralingText: formatEnumSelectText(FillerEnum, _fillerCode),
+                tralingTextColor: Colors.orange,
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择厚薄',
+                          items: ThicknessEnum,
+                          codes: _thicknessCode,
+                        ),
+                  ),
+                );
+
+                if (result != null) _thicknessCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '厚薄',
+                tralingText:
+                    formatEnumSelectText(ThicknessEnum, _thicknessCode),
+                tralingTextColor: Colors.orange,
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择季节',
+                          items: SeasonEnum,
+                          codes: _seasonCode,
+                        ),
+                  ),
+                );
+
+                if (result != null) _seasonCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '季节',
+                tralingText: formatEnumSelectText(SeasonEnum, _seasonCode),
+                tralingTextColor: Colors.orange,
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择吊牌',
+                          items: <EnumModel>[
+                            EnumModel('true', '有'),
+                            EnumModel('false', '没有'),
+                          ],
+                          codes: _taggableCode,
+                        ),
+                  ),
+                );
+
+                if (result != null) _taggableCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '吊牌',
+                tralingText: formatEnumSelectText(<EnumModel>[
+                  EnumModel('true', '有'),
+                  EnumModel('false', '没有'),
+                ], _taggableCode),
+                tralingTextColor: Colors.orange,
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnumSelectPage(
+                          title: '选择门襟',
+                          items: PlacketEnum,
+                          codes: _placketCode,
+                        ),
+                  ),
+                );
+
+                if (result != null) _placketCode = result;
+              },
+              child: ShowSelectTile(
+                leadingText: '门襟',
+                tralingText: formatEnumSelectText(PlacketEnum, _placketCode),
+                tralingTextColor: Colors.orange,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

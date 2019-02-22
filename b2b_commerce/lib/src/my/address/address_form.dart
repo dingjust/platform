@@ -128,6 +128,7 @@ class AddressFormState extends State<AddressFormPage> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text("编辑地址"),
         actions: <Widget>[

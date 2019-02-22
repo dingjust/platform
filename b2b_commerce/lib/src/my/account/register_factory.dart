@@ -27,6 +27,7 @@ class _RegisterFactoryPageState extends State<RegisterFactoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0.5,
           centerTitle: true,
           title: const Text('工厂注册'),
         ),

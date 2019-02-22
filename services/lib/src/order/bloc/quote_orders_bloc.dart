@@ -57,8 +57,11 @@ class QuoteOrdersBLoC extends BLoCBase {
                 starLevel: 3,
                 contactAddress: AddressModel(
                   region: RegionModel(name: '广东省'),
-                  city: CityModel(name: '广州市'),
-                  cityDistrict: DistrictModel(name: '海珠区'),
+                  city: CityModel(code: '', name: '广州市'),
+                  cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                    cellphone: '',
+                    fullname: '',
+                    line1: ''
                 ),
                 orderedSuccessRate: 0.3455,
                 historyOrdersCount: 214,
@@ -106,8 +109,11 @@ class QuoteOrdersBLoC extends BLoCBase {
                 starLevel: 3,
                 contactAddress: AddressModel(
                   region: RegionModel(name: '广东省'),
-                  city: CityModel(name: '广州市'),
-                  cityDistrict: DistrictModel(name: '海珠区'),
+                  city: CityModel(code: '', name: '广州市'),
+                  cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                    cellphone: '',
+                    fullname: '',
+                    line1: ''
                 ),
                 orderedSuccessRate: 0.3455,
                 historyOrdersCount: 214,
@@ -155,8 +161,11 @@ class QuoteOrdersBLoC extends BLoCBase {
                 starLevel: 3,
                 contactAddress: AddressModel(
                   region: RegionModel(name: '广东省'),
-                  city: CityModel(name: '广州市'),
-                  cityDistrict: DistrictModel(name: '海珠区'),
+                  city: CityModel(code: '', name: '广州市'),
+                  cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                    cellphone: '',
+                    fullname: '',
+                    line1: ''
                 ),
                 orderedSuccessRate: 0.3455,
                 historyOrdersCount: 214,
@@ -204,8 +213,11 @@ class QuoteOrdersBLoC extends BLoCBase {
                 starLevel: 3,
                 contactAddress: AddressModel(
                   region: RegionModel(name: '广东省'),
-                  city: CityModel(name: '广州市'),
-                  cityDistrict: DistrictModel(name: '海珠区'),
+                  city: CityModel(code: '', name: '广州市'),
+                  cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                    cellphone: '',
+                    fullname: '',
+                    line1: ''
                 ),
                 orderedSuccessRate: 0.3455,
                 historyOrdersCount: 214,
@@ -264,8 +276,11 @@ class QuoteOrdersBLoC extends BLoCBase {
               starLevel: 3,
               contactAddress: AddressModel(
                 region: RegionModel(name: '广东省'),
-                city: CityModel(name: '广州市'),
-                cityDistrict: DistrictModel(name: '海珠区'),
+                city: CityModel(code: '', name: '广州市'),
+                cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                  cellphone: '',
+                  fullname: '',
+                  line1: ''
               ),
               orderedSuccessRate: 0.3455,
               historyOrdersCount: 214,
@@ -322,8 +337,11 @@ class QuoteOrdersBLoC extends BLoCBase {
             starLevel: 3,
             contactAddress: AddressModel(
               region: RegionModel(name: '广东省'),
-              city: CityModel(name: '广州市'),
-              cityDistrict: DistrictModel(name: '海珠区'),
+              city: CityModel(code: '', name: '广州市'),
+              cityDistrict: DistrictModel(code: '', name: '海珠区'),
+              cellphone: '',
+              fullname: '',
+              line1: ''
             ),
             orderedSuccessRate: 0.3455,
             historyOrdersCount: 214,
@@ -392,5 +410,9 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   dispose() {
     _controller.close();
+    _loadingController.close();
+    _bottomController.close();
+    _toTopBtnController.close();
+    _returnToTopController.close();
   }
 }

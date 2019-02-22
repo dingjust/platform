@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'tax_invoice_detail.dart';
+import 'package:core/core.dart';
 
 class TaxInvoicesPage extends StatelessWidget {
   List<TaxInvoiceModel> taxInvoices = <TaxInvoiceModel>[
@@ -50,58 +51,42 @@ class TaxInvoicesPage extends StatelessWidget {
               ),
             );
           },
-          child: Column(
-            children: <Widget>[
-              /*ListTile(
-                title: Text(
-                  taxInvoice.seller,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 18,
-                  ),
-                ),
-              ),*/
-              ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: Container(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              children: <Widget>[
+                Row(
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Text('购方名称'),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Text('发票金额'),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Text('开票时间'),
-                    ),
-                  ],
-                ),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(bottom: 8),
+                    Expanded(
                       child: Text(
-                        taxInvoice.buyer,
+                          '购方名称',style: TextStyle(fontSize: 17),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Text(taxInvoice.amount.toString()),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Text(
-                        taxInvoice.billingDate.toString().substring(0, 10),
-                      ),
-                    ),
+                    Text(taxInvoice.buyer,),
                   ],
                 ),
-              ),
-            ],
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                          '发票金额',style: TextStyle(fontSize: 17),
+                      ),
+                    ),
+                    Text(taxInvoice.amount.toString(),),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                          '开票时间',style: TextStyle(fontSize: 17),
+                      ),
+                    ),
+                    Text(DateFormatUtil.formatYMD(taxInvoice.billingDate),),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -109,6 +94,7 @@ class TaxInvoicesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         title: Text('我的发票'),
         centerTitle: true,
       ),

@@ -13,7 +13,7 @@ class CategorySelect extends StatefulWidget {
     this.multiple = true,
     this.verticalDividerOpacity = 1,
     this.categorySelect,
-    this.hasButton = true,
+    this.hasButton = false,
   });
 
   CategorySelectState createState() => CategorySelectState();
@@ -90,35 +90,32 @@ class CategorySelectState extends State<CategorySelect> {
           orElse: () => null);
       if (entry != null) {
         _valueItem = entry.value.map((value) {
-          return Container(
-            width: 65,
-            child: ChoiceChip(
-              selectedColor: Colors.orange,
-              label: Text(
-                value.name,
-                style: TextStyle(color: Colors.black),
-              ),
-              selected: _selectRights.contains(value.code),
-              onSelected: (select) {
-                if (select) {
-                  setState(() {
-                    if (!_multiple) {
-                      widget.categorySelect.clear();
-                      _selectRights.clear();
-                    }
-                    widget.categorySelect.add(value);
-                    _selectRights.add(value.code);
-                  });
-                } else {
-                  setState(() {
-                    widget.categorySelect.removeWhere((category) => category.code == value.code);
-                    _selectRights.remove(value.code);
-                    print(widget.categorySelect);
-                    print(_selectRights);
-                  });
-                }
-              },
+          return ChoiceChip(
+            selectedColor: Colors.orange,
+            label: Text(
+              value.name,
+              style: TextStyle(color: Colors.black),
             ),
+            selected: _selectRights.contains(value.code),
+            onSelected: (select) {
+              if (select) {
+                setState(() {
+                  if (!_multiple) {
+                    widget.categorySelect.clear();
+                    _selectRights.clear();
+                  }
+                  widget.categorySelect.add(value);
+                  _selectRights.add(value.code);
+                });
+              } else {
+                setState(() {
+                  widget.categorySelect.removeWhere((category) => category.code == value.code);
+                  _selectRights.remove(value.code);
+                  print(widget.categorySelect);
+                  print(_selectRights);
+                });
+              }
+            },
           );
         }).toList();
       }

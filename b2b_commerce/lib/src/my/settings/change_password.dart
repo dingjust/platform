@@ -18,6 +18,7 @@ class ChangePasswordStatePage extends State<ChangePasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('修改密码'),
         actions : <Widget>[

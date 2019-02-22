@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/business/products/apparel_product_stock_input.d
 import 'package:b2b_commerce/src/home/product/product_color_size_select.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:b2b_commerce/src/business/products/apparel_product_size_stock_item.dart';
 
 class ProductNumSelectPage extends StatefulWidget {
   Map<ColorSelectEntry, List<SizeStockItem>> apparelProductStockInputItems;

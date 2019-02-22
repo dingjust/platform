@@ -29,6 +29,7 @@ class ApparelProductStockAdjustHistoryPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('库存调整记录'),
         actions: <Widget>[

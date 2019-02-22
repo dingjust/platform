@@ -35,6 +35,7 @@ class MemberRequestsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('会员审核'),
         actions: <Widget>[

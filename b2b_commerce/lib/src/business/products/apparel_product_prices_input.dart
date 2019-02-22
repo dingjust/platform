@@ -49,6 +49,7 @@ class ApparelProductPricesInputPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('商品价格'),
         actions: <Widget>[
