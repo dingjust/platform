@@ -14,53 +14,42 @@ class ApparelProductAttributesInputPage extends StatefulWidget {
 class ApparelProductAttributesInputPageState
     extends State<ApparelProductAttributesInputPage> {
   List<String> _styleCodes = [];
-  List<String> _fabricCompositionCode;
-  List<String> _editionTypeCode;
-  List<String> _patternCode;
-  List<String> _sleeveTypeCode;
-  List<String> _sleeveLengthCode;
-  List<String> _decorativePatternCodes;
-  List<String> _popularElementsCodes;
-  List<String> _fillerCode;
-  List<String> _thicknessCode;
-  List<String> _seasonCode;
-  List<String> _taggableCode;
-  List<String> _placketCode;
+  List<String> _fabricCompositionCode = [];
+  List<String> _editionTypeCode = [];
+  List<String> _patternCode = [];
+  List<String> _sleeveTypeCode = [];
+  List<String> _sleeveLengthCode = [];
+  List<String> _decorativePatternCodes = [];
+  List<String> _popularElementsCodes = [];
+  List<String> _fillerCode = [];
+  List<String> _thicknessCode = [];
+  List<String> _seasonCode = [];
+  List<String> _taggableCode = [];
+  List<String> _placketCode = [];
 
   @override
   void initState() {
-    if (widget.item?.styles != null) _styleCodes.addAll(widget.item.styles);
-
-    _fabricCompositionCode = widget.item?.fabricComposition == null
-        ? []
-        : [widget.item.fabricComposition];
-
-    _editionTypeCode =
-        widget.item?.editionType == null ? [] : [widget.item.editionType];
-
-    _patternCode = widget.item?.pattern == null ? [] : [widget.item.pattern];
-
-    _sleeveTypeCode =
-        widget.item?.sleeveType == null ? [] : [widget.item.sleeveType];
-
-    _sleeveLengthCode =
-        widget.item?.sleeveLength == null ? [] : [widget.item.sleeveLength];
-
-    _decorativePatternCodes = widget.item?.decorativePattern ?? [];
-
-    _popularElementsCodes = widget.item?.popularElements ?? [];
-
-    _fillerCode = widget.item?.filler == null ? [] : [widget.item.filler];
-
-    _thicknessCode =
-        widget.item?.thickness == null ? [] : [widget.item.thickness];
-
-    _seasonCode = widget.item?.season == null ? [] : [widget.item.season];
-
-    _placketCode = widget.item?.placket == null ? [] : [widget.item.placket];
-
-    _taggableCode =
-        widget.item?.taggable == null ? [] : [widget.item.taggable.toString()];
+    if (widget.item?.styles != null) _styleCodes.addAll(widget.item?.styles);
+    if (widget.item?.decorativePattern != null)
+      _decorativePatternCodes.addAll(widget.item?.decorativePattern);
+    if (widget.item?.popularElements != null)
+      _popularElementsCodes.addAll(widget.item?.popularElements);
+    if (widget.item?.fabricComposition != null)
+      _fabricCompositionCode.add(widget.item?.fabricComposition);
+    if (widget.item?.editionType != null)
+      _editionTypeCode.add(widget.item?.editionType);
+    if (widget.item?.pattern != null) _patternCode.add(widget.item?.pattern);
+    if (widget.item?.sleeveType != null)
+      _sleeveTypeCode.add(widget.item?.sleeveType);
+    if (widget.item?.sleeveLength != null)
+      _sleeveLengthCode.add(widget.item?.sleeveLength);
+    if (widget.item?.filler != null) _fillerCode.add(widget.item?.filler);
+    if (widget.item?.thickness != null)
+      _thicknessCode.add(widget.item?.thickness);
+    if (widget.item?.season != null) _seasonCode.add(widget.item?.season);
+    if (widget.item?.placket != null) _placketCode.add(widget.item?.placket);
+    if (widget.item?.taggable != null)
+      _taggableCode.add(widget.item?.taggable.toString());
 
     // TODO: implement initState
     super.initState();
@@ -104,6 +93,18 @@ class ApparelProductAttributesInputPageState
       styles: _styleCodes,
       fabricComposition:
           _fabricCompositionCode.length > 0 ? _fabricCompositionCode[0] : null,
+      editionType: _editionTypeCode.length > 0 ? _editionTypeCode[0] : null,
+      pattern: _patternCode.length > 0 ? _patternCode[0] : null,
+      placket: _placketCode.length > 0 ? _placketCode[0] : null,
+      sleeveType: _sleeveTypeCode.length > 0 ? _sleeveTypeCode[0] : null,
+      sleeveLength: _sleeveLengthCode.length > 0 ? _sleeveLengthCode[0] : null,
+      season: _seasonCode.length > 0 ? _seasonCode[0] : null,
+      thickness: _thicknessCode.length > 0 ? _thicknessCode[0] : null,
+      popularElements: _popularElementsCodes,
+      decorativePattern: _decorativePatternCodes,
+      filler: _fillerCode.length > 0 ? _fillerCode[0] : null,
+      taggable:
+          _taggableCode.length > 0 ? _taggableCode.contains('true') : null,
     );
     Navigator.pop(context, attributesModel);
     return Future.value(false);
@@ -230,7 +231,8 @@ class ApparelProductAttributesInputPageState
               },
               child: ShowSelectTile(
                 leadingText: '袖型',
-                tralingText: formatEnumSelectText(SleeveTypeEnum, _sleeveTypeCode),
+                tralingText:
+                    formatEnumSelectText(SleeveTypeEnum, _sleeveTypeCode),
                 tralingTextColor: Colors.orange,
               ),
             ),
@@ -275,7 +277,7 @@ class ApparelProductAttributesInputPageState
               child: ShowSelectTile(
                 leadingText: '图案',
                 tralingText: formatSelectText(
-                    widget.item?.decorativePattern, DecorativePatternEnum),
+                    _decorativePatternCodes, DecorativePatternEnum),
                 tralingTextColor: Colors.orange,
               ),
             ),
@@ -298,7 +300,7 @@ class ApparelProductAttributesInputPageState
               child: ShowSelectTile(
                 leadingText: '流行元素',
                 tralingText: formatSelectText(
-                    widget.item?.popularElements, PopularElementsEnum),
+                    _popularElementsCodes, PopularElementsEnum),
                 tralingTextColor: Colors.orange,
               ),
             ),
@@ -340,7 +342,8 @@ class ApparelProductAttributesInputPageState
               },
               child: ShowSelectTile(
                 leadingText: '厚薄',
-                tralingText: formatEnumSelectText(ThicknessEnum, _thicknessCode),
+                tralingText:
+                    formatEnumSelectText(ThicknessEnum, _thicknessCode),
                 tralingTextColor: Colors.orange,
               ),
             ),
