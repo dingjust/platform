@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/products/apparel_product_size_stock_item.dart';
 import 'package:b2b_commerce/src/home/product/product_color_size_select.dart';
 import 'package:b2b_commerce/src/home/product/product_num_select.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   ];
   final List<ColorSelectEntry> colorEntries = [];
   final List<SizeSelectEntry> sizeEntries = [];
+  Map<ColorSelectEntry, List<SizeStockItem>> apparelProductStockInputItems =
+      Map<ColorSelectEntry, List<SizeStockItem>>();
 
   //TODO 根据code查询款式详情
   final product = ProductModel(
@@ -64,6 +67,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     super.initState();
     colorEntries.clear();
     sizeEntries.clear();
+    apparelProductStockInputItems.clear();
 
     ///构建颜色尺码选中数据列
     colorEntries.addAll(mockColors
@@ -72,6 +76,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     sizeEntries.addAll(
         mockSizes.map((size) => SizeSelectEntry(sizeModel: size)).toList());
+
+    ///构建数量控制列
+    colorEntries.forEach((color) {
+      apparelProductStockInputItems[color] = sizeEntries
+          .map((size) => SizeStockItem(size: size.sizeModel,selectEntry: size))
+          .toList();
+    });
   }
 
   @override
@@ -219,8 +230,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ProductNumSelectPage(
-                        colorEntries: colorEntries,
-                        sizeEntries: sizeEntries,
+                        apparelProductStockInputItems:
+                            apparelProductStockInputItems,
                       )));
             },
           ),
