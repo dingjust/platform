@@ -7,6 +7,8 @@ import FactoriesModule from './user/factories';
 import BrandsModule from './user/brands';
 import AuditFactoriesModule from './user/audit-factories';
 import AuditBrandsModule from './user/audit-brands';
+import IndustrialClustersModule from './user/industrial-clusters';
+import LabelsModule from './user/labels';
 import ColorsModule from './product/colors';
 import SizesModule from './product/sizes';
 import StylesModule from './product/styles';
@@ -28,6 +30,8 @@ export {
   BrandsModule,
   AuditFactoriesModule,
   AuditBrandsModule,
+  IndustrialClustersModule,
+  LabelsModule,
   ColorsModule,
   SizesModule,
   StylesModule,
