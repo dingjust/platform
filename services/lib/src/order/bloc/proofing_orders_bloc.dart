@@ -44,6 +44,7 @@ class ProofingOrdersBLoC extends BLoCBase {
         return <ProofingModel>[
           ProofingModel(
             code: '1232323232',
+            remarks: '请尽快支付打样费用，以免延期，谢谢！',
             factory: FactoryModel.fromJson(mockFactory),
             status: ProofingStatus.PENDING_PAYMENT,
             totalPrice: 54,
@@ -51,6 +52,15 @@ class ProofingOrdersBLoC extends BLoCBase {
             order: RequirementOrderModel(
               code: '39492523423',
             ),
+            deliveryAddress: AddressModel.fromJson({
+              'fullname': "张三",
+              'cellphone': '13123456789',
+              'region': {'isocode': 'R123', 'name': '广东省'},
+              'city': {'code': 'C123', 'name': '广州市'},
+              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+              'line1': '广州大道',
+              'defaultAddress': true
+            }),
             creationTime: DateTime.parse('2019-01-03'),
             product: ApparelProductModel(
               name: '山本风少女长裙复古气质秋冬流行新款',
@@ -63,6 +73,7 @@ class ProofingOrdersBLoC extends BLoCBase {
           ),
           ProofingModel(
             code: '1232323232',
+            remarks: '请尽快支付打样费用，以免延期，谢谢！',
             factory: FactoryModel.fromJson(mockFactory),
             status: ProofingStatus.COMPLETED,
             totalPrice: 54,
@@ -70,6 +81,15 @@ class ProofingOrdersBLoC extends BLoCBase {
             order: RequirementOrderModel(
               code: '39492523423',
             ),
+            deliveryAddress: AddressModel.fromJson({
+              'fullname': "张三",
+              'cellphone': '13123456789',
+              'region': {'isocode': 'R123', 'name': '广东省'},
+              'city': {'code': 'C123', 'name': '广州市'},
+              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+              'line1': '广州大道',
+              'defaultAddress': true
+            }),
             creationTime: DateTime.parse('2019-01-03'),
             product: ApparelProductModel(
               name: '山本风少女长裙复古气质秋冬流行新款',
@@ -82,10 +102,20 @@ class ProofingOrdersBLoC extends BLoCBase {
           ),
           ProofingModel(
             code: '1232323232',
+            remarks: '请尽快支付打样费用，以免延期，谢谢！',
             factory: FactoryModel.fromJson(mockFactory),
             status: ProofingStatus.SHIPPED,
             totalPrice: 54,
             totalQuantity: 554,
+            deliveryAddress: AddressModel.fromJson({
+              'fullname': "张三",
+              'cellphone': '13123456789',
+              'region': {'isocode': 'R123', 'name': '广东省'},
+              'city': {'code': 'C123', 'name': '广州市'},
+              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+              'line1': '广州大道',
+              'defaultAddress': true
+            }),
             order: RequirementOrderModel(
               code: '39492523423',
             ),
@@ -101,6 +131,7 @@ class ProofingOrdersBLoC extends BLoCBase {
           ),
           ProofingModel(
             code: '1232323232',
+            remarks: '请尽快支付打样费用，以免延期，谢谢！',
             factory: FactoryModel.fromJson(mockFactory),
             status: ProofingStatus.PENDING_PAYMENT,
             totalPrice: 54,
@@ -108,6 +139,15 @@ class ProofingOrdersBLoC extends BLoCBase {
             order: RequirementOrderModel(
               code: '39492523423',
             ),
+            deliveryAddress: AddressModel.fromJson({
+              'fullname': "张三",
+              'cellphone': '13123456789',
+              'region': {'isocode': 'R123', 'name': '广东省'},
+              'city': {'code': 'C123', 'name': '广州市'},
+              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+              'line1': '广州大道',
+              'defaultAddress': true
+            }),
             creationTime: DateTime.parse('2019-01-03'),
             product: ApparelProductModel(
               name: '山本风少女长裙复古气质秋冬流行新款',
@@ -120,6 +160,7 @@ class ProofingOrdersBLoC extends BLoCBase {
           ),
           ProofingModel(
             code: '1232323232',
+            remarks: '请尽快支付打样费用，以免延期，谢谢！',
             factory: FactoryModel.fromJson(mockFactory),
             status: ProofingStatus.PENDING_DELIVERY,
             totalPrice: 54,
@@ -127,6 +168,15 @@ class ProofingOrdersBLoC extends BLoCBase {
             order: RequirementOrderModel(
               code: '39492523423',
             ),
+            deliveryAddress: AddressModel.fromJson({
+              'fullname': "张三",
+              'cellphone': '13123456789',
+              'region': {'isocode': 'R123', 'name': '广东省'},
+              'city': {'code': 'C123', 'name': '广州市'},
+              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+              'line1': '广州大道',
+              'defaultAddress': true
+            }),
             creationTime: DateTime.parse('2019-01-03'),
             product: ApparelProductModel(
               name: '山本风少女长裙复古气质秋冬流行新款',
@@ -150,6 +200,7 @@ class ProofingOrdersBLoC extends BLoCBase {
           .add(await Future.delayed(const Duration(seconds: 1), () {
         return ProofingModel(
           code: '1232323232',
+          remarks: '请尽快支付打样费用，以免延期，谢谢！',
           factory: FactoryModel.fromJson(mockFactory),
           status: ProofingStatus.PENDING_PAYMENT,
           totalPrice: 54,
@@ -157,6 +208,15 @@ class ProofingOrdersBLoC extends BLoCBase {
           order: RequirementOrderModel(
             code: '39492523423',
           ),
+          deliveryAddress: AddressModel.fromJson({
+            'fullname': "张三",
+            'cellphone': '13123456789',
+            'region': {'isocode': 'R123', 'name': '广东省'},
+            'city': {'code': 'C123', 'name': '广州市'},
+            'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+            'line1': '广州大道',
+            'defaultAddress': true
+          }),
           creationTime: DateTime.parse('2019-01-03'),
           product: ApparelProductModel(
             name: '山本风少女长裙复古气质秋冬流行新款',
@@ -182,6 +242,7 @@ class ProofingOrdersBLoC extends BLoCBase {
     _quotesMap[status].add(await Future.delayed(const Duration(seconds: 1), () {
       return ProofingModel(
         code: '1232323232',
+        remarks: '请尽快支付打样费用，以免延期，谢谢！',
         factory: FactoryModel.fromJson(mockFactory),
         status: ProofingStatus.PENDING_PAYMENT,
         totalPrice: 54,
@@ -189,6 +250,15 @@ class ProofingOrdersBLoC extends BLoCBase {
         order: RequirementOrderModel(
           code: '39492523423',
         ),
+        deliveryAddress: AddressModel.fromJson({
+          'fullname': "张三",
+          'cellphone': '13123456789',
+          'region': {'isocode': 'R123', 'name': '广东省'},
+          'city': {'code': 'C123', 'name': '广州市'},
+          'cityDistrict': {'code': 'D123', 'name': '海珠区'},
+          'line1': '广州大道',
+          'defaultAddress': true
+        }),
         creationTime: DateTime.parse('2019-01-03'),
         product: ApparelProductModel(
           name: '山本风少女长裙复古气质秋冬流行新款',
@@ -260,7 +330,7 @@ Map<String, dynamic> mockFactory = {
   'latheQuantity': 5,
   'contactPerson': 'luffy',
   'contactPhone': '13123456789',
-  'address': '广东省广州市海珠区广州大道南',
+  'address': '广东广州',
   'contactAddress': {
     'fullname': "张三",
     'cellphone': '13123456789',
