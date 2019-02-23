@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 import 'sample_products.dart';
+import 'package:core/core.dart';
 
 class SampleProductHistoryFormPage extends StatefulWidget {
   SampleProductHistoryFormPageState createState() =>
@@ -20,9 +21,6 @@ class SampleProductHistoryFormPageState
   final TextEditingController _skuIDController = TextEditingController();
   FocusNode _quantityFocusNode = FocusNode();
   final TextEditingController _quantityController = TextEditingController();
-  FocusNode _expectedReturnDateFocusNode = FocusNode();
-  final TextEditingController _expectedReturnDateController =
-      TextEditingController();
   FocusNode _remakeFocusNode = FocusNode();
   final TextEditingController _remakeController = TextEditingController();
   FocusNode _relatedPartyFocusNode = FocusNode();
@@ -32,6 +30,10 @@ class SampleProductHistoryFormPageState
 
   Text _nameText = Text('点击选择', style: TextStyle(color: Colors.grey));
   String _skuIDText = '';
+  Text _expectedReturnDateText = Text(
+    '点击选择日期',
+    style: TextStyle(color: Colors.grey),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -127,69 +129,122 @@ class SampleProductHistoryFormPageState
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Column(
                 children: <Widget>[
-                  _type == LendBorrowType.BORROW ?
-                  Column(
-                    children: <Widget>[
-                      ListTile(
-                        leading: Text(
-                          '样衣名称',
-                          style: TextStyle(fontSize: 16),
+                  _type == LendBorrowType.BORROW
+                      ? Column(
+                          children: <Widget>[
+                            ListTile(
+                              leading: Text(
+                                '样衣名称',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              title: Container(
+                                padding: EdgeInsets.only(left: 43),
+                                child: GestureDetector(
+                                  child: _nameText,
+                                  onTap: () async {
+                                    SampleProductModel model =
+                                        await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SampleProductsPage(
+                                                        isHistoryCreate:
+                                                            true)));
+                                    _nameText = Text(model.name,
+                                        style: TextStyle(color: Colors.black));
+                                    _skuIDText = model.skuID;
+                                  },
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: Divider(
+                                height: 0,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                            ListTile(
+                              leading: Text(
+                                '货号',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              title: Padding(
+                                padding: const EdgeInsets.only(left: 60),
+                                child: Text(_skuIDText),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: Divider(
+                                height: 0,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: <Widget>[
+                            TextFieldComponent(
+                              focusNode: _nameFocusNode,
+                              controller: _nameController,
+                              leadingText: '样衣名称',
+                              hintText: '请输入样衣名称',
+                              leadingWidth: 100,
+                            ),
+                            TextFieldComponent(
+                              focusNode: _skuIDFocusNode,
+                              controller: _skuIDController,
+                              leadingText: '货号',
+                              hintText: '请输入货号',
+                              leadingWidth: 100,
+                            ),
+                          ],
                         ),
-                        title: Container(
-                          padding: EdgeInsets.only(left: 43),
-                          child: _nameText,
-                        ),
-                        onTap: () async{
-                          SampleProductModel model = await Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductsPage(isHistoryCreate : true)));
-                          _nameText = Text(model.name, style: TextStyle(color: Colors.black));
-                          _skuIDText = model.skuID;
-                        },
-                      ),
-                      Divider(height: 0,),
-                      ListTile(
-                        leading: Text(
-                          '货号',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        title: Padding(
-                          padding: const EdgeInsets.only(left: 60),
-                          child: Text(_skuIDText),
-                        ),
-                      ),
-                      Divider(height: 0,),
-                    ],
-                  )
-                  : Column(
-                    children: <Widget>[
-                      TextFieldComponent(
-                        focusNode: _nameFocusNode,
-                        controller: _nameController,
-                        leadingText: '样衣名称',
-                        hintText: '请输入样衣名称',
-                        leadingWidth: 100,
-                      ),
-                      TextFieldComponent(
-                        focusNode: _skuIDFocusNode,
-                        controller: _skuIDController,
-                        leadingText: '货号',
-                        hintText: '请输入货号',
-                        leadingWidth: 100,
-                      ),
-                    ],
-                  ),
                   TextFieldComponent(
                     focusNode: _quantityFocusNode,
                     controller: _quantityController,
-                    leadingText: _type == LendBorrowType.BORROW ? '借出数量':'借入数量',
-                    hintText: _type == LendBorrowType.BORROW ? '请输入借出数量':'请输入借入数量',
+                    leadingText:
+                        _type == LendBorrowType.BORROW ? '借出数量' : '借入数量',
+                    hintText:
+                        _type == LendBorrowType.BORROW ? '请输入借出数量' : '请输入借入数量',
                     leadingWidth: 100,
                   ),
-                  TextFieldComponent(
-                    focusNode: _expectedReturnDateFocusNode,
-                    controller: _expectedReturnDateController,
-                    leadingText: '预计归还时间',
-                    hintText: '请输入预计归还时间',
-                    leadingWidth: 100,
+                  ListTile(
+                    leading: Text(
+                      '预计归还时间',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    title: Container(
+                      padding: EdgeInsets.only(left: 18),
+                      child: GestureDetector(
+                        child: _expectedReturnDateText,
+                        onTap: () {
+                          _selectDate(context).then((value) {
+                            setState(() {
+                              if (value != null) {
+                                _expectedReturnDateText =
+                                    Text(DateFormatUtil.formatYMD(value));
+                              } else {
+                                _expectedReturnDateText = Text(
+                                  '点击选择日期',
+                                  style: TextStyle(color: Colors.grey),
+                                );
+                              }
+                            });
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Divider(
+                      height: 0,
+                      color: Colors.grey[400],
+                    ),
                   ),
                   TextFieldComponent(
                     focusNode: _remakeFocusNode,
@@ -213,7 +268,8 @@ class SampleProductHistoryFormPageState
                     focusNode: _relatedPartyFocusNode,
                     controller: _relatedPartyController,
                     leadingText: '关联方',
-                    hintText: _type == LendBorrowType.BORROW ? '我借给谁的':'谁借给我的',
+                    hintText:
+                        _type == LendBorrowType.BORROW ? '我借给谁的' : '谁借给我的',
                     leadingWidth: 100,
                   ),
                   TextFieldComponent(
@@ -229,6 +285,15 @@ class SampleProductHistoryFormPageState
           ),
         ],
       ),
+    );
+  }
+
+  Future<DateTime> _selectDate(BuildContext context) {
+    return showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2101),
     );
   }
 }
