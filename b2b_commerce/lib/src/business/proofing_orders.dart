@@ -1,6 +1,5 @@
-import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/proofing_search.dart';
-import 'package:b2b_commerce/src/business/search/quotes_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -208,11 +207,10 @@ class ProofingOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => QuoteOrderDetailPage(
-        //           item: model,
-        //         )));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ProofingOrderDetailPage(
+                  model: model,
+                )));
       },
       child: Container(
         padding: EdgeInsets.all(10),

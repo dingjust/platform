@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/factory/hot_category.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
+import 'package:b2b_commerce/src/my/my_bill.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -74,6 +75,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_REGISTER_BRAND = '/my/account/register_brand';
   static const ROUTE_MY_REGISTER_FACTORY = '/my/account/register_factory';
   static const ROUTE_MY_REGISTER_CUSTOMER = '/my/account/register_customer';
+  static const ROUTE_MY_BILL = '/my/my_bill';
   static const ROUTE_DELIVERY = '/business/delivery';
 
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
@@ -111,6 +113,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_DELIVERY: (context) => DeliveryPage(),
     ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
     ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage(),
-    ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage()
+    ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage(),
+    ROUTE_MY_BILL: (context) => MyBillPage()
   };
 }

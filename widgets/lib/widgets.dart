@@ -29,3 +29,6 @@ export 'src/commons/select/category_select.dart';
 export 'src/commons/select/enum_selection.dart';
 export 'src/commons/photo_picker/photo_picker.dart';
 export 'src/commons/flutter_amap/flutter_amap.dart';
+export 'src/commons/table/color_size_num_table.dart';
+export 'src/commons/filterTabBar/date_bar.dart';
+export 'src/commons/income_comparison/income_comparison.dart';
