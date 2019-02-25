@@ -24,7 +24,7 @@
              :model="slotData"
              :disabled="readOnly">
       <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="产品类别" prop="category">
             <el-select class="w-100"
                         placeholder="请选择"
@@ -43,7 +43,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="产品大类" prop="majorCategory">
             <el-select v-model="slotData.details.majorCategory.code" class="w-100">
               <el-option v-for="item in majorCategories"
@@ -54,16 +54,14 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="预计加工总数量" prop="expectedMachiningQuantity">
             <el-input-number class="w-100"
                              v-model="slotData.details.expectedMachiningQuantity">
             </el-input-number>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="预计交货时间" prop="expectedDeliveryDate">
             <el-date-picker class="w-100"
                             type="date"
@@ -73,16 +71,16 @@
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="6">
           <el-form-item label="期望价格" prop="maxExpectedPrice">
             <el-input-number class="w-100"
                              v-model="slotData.details.maxExpectedPrice">
             </el-input-number>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="加工类型" prop="machiningType">
             <el-select class="w-100" v-model="slotData.details.machiningType">
               <el-option v-for="item in machiningTypes"
@@ -93,19 +91,19 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="联系人" prop="contactPerson">
             <el-input v-model="slotData.details.contactPerson"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="联系电话" prop="contactPhone">
             <el-input v-model="slotData.details.contactPhone"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="是否提供样衣" prop="samplesNeeded">
             <el-radio-group v-model="slotData.details.samplesNeeded">
               <el-radio :label="true">是</el-radio>
@@ -113,7 +111,7 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="是否需要发票" prop="invoiceNeeded">
             <el-radio-group v-model="slotData.details.invoiceNeeded">
               <el-radio :label="true">是</el-radio>
@@ -121,17 +119,6 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <!--<el-col :span="20">
-          <el-upload ref="uploadForm" :disabled="readOnly"
-                     name="files"
-                     :multiple="true"
-                     list-type="picture-card"
-                     :file-list="files"
-                     :auto-upload="false">
-            <i class="el-icon-plus"></i>
-            <div slot="tip" class="el-upload__tip">文件大小不超过10MB</div>
-          </el-upload>
-        </el-col>-->
       </el-row>
     </el-form>
   </div>

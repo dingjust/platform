@@ -2,48 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'apparel_product_size_stock_item.dart';
 
-class ApparelProductStockInputPage extends StatelessWidget {
+class ApparelProductStockInputPage extends StatefulWidget {
   Map<ColorModel, List<SizeStockItem>> items;
+
   ApparelProductStockInputPage({this.items});
 
-//  static Map<ColorModel, List<SizeStockItem>> items =
-//      <ColorModel, List<SizeStockItem>>{
-//    ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'): <SizeStockItem>[
-//      SizeStockItem(
-//          size: SizeModel(code: 'S01', name: 'XL'),
-//          available: 35,
-//          maxPreOrder: 55),
-//      SizeStockItem(
-//        size: SizeModel(code: 'S012', name: 'XXL'),
-//      ),
-//    ],
-//    ColorModel(code: 'C02', name: '海军蓝', colorCode: '0066FF'): <SizeStockItem>[
-//      SizeStockItem(size: SizeModel(code: 'S01', name: 'XL')),
-//      SizeStockItem(size: SizeModel(code: 'S012', name: 'XXL')),
-//    ],
-//  };
+  ApparelProductStockInputPageState createState() =>
+      ApparelProductStockInputPageState();
+}
+
+class ApparelProductStockInputPageState
+    extends State<ApparelProductStockInputPage> {
+  Map<ColorModel, List<SizeStockItem>> _beforeItems = Map();
+
+  @override
+  void initState() {
+    widget.items.forEach((color, sizeStockItems) {
+      _beforeItems[color] = sizeStockItems.map((item) {
+        return SizeStockItem(
+          size: item.size,
+          available: int.parse(item.availableController.text == '' ? '0' : item.availableController.text),
+          maxPreOrder: int.parse(item.maxPreOrderController.text == '' ? '0' : item.maxPreOrderController.text),
+        );
+      }).toList();
+    });
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.5,
-        centerTitle: true,
-        title: Text('库存'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.done,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-      body: Container(
-        color: Colors.grey[200],
-        child: Card(
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context, _beforeItems);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.5,
+          centerTitle: true,
+          title: Text('库存'),
+          leading: IconButton(
+              icon: Text('取消'),
+              onPressed: () {
+                widget.items.clear();
+                Navigator.pop(context, _beforeItems);
+              }),
+          actions: <Widget>[
+            IconButton(
+              icon: Text('确定'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+        body: Container(
+          color: Colors.white,
           child: Column(
             children: <Widget>[
               Container(
@@ -99,22 +114,10 @@ class ApparelProductStockInputPage extends StatelessWidget {
                   ],
                 ),
               ),
-              ApparelProductStockInputItem(items: items),
+              ApparelProductStockInputItem(items: widget.items),
 //            ApparelProductStockInputItem(),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: RaisedButton(
-          onPressed: () {
-            items.values.forEach((item) {
-              item.forEach((it) {
-                print(it.availableController.text);
-              });
-            });
-          },
-          child: Text('批量调整'),
         ),
       ),
     );
@@ -123,6 +126,7 @@ class ApparelProductStockInputPage extends StatelessWidget {
 
 class ApparelProductStockInputItem extends StatefulWidget {
   final Map<ColorModel, List<SizeStockItem>> items;
+
   ApparelProductStockInputItem({@required this.items});
 
   ApparelProductStockInputItemState createState() =>
@@ -145,13 +149,12 @@ class ApparelProductStockInputItemState
   Widget build(BuildContext context) {
     Widget buildRow(BuildContext context,
         MapEntry<ColorModel, List<SizeStockItem>> row, int index) {
-//      print(index);
       final List<TableRow> _subRows = row.value.map((item) {
         return TableRow(children: <TableCell>[
           TableCell(
             child: Center(
                 child: Text(
-              '${item.size.name}',
+              '${item.size?.name}',
               style: TextStyle(fontSize: 14),
             )),
           ),

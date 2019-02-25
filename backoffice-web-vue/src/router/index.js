@@ -174,9 +174,14 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/product/HotProductsPage')
             },
             {
-              path: 'media',
-              name: '系统图片配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/media/SystemMediaPage')
+              path: 'industrial-cluster',
+              name: '产业集群配置',
+              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/industrial-cluster/IndustrialClusterPage')
+            },
+            {
+              path: 'label',
+              name: '标签配置',
+              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/label/LabelPage')
             },
             {
               path: 'partners',
