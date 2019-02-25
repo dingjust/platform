@@ -19,6 +19,7 @@ import RequirementOrdersModule from './order/requirement-orders';
 import SalesOrdersModule from './order/sales-orders';
 import ProductionOrdersModule from './order/production-orders';
 import PickOrdersModule from './order/pick-orders';
+import QuotesModule from './order/quotes';
 
 export {
   EnumsModule,
@@ -41,5 +42,6 @@ export {
   RequirementOrdersModule,
   SalesOrdersModule,
   ProductionOrdersModule,
-  PickOrdersModule
+  PickOrdersModule,
+  QuotesModule
 }

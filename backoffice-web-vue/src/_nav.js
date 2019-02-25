@@ -101,6 +101,11 @@ export default {
           icon: 'iconNone'
         },
         {
+          name: '报价单',
+          url: '/backoffice/order/quote',
+          icon: 'iconNone'
+        },
+        {
           name: '生产订单',
           url: '/backoffice/order/consignment',
           icon: 'iconNone'

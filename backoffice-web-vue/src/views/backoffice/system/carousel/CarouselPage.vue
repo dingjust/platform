@@ -14,7 +14,7 @@
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="图片" prop="media">
           <template slot-scope="scope">
-            <img :src="scope.row.media" width="200" height="60"></img>
+            <img :src="scope.row.media" width="200" height="60" alt=""/>
           </template>
         </el-table-column>
         <el-table-column label="跳转动作" prop="action"></el-table-column>

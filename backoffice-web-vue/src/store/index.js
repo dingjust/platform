@@ -24,7 +24,8 @@ import {
   RequirementOrdersModule,
   SalesOrdersModule,
   ProductionOrdersModule,
-  PickOrdersModule
+  PickOrdersModule,
+  QuotesModule
 } from './modules';
 
 import {
@@ -99,6 +100,7 @@ export default new Vuex.Store({
     SalesOrdersModule,
     ProductionOrdersModule,
     PickOrdersModule,
+    QuotesModule,
     // brand
     BrandEmployeesModule,
     BrandFollowersModule,

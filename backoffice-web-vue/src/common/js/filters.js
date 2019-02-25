@@ -199,7 +199,18 @@ const ENUMS = {
       code: "DELIVERY",
       name: "发货"
     }
-  }
+  },
+  //发料单状态
+  QuoteState: {
+    WAIT_FOR_CONFIRM: {
+      code: "WAIT_FOR_CONFIRM",
+      name: "待处理"
+    },
+    CONFIRMED: {
+      code: "CONFIRMED",
+      name: "已确认"
+    }
+  },
 };
 
 export function enumTranslate(enumVal, enumType) {

@@ -28,9 +28,6 @@
       validate(callback) {
         this.$refs['form'].validate(callback);
       },
-      getValue() {
-        return this.slotData;
-      },
       async getLabels() {
         const results = await this.$http.get('/djwebservices/labels');
         if (results["errors"]) {

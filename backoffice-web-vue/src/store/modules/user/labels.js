@@ -14,7 +14,7 @@ const state = {
   formData: {
     id: null,
     name: '',
-    groups: []
+    group: ''
   }
 };
 
@@ -33,8 +33,9 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get('/djwebservices/labels', {
-      text: state.keyword,
+    const response = await http.post('/djwebservices/labels', {
+      name: state.keyword,
+    }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

@@ -30,7 +30,7 @@
   import LabelBaseForm from './LabelBaseForm';
 
   export default {
-    name: 'EmployeeForm',
+    name: 'LabelForm',
     components: {LabelBaseForm},
     props: ['slotData'],
     methods: {
@@ -44,7 +44,7 @@
             return false;
           }
 
-          this._onSubmit(baseForm.getValue());
+          this._onSubmit(this.slotData);
 
           return true;
         });
@@ -53,11 +53,7 @@
         this.fn.closeSlider();
       },
       async _onSubmit(formData) {
-        let request = this.$http.post;
-        if (!this.isNewlyCreated) {
-          request = this.$http.put;
-        }
-        const result = await request('/djwebservices/labels', formData);
+        const result = await this.$http.post('/djwebservices/labels/create', formData);
         if (result['errors']) {
           this.$message.error('保存失败，原因：' + result['errors'][0].message);
           return;
