@@ -28,11 +28,14 @@ class _MyBillPageState extends State<MyBillPage> {
         //   bottom: DateBar(),
         // ),
         body: Container(
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           color: Color.fromRGBO(245, 245, 245, 1),
           child: ListView(
             children: <Widget>[
               IncomeComparison(
-                height: 150,
+                height: 100,
+                income: 8000.00,
+                expenditure: 20134.00,
               )
             ],
           ),
