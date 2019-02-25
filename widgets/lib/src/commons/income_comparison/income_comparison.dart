@@ -17,7 +17,7 @@ class IncomeComparison extends StatelessWidget {
       this.height,
       this.income,
       this.expenditure,
-      this.lineHeight = 10})
+      this.lineHeight = 8})
       : super(key: key);
 
   @override
@@ -51,14 +51,14 @@ class IncomeComparison extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '￥${income}',
+                '￥ ${income}',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
               Text(
-                '￥${expenditure}',
+                '￥ ${expenditure}',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

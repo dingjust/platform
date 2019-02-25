@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class MyBillPage extends StatefulWidget {
@@ -10,6 +14,8 @@ class MyBillPage extends StatefulWidget {
 }
 
 class _MyBillPageState extends State<MyBillPage> {
+  StreamController streamController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,19 +29,23 @@ class _MyBillPageState extends State<MyBillPage> {
         ),
       ),
       body: Scaffold(
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   bottom: DateBar(),
-        // ),
+        appBar: AppBar(
+          elevation: 0,
+          leading: Container(),
+          bottom: DateBar(
+            streamController: streamController,
+          ),
+        ),
         body: Container(
           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           color: Color.fromRGBO(245, 245, 245, 1),
           child: ListView(
             children: <Widget>[
               IncomeComparison(
-                height: 100,
+                height: 120,
                 income: 8000.00,
                 expenditure: 20134.00,
+                lineHeight: 8,
               )
             ],
           ),

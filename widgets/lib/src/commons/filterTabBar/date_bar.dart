@@ -1,29 +1,22 @@
 import 'dart:async';
 
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
+import 'package:intl/intl.dart';
 
 class DateBar extends StatefulWidget implements PreferredSizeWidget {
-  const DateBar(
-      {Key key,
-      this.itemHeight = 20,
-      this.itemWidth = 100,
-      @required this.entries,
-      this.unselectedColor = Colors.black54,
-      this.color = Colors.orange,
-      @required this.streamController,
-      this.action})
-      : super(key: key);
+  const DateBar({
+    Key key,
+    @required this.streamController,
+    this.width = 100,
+    this.height = 10,
+  }) : super(key: key);
 
   _DateBarState createState() => _DateBarState();
 
-  final List<FilterConditionEntry> entries;
-  final double itemHeight;
-  final double itemWidth;
-  final Color unselectedColor;
-  final Color color;
-  final Widget action;
   final StreamController streamController;
+  final double width;
+  final double height;
 
   @override
   // TODO: implement preferredSize
@@ -34,9 +27,21 @@ class _DateBarState extends State<DateBar> {
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
-        preferredSize: Size(widget.itemWidth, widget.itemHeight),
-        child: Row(
-          children: <Widget>[],
+        preferredSize: Size(widget.width, widget.height),
+        child: GestureDetector(
+          onTap: () {},
+          child: Container(
+            margin: EdgeInsets.fromLTRB(20, 0, 0, 15),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  '${DateFormat.yM().format(DateTime.now())}',
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                Icon(Icons.arrow_drop_down)
+              ],
+            ),
+          ),
         ));
   }
 }

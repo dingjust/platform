@@ -45,7 +45,8 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
           body: Scaffold(
             appBar: AppBar(
               elevation: 0,
-              bottom: FilterBar(
+              bottom: 
+              FilterBar(
                 entries: <FilterConditionEntry>[
                   FilterConditionEntry(
                       label: '综合', value: 'comprehensive', checked: true),
