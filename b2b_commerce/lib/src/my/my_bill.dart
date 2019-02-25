@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class MyBillPage extends StatefulWidget {
@@ -18,6 +16,8 @@ class _MyBillPageState extends State<MyBillPage> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime date = DateTime.now();
+
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
@@ -34,6 +34,7 @@ class _MyBillPageState extends State<MyBillPage> {
           leading: Container(),
           bottom: DateBar(
             streamController: streamController,
+            initeDate: date,
           ),
         ),
         body: Container(
@@ -46,10 +47,59 @@ class _MyBillPageState extends State<MyBillPage> {
                 income: 8000.00,
                 expenditure: 20134.00,
                 lineHeight: 8,
-              )
+              ),
+              BillCard(),
+              BillCard(),
+              BillCard(),
+              BillCard(),
+              BillCard(),
+              BillCard(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class BillCard extends StatelessWidget {
+  BillCard({Key key, this.height = 150}) : super(key: key);
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      margin: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            '提现',
+            style: TextStyle(
+                fontSize: 18, color: Color.fromRGBO(100, 100, 100, 1)),
+          ),
+          Text(
+            '- ￥ 11,919.86',
+            style:
+                TextStyle(fontSize: 20, color: Color.fromRGBO(255, 68, 68, 1)),
+          ),
+          Text(
+            '生产订单NA1231309091090',
+            style: TextStyle(
+                fontSize: 18, color: Colors.black),
+          ),
+          Text(
+            '余额￥9000.00',
+            style: TextStyle(
+                fontSize: 18, color: Colors.black),
+          ),
+        ],
       ),
     );
   }

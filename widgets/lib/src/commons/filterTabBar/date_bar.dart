@@ -1,15 +1,16 @@
 import 'dart:async';
 
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class DateBar extends StatefulWidget implements PreferredSizeWidget {
-  const DateBar({
+  DateBar({
     Key key,
     @required this.streamController,
-    this.width = 100,
+    this.width = 200,
     this.height = 10,
+    @required this.initeDate,
   }) : super(key: key);
 
   _DateBarState createState() => _DateBarState();
@@ -17,6 +18,9 @@ class DateBar extends StatefulWidget implements PreferredSizeWidget {
   final StreamController streamController;
   final double width;
   final double height;
+
+  ///筛选日期
+  DateTime initeDate;
 
   @override
   // TODO: implement preferredSize
@@ -28,14 +32,21 @@ class _DateBarState extends State<DateBar> {
   Widget build(BuildContext context) {
     return PreferredSize(
         preferredSize: Size(widget.width, widget.height),
-        child: GestureDetector(
-          onTap: () {},
+        child: FlatButton(
+          onPressed: () {
+            showMonthPicker(context: context, initialDate: widget.initeDate)
+                .then((date) => setState(() {
+                      if (date != null) {
+                        widget.initeDate = date;
+                      }
+                    }));
+          },
           child: Container(
             margin: EdgeInsets.fromLTRB(20, 0, 0, 15),
             child: Row(
               children: <Widget>[
                 Text(
-                  '${DateFormat.yM().format(DateTime.now())}',
+                  '${DateFormat.yM('zh').format(widget.initeDate)}',
                   style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
                 Icon(Icons.arrow_drop_down)
