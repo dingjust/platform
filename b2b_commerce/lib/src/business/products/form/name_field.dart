@@ -27,7 +27,7 @@ class _NameFieldState extends State<NameField> {
       focusNode: _nameFocusNode,
       controller: _nameController,
       leadingText: '商品名称',
-      hintText: '请输入商品名称，必填',
+      hintText: '请输入商品名称',
     );
   }
 }

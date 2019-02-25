@@ -362,7 +362,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
       ));
     }
 
-    widgetList.addAll(widget.list.map(
+    widgetList.addAll(widget.list.reversed.map(
       (model) {
         // 附件类型
         switch (model.mediaType) {

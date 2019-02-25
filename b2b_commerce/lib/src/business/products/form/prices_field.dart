@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import '../apparel_product_prices_input.dart';
+import 'package:widgets/widgets.dart';
 
 class PricesField extends StatefulWidget {
   PricesField(this.item);
@@ -12,20 +13,15 @@ class PricesField extends StatefulWidget {
 }
 
 class _PricesFieldState extends State<PricesField> {
-  List<Object> prices = [];
+//  List<Object> prices = [];
+  TextEditingController _priceController = TextEditingController();
+  FocusNode _priceFocusNode = FocusNode();
 
   @override
   void initState() {
-    super.initState();
-    Map<String, double> priceMap = Map();
-    priceMap['price'] = widget.item?.price;
-    priceMap['suggestedPrice'] = widget.item?.suggestedPrice;
-    priceMap['price1'] = widget.item?.price1;
-    priceMap['price2'] = widget.item?.price2;
-    priceMap['price3'] = widget.item?.price3;
+    _priceController.text = widget.item?.price?.toString();
 
-    prices.add(priceMap);
-    prices.add(widget.item?.staircasePrices);
+    super.initState();
   }
 
   @override
@@ -33,36 +29,36 @@ class _PricesFieldState extends State<PricesField> {
     // TODO: implement build
     return Column(
       children: <Widget>[
-        InkWell(
-          onTap: () async {
-            List<Object> result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ApparelProductPricesInputPage(
-                  prices: prices,
-                ),
-              ),
-            );
-
-//            List list = result[1] as List;
+//        InkWell(
+//          onTap: () async {
+//            List<Object> result = await Navigator.push(
+//              context,
+//              MaterialPageRoute(
+//                builder: (context) => ApparelProductPricesInputPage(
+//                  prices: prices,
+//                ),
+//              ),
+//            );
 //
-//            list.forEach((item){
-//              print(item.staircasePrice?.price);
-//            });
-
-            if (result != null && result.length > 0) {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text(result.toString()),
-                ),
-              );
-            }
-          },
-          child: ListTile(
-            title: Text('价格'),
-            trailing: Icon(Icons.chevron_right),
-          ),
+//            if (result != null && result.length > 0) {
+//              showDialog(
+//                context: context,
+//                builder: (context) => AlertDialog(
+//                  title: Text(result.toString()),
+//                ),
+//              );
+//            }
+//          },
+//          child: ListTile(
+//            title: Text('价格'),
+//            trailing: Icon(Icons.chevron_right),
+//          ),
+//        ),
+        TextFieldComponent(
+          focusNode: _priceFocusNode,
+          controller: _priceController,
+          leadingText: '供货价',
+          hintText: '请输入供货价',
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -72,3 +68,19 @@ class _PricesFieldState extends State<PricesField> {
     );
   }
 }
+
+/*class ApparelProductPrices{
+  double price;
+  double suggestedPrice;
+  double price1;
+  double price2;
+  double price3;
+
+  ApparelProductPrices({
+    this.price,
+    this.suggestedPrice,
+    this.price1,
+    this.price2,
+    this.price3,
+  });
+}*/

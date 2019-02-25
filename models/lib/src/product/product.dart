@@ -149,9 +149,9 @@ class ProductModel extends ItemModel {
   double minPrice;
   double maxPrice;
   String thumbnail;
-  List<String> normal;
-  List<String> detail;
-  List<String> master;
+  List<MediaModel> normal;
+  List<MediaModel> detail;
+  List<MediaModel> master;
   int salesVolume;
   List<StaircasePriceModel> staircasePrices;
   bool privacy;
@@ -261,6 +261,9 @@ class ApparelProductModel extends ProductModel {
     List<CategoryModel> superCategories,
     int salesVolume,
     StockLevelModel stockLevel,
+    List<MediaModel> normal,
+    List<MediaModel> detail,
+    List<MediaModel> master,
     this.variants,
     this.attributes,
     this.skuID,
@@ -283,6 +286,9 @@ class ApparelProductModel extends ProductModel {
           ratingIfPrivacy: ratingIfPrivacy,
           superCategories: superCategories,
           stockLevel: stockLevel,
+          normal:normal,
+          detail:detail,
+          master:master,
         );
 
   ApparelProductModel.empty() {

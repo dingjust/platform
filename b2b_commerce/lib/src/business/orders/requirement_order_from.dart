@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:b2b_commerce/src/business/orders/requirement_import_product.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import '../apparel_products.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -63,6 +64,9 @@ final List<EnumModel> productionAreaList = [
 ];
 
 class RequirementOrderFrom extends StatefulWidget {
+  final ApparelProductModel product;
+  RequirementOrderFrom({this.product});
+
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
 
@@ -83,8 +87,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   String technology = '选取';
   String deliveryDate = '选取';
   String remarks = '输入';
+  List<MediaModel> _normalMedias = [];
   List<File> _normalImages = [];
-  List<String> normal;
   String isProvideSampleProduct = '选取';
   String isInvoice = '选取';
   String inspectionMethod = '选取';
@@ -94,6 +98,16 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   String contactInformation = '输入';
   String contactPerson = '';
   String contactPhone = '';
+  ApparelProductModel _product;
+
+  @override
+  void initState() {
+    _product = widget.product;
+    if(_product?.normal != null) _normalMedias = _product?.normal;
+
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,13 +139,18 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   ),
                 ),
               ),
-                onTap: () {
-                  Navigator.push(
+                onTap: () async{
+                  dynamic result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => RequirementImportProduct(),
+                      builder: (context) => ApparelProductsPage(isRequirement: true,),
                     ),
                   );
+
+                  _product = result;
+                  print(_product?.normal);
+                  _normalMedias = _product?.normal;
+
                 }
             )
           ],
@@ -218,11 +237,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             ],
           ),
         ),
-        PhotoPicker(
-          images: _normalImages,
-          maxNum: 10,
-          width: 400,
-        ),
+        PhotoPicker(images: _normalImages, width: 350,medias: _normalMedias,),
       ],
     );
   }
@@ -783,7 +798,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('确定'),
+              child: Text('确定',style: TextStyle(color: Color(0xffFF9516)),),
               onPressed: () {
                 if (inputNumber.text != null) {
                   print(inputNumber.text);

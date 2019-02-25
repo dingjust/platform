@@ -15,7 +15,15 @@ class NormalPictureField extends StatefulWidget {
 }
 
 class _NormalPictureFieldState extends State<NormalPictureField> {
- static List<File> _normalImages = [];
+  List<MediaModel> _normalMedias = [];
+  List<File> _normalImages = [];
+
+  @override
+  void initState() {
+    if(widget.item?.normal != null) _normalMedias = widget.item?.normal;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,26 +44,19 @@ class _NormalPictureFieldState extends State<NormalPictureField> {
             ],
           ),
         ),
-        AlbumsAndCameras(
-          images: _normalImages,
-          pictureUrls: widget.item?.normal,
-          height: 100,
-          width: 100,
-          iconSize: 100,
-          count: 5,
-        ),
-        FlatButton(
-          onPressed: () {
-            print('${_normalImages.length}');
-          },
-          child: Text('asdads'),
-        )
+//        AlbumsAndCameras(
+//          images: _normalImages,
+//          pictureUrls: widget.item?.normal,
+//          height: 100,
+//          width: 100,
+//          iconSize: 100,
+//          count: 5,
+//        ),
+        widget.item != null
+            ? EditableAttachments(list: _normalMedias)
+            : PhotoPicker(images: _normalImages, width: 350),
       ],
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
 }

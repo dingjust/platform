@@ -9,6 +9,9 @@ import 'search/apparel_product_search.dart';
 
 class ApparelProductsPage extends StatelessWidget {
 //  final List<ApparelProductModel> items = <ApparelProductModel>[];
+  final bool isRequirement;
+
+  ApparelProductsPage({this.isRequirement = false});
 
   @override
   Widget build(BuildContext context) {
@@ -37,18 +40,18 @@ class ApparelProductsPage extends StatelessWidget {
           color: Colors.grey[200],
           child: Column(
             children: <Widget>[
-              Menu('', <MenuItem>[
-                MenuItem(
-                  Icons.shopping_basket,
-                  '下架商品',
-                  AppRoutes.ROUTE_PRODUCTS_OFF_THE_SHELF,
-                )
-              ]),
+//              Menu('', <MenuItem>[
+//                MenuItem(
+//                  Icons.shopping_basket,
+//                  '下架商品',
+//                  AppRoutes.ROUTE_PRODUCTS_OFF_THE_SHELF,
+//                )
+//              ]),
               SizedBox(
                 height: 10,
               ),
               Expanded(
-                child: ApparelProductList(),
+                child: ApparelProductList(isRequirement: isRequirement,),
 //                ListView.builder(
 //                  shrinkWrap: true,
 //                  itemCount: _items.length,

@@ -49,7 +49,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
             }
           },
           child: ShowSelectTile(
-            leadingText: '选择分类',
+            leadingText: '商品类目',
             tralingText: _minorCategoryText,
             tralingTextColor: Colors.orange,
           ),

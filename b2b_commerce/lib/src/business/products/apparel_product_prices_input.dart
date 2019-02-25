@@ -13,7 +13,6 @@ class ApparelProductPricesInputPage extends StatefulWidget {
 
 class ApparelProductPricesInputPageState
     extends State<ApparelProductPricesInputPage> {
-  GlobalKey _priceForm = GlobalKey<FormState>();
   TextEditingController _priceController = TextEditingController();
   TextEditingController _suggestedPriceController = TextEditingController();
   TextEditingController _price1Controller = TextEditingController();
@@ -36,9 +35,10 @@ class ApparelProductPricesInputPageState
     _price2Controller.text = widget.prices[0]['price2']?.toString();
     _price3Controller.text = widget.prices[0]['price3']?.toString();
 
-    if(widget.prices != null && widget.prices[1] != null) {
+    if (widget.prices != null && widget.prices[1] != null) {
       widget.prices[1].forEach((staircasePrice) {
-        _staircasePriceInputs.add(StaircasePricesInput(staircasePrice: staircasePrice));
+        _staircasePriceInputs
+            .add(StaircasePricesInput(staircasePrice: staircasePrice));
       });
     }
     // TODO: implement initState
@@ -93,81 +93,78 @@ class ApparelProductPricesInputPageState
       ),
       body: Container(
 //        color: Colors.grey[200],
-        child: Form(
-          key: _priceForm,
-          autovalidate: false,
-          child: ListView(
-            children: <Widget>[
-              TextFieldComponent(
-                leadingText: '供货价',
-                hintText: '请输入供货价，必填',
-                inputType: TextInputType.number,
-                leadingWidth: 80,
-                controller: _priceController,
-                focusNode: _priceFocusNode,
-              ),
-              TextFieldComponent(
-                leadingText: '建议零售价',
-                hintText: '请输入建议零售价',
-                inputType: TextInputType.number,
-                leadingWidth: 80,
-                controller: _suggestedPriceController,
-                focusNode: _suggestedFocusNode,
-              ),
-              Container(
+        child: ListView(
+          children: <Widget>[
+            TextFieldComponent(
+              leadingText: '供货价',
+              hintText: '请输入供货价，必填',
+              inputType: TextInputType.number,
+              leadingWidth: 80,
+              controller: _priceController,
+              focusNode: _priceFocusNode,
+            ),
+            TextFieldComponent(
+              leadingText: '建议零售价',
+              hintText: '请输入建议零售价',
+              inputType: TextInputType.number,
+              leadingWidth: 80,
+              controller: _suggestedPriceController,
+              focusNode: _suggestedFocusNode,
+            ),
+            Container(
 //                padding: const EdgeInsets.only(top: 10),
-                child: Card(
-                    elevation: 0,
-                    margin: EdgeInsets.symmetric(horizontal: 0),
-                    child: Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            '会员价',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          TextFieldComponent(
-                            leadingText: '会员价（A）',
-                            hintText: '请输入会员价（A）',
-                            inputType: TextInputType.number,
-                            leadingWidth: 80,
-                            controller: _price1Controller,
-                            focusNode: _price1FocusNode,
-                          ),
-                          TextFieldComponent(
-                            leadingText: '会员价（B）',
-                            hintText: '请输入会员价（B）',
-                            inputType: TextInputType.number,
-                            leadingWidth: 80,
-                            controller: _price2Controller,
-                            focusNode: _price2FocusNode,
-                          ),
-                          TextFieldComponent(
-                            leadingText: '会员价（C）',
-                            hintText: '请输入会员价（C）',
-                            inputType: TextInputType.number,
-                            leadingWidth: 80,
-                            controller: _price3Controller,
-                            focusNode: _price3FocusNode,
-                          ),
-                        ],
-                      ),
-                    )),
-              ),
-              Container(
+              child: Card(
+                  elevation: 0,
+                  margin: EdgeInsets.symmetric(horizontal: 0),
+                  child: Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          '会员价',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        TextFieldComponent(
+                          leadingText: '会员价（A）',
+                          hintText: '请输入会员价（A）',
+                          inputType: TextInputType.number,
+                          leadingWidth: 80,
+                          controller: _price1Controller,
+                          focusNode: _price1FocusNode,
+                        ),
+                        TextFieldComponent(
+                          leadingText: '会员价（B）',
+                          hintText: '请输入会员价（B）',
+                          inputType: TextInputType.number,
+                          leadingWidth: 80,
+                          controller: _price2Controller,
+                          focusNode: _price2FocusNode,
+                        ),
+                        TextFieldComponent(
+                          leadingText: '会员价（C）',
+                          hintText: '请输入会员价（C）',
+                          inputType: TextInputType.number,
+                          leadingWidth: 80,
+                          controller: _price3Controller,
+                          focusNode: _price3FocusNode,
+                        ),
+                      ],
+                    ),
+                  )),
+            ),
+            Container(
 //                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                    margin: EdgeInsets.all(0),
-                    child: Container(
-                      padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-                      child: Column(
-                        children: _staircasePriceList(),
-                      ),
-                    )),
+              child: Card(
+                margin: EdgeInsets.all(0),
+                child: Container(
+                  padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Column(
+                    children: _staircasePriceList(),
+                  ),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -183,7 +180,7 @@ class ApparelProductPricesInputPageState
 
     //阶梯价行数据
 
-    if(_staircasePriceInputs.length <= 0){
+    if (_staircasePriceInputs.length <= 0) {
       _staircasePriceInputs.add(StaircasePricesInput());
     }
 
