@@ -64,12 +64,12 @@ class ApparelProductBLoC extends BLoCBase {
       'thumbnail':
           'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
       'normal': [
-        'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-        'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
+        'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg',
+        'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg'
       ],
       'detail': [
-        'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-        'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
+        'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg',
+        'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg'
       ],
       'stockLevel': {
         'available': 99,
@@ -140,9 +140,12 @@ class ApparelProductBLoC extends BLoCBase {
             'normal': [
               {
                 'url':
-                    'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
+                    'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg',
               },
-              {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'}
+              {
+                'url':
+                    'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg'
+              }
             ],
             'stockLevel': {
               'available': 99,
@@ -198,8 +201,14 @@ class ApparelProductBLoC extends BLoCBase {
             'thumbnail':
                 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
             'normal': [
-              {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-              {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
+              {
+                'url':
+                'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg',
+              },
+              {
+                'url':
+                'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg'
+              }
             ],
 //            'detail': [
 //              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',

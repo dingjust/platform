@@ -1,19 +1,12 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:widgets/widgets.dart';
-import 'package:models/models.dart';
 
 class PhotoPicker extends StatefulWidget {
   ///图片文件列表
   List<File> images;
-
-  //图片模型列表
-  List<MediaModel> medias;
 
   ///组件宽
   final double width;
@@ -33,7 +26,6 @@ class PhotoPicker extends StatefulWidget {
   PhotoPicker(
       {Key key,
       @required this.images,
-        this.medias,
       this.width = 350,
       this.height = 80,
       this.imageWidth = 80,
@@ -44,13 +36,6 @@ class PhotoPicker extends StatefulWidget {
 }
 
 class _PhotoPickerState extends State<PhotoPicker> {
-  Future<File> getFile(String url)async{
-    var cacheManager = await CacheManager.getInstance();
-    var file = await cacheManager.getFile(url);
-
-    return file;
-  }
-
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetList = [];
@@ -80,30 +65,6 @@ class _PhotoPickerState extends State<PhotoPicker> {
         ),
       ));
     }
-
-    if(widget.medias != null)
-    widgetList.addAll(widget.medias?.map((media)=>GestureDetector(
-      child: Container(
-        width: widget.imageWidth,
-        height: widget.height,
-        margin: EdgeInsets.symmetric(horizontal: 5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.grey,
-          image: DecorationImage(
-            image: Image.network(media.url).image,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-      onTap: () {
-//        onPreview(context, file);
-      },
-      onLongPress: () {
-//        _deleteFile(file);
-      },
-    )));
-
 
     if (widget.images.isNotEmpty) {
       widgetList.addAll(widget.images.reversed

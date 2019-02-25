@@ -2,43 +2,35 @@ import 'dart:io';
 
 import 'package:b2b_commerce/src/business/orders/requirement_import_product.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import '../apparel_products.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import '../../home/requirement/requirement_publish_success.dart';
 
 final List<Map<CategoryModel, List<CategoryModel>>> _category = [
   {
-    CategoryModel(code: 'C01', name: '男装'): [
-      CategoryModel(code: 'C001', name: 'T恤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C002', name: '衬衫',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C003', name: '卫衣',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C004', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C005', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C006', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C007', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C008', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C009', name: '羽绒服',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C010', name: '绒服地方',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C011', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C012', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
+    CategoryModel(code: 'W01', name: '女装'): [
+      CategoryModel(code: 'W0101', name: '女式毛衣',parent: CategoryModel(code: 'W01',name: '女装')),
+      CategoryModel(code: 'W0102', name: '女式马夹',parent: CategoryModel(code: 'W01',name: '女装')),
+      CategoryModel(code: 'W0103', name: '女式西服',parent: CategoryModel(code: 'W01',name: '女装')),
+      CategoryModel(code: 'W0104', name: '女式夹克',parent: CategoryModel(code: 'W01',name: '女装')),
+      CategoryModel(code: 'W0105', name: '女式风衣',parent: CategoryModel(code: 'W01',name: '女装')),
+      CategoryModel(code: 'W0106', name: '女式棉衣',parent: CategoryModel(code: 'W01',name: '女装')),
+      CategoryModel(code: 'W0107', name: '女式羽绒',parent: CategoryModel(code: 'W01',name: '女装')),
     ],
-    CategoryModel(code: 'C02', name: '女装'): [
-      CategoryModel(code: 'C013', name: '棉服服',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C014', name: '羽绒服地方',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C015', name: '背带裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C016', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C017', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C018', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C019', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C020', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C021', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C022', name: '牛仔裤裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C023', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C024', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+    CategoryModel(code: 'M01', name: '男装'): [
+      CategoryModel(code: 'M0101', name: '男式POLO衫',parent: CategoryModel(code: 'M01',name: '男装')),
+      CategoryModel(code: 'M0102', name: '男式衬衫',parent: CategoryModel(code: 'M01',name: '男装')),
+      CategoryModel(code: 'M0103', name: '男式卫衣',parent: CategoryModel(code: 'M01',name: '男装')),
+      CategoryModel(code: 'M0104', name: '男式线衫',parent: CategoryModel(code: 'M01',name: '男装')),
+      CategoryModel(code: 'M0105', name: '男式毛衣',parent: CategoryModel(code: 'M01',name: '男装')),
+      CategoryModel(code: 'M0106', name: '男式马夹',parent: CategoryModel(code: 'M01',name: '男装')),
+      CategoryModel(code: 'M0107', name: '男式西服',parent: CategoryModel(code: 'M01',name: '男装')),
     ],
-  },
+  }
 ];
 
 final List<CategoryModel> _majorCategory = [
@@ -65,13 +57,13 @@ final List<EnumModel> productionAreaList = [
 
 class RequirementOrderFrom extends StatefulWidget {
   final ApparelProductModel product;
+
   RequirementOrderFrom({this.product});
 
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
 
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
-  List<CategoryModel> _mojarSelected = [];
   List<EnumModel> _mojarEnumSelected = [];
   List<CategoryModel> _categorySelected = [];
   List<EnumModel> _productionAreaSelected = [];
@@ -103,10 +95,22 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   @override
   void initState() {
     _product = widget.product;
-    if(_product?.normal != null) _normalMedias = _product?.normal;
+    if (_product?.normal != null) _normalMedias = _product?.normal;
 
     // TODO: implement initState
     super.initState();
+  }
+
+  String formatCategorySelectText(List<CategoryModel> categorys) {
+    String text = '选取';
+    if (categorys != null && categorys.length > 0) text = categorys[0].name;
+    return text;
+  }
+
+  String formatEnumSelectText(List<EnumModel> enums) {
+    String text = '选取';
+    if (enums != null && enums.length > 0) text = enums[0].name;
+    return text;
   }
 
   @override
@@ -119,40 +123,66 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           centerTitle: true,
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.play_for_work),
-              color: Color.fromRGBO(255, 149, 22, 1),
-              onPressed: () =>
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RequirementImportProduct(),
-                    ),
-                  )
-            ),
+                icon: Icon(Icons.play_for_work),
+                color: Color.fromRGBO(255, 149, 22, 1),
+                onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RequirementImportProduct(),
+                      ),
+                    )),
             GestureDetector(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: Center(
-                  child: Text(
-                    '导入商品',
-                    style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Center(
+                    child: Text(
+                      '导入商品',
+                      style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                    ),
                   ),
                 ),
-              ),
-                onTap: () async{
+                onTap: () async {
                   dynamic result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ApparelProductsPage(isRequirement: true,),
+                      builder: (context) => ApparelProductsPage(
+                            isRequirement: true,
+                            item: _product,
+                          ),
                     ),
                   );
 
+                  _normalImages.clear();
+                  _categorySelected.clear();
                   _product = result;
-                  print(_product?.normal);
                   _normalMedias = _product?.normal;
+                  if(_product?.minorCategory != null){
+                    setState(() {
+                      _categorySelected.add(_product.minorCategory);
+                    });
+                  }
+                  if (_normalMedias != null) {
+                    _normalMedias.forEach((media) {
+                      //缓存网络图片
+                      Image.network(media.url);
+//                      DefaultCacheManager().downloadFile(media.url);
+                      //获取缓存图片
+//                      DefaultCacheManager().getFile(media.url).listen((fileInfo){
+//                        fileInfo.file;
+//                      });
 
-                }
-            )
+                      DefaultCacheManager()
+                          .getSingleFile(media.url)
+                          .then((file) {
+                        setState(() {
+                          _normalImages.add(file);
+                        });
+                      });
+                    });
+                    //清理缓存
+
+                  }
+                })
           ],
         ),
         body: Container(
@@ -161,8 +191,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             _buildBody(context),
             _buildCommitButton(context),
           ],
-        ))
-    );
+        )));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -172,20 +201,40 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Column(
           children: <Widget>[
             _buildPic(context),
+            Offstage(
+              offstage: _product == null,
+              child: _buildProduct(context),
+            ),
             _buildMajor(context),
-            new Divider(height: 0,),
+            new Divider(
+              height: 0,
+            ),
             _buildCategory(context),
-            new Divider(height: 0,),
+            new Divider(
+              height: 0,
+            ),
             _buildProcessCount(context),
-            new Divider(height: 0,),
+            new Divider(
+              height: 0,
+            ),
             _buildExpectPrice(context),
-            new Divider(height: 0,),
+            new Divider(
+              height: 0,
+            ),
             _buildDeliveryDate(context),
-            new Divider(height: 0,),
+            new Divider(
+              height: 0,
+            ),
             _buildContactInformation(context),
-            new Divider(height: 0,),
+            new Divider(
+              height: 0,
+            ),
             _buildAddress(context),
-            _isShowMore ? Container() : new Divider(height: 0,),
+            _isShowMore
+                ? Container()
+                : new Divider(
+                    height: 0,
+                  ),
             _buildHideBody(context),
             _buildHideTips(context),
           ],
@@ -202,15 +251,25 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             child: Column(
               children: <Widget>[
                 _buildProductionArea(context),
-                new Divider(height: 0,),
+                new Divider(
+                  height: 0,
+                ),
                 _buildCooperationModes(context),
-                new Divider(height: 0,),
+                new Divider(
+                  height: 0,
+                ),
                 _buildProofing(context),
-                new Divider(height: 0,),
+                new Divider(
+                  height: 0,
+                ),
                 _buildSampleProduct(context),
-                new Divider(height: 0,),
+                new Divider(
+                  height: 0,
+                ),
                 _buildInvoice(context),
-                new Divider(height: 0,),
+                new Divider(
+                  height: 0,
+                ),
                 _buildRemarks(context),
               ],
             ),
@@ -237,7 +296,56 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             ],
           ),
         ),
-        PhotoPicker(images: _normalImages, width: 350,medias: _normalMedias,),
+        PhotoPicker(images: _normalImages, width: 350),
+      ],
+    );
+  }
+
+  Widget _buildProduct(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        ListTile(
+          leading: Text(
+            '商品名称',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          trailing: Container(
+            width: 250,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(_product?.name ?? '',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey),
+                  overflow: TextOverflow.ellipsis),
+            ),
+          ),
+        ),
+        ListTile(
+          leading: Text(
+            '商品货号',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          trailing: Container(
+            width: 150,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(_product?.skuID ?? '',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey),
+                  overflow: TextOverflow.ellipsis),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -258,12 +366,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(mojar,
+                    child: Text(formatEnumSelectText(_mojarEnumSelected),
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey
-                        ),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
                         overflow: TextOverflow.ellipsis),
                   ))),
         ),
@@ -288,12 +395,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(category,
+                    child: Text(formatCategorySelectText(_categorySelected),
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                            color: Colors.grey
-                        ),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
                         overflow: TextOverflow.ellipsis),
                   ))),
         ),
@@ -317,10 +423,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               processCount,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -344,10 +449,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               expectPrice,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -374,10 +478,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                     alignment: Alignment.centerRight,
                     child: Text(deliveryDate,
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                            color: Colors.grey
-                        ),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
                         overflow: TextOverflow.ellipsis),
                   ))),
         ),
@@ -401,10 +504,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               contactInformation,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -428,10 +530,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               address,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -521,10 +622,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               _productionArea,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -548,10 +648,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               processingType,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -575,10 +674,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               isProofing,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -602,10 +700,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               isProvideSampleProduct,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -629,10 +726,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               isInvoice,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -656,10 +752,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             trailing: Text(
               remarks,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
         ),
@@ -689,7 +784,13 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   ),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  onPressed: () {})),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PublishRequirementSuccessDialog()));
+                  })),
           Container(
             margin: EdgeInsets.all(0),
             padding: EdgeInsets.all(0),
@@ -727,29 +828,24 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       builder: (BuildContext context) {
         return Container(
           child: EnumSelection(
-            enumModels: _majorCategory.map((category) => EnumModel(category.code, category.name)).toList(),
+            enumModels: _majorCategory
+                .map((category) => EnumModel(category.code, category.name))
+                .toList(),
             multiple: false,
             enumSelect: _mojarEnumSelected,
           ),
         );
       },
-    ).then((val) {
-      _mojarSelected = _mojarEnumSelected.map((enumModel) => CategoryModel(code: enumModel.code,name: enumModel.name)).toList();
-      mojar = '';
-      if (_mojarSelected.isNotEmpty) {
-        for (int i = 0; i < _mojarSelected.length; i++) {
-          mojar += _mojarSelected[i].name + ',';
-        }
-      }
+    ).then((_mojarEnumSelected){
       setState(() {
-        mojar = mojar;
+        formatEnumSelectText(_mojarEnumSelected);
       });
     });
   }
 
   //小类
   void _showCategorySelect() async {
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
@@ -761,15 +857,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ),
         );
       },
-    ).then((val) {
-      category = '';
-      if (_categorySelected.isNotEmpty) {
-        for (int i = 0; i < _categorySelected.length; i++) {
-          category += _categorySelected[i].name + ',';
-        }
-      }
+    ).then((_categorySelected){
       setState(() {
-        category = category;
+        formatCategorySelectText(_categorySelected);
       });
     });
   }
@@ -798,7 +888,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('确定',style: TextStyle(color: Color(0xffFF9516)),),
+              child: Text(
+                '确定',
+                style: TextStyle(color: Color(0xffFF9516)),
+              ),
               onPressed: () {
                 if (inputNumber.text != null) {
                   print(inputNumber.text);
@@ -852,7 +945,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 if (inputNumber.text != null && inputPerson.text != null) {
                   print(inputNumber.text);
                   setState(() {
-                    contactInformation = inputPerson.text + ',' +inputNumber.text;
+                    contactInformation =
+                        inputPerson.text + ',' + inputNumber.text;
                   });
                 }
                 Navigator.of(context).pop();
@@ -1129,5 +1223,4 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       });
     });
   }
-
 }
