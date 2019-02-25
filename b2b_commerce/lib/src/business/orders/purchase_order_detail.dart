@@ -311,13 +311,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 )),
             trailing: Icon(Icons.chevron_right),
           ),
-          Divider(
-            height: 1,
-            color: Colors.indigo,
-          ),
-          Divider(
-            height: 1,
-            color: Colors.red,
+          SizedBox(
+            child: Image.asset(
+              'temp/common/address_under_line.png',
+              package: 'assets',
+              fit: BoxFit.fitWidth,
+            ),
           ),
           ListTile(
             title: Text("物流信息"),

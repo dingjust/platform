@@ -119,6 +119,12 @@ class MenuItemImage {
     width: _width,
     height: _height,
   );
+  static Image proofing_order = Image.asset(
+    'temp/business/proofing_order.png',
+    package: _package,
+    width: _width,
+    height: _height,
+  );
   static Image setting = Image.asset(
     'temp/business/setting.png',
     package: _package,
@@ -192,6 +198,15 @@ class B2BImage {
   static Image order({double width, double height}) {
     return Image.asset(
       'temp/common/order.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+    static Image address_under_line({double width, double height}) {
+    return Image.asset(
+      'temp/common/address_under_line.png',
       package: _package,
       width: width,
       height: height,

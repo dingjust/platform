@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -233,7 +234,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
   //构建收货信息UI
   Widget _buildDeliveryAddress(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      // padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
         children: <Widget>[
@@ -261,13 +262,12 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 )),
             trailing: Icon(Icons.chevron_right),
           ),
-          Divider(
-            height: 1,
-            color: Colors.indigo,
-          ),
-          Divider(
-            height: 1,
-            color: Colors.red,
+          SizedBox(
+            child: Image.asset(
+              'temp/common/address_under_line.png',
+              package: 'assets',
+              fit: BoxFit.fitWidth,
+            ),
           ),
           ListTile(
             title: Text("物流信息"),

@@ -24,7 +24,8 @@ import {
   RequirementOrdersModule,
   SalesOrdersModule,
   ProductionOrdersModule,
-  PickOrdersModule
+  PickOrdersModule,
+  QuotesModule
 } from './modules';
 
 import {
@@ -50,6 +51,7 @@ import {
   FactoryFabricProductStocksModule,
   FactoryProductionOrdersModule,
   FactoryPickOrdersModule,
+  FactoryQuotesModule,
 } from './factory/modules';
 
 // 状态管理
@@ -99,6 +101,7 @@ export default new Vuex.Store({
     SalesOrdersModule,
     ProductionOrdersModule,
     PickOrdersModule,
+    QuotesModule,
     // brand
     BrandEmployeesModule,
     BrandFollowersModule,
@@ -120,6 +123,7 @@ export default new Vuex.Store({
     FactoryFabricProductStocksModule,
     FactoryProductionOrdersModule,
     FactoryPickOrdersModule,
+    FactoryQuotesModule,
   },
   state,
   getters,
