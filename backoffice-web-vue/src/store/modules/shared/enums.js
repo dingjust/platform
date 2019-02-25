@@ -13,6 +13,16 @@ const state = {
     code: 'LIGHT_PROCESSING',
     name: '清加工'
   }],
+  labelGroups: [
+    {
+      code: 'FACTORY',
+      name: '工厂打标'
+    },
+    {
+      code: 'PLATFORM',
+      name: '平台打标'
+    }
+  ]
 };
 
 const mutations = {};

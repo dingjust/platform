@@ -183,8 +183,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               child: Text('需求订单号：${order.code}')),
           Align(
               alignment: Alignment.centerLeft,
-              child:
-                  Text('订单生成时间：${DateFormatUtil.formatYMD(order.creationTime)}')),
+              child: Text(
+                  '订单生成时间：${DateFormatUtil.formatYMD(order.creationTime)}')),
           Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -290,8 +290,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         children: <Widget>[
           ListTile(
             leading: Icon(
-              Icons.add_location,
-              color: Color(0xFFFF9516),
+              B2BIcons.location,
+              color: Colors.black,
             ),
             title: Row(
               children: <Widget>[
@@ -301,10 +301,14 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 Expanded(child: Text(order.deliveryAddress.cellphone))
               ],
             ),
-            subtitle: Text(order.deliveryAddress.region.name +
-                order.deliveryAddress.city.name +
-                order.deliveryAddress.cityDistrict.name +
-                order.deliveryAddress.line1),
+            subtitle: Text(
+                order.deliveryAddress.region.name +
+                    order.deliveryAddress.city.name +
+                    order.deliveryAddress.cityDistrict.name +
+                    order.deliveryAddress.line1,
+                style: TextStyle(
+                  color: Colors.black,
+                )),
             trailing: Icon(Icons.chevron_right),
           ),
           Divider(
@@ -339,63 +343,63 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: _index==0?Column(
-        children: <Widget>[
-          _buildProductionProgress(
-              context, order.productionProgresses[_index], true),
-          _buildProductionProgress(
-              context, order.productionProgresses[_index + 1], false),
-          Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
-              child: RaisedButton(
-                elevation: 0,
-                color: Colors.white,
-                child: Text(
-                  '查看全部',
-                  style: TextStyle(color: Color(0xFFFF9516)),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ProductionProgressesPage(order: order),
-                    ),
-                  );
-                },
-              ))
-        ],
-      )
-      :
-      Column(
-        children: <Widget>[
-          _buildProductionProgress(
-              context, order.productionProgresses[_index - 1], false),
-          _buildProductionProgress(
-              context, order.productionProgresses[_index], true),
-          Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
-              child: RaisedButton(
-                elevation: 0,
-                color: Colors.white,
-                child: Text(
-                  '查看全部',
-                  style: TextStyle(color: Color(0xFFFF9516)),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ProductionProgressesPage(order: order),
-                    ),
-                  );
-                },
-              ))
-        ],
-      ),
+      child: _index == 0
+          ? Column(
+              children: <Widget>[
+                _buildProductionProgress(
+                    context, order.productionProgresses[_index], true),
+                _buildProductionProgress(
+                    context, order.productionProgresses[_index + 1], false),
+                Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
+                    child: RaisedButton(
+                      elevation: 0,
+                      color: Colors.white,
+                      child: Text(
+                        '查看全部',
+                        style: TextStyle(color: Color(0xFFFF9516)),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductionProgressesPage(order: order),
+                          ),
+                        );
+                      },
+                    ))
+              ],
+            )
+          : Column(
+              children: <Widget>[
+                _buildProductionProgress(
+                    context, order.productionProgresses[_index - 1], false),
+                _buildProductionProgress(
+                    context, order.productionProgresses[_index], true),
+                Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
+                    child: RaisedButton(
+                      elevation: 0,
+                      color: Colors.white,
+                      child: Text(
+                        '查看全部',
+                        style: TextStyle(color: Color(0xFFFF9516)),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductionProgressesPage(order: order),
+                          ),
+                        );
+                      },
+                    ))
+              ],
+            ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
@@ -419,8 +423,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color:
-                isCurrentStatus == true ? Color(0xFFFF9516) : Colors.black45,
+            color: isCurrentStatus == true ? Color(0xFFFF9516) : Colors.black45,
           ),
         ),
         Positioned(
@@ -435,8 +438,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               width: 16.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color:
-                      isCurrentStatus == true ? Color(0xFFFF9516) : Colors.black),
+                  color: isCurrentStatus == true
+                      ? Color(0xFFFF9516)
+                      : Colors.black),
             ),
           ),
         )
@@ -598,7 +602,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
               child: isCurrentStatus == true &&
                       (productionProgress.phase ==
-                              ProductionProgressPhase.INSPECTION)
+                          ProductionProgressPhase.INSPECTION)
                   ? RaisedButton(
                       color: Color(0xFFFF9516),
                       child: Text(

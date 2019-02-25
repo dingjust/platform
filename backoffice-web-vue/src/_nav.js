@@ -149,8 +149,13 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '系统图片配置',
-          url: '/backoffice/system/media',
+          name: '产业集群配置',
+          url: '/backoffice/system/industrial-cluster',
+          icon: 'iconNone'
+        },
+        {
+          name: '标签配置',
+          url: '/backoffice/system/label',
           icon: 'iconNone'
         },
         {
