@@ -266,11 +266,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             child: Image.asset(
               'temp/common/address_under_line.png',
               package: 'assets',
-              // width: width,
-              // height: 4.8,
-              // width: 200,
               fit: BoxFit.fitWidth,
-              // repeat: ImageRepeat.repeatX,
             ),
           ),
           ListTile(
