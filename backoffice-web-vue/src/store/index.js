@@ -51,6 +51,7 @@ import {
   FactoryFabricProductStocksModule,
   FactoryProductionOrdersModule,
   FactoryPickOrdersModule,
+  FactoryQuotesModule,
 } from './factory/modules';
 
 // 状态管理
@@ -122,6 +123,7 @@ export default new Vuex.Store({
     FactoryFabricProductStocksModule,
     FactoryProductionOrdersModule,
     FactoryPickOrdersModule,
+    FactoryQuotesModule,
   },
   state,
   getters,

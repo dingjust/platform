@@ -29,7 +29,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get('/djwebservices/quotes/all', {
+    const response = await http.get('/djwebservices/quotes', {
       code: state.keyword,
       requirementOrderRef: state.keyword
     }, {

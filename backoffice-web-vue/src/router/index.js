@@ -383,6 +383,11 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/consignment/ConsignmentPage'),
             },
             {
+              path: 'quote',
+              name: '报价单',
+              component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/quote/QuotePage'),
+            },
+            {
               path: 'pick',
               name: '发料单',
               component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/pick/PickOrderPage'),
