@@ -41,33 +41,51 @@ class UserBLoC extends BLoCBase {
 
   Stream<UserModel> get stream => _controller.stream;
 
+  StreamController _loginResultController =
+      StreamController<DioError>.broadcast();
+
+  Stream<DioError> get loginStream => _loginResultController.stream;
+
   Future<bool> login({String username, String password}) async {
     // // TODO: call login service
-    Response loginRequest = await http$.post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
-      'username': username,
-      'password': password,
-      'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
-      'client_id': 'asm', // TODO:
-      'client_secret': 'password' // TODO:
-    }));
+    Response loginRequest;
+    try {
+      loginRequest = await http$
+          .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+        'username': username,
+        'password': password,
+        'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
+        'client_id': 'asm', // TODO:
+        'client_secret': 'password' // TODO:
+      }));
+    } on DioError catch (e) {
+      print(e);
+      //登陆错误回调
+      _loginResultController.sink.add(e);
+    }
 
-    if (loginRequest.statusCode == 200) {
+    if (loginRequest != null && loginRequest.statusCode == 200) {
       LoginResponse _response = LoginResponse.fromJson(loginRequest.data);
       LocalStorage.save(GlobalConfigs.ACCESS_TOKEN_KEY, _response.accessToken);
 
       // TODO: GET USER INFO
       // http$.get('');
+      print(_response);
       _user.name = '衣加衣管理员';
       _user.uid = 'nbyjy';
 
       /// 品牌用户
       _user.userType = UserType.BRAND;
       _controller.sink.add(_user);
-
       return true;
     }
 
     return false;
+  }
+
+  void logout() async {
+    _user = UserModel.empty();
+    _controller.sink.add(_user);
   }
 
   @override

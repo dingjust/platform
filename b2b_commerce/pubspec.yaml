@@ -107,7 +107,7 @@ flutter:
     - packages/assets/temp/production/fab_add.png
     - packages/assets/temp/production/fab_create.png
     - packages/assets/temp/production/fab_only.png
-
+    - packages/assets/temp/business/proofing.png
   fonts:
     - family: b2bIcons
       fonts:
