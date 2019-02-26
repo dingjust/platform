@@ -50,6 +50,12 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
               _sizeFilters = result[1];
             }
 
+            _colorFilters.forEach((color){
+              widget.item.variants = _sizeFilters.map((size){
+                return ApparelSizeVariantProductModel(baseProduct:widget.item.code,color: color,size:size);
+              }).toList();
+            });
+
             //选择完颜色，生成库存item
 //            _newItems = Map.from(_items);
 //            _items.clear();

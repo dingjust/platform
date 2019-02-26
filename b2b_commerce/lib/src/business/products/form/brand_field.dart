@@ -28,6 +28,9 @@ class _BrandFieldState extends State<BrandField> {
       controller: _brandController,
       leadingText: '品牌',
       hintText: '请输入品牌',
+      onChanged: (value){
+        widget.item.brand = value;
+      },
     );
   }
 }

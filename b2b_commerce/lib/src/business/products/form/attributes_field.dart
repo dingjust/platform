@@ -12,11 +12,9 @@ class AttributesField extends StatefulWidget {
 }
 
 class _AttributesFieldState extends State<AttributesField> {
-  ApparelProductAttributesModel _attributesModel;
 
   @override
   void initState() {
-    _attributesModel = widget.item?.attributes;
     // TODO: implement initState
     super.initState();
   }
@@ -32,12 +30,12 @@ class _AttributesFieldState extends State<AttributesField> {
               context,
               MaterialPageRoute(
                 builder: (context) => ApparelProductAttributesInputPage(
-                  item: _attributesModel,
+                  item: widget.item?.attributes,
                 ),
               ),
             );
 
-            _attributesModel = attribute;
+            widget.item?.attributes = attribute;
           },
           child: ListTile(
             title: Text('属性'),

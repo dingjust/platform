@@ -132,144 +132,175 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
   }
 
   Widget _bottomView() {
-    return new Container(
-        width: double.infinity,
-        color: Colors.white,
-        child: new Column(
-          children: <Widget>[
-            new Expanded(
-              child: new Row(
+    return WillPopScope(
+      onWillPop: (){
+        Map<String, dynamic> provinceMap = {
+          "code": province[provinceIndex]['code'],
+          "name": province[provinceIndex]['name']
+        };
+        Map<String, dynamic> cityMap = {
+          "code": province[provinceIndex]['sub'][cityIndex]
+          ['code'],
+          "name": province[provinceIndex]['sub'][cityIndex]
+          ['name']
+        };
+        Map<String, dynamic> areaMap = {
+          "code": province[provinceIndex]['sub'][cityIndex]['sub']
+          [areaIndex]['code'],
+          "name": province[provinceIndex]['sub'][cityIndex]['sub']
+          [areaIndex]['name']
+        };
+        if (widget.selectProvince != null) {
+          widget.selectProvince(provinceMap);
+        }
+        if (widget.selectCity != null) {
+          widget.selectCity(cityMap);
+        }
+        if (widget.selectArea != null) {
+          widget.selectArea(areaMap);
+        }
+        Navigator.pop(context);
+        return Future.value(false);
+      },
+      child: new Container(
+          width: double.infinity,
+          color: Colors.white,
+          child: new Column(
+            children: <Widget>[
+              new Expanded(
+                child: new Row(
+                  children: <Widget>[
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: new Text(
+                        '取消',
+                        style: new TextStyle(
+                          color: Colors.orangeAccent,
+                        ),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        Map<String, dynamic> provinceMap = {
+                          "code": province[provinceIndex]['code'],
+                          "name": province[provinceIndex]['name']
+                        };
+                        Map<String, dynamic> cityMap = {
+                          "code": province[provinceIndex]['sub'][cityIndex]
+                          ['code'],
+                          "name": province[provinceIndex]['sub'][cityIndex]
+                          ['name']
+                        };
+                        Map<String, dynamic> areaMap = {
+                          "code": province[provinceIndex]['sub'][cityIndex]['sub']
+                          [areaIndex]['code'],
+                          "name": province[provinceIndex]['sub'][cityIndex]['sub']
+                          [areaIndex]['name']
+                        };
+                        if (widget.selectProvince != null) {
+                          widget.selectProvince(provinceMap);
+                        }
+                        if (widget.selectCity != null) {
+                          widget.selectCity(cityMap);
+                        }
+                        if (widget.selectArea != null) {
+                          widget.selectArea(areaMap);
+                        }
+                        Navigator.pop(context);
+                      },
+                      child: new Text(
+                        '确定',
+                        style: new TextStyle(
+                          color: Colors.orangeAccent,
+                        ),
+                      ),
+                    ),
+                  ],
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+                flex: 1,
+              ),
+              new Row(
                 children: <Widget>[
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.pop(context);
+                  new _MyAddressPicker(
+                    key: Key('province'),
+                    controller: provinceController,
+                    createWidgetList: () {
+                      return province.map((v) {
+                        return new Align(
+                          child: new Text(
+                            v['name'],
+                            textScaleFactor: 1.2,
+                          ),
+                          alignment: Alignment.centerLeft,
+                        );
+                      }).toList();
                     },
-                    child: new Text(
-                      '取消',
-                      style: new TextStyle(
-                        color: Colors.orangeAccent,
-                      ),
-                    ),
+                    changed: (index) {
+                      setState(() {
+                        provinceIndex = index;
+                        cityIndex = 0;
+                        areaIndex = 0;
+                        cityController.jumpToItem(0);
+                        areaController.jumpToItem(0);
+                        city = widget.data[provinceIndex]['sub'];
+                        area =
+                        widget.data[provinceIndex]['sub'][cityIndex]['sub'];
+                      });
+                    },
                   ),
-                  FlatButton(
-                    onPressed: () {
-                      Map<String, dynamic> provinceMap = {
-                        "code": province[provinceIndex]['code'],
-                        "name": province[provinceIndex]['name']
-                      };
-                      Map<String, dynamic> cityMap = {
-                        "code": province[provinceIndex]['sub'][cityIndex]
-                        ['code'],
-                        "name": province[provinceIndex]['sub'][cityIndex]
-                        ['name']
-                      };
-                      Map<String, dynamic> areaMap = {
-                        "code": province[provinceIndex]['sub'][cityIndex]['sub']
-                        [areaIndex]['code'],
-                        "name": province[provinceIndex]['sub'][cityIndex]['sub']
-                        [areaIndex]['name']
-                      };
-                      if (widget.selectProvince != null) {
-                        widget.selectProvince(provinceMap);
-                      }
-                      if (widget.selectCity != null) {
-                        widget.selectCity(cityMap);
-                      }
-                      if (widget.selectArea != null) {
-                        widget.selectArea(areaMap);
-                      }
-                      Navigator.pop(context);
+                  new _MyAddressPicker(
+                    key: Key('city'),
+                    controller: cityController,
+                    createWidgetList: () {
+                      return city.map((v) {
+                        return new Align(
+                          child: new Text(
+                            v['name'],
+                            textScaleFactor: 1.2,
+                          ),
+                          alignment: Alignment.centerLeft,
+                        );
+                      }).toList();
                     },
-                    child: new Text(
-                      '确定',
-                      style: new TextStyle(
-                        color: Colors.orangeAccent,
-                      ),
-                    ),
+                    changed: (index) {
+                      setState(() {
+                        cityIndex = index;
+                        areaIndex = 0;
+                        areaController.jumpToItem(0);
+                        area =
+                        widget.data[provinceIndex]['sub'][cityIndex]['sub'];
+                      });
+                    },
+                  ),
+                  new _MyAddressPicker(
+                    key: Key('area'),
+                    controller: areaController,
+                    createWidgetList: () {
+                      return area.map((v) {
+                        return new Align(
+                          child: new Text(
+                            v['name'],
+                            textScaleFactor: 1.2,
+                          ),
+                          alignment: Alignment.centerLeft,
+                        );
+                      }).toList();
+                    },
+                    changed: (index) {
+                      setState(() {
+                        areaIndex = index;
+                      });
+                    },
                   ),
                 ],
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              ),
-              flex: 1,
-            ),
-            new Row(
-              children: <Widget>[
-                new _MyAddressPicker(
-                  key: Key('province'),
-                  controller: provinceController,
-                  createWidgetList: () {
-                    return province.map((v) {
-                      return new Align(
-                        child: new Text(
-                          v['name'],
-                          textScaleFactor: 1.2,
-                        ),
-                        alignment: Alignment.centerLeft,
-                      );
-                    }).toList();
-                  },
-                  changed: (index) {
-                    setState(() {
-                      provinceIndex = index;
-                      cityIndex = 0;
-                      areaIndex = 0;
-                      cityController.jumpToItem(0);
-                      areaController.jumpToItem(0);
-                      city = widget.data[provinceIndex]['sub'];
-                      area =
-                      widget.data[provinceIndex]['sub'][cityIndex]['sub'];
-                    });
-                  },
-                ),
-                new _MyAddressPicker(
-                  key: Key('city'),
-                  controller: cityController,
-                  createWidgetList: () {
-                    return city.map((v) {
-                      return new Align(
-                        child: new Text(
-                          v['name'],
-                          textScaleFactor: 1.2,
-                        ),
-                        alignment: Alignment.centerLeft,
-                      );
-                    }).toList();
-                  },
-                  changed: (index) {
-                    setState(() {
-                      cityIndex = index;
-                      areaIndex = 0;
-                      areaController.jumpToItem(0);
-                      area =
-                      widget.data[provinceIndex]['sub'][cityIndex]['sub'];
-                    });
-                  },
-                ),
-                new _MyAddressPicker(
-                  key: Key('area'),
-                  controller: areaController,
-                  createWidgetList: () {
-                    return area.map((v) {
-                      return new Align(
-                        child: new Text(
-                          v['name'],
-                          textScaleFactor: 1.2,
-                        ),
-                        alignment: Alignment.centerLeft,
-                      );
-                    }).toList();
-                  },
-                  changed: (index) {
-                    setState(() {
-                      areaIndex = index;
-                    });
-                  },
-                ),
-              ],
-            )
-          ],
-        ));
+              )
+            ],
+          )),
+    );
   }
 
   @override

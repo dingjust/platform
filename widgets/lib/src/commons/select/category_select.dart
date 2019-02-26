@@ -148,7 +148,7 @@ class CategorySelectState extends State<CategorySelect> {
                   children: _valueItem,
                 ),
                 Offstage(
-                  offstage: widget.hasButton ? false:true,
+                  offstage: !widget.hasButton,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[

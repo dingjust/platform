@@ -43,6 +43,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
            if(result != null) _minCategorySelect = result;
 
             if (_minCategorySelect.length > 0) {
+              widget.item.minorCategory = _minCategorySelect[0];
               _minorCategoryText = _minCategorySelect[0]?.name;
             }else{
               _minorCategoryText = '';
