@@ -46,6 +46,8 @@ dependencies:
   url_launcher: ^3.0.3
   flutter_speed_dial: ^1.0.9
   flutter_map: ^0.1.4
+  month_picker_dialog: ^0.0.8
+
 
 dev_dependencies:
   flutter_test:

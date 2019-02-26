@@ -14,6 +14,8 @@ export 'src/user/user_group.dart';
 export 'src/order/invoice.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
+export 'src/my/bill.dart';
+
 
 part 'models.g.dart';
 
