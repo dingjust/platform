@@ -67,7 +67,7 @@ class EnumSelectionState extends State<EnumSelection> {
           children: _chips,
         ),
         Offstage(
-          offstage: widget.hasButton ? false:true,
+          offstage: !widget.hasButton,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[

@@ -8,11 +8,10 @@ import '../common/app_routes.dart';
 
 class MyHomePage extends StatelessWidget {
   static const String ROUTE_SETTINGS = '/settings';
-  static final GlobalKey<ScaffoldState> _scaffoldKey =
-      GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final double _appBarHeight = 200.0;
 
-  MyHomePage() : super(key: AppKeys.myHomePage);
+  MyHomePage() :super(key: AppKeys.myHomePage);
 
   @override
   Widget build(BuildContext context) {
@@ -52,30 +51,27 @@ class MyHomePage extends StatelessWidget {
               expandedHeight: _appBarHeight,
               pinned: true,
               actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.menu),
-                  tooltip: 'Edit',
-                  color: Colors.white,
-                  onPressed: () {
-                    // http test
-                    http$
-                        .get('/apparel-zh/users/13234', context: context)
-                        .then((response) {});
-//                    _scaffoldKey.currentState.showSnackBar(
-//                      const SnackBar(
-//                        content: Text('Editing isn\'t supported in this screen.'),
-//                      ),
-//                    );
-                  },
-                ),
+//                IconButton(
+//                  icon: const Icon(Icons.menu),
+//                  tooltip: 'Edit',
+//                  color: Colors.white,
+//                  onPressed: () {
+//                    // http test
+//                    http$.get('/apparel-zh/users/13234', context: context).then((response) {});
+////                    _scaffoldKey.currentState.showSnackBar(
+////                      const SnackBar(
+////                        content: Text('Editing isn\'t supported in this screen.'),
+////                      ),
+////                    );
+//                  },
+//                ),
               ],
               flexibleSpace: FlexibleSpaceBar(
                 key: const Key('__myHomeSpaceBar__'),
                 title: StreamBuilder<UserModel>(
                   stream: bloc.stream,
                   initialData: bloc.currentUser,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<UserModel> snapshot) {
+                  builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
                     debugPrint('${snapshot.data.userType}');
                     return Container(
                       child: Column(
@@ -116,76 +112,85 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Color.fromRGBO(255, 80, 1, 1),
-          Color.fromRGBO(255, 140, 0, 1)
-        ]),
+        gradient: LinearGradient(colors: [ Color.fromRGBO(255, 80, 1, 1),Color.fromRGBO(255, 140, 0, 1)]),
       ),
     );
   }
 
-  Widget _buildPortrait(BuildContext context) {
+  Widget _buildPortrait(BuildContext context){
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
       child: Container(
           child: CircleAvatar(
             backgroundImage: NetworkImage(
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'),
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'
+            ),
             radius: 40.0,
           ),
           decoration: BoxDecoration(
-            border: new Border.all(color: Colors.white, width: 0.5),
+            border: new Border.all(
+                color: Colors.white,
+                width: 0.5
+            ),
             color: Colors.white,
             shape: BoxShape.rectangle,
             borderRadius: new BorderRadius.circular((50.0)),
-          )),
-    );
-  }
-
-  Widget _buildInfomation(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 85),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            width: 210,
-            child: Row(
-              children: <Widget>[
-                Container(
-                    child: Text(
-                  "欧阳娜娜",
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                )),
-                Container(
-                  padding: EdgeInsets.all(3),
-                  margin: EdgeInsets.only(left: 10),
-                  child: Text(
-                    '采购员',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black26,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            child: Text(
-              '定制加（深圳）科技有限公司',
-              style: TextStyle(fontSize: 16, color: Colors.white),
-            ),
           )
-        ],
       ),
     );
   }
+
+  Widget _buildInfomation(BuildContext context){
+    return Container(
+      padding: EdgeInsets.only(top: 85),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 210,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      child:Text(
+                        "欧阳娜娜",
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                        ),
+                      )
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(3),
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text(
+                      '采购员',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              child: Text(
+                '定制加（深圳）科技有限公司',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white
+                ),
+              ),
+            )
+          ],
+      ),
+    );
+  }
+
 }

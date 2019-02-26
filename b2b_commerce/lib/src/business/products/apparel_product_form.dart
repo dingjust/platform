@@ -15,16 +15,17 @@ import 'form/postage_free_field.dart';
 import 'form/normal_picture_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
-  ApparelProductFormPage({Key key, this.item})
+  ApparelProductFormPage({Key key, @required this.item,this.isCreate = false})
       : super(key: const Key('__apparelProductFormPage__'));
 
   final ApparelProductModel item;
+  final bool isCreate;
 
   ApparelProductFormState createState() => ApparelProductFormState();
 }
 
 class ApparelProductFormState extends State<ApparelProductFormPage> {
-  final GlobalKey _apparelProductForm = GlobalKey<FormState>();
+  final GlobalKey<FormState> _apparelProductForm = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -41,7 +42,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 //        initialData: bloc.currentProduct,
 //        builder: (BuildContext context,
 //            AsyncSnapshot<ApparelProductModel> snapshot) {
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -54,61 +54,69 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               style: TextStyle(color: Color(0xffFF9516)),
             ),
             onPressed: (){
+//              print(widget.item.normalFiles);
+////              print(widget.item.name);
+////              print(widget.item.skuID);
+////              print(widget.item.minorCategory?.name);
+////              print(widget.item.brand);
+////              print(widget.item.price);
+////              print(widget.item.gramWeight);
+////              if(widget.item.variants != null){
+////                print('color'+widget.item?.variants[0]?.color?.name.toString());
+////                print('size'+widget.item?.variants[0]?.size?.name.toString());
+////              }
+////              print(widget.item.attributes.styles[0]);
               Navigator.pop(context);
             },
           )
         ],
       ),
-      body: Form(
-        key: _apparelProductForm,
-        autovalidate: false,
-        child: ListView(
-          children: <Widget>[
-            NormalPictureField(widget.item),
+      body: ListView(
+        children: <Widget>[
+          NormalPictureField(widget.item,widget.isCreate),
 //            DetailPictureField(widget.item),
-            NameField(widget.item),
-            SkuIDField(widget.item),
-            MinorCategoryField(widget.item),
-            BrandField(widget.item),
-            PricesField(widget.item),
-            GramWeightField(widget.item),
-            ColorSizeStockField(widget.item),
-            AttributesField(widget.item),
+          NameField(widget.item),
+          SkuIDField(widget.item),
+          MinorCategoryField(widget.item),
+          BrandField(widget.item),
+          PricesField(widget.item),
+          GramWeightField(widget.item),
+          ColorSizeStockField(widget.item),
+          AttributesField(widget.item),
 //            PrivacyField(widget.item),
 //            PostageFreeField(widget.item),
-            /*Container(
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ActionChip(
-                      backgroundColor: Colors.red,
-                      labelPadding:
-                          EdgeInsets.symmetric(vertical: 4, horizontal: 22),
-                      labelStyle: TextStyle(fontSize: 16),
-                      label: Text('发布商品'),
-                      onPressed: () {
-                        // TODO:默认下架
-                      },
-                    ),
+          /*Container(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: ActionChip(
+                    backgroundColor: Colors.red,
+                    labelPadding:
+                        EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                    labelStyle: TextStyle(fontSize: 16),
+                    label: Text('发布商品'),
+                    onPressed: () {
+                      // TODO:默认下架
+                    },
                   ),
-                  Expanded(
-                    child: ActionChip(
-                      backgroundColor: Colors.orange,
-                      labelPadding:
-                          EdgeInsets.symmetric(vertical: 4, horizontal: 22),
-                      labelStyle: TextStyle(fontSize: 16),
-                      label: Text('直接上架'),
-                      onPressed: () {
-                        // TODO:直接上架
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),*/
-          ],
-        ),
+                ),
+                Expanded(
+                  child: ActionChip(
+                    backgroundColor: Colors.orange,
+                    labelPadding:
+                        EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                    labelStyle: TextStyle(fontSize: 16),
+                    label: Text('直接上架'),
+                    onPressed: () {
+                      // TODO:直接上架
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),*/
+        ],
       ),
     );
 //        }

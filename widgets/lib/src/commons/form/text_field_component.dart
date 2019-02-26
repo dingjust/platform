@@ -8,6 +8,7 @@ class TextFieldComponent extends StatefulWidget {
   final FocusNode focusNode;
   final TextInputType inputType;
   final Widget trailing;
+  Function onChanged;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -19,6 +20,7 @@ class TextFieldComponent extends StatefulWidget {
     @required this.focusNode,
     this.inputType,
     this.trailing,
+    this.onChanged,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
@@ -71,7 +73,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
-                title: TextFormField(
+                title: TextField(
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
@@ -81,7 +83,8 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 //              suffixIcon: Icon(Icons.close),
                   ),
                   focusNode: widget.focusNode,
-                ),
+                  onChanged: widget.onChanged,
+                )
               )
             : ListTile(
                 leading: Container(
@@ -91,7 +94,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
-                title: TextFormField(
+                title: TextField(
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
@@ -101,10 +104,6 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 //              suffixIcon: Icon(Icons.close),
                   ),
                   focusNode: widget.focusNode,
-
-                  /*validator: (v) {
-              return v.trim().length > 0 ? null : widget.leadingText + '不能为空';
-            },*/
                 ),
                 trailing: widget.trailing ?? Text(''),
               ),
