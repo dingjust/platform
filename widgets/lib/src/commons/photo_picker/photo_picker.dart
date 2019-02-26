@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:widgets/widgets.dart';
 
 class PhotoPicker extends StatefulWidget {
   ///图片文件列表
@@ -27,7 +26,7 @@ class PhotoPicker extends StatefulWidget {
   PhotoPicker(
       {Key key,
       @required this.images,
-      this.width = 300,
+      this.width = 350,
       this.height = 80,
       this.imageWidth = 80,
       this.maxNum = 5})
@@ -57,20 +56,18 @@ class _PhotoPickerState extends State<PhotoPicker> {
             // border: Border.all(color: Colors.grey[300], width: 1.0)
           ),
           child: Center(
-            child: 
-            Icon(
+            child: Icon(
               Icons.add,
               size: widget.imageWidth * 0.6,
               color: Colors.grey,
             ),
-
           ),
         ),
       ));
     }
 
     if (widget.images.isNotEmpty) {
-      widgetList.addAll(widget.images
+      widgetList.addAll(widget.images.reversed
           .map((file) => GestureDetector(
                 child: Container(
                   width: widget.imageWidth,

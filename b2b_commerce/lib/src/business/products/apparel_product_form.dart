@@ -12,6 +12,7 @@ import 'form/color_size_stock_field.dart';
 import 'form/attributes_field.dart';
 import 'form/privacy_field.dart';
 import 'form/postage_free_field.dart';
+import 'form/normal_picture_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
   ApparelProductFormPage({Key key, this.item})
@@ -24,8 +25,6 @@ class ApparelProductFormPage extends StatefulWidget {
 
 class ApparelProductFormState extends State<ApparelProductFormPage> {
   final GlobalKey _apparelProductForm = GlobalKey<FormState>();
-
-  List<MediaModel> mediaModels=[];
 
   @override
   void initState() {
@@ -48,19 +47,25 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         elevation: 0.5,
         centerTitle: true,
         title: Text('编辑商品'),
+        actions: <Widget>[
+          IconButton(
+            icon: Text(
+              '确定',
+              style: TextStyle(color: Color(0xffFF9516)),
+            ),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
       body: Form(
         key: _apparelProductForm,
         autovalidate: false,
         child: ListView(
           children: <Widget>[
-            // NormalPictureField(widget.item),
-            // DetailPictureField(
-            //   widget.item,
-            // ),
-            EditableAttachments(
-                list: mediaModels,
-              ),
+            NormalPictureField(widget.item),
+//            DetailPictureField(widget.item),
             NameField(widget.item),
             SkuIDField(widget.item),
             MinorCategoryField(widget.item),
@@ -69,9 +74,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
             GramWeightField(widget.item),
             ColorSizeStockField(widget.item),
             AttributesField(widget.item),
-            PrivacyField(widget.item),
-            PostageFreeField(widget.item),
-            Container(
+//            PrivacyField(widget.item),
+//            PostageFreeField(widget.item),
+            /*Container(
               padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
               child: Row(
                 children: <Widget>[
@@ -101,7 +106,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   )
                 ],
               ),
-            ),
+            ),*/
           ],
         ),
       ),

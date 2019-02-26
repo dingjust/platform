@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import '../orders/requirement_order_from.dart';
 
 class ApparelProductItem extends StatefulWidget {
-  ApparelProductItem(this.item);
+  ApparelProductItem(this.item, {this.isRequirement = false});
 
   final ApparelProductModel item;
+  final bool isRequirement;
 
   ApparelProductItemState createState() => ApparelProductItemState();
 }
@@ -32,14 +34,22 @@ class ApparelProductItemState extends State<ApparelProductItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-      elevation: 0,
-      child: Column(
-        children: <Widget>[
-          _buildProduct(context),
-          _buildButtons(context),
-        ],
+    return GestureDetector(
+      onTap: (){
+        if(widget.isRequirement) Navigator.pop(context,widget.item);
+      },
+      child: Card(
+        margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+        elevation: 0,
+        child: Column(
+          children: <Widget>[
+            _buildProduct(context),
+            Offstage(
+              offstage: widget.isRequirement,
+              child: _buildButtons(context),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -50,8 +60,8 @@ class ApparelProductItemState extends State<ApparelProductItem> {
       child: Row(
         children: <Widget>[
           Container(
-            width: 100,
-            height: 100,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
@@ -67,9 +77,9 @@ class ApparelProductItemState extends State<ApparelProductItem> {
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 120,
+              height: 80,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
@@ -80,11 +90,10 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       '货号：' + widget.item.skuID,
                       style: TextStyle(
@@ -93,98 +102,110 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Text('￥', style: TextStyle(color: Colors.orange)),
-                      Expanded(
-                          child: Text(
-                        widget.item.price.toString(),
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.orange,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )),
-                      _isRecommend
-                          ? GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _isRecommend = !_isRecommend;
-                                });
-                              },
-                              child: Container(
-//                                padding: EdgeInsets.only(right: 0),
-                                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-                                child: Icon(
-                                  Icons.done,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            )
-                          : GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _isRecommend = !_isRecommend;
-                                });
-                              },
-                              child: Container(
-                                height: 24,
-//                                padding: EdgeInsets.only(right: 5),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.done,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                      Text(
-                        '推款',
-                        style: TextStyle(fontSize: 18),
-                      )
-                    ],
+                  Container(
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 243, 243, 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "${widget.item?.minorCategory?.name}",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Color.fromRGBO(255, 133, 148, 1)),
+                    ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
-                        decoration: BoxDecoration(
-                          color: Colors.orange[50],
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          '实际库存 ' + widget.item.stockLevel.available.toString(),
-                          style: TextStyle(
-                            color: Colors.orange,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10),
-                        padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
-                        decoration: BoxDecoration(
-                          color: Colors.orange[50],
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          '平台库存 ' + widget.item.stockLevel.available.toString(),
-                          style: TextStyle(
-                            color: Colors.orange,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '销量' + widget.item.salesVolume.toString(),
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                  ),
+//                  Row(
+//                    children: <Widget>[
+//                      Text('￥', style: TextStyle(color: Colors.orange)),
+//                      Expanded(
+//                          child: Text(
+//                        widget.item.price.toString(),
+//                        style: TextStyle(
+//                          fontSize: 20,
+//                          color: Colors.orange,
+//                          fontWeight: FontWeight.w600,
+//                        ),
+//                      )),
+//                      _isRecommend
+//                          ? GestureDetector(
+//                              onTap: () {
+//                                setState(() {
+//                                  _isRecommend = !_isRecommend;
+//                                });
+//                              },
+//                              child: Container(
+////                                padding: EdgeInsets.only(right: 0),
+//                                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+//                                child: Icon(
+//                                  Icons.done,
+//                                  color: Colors.white,
+//                                ),
+//                              ),
+//                            )
+//                          : GestureDetector(
+//                              onTap: () {
+//                                setState(() {
+//                                  _isRecommend = !_isRecommend;
+//                                });
+//                              },
+//                              child: Container(
+//                                height: 24,
+////                                padding: EdgeInsets.only(right: 5),
+//                                decoration: BoxDecoration(
+//                                  border: Border.all(
+//                                    color: Colors.grey,
+//                                  ),
+//                                  shape: BoxShape.circle,
+//                                ),
+//                                child: Icon(
+//                                  Icons.done,
+//                                  color: Colors.white,
+//                                ),
+//                              ),
+//                            ),
+//                      Text(
+//                        '推款',
+//                        style: TextStyle(fontSize: 18),
+//                      )
+//                    ],
+//                  ),
+//                  Row(
+//                    children: <Widget>[
+//                      Container(
+//                        padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+//                        decoration: BoxDecoration(
+//                          color: Colors.orange[50],
+//                          borderRadius: BorderRadius.circular(5),
+//                        ),
+//                        child: Text(
+//                          '实际库存 ' + widget.item.stockLevel.available.toString(),
+//                          style: TextStyle(
+//                            color: Colors.orange,
+//                            fontSize: 12,
+//                          ),
+//                        ),
+//                      ),
+//                      Container(
+//                        margin: EdgeInsets.only(left: 10),
+//                        padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+//                        decoration: BoxDecoration(
+//                          color: Colors.orange[50],
+//                          borderRadius: BorderRadius.circular(5),
+//                        ),
+//                        child: Text(
+//                          '平台库存 ' + widget.item.stockLevel.available.toString(),
+//                          style: TextStyle(
+//                            color: Colors.orange,
+//                            fontSize: 12,
+//                          ),
+//                        ),
+//                      ),
+//                    ],
+//                  ),
+//                  Text(
+//                    '销量' + widget.item.salesVolume.toString(),
+//                    style: TextStyle(color: Colors.grey, fontSize: 16),
+//                  ),
                 ],
               ),
             ),
@@ -201,13 +222,12 @@ class ApparelProductItemState extends State<ApparelProductItem> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           ActionChip(
-            labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-            backgroundColor: Colors.orange,
-            label: Text('生产'),
-            labelStyle: TextStyle(color: Colors.white),
-            onPressed: () {
-              // TODO: 带到商品，跳到需求页面，需求页面未提供
-            },
+            shape: StadiumBorder(side: BorderSide(color: Colors.grey)),
+            labelPadding: EdgeInsets.symmetric(horizontal: 15),
+            backgroundColor: Colors.white,
+            label: Text('删除'),
+            labelStyle: TextStyle(color: Colors.grey),
+            onPressed: () {},
           ),
           ActionChip(
             shape: StadiumBorder(side: BorderSide(color: Colors.orange)),
@@ -229,21 +249,23 @@ class ApparelProductItemState extends State<ApparelProductItem> {
               );
             },
           ),
+//          ActionChip(
+//            shape: StadiumBorder(side: BorderSide(color: Colors.orange)),
+//            labelPadding: EdgeInsets.symmetric(horizontal: 15),
+//            backgroundColor: Colors.white,
+//            label: Text(_approvalStatusText),
+//            labelStyle: TextStyle(color: Colors.orange),
+//            onPressed: () {},
+//          ),
           ActionChip(
-            shape: StadiumBorder(side: BorderSide(color: Colors.orange)),
-            labelPadding: EdgeInsets.symmetric(horizontal: 15),
-            backgroundColor: Colors.white,
-            label: Text(_approvalStatusText),
-            labelStyle: TextStyle(color: Colors.orange),
-            onPressed: () {},
-          ),
-          ActionChip(
-            shape: StadiumBorder(side: BorderSide(color: Colors.grey)),
-            labelPadding: EdgeInsets.symmetric(horizontal: 15),
-            backgroundColor: Colors.white,
-            label: Text('删除'),
-            labelStyle: TextStyle(color: Colors.grey),
-            onPressed: () {},
+            labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
+            backgroundColor: Colors.orange,
+            label: Text('生产'),
+            labelStyle: TextStyle(color: Colors.white),
+            onPressed: () {
+              // TODO: 带到商品，跳到需求页面，需求页面未提供
+              Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderFrom(product: widget.item,)));
+            },
           ),
         ],
       ),

@@ -10,7 +10,7 @@ description: Hybris B2B Commerce.
 version: 1.0.0+1
 
 flutter_localizations:
-  sdk: flutter
+    sdk: flutter
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -30,7 +30,7 @@ dependencies:
   json_annotation: ^2.0.0
   cupertino_icons: ^0.1.2
   font_awesome_flutter: 8.2.0
-  cached_network_image: ^0.4.1+1
+#  cached_network_image: ^0.4.1+1
   dio: 1.0.9
   shared_preferences: ^0.4.2
   transparent_image: ^0.1.0
@@ -40,9 +40,9 @@ dependencies:
   rxdart: ^0.20.0
   fluwx: ^0.5.4
   photo_view: ^0.1.3
+  path_provider: ^0.5.0+1
+  flutter_cache_manager: ^0.3.0
   open_file: 1.1.1
-  path_provider: ^0.4.1
-  flutter_cache_manager: ^0.1.1
   url_launcher: ^3.0.3
   flutter_speed_dial: ^1.0.9
   flutter_map: ^0.1.4
@@ -102,13 +102,11 @@ flutter:
     - packages/assets/temp/common/find_factory.png
     - packages/assets/temp/common/idle_capacity.png
     - packages/assets/temp/common/order.png
-    - packages/assets/temp/common/address_under_line.png
     - data/province.json
     - packages/assets/temp/login_background.png
     - packages/assets/temp/production/fab_add.png
     - packages/assets/temp/production/fab_create.png
     - packages/assets/temp/production/fab_only.png
-    - packages/assets/temp/business/proofing_order.png
 
   fonts:
     - family: b2bIcons

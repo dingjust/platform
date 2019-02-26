@@ -2,6 +2,7 @@ import http from '@/common/js/http';
 
 const state = {
   keyword: '',
+  statuses: [],
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -11,11 +12,6 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
-  formData: {
-    id: null,
-    name: '',
-    labels: []
-  }
 };
 
 const mutations = {
@@ -33,9 +29,9 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/djwebservices/industrialClusters', {
+    const response = await http.get('/djwebservices/quotes', {
       code: state.keyword,
-      name: state.keyword
+      requirementOrderRef: state.keyword
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize

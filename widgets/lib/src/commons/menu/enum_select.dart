@@ -63,7 +63,7 @@ class EnumSelectPageState extends State<EnumSelectPage> {
           leading: IconButton(icon: Text('取消'), onPressed: () => Navigator.pop(context,_beforeModifyCodes),),
           actions: <Widget>[
             IconButton(
-              icon: Text('确定'),
+              icon: Text('确定',style: TextStyle(color: Color(0xffFF9516)),),
               onPressed: () {
                 Navigator.pop(context);
               },

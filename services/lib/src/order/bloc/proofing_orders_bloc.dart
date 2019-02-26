@@ -474,35 +474,40 @@ Map<String, dynamic> mockFactory = {
     {
       'name': '春秋薄款卫衣',
       'normal': [
-        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
+        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
       ],
       'price': 33.3,
     },
     {
       'name': '春秋薄款卫衣',
       'normal': [
-        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
+        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
       ],
       'price': 33.3,
     },
     {
       'name': '春秋薄款卫衣',
       'normal': [
-        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
+        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
       ],
       'price': 33.3,
     },
     {
       'name': '春秋薄款卫衣',
       'normal': [
-        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
+        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
       ],
       'price': 33.3,
     },
     {
       'name': '春秋薄款卫衣',
       'normal': [
-        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548306578766&di=582a7f725bffd1d95852c70c07f8fd9c&imgtype=0&src=http%3A%2F%2Fimg009.hc360.cn%2Fg6%2FM06%2F71%2FEE%2FwKhQr1PjF5WEEgn9AAAAAJ0GDyw582.jpg'
+        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
+        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
       ],
       'price': 33.3,
     },

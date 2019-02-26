@@ -27,7 +27,7 @@ class _BrandFieldState extends State<BrandField> {
       focusNode: _brandFocusNode,
       controller: _brandController,
       leadingText: '品牌',
-      hintText: '请输入品牌，必填',
+      hintText: '请输入品牌',
     );
   }
 }

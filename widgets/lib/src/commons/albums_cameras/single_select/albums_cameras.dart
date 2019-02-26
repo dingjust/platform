@@ -122,9 +122,7 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
                   setState(() {
                     widget.images.add(image);
 
-                    print(_list.length);
                     _list.removeLast();
-                    print(_list.length);
 
                     _list.add(Container(
                       width: widget.width,

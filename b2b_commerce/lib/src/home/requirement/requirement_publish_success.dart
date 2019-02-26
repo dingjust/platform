@@ -9,7 +9,7 @@ import 'package:widgets/widgets.dart';
 class PublishRequirementSuccessDialog extends StatefulWidget {
   final RequirementOrderModel model;
 
-  const PublishRequirementSuccessDialog({Key key, @required this.model})
+  const PublishRequirementSuccessDialog({Key key, this.model})
       : super(key: key);
 
   _PublishRequirementSuccessDialogState createState() =>
@@ -146,15 +146,15 @@ class _PublishRequirementSuccessDialogState
       },
       child: Container(
         child: Column(
-          children: _buildEntries(),
+          children: _buildEntries() ?? [],
         ),
       ),
     );
   }
 
   List<Widget> _buildEntries() {
-    return widget.model.entries
-        .map((entry) => Container(
+    return widget.model?.entries
+        ?.map((entry) => Container(
             padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
             color: Colors.grey[50],
             child: Column(
@@ -265,7 +265,7 @@ class _PublishRequirementSuccessDialogState
                 ),
               ],
             )))
-        .toList();
+        ?.toList();
   }
 
   Widget _buildCheckLine() {

@@ -36,7 +36,10 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(B2BIcons.search,size: 20,),
+                icon: Icon(
+                  B2BIcons.search,
+                  size: 20,
+                ),
                 onPressed: () => showSearch(
                     context: context, delegate: QuotesSearchDelegate()),
               ),
@@ -327,8 +330,9 @@ class QuoteOrderItem extends StatelessWidget {
                       ? Container(
                           padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                           decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10)),
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           child: Text(
                             '货号：${model.product.skuID}',
                             style: TextStyle(fontSize: 12, color: Colors.grey),

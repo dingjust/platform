@@ -5,7 +5,12 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ApparelProductList extends StatelessWidget {
+  final bool isRequirement;
+
+  ApparelProductList({this.isRequirement = false});
+
   ScrollController _scrollController = new ScrollController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +65,7 @@ class ApparelProductList extends StatelessWidget {
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((product) {
-                        return ApparelProductItem(product);
+                        return ApparelProductItem(product,isRequirement: isRequirement,);
                       }).toList(),
                     );
                   } else if (snapshot.hasError) {

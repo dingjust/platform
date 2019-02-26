@@ -38,7 +38,7 @@ class _DetailPictureFieldState extends State<DetailPictureField> {
           ),
         ),
         AlbumsAndCameras(
-          pictureUrls: widget.item?.detail,
+//          pictureUrls: widget.item?.detail.,
           images: _detailImages,
           height: 100,
           width: 100,

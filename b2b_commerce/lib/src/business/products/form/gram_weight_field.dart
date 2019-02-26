@@ -28,7 +28,7 @@ class _GramWeightFieldState extends State<GramWeightField> {
       controller: _gramWeightController,
       inputType: TextInputType.number,
       leadingText: '重量',
-      hintText: '请输入重量，必填',
+      hintText: '请输入重量',
     );
   }
 }

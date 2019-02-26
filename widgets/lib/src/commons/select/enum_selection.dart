@@ -82,7 +82,7 @@ class EnumSelectionState extends State<EnumSelection> {
                 },
               ),
               IconButton(
-                icon: Text('确定'),
+                icon: Text('确定',style: TextStyle(color: Color(0xffFF9516)),),
                 onPressed: () {
                   Navigator.pop(context);
                 },
