@@ -106,8 +106,6 @@ class RequirementOrderFrom extends StatefulWidget {
 }
 
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
-  RequirementOrderModel model = RequirementOrderModel();
-
   List<EnumModel> _mojarEnumSelected = [];
   List<CategoryModel> _categorySelected = [];
   List<EnumModel> _productionAreaSelected = [];
@@ -222,6 +220,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                         });
                       });
                     });
+                    //清理缓存
 
                   }
                 })
