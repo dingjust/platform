@@ -38,6 +38,7 @@ class _DateBarState extends State<DateBar> {
                 .then((date) => setState(() {
                       if (date != null) {
                         widget.initeDate = date;
+                        widget.streamController.add(date);
                       }
                     }));
           },
