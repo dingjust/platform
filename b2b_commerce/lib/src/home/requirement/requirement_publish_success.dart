@@ -9,7 +9,7 @@ import 'package:widgets/widgets.dart';
 class PublishRequirementSuccessDialog extends StatefulWidget {
   final RequirementOrderModel model;
 
-  const PublishRequirementSuccessDialog({Key key, @required this.model})
+  const PublishRequirementSuccessDialog({Key key, this.model})
       : super(key: key);
 
   _PublishRequirementSuccessDialogState createState() =>

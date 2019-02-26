@@ -9,34 +9,77 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 import '../../home/requirement/requirement_publish_success.dart';
+import 'dart:typed_data';
 
 final List<Map<CategoryModel, List<CategoryModel>>> _category = [
   {
     CategoryModel(code: 'W01', name: '女装'): [
-      CategoryModel(code: 'W0101', name: '女式毛衣',parent: CategoryModel(code: 'W01',name: '女装')),
-      CategoryModel(code: 'W0102', name: '女式马夹',parent: CategoryModel(code: 'W01',name: '女装')),
-      CategoryModel(code: 'W0103', name: '女式西服',parent: CategoryModel(code: 'W01',name: '女装')),
-      CategoryModel(code: 'W0104', name: '女式夹克',parent: CategoryModel(code: 'W01',name: '女装')),
-      CategoryModel(code: 'W0105', name: '女式风衣',parent: CategoryModel(code: 'W01',name: '女装')),
-      CategoryModel(code: 'W0106', name: '女式棉衣',parent: CategoryModel(code: 'W01',name: '女装')),
-      CategoryModel(code: 'W0107', name: '女式羽绒',parent: CategoryModel(code: 'W01',name: '女装')),
+      CategoryModel(
+          code: 'W0101',
+          name: '女式毛衣',
+          parent: CategoryModel(code: 'W01', name: '女装')),
+      CategoryModel(
+          code: 'W0102',
+          name: '女式马夹',
+          parent: CategoryModel(code: 'W01', name: '女装')),
+      CategoryModel(
+          code: 'W0103',
+          name: '女式西服',
+          parent: CategoryModel(code: 'W01', name: '女装')),
+      CategoryModel(
+          code: 'W0104',
+          name: '女式夹克',
+          parent: CategoryModel(code: 'W01', name: '女装')),
+      CategoryModel(
+          code: 'W0105',
+          name: '女式风衣',
+          parent: CategoryModel(code: 'W01', name: '女装')),
+      CategoryModel(
+          code: 'W0106',
+          name: '女式棉衣',
+          parent: CategoryModel(code: 'W01', name: '女装')),
+      CategoryModel(
+          code: 'W0107',
+          name: '女式羽绒',
+          parent: CategoryModel(code: 'W01', name: '女装')),
     ],
     CategoryModel(code: 'M01', name: '男装'): [
-      CategoryModel(code: 'M0101', name: '男式POLO衫',parent: CategoryModel(code: 'M01',name: '男装')),
-      CategoryModel(code: 'M0102', name: '男式衬衫',parent: CategoryModel(code: 'M01',name: '男装')),
-      CategoryModel(code: 'M0103', name: '男式卫衣',parent: CategoryModel(code: 'M01',name: '男装')),
-      CategoryModel(code: 'M0104', name: '男式线衫',parent: CategoryModel(code: 'M01',name: '男装')),
-      CategoryModel(code: 'M0105', name: '男式毛衣',parent: CategoryModel(code: 'M01',name: '男装')),
-      CategoryModel(code: 'M0106', name: '男式马夹',parent: CategoryModel(code: 'M01',name: '男装')),
-      CategoryModel(code: 'M0107', name: '男式西服',parent: CategoryModel(code: 'M01',name: '男装')),
+      CategoryModel(
+          code: 'M0101',
+          name: '男式POLO衫',
+          parent: CategoryModel(code: 'M01', name: '男装')),
+      CategoryModel(
+          code: 'M0102',
+          name: '男式衬衫',
+          parent: CategoryModel(code: 'M01', name: '男装')),
+      CategoryModel(
+          code: 'M0103',
+          name: '男式卫衣',
+          parent: CategoryModel(code: 'M01', name: '男装')),
+      CategoryModel(
+          code: 'M0104',
+          name: '男式线衫',
+          parent: CategoryModel(code: 'M01', name: '男装')),
+      CategoryModel(
+          code: 'M0105',
+          name: '男式毛衣',
+          parent: CategoryModel(code: 'M01', name: '男装')),
+      CategoryModel(
+          code: 'M0106',
+          name: '男式马夹',
+          parent: CategoryModel(code: 'M01', name: '男装')),
+      CategoryModel(
+          code: 'M0107',
+          name: '男式西服',
+          parent: CategoryModel(code: 'M01', name: '男装')),
     ],
   }
 ];
 
 final List<CategoryModel> _majorCategory = [
   CategoryModel(code: 'C2', name: '针织'),
-  CategoryModel(code: 'C3', name: '针织'),
-  CategoryModel(code: 'C4', name: '针织'),
+  CategoryModel(code: 'C3', name: '梭织'),
+  CategoryModel(code: 'C4', name: '尼龙'),
 ];
 
 final List<EnumModel> technologyList = [
@@ -67,8 +110,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   List<EnumModel> _mojarEnumSelected = [];
   List<CategoryModel> _categorySelected = [];
   List<EnumModel> _productionAreaSelected = [];
-  String mojar = '选取';
-  String category = '选取';
   String processCount = '输入';
   String expectPrice = '输入';
   TextEditingController inputNumber;
@@ -142,6 +183,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   ),
                 ),
                 onTap: () async {
+                  List<File> files = _normalImages.toList();
                   dynamic result = await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -152,23 +194,23 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                     ),
                   );
 
+                  //TODO：导入商品后的一系列操作
                   _normalImages.clear();
                   _categorySelected.clear();
                   _product = result;
                   _normalMedias = _product?.normal;
-                  if(_product?.minorCategory != null){
+                  if (_product?.minorCategory != null) {
                     setState(() {
                       _categorySelected.add(_product.minorCategory);
                     });
                   }
                   if (_normalMedias != null) {
                     _normalMedias.forEach((media) {
-                      //缓存网络图片
-                      Image.network(media.url);
-//                      DefaultCacheManager().downloadFile(media.url);
                       //获取缓存图片
-//                      DefaultCacheManager().getFile(media.url).listen((fileInfo){
-//                        fileInfo.file;
+//                      CacheManager.getInstance().then((cacheManager){
+//                        cacheManager.getFile(media.url).then((file){
+//                          _normalImages.add(file);
+//                        });
 //                      });
 
                       DefaultCacheManager()
@@ -313,7 +355,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             ),
           ),
           trailing: Container(
-            width: 250,
+            width: 235,
             child: Align(
               alignment: Alignment.centerRight,
               child: Text(_product?.name ?? '',
@@ -769,28 +811,31 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       child: Column(
         children: <Widget>[
           Container(
-              width: double.infinity,
-              height: 50,
-              margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-              child: RaisedButton(
-                  color: Color(0xFFFF9516),
-                  child: Text(
-                    '确定发布',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                    ),
+            width: double.infinity,
+            height: 50,
+            margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+            child: RaisedButton(
+              color: Color(0xFFFF9516),
+              child: Text(
+                '确定发布',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PublishRequirementSuccessDialog(),
                   ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                PublishRequirementSuccessDialog()));
-                  })),
+                );
+              },
+            ),
+          ),
           Container(
             margin: EdgeInsets.all(0),
             padding: EdgeInsets.all(0),
@@ -836,7 +881,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ),
         );
       },
-    ).then((_mojarEnumSelected){
+    ).then((_mojarEnumSelected) {
       setState(() {
         formatEnumSelectText(_mojarEnumSelected);
       });
@@ -857,7 +902,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ),
         );
       },
-    ).then((_categorySelected){
+    ).then((_categorySelected) {
       setState(() {
         formatCategorySelectText(_categorySelected);
       });
