@@ -285,7 +285,8 @@ class _LoginPageState extends State<LoginPage> {
                           bloc
                               .login(
                                   username: _phoneController.text,
-                                  password: _passwordController.text)
+                                  password: _passwordController.text,
+                                  remember: _isRemember)
                               .then((result) {});
                         }
                       : null,

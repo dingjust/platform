@@ -21,7 +21,6 @@ class MyHomePage extends StatelessWidget {
       Menu('', <MenuItem>[
         MenuItem(Icons.account_box, '我的账户', AppRoutes.ROUTE_MY_ACCOUNT),
         MenuItem(Icons.business, '认证信息', AppRoutes.ROUTE_MY_COMPANY),
-        MenuItem(Icons.business, '账单', AppRoutes.ROUTE_MY_BILL),
       ]),
       Menu('', <MenuItem>[
         MenuItem(Icons.pin_drop, '地址管理', AppRoutes.ROUTE_MY_ADDRESSES),

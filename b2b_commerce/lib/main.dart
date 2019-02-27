@@ -9,9 +9,10 @@ import 'package:widgets/widgets.dart';
 
 import 'src/common/app_bloc.dart';
 
-void main() {
+void main() async {
   debugInstrumentationEnabled = true;
-
+  // 检测是否有用户登陆信息
+  await UserBLoC.instance.checkLocalUser();
   runApp(BLoCProvider<AppBLoC>(
     bloc: AppBLoC(),
     child: MyApp(),
@@ -24,20 +25,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _currentIndex = 0;
-
-  void _handleNavigation(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BLoCProvider<UserBLoC>(
