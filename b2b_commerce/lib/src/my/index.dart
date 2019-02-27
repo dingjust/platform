@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -8,33 +9,51 @@ import '../common/app_routes.dart';
 
 class MyHomePage extends StatelessWidget {
   static const String ROUTE_SETTINGS = '/settings';
-  static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>();
   final double _appBarHeight = 200.0;
 
-  MyHomePage() :super(key: AppKeys.myHomePage);
+  MyHomePage() : super(key: AppKeys.myHomePage);
 
   @override
   Widget build(BuildContext context) {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     final List<Widget> menus = <Widget>[
-      Menu('', <MenuItem>[
-        MenuItem(Icons.account_box, '我的账户', AppRoutes.ROUTE_MY_ACCOUNT),
-        MenuItem(Icons.business, '认证信息', AppRoutes.ROUTE_MY_COMPANY),
-        MenuItem(Icons.business, '账单', AppRoutes.ROUTE_MY_BILL),
+      Menu('', <Widget>[
+        MenuItem(B2BImage.my_account(width: 23, height: 27), '我的账户',
+            AppRoutes.ROUTE_MY_ACCOUNT),
+        Container(
+          padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
+          child: Divider(),
+        ),
+        MenuItem(B2BImage.certicate_info(width: 26, height: 19), '认证信息',
+            AppRoutes.ROUTE_MY_COMPANY),
       ]),
-      Menu('', <MenuItem>[
-        MenuItem(Icons.pin_drop, '地址管理', AppRoutes.ROUTE_MY_ADDRESSES),
-        MenuItem(Icons.collections, '发票管理', AppRoutes.ROUTE_MY_INVOICES),
+      Menu('', <Widget>[
+        MenuItem(B2BImage.address_manage(width: 24, height: 29), '地址管理',
+            AppRoutes.ROUTE_MY_ADDRESSES),
+        Container(
+          padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
+          child: Divider(),
+        ),
+        MenuItem(B2BImage.invoice_manage(width: 26, height: 21), '发票管理',
+            AppRoutes.ROUTE_MY_INVOICES),
 //        MenuItem(Icons.shopping_cart, '购物车', AppRoutes.ROUTE_MY_CART),
       ]),
 //      Menu('', <MenuItem>[
 //
 ////        MenuItem(Icons.collections, '我的收藏', AppRoutes.ROUTE_MY_COLLECTIONS),
 //      ]),
-      Menu('', <MenuItem>[
-        MenuItem(Icons.call, '联系客服', AppRoutes.ROUTE_MY_CLIENT_SERVICES),
-        MenuItem(Icons.settings, '设置', AppRoutes.ROUTE_MY_SETTINGS),
+      Menu('', <Widget>[
+        MenuItem(B2BImage.customer_service(width: 25, height: 25), '联系客服',
+            AppRoutes.ROUTE_MY_CLIENT_SERVICES),
+        Container(
+          padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
+          child: Divider(),
+        ),
+        MenuItem(B2BImage.setting(width: 25, height: 24), '设置',
+            AppRoutes.ROUTE_MY_SETTINGS),
       ]),
 //      Menu('', <MenuItem>[
 //
@@ -71,7 +90,8 @@ class MyHomePage extends StatelessWidget {
                 title: StreamBuilder<UserModel>(
                   stream: bloc.stream,
                   initialData: bloc.currentUser,
-                  builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<UserModel> snapshot) {
                     debugPrint('${snapshot.data.userType}');
                     return Container(
                       child: Column(
@@ -112,85 +132,76 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [ Color.fromRGBO(255, 80, 1, 1),Color.fromRGBO(255, 140, 0, 1)]),
+        gradient: LinearGradient(colors: [
+          Color.fromRGBO(255, 80, 1, 1),
+          Color.fromRGBO(255, 140, 0, 1)
+        ]),
       ),
     );
   }
 
-  Widget _buildPortrait(BuildContext context){
+  Widget _buildPortrait(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
       child: Container(
           child: CircleAvatar(
             backgroundImage: NetworkImage(
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'
-            ),
+                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'),
             radius: 40.0,
           ),
           decoration: BoxDecoration(
-            border: new Border.all(
-                color: Colors.white,
-                width: 0.5
-            ),
+            border: new Border.all(color: Colors.white, width: 0.5),
             color: Colors.white,
             shape: BoxShape.rectangle,
             borderRadius: new BorderRadius.circular((50.0)),
-          )
-      ),
+          )),
     );
   }
 
-  Widget _buildInfomation(BuildContext context){
+  Widget _buildInfomation(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 85),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: 210,
-              child: Row(
-                children: <Widget>[
-                  Container(
-                      child:Text(
-                        "欧阳娜娜",
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white
-                        ),
-                      )
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(3),
-                    margin: EdgeInsets.only(left: 10),
+        children: <Widget>[
+          Container(
+            width: 210,
+            child: Row(
+              children: <Widget>[
+                Container(
                     child: Text(
-                      '采购员',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black26,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  )
-                ],
-              ),
+                  "欧阳娜娜",
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                )),
+                Container(
+                  padding: EdgeInsets.all(3),
+                  margin: EdgeInsets.only(left: 10),
+                  child: Text(
+                    '采购员',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black26,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                )
+              ],
             ),
-            Container(
-              child: Text(
-                '定制加（深圳）科技有限公司',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white
-                ),
-              ),
-            )
-          ],
+          ),
+          Container(
+            child: Text(
+              '定制加（深圳）科技有限公司',
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+          )
+        ],
       ),
     );
   }
-
 }

@@ -42,8 +42,12 @@ class MembershipsPage extends StatelessWidget {
         title: Text('会员管理'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(B2BIcons.search,size: 20,),
-            onPressed: () => showSearch(context: context, delegate: MembershipSearchDelegate()),
+            icon: Icon(
+              B2BIcons.search,
+              size: 20,
+            ),
+            onPressed: () => showSearch(
+                context: context, delegate: MembershipSearchDelegate()),
           ),
         ],
       ),
@@ -53,7 +57,7 @@ class MembershipsPage extends StatelessWidget {
           children: <Widget>[
             Menu('', <MenuItem>[
               MenuItem(
-                Icons.phone,
+                Icon(Icons.phone),
                 '会员审核',
                 AppRoutes.ROUTE_MEMBER_REQUESTS,
               )

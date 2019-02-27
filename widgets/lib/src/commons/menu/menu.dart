@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
   final String title;
-  final List<MenuItem> items;
+  final List<Widget> items;
 
   Menu(this.title, this.items);
 
   @override
   Widget build(BuildContext context) {
-    List<MenuItem> columns = this.items.map((item) {
-      return MenuItem(item.icon, item.title, item.routeTo);
-    }).toList();
+    // List<MenuItem> columns = this.items.map((item) {
+    //   return MenuItem(item.leading, item.title, item.routeTo);
+    // }).toList();
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Container(
         child: Column(
-          children: columns,
+          children: items,
         ),
         color: Colors.white,
       ),
@@ -25,11 +25,11 @@ class Menu extends StatelessWidget {
 }
 
 class MenuItem extends StatelessWidget {
-  final IconData icon;
+  final Widget leading;
   final String title;
   final String routeTo;
 
-  MenuItem(this.icon, this.title, this.routeTo);
+  MenuItem(this.leading, this.title, this.routeTo);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class MenuItem extends StatelessWidget {
         title: Text(
           title,
         ),
-        leading: Icon(icon),
+        leading: leading,
       ),
     );
   }
