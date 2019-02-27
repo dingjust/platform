@@ -6,9 +6,10 @@ import 'package:widgets/widgets.dart';
 
 /// 主图
 class NormalPictureField extends StatefulWidget {
-  NormalPictureField(this.item);
+  NormalPictureField(this.item,this.isCreate);
 
   final ApparelProductModel item;
+  final bool isCreate;
 
   @override
   State<StatefulWidget> createState() => _NormalPictureFieldState();
@@ -52,9 +53,9 @@ class _NormalPictureFieldState extends State<NormalPictureField> {
 //          iconSize: 100,
 //          count: 5,
 //        ),
-        widget.item != null
+        !widget.isCreate
             ? EditableAttachments(list: _normalMedias)
-            : PhotoPicker(images: _normalImages, width: 350),
+            : PhotoPicker(images: widget.item.normalFiles, width: 350),
       ],
     );
   }

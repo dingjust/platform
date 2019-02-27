@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isRemember = true;
   bool _isPasswordHide = true;
-  bool _isPasswordLogin = false;
+  bool _isPasswordLogin = true;
 
   @override
   Widget build(BuildContext context) {
@@ -157,8 +157,13 @@ class _LoginPageState extends State<LoginPage> {
         ),
         // 校验用户名
         validator: (v) {
-          return v.trim().length > 0 ? null : '密码不能为空';
+          return v.trim().length > 0 ? null : '验证码不能为空';
         });
+
+    //监听密码输入变动、刷新表单校验
+    _passwordController.addListener(() {
+      setState(() {});
+    });
 
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
@@ -229,6 +234,25 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildBody(BuildContext context) {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
+    bloc.loginStream.listen((result) {
+      Navigator.pop(context);
+      showDialog(
+          context: context,
+          child: SimpleDialog(
+            title: Text('登陆失败'),
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Text('${result.response}'),
+              ),
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Text('${result.message}'),
+              )
+            ],
+          ));
+    });
+
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -251,13 +275,18 @@ class _LoginPageState extends State<LoginPage> {
                   ? null
                   : (_formKey.currentState as FormState).validate()
                       ? () {
+                          //加载条
+                          showDialog(
+                              context: context,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ));
+
                           bloc
-                              .login(username: 'nbyjy', password: 'z123456')
-                              .then((success) {
-                            if (success) {
-                              Navigator.pop(context);
-                            }
-                          });
+                              .login(
+                                  username: _phoneController.text,
+                                  password: _passwordController.text)
+                              .then((result) {});
                         }
                       : null,
               shape: RoundedRectangleBorder(

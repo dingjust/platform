@@ -59,6 +59,9 @@ class _PricesFieldState extends State<PricesField> {
           controller: _priceController,
           leadingText: '供货价',
           hintText: '请输入供货价',
+          onChanged: (value){
+            widget.item.price = value;
+          },
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),

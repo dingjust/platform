@@ -36,6 +36,15 @@ class PhotoPicker extends StatefulWidget {
 }
 
 class _PhotoPickerState extends State<PhotoPicker> {
+
+  @override
+  void initState() {
+    if(widget.images == null) widget.images = [];
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetList = [];

@@ -1,5 +1,7 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import 'settings/about.dart';
 import 'settings/account_security.dart';
@@ -14,6 +16,8 @@ class MySettingsPage extends StatefulWidget {
 class _MySettingsPageState extends State<MySettingsPage> {
   @override
   Widget build(BuildContext context) {
+    var bloc = BLoCProvider.of<UserBLoC>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -63,7 +67,9 @@ class _MySettingsPageState extends State<MySettingsPage> {
                 '退出登录',
                 style: TextStyle(color: Colors.red),
               ),
-              onPressed: null,
+              onPressed: () {
+                bloc.logout();
+              },
             ),
           ),
         ],

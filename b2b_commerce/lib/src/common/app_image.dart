@@ -120,7 +120,7 @@ class MenuItemImage {
     height: _height,
   );
   static Image proofing_order = Image.asset(
-    'temp/business/proofing_order.png',
+    'temp/business/proofing.png',
     package: _package,
     width: _width,
     height: _height,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:models/models.dart';
@@ -133,6 +135,11 @@ class ApparelProductAttributesModel extends ItemModel {
     this.placket,
   });
 
+  ApparelProductAttributesModel.empty(){
+   this.styles = [];
+   this.fabricComposition = '';
+  }
+
   factory ApparelProductAttributesModel.fromJson(Map<String, dynamic> json) =>
       _$ApparelProductAttributesModelFromJson(json);
 
@@ -152,6 +159,9 @@ class ProductModel extends ItemModel {
   List<MediaModel> normal;
   List<MediaModel> detail;
   List<MediaModel> master;
+  List<File> normalFiles;
+  List<File> detailFiles;
+  List<File> masterFiles;
   int salesVolume;
   List<StaircasePriceModel> staircasePrices;
   bool privacy;
@@ -171,9 +181,9 @@ class ProductModel extends ItemModel {
   ProductModel(
       {this.code,
       this.name,
-      this.price = 0.0,
-      this.minPrice = 0.0,
-      this.maxPrice = 0.0,
+      this.price,
+      this.minPrice,
+      this.maxPrice,
       this.thumbnail,
       this.staircasePrices,
       this.privacy,
@@ -292,8 +302,9 @@ class ApparelProductModel extends ProductModel {
         );
 
   ApparelProductModel.empty() {
-    this.code = '';
-    this.name = '';
+    this.normalFiles = [];
+    this.detailFiles = [];
+    this.attributes = ApparelProductAttributesModel.empty();
   }
 
   factory ApparelProductModel.fromJson(Map<String, dynamic> json) =>

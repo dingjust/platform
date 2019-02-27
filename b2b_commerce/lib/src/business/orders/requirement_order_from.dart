@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 import '../../home/requirement/requirement_publish_success.dart';
-import 'dart:typed_data';
 
 final List<Map<CategoryModel, List<CategoryModel>>> _category = [
   {
@@ -163,6 +162,15 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           brightness: Brightness.light,
           centerTitle: true,
           actions: <Widget>[
+            /*IconButton(
+                icon: Icon(Icons.play_for_work),
+                color: Color.fromRGBO(255, 149, 22, 1),
+                onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RequirementImportProduct(),
+                      ),
+                    )),*/
             GestureDetector(
                 child: Container(
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -929,8 +937,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 style: TextStyle(color: Color(0xffFF9516)),
               ),
               onPressed: () {
-                if (inputNumber.text != null) {
-                  print(inputNumber.text);
+                if (inputNumber.text != '') {
                   setState(() {
                     processCount = inputNumber.text;
                   });
@@ -978,9 +985,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             FlatButton(
               child: Text('确定'),
               onPressed: () {
-                if (inputNumber.text != null && inputPerson.text != null) {
+                if (inputNumber.text != '' && inputPerson.text != '') {
                   print(inputNumber.text);
                   setState(() {
+
                     contactInformation =
                         inputPerson.text + ',' + inputNumber.text;
                   });
@@ -1002,7 +1010,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('请输入加工数量'),
+          title: Text('请输入期望价格'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -1010,7 +1018,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   controller: inputNumber,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: '请输入加工数量',
+                    labelText: '请输入期望价格',
                   ),
                 ),
               ],
@@ -1020,7 +1028,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             FlatButton(
               child: Text('确定'),
               onPressed: () {
-                if (inputNumber.text != null) {
+                if (inputNumber.text != '') {
                   print(inputNumber.text);
                   setState(() {
                     expectPrice = inputNumber.text;
@@ -1116,7 +1124,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             FlatButton(
               child: Text('确定'),
               onPressed: () {
-                if (inputNumber.text != null) {
+                if (inputNumber.text != '') {
                   print(inputNumber.text);
                   setState(() {
                     remarks = inputNumber.text;
