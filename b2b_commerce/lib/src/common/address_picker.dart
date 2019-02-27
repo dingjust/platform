@@ -7,24 +7,31 @@ typedef void ChangeData(Map<String, dynamic> map);
 typedef List<Widget> CreateWidgetList();
 
 class AddressPicker {
-  static void showAddressPicker(
-      BuildContext context, {
-        ChangeData selectProvince,
-        ChangeData selectCity,
-        ChangeData selectArea,
-      }) {
+  Function cacel;
+
+  AddressPicker(this.cacel);
+
+  void showAddressPicker(BuildContext context, {
+    ChangeData selectProvince,
+    ChangeData selectCity,
+    ChangeData selectArea,
+  }) {
     rootBundle.loadString('data/province.json').then((v) {
       List data = json.decode(v);
       Navigator.push(
         context,
         new _AddressPickerRoute(
-            data: data,
-            selectProvince: selectProvince,
-            selectCity: selectCity,
-            selectArea: selectArea,
-            theme: Theme.of(context, shadowThemeOnly: true),
-            barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel),
+          data: data,
+          selectProvince: selectProvince,
+          selectCity: selectCity,
+          selectArea: selectArea,
+          theme: Theme.of(context, shadowThemeOnly: true),
+          barrierLabel:
+          MaterialLocalizations
+              .of(context)
+              .modalBarrierDismissLabel,
+          cacel:cacel,
+        ),
       );
     });
   }
@@ -37,6 +44,7 @@ class _AddressPickerRoute<T> extends PopupRoute<T> {
   final ChangeData selectProvince;
   final ChangeData selectCity;
   final ChangeData selectArea;
+  Function cacel;
 
   _AddressPickerRoute({
     this.theme,
@@ -45,6 +53,7 @@ class _AddressPickerRoute<T> extends PopupRoute<T> {
     this.selectProvince,
     this.selectCity,
     this.selectArea,
+    this.cacel,
   });
 
   @override
@@ -74,11 +83,12 @@ class _AddressPickerRoute<T> extends PopupRoute<T> {
       removeTop: true,
       context: context,
       child: new _AddressPickerWidget(
-        route: this,
-        data: data,
-        selectProvince: selectProvince,
-        selectCity: selectCity,
-        selectArea: selectArea,
+          route: this,
+          data: data,
+          selectProvince: selectProvince,
+          selectCity: selectCity,
+          selectArea: selectArea,
+          cacel:cacel,
       ),
     );
     if (theme != null) {
@@ -94,14 +104,16 @@ class _AddressPickerWidget extends StatefulWidget {
   final ChangeData selectProvince;
   final ChangeData selectCity;
   final ChangeData selectArea;
+  Function cacel;
 
-  _AddressPickerWidget(
-      {Key key,
-        @required this.route,
-        this.data,
-        this.selectProvince,
-        this.selectCity,
-        this.selectArea});
+  _AddressPickerWidget({Key key,
+    @required this.route,
+    this.data,
+    this.selectProvince,
+    this.selectCity,
+    this.selectArea,
+    this.cacel,
+  });
 
   @override
   State createState() {
@@ -113,7 +125,9 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
   FixedExtentScrollController provinceController;
   FixedExtentScrollController cityController;
   FixedExtentScrollController areaController;
-  int provinceIndex = 0, cityIndex = 0, areaIndex = 0;
+  int provinceIndex = 0,
+      cityIndex = 0,
+      areaIndex = 0;
   List province = new List();
   List city = new List();
   List area = new List();
@@ -133,32 +147,32 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
 
   Widget _bottomView() {
     return WillPopScope(
-      onWillPop: (){
-        Map<String, dynamic> provinceMap = {
-          "code": province[provinceIndex]['code'],
-          "name": province[provinceIndex]['name']
-        };
-        Map<String, dynamic> cityMap = {
-          "code": province[provinceIndex]['sub'][cityIndex]
-          ['code'],
-          "name": province[provinceIndex]['sub'][cityIndex]
-          ['name']
-        };
-        Map<String, dynamic> areaMap = {
-          "code": province[provinceIndex]['sub'][cityIndex]['sub']
-          [areaIndex]['code'],
-          "name": province[provinceIndex]['sub'][cityIndex]['sub']
-          [areaIndex]['name']
-        };
-        if (widget.selectProvince != null) {
-          widget.selectProvince(provinceMap);
-        }
-        if (widget.selectCity != null) {
-          widget.selectCity(cityMap);
-        }
-        if (widget.selectArea != null) {
-          widget.selectArea(areaMap);
-        }
+      onWillPop: () {
+//        Map<String, dynamic> provinceMap = {
+//          "code": province[provinceIndex]['code'],
+//          "name": province[provinceIndex]['name']
+//        };
+//        Map<String, dynamic> cityMap = {
+//          "code": province[provinceIndex]['sub'][cityIndex]
+//          ['code'],
+//          "name": province[provinceIndex]['sub'][cityIndex]
+//          ['name']
+//        };
+//        Map<String, dynamic> areaMap = {
+//          "code": province[provinceIndex]['sub'][cityIndex]['sub']
+//          [areaIndex]['code'],
+//          "name": province[provinceIndex]['sub'][cityIndex]['sub']
+//          [areaIndex]['name']
+//        };
+//        if (widget.selectProvince != null) {
+//          widget.selectProvince(provinceMap);
+//        }
+//        if (widget.selectCity != null) {
+//          widget.selectCity(cityMap);
+//        }
+//        if (widget.selectArea != null) {
+//          widget.selectArea(areaMap);
+//        }
         Navigator.pop(context);
         return Future.value(false);
       },
@@ -171,9 +185,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                 child: new Row(
                   children: <Widget>[
                     FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: widget.cacel,
                       child: new Text(
                         '取消',
                         style: new TextStyle(
@@ -365,7 +377,9 @@ class _MyAddressPickerState extends State<_MyAddressPicker> {
               widget.changed(index);
             }
           },
-          children: widget.createWidgetList().length > 0
+          children: widget
+              .createWidgetList()
+              .length > 0
               ? widget.createWidgetList()
               : [new Text('')],
         ),
