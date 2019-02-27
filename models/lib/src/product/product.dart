@@ -159,9 +159,6 @@ class ProductModel extends ItemModel {
   List<MediaModel> normal;
   List<MediaModel> detail;
   List<MediaModel> master;
-  List<File> normalFiles;
-  List<File> detailFiles;
-  List<File> masterFiles;
   int salesVolume;
   List<StaircasePriceModel> staircasePrices;
   bool privacy;
@@ -302,8 +299,6 @@ class ApparelProductModel extends ProductModel {
         );
 
   ApparelProductModel.empty() {
-    this.normalFiles = [];
-    this.detailFiles = [];
     this.attributes = ApparelProductAttributesModel.empty();
   }
 
