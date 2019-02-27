@@ -102,7 +102,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             _buildFactoryInfo(context),
             _buildDocutment(context),
             _buildDeliveryAddress(context),
-            _buildBottom(context)
+            _buildBottom(context),
+            _buildCommitButton(context),
           ],
         )));
   }
@@ -623,6 +624,56 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return PurchaseDocument(order);
   }
 
+  Widget _buildCommitButton(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Expanded(
+            child: Container(
+                margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                height: 40,
+                child: RaisedButton(
+                    color: Colors.red,
+                    child: Text(
+                      '取消订单',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    onPressed: () {})),
+          ),
+          Expanded(
+            child:
+            Container(
+                padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
+                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                height: 40,
+                child: RaisedButton(
+                    color: Color(0xFFFF9516),
+                    child: Text(
+                      '去支付',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    onPressed: () {})),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _selectPapersImages() async {
     showModalBottomSheet(
       context: context,
@@ -794,48 +845,6 @@ class PurchaseVoucherPic extends StatelessWidget {
     );
     ;
   }
-
-//  Widget _buildPicRow(BuildContext context){
-////    return Row(
-////        children: _buildPicList(context)
-////    );
-////  }
-////
-//////构造凭证横向图片UI
-////  List<Widget> _buildPicList(BuildContext context) {
-////    List<Widget> _listPic = new List();
-////    int mediasNumber = 4;
-////    if(progressModel.medias.length < 4){
-////      mediasNumber = progressModel.medias.length;
-////    }
-////    for (int i = 0; i < mediasNumber; i++) {
-////      _listPic.add(
-////          Expanded(
-////            child: Image.network(
-////              progressModel.medias[i] == null ? defaultPicUrl : progressModel.medias[i],
-////              width: 50,
-////              height: 50,
-////              fit: BoxFit.scaleDown,
-////            ),
-////          )
-////      );
-////    }
-////    if(_listPic.length < 4){
-////      for (int i = 0; i <= 4 - _listPic.length; i++) {
-////        _listPic.add(
-////            Expanded(
-////              child: Image.network(
-////                defaultPicUrl,
-////                width: 50,
-////                height: 50,
-////                fit: BoxFit.scaleDown,
-////              ),
-////            )
-////        );
-////      }
-////    }
-////    return _listPic;
-////  }
 
 }
 
