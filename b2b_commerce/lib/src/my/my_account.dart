@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
+import 'package:b2b_commerce/src/my/my_bill.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
@@ -137,45 +138,45 @@ class MyAccountPage extends StatelessWidget {
                   )),
             ),
           ),
-          Container(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  margin: EdgeInsets.only(bottom: 15),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                          child: Text(
-                        '本月收支',
-                        style: TextStyle(fontSize: 20),
-                      )),
-                      Icon(
-                        Icons.chevron_right,
-                        color: Colors.grey,
-                        size: 30,
-                      ),
-                    ],
+          GestureDetector(
+            child: Container(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    margin: EdgeInsets.only(bottom: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Text(
+                          '本月收支',
+                          style: TextStyle(fontSize: 20),
+                        )),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Colors.grey,
+                          size: 30,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.ROUTE_MY_BILL);
-                  },
-                  child: IncomeComparison(
+                  IncomeComparison(
                     height: 120,
                     income: 123456.00,
                     expenditure: 789456.00,
                   ),
-                )
-              ],
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-            ),
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.ROUTE_MY_BILL);
+            },
           )
         ],
       ),

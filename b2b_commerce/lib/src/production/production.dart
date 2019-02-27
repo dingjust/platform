@@ -138,7 +138,7 @@ class ProductionItem extends StatelessWidget {
                           Row(
                             children: <Widget>[
                               Text(
-                                '共${order.totalQuantity}件商品   合计: ￥${order.totalPrice}',
+                                '共${order.totalQuantity}件商品',
                                 style: TextStyle(
                                   color: Color.fromRGBO(150, 150, 150, 1),
                                   fontSize: 14,
