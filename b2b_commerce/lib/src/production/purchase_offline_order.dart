@@ -1,12 +1,6 @@
-import 'dart:io';
-
 import 'package:b2b_commerce/src/common/address_picker.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
-import 'dart:typed_data';
 
 class PurchaseOfflineOrder extends StatefulWidget {
 

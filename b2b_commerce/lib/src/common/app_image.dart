@@ -204,9 +204,63 @@ class B2BImage {
     );
   }
 
-    static Image address_under_line({double width, double height}) {
+  static Image address_under_line({double width, double height}) {
     return Image.asset(
       'temp/common/address_under_line.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image address_manage({double width, double height}) {
+    return Image.asset(
+      'temp/my/address_manage.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image certicate_info({double width, double height}) {
+    return Image.asset(
+      'temp/my/certicate_info.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image customer_service({double width, double height}) {
+    return Image.asset(
+      'temp/my/customer_service.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image invoice_manage({double width, double height}) {
+    return Image.asset(
+      'temp/my/invoice_manage.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image my_account({double width, double height}) {
+    return Image.asset(
+      'temp/my/my_account.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
+
+  static Image setting({double width, double height}) {
+    return Image.asset(
+      'temp/my/setting.png',
       package: _package,
       width: width,
       height: height,

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
-import 'package:image_picker/image_picker.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
