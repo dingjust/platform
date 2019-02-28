@@ -110,8 +110,7 @@ class AddressModel extends ItemModel {
     @required this.line1,
     this.defaultAddress = false,
   });
-
-  String get regionCityAndDistrict => region.name + city.name + cityDistrict.name;
+  String get regionCityAndDistrict => region.name == city.name && region.name == cityDistrict.name ? region.name :region.name + city.name + cityDistrict.name;
 
   String get details => (region.name + city.name + cityDistrict.name + line1);
 
