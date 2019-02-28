@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 class ProductField extends StatefulWidget {
-  RequirementOrderModel item;
+  ApparelProductModel item;
 
   ProductField(this.item);
 
@@ -28,7 +27,7 @@ class ProductFieldState extends State<ProductField> {
             width: 235,
             child: Align(
               alignment: Alignment.centerRight,
-              child: Text(widget.item?.product?.name ?? '',
+              child: Text(widget.item?.name ?? '',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -49,7 +48,7 @@ class ProductFieldState extends State<ProductField> {
             width: 150,
             child: Align(
               alignment: Alignment.centerRight,
-              child: Text(widget.item?.product?.skuID ?? '',
+              child: Text(widget.item?.skuID ?? '',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

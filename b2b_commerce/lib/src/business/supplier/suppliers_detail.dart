@@ -1,5 +1,7 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
+import 'package:b2b_commerce/src/business/supplier/contact_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -42,7 +44,12 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                 ),
               ),
               onTap: () {
-                _selectActionButton(widget.supplierModel.factory.contactPhone);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ContactFactoryPage(),
+                  ),
+                );
               }
           )
         ],
@@ -81,9 +88,15 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
         Icons.add,
         color: Colors.white,
       ),
-      tooltip: '敬请期待',
       label: Text('发布需求'),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RequirementOrderFrom(),
+          ),
+        );
+      },
       backgroundColor: Colors.orangeAccent,
     );
   }
