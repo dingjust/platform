@@ -4,13 +4,15 @@ import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/delivery_address_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_price_field.dart';
+import 'package:b2b_commerce/src/business/orders/form/is_invoice_field.dart';
+import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
+import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
+import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/remarks_field.dart';
-import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import '../apparel_products.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 import '../../home/requirement/requirement_publish_success.dart';
 import 'form/pictures_field.dart';
 import 'form/product_field.dart';
@@ -50,10 +52,29 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   bool _isRequirementPool = true;
   String isProofing = '选取';
 
+  ApparelProductModel _product;
+
   @override
   void initState() {
-    model.product = widget.product;
-    if (model.product?.normal != null) _normalMedias = model.product?.normal;
+    if(widget.product != null){
+      if (widget.product.normal != null) _normalMedias = widget.product.normal;
+      model.minorCategory = widget.product.minorCategory;
+      if (widget.product?.minorCategory != null) {
+        _categorySelected = [widget.product.minorCategory];
+      }
+      _product = widget.product;
+    }
+
+    if (_normalMedias != null) {
+      _normalMedias.forEach((media) {
+        //缓存图片并获取缓存图片
+        DefaultCacheManager().getSingleFile(media.url).then((file) {
+          setState(() {
+            _normalImages.add(file);
+          });
+        });
+      });
+    }
 
     // TODO: implement initState
     super.initState();
@@ -62,13 +83,13 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('需求发布'),
-          elevation: 0.5,
-          brightness: Brightness.light,
-          centerTitle: true,
-          actions: <Widget>[
-            /*IconButton(
+      appBar: AppBar(
+        title: Text('需求发布'),
+        elevation: 0.5,
+        brightness: Brightness.light,
+        centerTitle: true,
+        actions: <Widget>[
+          /*IconButton(
                 icon: Icon(Icons.play_for_work),
                 color: Color.fromRGBO(255, 149, 22, 1),
                 onPressed: () => Navigator.push(
@@ -77,63 +98,60 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                         builder: (context) => RequirementImportProduct(),
                       ),
                     )),*/
-            GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  child: Center(
-                    child: Text(
-                      '导入商品',
-                      style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
-                    ),
+          GestureDetector(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Center(
+                  child: Text(
+                    '导入商品',
+                    style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
                   ),
                 ),
-                onTap: () async {
-                  List<File> files = _normalImages.toList();
-                  dynamic result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ApparelProductsPage(
-                            isRequirement: true,
-                            item: model.product,
-                          ),
-                    ),
-                  );
+              ),
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ApparelProductsPage(
+                          isRequirement: true,
+                          item: widget.product,
+                        ),
+                  ),
+                );
 
-                  //TODO：导入商品后的一系列操作
-                  _normalImages.clear();
-                  model.product = result;
-                  _normalMedias = model.product?.normal;
-                  _categorySelected.clear();
-                  if (model.product?.minorCategory != null) {
-                    _categorySelected.add(model.product.minorCategory);
-                  }
-                  if (_normalMedias != null) {
-                    _normalMedias.forEach((media) {
-                      //缓存图片并获取缓存图片
+                //TODO：导入商品后的一系列操作
+                _normalImages.clear();
+                _product = result;
+                _normalMedias = _product?.normal;
+                if(_product != null)  _categorySelected = [_product.minorCategory];
+                model.minorCategory = _categorySelected.length>0 ? _categorySelected[0] : null;
+                if (_normalMedias != null) {
+                  _normalMedias.forEach((media) {
+                    //缓存图片并获取缓存图片
 //                      CacheManager.getInstance().then((cacheManager){
 //                        cacheManager.getFile(media.url).then((file){
 //                          _normalImages.add(file);
 //                        });
 //                      });
-                      DefaultCacheManager()
-                          .getSingleFile(media.url)
-                          .then((file) {
-                        setState(() {
-                          _normalImages.add(file);
-                        });
+                    DefaultCacheManager().getSingleFile(media.url).then((file) {
+                      setState(() {
+                        _normalImages.add(file);
                       });
                     });
-                  }
-                })
-          ],
-        ),
-        body: Container(
-            child: ListView(
+                  });
+                }
+              })
+        ],
+      ),
+      body: Container(
+        child: ListView(
           children: <Widget>[
             _buildBody(context),
             _buildCommitButton(context),
           ],
-        )));
+        ),
+      ),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -145,8 +163,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 //            _buildPic(context),
             PicturesField(_normalImages),
             Offstage(
-              offstage: model.product == null,
-              child: ProductField(model),
+              offstage: _product == null,
+              child: ProductField(_product),
             ),
             MajorCategoryField(model),
             new Divider(height: 0),
@@ -178,25 +196,15 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             child: Column(
               children: <Widget>[
                 ProductionAreasField(model),
-                new Divider(
-                  height: 0,
-                ),
-                _buildCooperationModes(context),
-                new Divider(
-                  height: 0,
-                ),
-                _buildProofing(context),
-                new Divider(
-                  height: 0,
-                ),
-                _buildSampleProduct(context),
-                new Divider(
-                  height: 0,
-                ),
-                _buildInvoice(context),
-                new Divider(
-                  height: 0,
-                ),
+                new Divider(height: 0),
+                MachiningTypeField(model),
+                new Divider(height: 0),
+                IsProofingField(model),
+                new Divider(height: 0),
+                IsProvideSampleProductField(model),
+                new Divider(height: 0),
+                IsInvoiceField(model),
+                new Divider(height: 0),
                 RemarksField(model),
               ],
             ),
@@ -252,113 +260,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         });
   }
 
-  //加工类型
-  Widget _buildCooperationModes(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Text(
-              '加工类型',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: Text(
-              model.machiningType == null
-                  ? enumMap(MachiningTypeEnum, model.machiningType)
-                  : '选取',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-        ),
-        onTap: () {
-          _showTypeSelect();
-        });
-  }
-
-  //是否需要打样
-  Widget _buildProofing(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Text(
-              '是否需要打样',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: Text(
-              isProofing,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey),
-            ),
-          ),
-        ),
-        onTap: () {
-          _showIsProofingSelect();
-        });
-  }
-
-  //是否提供样衣
-  Widget _buildSampleProduct(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Text(
-              '是否提供样衣',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: Text(
-              isProvideSampleProduct,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey),
-            ),
-          ),
-        ),
-        onTap: () {
-          _showIsProvideSampleProductSelect();
-        });
-  }
-
-  //是否开具发票
-  Widget _buildInvoice(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Text(
-              '是否开具发票',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: Text(
-              isInvoice,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey),
-            ),
-          ),
-        ),
-        onTap: () {
-          _showIsInvoiceSelect();
-        });
-  }
-
   //确认发布按钮
   Widget _buildCommitButton(BuildContext context) {
     return Container(
@@ -381,10 +282,16 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               onPressed: () {
+                model.entries = [RequirementOrderEntryModel(product: _product,order: model)];
+                print('${_normalImages}');
+                print('${model.code},${model.entries[0].product?.name},${model.entries[0].product?.code},${model.majorCategory},${model.minorCategory}');
+                print('${model.totalQuantity},${model.expectedPrice},${model.expectedDeliveryDate},${model.contactPerson},${model.contactPhone}');
+                print('${model.deliveryAddress},${model.productionAreas},${model.machiningType},${model.isProofing},${model.isProvideSampleProduct}');
+                print('${model.isInvoice},${model.remarks},${model.isToRequirementPool}');
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PublishRequirementSuccessDialog(),
+                    builder: (context) => PublishRequirementSuccessDialog(model: model,),
                   ),
                 );
               },
@@ -403,10 +310,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                       fontSize: 14,
                       color: Colors.grey),
                 ),
-                value: _isRequirementPool,
+                value: model.isToRequirementPool ?? true,
                 onChanged: (T) {
                   setState(() {
-                    _isRequirementPool = !_isRequirementPool;
+                    model.isToRequirementPool = model.isToRequirementPool == null ? true : !model.isToRequirementPool;
                   });
                 },
               ),
@@ -420,130 +327,4 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     );
   }
 
-  //加工类型
-  void _showTypeSelect() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-            height: 300,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: MachiningTypeEnum.map((machiningType) {
-                return ListTile(
-                  title: Text(machiningType.name),
-                  onTap: () {
-                    setState(() {
-                      model.machiningType = machiningType.code;
-                    });
-                    Navigator.pop(context);
-                  },
-                );
-              }).toList(),
-            ));
-      },
-    );
-  }
-
-  //是否打样选项
-  void _showIsProofingSelect() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-            height: 300,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  title: Text('需要打样'),
-                  onTap: () async {
-                    setState(() {
-                      isProofing = '需要打样';
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('不需要打样'),
-                  onTap: () async {
-                    setState(() {
-                      isProofing = '不需要打样';
-                    });
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            ));
-      },
-    );
-  }
-
-  //是否提供样衣选项
-  void _showIsProvideSampleProductSelect() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-            height: 300,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  title: Text('提供样衣'),
-                  onTap: () async {
-                    setState(() {
-                      isProvideSampleProduct = '提供样衣';
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('不提供样衣'),
-                  onTap: () async {
-                    setState(() {
-                      isProvideSampleProduct = '不提供样衣';
-                    });
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            ));
-      },
-    );
-  }
-
-  //是否开具发票选项
-  void _showIsInvoiceSelect() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-            height: 300,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  title: Text('开发票'),
-                  onTap: () async {
-                    setState(() {
-                      isInvoice = '开发票';
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('不开发票'),
-                  onTap: () async {
-                    setState(() {
-                      isInvoice = '不开发票';
-                    });
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            ));
-      },
-    );
-  }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class DeliveryAddressField extends StatefulWidget {
-  RequirementOrderModel item;
+  final RequirementOrderModel item;
 
   DeliveryAddressField(this.item);
 

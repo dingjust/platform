@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class MinorCategoryField extends StatefulWidget{
-  RequirementOrderModel item;
+  final RequirementOrderModel item;
   List<CategoryModel> categorySelected = [];
   MinorCategoryField(this.item,this.categorySelected);
 

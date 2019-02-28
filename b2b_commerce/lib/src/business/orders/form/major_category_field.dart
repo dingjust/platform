@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class MajorCategoryField extends StatefulWidget{
-  RequirementOrderModel item;
+  final RequirementOrderModel item;
   MajorCategoryField(this.item);
 
   MajorCategoryFieldState createState() => MajorCategoryFieldState();

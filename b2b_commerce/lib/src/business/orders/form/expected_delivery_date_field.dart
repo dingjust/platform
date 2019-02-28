@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class ExpectedDeliveryDateField extends StatefulWidget{
-  RequirementOrderModel item;
+  final RequirementOrderModel item;
   ExpectedDeliveryDateField(this.item);
 
   ExpectedDeliveryDateFieldState createState() => ExpectedDeliveryDateFieldState();

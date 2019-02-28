@@ -404,8 +404,8 @@ class RequirementOrderModel extends OrderModel {
   ///生产地区
   List<String> productionAreas;
 
-  ///商品
-  ApparelProductModel product;
+  ///是否发布到需求池
+  bool isToRequirementPool;
 
   RequirementOrderModel({
     String code,
@@ -429,7 +429,7 @@ class RequirementOrderModel extends OrderModel {
     this.contactPerson,
     this.contactPhone,
     this.productionAreas,
-    this.product,
+    this.isToRequirementPool,
   }) : super(
           code: code,
           totalQuantity: totalQuantity,
