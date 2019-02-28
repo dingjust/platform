@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 我的客服
-class MyClientServicesPage extends StatefulWidget {
-  _MyClientServicesPageState createState() => _MyClientServicesPageState();
+class ContactFactoryPage extends StatefulWidget {
+  _ContactFactoryPageState createState() => _ContactFactoryPageState();
 }
 
-class _MyClientServicesPageState extends State<MyClientServicesPage>{
+class _ContactFactoryPageState extends State<ContactFactoryPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
         brightness: Brightness.light,
         centerTitle: true,
         elevation: 0.5,
-        title: Text('我的客服'),
+        title: Text('联系工厂'),
       ),
       body: Container(
           child: ListView(
@@ -33,7 +33,6 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
                 height: 0,
               ),
               _buildEmail(context),
-              _buildTips(context),
             ],
           )
       ),
@@ -46,7 +45,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
           color: Colors.white,
           child: ListTile(
             leading: Text(
-              '客服电话',
+              '电话',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -73,7 +72,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
           color: Colors.white,
           child: ListTile(
             leading: Text(
-              '客服微信',
+              '微信',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -100,7 +99,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
           color: Colors.white,
           child: ListTile(
             leading: Text(
-              '客服QQ',
+              'QQ',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -127,7 +126,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
           color: Colors.white,
           child: ListTile(
             leading: Text(
-              '客服邮箱',
+              '邮箱',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -146,19 +145,6 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
         onTap : () {
           copyToClipboard('2995225588@qq.com');
         });
-  }
-
-  Widget _buildTips(BuildContext context){
-    return Container(
-      margin: EdgeInsets.only(top: 100),
-      child: Center(
-        child: Text('上班时间：工作日 9:00 - 18:00',
-          style: TextStyle(
-            fontSize: 16
-          ),
-        ),
-      ),
-    );
   }
 
 //拨打电话或发短信
