@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/production/production_search_result.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -36,7 +37,20 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
   @override
   Widget buildResults(BuildContext context) {
     // TODO: 结果集
-    return Container(child: Text(query));
+    return Container();
+  }
+
+  // @override
+  void showResults(BuildContext context) {
+    // TODO: implement showResults
+    super.showResults(context);
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductionResultPage(
+                  keyword: query,
+                )));
   }
 
   @override
@@ -49,12 +63,13 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
   Widget buildSuggestions(BuildContext context) {
     // TODO: 输入提示信息
     return Container(
-      child:
-          query == '' ? _buildHistoryListView() : _buildSuggestionsListView(),
+      child: query == ''
+          ? _buildHistoryListView(context)
+          : _buildSuggestionsListView(context),
     );
   }
 
-  Widget _buildHistoryListView() {
+  Widget _buildHistoryListView(BuildContext context) {
     return ListView(
       children: <Widget>[
         Container(
@@ -76,7 +91,14 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
                 value: 'NA12314412313',
                 onTap: () {},
               ),
-              HistoryTag(value: '鸭绒羽绒服', onTap: () {}),
+              HistoryTag(
+                  value: '鸭绒羽绒服',
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductionResultPage()));
+                  }),
               HistoryTag(value: '潮流', onTap: () {}),
               HistoryTag(value: 'ＡＩＯＪＯＪＩＯＡ', onTap: () {}),
               HistoryTag(value: '冬季款', onTap: () {}),
@@ -89,31 +111,67 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
     );
   }
 
-  Widget _buildSuggestionsListView() {
+  Widget _buildSuggestionsListView(BuildContext context) {
     return ListView(
       children: <Widget>[
         SuggestionsRow(
           value: query,
-          onPressed: () {
+          onIconPressed: () {
             query = query;
+          },
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProductionResultPage(
+                          keyword: query,
+                        )));
           },
         ),
         SuggestionsRow(
           value: '${query} 1',
-          onPressed: () {
+          onIconPressed: () {
             query = '${query} 1';
+          },
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProductionResultPage(
+                          keyword: '${query} 1',
+                        )));
           },
         ),
         SuggestionsRow(
           value: '${query} 2',
-          onPressed: () {
+          onIconPressed: () {
             query = '${query} 2';
+          },
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProductionResultPage(
+                          keyword: '${query} 2',
+                        )));
           },
         ),
         SuggestionsRow(
           value: '${query} 3',
-          onPressed: () {
+          onIconPressed: () {
             query = '${query} 3';
+          },
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProductionResultPage(
+                          keyword: '${query} 3',
+                        )));
           },
         )
       ],

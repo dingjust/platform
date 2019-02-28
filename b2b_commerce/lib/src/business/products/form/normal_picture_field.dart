@@ -55,7 +55,7 @@ class _NormalPictureFieldState extends State<NormalPictureField> {
 //        ),
         !widget.isCreate
             ? EditableAttachments(list: _normalMedias)
-            : PhotoPicker(images: widget.item.normalFiles, width: 350),
+            : PhotoPicker(images: _normalImages, width: 350),
       ],
     );
   }
