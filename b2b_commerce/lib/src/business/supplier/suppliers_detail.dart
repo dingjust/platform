@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
-import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
 import 'package:b2b_commerce/src/business/supplier/contact_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';

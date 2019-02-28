@@ -16,7 +16,7 @@ class ProductionFilterPage extends StatefulWidget {
       return FilterConditionEntry(
           label: entry.label, checked: entry.checked, value: entry.value);
     }).toList();
-    
+
     _startDate = bloc.startDate;
     _endDate = bloc.endDate;
   }

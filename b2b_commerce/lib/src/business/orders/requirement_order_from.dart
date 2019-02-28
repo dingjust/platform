@@ -9,17 +9,18 @@ import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/remarks_field.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import '../apparel_products.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:models/models.dart';
+
 import '../../home/requirement/requirement_publish_success.dart';
-import 'form/pictures_field.dart';
-import 'form/product_field.dart';
-import 'form/total_quantity_field.dart';
+import '../apparel_products.dart';
 import 'form/major_category_field.dart';
 import 'form/minor_category_field.dart';
+import 'form/pictures_field.dart';
+import 'form/product_field.dart';
 import 'form/production_areas_field.dart';
+import 'form/total_quantity_field.dart';
 
 final List<EnumModel> technologyList = [
   EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
