@@ -1,13 +1,21 @@
+import 'package:b2b_commerce/src/business/apparel_product_list.dart';
+import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:b2b_commerce/src/production/production_earnest_money.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 
-class PurchaseOfflineOrder extends StatefulWidget {
+class ProductionOfflineOrder extends StatefulWidget {
 
-  _PurchaseOfflineOrderState createState() => _PurchaseOfflineOrderState();
+  final ApparelProductModel product;
+
+  ProductionOfflineOrder({this.product});
+
+  _ProductionOfflineOrderState createState() => _ProductionOfflineOrderState();
 }
 
-class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
+class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   String address;
   String processingType;
   String isInvoice;
@@ -15,7 +23,18 @@ class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
   String processCount;
   String price;
   String deliveryDate;
+  String orderStatus;
+  String statusCode;
+  ApparelProductModel _product;
 
+  @override
+  void initState() {
+    _product = widget.product;
+//    if (_product?.normal != null) _normalMedias = _product?.normal;
+
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +48,6 @@ class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
         body: Container(
             child: ListView(
               children: <Widget>[
-//                _buildTop(context),
                 _buildCenter(context),
                 _buildBottom(context),
                 _buildCommitButton(context),
@@ -38,37 +56,33 @@ class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
     );
   }
 
-  Widget _buildTop(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child:  Column(
-          children: <Widget>[
-
-          ],
-      ),
-    );
-  }
-
   Widget _buildCenter(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
       color: Colors.white,
       child: Column(
-          children: <Widget>[
-            _buildProduct(context),
-            Divider(
-              height: 0,
-            ),
-            _buildCooperationModes(context),
-            Divider(
-              height: 0,
-            ),
-            _buildExpectPrice(context),
-            Divider(
-              height: 0,
-            ),
-            _buildDeliveryDate(context),
-          ],
+        children: <Widget>[
+          _buildFactory(context),
+          Divider(
+            height: 0,
+          ),
+          _buildProduct(context),
+          Divider(
+            height: 0,
+          ),
+          _buildProcessCount(context),
+          Divider(
+            height: 0,
+          ),
+          _buildExpectPrice(context),
+          Divider(
+            height: 0,
+          ),
+          _buildDeliveryDate(context),
+          Divider(
+            height: 0,
+          ),
+          _buildEarnestMoney(context),
+        ],
       ),
     );
   }
@@ -97,21 +111,22 @@ class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
     );
   }
 
+  //商品
   Widget _buildProduct(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
-            leading: Text(
-              '商品',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+              leading: Text(
+                '商品',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            trailing:
+              trailing:
 //            price == null || price == ''
 //                ?
-            Icon(Icons.keyboard_arrow_right)
+              Icon(Icons.keyboard_arrow_right)
 //                : Text(price,
 //              style: TextStyle(
 //                  fontSize: 16,
@@ -121,8 +136,17 @@ class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
 //            ),
           ),
         ),
-        onTap: () {
-//          _neverPrice(context);
+          onTap: () async {
+            dynamic result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ApparelProductsPage(
+                      isRequirement: true,
+                      item: _product,
+                    ),
+              ),
+            );
         });
   }
 
@@ -154,13 +178,41 @@ class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
         });
   }
 
+  //生产工厂
+  Widget _buildFactory(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '生产工厂',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: processCount == null || processCount == ''
+                ? Icon(Icons.keyboard_arrow_right)
+                : Text(processCount,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          _neverFactory(context);
+        });
+  }
+
   //价格
   Widget _buildExpectPrice(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
             leading: Text(
-              '价格',
+              '生产单价',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -213,6 +265,31 @@ class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
         ),
         onTap: () {
           _showDatePicker();
+        });
+  }
+
+  //定金尾款
+  Widget _buildEarnestMoney(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+              leading: Text(
+                '定金尾款',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              trailing:Icon(Icons.keyboard_arrow_right)
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductionEarnestMoney(),
+            ),
+          );
         });
   }
 
@@ -434,6 +511,67 @@ class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
     );
   }
 
+  //生产工厂
+  Future<void> _neverFactory(BuildContext context) async {
+    TextEditingController inputNumber = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('请输入生产工厂信息'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller: inputNumber,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: '请输入工厂名称',
+                  ),
+                ),
+                TextField(
+                  controller: inputNumber,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: '请输入联系人',
+                  ),
+                ),
+                TextField(
+                  controller: inputNumber,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: '请输入联系电话',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                if (inputNumber.text != null) {
+                  print(inputNumber.text);
+                  setState(() {
+                    processCount = inputNumber.text;
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   //价格
   Future<void> _neverPrice(BuildContext context) async {
     TextEditingController inputNumber = TextEditingController();
@@ -611,6 +749,62 @@ class _PurchaseOfflineOrderState extends State<PurchaseOfflineOrder> {
                     Navigator.pop(context);
                   },
                 )
+              ],
+            ));
+      },
+    );
+  }
+
+  //订单状态
+  void _showStatusSelect() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            height: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text('待付定金'),
+                  onTap: () async {
+                    setState(() {
+                      statusCode = 'WAIT_FOR_DEPOSIT_PAYABLE';
+                      orderStatus = '待付定金';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('生产中'),
+                  onTap: () async {
+                    setState(() {
+                      statusCode = 'IN_PRODUCTION';
+                      orderStatus = '生产中';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('已出库'),
+                  onTap: () async {
+                    setState(() {
+                      statusCode = 'OUT_OF_STORE';
+                      orderStatus = '已出库';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('已完成'),
+                  onTap: () async {
+                    setState(() {
+                      statusCode = 'COMPLETED';
+                      orderStatus = '已完成';
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ));
       },

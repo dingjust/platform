@@ -48,11 +48,8 @@ const RequirementOrderStatusLocalizedMap = {
 
 /// 采购订单状态
 enum PurchaseOrderStatus {
-  /// 待处理
-  WAIT_FOR_PROCESSING,
-
-  /// 待确认
-  PENDING_APPROVAL,
+  /// 待付定金
+  WAIT_FOR_DEPOSIT_PAYABLE,
 
   /// 生产中
   IN_PRODUCTION,
@@ -66,8 +63,7 @@ enum PurchaseOrderStatus {
 
 // TODO: i18n处理
 const PurchaseOrderStatusLocalizedMap = {
-  PurchaseOrderStatus.WAIT_FOR_PROCESSING: "待处理",
-  PurchaseOrderStatus.PENDING_APPROVAL: "待确认",
+  PurchaseOrderStatus.WAIT_FOR_DEPOSIT_PAYABLE: "待付定金",
   PurchaseOrderStatus.IN_PRODUCTION: "生产中",
   PurchaseOrderStatus.OUT_OF_STORE: "已出库",
   PurchaseOrderStatus.COMPLETED: "已完成"

@@ -16,8 +16,7 @@ class PurchaseOrderBLoC extends BLoCBase {
     // 初始化
     _ordersMap = {
       'ALL': [],
-      'WAIT_FOR_PROCESSING': [],
-      'PENDING_APPROVAL': [],
+      'WAIT_FOR_DEPOSIT_PAYABLE': [],
       'IN_PRODUCTION': [],
       'OUT_OF_STORE': [],
       'COMPLETED': []
