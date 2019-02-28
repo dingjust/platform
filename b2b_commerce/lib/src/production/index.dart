@@ -1,7 +1,7 @@
 import 'package:b2b_commerce/src/home/factory/factory.dart';
-import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/my/my_client_services.dart';
 import 'package:b2b_commerce/src/production/production.dart';
+import 'package:b2b_commerce/src/production/production_filter.dart';
 import 'package:b2b_commerce/src/production/production_offline_order.dart';
 import 'package:b2b_commerce/src/production/search_input.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class _ProductionPageState extends State<ProductionPage> {
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: HomeSearchInputBox(),
+            title: ProductionSearchInputBox(),
             brightness: Brightness.dark,
             actions: <Widget>[
               IconButton(
@@ -63,13 +63,22 @@ class _ProductionPageState extends State<ProductionPage> {
 //                  value: 'complete',
 //                )
               ],
-              action: IconButton(
-                icon: Icon(
+              action: FlatButton(
+                child: Icon(
                   B2BIcons.menu,
                   size: 12,
                   color: Color.fromRGBO(50, 50, 50, 1),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductionFilterPage(
+                            bloc: ProductionBLoC.instance,
+                          ),
+                    ),
+                  );
+                },
               ),
               streamController: ProductionBLoC.instance.conditionController,
             ),
@@ -131,8 +140,7 @@ class _ProductionPageState extends State<ProductionPage> {
                         builder: (context) => ProductionOfflineOrder(),
                       ),
                     );
-                  }
-              ),
+                  }),
             ],
           ),
         ));

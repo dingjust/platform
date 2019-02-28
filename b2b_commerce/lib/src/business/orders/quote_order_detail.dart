@@ -330,6 +330,25 @@ class QuoteOrderDetailPage extends StatelessWidget {
               color: Colors.grey,
             ),
             Padding(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text('其他'),
+                  ),
+                  Text(
+                    '￥ ${item.order.costOfOther}',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Colors.grey,
+            ),
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -339,7 +358,8 @@ class QuoteOrderDetailPage extends StatelessWidget {
                         '￥' +
                         (item.order.unitPriceOfFabric +
                                 item.order.unitPriceOfExcipients +
-                                item.order.unitPriceOfProcessing)
+                                item.order.unitPriceOfProcessing +
+                                item.order.costOfOther)
                             .toString(),
                     style: TextStyle(
                       color: Colors.red,
@@ -360,25 +380,6 @@ class QuoteOrderDetailPage extends StatelessWidget {
                   ),
                   Text(
                     '￥' + item.order.costOfSamples.toString(),
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              color: Colors.grey,
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text('其他'),
-                  ),
-                  Text(
-                    '￥ ${item.order.costOfOther}',
                     style: TextStyle(
                       color: Colors.red,
                     ),
