@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
+import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
+import 'package:b2b_commerce/src/home/factory/factory.dart';
 
 class FlutterAMap extends StatefulWidget {
     //地图定位纬度
@@ -122,6 +125,7 @@ class _FlutterAMapState extends State<FlutterAMap>{
   }
 
   onClickMarkers(FactoryModel model, int index) {
+    _showClickedFactory(model);
     print('123');
     allMarkers.clear();
     allMarkers.add(
@@ -147,36 +151,39 @@ class _FlutterAMapState extends State<FlutterAMap>{
     );
     if (widget.factoryList != null) {
       for (int i = 0; i < widget.factoryList.length; i++) {
-        allMarkers.add(
-          Marker(
-              width: 60.0,
-              height: 60.0,
-              //经纬度坐标
-              point: LatLng(
-                  widget.factoryList[i].locationX,
-                  widget.factoryList[i].locationY),
-              builder: (ctx) =>
-                  Container(
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.location_on,
+        if(i != index){
+          allMarkers.add(
+            Marker(
+                width: 60.0,
+                height: 60.0,
+                //经纬度坐标
+                point: LatLng(
+                    widget.factoryList[i].locationX,
+                    widget.factoryList[i].locationY),
+                builder: (ctx) =>
+                    Container(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.location_on,
+                        ),
+                        color: Colors.orangeAccent,
+                        iconSize: 40,
+                        tooltip: widget.factoryList[i].name,
+                        onPressed: () {
+                          onClickMarkers(widget.factoryList[i], i);
+                          setState(() {
+                            allMarkers = allMarkers;
+                          });
+                        }, //标记添加动作
                       ),
-                      color: Colors.orangeAccent,
-                      iconSize: 40,
-                      tooltip: widget.factoryList[i].name,
-                      onPressed: () {
-                        onClickMarkers(widget.factoryList[i], i);
-                        setState(() {
-                          allMarkers = allMarkers;
-                        });
-                      }, //标记添加动作
-                    ),
-                  )
-          ),
-        );
+                    )
+            ),
+          );
+        }
+
       }
     }
-    allMarkers.removeAt(index);
+//    allMarkers.removeAt(index);
     setState(() {
       allMarkers = allMarkers;
     });
@@ -197,6 +204,7 @@ class _FlutterAMapState extends State<FlutterAMap>{
                   iconSize: 60,
                   tooltip: model.name,
                   onPressed: () {
+
                     onClickMarkers(model, index);
                     setState(() {
                       allMarkers = allMarkers;
@@ -208,5 +216,16 @@ class _FlutterAMapState extends State<FlutterAMap>{
     );
   }
 
+  void _showClickedFactory(FactoryModel model) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return FactoryItem(
+          model:model,
+          showButton: false,
+        );
+      },
+    );
+  }
 
 }
