@@ -9,18 +9,22 @@ class TextFieldComponent extends StatefulWidget {
   final TextInputType inputType;
   final Widget trailing;
   Function onChanged;
+  final bool autofocus;
+  EdgeInsets padding;
 
 //  final FormFieldValidator<String> _validator;
 
   TextFieldComponent({
     this.leadingText,
     this.hintText,
-    this.leadingWidth,
+    this.leadingWidth = 75,
     this.controller,
     @required this.focusNode,
     this.inputType,
     this.trailing,
     this.onChanged,
+    this.autofocus = false,
+    this.padding,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
@@ -28,7 +32,6 @@ class TextFieldComponent extends StatefulWidget {
 
 class TextFieldComponentState extends State<TextFieldComponent> {
   Color _dividerColor = Colors.grey[400];
-  double _width = 75;
 
   @override
   void initState() {
@@ -44,10 +47,10 @@ class TextFieldComponentState extends State<TextFieldComponent> {
       }
     });
 
-    if(widget.leadingText == null || widget.leadingText == ''){
-      _width = 0.0;
-    }else if(widget.leadingWidth != null){
-      _width = widget.leadingWidth;
+    if (widget.leadingText == null || widget.leadingText == '') {
+      widget.leadingWidth = 0.0;
+    } else if (widget.leadingWidth != null) {
+      widget.leadingWidth = widget.leadingWidth;
     }
 
     // TODO: implement initState
@@ -62,53 +65,52 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.autofocus)
+    widget.controller.value = TextEditingValue(
+      // 设置内容
+      text: widget.controller.text,
+      // 保持光标在最后
+      selection: TextSelection.fromPosition(
+        TextPosition(
+            affinity: TextAffinity.downstream,
+            offset: widget.controller.text.length),
+      ),
+    );
     return Column(
       children: <Widget>[
-        widget.trailing == null
-            ? ListTile(
-                leading: Container(
-                  width: _width,
-                  child: Text(
-                    widget.leadingText ?? '',
-                    style: TextStyle(fontSize: 16),
-                  ),
+        Container(
+          padding: widget.padding ??
+              EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          child: Row(
+            children: <Widget>[
+              Offstage(
+                offstage: widget.leadingText == null,
+                child: Container(
+                  width: widget.leadingWidth,
+                  child: Text(widget.leadingText ?? ''),
                 ),
-                title: TextField(
+              ),
+              Expanded(
+                child: TextField(
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: widget.hintText,
                     hintStyle: TextStyle(color: Colors.grey[400]),
-//              suffixIcon: Icon(Icons.close),
                   ),
+                  autofocus: widget.autofocus,
                   focusNode: widget.focusNode,
                   onChanged: widget.onChanged,
-                )
+                ),
               )
-            : ListTile(
-                leading: Container(
-                  width: widget.leadingWidth ?? 80,
-                  child: Text(
-                    widget.leadingText,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                title: TextField(
-                  controller: widget.controller,
-                  keyboardType: widget.inputType ?? TextInputType.text,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: widget.hintText,
-                    hintStyle: TextStyle(color: Colors.grey[400]),
-//              suffixIcon: Icon(Icons.close),
-                  ),
-                  focusNode: widget.focusNode,
-                ),
-                trailing: widget.trailing ?? Text(''),
-              ),
+            ],
+          ),
+        ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: widget.padding != null
+              ? EdgeInsets.symmetric(horizontal: widget.padding.horizontal)
+              : EdgeInsets.symmetric(horizontal: 15),
           child: Divider(
             height: 0,
             color: _dividerColor,

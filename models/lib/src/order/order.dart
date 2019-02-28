@@ -368,8 +368,14 @@ class RequirementOrderModel extends OrderModel {
   /// 加工类型
   String machiningType;
 
+  ///是否需要打样
+  bool isProofing;
+
+  ///是否提供样衣
+  bool isProvideSampleProduct;
+
   /// 是否开具发票
-  bool invoiceNeeded;
+  bool isInvoice;
 
   /// 报价数
   int countOfQuotes;
@@ -379,6 +385,27 @@ class RequirementOrderModel extends OrderModel {
 
   /// 订单状态
   RequirementOrderStatus status;
+
+  ///图片
+  List<MediaModel> pictures;
+
+  ///大类
+  CategoryModel majorCategory;
+
+  ///小类
+  CategoryModel minorCategory;
+
+  ///联系人
+  String contactPerson;
+
+  ///联系电话
+  String contactPhone;
+
+  ///生产地区
+  List<String> productionAreas;
+
+  ///商品
+  ApparelProductModel product;
 
   RequirementOrderModel({
     String code,
@@ -393,9 +420,16 @@ class RequirementOrderModel extends OrderModel {
     this.expectedDeliveryDate,
     this.expectedPrice,
     this.machiningType,
-    this.invoiceNeeded = false,
+    this.isInvoice,
+    this.isProofing,
+    this.isProvideSampleProduct,
     this.countOfQuotes,
     this.attachments,
+    this.pictures,
+    this.contactPerson,
+    this.contactPhone,
+    this.productionAreas,
+    this.product,
   }) : super(
           code: code,
           totalQuantity: totalQuantity,

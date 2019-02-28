@@ -55,38 +55,6 @@ class ApparelProductAttributesInputPageState
     super.initState();
   }
 
-  //格式选中的枚举（多选）
-  String formatSelectText(List<String> codes, List<EnumModel> enumModels) {
-    String text = '';
-
-    if (codes != null) {
-      text = '';
-      for (int i = 0; i < codes.length; i++) {
-        if (i > 3) {
-          text += '...';
-          break;
-        }
-
-        if (i == codes.length - 1) {
-          text += enumMap(enumModels, codes[i]);
-        } else {
-          text += enumMap(enumModels, codes[i]) + '、';
-        }
-      }
-    }
-
-    return text;
-  }
-
-  //格式选中的枚举（单选）
-  String formatEnumSelectText(
-      List<EnumModel> enumModels, List<String> enumCode) {
-    String text = '';
-    if (enumCode != null && enumCode.length > 0)
-      text = enumMap(enumModels, enumCode[0]);
-    return text;
-  }
-
   Future<bool> _requestPop() {
     ApparelProductAttributesModel attributesModel =
         ApparelProductAttributesModel(
@@ -143,7 +111,7 @@ class ApparelProductAttributesInputPageState
               },
               child: ShowSelectTile(
                 leadingText: '风格',
-                tralingText: formatSelectText(_styleCodes, StyleEnum),
+                tralingText: formatEnumSelectsText(_styleCodes, StyleEnum,4),
                 tralingTextColor: Colors.orange,
               ),
             ),
@@ -276,8 +244,8 @@ class ApparelProductAttributesInputPageState
               },
               child: ShowSelectTile(
                 leadingText: '图案',
-                tralingText: formatSelectText(
-                    _decorativePatternCodes, DecorativePatternEnum),
+                tralingText: formatEnumSelectsText(
+                    _decorativePatternCodes, DecorativePatternEnum,4),
                 tralingTextColor: Colors.orange,
               ),
             ),
@@ -299,8 +267,8 @@ class ApparelProductAttributesInputPageState
               },
               child: ShowSelectTile(
                 leadingText: '流行元素',
-                tralingText: formatSelectText(
-                    _popularElementsCodes, PopularElementsEnum),
+                tralingText: formatEnumSelectsText(
+                    _popularElementsCodes, PopularElementsEnum,4),
                 tralingTextColor: Colors.orange,
               ),
             ),

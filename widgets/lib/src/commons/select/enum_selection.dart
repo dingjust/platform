@@ -33,7 +33,7 @@ class EnumSelectionState extends State<EnumSelection> {
   Widget build(BuildContext context) {
     List<Widget> _chips = _enumModels.map((style) {
       return Container(
-//        width: 65,
+//        width: 100,
         child: ChoiceChip(
           selectedColor: Colors.orange,
           label: Text(style.name,style: TextStyle(color: Colors.black),),
@@ -59,35 +59,39 @@ class EnumSelectionState extends State<EnumSelection> {
       );
     }).toList();
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ListView(
       children: <Widget>[
-        Wrap(
-          spacing: 5,
-          children: _chips,
-        ),
         Offstage(
           offstage: !widget.hasButton,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              IconButton(
-                icon: Text('取消'),
-                onPressed: () {
-                  setState(() {
-                    widget.enumSelect.clear();
-                    _enumCodeSelect.clear();
-                    Navigator.pop(context);
-                  });
-                },
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: IconButton(
+                  icon: Text('清除'),
+                  onPressed: () {
+                    setState(() {
+                      widget.enumSelect.clear();
+                      _enumCodeSelect.clear();
+                    });
+                  },
+                ),
               ),
-              IconButton(
-                icon: Text('确定',style: TextStyle(color: Color(0xffFF9516)),),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+//              IconButton(
+//                icon: Text('确定',style: TextStyle(color: Color(0xffFF9516)),),
+//                onPressed: () {
+//                  Navigator.pop(context);
+//                },
+//              ),
             ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
+            spacing: 5,
+            children: _chips,
           ),
         ),
       ],

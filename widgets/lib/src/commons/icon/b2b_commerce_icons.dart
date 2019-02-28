@@ -62,7 +62,9 @@ class B2BIcons {
   static const IconData ICBC =
       const IconData(0xe6bc, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData del_blank_card =
-  const IconData(0xe6ba, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6ba, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData arrow_left_bottom =
+      const IconData(0xeb0c, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

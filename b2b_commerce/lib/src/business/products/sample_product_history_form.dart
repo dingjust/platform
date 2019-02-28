@@ -138,7 +138,7 @@ class SampleProductHistoryFormPageState
                                 style: TextStyle(fontSize: 16),
                               ),
                               title: Container(
-                                padding: EdgeInsets.only(left: 43),
+                                padding: EdgeInsets.only(left: 28),
                                 child: GestureDetector(
                                   child: _nameText,
                                   onTap: () async {
@@ -218,7 +218,7 @@ class SampleProductHistoryFormPageState
                       style: TextStyle(fontSize: 16),
                     ),
                     title: Container(
-                      padding: EdgeInsets.only(left: 18),
+//                      padding: EdgeInsets.only(left: 18),
                       child: GestureDetector(
                         child: _expectedReturnDateText,
                         onTap: () {
