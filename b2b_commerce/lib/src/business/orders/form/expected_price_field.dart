@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class ExpectedPriceField extends StatefulWidget{
-  RequirementOrderModel item;
+  final RequirementOrderModel item;
   ExpectedPriceField(this.item);
 
   ExpectedPriceFieldState createState() => ExpectedPriceFieldState();

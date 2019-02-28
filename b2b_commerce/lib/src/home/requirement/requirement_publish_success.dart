@@ -164,7 +164,7 @@ class _PublishRequirementSuccessDialogState
                     Container(
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
-                        '需求订单号：${widget.model.code}',
+                        '需求订单号：${widget.model.code ?? ''}',
                         style: TextStyle(fontSize: 14),
                       ),
                     )
@@ -173,13 +173,13 @@ class _PublishRequirementSuccessDialogState
                 Row(
                   children: <Widget>[
                     Container(
-                      width: 100,
-                      height: 100,
+                      width: 80,
+                      height: 80,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: entry.product.thumbnail != null
-                                ? NetworkImage(entry.product.thumbnail)
+                            image: entry.product?.thumbnail != null
+                                ? NetworkImage(entry.product?.thumbnail)
                                 : AssetImage(
                                     'temp/picture.png',
                                     package: "assets",
@@ -192,12 +192,12 @@ class _PublishRequirementSuccessDialogState
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                        height: 100,
+                        height: 80,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            entry.product.name != null
+                            entry.product?.name != null
                                 ? Text(
                                     entry.product.name,
                                     style: TextStyle(fontSize: 15),
@@ -208,7 +208,7 @@ class _PublishRequirementSuccessDialogState
                                     style: TextStyle(
                                         fontSize: 15, color: Colors.red),
                                   ),
-                            entry.product.skuID != null
+                            entry.product?.skuID != null
                                 ? Container(
                                     padding: EdgeInsets.all(3),
                                     decoration: BoxDecoration(
@@ -221,13 +221,38 @@ class _PublishRequirementSuccessDialogState
                                     ),
                                   )
                                 : Container(),
+//                            entry.product?.superCategories?.first?.name ==
+//                                        null &&
+//                                    entry.product?.majorCategory?.name ==
+//                                        null &&
+//                                    entry?.entryNumber == null
+//                                ? Container(
+//                                    padding: EdgeInsets.all(3),
+//                                    decoration: BoxDecoration(
+//                                        color: Colors.yellow[50],
+//                                        borderRadius: BorderRadius.circular(5)),
+//                                    child: Text(
+//                                      "${entry.product?.superCategories?.first?.name ?? ''}   ${widget.model?.majorCategory?.name ?? ''}   " +
+//                                          (entry?.entryNumber == null
+//                                              ? ''
+//                                              : entry?.entryNumber.toString() +
+//                                                  '件'),
+//                                      style: TextStyle(
+//                                          fontSize: 15, color: Colors.orange),
+//                                    ),
+//                                  )
+//                                : Container(),
                             Container(
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
                                   color: Colors.yellow[50],
                                   borderRadius: BorderRadius.circular(5)),
                               child: Text(
-                                "${entry.product.superCategories.first.name}   ${entry.product.majorCategory.name}   ${entry.entryNumber}件",
+                                "${entry.product?.superCategories?.first?.name ?? ''}   ${widget.model?.majorCategory?.name ?? ''}   " +
+                                    (entry?.entryNumber == null
+                                        ? ''
+                                        : entry?.entryNumber.toString() +
+                                        '件'),
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.orange),
                               ),
@@ -243,7 +268,7 @@ class _PublishRequirementSuccessDialogState
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        '预计交货日期：${DateFormatUtil.format(widget.model.expectedDeliveryDate)}',
+                        '预计交货日期：${DateFormatUtil.formatYMD(widget.model?.expectedDeliveryDate) ?? ''}',
                         style: TextStyle(fontSize: 14),
                       ),
                     )
@@ -254,7 +279,7 @@ class _PublishRequirementSuccessDialogState
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        '备注 ：${widget.model.remarks}',
+                        '备注 ：${widget.model.remarks ?? ''}',
                         style: TextStyle(
                           fontSize: 14,
                         ),
