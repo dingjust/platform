@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:models/models.dart';
 
 class SuppliersBloc {
@@ -226,7 +227,7 @@ class SuppliersBloc {
             'quoteCount': 30,
             'purchaseOrder': {
               'code': 'PO34938475200045',
-              'status': 'WAIT_FOR_PROCESSING',
+              'status': 'WAIT_FOR_DEPOSIT_PAYABLE',
               'totalQuantity': 10,
               'totalPrice': 300,
               'creationtime': DateTime.now().toString(),
@@ -476,7 +477,7 @@ class SuppliersBloc {
             'quoteCount': 30,
             'purchaseOrder': {
               'code': 'PO34938475200045',
-              'status': 'WAIT_FOR_PROCESSING',
+              'status': 'WAIT_FOR_DEPOSIT_PAYABLE',
               'totalQuantity': 10,
               'totalPrice': 300,
               'creationtime': DateTime.now().toString(),
@@ -726,7 +727,7 @@ class SuppliersBloc {
             'quoteCount': 30,
             'purchaseOrder': {
               'code': 'PO34938475200045',
-              'status': 'WAIT_FOR_PROCESSING',
+              'status': 'WAIT_FOR_DEPOSIT_PAYABLE',
               'totalQuantity': 10,
               'totalPrice': 300,
               'creationtime': DateTime.now().toString(),
@@ -986,7 +987,7 @@ class SuppliersBloc {
           'quoteCount': 30,
           'purchaseOrder': {
             'code': 'PO34938475200045',
-            'status': 'WAIT_FOR_PROCESSING',
+            'status': 'WAIT_FOR_DEPOSIT_PAYABLE',
             'totalQuantity': 10,
             'totalPrice': 300,
             'creationtime': DateTime.now().toString(),

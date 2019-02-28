@@ -38,7 +38,7 @@ class _EasyGridState extends State<EasyGrid> {
         height: widget.height,
         margin: EdgeInsets.all(5),
         child: GridView(
-          primary: widget.primary,
+          physics: widget.primary==false?NeverScrollableScrollPhysics():null,
           padding: EdgeInsets.zero,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: widget.itemWidth,

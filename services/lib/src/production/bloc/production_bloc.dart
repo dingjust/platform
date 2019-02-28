@@ -25,9 +25,52 @@ class ProductionBLoC extends BLoCBase {
 
   static final List<FactoryModel> _recommendFactories = [];
 
+  //维护筛选条件
+  List<FilterConditionEntry> _orderType = [
+    FilterConditionEntry(label: '全部', value: 'ALL', checked: true),
+    FilterConditionEntry(label: '线上订单', value: 'ORDER_ONLINE'),
+    FilterConditionEntry(label: '线下订单', value: 'ORDER_OFFLINE'),
+  ];
+
+  List<FilterConditionEntry> _currentStatus = [
+    FilterConditionEntry(label: '全部', value: 'ALL', checked: true),
+    FilterConditionEntry(label: '备料', value: 'MATERIAL_PREPARATION'),
+    FilterConditionEntry(label: '裁剪', value: 'CUTTING'),
+    FilterConditionEntry(label: '车缝', value: 'STITCHING'),
+    FilterConditionEntry(label: '后整', value: 'AFTER_FINISHING'),
+    FilterConditionEntry(label: '验货', value: 'INSPECTION'),
+    FilterConditionEntry(label: '发货', value: 'DELIVERY'),
+  ];
+
+  DateTime _startDate;
+  DateTime _endDate;
+
   List<PurchaseOrderModel> orders() => _purchaseOrders;
 
   List<FactoryModel> recommendFactories() => _recommendFactories;
+
+  List<FilterConditionEntry> get orderType => _orderType;
+
+  List<FilterConditionEntry> get currentStatus => _currentStatus;
+
+  DateTime get startDate => _startDate;
+  DateTime get endDate => _endDate;
+
+  void setOrderType(List<FilterConditionEntry> conditions) {
+    _orderType = conditions;
+  }
+
+  void setCurrentStatus(List<FilterConditionEntry> conditions) {
+    _currentStatus = conditions;
+  }
+
+  void setStartDate(DateTime date) {
+    _startDate = date;
+  }
+
+  void setEndDate(DateTime date) {
+    _endDate = date;
+  }
 
   var _controller = StreamController<List<PurchaseOrderModel>>.broadcast();
 
@@ -46,6 +89,9 @@ class ProductionBLoC extends BLoCBase {
     //若没有数据则查询
     if (_purchaseOrders.isEmpty) {
       // TODO: 分页拿数据，response.data;
+
+      // TODO :根据_orderType、_currentStatus、_startDate、_endDate筛选条件
+
       _purchaseOrders
           .addAll(await Future.delayed(const Duration(seconds: 1), () {
         return <PurchaseOrderModel>[
@@ -895,6 +941,7 @@ class ProductionBLoC extends BLoCBase {
     //若没有数据则查询
     if (_recommendFactories.isEmpty) {
       //TODO:查询推荐工厂接口
+
       _recommendFactories.addAll(<FactoryModel>[
         FactoryModel(
             historyOrdersCount: 214,
@@ -971,6 +1018,9 @@ class ProductionBLoC extends BLoCBase {
   Future refreshData() async {
     _purchaseOrders.clear();
     //TODO :查询采购订单接口
+
+    // TODO :根据_orderType、_currentStatus、_startDate、_endDate筛选条件
+
     _purchaseOrders.add(await Future.delayed(const Duration(seconds: 1), () {
       return PurchaseOrderModel.fromJson({
         'code': 'PO34938475200045',

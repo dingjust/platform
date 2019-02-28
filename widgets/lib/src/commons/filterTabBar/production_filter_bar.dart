@@ -143,7 +143,13 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
               ),
             ))
         .toList());
-    body.add(widget.action);
+    body.add(Container(
+      width: widget.itemWidth,
+      height: widget.height,
+      padding: EdgeInsets.only(bottom: 10),
+      child: widget.action,
+    ));
+
     return body;
   }
 }

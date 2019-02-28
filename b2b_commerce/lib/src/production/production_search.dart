@@ -1,10 +1,32 @@
+import 'dart:convert';
+
 import 'package:b2b_commerce/src/production/production_search_result.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 /// 生产搜索页
 class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
+  List<String> history_keywords;
+
+  ProductionSearchDelegate() {
+    getHistory();
+  }
+
+  void getHistory() async {
+    //解析
+    String jsonStr =
+        await LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY);
+    if (jsonStr != null && jsonStr!='') {
+      List<dynamic> list = json.decode(jsonStr);
+      history_keywords = list.map((item) => item as String).toList();
+      print(history_keywords);
+    } else {
+      history_keywords = [];
+    }
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -44,6 +66,10 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
   void showResults(BuildContext context) {
     // TODO: implement showResults
     super.showResults(context);
+    //记录搜索关键字
+    history_keywords.add(query);
+    LocalStorage.save(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
+        json.encode(history_keywords));
     Navigator.pop(context);
     Navigator.push(
         context,
@@ -83,29 +109,21 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
         Container(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 15),
           child: Wrap(
-            spacing: 8.0, // 主轴(水平)方向间距
-            runSpacing: 4.0, // 纵轴（垂直）方向间距
-            alignment: WrapAlignment.start, //沿主轴方向居中
-            children: <Widget>[
-              HistoryTag(
-                value: 'NA12314412313',
-                onTap: () {},
-              ),
-              HistoryTag(
-                  value: '鸭绒羽绒服',
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductionResultPage()));
-                  }),
-              HistoryTag(value: '潮流', onTap: () {}),
-              HistoryTag(value: 'ＡＩＯＪＯＪＩＯＡ', onTap: () {}),
-              HistoryTag(value: '冬季款', onTap: () {}),
-              HistoryTag(value: '女装', onTap: () {}),
-              HistoryTag(value: '男装', onTap: () {}),
-            ],
-          ),
+              spacing: 8.0, // 主轴(水平)方向间距
+              runSpacing: 4.0, // 纵轴（垂直）方向间距
+              alignment: WrapAlignment.start, //沿主轴方向居中
+              children: history_keywords
+                  .map((keyword) => HistoryTag(
+                        value: keyword,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProductionResultPage()));
+                        },
+                      ))
+                  .toList()),
         )
       ],
     );

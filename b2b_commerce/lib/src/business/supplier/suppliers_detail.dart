@@ -1,5 +1,6 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
-import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
+import 'package:b2b_commerce/src/business/supplier/contact_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -42,7 +43,12 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                 ),
               ),
               onTap: () {
-                _selectActionButton(widget.supplierModel.factory.contactPhone);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ContactFactoryPage(),
+                  ),
+                );
               }
           )
         ],
@@ -81,9 +87,20 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
         Icons.add,
         color: Colors.white,
       ),
-      tooltip: '敬请期待',
-      label: Text('发布需求'),
-      onPressed: () {},
+      label: Text(
+        '发布需求',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RequirementOrderFrom(),
+          ),
+        );
+      },
       backgroundColor: Colors.orangeAccent,
     );
   }
@@ -92,15 +109,15 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   Widget _buildTop(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 5, 0, 5),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.fromLTRB(10,0,10,0),
       child: Row(
         children: <Widget>[
           Container(
             color: Colors.grey,
             child: Image.network(
               widget.supplierModel.factory.profilePicture,
-              width: 90,
-              height: 90,
+              width: 110,
+              height: 110,
               fit: BoxFit.fill,
             ),
           ),
@@ -140,6 +157,23 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                   margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
                   child: Row(
                     children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          widget.supplierModel.factory.address,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        )
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
+                  child: Row(
+                    children: <Widget>[
                       Container(
                           padding: EdgeInsets.all(5),
                           child: Image.network(
@@ -163,14 +197,6 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                                 fontWeight: FontWeight.w500,
                                 color: Colors.deepOrange),
                           )),
-                      Expanded(
-                        child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              widget.supplierModel.factory.address,
-                              style: TextStyle(fontSize: 14),
-                            )),
-                      )
                     ],
                   ),
                 ),
@@ -776,7 +802,8 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                         child: Text(
                           '新型H-365裁衣机床',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
+                            color: Colors.grey,
                           ),
                         ),
                       ),
@@ -797,7 +824,8 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                         child: Text(
                           '新型H-365裁衣机床',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
+                            color: Colors.grey,
                           ),
                         ),
                       ),

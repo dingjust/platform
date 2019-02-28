@@ -146,9 +146,16 @@ class FactoryItem extends StatelessWidget {
   Widget _buildCategoryTags() {
     //取前3条
     var tags = <CategoryTag>[];
-    for (int i = 0; i < model.categories.length && i < 3; i++) {
-      tags.add(CategoryTag(label: model.categories[i].name));
+    if(model.categories.length > 3){
+      for (int i = 0; i < model.categories.length && i < 3; i++) {
+        tags.add(CategoryTag(label: model.categories[i].name));
+      }
+    }else{
+      for (int i = 0; i < model.categories.length; i++) {
+        tags.add(CategoryTag(label: model.categories[i].name));
+      }
     }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: tags,

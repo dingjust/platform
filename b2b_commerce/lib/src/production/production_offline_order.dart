@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/apparel_product_list.dart';
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
