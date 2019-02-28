@@ -135,7 +135,7 @@ class _WithdrawCashState extends State<WithdrawCash> {
               ),
             ),
           ),
-          _buildBlankCrad(context),
+          _buildBlankCard(context),
           _buildCommitButton(context),
         ],
       ),
@@ -194,7 +194,7 @@ class _WithdrawCashState extends State<WithdrawCash> {
     );
   }
 
-  Widget _buildBlankCrad(BuildContext context){
+  Widget _buildBlankCard(BuildContext context){
     return Container(
       padding: EdgeInsets.fromLTRB(20,0,20,20),
       margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
