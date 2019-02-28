@@ -96,7 +96,7 @@ class _PublishRequirementSuccessDialogState
           children: <Widget>[
             _buildTitle(),
             _buildOrderInfo(),
-            _buildCheckLine(),
+//            _buildCheckLine(),
             _buildButtonGroup(),
             _buildRecommend()
           ],

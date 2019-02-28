@@ -325,7 +325,9 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         ),
         onTap: () {
           address='';
-          AddressPicker.showAddressPicker(
+          AddressPicker((){
+            Navigator.pop(context);
+          }).showAddressPicker(
             context,
             selectProvince: (province) {
               address += province['name'];

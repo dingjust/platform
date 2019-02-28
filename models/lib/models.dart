@@ -48,6 +48,38 @@ String enumMap(dynamic enumModels,String code){
   return text;
 }
 
+//格式选中的枚举（多选）
+String formatEnumSelectsText(List<String> codes, List<EnumModel> enumModels,int count) {
+  String text = '';
+
+  if (codes != null) {
+    text = '';
+    for (int i = 0; i < codes.length; i++) {
+      if (i > count-1) {
+        text += '...';
+        break;
+      }
+
+      if (i == codes.length - 1) {
+        text += enumMap(enumModels, codes[i]);
+      } else {
+        text += enumMap(enumModels, codes[i]) + '、';
+      }
+    }
+  }
+
+  return text;
+}
+
+//格式选中的枚举（单选）
+String formatEnumSelectText(
+    List<EnumModel> enumModels, List<String> enumCode) {
+  String text = '';
+  if (enumCode != null && enumCode.length > 0)
+    text = enumMap(enumModels, enumCode[0]);
+  return text;
+}
+
 ///风格
 const StyleEnum = <EnumModel>[
   EnumModel('FG0001', '潮流'),
@@ -210,6 +242,49 @@ const PlacketEnum = <EnumModel>[
   EnumModel('M003','双排扣'),
   EnumModel('M004','暗扣'),
   EnumModel('M005','牛角扣'),
+];
+
+///省份
+const ProvinceEnum = <EnumModel>[
+  EnumModel('P01','北京市'),
+  EnumModel('P02','天津市'),
+  EnumModel('P03','上海市'),
+  EnumModel('P04','重庆市'),
+  EnumModel('P05','河北省'),
+  EnumModel('P06','河南省'),
+  EnumModel('P07','云南省'),
+  EnumModel('P08','辽宁省'),
+  EnumModel('P09','黑龙江省'),
+  EnumModel('P10','湖南省'),
+  EnumModel('P11','安徽省'),
+  EnumModel('P12','山东省'),
+  EnumModel('P13','新疆维吾尔...'),
+  EnumModel('P14','江苏省'),
+  EnumModel('P15','浙江省'),
+  EnumModel('P16','江西省'),
+  EnumModel('P17','广西壮族...'),
+  EnumModel('P18','甘肃省'),
+  EnumModel('P19','山西省'),
+  EnumModel('P20','内蒙古'),
+  EnumModel('P21','陕西省'),
+  EnumModel('P22','吉林省'),
+  EnumModel('P23','福建省'),
+  EnumModel('P24','贵州省'),
+  EnumModel('P25','广东省'),
+  EnumModel('P26','青海省'),
+  EnumModel('P27','西藏'),
+  EnumModel('P28','四川省'),
+  EnumModel('P29','宁夏回族...'),
+  EnumModel('P30','海南省'),
+  EnumModel('P31','台湾省'),
+  EnumModel('P32','香港'),
+  EnumModel('P33','澳门'),
+];
+
+///加工类型
+const MachiningTypeEnum = <EnumModel>[
+  EnumModel('MT01','清加工'),
+  EnumModel('MT02','包工包料'),
 ];
 
 /// 分页数据

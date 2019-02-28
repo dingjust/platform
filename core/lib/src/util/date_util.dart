@@ -5,6 +5,10 @@ class DateFormatUtil {
   }
 
   static String formatYMD(DateTime date) {
-    return DateFormat('yyyy-MM-dd').format(date);
+    String text = null;
+    if(date != null){
+      text = DateFormat('yyyy-MM-dd').format(date);
+    }
+    return text;
   }
 }

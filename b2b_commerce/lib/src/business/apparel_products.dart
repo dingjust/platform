@@ -75,7 +75,7 @@ class ApparelProductsPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ApparelProductFormPage(item:ApparelProductModel.empty(),isCreate: true,)),
+                MaterialPageRoute(builder: (context) => ApparelProductFormPage(item:ApparelProductModel(),isCreate: true,)),
               );
             },
           ),
