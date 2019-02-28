@@ -88,7 +88,12 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
         Icons.add,
         color: Colors.white,
       ),
-      label: Text('发布需求'),
+      label: Text(
+        '发布需求',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
       onPressed: () {
         Navigator.push(
           context,
