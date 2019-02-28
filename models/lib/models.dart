@@ -75,7 +75,7 @@ String formatEnumSelectsText(List<String> codes, List<EnumModel> enumModels,int 
 String formatEnumSelectText(
     List<EnumModel> enumModels, List<String> enumCode) {
   String text = '';
-  if (enumCode != null && enumCode.length > 0)
+  if (enumCode.isNotEmpty)
     text = enumMap(enumModels, enumCode[0]);
   return text;
 }

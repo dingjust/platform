@@ -37,7 +37,7 @@ class CategorySelectState extends State<CategorySelect> {
   void initState() {
     _verticalDivider = widget.verticalDividerOpacity;
     _multiple = widget.multiple;
-    if(widget.categorySelect != null && widget.categorySelect.length>0){
+    if(widget.categorySelect.isNotEmpty){
       _selectLeft = widget.categorySelect[0].parent?.code;
       _selectRights = widget.categorySelect.map((category) => category.code).toList();
     }else {

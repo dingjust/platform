@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class TextFieldComponent extends StatefulWidget {
   final String leadingText;
   final String hintText;
+  final String helperText;
   double leadingWidth;
   TextEditingController controller;
   final FocusNode focusNode;
@@ -17,6 +18,7 @@ class TextFieldComponent extends StatefulWidget {
   TextFieldComponent({
     this.leadingText,
     this.hintText,
+    this.helperText,
     this.leadingWidth = 75,
     this.controller,
     @required this.focusNode,
@@ -66,16 +68,16 @@ class TextFieldComponentState extends State<TextFieldComponent> {
   @override
   Widget build(BuildContext context) {
     if (widget.autofocus)
-    widget.controller.value = TextEditingValue(
-      // 设置内容
-      text: widget.controller.text,
-      // 保持光标在最后
-      selection: TextSelection.fromPosition(
-        TextPosition(
-            affinity: TextAffinity.downstream,
-            offset: widget.controller.text.length),
-      ),
-    );
+      widget.controller.value = TextEditingValue(
+        // 设置内容
+        text: widget.controller.text,
+        // 保持光标在最后
+        selection: TextSelection.fromPosition(
+          TextPosition(
+              affinity: TextAffinity.downstream,
+              offset: widget.controller.text.length),
+        ),
+      );
     return Column(
       children: <Widget>[
         Container(
@@ -111,9 +113,21 @@ class TextFieldComponentState extends State<TextFieldComponent> {
           padding: widget.padding != null
               ? EdgeInsets.symmetric(horizontal: widget.padding.horizontal)
               : EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(
-            height: 0,
-            color: _dividerColor,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Divider(
+                height: 0,
+                color: _dividerColor,
+              ),
+              Offstage(
+                offstage: widget.helperText == null,
+                child: Text(
+                  widget.helperText ?? '',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
           ),
         ),
       ],

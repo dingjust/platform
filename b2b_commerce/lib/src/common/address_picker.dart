@@ -9,7 +9,9 @@ typedef List<Widget> CreateWidgetList();
 class AddressPicker {
   Function cacel;
 
-  AddressPicker(this.cacel);
+  AddressPicker({this.cacel}){
+    if(this.cacel == null) this.cacel = (){};
+  }
 
   void showAddressPicker(BuildContext context, {
     ChangeData selectProvince,

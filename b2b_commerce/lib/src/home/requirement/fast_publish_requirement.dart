@@ -9,6 +9,7 @@ class FastPublishRequirement extends StatefulWidget {
 }
 
 class _FastPublishRequirementState extends State<FastPublishRequirement> {
+  RequirementOrderModel model = RequirementOrderModel();
   GlobalKey _formKey = new GlobalKey<FormState>();
   TextEditingController _requirementNumController = TextEditingController();
 
@@ -235,7 +236,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
+        initialDate: expectedDeliveryDate == null ? DateTime.now() : expectedDeliveryDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     setState(() {

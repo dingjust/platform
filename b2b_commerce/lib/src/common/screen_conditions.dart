@@ -325,7 +325,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         ),
         onTap: () {
           address='';
-          AddressPicker((){
+          AddressPicker(cacel:(){
             Navigator.pop(context);
           }).showAddressPicker(
             context,

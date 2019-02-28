@@ -80,7 +80,7 @@ class MinorCategoryFieldState extends State<MinorCategoryField>{
 
   String formatCategorySelectText(List<CategoryModel> categorys) {
     String text = '选取';
-    if (categorys != null && categorys.length > 0) text = categorys[0].name;
+    if (categorys.isNotEmpty) text = categorys[0].name;
     return text;
   }
 
@@ -123,7 +123,7 @@ class MinorCategoryFieldState extends State<MinorCategoryField>{
             },
           ).then((a) {
             setState(() {
-              if(widget.categorySelected.length <= 0){
+              if(widget.categorySelected.isNotEmpty){
                 widget.item.minorCategory = null;
               }else{
                 widget.item.minorCategory = widget.categorySelected[0];
