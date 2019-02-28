@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
-import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:b2b_commerce/src/home/factory/factory.dart';
 
 class FlutterAMap extends StatefulWidget {

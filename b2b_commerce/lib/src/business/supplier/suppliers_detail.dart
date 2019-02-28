@@ -87,7 +87,12 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
         Icons.add,
         color: Colors.white,
       ),
-      label: Text('发布需求'),
+      label: Text(
+        '发布需求',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
       onPressed: () {
         Navigator.push(
           context,
@@ -104,15 +109,15 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   Widget _buildTop(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 5, 0, 5),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.fromLTRB(10,0,10,0),
       child: Row(
         children: <Widget>[
           Container(
             color: Colors.grey,
             child: Image.network(
               widget.supplierModel.factory.profilePicture,
-              width: 90,
-              height: 90,
+              width: 110,
+              height: 110,
               fit: BoxFit.fill,
             ),
           ),
@@ -152,6 +157,23 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                   margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
                   child: Row(
                     children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          widget.supplierModel.factory.address,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        )
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 7, 0, 0),
+                  child: Row(
+                    children: <Widget>[
                       Container(
                           padding: EdgeInsets.all(5),
                           child: Image.network(
@@ -175,14 +197,6 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                                 fontWeight: FontWeight.w500,
                                 color: Colors.deepOrange),
                           )),
-                      Expanded(
-                        child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              widget.supplierModel.factory.address,
-                              style: TextStyle(fontSize: 14),
-                            )),
-                      )
                     ],
                   ),
                 ),
@@ -788,7 +802,8 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                         child: Text(
                           '新型H-365裁衣机床',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
+                            color: Colors.grey,
                           ),
                         ),
                       ),
@@ -809,7 +824,8 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                         child: Text(
                           '新型H-365裁衣机床',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
+                            color: Colors.grey,
                           ),
                         ),
                       ),
