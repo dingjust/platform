@@ -634,7 +634,7 @@ class QuoteModel extends AbstractOrderModel {
   /// 需求订单号
   String requirementOrderCode;
 
-  /// 采购订单号
+  /// 生产订单号
   String purchaseOrderCode;
 
   /// 交货时间，工厂自己填写的交货时间，而不是需求订单中的交货时间

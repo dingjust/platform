@@ -57,7 +57,7 @@ class ProductionItem extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  '采购订单号：' + order.code,
+                  '生产订单号：' + order.code,
                   style: TextStyle(fontSize: 14),
                 ),
               ),

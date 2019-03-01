@@ -177,7 +177,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         children: <Widget>[
           Align(
             alignment: Alignment.centerLeft,
-            child: Text('采购订单号：${order.code}'),
+            child: Text('生产订单号：${order.code}'),
           ),
           Align(
               alignment: Alignment.centerLeft,

@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/my/my_client_services.dart';
 import 'package:b2b_commerce/src/production/production.dart';
 import 'package:b2b_commerce/src/production/production_filter.dart';
 import 'package:b2b_commerce/src/production/production_offline_order.dart';
+import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:b2b_commerce/src/production/search_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -123,7 +124,14 @@ class _ProductionPageState extends State<ProductionPage> {
                   ),
                 ),
                 backgroundColor: Colors.blue,
-                onTap: () => print('SECOND CHILD'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductionUniqueCodePage(),
+                    ),
+                  );
+                },
               ),
               SpeedDialChild(
                   child: Center(

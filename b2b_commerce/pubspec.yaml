@@ -115,6 +115,7 @@ flutter:
     - packages/assets/temp/my/invoice_manage.png
     - packages/assets/temp/my/my_account.png
     - packages/assets/temp/my/setting.png
+    - packages/assets/temp/common/address_under_line.png
 
   fonts:
     - family: b2bIcons
