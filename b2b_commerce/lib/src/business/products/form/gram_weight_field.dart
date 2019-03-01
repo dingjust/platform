@@ -29,9 +29,6 @@ class _GramWeightFieldState extends State<GramWeightField> {
       inputType: TextInputType.number,
       leadingText: '重量',
       hintText: '请输入重量',
-      onChanged: (value){
-        widget.item.gramWeight = value;
-      },
     );
   }
 }

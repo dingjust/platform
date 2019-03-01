@@ -123,7 +123,7 @@ class MinorCategoryFieldState extends State<MinorCategoryField>{
             },
           ).then((a) {
             setState(() {
-              if(widget.categorySelected.isNotEmpty){
+              if(widget.categorySelected.isEmpty){
                 widget.item.minorCategory = null;
               }else{
                 widget.item.minorCategory = widget.categorySelected[0];

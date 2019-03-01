@@ -57,12 +57,8 @@ class _PricesFieldState extends State<PricesField> {
         TextFieldComponent(
           focusNode: _priceFocusNode,
           controller: _priceController,
-          inputType: TextInputType.number,
           leadingText: '供货价',
           hintText: '请输入供货价',
-          onChanged: (value){
-            widget.item.price = value;
-          },
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),

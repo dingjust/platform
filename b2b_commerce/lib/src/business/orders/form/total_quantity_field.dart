@@ -62,13 +62,11 @@ class TotalQuantityFieldState extends State<TotalQuantityField>{
                       style: TextStyle(color: Color(0xffFF9516)),
                     ),
                     onPressed: () {
-                      setState(() {
                         if(_totalQuantityController.text.trim() != ''){
                           widget.item.totalQuantity = int.parse(_totalQuantityController.text);
                         }else{
                           widget.item.totalQuantity = null;
                         }
-                      });
                       Navigator.of(context).pop();
                     },
                   ),

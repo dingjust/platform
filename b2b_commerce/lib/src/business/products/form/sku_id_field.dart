@@ -29,9 +29,6 @@ class _SkuIDFieldState extends State<SkuIDField> {
       controller: _skuIDController,
       leadingText: '商品货号',
       hintText: '请输入商品货号',
-      onChanged: (value){
-        widget.item.skuID = value;
-      },
     );
   }
 }

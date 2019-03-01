@@ -9,7 +9,6 @@ class TextFieldComponent extends StatefulWidget {
   final FocusNode focusNode;
   final TextInputType inputType;
   final Widget trailing;
-  Function onChanged;
   final bool autofocus;
   EdgeInsets padding;
 
@@ -24,7 +23,6 @@ class TextFieldComponent extends StatefulWidget {
     @required this.focusNode,
     this.inputType,
     this.trailing,
-    this.onChanged,
     this.autofocus = false,
     this.padding,
   });
@@ -37,24 +35,12 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   void initState() {
-    widget.focusNode.addListener(() {
-      if (widget.focusNode.hasFocus) {
-        setState(() {
-          _dividerColor = Colors.orange;
-        });
-      } else {
-        setState(() {
-          _dividerColor = Colors.grey[400];
-        });
-      }
-    });
 
     if (widget.leadingText == null || widget.leadingText == '') {
       widget.leadingWidth = 0.0;
     } else if (widget.leadingWidth != null) {
       widget.leadingWidth = widget.leadingWidth;
     }
-
     // TODO: implement initState
     super.initState();
   }
@@ -67,6 +53,18 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   Widget build(BuildContext context) {
+    widget.focusNode.addListener(() {
+      if (widget.focusNode.hasFocus) {
+        setState(() {
+          _dividerColor = Colors.orange;
+        });
+      } else {
+        setState(() {
+          _dividerColor = Colors.grey[400];
+        });
+      }
+    });
+
     if (widget.autofocus)
       widget.controller.value = TextEditingValue(
         // 设置内容
@@ -93,7 +91,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                 ),
               ),
               Expanded(
-                child: TextField(
+                child: TextFormField(
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
@@ -103,7 +101,6 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   ),
                   autofocus: widget.autofocus,
                   focusNode: widget.focusNode,
-                  onChanged: widget.onChanged,
                 ),
               )
             ],

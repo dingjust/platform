@@ -43,16 +43,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   RequirementOrderModel model = RequirementOrderModel();
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
-  String address = '选取';
-  String technology = '选取';
   List<MediaModel> _normalMedias = [];
   List<File> _normalImages = [];
-  String isProvideSampleProduct = '选取';
-  String isInvoice = '选取';
-  String inspectionMethod = '选取';
-  bool _isRequirementPool = true;
-  String isProofing = '选取';
-
   ApparelProductModel _product;
 
   @override
@@ -73,7 +65,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           setState(() {
             _normalImages.add(file);
           });
-        });
+         });
       });
     }
 

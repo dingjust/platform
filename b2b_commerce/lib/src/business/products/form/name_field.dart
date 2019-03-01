@@ -35,9 +35,6 @@ class _NameFieldState extends State<NameField> {
       controller: _nameController,
       leadingText: '商品名称',
       hintText: '请输入商品名称',
-      onChanged: (value){
-        widget.item.name = value;
-      },
     );
   }
 }
