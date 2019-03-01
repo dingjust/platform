@@ -36,6 +36,7 @@ class ProductFieldState extends State<ProductField> {
             ),
           ),
         ),
+        Divider(height: 0,),
         ListTile(
           leading: Text(
             '商品货号',
@@ -57,6 +58,7 @@ class ProductFieldState extends State<ProductField> {
             ),
           ),
         ),
+        Divider(height: 0,),
       ],
     );
   }

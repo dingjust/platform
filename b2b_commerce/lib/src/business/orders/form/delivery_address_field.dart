@@ -40,7 +40,7 @@ class DeliveryAddressFieldState extends State<DeliveryAddressField> {
         ),
       ),
       onTap: () {
-        AddressPicker((){
+        AddressPicker(cacel:(){
           setState(() {
             widget.item.deliveryAddress = null;
           });

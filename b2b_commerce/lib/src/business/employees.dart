@@ -55,7 +55,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EmployeeFormPage(null),
+              builder: (context) => EmployeeFormPage(B2BCustomerModel()),
             ),
           );
         },

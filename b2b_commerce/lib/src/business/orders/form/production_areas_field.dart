@@ -50,7 +50,7 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
             context: context,
             builder: (BuildContext context) {
               return Container(
-                height: 400,
+                height: 300,
                 child: EnumSelection(
                   enumModels: ProvinceEnum,
                   multiple: true,

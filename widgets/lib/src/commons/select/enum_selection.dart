@@ -6,8 +6,9 @@ class EnumSelection extends StatefulWidget {
   final bool hasButton;
   List<EnumModel> enumModels;
   List<EnumModel> enumSelect;
+  final int count;
 
-  EnumSelection({this.multiple = false,this.hasButton = false,@required this.enumSelect,this.enumModels});
+  EnumSelection({this.multiple = false,this.hasButton = false,@required this.enumSelect,this.enumModels,this.count = 4,});
 
   EnumSelectionState createState() => EnumSelectionState();
 }
@@ -21,7 +22,7 @@ class EnumSelectionState extends State<EnumSelection> {
   void initState() {
     _enumModels = widget.enumModels;
     _multiple = widget.multiple;
-    if(widget.enumSelect != null && widget.enumSelect.length>0){
+    if(widget.enumSelect.isNotEmpty){
       _enumCodeSelect = widget.enumSelect?.map((enumModel) => enumModel.code)?.toList();
     }
 
@@ -33,7 +34,7 @@ class EnumSelectionState extends State<EnumSelection> {
   Widget build(BuildContext context) {
     List<Widget> _chips = _enumModels.map((style) {
       return Container(
-//        width: 100,
+        width: MediaQuery.of(context).size.width / widget.count,
         child: ChoiceChip(
           selectedColor: Colors.orange,
           label: Text(style.name,style: TextStyle(color: Colors.black),),
@@ -87,10 +88,10 @@ class EnumSelectionState extends State<EnumSelection> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        Container(
+//          padding: const EdgeInsets.all(8.0),
           child: Wrap(
-            spacing: 5,
+            spacing: 0,
             children: _chips,
           ),
         ),

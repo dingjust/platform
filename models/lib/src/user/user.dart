@@ -13,6 +13,7 @@ part 'user.g.dart';
 class UserModel extends PrincipalModel {
   bool loginDisabled;
   UserType userType;
+  List<RoleModel> roles;
 
   Image get avatar => profilePicture ?? Image.network(profilePicture);
 
@@ -21,6 +22,8 @@ class UserModel extends PrincipalModel {
     String uid,
     String name,
     this.loginDisabled,
+    this.roles,
+    this.userType,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -110,8 +113,7 @@ class AddressModel extends ItemModel {
     @required this.line1,
     this.defaultAddress = false,
   });
-
-  String get regionCityAndDistrict => region.name + city.name + cityDistrict.name;
+  String get regionCityAndDistrict => region.name == city.name && region.name == cityDistrict.name ? region.name :region.name + city.name + cityDistrict.name;
 
   String get details => (region.name + city.name + cityDistrict.name + line1);
 
@@ -165,4 +167,17 @@ class DistrictModel extends ItemModel {
   factory DistrictModel.fromJson(Map<String, dynamic> json) => _$DistrictModelFromJson(json);
 
   static Map<String, dynamic> toJson(DistrictModel model) => _$DistrictModelToJson(model);
+}
+
+///角色
+@JsonSerializable()
+class RoleModel extends ItemModel{
+  String uid;
+  String name;
+
+  RoleModel({this.uid,this.name});
+
+  factory RoleModel.fromJson(Map<String, dynamic> json) => _$RoleModelFromJson(json);
+
+  static Map<String, dynamic> toJson(RoleModel model) => _$RoleModelToJson(model);
 }

@@ -22,14 +22,14 @@ import 'form/product_field.dart';
 import 'form/production_areas_field.dart';
 import 'form/total_quantity_field.dart';
 
-final List<EnumModel> technologyList = [
-  EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
-  EnumModel.fromJson({'code': '打板', 'name': '打板'}),
-  EnumModel.fromJson({'code': '车缝', 'name': '车缝'}),
-  EnumModel.fromJson({'code': '裁剪', 'name': '裁剪'}),
-  EnumModel.fromJson({'code': '印花', 'name': '印花'}),
-  EnumModel.fromJson({'code': '后枕', 'name': '后枕'}),
-];
+//final List<EnumModel> technologyList = [
+//  EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
+//  EnumModel.fromJson({'code': '打板', 'name': '打板'}),
+//  EnumModel.fromJson({'code': '车缝', 'name': '车缝'}),
+//  EnumModel.fromJson({'code': '裁剪', 'name': '裁剪'}),
+//  EnumModel.fromJson({'code': '印花', 'name': '印花'}),
+//  EnumModel.fromJson({'code': '后枕', 'name': '后枕'}),
+//];
 
 class RequirementOrderFrom extends StatefulWidget {
   final ApparelProductModel product;
@@ -43,16 +43,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   RequirementOrderModel model = RequirementOrderModel();
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
-  String address = '选取';
-  String technology = '选取';
   List<MediaModel> _normalMedias = [];
   List<File> _normalImages = [];
-  String isProvideSampleProduct = '选取';
-  String isInvoice = '选取';
-  String inspectionMethod = '选取';
-  bool _isRequirementPool = true;
-  String isProofing = '选取';
-
   ApparelProductModel _product;
 
   @override
@@ -73,7 +65,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           setState(() {
             _normalImages.add(file);
           });
-        });
+         });
       });
     }
 
