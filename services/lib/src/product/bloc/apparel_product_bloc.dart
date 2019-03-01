@@ -7,6 +7,8 @@ class ApparelProductBLoC extends BLoCBase {
   List<ApparelProductModel> products;
   ApparelProductModel currentProduct;
 
+  ApparelProductModel newProduct;
+
   // 工厂模式
   factory ApparelProductBLoC() => _getInstance();
 
@@ -17,6 +19,8 @@ class ApparelProductBLoC extends BLoCBase {
     // 初始化
     products = List<ApparelProductModel>();
     currentProduct = ApparelProductModel.empty();
+
+    newProduct = ApparelProductModel();
   }
 
   static ApparelProductBLoC _getInstance() {
@@ -25,6 +29,9 @@ class ApparelProductBLoC extends BLoCBase {
     }
     return _instance;
   }
+
+  //TODO 清空表单数据
+  void clearNewProduct() {}
 
   var _controller = StreamController<List<ApparelProductModel>>.broadcast();
 
@@ -203,11 +210,11 @@ class ApparelProductBLoC extends BLoCBase {
             'normal': [
               {
                 'url':
-                'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg',
+                    'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg',
               },
               {
                 'url':
-                'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg'
+                    'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg'
               }
             ],
 //            'detail': [
