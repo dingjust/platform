@@ -14,6 +14,7 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
     getHistory();
   }
 
+  //获取本地搜索历史记录
   void getHistory() async {
     //解析
     String jsonStr =
@@ -120,7 +121,7 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      ProductionResultPage()));
+                                      ProductionResultPage(keyword: keyword,)));
                         },
                       ))
                   .toList()),
