@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -18,8 +19,12 @@ class OffTheShelfApparelProductsPage extends StatelessWidget {
           title: Text('下架商品'),
           actions: <Widget>[
             IconButton(
-              icon: Icon(B2BIcons.search,size: 20,),
-              onPressed: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
+              icon: Icon(
+                B2BIcons.search,
+                size: 20,
+              ),
+              onPressed: () => showSearch(
+                  context: context, delegate: ApparelProductSearchDelegate()),
             ),
           ],
         ),
@@ -49,7 +54,9 @@ class OffTheShelfApparelProductsPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ApparelProductFormPage()),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ApparelProductFormPage(item: ApparelProductModel())),
             );
           },
         ),

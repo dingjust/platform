@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:models/models.dart';
 
-import '../common/app_routes.dart';
 import 'apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
 import 'search/apparel_product_search.dart';
@@ -12,20 +11,20 @@ class ApparelProductsPage extends StatelessWidget {
 //  final List<ApparelProductModel> items = <ApparelProductModel>[];
   final bool isRequirement;
   final ApparelProductModel item;
+  ApparelProductModel newItem = ApparelProductModel();
 
-  ApparelProductsPage({this.isRequirement = false,this.item});
+  ApparelProductsPage({this.isRequirement = false, this.item}) {}
 
   @override
   Widget build(BuildContext context) {
 //    List<ApparelProductItem> _items = items.map((item) {
 //      return ApparelProductItem(item);
 //    }).toList();
-
     return BLoCProvider<ApparelProductBLoC>(
       bloc: ApparelProductBLoC.instance,
       child: WillPopScope(
-        onWillPop: (){
-          Navigator.pop(context,item);
+        onWillPop: () {
+          Navigator.pop(context, item);
           return Future.value(false);
         },
         child: Scaffold(
@@ -35,11 +34,14 @@ class ApparelProductsPage extends StatelessWidget {
             title: Text('商品管理'),
             actions: <Widget>[
               IconButton(
-                icon: Icon(B2BIcons.search,size: 20,),
-                onPressed: () => showSearch(
-                  context: context,
-                  delegate: ApparelProductSearchDelegate(),
+                icon: Icon(
+                  B2BIcons.search,
+                  size: 20,
                 ),
+                onPressed: () => showSearch(
+                      context: context,
+                      delegate: ApparelProductSearchDelegate(),
+                    ),
               ),
             ],
           ),
@@ -58,7 +60,9 @@ class ApparelProductsPage extends StatelessWidget {
                   height: 10,
                 ),
                 Expanded(
-                  child: ApparelProductList(isRequirement: isRequirement,),
+                  child: ApparelProductList(
+                    isRequirement: isRequirement,
+                  ),
 //                ListView.builder(
 //                  shrinkWrap: true,
 //                  itemCount: _items.length,
@@ -75,7 +79,11 @@ class ApparelProductsPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ApparelProductFormPage(item:ApparelProductModel(),isCreate: true,)),
+                MaterialPageRoute(
+                    builder: (context) => ApparelProductFormPage(
+                          item: newItem,
+                          isCreate: true,
+                        )),
               );
             },
           ),

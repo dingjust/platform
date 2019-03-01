@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
-import 'form/minor_category_field.dart';
-import 'form/color_size_stock_field.dart';
+
 import 'form/attributes_field.dart';
+import 'form/color_size_stock_field.dart';
+import 'form/minor_category_field.dart';
 import 'form/normal_picture_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
-  ApparelProductFormPage({Key key, @required this.item,this.isCreate = false})
+  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false})
       : super(key: const Key('__apparelProductFormPage__'));
 
   final ApparelProductModel item;
@@ -49,6 +50,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 //        initialData: bloc.currentProduct,
 //        builder: (BuildContext context,
 //            AsyncSnapshot<ApparelProductModel> snapshot) {
+    print('${widget.item.hashCode} ========= ${this.hashCode}');
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -60,7 +63,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               '确定',
               style: TextStyle(color: Color(0xffFF9516)),
             ),
-            onPressed: (){
+            onPressed: () {
               _apparelProductForm.currentState.save();
 
               widget.item.name = _nameController.text;
@@ -69,16 +72,18 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               widget.item.price = double.parse(_priceController.text);
               widget.item.gramWeight = double.parse(_gramWeightController.text);
 
-              print(widget.item.normal);
-              print(widget.item.name);
-              print(widget.item.skuID);
-              print(widget.item.minorCategory?.name);
-              print(widget.item.brand);
+              print("${widget.item.normal}  code : ${widget.item.hashCode}");
+              print("${widget.item.name} code : ${widget.item.hashCode}");
+              print("${widget.item.skuID}  code : ${widget.item.hashCode}");
+              print(
+                  "${widget.item.minorCategory?.name} code : ${widget.item.hashCode}");
+              print("${widget.item.brand} code : ${widget.item.hashCode}");
               print(widget.item.price);
               print(widget.item.gramWeight);
-              if(widget.item.variants != null){
-                print('color'+widget.item?.variants[0]?.color?.name.toString());
-                print('size'+widget.item?.variants[0]?.size?.name.toString());
+              if (widget.item.variants != null) {
+                print(
+                    'color' + widget.item?.variants[0]?.color?.name.toString());
+                print('size' + widget.item?.variants[0]?.size?.name.toString());
               }
 //              print(widget.item.attributes.styles[0]);
               Navigator.pop(context);
@@ -90,7 +95,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         key: _apparelProductForm,
         child: ListView(
           children: <Widget>[
-            NormalPictureField(widget.item,widget.isCreate),
+            NormalPictureField(widget.item, widget.isCreate),
 //            DetailPictureField(widget.item),
             TextFieldComponent(
               focusNode: _nameFocusNode,

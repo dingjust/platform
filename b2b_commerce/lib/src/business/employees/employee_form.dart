@@ -52,8 +52,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
     return text;
   }
 
-
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -82,11 +81,6 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
               focusNode: _nameFocusNode,
               leadingText: '姓名',
               hintText: '请输入姓名',
-              onChanged: (value) {
-                setState(() {
-                  widget.item.name = value;
-                });
-              },
             ),
             TextFieldComponent(
               controller: _mobileNumberController,
@@ -94,40 +88,36 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
               leadingText: '手机号码',
               hintText: '请输入手机号码',
               inputType: TextInputType.number,
-              onChanged: (value) {
-                widget.item.mobileNumber = value;
-              },
             ),
             InkWell(
-              onTap: () async {
-                dynamic result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EnumSelectPage(
-                          title: '选择角色/岗位',
-                          items: <EnumModel>[
-                            EnumModel('R001', '超级管理员'),
-                            EnumModel('R002', '会计'),
-                          ],
-                          models: enumModels,
-                          multiple: true,
-                        ),
-                  ),
-                );
-                if (result != null) enumModels = result;
+                onTap: () async {
+                  dynamic result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EnumSelectPage(
+                            title: '选择角色/岗位',
+                            items: <EnumModel>[
+                              EnumModel('R001', '超级管理员'),
+                              EnumModel('R002', '会计'),
+                            ],
+                            models: enumModels,
+                            multiple: true,
+                          ),
+                    ),
+                  );
+                  if (result != null) enumModels = result;
 
-                widget.item.roles = enumModels
-                    .map(
-                        (model) => RoleModel(uid: model.code, name: model.name))
-                    .toList();
-                print(widget.item.name);
-              },
-              child: ShowSelectTile(
-                leadingText: '角色/岗位',
-                tralingText: formatRoleSelectsText(),
-                tralingTextColor: Color(0xffFF9516),
-              )
-            ),
+                  widget.item.roles = enumModels
+                      .map((model) =>
+                          RoleModel(uid: model.code, name: model.name))
+                      .toList();
+                  print(widget.item.name);
+                },
+                child: ShowSelectTile(
+                  leadingText: '角色/岗位',
+                  tralingText: formatRoleSelectsText(),
+                  tralingTextColor: Color(0xffFF9516),
+                )),
           ],
         ),
       ),
