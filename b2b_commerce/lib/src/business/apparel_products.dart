@@ -11,15 +11,16 @@ class ApparelProductsPage extends StatelessWidget {
 //  final List<ApparelProductModel> items = <ApparelProductModel>[];
   final bool isRequirement;
   final ApparelProductModel item;
-  ApparelProductModel newItem = ApparelProductModel();
 
-  ApparelProductsPage({this.isRequirement = false, this.item}) {}
+  ApparelProductsPage({this.isRequirement = false, this.item});
 
   @override
   Widget build(BuildContext context) {
 //    List<ApparelProductItem> _items = items.map((item) {
 //      return ApparelProductItem(item);
 //    }).toList();
+    print("${ApparelProductBLoC.instance.newProduct.hashCode}=============");
+
     return BLoCProvider<ApparelProductBLoC>(
       bloc: ApparelProductBLoC.instance,
       child: WillPopScope(
@@ -81,7 +82,7 @@ class ApparelProductsPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ApparelProductFormPage(
-                          item: newItem,
+                          item: ApparelProductBLoC.instance.newProduct,
                           isCreate: true,
                         )),
               );

@@ -50,8 +50,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 //        initialData: bloc.currentProduct,
 //        builder: (BuildContext context,
 //            AsyncSnapshot<ApparelProductModel> snapshot) {
-    print('${widget.item.hashCode} ========= ${this.hashCode}');
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -64,14 +62,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               style: TextStyle(color: Color(0xffFF9516)),
             ),
             onPressed: () {
-              _apparelProductForm.currentState.save();
-
-              widget.item.name = _nameController.text;
-              widget.item.skuID = _skuIDController.text;
-              widget.item.brand = _brandController.text;
-              widget.item.price = double.parse(_priceController.text);
-              widget.item.gramWeight = double.parse(_gramWeightController.text);
-
               print("${widget.item.normal}  code : ${widget.item.hashCode}");
               print("${widget.item.name} code : ${widget.item.hashCode}");
               print("${widget.item.skuID}  code : ${widget.item.hashCode}");

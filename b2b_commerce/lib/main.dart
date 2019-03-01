@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
           initialData: UserBLoC.instance.currentUser,
           stream: UserBLoC.instance.stream,
           builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-            //品牌
+            // //品牌
             if (snapshot.data.userType == UserType.BRAND) {
               return BrandClient();
             }
