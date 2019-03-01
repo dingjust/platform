@@ -152,7 +152,7 @@ class MyHomePage extends StatelessWidget {
       child: Container(
           child: CircleAvatar(
             backgroundImage: NetworkImage(
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'),
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1551440775165&di=888256c517822e8d6e57b641cfb83114&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20170507%2F3de55040afb04926a0cfbcbbf5af49a6_th.jpeg'),
             radius: 40.0,
           ),
           decoration: BoxDecoration(

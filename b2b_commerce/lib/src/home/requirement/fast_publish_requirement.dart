@@ -162,7 +162,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                                           {
                                             "product": {
                                               "code": "NA89852509",
-                                              "name": "山本风法少女长裙复古气质秋冬款",
+                                              "name": "森马2018冬装男装新款休闲中长款呢大衣",
                                               "skuID": "NA89852509",
                                               "majorCategory": {
                                                 "name": "女装-T恤"
