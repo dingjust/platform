@@ -25,7 +25,9 @@ class MyHomePage extends StatelessWidget {
             AppRoutes.ROUTE_MY_ACCOUNT),
         Container(
           padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
-          child: Divider(),
+          child: Divider(
+            height: 0,
+          ),
         ),
         MenuItem(B2BImage.certicate_info(width: 26, height: 19), '认证信息',
             AppRoutes.ROUTE_MY_COMPANY),
@@ -35,7 +37,9 @@ class MyHomePage extends StatelessWidget {
             AppRoutes.ROUTE_MY_ADDRESSES),
         Container(
           padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
-          child: Divider(),
+          child: Divider(
+            height: 0,
+          ),
         ),
         MenuItem(B2BImage.invoice_manage(width: 26, height: 21), '发票管理',
             AppRoutes.ROUTE_MY_INVOICES),
@@ -50,7 +54,9 @@ class MyHomePage extends StatelessWidget {
             AppRoutes.ROUTE_MY_CLIENT_SERVICES),
         Container(
           padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
-          child: Divider(),
+          child: Divider(
+            height: 0,
+          ),
         ),
         MenuItem(B2BImage.setting(width: 25, height: 24), '设置',
             AppRoutes.ROUTE_MY_SETTINGS),
@@ -195,6 +201,7 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           Container(
+            width: 210,
             child: Text(
               '定制加（深圳）科技有限公司',
               style: TextStyle(fontSize: 16, color: Colors.white),

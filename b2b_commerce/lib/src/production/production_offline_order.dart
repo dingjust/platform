@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/production/production_earnest_money.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class ProductionOfflineOrder extends StatefulWidget {
 
@@ -15,6 +16,7 @@ class ProductionOfflineOrder extends StatefulWidget {
 }
 
 class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
+  FocusNode _expectedPriceFocusNode = FocusNode();
   String address;
   String processingType;
   String isInvoice;
@@ -524,26 +526,29 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextField(
+                TextFieldComponent(
                   controller: inputNumber,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: '请输入工厂名称',
-                  ),
+                  focusNode: _expectedPriceFocusNode,
+                  autofocus: true,
+                  inputType: TextInputType.number,
+                  hintText: '请输入工厂名',
+                  padding: EdgeInsets.all(0),
                 ),
-                TextField(
+                TextFieldComponent(
                   controller: inputNumber,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: '请输入联系人',
-                  ),
+                  focusNode: _expectedPriceFocusNode,
+                  autofocus: true,
+                  inputType: TextInputType.number,
+                  hintText: '请输入联系人',
+                  padding: EdgeInsets.all(0),
                 ),
-                TextField(
+                TextFieldComponent(
                   controller: inputNumber,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: '请输入联系电话',
-                  ),
+                  focusNode: _expectedPriceFocusNode,
+                  autofocus: true,
+                  inputType: TextInputType.number,
+                  hintText: '请输入联系电话',
+                  padding: EdgeInsets.all(0),
                 ),
               ],
             ),
@@ -581,16 +586,17 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('请输入加工数量'),
+          title: Text('请输入生产单价'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextField(
+                TextFieldComponent(
                   controller: inputNumber,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: '请输入加工数量',
-                  ),
+                  focusNode: _expectedPriceFocusNode,
+                  autofocus: true,
+                  inputType: TextInputType.number,
+                  hintText: '请输入生产单价',
+                  padding: EdgeInsets.all(0),
                 ),
               ],
             ),

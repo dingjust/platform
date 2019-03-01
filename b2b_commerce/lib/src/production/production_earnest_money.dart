@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class ProductionEarnestMoney extends StatefulWidget {
   final ApparelProductModel product;
@@ -10,6 +11,7 @@ class ProductionEarnestMoney extends StatefulWidget {
 }
 
 class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
+  FocusNode _expectedPriceFocusNode = FocusNode();
   String earnestMoney;
   String tailMoney;
   bool isEarnestPayment = false;
@@ -272,12 +274,13 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextField(
+                TextFieldComponent(
                   controller: inputNumber,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: '请输入定金金额',
-                  ),
+                  focusNode: _expectedPriceFocusNode,
+                  autofocus: true,
+                  inputType: TextInputType.number,
+                  hintText: '请输入定金金额',
+                  padding: EdgeInsets.all(0),
                 ),
               ],
             ),
@@ -319,12 +322,13 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextField(
+                TextFieldComponent(
                   controller: inputNumber,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: '请输入尾款金额',
-                  ),
+                  focusNode: _expectedPriceFocusNode,
+                  autofocus: true,
+                  inputType: TextInputType.number,
+                  hintText: '请输入生产单价',
+                  padding: EdgeInsets.all(0),
                 ),
               ],
             ),
