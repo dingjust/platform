@@ -19,7 +19,7 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
     //解析
     String jsonStr =
         await LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY);
-    if (jsonStr != null && jsonStr!='') {
+    if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
       history_keywords = list.map((item) => item as String).toList();
       print(history_keywords);
@@ -68,9 +68,11 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
     // TODO: implement showResults
     super.showResults(context);
     //记录搜索关键字
-    history_keywords.add(query);
-    LocalStorage.save(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
-        json.encode(history_keywords));
+    if (query != '' && query.isNotEmpty) {
+      history_keywords.add(query);
+      LocalStorage.save(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
+          json.encode(history_keywords));
+    }
     Navigator.pop(context);
     Navigator.push(
         context,
@@ -120,8 +122,9 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProductionResultPage(keyword: keyword,)));
+                                  builder: (context) => ProductionResultPage(
+                                        keyword: keyword,
+                                      )));
                         },
                       ))
                   .toList()),
