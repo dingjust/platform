@@ -232,7 +232,7 @@ class PurchaseOrderItem extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     child: Text(
-                  '采购订单号：' + order.code,
+                  '生产订单号：' + order.code,
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: 16,
