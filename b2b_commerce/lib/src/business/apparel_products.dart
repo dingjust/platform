@@ -19,7 +19,7 @@ class ApparelProductsPage extends StatelessWidget {
 //    List<ApparelProductItem> _items = items.map((item) {
 //      return ApparelProductItem(item);
 //    }).toList();
-    print("${ApparelProductBLoC.instance.newProduct.hashCode}=============");
+//    print("${ApparelProductBLoC.instance.newProduct.hashCode}=============");
 
     return BLoCProvider<ApparelProductBLoC>(
       bloc: ApparelProductBLoC.instance,
