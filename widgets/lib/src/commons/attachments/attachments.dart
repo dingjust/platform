@@ -605,6 +605,36 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
         }));
       });
     });
+
+
+    // var dio = Dio();
+    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (client) {
+    //   HttpClient httpClient = new HttpClient()
+    //     ..badCertificateCallback =
+    //         ((X509Certificate cert, String host, int port) => true);
+    //   httpClient.idleTimeout = Duration(seconds: 0);
+
+    //   return httpClient;
+    // };
+    // try {
+    //   FormData formData = FormData.from({
+    //     "file": UploadFileInfo(file, "file"),
+    //   });
+
+    //   Response response = await dio.post(
+    //     "https://47.106.112.137:9002/djwebservices/v2/apparel-zh/media/file/upload",
+    //     data: formData,
+    //     onSendProgress: (int sent, int total) {
+    //       print("$sent $total");
+    //     },
+    //   );
+    //   print(response);
+    // } catch (e) {
+    //   print(e);
+    // }
+
+
   }
 
   //TODO :传入Media参数
