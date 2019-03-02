@@ -175,7 +175,7 @@ class ProductionListView extends StatelessWidget {
 
     return Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        color: Colors.grey[200],
+        color: Color.fromRGBO(242, 242, 242, 1),
         child: RefreshIndicator(
           onRefresh: () async {
             return await bloc.refreshData();
@@ -205,7 +205,7 @@ class ProductionListView extends StatelessWidget {
                       return Text('${snapshot.error}');
                     }
                   }),
-              _buildRecommend(bloc)
+              // _buildRecommend(bloc)
             ],
           ),
         ));

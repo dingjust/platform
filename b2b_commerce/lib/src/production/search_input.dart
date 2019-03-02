@@ -15,16 +15,16 @@ class ProductionSearchInputBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showSearch(
-          context: context, delegate: ProductionSearchDelegate()),
+      onTap: () =>
+          showSearch(context: context, delegate: ProductionSearchDelegate()),
       child: Container(
         width: width,
         height: height,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey[300], width: 0.5)),
+          color: Color.fromRGBO(242, 242, 242, 1),
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Row(
           children: <Widget>[
             Icon(

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
+import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,7 +53,11 @@ final String defaultPicUrl =
 class PurchaseOrderDetailPage extends StatefulWidget {
   final PurchaseOrderModel order;
 
-  PurchaseOrderDetailPage({Key key, @required this.order}) : super(key: key);
+  final bool isProduction;
+
+  PurchaseOrderDetailPage(
+      {Key key, @required this.order, this.isProduction = false})
+      : super(key: key);
 
   _PurchaseDetailPageState createState() =>
       _PurchaseDetailPageState(order: order);
@@ -74,15 +79,17 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           brightness: Brightness.light,
           centerTitle: true,
           elevation: 0.5,
-          title: Text('采购订单明细'),
+          title: Text('生产订单明细'),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: Colors.white,
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: Center(
+                child: Text(
+                  '${SalesApplicationLocalizedMap[order.salesApplication]}',
+                  style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                ),
               ),
-              onPressed: null,
-            )
+            ),
           ],
         ),
         body: Container(
@@ -629,47 +636,81 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Expanded(
-            child: Container(
-                margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                height: 40,
-                child: RaisedButton(
-                    color: Colors.red,
-                    child: Text(
-                      '取消订单',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    onPressed: () {})),
-          ),
-          Expanded(
-            child:
-            Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                height: 40,
-                child: RaisedButton(
-                    color: Color(0xFFFF9516),
-                    child: Text(
-                      '去支付',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    onPressed: () {})),
-          ),
-        ],
+        children: widget.isProduction
+            ? <Widget>[
+                widget.order.salesApplication == SalesApplication.BELOW_THE_LINE
+                    ? Expanded(
+                        child: Container(
+                            margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            height: 40,
+                            child: RaisedButton(
+                                color: Colors.orange,
+                                child: Text(
+                                  '唯一码',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductionGenerateUniqueCodePage(
+                                                model: widget.order,
+                                              )));
+                                })),
+                      )
+                    : Container(),
+              ]
+            : <Widget>[
+                Expanded(
+                  child: Container(
+                      margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      height: 40,
+                      child: RaisedButton(
+                          color: Colors.red,
+                          child: Text(
+                            '取消订单',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          onPressed: () {})),
+                ),
+                Expanded(
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
+                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      height: 40,
+                      child: RaisedButton(
+                          color: Color(0xFFFF9516),
+                          child: Text(
+                            '去支付',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          onPressed: () {})),
+                ),
+              ],
       ),
     );
   }
@@ -845,7 +886,6 @@ class PurchaseVoucherPic extends StatelessWidget {
     );
     ;
   }
-
 }
 
 //附件

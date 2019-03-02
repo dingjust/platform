@@ -96,6 +96,7 @@ class ProductionBLoC extends BLoCBase {
           .addAll(await Future.delayed(const Duration(seconds: 1), () {
         return <PurchaseOrderModel>[
           PurchaseOrderModel.fromJson({
+            'salesApplication': 'ONLINE',
             'code': 'PO34938475200045',
             'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
@@ -305,6 +306,7 @@ class ProductionBLoC extends BLoCBase {
             ],
           }),
           PurchaseOrderModel.fromJson({
+            'salesApplication': 'BELOW_THE_LINE',
             'code': 'PO34938475200045',
             'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
@@ -514,6 +516,7 @@ class ProductionBLoC extends BLoCBase {
             ],
           }),
           PurchaseOrderModel.fromJson({
+            'salesApplication': 'BELOW_THE_LINE',
             'code': 'PO34938475200045',
             'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
@@ -723,6 +726,7 @@ class ProductionBLoC extends BLoCBase {
             ],
           }),
           PurchaseOrderModel.fromJson({
+            'salesApplication': 'ONLINE',
             'code': 'PO34938475200045',
             'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
@@ -1023,6 +1027,7 @@ class ProductionBLoC extends BLoCBase {
 
     _purchaseOrders.add(await Future.delayed(const Duration(seconds: 1), () {
       return PurchaseOrderModel.fromJson({
+        'salesApplication': 'BELOW_THE_LINE',
         'code': 'PO34938475200045',
         'status': 'IN_PRODUCTION',
         'totalQuantity': 10,

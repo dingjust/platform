@@ -69,6 +69,30 @@ const PurchaseOrderStatusLocalizedMap = {
   PurchaseOrderStatus.COMPLETED: "已完成"
 };
 
+enum SalesApplication {
+  /// 线上
+  ONLINE,
+
+  ///Web
+  WEB,
+
+  ///线下
+  BELOW_THE_LINE,
+
+  ///
+  WEBMOBILE,
+
+  CALLCENTER
+}
+
+// TODO: i18n处理
+const SalesApplicationLocalizedMap = {
+  SalesApplication.ONLINE: "线上订单",
+  SalesApplication.BELOW_THE_LINE: "线下订单",
+  SalesApplication.WEB: "Web",
+  SalesApplication.WEBMOBILE: "移动"
+};
+
 /// 报价单状态
 enum QuoteState {
   /// （工厂）待处理
@@ -161,35 +185,40 @@ class AbstractOrderModel extends ItemModel {
   /// 备注
   String remarks;
 
-  AbstractOrderModel({
-    @required this.code,
-    this.totalQuantity = 0,
-    this.totalPrice = 0,
-    this.creationTime,
-    this.deliveryAddress,
-    this.remarks,
-  });
+  //线上线下订单
+  SalesApplication salesApplication;
+
+  AbstractOrderModel(
+      {@required this.code,
+      this.totalQuantity = 0,
+      this.totalPrice = 0,
+      this.creationTime,
+      this.deliveryAddress,
+      this.remarks,
+      this.salesApplication});
 }
 
 /// 订单
 @JsonSerializable()
 class OrderModel extends AbstractOrderModel {
-  OrderModel({
-    String code,
-    String status,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-  }) : super(
-          code: code,
-          totalQuantity: totalQuantity,
-          totalPrice: totalPrice,
-          creationTime: creationTime,
-          deliveryAddress: deliveryAddress,
-          remarks: remarks,
-        );
+  OrderModel(
+      {String code,
+      String status,
+      int totalQuantity,
+      double totalPrice,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      //线上线下订单
+      SalesApplication salesApplication})
+      : super(
+            code: code,
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice,
+            creationTime: creationTime,
+            deliveryAddress: deliveryAddress,
+            remarks: remarks,
+            salesApplication: salesApplication);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
       _$OrderModelFromJson(json);
@@ -506,30 +535,31 @@ class PurchaseOrderModel extends OrderModel {
   //生产进度
   List<ProductionProgressModel> productionProgresses;
 
-  PurchaseOrderModel({
-    String code,
-    this.status,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-    this.belongTo,
-    this.entries,
-    this.machiningType,
-    this.currentPhase,
-    this.attachments,
-    this.requirementOrderCode,
-    this.expectedDeliveryDate,
-    this.productionProgresses,
-  }) : super(
-          code: code,
-          totalQuantity: totalQuantity,
-          totalPrice: totalPrice,
-          creationTime: creationTime,
-          deliveryAddress: deliveryAddress,
-          remarks: remarks,
-        );
+  PurchaseOrderModel(
+      {String code,
+      this.status,
+      int totalQuantity,
+      double totalPrice,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      this.belongTo,
+      this.entries,
+      this.machiningType,
+      this.currentPhase,
+      this.attachments,
+      this.requirementOrderCode,
+      this.expectedDeliveryDate,
+      this.productionProgresses,
+      SalesApplication salesApplication})
+      : super(
+            code: code,
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice,
+            creationTime: creationTime,
+            deliveryAddress: deliveryAddress,
+            remarks: remarks,
+            salesApplication: salesApplication);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
       _$PurchaseOrderModelFromJson(json);
