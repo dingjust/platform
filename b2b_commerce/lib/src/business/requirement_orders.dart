@@ -214,9 +214,7 @@ class RequirementOrderItem extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildHeader(),
-            Column(
-              children: _buildEntries(),
-            ),
+            _buildEntries(),
             _buildSummary()
           ],
         ),
@@ -258,89 +256,70 @@ class RequirementOrderItem extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildEntries() {
-    return order.entries
-        .map((entry) => Container(
-              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-              child: Row(
+  Widget _buildEntries() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  image: order.details.pictures != null && order.details.pictures.isNotEmpty
+                      ? NetworkImage(order.details.pictures[0].url)
+                      : AssetImage(
+                    'temp/picture.png',
+                    package: "assets",
+                  ),
+                  fit: BoxFit.cover,
+                )),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding:
+              EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              height: 100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  entry.product.thumbnail != null
+                  order.details.productName != null
+                      ? Text(
+                    order.details.productName,
+                    style: TextStyle(fontSize: 15),
+                  )
+                      : Text(
+                    '暂无产品',
+                    style: TextStyle(
+                        fontSize: 15, color: Colors.red),
+                  ),
+                  order.details.productSkuID != null
                       ? Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              image: DecorationImage(
-                                image: NetworkImage(entry.product.thumbnail),
-                                fit: BoxFit.cover,
-                              )),
-                        )
-                      : Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Color.fromRGBO(243, 243, 243, 1)),
-                          child: Icon(
-                            B2BIcons.noPicture,
-                            color: Color.fromRGBO(200, 200, 200, 1),
-                            size: 25,
-                          ),
-                        ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          entry.product.name != null
-                              ? Text(
-                                  entry.product.name,
-                                  style: TextStyle(fontSize: 15),
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              : Text(
-                                  '暂无产品',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.red),
-                                ),
-                          entry.product.skuID != null
-                              ? Container(
-                                  padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Text(
-                                    '货号：' + entry.product.skuID,
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.grey),
-                                  ),
-                                )
-                              : Container(),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                            decoration: BoxDecoration(
-                                color: Color.fromRGBO(255, 243, 243, 1),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              "${entry.product.superCategories.first.name}   ${entry.product.majorCategory.name}   ${entry.entryNumber}件",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color.fromRGBO(255, 133, 148, 1)),
-                            ),
-                          )
-                        ],
-                      ),
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Text(
+                      '货号：' + order.details.productSkuID,
+                      style: TextStyle(
+                          fontSize: 12, color: Colors.grey),
                     ),
+                  )
+                      : Container(),
+                  Text(
+                    '生产单价：￥ ${order.details.maxExpectedPrice}',
+                    style: TextStyle(color: Colors.red),
                   )
                 ],
               ),
-            ))
-        .toList();
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildSummary() {

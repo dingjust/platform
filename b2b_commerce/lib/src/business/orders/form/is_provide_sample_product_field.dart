@@ -24,7 +24,7 @@ class IsProvideSampleProductFieldState extends State<IsProvideSampleProductField
               ),
             ),
             trailing: Text(
-              widget.item.isProvideSampleProduct == null ? '选取' : widget.item.isProvideSampleProduct ? '提供样衣':'不提供样衣',
+              widget.item.details?.samplesNeeded == null ? '选取' : widget.item.details.samplesNeeded ? '提供样衣':'不提供样衣',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -45,7 +45,7 @@ class IsProvideSampleProductFieldState extends State<IsProvideSampleProductField
                         title: Text('提供样衣'),
                         onTap: () async {
                           setState(() {
-                            widget.item.isProvideSampleProduct = true;
+                            widget.item.details.samplesNeeded = true;
                           });
                           Navigator.pop(context);
                         },
@@ -54,7 +54,7 @@ class IsProvideSampleProductFieldState extends State<IsProvideSampleProductField
                         title: Text('不提供样衣'),
                         onTap: () async {
                           setState(() {
-                            widget.item.isProvideSampleProduct = false;
+                            widget.item.details.samplesNeeded = false;
                           });
                           Navigator.pop(context);
                         },

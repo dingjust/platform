@@ -32,7 +32,7 @@ import 'form/total_quantity_field.dart';
 //];
 
 class RequirementOrderFrom extends StatefulWidget {
-  final ApparelProductModel product;
+  ApparelProductModel product;
 
   RequirementOrderFrom({this.product});
 
@@ -40,26 +40,23 @@ class RequirementOrderFrom extends StatefulWidget {
 }
 
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
-  RequirementOrderModel model = RequirementOrderModel();
+  RequirementOrderModel model = RequirementOrderModel(details: RequirementInfoModel());
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
-  List<MediaModel> _normalMedias = [];
   List<File> _normalImages = [];
-  ApparelProductModel _product;
 
   @override
   void initState() {
     if(widget.product != null){
-      if (widget.product.normal != null) _normalMedias = widget.product.normal;
-      model.minorCategory = widget.product.minorCategory;
+      if (widget.product.normal != null) model.details.pictures = widget.product.normal;
+      model.details.category = widget.product.minorCategory;
       if (widget.product?.minorCategory != null) {
         _categorySelected = [widget.product.minorCategory];
       }
-      _product = widget.product;
     }
 
-    if (_normalMedias != null) {
-      _normalMedias.forEach((media) {
+    if (model.details.pictures != null) {
+      model.details.pictures.forEach((media) {
         //缓存图片并获取缓存图片
         DefaultCacheManager().getSingleFile(media.url).then((file) {
           setState(() {
@@ -114,12 +111,17 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
                 //TODO：导入商品后的一系列操作
                 _normalImages.clear();
-                _product = result;
-                _normalMedias = _product?.normal;
-                if(_product != null)  _categorySelected = [_product.minorCategory];
-                model.minorCategory = _categorySelected.length>0 ? _categorySelected[0] : null;
-                if (_normalMedias != null) {
-                  _normalMedias.forEach((media) {
+                widget.product = result;
+                if(result != null){
+                  model.details.productName = result.name;
+                  model.details.productSkuID = result.skuID;
+                  model.details.pictures = result?.normal;
+                  _categorySelected = [result.minorCategory];
+                }
+
+                model.details.category = _categorySelected.length>0 ? _categorySelected[0] : null;
+                if (model.details.pictures != null) {
+                  model.details.pictures.forEach((media) {
                     //缓存图片并获取缓存图片
 //                      CacheManager.getInstance().then((cacheManager){
 //                        cacheManager.getFile(media.url).then((file){
@@ -156,8 +158,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 //            _buildPic(context),
             PicturesField(_normalImages),
             Offstage(
-              offstage: _product == null,
-              child: ProductField(_product),
+              offstage: widget.product == null,
+              child: ProductField(widget.product),
             ),
             MajorCategoryField(model),
             new Divider(height: 0),
@@ -275,12 +277,12 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               onPressed: () {
-                model.entries = [RequirementOrderEntryModel(product: _product,order: model)];
+                model.entries = [RequirementOrderEntryModel(product: widget.product,order: model)];
                 print('${_normalImages}');
-                print('${model.code},${model.entries[0].product?.name},${model.entries[0].product?.code},${model.majorCategory},${model.minorCategory}');
-                print('${model.totalQuantity},${model.expectedPrice},${model.expectedDeliveryDate},${model.contactPerson},${model.contactPhone}');
-                print('${model.deliveryAddress},${model.productionAreas},${model.machiningType},${model.isProofing},${model.isProvideSampleProduct}');
-                print('${model.isInvoice},${model.remarks},${model.isToRequirementPool}');
+                print('${model.code},${model.entries[0].product?.name},${model.entries[0].product?.code},${model.details.majorCategory},${model.details.category}');
+                print('${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
+                print('${model.deliveryAddress},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
+                print('${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -303,10 +305,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                       fontSize: 14,
                       color: Colors.grey),
                 ),
-                value: model.isToRequirementPool ?? true,
+                value: model.details.isToRequirementPool,
                 onChanged: (T) {
                   setState(() {
-                    model.isToRequirementPool = model.isToRequirementPool == null ? true : !model.isToRequirementPool;
+                    model.details.isToRequirementPool = !model.details.isToRequirementPool;
                   });
                 },
               ),

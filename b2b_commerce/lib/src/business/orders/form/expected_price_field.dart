@@ -13,7 +13,7 @@ class ExpectedPriceFieldState extends State<ExpectedPriceField>{
   @override
   Widget build(BuildContext context) {
     FocusNode _expectedPriceFocusNode = FocusNode();
-    TextEditingController _expectedPriceController = TextEditingController(text: widget.item.expectedPrice == null ? '':widget.item.expectedPrice.toString());
+    TextEditingController _expectedPriceController = TextEditingController(text: widget.item.details?.maxExpectedPrice == null ? '':widget.item.details?.maxExpectedPrice.toString());
 
     return GestureDetector(
         child: Container(
@@ -26,7 +26,7 @@ class ExpectedPriceFieldState extends State<ExpectedPriceField>{
               ),
             ),
             trailing: Text(
-                widget.item.expectedPrice == null ? '填写':widget.item.expectedPrice.toString(),
+                widget.item.details?.maxExpectedPrice == null ? '填写':widget.item.details?.maxExpectedPrice.toString(),
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -61,9 +61,9 @@ class ExpectedPriceFieldState extends State<ExpectedPriceField>{
                     onPressed: () {
                       setState(() {
                         if(_expectedPriceController.text.trim() != ''){
-                          widget.item.expectedPrice = double.parse(_expectedPriceController.text);
+                          widget.item.details.maxExpectedPrice = double.parse(_expectedPriceController.text);
                         }else{
-                          widget.item.expectedPrice = null;
+                          widget.item.details.maxExpectedPrice = null;
                         }
                       });
                       Navigator.of(context).pop();
