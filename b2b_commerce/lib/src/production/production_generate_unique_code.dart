@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 class ProductionGenerateUniqueCodePage extends StatefulWidget {
   final PurchaseOrderModel model;
@@ -16,13 +15,11 @@ class ProductionGenerateUniqueCodePage extends StatefulWidget {
 
 class _ProductionGenerateUniqueCodePageState
     extends State<ProductionGenerateUniqueCodePage> {
-  TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
 
   String uniqueCode;
 
-  TextEditingController _smsController = TextEditingController();
-  TextEditingController _onlineController = TextEditingController();
-  FocusNode _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +67,7 @@ class _ProductionGenerateUniqueCodePageState
                   child: FlatButton(
                     color: Colors.orange,
                     onPressed: () {
-                      // _smsInvite();
+                      _smsInvite();
                     },
                     child: Text(
                       '短信邀请',
@@ -84,7 +81,9 @@ class _ProductionGenerateUniqueCodePageState
                   width: 180,
                   child: FlatButton(
                     color: Colors.white,
-                    onPressed: () {},
+                    onPressed: () {
+                      _onlineInvite();
+                    },
                     child: Text(
                       '线上邀请',
                       style: TextStyle(color: Colors.orange),
@@ -166,31 +165,160 @@ class _ProductionGenerateUniqueCodePageState
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('请输入对方的手机号码'),
+          title: Text(
+            '请输入对方的手机号码',
+            style: TextStyle(
+                fontSize: 15, color: Color.fromRGBO(100, 100, 100, 1)),
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextFieldComponent(
-                  controller: _smsController,
-                  focusNode: _focusNode,
+                TextField(
+                  controller: _phoneController,
                   autofocus: true,
-                  inputType: TextInputType.number,
-                  hintText: '请输入加工数量',
-                  padding: EdgeInsets.all(0),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      // hintText: '请输入',
+                      prefix: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Text(
+                      '+86',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  )),
+
+                  // padding: EdgeInsets.all(0),
                 ),
+                Text(
+                  '是否确认手机号并发送邀请？',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 149, 22, 1), fontSize: 14),
+                )
               ],
             ),
           ),
           actions: <Widget>[
-            FlatButton(
-              child: Text(
-                '确定',
-                style: TextStyle(color: Color(0xffFF9516)),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  margin: EdgeInsets.only(right: 50),
+                  child: FlatButton(
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      '不，再看看',
+                      style: TextStyle(color: Colors.orange),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(width: 0.5, color: Colors.orange),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                  ),
+                ),
+                Container(
+                  width: 100,
+                  child: FlatButton(
+                    color: Colors.orange,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      '是',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                  ),
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _onlineInvite() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            '请输入对方工厂名称',
+            style: TextStyle(
+                fontSize: 15, color: Color.fromRGBO(100, 100, 100, 1)),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Color.fromRGBO(239, 239, 239, 1),
+                      borderRadius: BorderRadius.circular(5)),
+                  child: TextFormField(
+                    autofocus: true,
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
+                        contentPadding: EdgeInsets.symmetric(vertical: 0),
+                        border: InputBorder.none,
+                        suffix: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Color.fromRGBO(200, 200, 200, 1),
+                        )),
+                  ),
+                ),
+                Text(
+                  '是否确认手机号并发送邀请？',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 149, 22, 1), fontSize: 14),
+                )
+              ],
             ),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  margin: EdgeInsets.only(right: 50),
+                  child: FlatButton(
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      '不，再看看',
+                      style: TextStyle(color: Colors.orange),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(width: 0.5, color: Colors.orange),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                  ),
+                ),
+                Container(
+                  width: 100,
+                  child: FlatButton(
+                    color: Colors.orange,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      '是',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                  ),
+                ),
+              ],
+            )
           ],
         );
       },
@@ -202,13 +330,6 @@ class GenerateUniqueCodeItem extends StatelessWidget {
   const GenerateUniqueCodeItem({Key key, this.order}) : super(key: key);
 
   final PurchaseOrderModel order;
-
-  // 订单渠道类型
-  // static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
-  //   RequirementOrderStatus.PENDING_QUOTE: Colors.green,
-  //   RequirementOrderStatus.COMPLETED: Colors.orange,
-  //   RequirementOrderStatus.CANCELLED: Colors.red
-  // };
 
   @override
   Widget build(BuildContext context) {
