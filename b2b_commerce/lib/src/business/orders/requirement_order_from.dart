@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/delivery_address_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/expected_price_field.dart';
+import 'package:b2b_commerce/src/business/orders/form/max_expected_price_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_invoice_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
@@ -12,15 +12,14 @@ import 'package:b2b_commerce/src/business/orders/form/remarks_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:models/models.dart';
-
 import '../../home/requirement/requirement_publish_success.dart';
 import '../apparel_products.dart';
 import 'form/major_category_field.dart';
-import 'form/minor_category_field.dart';
+import 'form/category_field.dart';
 import 'form/pictures_field.dart';
 import 'form/product_field.dart';
 import 'form/production_areas_field.dart';
-import 'form/total_quantity_field.dart';
+import 'form/expected_machining_quantity.dart';
 
 //final List<EnumModel> technologyList = [
 //  EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
@@ -40,15 +39,22 @@ class RequirementOrderFrom extends StatefulWidget {
 }
 
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
-  RequirementOrderModel model = RequirementOrderModel(details: RequirementInfoModel());
+  RequirementOrderModel model =
+      RequirementOrderModel(details: RequirementInfoModel());
+  FocusNode _expectedMachiningQuantityFocusNode = FocusNode();
+  TextEditingController _expectedMachiningQuantityController = TextEditingController();
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
   List<File> _normalImages = [];
 
   @override
   void initState() {
-    if(widget.product != null){
-      if (widget.product.normal != null) model.details.pictures = widget.product.normal;
+    _expectedMachiningQuantityController.text =
+        '${model.details.expectedMachiningQuantity ?? ''}';
+
+    if (widget.product != null) {
+      if (widget.product.normal != null)
+        model.details.pictures = widget.product.normal;
       model.details.category = widget.product.minorCategory;
       if (widget.product?.minorCategory != null) {
         _categorySelected = [widget.product.minorCategory];
@@ -62,7 +68,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           setState(() {
             _normalImages.add(file);
           });
-         });
+        });
       });
     }
 
@@ -112,14 +118,15 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 //TODO：导入商品后的一系列操作
                 _normalImages.clear();
                 widget.product = result;
-                if(result != null){
+                if (result != null) {
                   model.details.productName = result.name;
                   model.details.productSkuID = result.skuID;
                   model.details.pictures = result?.normal;
                   _categorySelected = [result.minorCategory];
                 }
 
-                model.details.category = _categorySelected.length>0 ? _categorySelected[0] : null;
+                model.details.category =
+                    _categorySelected.length > 0 ? _categorySelected[0] : null;
                 if (model.details.pictures != null) {
                   model.details.pictures.forEach((media) {
                     //缓存图片并获取缓存图片
@@ -163,11 +170,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             ),
             MajorCategoryField(model),
             new Divider(height: 0),
-            MinorCategoryField(model, _categorySelected),
+            CategoryField(model, _categorySelected),
             new Divider(height: 0),
-            TotalQuantityField(model),
+            ExpectedMachiningQuantityField(model),
             new Divider(height: 0),
-            ExpectedPriceField(model),
+            MaxExpectedPriceField(model),
             new Divider(height: 0),
             ExpectedDeliveryDateField(model),
             new Divider(height: 0),
@@ -277,16 +284,25 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               onPressed: () {
-                model.entries = [RequirementOrderEntryModel(product: widget.product,order: model)];
+                model.entries = [
+                  RequirementOrderEntryModel(
+                      product: widget.product, order: model)
+                ];
                 print('${_normalImages}');
-                print('${model.code},${model.entries[0].product?.name},${model.entries[0].product?.code},${model.details.majorCategory},${model.details.category}');
-                print('${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
-                print('${model.deliveryAddress},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
-                print('${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
+                print(
+                    '${model.code},${model.entries[0].product?.name},${model.entries[0].product?.code},${model.details.majorCategory},${model.details.category}');
+                print(
+                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
+                print(
+                    '${model.deliveryAddress},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
+                print(
+                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PublishRequirementSuccessDialog(model: model,),
+                    builder: (context) => PublishRequirementSuccessDialog(
+                          model: model,
+                        ),
                   ),
                 );
               },
@@ -308,7 +324,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 value: model.details.isToRequirementPool,
                 onChanged: (T) {
                   setState(() {
-                    model.details.isToRequirementPool = !model.details.isToRequirementPool;
+                    model.details.isToRequirementPool =
+                        !model.details.isToRequirementPool;
                   });
                 },
               ),
@@ -321,5 +338,4 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       ),
     );
   }
-
 }
