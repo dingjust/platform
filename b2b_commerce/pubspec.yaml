@@ -31,7 +31,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   font_awesome_flutter: 8.2.0
   #  cached_network_image: ^0.4.1+1
-  dio: 1.0.9
+  dio: ^2.0.15
   shared_preferences: ^0.4.2
   transparent_image: ^0.1.0
   flutter_staggered_grid_view: "^0.2.4"
@@ -115,6 +115,7 @@ flutter:
     - packages/assets/temp/my/invoice_manage.png
     - packages/assets/temp/my/my_account.png
     - packages/assets/temp/my/setting.png
+    - packages/assets/temp/common/address_under_line.png
 
   fonts:
     - family: b2bIcons

@@ -960,7 +960,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
               children: <Widget>[
                 Expanded(
                     child: Text(
-                  '采购订单号：' + widget.supplierModel.purchaseOrder.code,
+                  '生产订单号：' + widget.supplierModel.purchaseOrder.code,
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: 16,

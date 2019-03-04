@@ -8,6 +8,11 @@ class ProductionItem extends StatelessWidget {
 
   final PurchaseOrderModel order;
 
+  static Map<SalesApplication, Color> _typeColors = {
+    SalesApplication.ONLINE: Color.fromRGBO(86, 194, 117, 1),
+    SalesApplication.BELOW_THE_LINE: Color.fromRGBO(22, 141, 255, 1),
+  };
+
   // 订单渠道类型
   // static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
   //   RequirementOrderStatus.PENDING_QUOTE: Colors.green,
@@ -22,7 +27,10 @@ class ProductionItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PurchaseOrderDetailPage(order: order),
+            builder: (context) => PurchaseOrderDetailPage(
+                  order: order,
+                  isProduction: true,
+                ),
           ),
         );
       },
@@ -57,7 +65,7 @@ class ProductionItem extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  '采购订单号：' + order.code,
+                  '生产订单号：' + order.code,
                   style: TextStyle(fontSize: 14),
                 ),
               ),
@@ -67,9 +75,9 @@ class ProductionItem extends StatelessWidget {
               //   style: TextStyle(color: _statusColors[order.status])
               // )
               Text(
-                '线上订单',
+                '${SalesApplicationLocalizedMap[order.salesApplication]}',
                 style: TextStyle(
-                    color: Color.fromRGBO(86, 194, 117, 1),
+                    color: _typeColors[order.salesApplication],
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               )

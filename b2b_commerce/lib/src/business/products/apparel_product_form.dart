@@ -92,12 +92,18 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               controller: _nameController,
               leadingText: '商品名称',
               hintText: '请输入商品名称',
+              onChanged: (value){
+                widget.item.name = value;
+              },
             ),
             TextFieldComponent(
               focusNode: _skuIDFocusNode,
               controller: _skuIDController,
               leadingText: '商品货号',
               hintText: '请输入商品货号',
+              onChanged: (value){
+                widget.item.skuID = value;
+              },
             ),
             MinorCategoryField(widget.item),
             ColorSizeStockField(widget.item),
@@ -106,6 +112,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               controller: _brandController,
               leadingText: '品牌',
               hintText: '请输入品牌',
+              onChanged: (value){
+                widget.item.brand = value;
+              },
             ),
             TextFieldComponent(
               focusNode: _priceFocusNode,
@@ -113,6 +122,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               inputType: TextInputType.number,
               leadingText: '供货价',
               hintText: '请输入供货价',
+              onChanged: (value){
+                widget.item.price = double.parse(value);
+              },
             ),
             TextFieldComponent(
               focusNode: _gramWeightFocusNode,
@@ -120,6 +132,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               inputType: TextInputType.number,
               leadingText: '重量',
               hintText: '请输入重量',
+              onChanged: (value){
+                widget.item.gramWeight = double.parse(value);
+              },
             ),
             AttributesField(widget.item),
 //            PrivacyField(widget.item),

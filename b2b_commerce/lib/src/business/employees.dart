@@ -15,6 +15,14 @@ class _EmployeesPageState extends State<EmployeesPage> {
     B2BCustomerModel.fromJson({'uid': 'zhan', 'name': '湛红波', 'mobileNumber': '13556179554'}),
     B2BCustomerModel.fromJson({'uid': 'zhan1', 'name': '湛红波1', 'mobileNumber': '13556179554'})
   ];
+  B2BCustomerModel employee;
+  @override
+  void initState() {
+    if(employee == null) employee = B2BCustomerModel();
+
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +63,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EmployeeFormPage(B2BCustomerModel()),
+              builder: (context) => EmployeeFormPage(item:employee,newlyCreated: true,),
             ),
           );
         },
@@ -64,11 +72,15 @@ class _EmployeesPageState extends State<EmployeesPage> {
   }
 }
 
-class EmployeeItem extends StatelessWidget {
+class EmployeeItem extends StatefulWidget {
   EmployeeItem(this.item);
 
-  final B2BCustomerModel item;
+  B2BCustomerModel item;
 
+  EmployeeItemState createState() => EmployeeItemState();
+}
+
+class EmployeeItemState extends State<EmployeeItem>{
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -78,21 +90,31 @@ class EmployeeItem extends StatelessWidget {
         margin: EdgeInsets.only(top: 5),
         child: ListTile(
           title: Text(
-            item.name,
+            widget.item.name,
             style: TextStyle(
               color: Colors.black54,
               fontSize: 20.0,
             ),
           ),
-          subtitle: Text(item.mobileNumber),
+          subtitle: Text(widget.item.mobileNumber),
           trailing: Icon(Icons.keyboard_arrow_right),
-          onTap: () {
-            Navigator.push(
+          onTap: () async{
+            print(widget.item.name);
+            dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => EmployeeFormPage(item),
+                builder: (context) => EmployeeFormPage(item: widget.item),
               ),
             );
+
+            setState(() {
+              if(result != null){
+                widget.item.name = result.name;
+                widget.item.mobileNumber = result.mobileNumber;
+                widget.item.roles = result.roles;
+              }
+            });
+
           },
         ),
       ),

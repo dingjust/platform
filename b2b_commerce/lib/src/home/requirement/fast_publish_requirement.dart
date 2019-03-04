@@ -16,11 +16,16 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   /// 期望交货时间
   DateTime expectedDeliveryDate;
 
+  /// 需求数量
+  int requirementNum;
+
   List<CategoryModel> _categorySelected = [];
   String category = '点击选择分类';
 
   @override
   Widget build(BuildContext context) {
+    FocusNode _focusNode = FocusNode();
+
     return Form(
       key: _formKey,
       child: Container(
@@ -81,25 +86,43 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                 ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(248, 248, 248, 1),
-                  borderRadius: BorderRadius.circular(5)),
-              child: TextFormField(
-                  autofocus: false,
-                  controller: _requirementNumController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
-                      contentPadding: EdgeInsets.symmetric(vertical: 0),
-                      hintText: '填写需求数量',
-                      border: InputBorder.none),
-                  // 校验数量
-                  validator: (v) {
-                    return int.parse(v) > 0 ? null : '数量大于0';
-                  }),
+            GestureDetector(
+              onTap: () {
+                _showRequirementNum(context, _focusNode);
+              },
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(248, 248, 248, 1),
+                    borderRadius: BorderRadius.circular(5)),
+                child:
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: <Widget>[
+                    //     Text(
+                    //       requirementNum == null ? '填写需求数量' : '${requirementNum}',
+                    //       style: TextStyle(
+                    //           color: Color.fromRGBO(150, 150, 150, 1),
+                    //           fontSize: 15),
+                    //     )
+                    //   ],
+                    // )
+                    TextFormField(
+                        autofocus: false,
+                        controller: _requirementNumController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 15),
+                            contentPadding: EdgeInsets.symmetric(vertical: 0),
+                            hintText: '填写需求数量',
+                            border: InputBorder.none),
+                        // 校验数量
+                        validator: (v) {
+                          return int.parse(v) > 0 ? null : '数量大于0';
+                        }),
+              ),
             ),
             GestureDetector(
               onTap: () {
@@ -236,12 +259,57 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: expectedDeliveryDate == null ? DateTime.now() : expectedDeliveryDate,
+        initialDate: expectedDeliveryDate == null
+            ? DateTime.now()
+            : expectedDeliveryDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     setState(() {
       expectedDeliveryDate = picked;
     });
+  }
+
+  void _showRequirementNum(BuildContext context, FocusNode focusNode) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('请输入需求数量'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextFieldComponent(
+                  controller: _requirementNumController,
+                  autofocus: true,
+                  inputType: TextInputType.number,
+                  focusNode: focusNode,
+                  hintText: '请输入需求数量',
+                  padding: EdgeInsets.all(0),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                '确定',
+                style: TextStyle(color: Color(0xffFF9516)),
+              ),
+              onPressed: () {
+                if (_requirementNumController.text != '' &&
+                    _requirementNumController.text != null) {
+                  setState(() {
+                    requirementNum = int.parse(_requirementNumController.text);
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   //小类
@@ -277,32 +345,104 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
 final List<Map<CategoryModel, List<CategoryModel>>> _category = [
   {
     CategoryModel(code: 'C01', name: '男装'): [
-      CategoryModel(code: 'C001', name: 'T恤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C002', name: '衬衫',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C003', name: '卫衣',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C004', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C005', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C006', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C007', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C008', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C009', name: '羽绒服',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C010', name: '绒服地方',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C011', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C012', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C001',
+          name: 'T恤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C002',
+          name: '衬衫',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C003',
+          name: '卫衣',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C004',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C005',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C006',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C007',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C008',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C009',
+          name: '羽绒服',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C010',
+          name: '绒服地方',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C011',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C012',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
     ],
     CategoryModel(code: 'C02', name: '女装'): [
-      CategoryModel(code: 'C013', name: '棉服服',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C014', name: '羽绒服地方',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C015', name: '背带裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C016', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C017', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C018', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C019', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C020', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C021', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C022', name: '牛仔裤裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C023', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C024', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C013',
+          name: '棉服服',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C014',
+          name: '羽绒服地方',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C015',
+          name: '背带裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C016',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C017',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C018',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C019',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C020',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C021',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C022',
+          name: '牛仔裤裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C023',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C024',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
     ],
   },
 ];

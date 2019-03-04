@@ -50,7 +50,21 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _buildBody(),
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: _buildBody(),
+                ),
+              ),
+              Container(
+                width: widget.itemWidth,
+                height: widget.height,
+                padding: EdgeInsets.only(bottom: 10),
+                child: widget.action,
+              )
+            ],
           ),
         ));
   }
@@ -143,12 +157,7 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
               ),
             ))
         .toList());
-    body.add(Container(
-      width: widget.itemWidth,
-      height: widget.height,
-      padding: EdgeInsets.only(bottom: 10),
-      child: widget.action,
-    ));
+    // body.add();
 
     return body;
   }

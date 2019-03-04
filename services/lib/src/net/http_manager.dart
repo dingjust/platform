@@ -20,26 +20,31 @@ class HttpManager {
 
   static Dio _getInstance() {
     if (_instance == null) {
-      Options options = Options(
+      BaseOptions options = BaseOptions(
         baseUrl: GlobalConfigs.BASE_URL,
         connectTimeout: 5000,
         receiveTimeout: 10000,
       );
       _instance = Dio(options);
-      _instance.onHttpClientCreate = (HttpClient client) {
+
+      (_instance.httpClientAdapter as DefaultHttpClientAdapter)
+          .onHttpClientCreate = (client) {
+        // you can also create a new HttpClient to dio
+        // return new HttpClient();
         // 忽略证书
         HttpClient httpClient = new HttpClient()
-          ..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+          ..badCertificateCallback =
+              ((X509Certificate cert, String host, int port) => true);
         return httpClient;
       };
 
-      _instance.interceptor.request.onSend = (Options options) async {
+      _instance.interceptors
+          .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
+        // 在请求被发送之前做一些事情
         var connectivityResult = await Connectivity().checkConnectivity();
         if (connectivityResult == ConnectivityResult.none) {
           throw -1; // network error
         }
-
-        // 在请求被发送之前做一些事情
         options.headers['Authorization'] = getAuthorization();
         return options; //continue
         // 如果你想完成请求并返回一些自定义数据，可以返回一个`Response`对象或返回`dio.resolve(data)`。
@@ -47,22 +52,16 @@ class HttpManager {
         //
         // 如果你想终止请求并触发一个错误,你可以返回一个`DioError`对象，或返回`dio.reject(errMsg)`，
         // 这样请求将被中止并触发异常，上层catchError会被调用。
-      };
-
-      _instance.interceptor.response.onSuccess = (Response response) {
+      }, onResponse: (Response response) {
+        // 在返回响应数据之前做一些预处理
         if (GlobalConfigs.DEBUG) {
           if (response != null) {
             print('返回结果: ' + response.toString());
           }
         }
-
         _clearContext();
-
-        // 在返回响应数据之前做一些预处理
         return response; // continue
-      };
-
-      _instance.interceptor.response.onError = (DioError e) {
+      }, onError: (DioError e) {
         // 当请求失败时做一些预处理
         if (GlobalConfigs.DEBUG) {
           print(e.toString());
@@ -70,7 +69,8 @@ class HttpManager {
 
         // unauthorized
         if (e.response != null && e.response.statusCode == 401) {
-          BuildContext currentContext = _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY];
+          BuildContext currentContext =
+              _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY];
           assert(currentContext != null);
           Navigator.pushNamed(currentContext, GlobalRoutes.ROUTE_LOGIN);
           return null;
@@ -79,7 +79,7 @@ class HttpManager {
         _clearContext();
 
         return e; //continue
-      };
+      }));
     }
 
     return _instance;
@@ -94,10 +94,12 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.get(path, data: data, options: options, cancelToken: cancelToken);
+    return instance.get(path,
+        queryParameters: data, options: options, cancelToken: cancelToken);
   }
 
-  Future<Response<T>> post<T>(String path, {
+  Future<Response<T>> post<T>(
+    String path, {
     BuildContext context,
     data,
     Options options,
@@ -105,7 +107,8 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.post(path, data: data, options: options, cancelToken: cancelToken);
+    return instance.post(path,
+        data: data, options: options, cancelToken: cancelToken);
   }
 
   Future<Response<T>> put<T>(
@@ -117,7 +120,8 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.put(path, data: data, options: options, cancelToken: cancelToken);
+    return instance.put(path,
+        data: data, options: options, cancelToken: cancelToken);
   }
 
   Future<Response<T>> delete<T>(
@@ -129,7 +133,8 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.delete(path, data: data, options: options, cancelToken: cancelToken);
+    return instance.delete(path,
+        data: data, options: options, cancelToken: cancelToken);
   }
 
   static _setContext(BuildContext context) {
