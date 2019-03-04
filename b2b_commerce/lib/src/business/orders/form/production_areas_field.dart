@@ -27,10 +27,10 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
               ),
             ),
             trailing: Text(
-              widget.item.productionAreas == null
+              widget.item.details?.productiveOrientations == null
                   ? '选取'
                   : formatEnumSelectsText(
-                  widget.item.productionAreas, ProvinceEnum, 3),
+                  widget.item.details?.productiveOrientations, ProvinceEnum, 3),
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -62,10 +62,10 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
           ).then((val) {
             setState(() {
               if (_productionAreasSelected.length > 0) {
-                widget.item.productionAreas =
+                widget.item.details.productiveOrientations =
                     _productionAreasSelected.map((area) => area.code).toList();
               } else {
-                widget.item.productionAreas = null;
+                widget.item.details.productiveOrientations = null;
               }
             });
           });

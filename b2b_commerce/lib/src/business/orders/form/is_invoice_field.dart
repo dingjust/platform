@@ -24,7 +24,7 @@ class IsInvoiceFieldState extends State<IsInvoiceField> {
               ),
             ),
             trailing: Text(
-              widget.item.isInvoice == null ? '选取' : widget.item.isInvoice ? '开发票':'不开发票',
+              widget.item.details.invoiceNeeded == null ? '选取' : widget.item.details.invoiceNeeded ? '开发票':'不开发票',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -45,7 +45,7 @@ class IsInvoiceFieldState extends State<IsInvoiceField> {
                         title: Text('开发票'),
                         onTap: () async {
                           setState(() {
-                            widget.item.isInvoice = true;
+                            widget.item.details.invoiceNeeded = true;
                           });
                           Navigator.pop(context);
                         },
@@ -54,7 +54,7 @@ class IsInvoiceFieldState extends State<IsInvoiceField> {
                         title: Text('不开发票'),
                         onTap: () async {
                           setState(() {
-                            widget.item.isInvoice = false;
+                            widget.item.details.invoiceNeeded = false;
                           });
                           Navigator.pop(context);
                         },

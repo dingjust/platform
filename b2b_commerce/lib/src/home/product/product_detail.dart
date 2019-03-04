@@ -46,7 +46,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         'profilePicture':
             'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'historyOrdersCount': 35,
         'responseQuotedTime': 50,
@@ -103,7 +103,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             'profilePicture':
                 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
             'uid': 'BB123456',
-            'name': '草帽工厂',
+            'name': '森马',
             'starLevel': 5,
             'email': 'monkey.D.luffy@163.com',
             'phone': '020-12345678',
@@ -118,7 +118,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             'profilePicture':
                 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
             'uid': 'BB123456',
-            'name': '草帽工厂',
+            'name': '森马',
             'starLevel': 5,
             'email': 'monkey.D.luffy@163.com',
             'phone': '020-12345678',
@@ -133,7 +133,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             'profilePicture':
                 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
             'uid': 'BB123456',
-            'name': '草帽工厂',
+            'name': '森马',
             'starLevel': 5,
             'email': 'monkey.D.luffy@163.com',
             'phone': '020-12345678',
@@ -148,7 +148,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             'profilePicture':
                 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
             'uid': 'BB123456',
-            'name': '草帽工厂',
+            'name': '森马',
             'starLevel': 5,
             'email': 'monkey.D.luffy@163.com',
             'phone': '020-12345678',
@@ -163,7 +163,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             'profilePicture':
                 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
             'uid': 'BB123456',
-            'name': '草帽工厂',
+            'name': '森马',
             'starLevel': 5,
             'email': 'monkey.D.luffy@163.com',
             'phone': '020-12345678',
@@ -178,7 +178,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             'profilePicture':
                 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
             'uid': 'BB123456',
-            'name': '草帽工厂',
+            'name': '森马',
             'starLevel': 5,
             'email': 'monkey.D.luffy@163.com',
             'phone': '020-12345678',
@@ -193,7 +193,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             'profilePicture':
                 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
             'uid': 'BB123456',
-            'name': '草帽工厂',
+            'name': '森马',
             'starLevel': 5,
             'email': 'monkey.D.luffy@163.com',
             'phone': '020-12345678',

@@ -134,6 +134,19 @@ const QuoteStateLocalizedMap = {
   QuoteState.BUYER_REJECTED: "拒绝"
 };
 
+
+enum MachiningType{
+  //包工包料
+  LABOR_AND_MATERIAL,
+  //清加工
+  LIGHT_PROCESSING,
+}
+
+const MachiningTypeLocalizedMap = {
+  MachiningType.LABOR_AND_MATERIAL : '包工包料',
+  MachiningType.LIGHT_PROCESSING : '清加工',
+};
+
 enum ProductionProgressPhase {
   /// 备料
   MATERIAL_PREPARATION,
@@ -233,7 +246,7 @@ class AbstractOrderEntryModel extends ItemModel {
   int entryNumber;
 
   /// 行单价
-  double basePrice;
+  double price;
 
   /// 行数量
   int quantity;
@@ -243,7 +256,7 @@ class AbstractOrderEntryModel extends ItemModel {
 
   AbstractOrderEntryModel({
     @required this.entryNumber,
-    this.basePrice,
+    this.price,
     this.quantity,
     this.totalPrice,
   });
@@ -259,12 +272,12 @@ class AbstractOrderEntryModel extends ItemModel {
 class OrderEntryModel extends AbstractOrderEntryModel {
   OrderEntryModel({
     int entryNumber,
-    double basePrice,
+    double price,
     int quantity,
     double totalPrice,
   }) : super(
           entryNumber: entryNumber,
-          basePrice: basePrice,
+          price: price,
           quantity: quantity,
           totalPrice: totalPrice,
         );
@@ -316,12 +329,12 @@ class CartEntryModel extends AbstractOrderEntryModel {
     int entryNumber,
     this.product,
     this.order,
-    double basePrice,
+    double price,
     int quantity,
     double totalPrice,
   }) : super(
           entryNumber: entryNumber,
-          basePrice: basePrice,
+          price: price,
           quantity: quantity,
           totalPrice: totalPrice,
         );
@@ -379,50 +392,44 @@ class ConsignmentEntryModel extends ItemModel {
       _$ConsignmentEntryModelToJson(model);
 }
 
-/// 需求订单
+///需求订单信息
 @JsonSerializable()
-class RequirementOrderModel extends OrderModel {
-  /// 发布者
-  BrandModel belongTo;
-
-  /// 订单行
-  List<RequirementOrderEntryModel> entries;
-
+class RequirementInfoModel extends ItemModel{
   /// 期望交货时间
   DateTime expectedDeliveryDate;
 
+  ///预计加工数量
+  int expectedMachiningQuantity;
+
   /// 期望价格
-  double expectedPrice;
+  double maxExpectedPrice;
 
   /// 加工类型
-  String machiningType;
+  MachiningType machiningType;
 
   ///是否需要打样
-  bool isProofing;
+  bool proofingNeeded;
 
   ///是否提供样衣
-  bool isProvideSampleProduct;
+  bool samplesNeeded;
 
   /// 是否开具发票
-  bool isInvoice;
-
-  /// 报价数
-  int countOfQuotes;
-
-  /// 附件
-  List<MediaModel> attachments;
-
-  /// 订单状态
-  RequirementOrderStatus status;
+  bool invoiceNeeded;
 
   ///图片
   List<MediaModel> pictures;
+
+  ///商品名称
+  String productName;
+
+  ///商品货号
+  String productSkuID;
 
   ///大类
   CategoryModel majorCategory;
 
   ///小类
-  CategoryModel minorCategory;
+  CategoryModel category;
 
   ///联系人
   String contactPerson;
@@ -431,34 +438,72 @@ class RequirementOrderModel extends OrderModel {
   String contactPhone;
 
   ///生产地区
-  List<String> productionAreas;
+  List<String> productiveOrientations;
 
   ///是否发布到需求池
   bool isToRequirementPool;
 
-  RequirementOrderModel({
-    String code,
+  RequirementInfoModel({
+    this.expectedDeliveryDate,
+    this.maxExpectedPrice,
+    this.machiningType,
+    this.invoiceNeeded,
+    this.proofingNeeded,
+    this.samplesNeeded,
+    this.pictures,
+    this.contactPerson,
+    this.contactPhone,
+    this.productiveOrientations,
+    this.isToRequirementPool = true,
+    this.productName,
+    this.productSkuID,
+    this.expectedMachiningQuantity,
+    this.category,
+    this.majorCategory,
+  });
+
+  factory RequirementInfoModel.fromJson(Map<String, dynamic> json) =>
+      _$RequirementInfoModelFromJson(json);
+
+  static Map<String, dynamic> toJson(RequirementInfoModel model) =>
+      _$RequirementInfoModelToJson(model);
+}
+
+/// 需求订单
+@JsonSerializable()
+class RequirementOrderModel extends OrderModel {
+  /// 订单状态
+  RequirementOrderStatus status;
+  /// 发布者
+  BrandModel belongTo;
+  ///需求信息
+  RequirementInfoModel details;
+  ///总报价数
+  int totalQuotesCount;
+  ///最近报价的报价单
+  List<QuoteModel> latestQuotes;
+  ///附件
+  List<MediaModel> attachments;
+  ///订单行
+  List<RequirementOrderEntryModel> entries;
+  ///延期天数
+  int delayDays;
+
+
+ RequirementOrderModel({
     this.status,
+    this.belongTo,
+    this.details,
+    this.totalQuotesCount,
+    this.latestQuotes,
+    this.entries,
+    this.delayDays,
+    String code,
     int totalQuantity,
     double totalPrice,
     DateTime creationTime,
     AddressModel deliveryAddress,
     String remarks,
-    this.belongTo,
-    this.entries,
-    this.expectedDeliveryDate,
-    this.expectedPrice,
-    this.machiningType,
-    this.isInvoice,
-    this.isProofing,
-    this.isProvideSampleProduct,
-    this.countOfQuotes,
-    this.attachments,
-    this.pictures,
-    this.contactPerson,
-    this.contactPhone,
-    this.productionAreas,
-    this.isToRequirementPool,
   }) : super(
           code: code,
           totalQuantity: totalQuantity,
@@ -485,12 +530,12 @@ class RequirementOrderEntryModel extends OrderEntryModel {
     int entryNumber,
     this.product,
     this.order,
-    double basePrice,
+    double price,
     int quantity,
     double totalPrice,
   }) : super(
           entryNumber: entryNumber,
-          basePrice: basePrice,
+          price: price,
           quantity: quantity,
           totalPrice: totalPrice,
         );
@@ -576,14 +621,14 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
 
   PurchaseOrderEntryModel({
     int entryNumber,
-    double basePrice,
+    double price,
     int quantity,
     double totalPrice,
     this.product,
     this.order,
   }) : super(
           entryNumber: entryNumber,
-          basePrice: basePrice,
+          price: price,
           quantity: quantity,
           totalPrice: totalPrice,
         );
@@ -638,12 +683,12 @@ class SalesOrderEntryModel extends OrderEntryModel {
     int entryNumber,
     this.product,
     this.order,
-    double basePrice,
+    double price,
     int quantity,
     double totalPrice,
   }) : super(
           entryNumber: entryNumber,
-          basePrice: basePrice,
+          price: price,
           quantity: quantity,
           totalPrice: totalPrice,
         );
@@ -733,14 +778,14 @@ class QuoteEntryModel extends AbstractOrderEntryModel {
 
   QuoteEntryModel({
     int entryNumber,
-    double basePrice,
+    double price,
     int quantity,
     double totalPrice,
     this.product,
     this.order,
   }) : super(
           entryNumber: entryNumber,
-          basePrice: basePrice,
+          price: price,
           quantity: quantity,
           totalPrice: totalPrice,
         );

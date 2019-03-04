@@ -7,9 +7,9 @@ import 'package:widgets/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 BrandModel brandModel = BrandModel.fromJson({
-  'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+  'profilePicture': 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1551440775165&di=888256c517822e8d6e57b641cfb83114&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20170507%2F3de55040afb04926a0cfbcbbf5af49a6_th.jpeg',
   'uid': 'BB123456',
-  'name': '草帽商店',
+  'name': '森马',
   'starLevel': 5,
   'email': 'monkey.D.luffy@163.com',
   'phone': '020-12345678',
@@ -57,9 +57,9 @@ BrandModel brandModel = BrandModel.fromJson({
 });
 
 FactoryModel factoryModel = FactoryModel.fromJson({
-  'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+  'profilePicture': 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1551440775165&di=888256c517822e8d6e57b641cfb83114&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20170507%2F3de55040afb04926a0cfbcbbf5af49a6_th.jpeg',
   'uid': 'BB123456',
-  'name': '草帽工厂',
+  'name': '森马',
   'starLevel': 5,
   'email': 'monkey.D.luffy@163.com',
   'phone': '020-12345678',

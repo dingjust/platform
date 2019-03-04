@@ -6,7 +6,7 @@ List<FactoryModel> factoryList = [
   FactoryModel.fromJson({
     'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
     'uid': 'BB123456',
-    'name': '草帽工厂',
+    'name': '森马',
     'starLevel': 5,
     'describe': '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
     'historyOrdersCount': 35,
@@ -64,7 +64,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -79,7 +79,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -94,7 +94,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -109,7 +109,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -124,7 +124,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -139,7 +139,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -154,7 +154,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -214,7 +214,7 @@ List<FactoryModel> factoryList = [
   FactoryModel.fromJson({
     'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
     'uid': 'BB123456',
-    'name': '草帽工厂',
+    'name': '森马',
     'starLevel': 5,
     'describe': '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
     'historyOrdersCount': 35,
@@ -272,7 +272,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -287,7 +287,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -302,7 +302,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -317,7 +317,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -332,7 +332,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -347,7 +347,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -362,7 +362,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -422,7 +422,7 @@ List<FactoryModel> factoryList = [
   FactoryModel.fromJson({
     'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
     'uid': 'BB123456',
-    'name': '草帽工厂',
+    'name': '森马',
     'starLevel': 5,
     'describe': '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
     'historyOrdersCount': 35,
@@ -480,7 +480,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -495,7 +495,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -510,7 +510,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -525,7 +525,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -540,7 +540,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -555,7 +555,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -570,7 +570,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -630,7 +630,7 @@ List<FactoryModel> factoryList = [
   FactoryModel.fromJson({
     'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
     'uid': 'BB123456',
-    'name': '草帽工厂',
+    'name': '森马',
     'starLevel': 5,
     'describe': '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
     'historyOrdersCount': 35,
@@ -688,7 +688,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -703,7 +703,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -718,7 +718,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -733,7 +733,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -748,7 +748,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -763,7 +763,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',
@@ -778,7 +778,7 @@ List<FactoryModel> factoryList = [
         'profilePicture':
         'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
         'uid': 'BB123456',
-        'name': '草帽工厂',
+        'name': '森马',
         'starLevel': 5,
         'email': 'monkey.D.luffy@163.com',
         'phone': '020-12345678',

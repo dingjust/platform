@@ -33,18 +33,18 @@ class _MyAppState extends State<MyApp> {
           initialData: UserBLoC.instance.currentUser,
           stream: UserBLoC.instance.stream,
           builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-            // //品牌
-            if (snapshot.data.userType == UserType.BRAND) {
+              //品牌
+//            if (snapshot.data.userType == UserType.BRAND) {
               return BrandClient();
-            }
+//            }
             //TODO:工厂
 
             //未登陆
-            else {
-              return MaterialApp(
-                home: B2BLoginPage(),
-              );
-            }
+//            else {
+//              return MaterialApp(
+//                home: B2BLoginPage(),
+//              );
+//            }
           }),
     );
   }

@@ -24,7 +24,7 @@ class IsProofingFieldState extends State<IsProofingField> {
               ),
             ),
             trailing: Text(
-              widget.item.isProofing == null ? '选取' : widget.item.isProofing ? '需要打样':'不需要打样',
+              widget.item.details?.proofingNeeded == null ? '选取' : widget.item.details?.proofingNeeded ? '需要打样':'不需要打样',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -45,7 +45,7 @@ class IsProofingFieldState extends State<IsProofingField> {
                         title: Text('需要打样'),
                         onTap: () async {
                           setState(() {
-                            widget.item.isProofing = true;
+                            widget.item.details.proofingNeeded = true;
                           });
                           Navigator.pop(context);
                         },
@@ -54,11 +54,11 @@ class IsProofingFieldState extends State<IsProofingField> {
                         title: Text('不需要打样'),
                         onTap: () async {
                           setState(() {
-                            widget.item.isProofing = false;
+                            widget.item.details.proofingNeeded = false;
                           });
                           Navigator.pop(context);
                         },
-                      )
+                      ),
                     ],
                   ));
             },
