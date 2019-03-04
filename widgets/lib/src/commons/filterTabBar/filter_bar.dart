@@ -89,6 +89,7 @@ class _FilterBarState extends State<FilterBar> {
             )),
             widget.action
           ],
-        ));
+        )
+        );
   }
 }
