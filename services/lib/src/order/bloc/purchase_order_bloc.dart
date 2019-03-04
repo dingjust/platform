@@ -218,10 +218,10 @@ class PurchaseOrderBLoC extends BLoCBase {
                 'requirementOrderCode': 'RC34938475200045',
                 'product': {
                   'code': 'NA89852509',
-                  'name': '山本风法少女长裙复古气质秋冬款',
+                  'name': '森马2018冬装男装新款休闲中长款呢大衣',
                   'skuID': 'NA89852509',
                   'thumbnail':
-                      'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
+                      'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
                 },
               }
             ],
@@ -402,10 +402,10 @@ class PurchaseOrderBLoC extends BLoCBase {
                 'requirementOrderCode': 'RC34938475200045',
                 'product': {
                   'code': 'NA89852509',
-                  'name': '山本风法少女长裙复古气质秋冬款',
+                  'name': '森马2018冬装男装新款休闲中长款呢大衣',
                   'skuID': 'NA89852509',
                   'thumbnail':
-                  'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
+                  'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
                 },
               }
             ],
@@ -586,10 +586,10 @@ class PurchaseOrderBLoC extends BLoCBase {
                 'requirementOrderCode': 'RC34938475200045',
                 'product': {
                   'code': 'NA89852509',
-                  'name': '山本风法少女长裙复古气质秋冬款',
+                  'name': '森马2018冬装男装新款休闲中长款呢大衣',
                   'skuID': 'NA89852509',
                   'thumbnail':
-                  'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
+                  'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
                 },
               }
             ],
@@ -770,10 +770,10 @@ class PurchaseOrderBLoC extends BLoCBase {
                 'requirementOrderCode': 'RC34938475200045',
                 'product': {
                   'code': 'NA89852509',
-                  'name': '山本风法少女长裙复古气质秋冬款',
+                  'name': '森马2018冬装男装新款休闲中长款呢大衣',
                   'skuID': 'NA89852509',
                   'thumbnail':
-                  'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
+                  'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
                 },
               }
             ],
@@ -964,10 +964,10 @@ class PurchaseOrderBLoC extends BLoCBase {
               'requirementOrderCode': 'RC34938475200045',
               'product': {
                 'code': 'NA89852509',
-                'name': '山本风法少女长裙复古气质秋冬款',
+                'name': '森马2018冬装男装新款休闲中长款呢大衣',
                 'skuID': 'NA89852509',
                 'thumbnail':
-                'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
+                'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
               },
             }
           ],
@@ -1161,10 +1161,10 @@ class PurchaseOrderBLoC extends BLoCBase {
             'requirementOrderCode': 'RC34938475200045',
             'product': {
               'code': 'NA89852509',
-              'name': '山本风法少女长裙复古气质秋冬款',
+              'name': '森马2018冬装男装新款休闲中长款呢大衣',
               'skuID': 'NA89852509',
               'thumbnail':
-              'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
+              'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
             },
           }
         ],

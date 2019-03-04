@@ -30,7 +30,7 @@ class SaleOrderDetail extends StatelessWidget {
             "thumbnail":
             "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
             "code": "NA89852509",
-            "name": "山本风法少女长裙复古气质秋冬款",
+            "name": "森马2018冬装男装新款休闲中长款呢大衣",
             "skuID": "NA89852509",
           },
         },
@@ -39,7 +39,7 @@ class SaleOrderDetail extends StatelessWidget {
             "thumbnail":
             "https://img.alicdn.com/imgextra/i3/1860270913/O1CN011IcC4vOIEr9xdXw_!!0-item_pic.jpg_430x430q90.jpg",
             "code": "NA89852509",
-            "name": "山本风法少女长裙复古气质秋冬款",
+            "name": "森马2018冬装男装新款休闲中长款呢大衣",
             "skuID": "NA89852509",
           },
         }
