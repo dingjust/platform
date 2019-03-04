@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
+import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -56,7 +57,7 @@ class _RequirementOrderDetailPageState
             _buildQuote(),
             _buildAttachments(),
             _buildRemarks(),
-            _buildButton()
+            _buildButtonGroups()
           ],
         ),
       ),
@@ -106,17 +107,20 @@ class _RequirementOrderDetailPageState
   }
 
   Widget _buildMain() {
+    String addressStr = "";
+    widget.order.details.productiveOrientations.forEach((str) {
+      addressStr = "${addressStr} ${str}";
+    });
+
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
         children: <Widget>[
-          Column(
-            children: [
-              _buildEntries(),
-            ]
-          ),
+          Column(children: [
+            _buildEntries(),
+          ]),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -127,20 +131,6 @@ class _RequirementOrderDetailPageState
             ],
           ),
           InfoRow(
-            label: '加工类型',
-            value: Text(
-              widget.order.details.machiningType == null ? '' : MachiningTypeLocalizedMap[widget.order.details.machiningType],
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-          InfoRow(
-            label: '是否开具发票',
-            value: Text(
-              '否',
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-          InfoRow(
             label: '期望价格',
             value: Text(
               '￥15.00',
@@ -148,74 +138,148 @@ class _RequirementOrderDetailPageState
             ),
           ),
           InfoRow(
-            label: '预计交货时间',
+            label: '加工类型',
+            value: Text(
+              widget.order.details.machiningType == null
+                  ? ''
+                  : MachiningTypeLocalizedMap[
+                      widget.order.details.machiningType],
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          InfoRow(
+            label: '交货时间',
             value: Text(
               '${DateFormatUtil.format(widget.order.details.expectedDeliveryDate)}',
               style: TextStyle(fontSize: 16),
             ),
+          ),
+          InfoRow(
+            label: '是否需要打样',
+            value: Text(
+              widget.order.details.proofingNeeded ? '是' : '否',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          InfoRow(
+            label: '是否提供样衣',
+            value: Text(
+              widget.order.details.samplesNeeded ? '是' : '否',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          InfoRow(
+            label: '生产地区',
+            value: Text(
+              '${addressStr}',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          InfoRow(
+            label: '是否开票',
+            value: Text(
+              widget.order.details.invoiceNeeded ? '是' : '否',
+              style: TextStyle(fontSize: 16),
+            ),
             hasBottomBorder: false,
-          )
+          ),
         ],
       ),
     );
   }
 
   Widget _buildEntries() {
+    Widget _pictureWidget;
+
+    if (widget.order.details.pictures == null) {
+      _pictureWidget = Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Color.fromRGBO(243, 243, 243, 1)),
+        child: Icon(
+          B2BIcons.noPicture,
+          color: Color.fromRGBO(200, 200, 200, 1),
+          size: 25,
+        ),
+      );
+    } else {
+      if (widget.order.details.pictures.isEmpty) {
+        _pictureWidget = Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color.fromRGBO(243, 243, 243, 1)),
+          child: Icon(
+            B2BIcons.noPicture,
+            color: Color.fromRGBO(200, 200, 200, 1),
+            size: 25,
+          ),
+        );
+      } else {
+        _pictureWidget = Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              image: DecorationImage(
+                image: NetworkImage(widget.order.details.pictures[0].url),
+                fit: BoxFit.cover,
+              )),
+        );
+      }
+    }
+
     return Container(
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image:widget.order.details.pictures != null && widget.order.details.pictures.isNotEmpty
-                      ? NetworkImage(widget.order.details.pictures[0].url)
-                      : AssetImage(
-                    'temp/picture.png',
-                    package: "assets",
-                  ),
-                  fit: BoxFit.cover,
-                )),
-          ),
+          _pictureWidget,
           Expanded(
             flex: 1,
             child: Container(
-              padding:
-              EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 100,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              height: 80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   widget.order.details.productName != null
                       ? Text(
-                    widget.order.details.productName,
-                    style: TextStyle(fontSize: 15),
-                  )
+                          widget.order.details.productName,
+                          style: TextStyle(fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
+                        )
                       : Text(
-                    '暂无产品',
-                    style: TextStyle(
-                        fontSize: 15, color: Colors.red),
-                  ),
+                          '暂无产品',
+                          style: TextStyle(fontSize: 15, color: Colors.red),
+                        ),
                   widget.order.details.productSkuID != null
                       ? Container(
-                    padding: EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Text(
-                      '货号：' + widget.order.details.productSkuID,
-                      style: TextStyle(
-                          fontSize: 12, color: Colors.grey),
-                    ),
-                  )
+                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '货号：${widget.order.details.productSkuID}',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        )
                       : Container(),
-                  Text(
-                    '生产单价：￥ ${widget.order.details.maxExpectedPrice}',
-                    style: TextStyle(color: Colors.red),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 243, 243, 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "${widget.order.details.majorCategory.name}   ${widget.order.details.category.name}   ${widget.order.totalQuantity}件",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Color.fromRGBO(255, 133, 148, 1)),
+                    ),
                   )
                 ],
               ),
@@ -238,8 +302,7 @@ class _RequirementOrderDetailPageState
           FlatButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      RequirementQuoteDetailPage()));
+                  builder: (context) => RequirementQuoteDetailPage()));
             },
             child: Text(
               '查看全部报价>>',
@@ -300,19 +363,47 @@ class _RequirementOrderDetailPageState
     );
   }
 
-  Widget _buildButton() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-      child: RaisedButton(
-          onPressed: () {},
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          color: Color.fromRGBO(255, 149, 22, 1),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-          child: Text(
-            '重新发布需求',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          )),
+  Widget _buildButtonGroups() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+          width: 180,
+          child: FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Colors.red,
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+              child: Text(
+                '重新发布需求',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              )),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+          width: 180,
+          child: FlatButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => QuickReactionFactoryPage(
+                            route: '全部工厂',
+                          )),
+                );
+              },
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 149, 22, 1),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+              child: Text(
+                '邀请工厂报价',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              )),
+        )
+      ],
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class FilterBar extends StatefulWidget implements PreferredSizeWidget {
-  const FilterBar(
+  FilterBar(
       {Key key,
       this.itemHeight = 20,
       this.itemWidth = 100,
@@ -18,7 +18,7 @@ class FilterBar extends StatefulWidget implements PreferredSizeWidget {
   _FilterBarState createState() => _FilterBarState();
 
   final List<FilterConditionEntry> entries;
-  final double itemHeight;
+  double itemHeight;
   final double itemWidth;
   final Color unselectedColor;
   final Color color;

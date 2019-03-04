@@ -45,8 +45,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
           body: Scaffold(
             appBar: AppBar(
               elevation: 0,
-              bottom: 
-              FilterBar(
+              bottom: FilterBar(
                 entries: <FilterConditionEntry>[
                   FilterConditionEntry(
                       label: '综合', value: 'comprehensive', checked: true),
@@ -96,7 +95,7 @@ class FactoriesListView extends StatelessWidget {
     bloc.conditionStream.listen((condition) {
       this.currentCondition = condition;
       //清空数据
-      bloc.clear();
+      // bloc.clear();
     });
 
     _scrollController.addListener(() {
@@ -121,6 +120,20 @@ class FactoriesListView extends StatelessWidget {
             physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             children: <Widget>[
+              StreamBuilder<FilterConditionEntry>(
+                stream: bloc.conditionStream,
+                initialData: null,
+                builder: (BuildContext context,
+                    AsyncSnapshot<FilterConditionEntry> snapshot) {
+                  return snapshot.data == null
+                      ? Container()
+                      : Container(
+                          color: Colors.white,
+                          height: 100,
+                          // width: 200,
+                        );
+                },
+              ),
               StreamBuilder<List<FactoryModel>>(
                 stream: bloc.stream,
                 initialData: null,
