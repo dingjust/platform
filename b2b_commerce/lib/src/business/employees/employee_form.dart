@@ -64,6 +64,12 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    _nameFocusNode.addListener((){
+      if(_nameFocusNode.hasFocus){
+        print(enumModels);
+      }
+    });
+
     return WillPopScope(
       onWillPop: () {
         if(_enabled){
@@ -138,7 +144,6 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
               InkWell(
                   onTap: () async {
                     if (_enabled) {
-                      print(enumModels);
                       dynamic result = await Navigator.push(
                         context,
                         MaterialPageRoute(

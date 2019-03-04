@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-class TotalQuantityField extends StatefulWidget {
+class ExpectedMachiningQuantityField extends StatefulWidget {
   RequirementOrderModel item;
 
-  TotalQuantityField(this.item);
+  ExpectedMachiningQuantityField(this.item);
 
-  TotalQuantityFieldState createState() => TotalQuantityFieldState();
+  ExpectedMachiningQuantityFieldState createState() => ExpectedMachiningQuantityFieldState();
 }
 
-class TotalQuantityFieldState extends State<TotalQuantityField> {
+class ExpectedMachiningQuantityFieldState extends State<ExpectedMachiningQuantityField> {
   @override
   Widget build(BuildContext context) {
     FocusNode _expectedMachiningQuantityFocusNode = FocusNode();
@@ -66,13 +66,15 @@ class TotalQuantityFieldState extends State<TotalQuantityField> {
                     style: TextStyle(color: Color(0xffFF9516)),
                   ),
                   onPressed: () {
-                    if (_expectedMachiningQuantityController.text.trim() !=
-                        '') {
-                      widget.item.details.expectedMachiningQuantity =
-                          int.parse(_expectedMachiningQuantityController.text);
-                    } else {
-                      widget.item.details.expectedMachiningQuantity = null;
-                    }
+                    setState(() {
+                      if (_expectedMachiningQuantityController.text.trim() !=
+                          '') {
+                        widget.item.details.expectedMachiningQuantity =
+                            int.parse(_expectedMachiningQuantityController.text);
+                      } else {
+                        widget.item.details.expectedMachiningQuantity = null;
+                      }
+                    });
                     Navigator.of(context).pop();
                   },
                 ),

@@ -15,11 +15,17 @@ class EnumSelectPage extends StatefulWidget {
    if(this.codes == null) this.codes = [];
   }
 
+  //页面title
   final String title;
+  //全部枚举的集合
   final List<EnumModel> items;
+  //是否多选
   final bool multiple;
+  //被选中的枚举的code
   List<String> codes;
+  //一行显示多少个
   final int count;
+  //被选中的枚举model
   List<EnumModel> models;
 
   EnumSelectPageState createState() => EnumSelectPageState();
@@ -31,20 +37,25 @@ class EnumSelectPageState extends State<EnumSelectPage> {
 
   @override
   void initState() {
+//    widget.models.forEach((model){
+//      print(model.code+'==='+model.name);
+//    });
     if(widget.models != null){
-      widget.codes = widget.models.map((model) => model.code).toList();
+//      widget.codes = widget.models.map((model) => model.code).toList();
       _beforModifyModels = [];
       _beforModifyModels.addAll(widget.models);
     }
       if(widget.codes != null) _beforeModifyCodes.addAll(widget.codes);
-
       // TODO: implement initState
       super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    //当有键盘的状态进来时，widget.codes会被清空，所以在build的时候重新赋值
+    if(widget.models != null) widget.codes = widget.models.map((model) => model.code).toList();
     final List<dynamic> _items = widget.items.map((item) {
+//      print(widget.codes.toString() + '-----'+ item.code);
       return Container(
         width: MediaQuery.of(context).size.width / widget.count,
         child: ChoiceChip(
@@ -68,23 +79,6 @@ class EnumSelectPageState extends State<EnumSelectPage> {
           },
         ),
       );
-//      return CheckboxListTile(
-//              selected: widget.codes.contains(item.code),
-//              title: Text(item.name),
-//              value: widget.codes.contains(item.code),
-//              onChanged: (value) {
-//                setState(() {
-//                  if (value) {
-//                    if(!widget.multiple){
-//                      widget.codes.clear();
-//                    }
-//                    widget.codes.add(item.code);
-//                  } else {
-//                    widget.codes.remove(item.code);
-//                  }
-//                });
-//              },
-//            );
     }).toList();
 
     return WillPopScope(

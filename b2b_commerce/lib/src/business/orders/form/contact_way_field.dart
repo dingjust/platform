@@ -80,8 +80,10 @@ class ContactWayFieldState extends State<ContactWayField>{
                   FlatButton(
                     child: Text('确定'),
                     onPressed: () {
-                      widget.item.details.contactPerson = _contactPersonController.text.trim() == '' ? null: _contactPersonController.text.trim();
-                      widget.item.details.contactPhone = _contactPhoneController.text.trim() == '' ? null: _contactPhoneController.text.trim();
+                      setState(() {
+                        widget.item.details.contactPerson = _contactPersonController.text.trim() == '' ? null: _contactPersonController.text.trim();
+                        widget.item.details.contactPhone = _contactPhoneController.text.trim() == '' ? null: _contactPhoneController.text.trim();
+                      });
                       Navigator.of(context).pop();
                     },
                   ),
