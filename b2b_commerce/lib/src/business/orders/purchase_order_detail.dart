@@ -81,7 +81,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           elevation: 0.5,
           title: Text('生产订单明细'),
           actions: <Widget>[
-            Container(
+            '${SalesApplicationLocalizedMap[order.salesApplication]}'==null?Container():Container(
               padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
               child: Center(
                 child: Text(
@@ -687,7 +687,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           ),
                           shape: RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
+                              BorderRadius.all(Radius.circular(20))),
                           onPressed: () {})),
                 ),
                 Expanded(
@@ -707,8 +707,104 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           ),
                           shape: RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          onPressed: () {})),
+                              BorderRadius.all(Radius.circular(20))),
+                          onPressed: () {
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible: false,
+                              // user must tap button!
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('您的默认收货地址为：'),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading: Icon(
+                                            Icons.location_on,
+                                            size: 20,
+                                          ),
+                                          title: Text(
+                                            order.deliveryAddress.fullname +
+                                                '  ' +
+                                                order.deliveryAddress.cellphone,
+                                          ),
+                                          subtitle: Text(
+                                            order.deliveryAddress.region.name +
+                                                order.deliveryAddress.city
+                                                    .name +
+                                                order.deliveryAddress
+                                                    .cityDistrict.name +
+                                                order.deliveryAddress.line1,
+                                          ),
+                                          trailing: Icon(
+                                            Icons.keyboard_arrow_right,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        width:100,
+                                        child: RaisedButton(
+                                          child: Text("不，在看看"),
+                                          textTheme: ButtonTextTheme.normal,
+                                          textColor: Color(0xFFFF9516),
+                                          color: Colors.white,
+                                          // 主题
+                                          // RaisedButton 才起效
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                              side: BorderSide(
+                                                  color: Color(0xFFFF9516),
+                                                  style: BorderStyle.solid,
+                                                  width: 1)),
+                                          materialTapTargetSize: MaterialTapTargetSize
+                                              .padded,
+                                          animationDuration: Duration(
+                                              seconds: 1),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          }
+                                      ),
+                                    ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        width:100,
+                                        child: RaisedButton(
+                                            child: Text("是"),
+                                            textTheme: ButtonTextTheme.normal,
+                                            textColor: Colors.white,
+                                            color: Color(0xFFFF9516),
+                                            // 主题
+                                            // RaisedButton 才起效
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                            ),
+                                            materialTapTargetSize: MaterialTapTargetSize
+                                                .padded,
+                                            animationDuration: Duration(
+                                                seconds: 1),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }
+                                        ),
+                                      )
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          })),
                 ),
               ],
       ),
