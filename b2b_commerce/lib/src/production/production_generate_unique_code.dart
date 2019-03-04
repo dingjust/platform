@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -19,6 +20,78 @@ class _ProductionGenerateUniqueCodePageState
   TextEditingController _nameController = TextEditingController();
 
   String uniqueCode;
+
+  SimpleAutoCompleteTextField textField;
+
+  List<String> added = [];
+  String currentText = "";
+  List<String> suggestions = [
+    "工厂",
+    "Apple",
+    "Armidillo",
+    "Actual",
+    "Actuary",
+    "America",
+    "Argentina",
+    "Australia",
+    "Antarctica",
+    "Blueberry",
+    "Cheese",
+    "Danish",
+    "Eclair",
+    "Fudge",
+    "Granola",
+    "Hazelnut",
+    "Ice Cream",
+    "Jely",
+    "Kiwi Fruit",
+    "Lamb",
+    "Macadamia",
+    "Nachos",
+    "Oatmeal",
+    "Palm Oil",
+    "Quail",
+    "Rabbit",
+    "Salad",
+    "T-Bone Steak",
+    "Urid Dal",
+    "Vanilla",
+    "Waffles",
+    "Yam",
+    "Zest"
+  ];
+
+  bool showTextField = true;
+
+  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
+
+  void _handleShowTextFieldChanged(bool newValue) {
+    setState(() {
+      showTextField = true;
+      Navigator.of(context).pop();
+      _onlineInvite();
+    });
+  }
+
+  _ProductionGenerateUniqueCodePageState() {
+    textField = SimpleAutoCompleteTextField(
+      key: key,
+      suggestions: suggestions,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+      ),
+      textChanged: (text) {
+        print(text);
+      },
+      textSubmitted: (text) {
+        print(text);
+        setState(() {
+          currentText = text;
+          showTextField = false;
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -245,81 +318,11 @@ class _ProductionGenerateUniqueCodePageState
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(
-            '请输入对方工厂名称',
-            style: TextStyle(
-                fontSize: 15, color: Color.fromRGBO(100, 100, 100, 1)),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Color.fromRGBO(239, 239, 239, 1),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: TextFormField(
-                    autofocus: true,
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                        hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
-                        contentPadding: EdgeInsets.symmetric(vertical: 0),
-                        border: InputBorder.none,
-                        suffix: Icon(
-                          Icons.keyboard_arrow_down,
-                          color: Color.fromRGBO(200, 200, 200, 1),
-                        )),
-                  ),
-                ),
-                Text(
-                  '是否确认手机号并发送邀请？',
-                  style: TextStyle(
-                      color: Color.fromRGBO(255, 149, 22, 1), fontSize: 14),
-                )
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  width: 100,
-                  margin: EdgeInsets.only(right: 50),
-                  child: FlatButton(
-                    color: Colors.white,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      '不，再看看',
-                      style: TextStyle(color: Colors.orange),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 0.5, color: Colors.orange),
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                  ),
-                ),
-                Container(
-                  width: 100,
-                  child: FlatButton(
-                    color: Colors.orange,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      '是',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                  ),
-                ),
-              ],
-            )
-          ],
+        return CompleteTextFieldDialog(
+          currentText: currentText,
+          showTextField: showTextField,
+          textField: textField,
+          onChanged: _handleShowTextFieldChanged,
         );
       },
     );
@@ -479,5 +482,107 @@ class GenerateUniqueCodeItem extends StatelessWidget {
               ),
             ))
         .toList();
+  }
+}
+
+class CompleteTextFieldDialog extends StatelessWidget {
+  CompleteTextFieldDialog(
+      {Key key,
+      this.textField,
+      this.showTextField,
+      this.currentText,
+      this.onChanged})
+      : super(key: key);
+
+  final SimpleAutoCompleteTextField textField;
+
+  bool showTextField;
+
+  String currentText;
+
+  final ValueChanged<bool> onChanged;
+
+  void _handleTap() {
+    onChanged(true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('build');
+    // TODO: implement build
+    return AlertDialog(
+      title: Text(
+        '请输入对方工厂名称',
+        style: TextStyle(fontSize: 15, color: Color.fromRGBO(100, 100, 100, 1)),
+      ),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                padding: EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(239, 239, 239, 1),
+                    borderRadius: BorderRadius.circular(5)),
+                child: showTextField
+                    ? textField
+                    : GestureDetector(
+                        onTap: _handleTap,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            currentText,
+                            style: TextStyle(color: Colors.grey, fontSize: 15),
+                          ),
+                        ),
+                      )),
+            Text(
+              '是否确认手机号并发送邀请？',
+              style: TextStyle(
+                  color: Color.fromRGBO(255, 149, 22, 1), fontSize: 14),
+            )
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              width: 100,
+              margin: EdgeInsets.only(right: 50),
+              child: FlatButton(
+                color: Colors.white,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  '不，再看看',
+                  style: TextStyle(color: Colors.orange),
+                ),
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(width: 0.5, color: Colors.orange),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+              ),
+            ),
+            Container(
+              width: 100,
+              child: FlatButton(
+                color: Colors.orange,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  '是',
+                  style: TextStyle(color: Colors.white),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
   }
 }
