@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
 import 'package:open_file/open_file.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 ///横向滚动图片列表
@@ -217,12 +217,15 @@ class _AttachmentsState extends State<Attachments> {
     String dir = (await getApplicationDocumentsDirectory()).path;
     String filePath = "$dir/$name.$mediaType";
     var dio = new Dio();
-    dio.onHttpClientCreate = (HttpClient client) {
+
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
       client.idleTimeout = new Duration(seconds: 0);
     };
+
     try {
-      Response response =
-          await dio.download(url, filePath, onProgress: (received, total) {
+      Response response = await dio.download(url, filePath,
+          onReceiveProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
         _streamController.sink.add(received / total);
       });
@@ -499,12 +502,13 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     String dir = (await getApplicationDocumentsDirectory()).path;
     String filePath = "$dir/$name.$mediaType";
     var dio = new Dio();
-    dio.onHttpClientCreate = (HttpClient client) {
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
       client.idleTimeout = new Duration(seconds: 0);
     };
     try {
-      Response response =
-          await dio.download(url, filePath, onProgress: (received, total) {
+      Response response = await dio.download(url, filePath,
+          onReceiveProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
         _streamController.sink.add(received / total);
       });
@@ -601,6 +605,36 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
         }));
       });
     });
+
+
+    // var dio = Dio();
+    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (client) {
+    //   HttpClient httpClient = new HttpClient()
+    //     ..badCertificateCallback =
+    //         ((X509Certificate cert, String host, int port) => true);
+    //   httpClient.idleTimeout = Duration(seconds: 0);
+
+    //   return httpClient;
+    // };
+    // try {
+    //   FormData formData = FormData.from({
+    //     "file": UploadFileInfo(file, "file"),
+    //   });
+
+    //   Response response = await dio.post(
+    //     "https://47.106.112.137:9002/djwebservices/v2/apparel-zh/media/file/upload",
+    //     data: formData,
+    //     onSendProgress: (int sent, int total) {
+    //       print("$sent $total");
+    //     },
+    //   );
+    //   print(response);
+    // } catch (e) {
+    //   print(e);
+    // }
+
+
   }
 
   //TODO :传入Media参数

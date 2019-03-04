@@ -88,7 +88,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
             ),
             GestureDetector(
               onTap: () {
-                _showRequirementNum(context, _focusNode);
+                // _showRequirementNum(context, _focusNode);
               },
               child: Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
