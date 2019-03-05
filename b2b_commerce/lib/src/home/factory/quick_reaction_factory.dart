@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:b2b_commerce/src/home/search/quick_reaction_factory_search.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,28 @@ class QuickReactionFactoryPage extends StatefulWidget {
 class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
   GlobalKey _quickReactionFactoryBLoCProviderKey = GlobalKey();
 
+  bool showFilterMenu = false;
+
+  List<CategoryModel> _minCategorySelect = [];
+
+  String filterBarLabel = '综合排序';
+
+  List<FilterConditionEntry> filterConditionEntries = <FilterConditionEntry>[
+    FilterConditionEntry(label: '综合', value: 'comprehensive', checked: true),
+    FilterConditionEntry(label: '星级', value: 'starLevel'),
+    FilterConditionEntry(label: '接单数', value: 'orderNum'),
+    FilterConditionEntry(label: '响应时间', value: 'time'),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    String categoryStr = '全部类目...';
+    if (_minCategorySelect.length > 1) {
+      categoryStr = '${_minCategorySelect[0].name}...';
+    } else if (_minCategorySelect.length == 1) {
+      categoryStr = _minCategorySelect[0].name;
+    }
+
     return BLoCProvider<QuickReactionFactoryBLoC>(
         key: _quickReactionFactoryBLoCProviderKey,
         bloc: QuickReactionFactoryBLoC.instance,
@@ -46,22 +67,42 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
             appBar: AppBar(
               elevation: 0,
               bottom: FilterBar(
-                entries: <FilterConditionEntry>[
-                  FilterConditionEntry(
-                      label: '综合', value: 'comprehensive', checked: true),
-                  FilterConditionEntry(label: '星级', value: 'starLevel'),
-                  FilterConditionEntry(label: '接单数', value: 'orderNum'),
-                  FilterConditionEntry(label: '响应时间', value: 'time'),
-                ],
+                label: filterBarLabel,
+                onPressed: () {
+                  setState(() {
+                    showFilterMenu = !showFilterMenu;
+                  });
+                },
+                categoryLabel: categoryStr,
+                onCategoryPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductCategorySelectPage(
+                                minCategorySelect: _minCategorySelect,
+                              )));
+                },
                 action: IconButton(
                   icon: Icon(Icons.menu),
                   onPressed: () {},
                 ),
-                streamController:
-                    QuickReactionFactoryBLoC.instance.conditionController,
               ),
             ),
-            body: FactoriesListView(),
+            body: Column(
+              children: <Widget>[
+                FilterSelectMenu(
+                  color: Colors.orange,
+                  height: showFilterMenu ? 150 : 0,
+                  entries: filterConditionEntries,
+                  streamController:
+                      QuickReactionFactoryBLoC.instance.conditionController,
+                  afterPressed: _setLabel,
+                ),
+                Expanded(
+                  child: FactoriesListView(),
+                )
+              ],
+            ),
           ),
           floatingActionButton: FloatingActionButton(
               onPressed: () {},
@@ -77,6 +118,13 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
                 ),
               )),
         ));
+  }
+
+  void _setLabel(String newValue) {
+    setState(() {
+      showFilterMenu = !showFilterMenu;
+      filterBarLabel = newValue;
+    });
   }
 }
 
