@@ -1,29 +1,32 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 
 class FilterBar extends StatefulWidget implements PreferredSizeWidget {
-  const FilterBar(
+  FilterBar(
       {Key key,
       this.itemHeight = 20,
       this.itemWidth = 100,
-      @required this.entries,
       this.unselectedColor = Colors.black54,
       this.color = Colors.orange,
-      @required this.streamController,
-      this.action})
+      this.action,
+      @required this.onPressed,
+      @required this.label,
+      this.onCategoryPressed,
+      this.categoryLabel})
       : super(key: key);
 
   _FilterBarState createState() => _FilterBarState();
 
-  final List<FilterConditionEntry> entries;
-  final double itemHeight;
+  double itemHeight;
   final double itemWidth;
   final Color unselectedColor;
   final Color color;
   final Widget action;
-  final StreamController streamController;
+  String label;
+  String categoryLabel;
+
+  final VoidCallback onCategoryPressed;
+
+  final VoidCallback onPressed;
 
   @override
   // TODO: implement preferredSize
@@ -38,55 +41,39 @@ class _FilterBarState extends State<FilterBar> {
         child: Row(
           children: <Widget>[
             Expanded(
-                child: Container(
-              height: widget.itemHeight,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: widget.entries
-                    .map((entry) => FlatButton(
-                          onPressed: () {
-                            setState(() {
-                              if (entry.checked) {
-                                entry.isDESC = !entry.isDESC;
-                                //stream通知状态更改
-                                widget.streamController.add(entry);
-                              } else {
-                                widget.entries.forEach((entry) {
-                                  if (entry.checked) {
-                                    entry.checked = !entry.checked;
-                                  }
-                                });
-                                entry.checked = !entry.checked;
-                                //stream通知状态更改
-                                widget.streamController.add(entry);
-                              }
-                            });
-                          },
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    FlatButton(
+                      onPressed: widget.onCategoryPressed,
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.orange),
+                          borderRadius: BorderRadius.circular(20)),
+                      color: Colors.white,
+                      child: Text(
+                        widget.categoryLabel,
+                        style: TextStyle(fontSize: 15, color: Colors.orange),
+                      ),
+                    ),
+                    Container(
+                      width: 118,
+                      child: FlatButton(
+                          onPressed: widget.onPressed,
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                '${entry.label}',
+                                widget.label,
                                 style: TextStyle(
-                                    fontSize: 12,
-                                    color: entry.checked
-                                        ? widget.color
-                                        : widget.unselectedColor),
+                                    fontSize: 15, color: Colors.black),
                               ),
-                              Icon(
-                                entry.isDESC
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                                color: entry.checked
-                                    ? widget.color
-                                    : widget.unselectedColor,
-                              )
+                              Icon(Icons.keyboard_arrow_down)
                             ],
-                          ),
-                        ))
-                    .toList(),
-              ),
-            )),
+                          )),
+                    )
+                  ],
+                )),
             widget.action
           ],
         ));

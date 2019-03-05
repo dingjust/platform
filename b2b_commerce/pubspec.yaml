@@ -49,6 +49,7 @@ dependencies:
   month_picker_dialog: ^0.0.8
   #  flutter_location_picker: 0.0.6
   city_pickers: 0.1.12
+  autocomplete_textfield: ^1.6.4
 
 dev_dependencies:
   flutter_test:

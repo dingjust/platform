@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class ProductCategorySelectPage extends StatefulWidget {
   List<CategoryModel> minCategorySelect;
@@ -68,7 +68,7 @@ class ProductCategorySelectPageState extends State<ProductCategorySelectPage> {
               child: CategorySelect(
                 categorys: _minCategorys,
                 categorySelect: widget.minCategorySelect,
-                multiple: false,
+                multiple: true,
                 hasButton: false,
               ),
             ),

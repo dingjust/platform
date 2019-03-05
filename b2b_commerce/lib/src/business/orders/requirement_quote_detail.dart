@@ -157,76 +157,48 @@ class QuotesListView extends StatelessWidget {
 }
 
 class QuoteItem extends StatelessWidget {
-  const QuoteItem({Key key, @required this.model}) : super(key: key);
+  const QuoteItem({Key key, this.model}) : super(key: key);
 
   final QuoteModel model;
 
   static Map<QuoteState, MaterialColor> _statusColors = {
-    QuoteState.BUYER_APPROVED: Colors.green,
-    QuoteState.BUYER_REJECTED: Colors.red,
-    QuoteState.SELLER_SUBMITTED: Colors.orange
+    QuoteState.SELLER_SUBMITTED: Colors.green,
+    QuoteState.BUYER_APPROVED: Colors.blue,
+    QuoteState.BUYER_REJECTED: Colors.red
   };
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white,
+    return GestureDetector(
+      onTap: () {
+        // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => QuoteOrderDetailPage(
+        //           item: model,
+        //         )));
+      },
+      child: Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
-          children: <Widget>[_buildHeader(), _buildMain()],
-        ));
-  }
-
-  Widget _buildHeader() {
-    return Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border:
-                Border(bottom: BorderSide(width: 1, color: Colors.grey[300]))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text("报价：￥${model.totalPrice}",
-                      style: TextStyle(fontSize: 14)),
-                  Text("报价单号：${model.code}", style: TextStyle(fontSize: 14)),
-                  Text("报价时间：${DateFormatUtil.format(model.creationTime)}",
-                      style: TextStyle(fontSize: 14))
-                ],
-              ),
-            ),
-            Text(
-              QuoteStateLocalizedMap[model.state],
-              style: TextStyle(color: _statusColors[model.state]),
-            ),
+            _buildHeader(),
+            _buildMain(),
+            model.state == QuoteState.SELLER_SUBMITTED
+                ? _buildSummary()
+                : Container(),
           ],
-        ));
-  }
-
-  Widget _buildOrderRow() {
-    return Container(
-        padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+        ),
         decoration: BoxDecoration(
-            border:
-                Border(bottom: BorderSide(width: 1, color: Colors.grey[300]))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text("报价单号：${model.code}",
-                style: TextStyle(fontSize: 12, color: Colors.grey)),
-            Text("报价时间：${DateFormatUtil.format(model.creationTime)}",
-                style: TextStyle(fontSize: 12, color: Colors.grey))
-          ],
-        ));
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ),
+    );
   }
 
   Widget _buildMain() {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
       child: InkWell(
         onTap: () {},
         child: Column(
@@ -234,15 +206,6 @@ class QuoteItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  width: 140,
-                  child: Text(
-                    model.belongTo.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
                 Expanded(
                     flex: 1,
                     child: Container(
@@ -254,50 +217,108 @@ class QuoteItem extends StatelessWidget {
                             color: Color.fromRGBO(255, 183, 0, 1),
                             highlightOnly: false,
                           ),
+                          RichText(
+                            text: TextSpan(
+                                text: '历史接单',
+                                style: TextStyle(color: Colors.black54),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: '214',
+                                      style: TextStyle(color: Colors.red)),
+                                  TextSpan(
+                                      text: '单',
+                                      style: TextStyle(color: Colors.black54)),
+                                ]),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Colors.grey,
+                          ),
                         ],
                       ),
                     )),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        model.deliveryAddress.regionCityAndDistrict,
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                      Icon(
-                        Icons.chevron_right,
-                        color: Colors.grey,
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                RichText(
-                  text: TextSpan(
-                      text: '历史接单',
-                      style: TextStyle(color: Colors.black54),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: '214', style: TextStyle(color: Colors.red)),
-                        TextSpan(
-                            text: '单,报价成功率',
-                            style: TextStyle(color: Colors.black54)),
-                        TextSpan(
-                            text: '34%', style: TextStyle(color: Colors.red))
-                      ]),
-                )
-              ],
-            )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              RichText(
+                text: TextSpan(
+                    text: '报价：',
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '￥',
+                          style: TextStyle(fontSize: 14, color: Colors.red)),
+                      TextSpan(
+                          text: '${model.totalPrice}',
+                          style: TextStyle(color: Colors.red)),
+                    ]),
+              ),
+              Text(QuoteStateLocalizedMap[model.state],
+                  style: TextStyle(
+                      color: _statusColors[model.state], fontSize: 18))
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '${model.belongTo.name}',
+                  style: TextStyle(fontSize: 15),
+                ),
+                Text(
+                  '报价时间：${DateFormatUtil.format(model.creationTime)}',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSummary() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Colors.red,
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '拒绝报价',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              )),
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 149, 22, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '确认报价',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              )),
+        ],
       ),
     );
   }

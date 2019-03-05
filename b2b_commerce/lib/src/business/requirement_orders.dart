@@ -36,7 +36,10 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(B2BIcons.search,size: 20,),
+                icon: Icon(
+                  B2BIcons.search,
+                  size: 20,
+                ),
                 onPressed: () => showSearch(
                     context: context,
                     delegate: RequirementOrderSearchDelegate()),
@@ -212,11 +215,7 @@ class RequirementOrderItem extends StatelessWidget {
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
-          children: <Widget>[
-            _buildHeader(),
-            _buildEntries(),
-            _buildSummary()
-          ],
+          children: <Widget>[_buildHeader(), _buildEntries(), _buildSummary()],
         ),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -257,61 +256,97 @@ class RequirementOrderItem extends StatelessWidget {
   }
 
   Widget _buildEntries() {
+    Widget _pictureWidget;
+
+    if (order.details.pictures == null) {
+      _pictureWidget = Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Color.fromRGBO(243, 243, 243, 1)),
+        child: Icon(
+          B2BIcons.noPicture,
+          color: Color.fromRGBO(200, 200, 200, 1),
+          size: 25,
+        ),
+      );
+    } else {
+      if (order.details.pictures.isEmpty) {
+        _pictureWidget = Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color.fromRGBO(243, 243, 243, 1)),
+          child: Icon(
+            B2BIcons.noPicture,
+            color: Color.fromRGBO(200, 200, 200, 1),
+            size: 25,
+          ),
+        );
+      } else {
+        _pictureWidget = Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              image: DecorationImage(
+                image: NetworkImage(order.details.pictures[0].url),
+                fit: BoxFit.cover,
+              )),
+        );
+      }
+    }
+
     return Container(
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: order.details.pictures != null && order.details.pictures.isNotEmpty
-                      ? NetworkImage(order.details.pictures[0].url)
-                      : AssetImage(
-                    'temp/picture.png',
-                    package: "assets",
-                  ),
-                  fit: BoxFit.cover,
-                )),
-          ),
+          _pictureWidget,
           Expanded(
             flex: 1,
             child: Container(
-              padding:
-              EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 100,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              height: 80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   order.details.productName != null
                       ? Text(
-                    order.details.productName,
-                    style: TextStyle(fontSize: 15),
-                  )
+                          order.details.productName,
+                          style: TextStyle(fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
+                        )
                       : Text(
-                    '暂无产品',
-                    style: TextStyle(
-                        fontSize: 15, color: Colors.red),
-                  ),
+                          '暂无产品',
+                          style: TextStyle(fontSize: 15, color: Colors.red),
+                        ),
                   order.details.productSkuID != null
                       ? Container(
-                    padding: EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Text(
-                      '货号：' + order.details.productSkuID,
-                      style: TextStyle(
-                          fontSize: 12, color: Colors.grey),
-                    ),
-                  )
+                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '货号：${order.details.productSkuID}',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        )
                       : Container(),
-                  Text(
-                    '生产单价：￥ ${order.details.maxExpectedPrice}',
-                    style: TextStyle(color: Colors.red),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 243, 243, 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "${order.details.majorCategory.name}   ${order.details.category.name}   ${order.totalQuantity}件",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Color.fromRGBO(255, 133, 148, 1)),
+                    ),
                   )
                 ],
               ),
@@ -328,7 +363,7 @@ class RequirementOrderItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Text(
-            '已报价 6',
+            '已报价 ${order.totalQuotesCount}',
             style: TextStyle(color: Colors.red),
           )
         ],
