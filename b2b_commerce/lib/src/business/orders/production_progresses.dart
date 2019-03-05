@@ -51,12 +51,18 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   List<Widget> _buildPurchaseProductionProgresses(BuildContext context) {
     List<Widget> _list = new List();
+    int _index = 0;
+    for(int i =0; i< order.productionProgresses.length; i++){
+      if (ProductionProgressPhaseLocalizedMap[order.productionProgresses[i].phase] == ProductionProgressPhaseLocalizedMap[order.currentPhase]) {
+        _index = order.productionProgresses[i].sequence;
+      }
+    }
     for (int i = 0; i < order.productionProgresses.length; i++) {
       _list.add(Container(
         child: _buildProductionProgress(context,
           order.productionProgresses[i],
-          order.currentPhase.toString(),
-          i
+            ProductionProgressPhaseLocalizedMap[order.currentPhase],
+            order.productionProgresses[i].sequence,_index
         ),
       ));
     }
@@ -64,15 +70,14 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   //TimeLineUI
-  Widget _buildProductionProgress(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence) {
-    int _index = 0;
-    String phase = progress.phase.toString();
-    if (phase == currentPhase) {
-      _index = progress.sequence;
-    }
+  Widget _buildProductionProgress(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index) {
+//    String phase = progress.phase.toString();
+//    if (phase == currentPhase) {
+//      _index = progress.sequence;
+//    }
     return Stack(
       children: <Widget>[
-        Padding(padding: const EdgeInsets.only(left: 30.0), child: _buildProgressTimeLine(context,progress,currentPhase,sequence)),
+        Padding(padding: const EdgeInsets.only(left: 30.0), child: _buildProgressTimeLine(context,progress,currentPhase,sequence,_index)),
         Positioned(
           top: 30.0,
           bottom: 0.0,
@@ -105,12 +110,12 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
 //TimeLineUI右边的Card部分
-  Widget _buildProgressTimeLine(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence) {
-    String phase = progress.phase.toString();
-    int _index = 0;
-    if (phase == currentPhase) {
-      _index = progress.sequence;
-    }
+  Widget _buildProgressTimeLine(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index) {
+    String phase = ProductionProgressPhaseLocalizedMap[progress.phase];
+//    int _index = 0;
+//    if (phase == currentPhase) {
+//      _index = progress.sequence;
+//    }
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.0),
       width: double.infinity,

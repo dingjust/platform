@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -27,10 +28,8 @@ class ProductionItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PurchaseOrderDetailPage(
-                  order: order,
-                  isProduction: true,
-                ),
+            builder: (context) =>
+                ProductionProgressesPage(order: order),
           ),
         );
       },

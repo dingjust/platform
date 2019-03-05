@@ -157,7 +157,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'CUTTING',
                 'quantity': 70,
-                'sequence': 2,
+                'sequence': 1,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -182,7 +182,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'STITCHING',
                 'quantity': 70,
-                'sequence': 3,
+                'sequence': 2,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -207,7 +207,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'AFTER_FINISHING',
                 'quantity': 70,
-                'sequence': 1,
+                'sequence': 3,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -367,7 +367,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'CUTTING',
                 'quantity': 70,
-                'sequence': 2,
+                'sequence': 1,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -392,7 +392,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'STITCHING',
                 'quantity': 70,
-                'sequence': 3,
+                'sequence': 2,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -417,7 +417,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'AFTER_FINISHING',
                 'quantity': 70,
-                'sequence': 1,
+                'sequence': 3,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -577,7 +577,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'CUTTING',
                 'quantity': 70,
-                'sequence': 2,
+                'sequence': 1,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -602,7 +602,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'STITCHING',
                 'quantity': 70,
-                'sequence': 3,
+                'sequence': 2,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -627,7 +627,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'AFTER_FINISHING',
                 'quantity': 70,
-                'sequence': 1,
+                'sequence': 3,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -787,7 +787,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'CUTTING',
                 'quantity': 70,
-                'sequence': 2,
+                'sequence': 1,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -812,7 +812,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'STITCHING',
                 'quantity': 70,
-                'sequence': 3,
+                'sequence': 2,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
@@ -837,7 +837,7 @@ class ProductionBLoC extends BLoCBase {
               {
                 'phase': 'AFTER_FINISHING',
                 'quantity': 70,
-                'sequence': 1,
+                'sequence': 3,
                 'estimatedDate': DateTime.now().toString(),
                 'finishDate': DateTime.now().toString(),
                 'remarks': '延期了12天',
