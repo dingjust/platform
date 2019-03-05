@@ -40,7 +40,7 @@ class MyAccountPage extends StatelessWidget {
                   Expanded(
                       child: Center(
                     child: Container(
-                      padding: EdgeInsets.only(right: 30),
+//                      padding: EdgeInsets.only(right: 0),
                       child: Text(
                         '我的账户',
                         style: TextStyle(

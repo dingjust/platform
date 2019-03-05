@@ -7,7 +7,8 @@ class WithdrawCash extends StatefulWidget {
 }
 
 class _WithdrawCashState extends State<WithdrawCash> {
-  String cash = '';
+  String cash ;
+  double poundage ;
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +157,7 @@ class _WithdrawCashState extends State<WithdrawCash> {
                   ),
                 ),
                 trailing: Text(
-                  '输入金额',
+                  cash == null ? '输入金额' : cash,
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
@@ -183,7 +184,7 @@ class _WithdrawCashState extends State<WithdrawCash> {
           ),
         ),
         trailing: Text(
-          '￥0.00',
+          poundage == null ? '￥0.00' : poundage,
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -362,7 +363,7 @@ class _WithdrawCashState extends State<WithdrawCash> {
                 if (inputNumber.text != null) {
                   print(inputNumber.text);
                   setState(() {
-//                    processCount = inputNumber.text;
+                    cash = inputNumber.text;
                   });
                 }
                 Navigator.of(context).pop();
