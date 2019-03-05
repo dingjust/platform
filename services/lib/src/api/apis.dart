@@ -90,4 +90,9 @@ class Apis {
   static get quoteReject => (code) {
         return '/{baseSiteId}/orders/quote/$code/reject';
       };
+
+  /// 图片上传 （转换类型组）
+  static get upload => (conversionGroup) {
+        return '/{baseSiteId}/media/file/upload';
+      };
 }

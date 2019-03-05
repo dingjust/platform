@@ -559,35 +559,78 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
   Future _uploadFile(File file) async {
     // TODO： 引入StreamBuilder实时更新进度条
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return SimpleDialog(
+    //       children: <Widget>[
+    //         Container(
+    //           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+    //           child: Column(
+    //             children: <Widget>[
+    //               Container(
+    //                 padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+    //                 child: Text(
+    //                   '上传中',
+    //                   style: TextStyle(fontSize: 12),
+    //                 ),
+    //               ),
+    //               Center(
+    //                 child: LinearProgressIndicator(),
+    //               ),
+    //               Row(
+    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                 children: <Widget>[
+    //                   Text('进度:', style: TextStyle(fontSize: 12)),
+    //                   Text('100%', style: TextStyle(fontSize: 12))
+    //                 ],
+    //               )
+    //             ],
+    //           ),
+    //         )
+    //       ],
+    //     );
+    //   },
+    // );
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    child: Text(
-                      '上传中',
-                      style: TextStyle(fontSize: 12),
+            StreamBuilder<double>(
+                stream: _streamController.stream,
+                initialData: 0.0,
+                builder:
+                    (BuildContext context, AsyncSnapshot<double> snapshot) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: Text(
+                            '上传中',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        Center(
+                          child: LinearProgressIndicator(
+                            value: snapshot.data,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('进度:', style: TextStyle(fontSize: 12)),
+                            Text('${((snapshot.data / 1) * 100).round()}%',
+                                style: TextStyle(fontSize: 12))
+                          ],
+                        )
+                      ],
                     ),
-                  ),
-                  Center(
-                    child: LinearProgressIndicator(),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('进度:', style: TextStyle(fontSize: 12)),
-                      Text('100%', style: TextStyle(fontSize: 12))
-                    ],
-                  )
-                ],
-              ),
-            )
+                  );
+                })
           ],
         );
       },
@@ -607,39 +650,31 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     //   });
     // });
 
-    // BaseOptions options = BaseOptions(headers: {
-    //   'Authorization': 'Bearer 7cfeebfb-3a13-4da3-aac9-86f0c07fbea8',
-    //   'Content-Type': 'multipart/form-data'
-    // });
-    // var dio = Dio(options);
-    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-    //     (client) {
-    //   HttpClient httpClient = new HttpClient()
-    //     ..badCertificateCallback =
-    //         ((X509Certificate cert, String host, int port) => true);
-    //   httpClient.idleTimeout = Duration(seconds: 0);
-
-    //   return httpClient;
-    // };
-
     try {
-      FormData formData = FormData.from({
-        "file": UploadFileInfo(file, "file"),
-      });
-      // HttpManager.instance.options.headers['Content-Type']='multipart/form-data';
-      // print(HttpManager.instance.options.headers['Authorization']);
-
-      Response response = await HttpManager.instance.post(
-        "https://47.106.112.137:9002/djwebservices/v2/apparel-zh/media/file/upload?conversionGroup=DefaultProductConversionGroup",
+      FormData formData = FormData.from({"file": UploadFileInfo(file, "file")});
+      Response response = await http$.post(
+        Apis.upload('DefaultProductConversionGroup'),
         data: formData,
         options: Options(headers: {'Content-Type': 'multipart/form-data'}),
         onSendProgress: (int sent, int total) {
-          print("$sent $total");
+          _streamController.sink.add(sent / total);
         },
       );
-      print(response);
+
+      print(response.data);
+      var a = 1;
+      // print(response.request.path);
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      setState(() {
+        ///  TODO:用上传图片回调的URL更新图片列表
+        widget.list.add(MediaModel.fromJson({
+          'url':
+              'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        }));
+      });
     } catch (e) {
-      // DioError error = e as DioError;
       print(e);
     }
   }
