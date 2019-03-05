@@ -64,9 +64,9 @@ class MajorCategoryFieldState extends State<MajorCategoryField>{
           ).then((a) {
             setState(() {
               if(_mojarEnumSelected.length <= 0){
-                widget.item.majorCategory = null;
+                widget.item.details.majorCategory = null;
               }else{
-                widget.item.majorCategory = CategoryModel(code: _mojarEnumSelected[0].code,name: _mojarEnumSelected[0].name);
+                widget.item.details.majorCategory = CategoryModel(code: _mojarEnumSelected[0].code,name: _mojarEnumSelected[0].name);
               }
             });
           });

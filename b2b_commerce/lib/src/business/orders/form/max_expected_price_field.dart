@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-class ExpectedPriceField extends StatefulWidget{
+class MaxExpectedPriceField extends StatefulWidget{
   final RequirementOrderModel item;
-  ExpectedPriceField(this.item);
+  MaxExpectedPriceField(this.item);
 
-  ExpectedPriceFieldState createState() => ExpectedPriceFieldState();
+  MaxExpectedPriceFieldState createState() => MaxExpectedPriceFieldState();
 }
 
-class ExpectedPriceFieldState extends State<ExpectedPriceField>{
+class MaxExpectedPriceFieldState extends State<MaxExpectedPriceField>{
   @override
   Widget build(BuildContext context) {
-    FocusNode _expectedPriceFocusNode = FocusNode();
-    TextEditingController _expectedPriceController = TextEditingController(text: widget.item.expectedPrice == null ? '':widget.item.expectedPrice.toString());
+    FocusNode _maxExpectedPriceFocusNode = FocusNode();
+    TextEditingController _maxExpectedPriceController = TextEditingController(text: widget.item.details?.maxExpectedPrice == null ? '':widget.item.details?.maxExpectedPrice.toString());
 
     return GestureDetector(
         child: Container(
@@ -25,8 +25,7 @@ class ExpectedPriceFieldState extends State<ExpectedPriceField>{
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: Text(
-                widget.item.expectedPrice == null ? '填写':widget.item.expectedPrice.toString(),
+            trailing: Text('${widget.item.details?.maxExpectedPrice ?? '填写'}',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -45,8 +44,8 @@ class ExpectedPriceFieldState extends State<ExpectedPriceField>{
                   child: ListBody(
                     children: <Widget>[
                       TextFieldComponent(
-                        controller: _expectedPriceController,
-                        focusNode: _expectedPriceFocusNode,
+                        controller: _maxExpectedPriceController,
+                        focusNode: _maxExpectedPriceFocusNode,
                         autofocus: true,
                         inputType: TextInputType.number,
                         hintText: '请输入期望价格',
@@ -60,10 +59,10 @@ class ExpectedPriceFieldState extends State<ExpectedPriceField>{
                     child: Text('确定'),
                     onPressed: () {
                       setState(() {
-                        if(_expectedPriceController.text.trim() != ''){
-                          widget.item.expectedPrice = double.parse(_expectedPriceController.text);
+                        if(_maxExpectedPriceController.text.trim() != ''){
+                          widget.item.details.maxExpectedPrice = double.parse(_maxExpectedPriceController.text);
                         }else{
-                          widget.item.expectedPrice = null;
+                          widget.item.details.maxExpectedPrice = null;
                         }
                       });
                       Navigator.of(context).pop();

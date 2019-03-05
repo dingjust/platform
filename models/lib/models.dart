@@ -281,12 +281,6 @@ const ProvinceEnum = <EnumModel>[
   EnumModel('P33','澳门'),
 ];
 
-///加工类型
-const MachiningTypeEnum = <EnumModel>[
-  EnumModel('MT01','清加工'),
-  EnumModel('MT02','包工包料'),
-];
-
 /// 分页数据
 @JsonSerializable()
 class PaginationData {

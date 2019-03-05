@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-class MinorCategoryField extends StatefulWidget{
+class CategoryField extends StatefulWidget{
   final RequirementOrderModel item;
   List<CategoryModel> categorySelected = [];
-  MinorCategoryField(this.item,this.categorySelected);
+  CategoryField(this.item,this.categorySelected);
 
 
-  MinorCategoryFieldState createState() => MinorCategoryFieldState();
+  CategoryFieldState createState() => CategoryFieldState();
 }
 
-class MinorCategoryFieldState extends State<MinorCategoryField>{
+class CategoryFieldState extends State<CategoryField>{
 
   final List<Map<CategoryModel, List<CategoryModel>>> _category = [
     {
@@ -124,9 +124,9 @@ class MinorCategoryFieldState extends State<MinorCategoryField>{
           ).then((a) {
             setState(() {
               if(widget.categorySelected.isEmpty){
-                widget.item.minorCategory = null;
+                widget.item.details.category = null;
               }else{
-                widget.item.minorCategory = widget.categorySelected[0];
+                widget.item.details.category = widget.categorySelected[0];
               }
             });
           });

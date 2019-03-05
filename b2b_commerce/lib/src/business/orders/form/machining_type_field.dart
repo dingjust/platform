@@ -24,8 +24,8 @@ class MachiningTypeFieldState extends State<MachiningTypeField> {
               ),
             ),
             trailing: Text(
-              widget.item.machiningType != null
-                  ? widget.item.machiningType
+              widget.item.details?.machiningType != null
+                  ? widget.item.details.machiningType
                   : '选取',
               style: TextStyle(
                 fontSize: 16,
@@ -43,12 +43,12 @@ class MachiningTypeFieldState extends State<MachiningTypeField> {
                   height: 300,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: MachiningTypeEnum.map((machiningType) {
+                    children: MachiningType.values.map((machiningType) {
                       return ListTile(
-                        title: Text(machiningType.name),
+                        title: Text(MachiningTypeLocalizedMap[machiningType]),
                         onTap: () {
                           setState(() {
-                            widget.item.machiningType = machiningType.name;
+                            widget.item.details.machiningType = machiningType;
                           });
                           Navigator.pop(context);
                         },

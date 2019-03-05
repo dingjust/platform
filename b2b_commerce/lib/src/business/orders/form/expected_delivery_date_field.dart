@@ -27,7 +27,7 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField>{
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(DateFormatUtil.formatYMD(widget.item.expectedDeliveryDate) ?? '选取',
+                    child: Text(DateFormatUtil.formatYMD(widget.item.details?.expectedDeliveryDate) ?? '选取',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -38,12 +38,12 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField>{
         onTap: () {
           showDatePicker(
             context: context,
-            initialDate: widget.item.expectedDeliveryDate == null ? DateTime.now() : widget.item.expectedDeliveryDate,
+            initialDate: widget.item.details?.expectedDeliveryDate == null ? DateTime.now() : widget.item.details?.expectedDeliveryDate,
             firstDate: DateTime(2015, 8),
             lastDate: DateTime(2101),
           ).then((value) {
             setState(() {
-              widget.item.expectedDeliveryDate = value;
+              widget.item.details?.expectedDeliveryDate = value;
             });
           });
         });

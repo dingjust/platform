@@ -12,12 +12,12 @@ class ContactWayField extends StatefulWidget{
 class ContactWayFieldState extends State<ContactWayField>{
   formatContactWayText(){
     StringBuffer text = StringBuffer();
-    if(widget.item.contactPerson == null && widget.item.contactPhone == null){
+    if(widget.item.details?.contactPerson == null && widget.item.details?.contactPhone == null){
       text.write('填写');
     }else{
-      text.write(widget.item.contactPerson ?? '');
+      text.write(widget.item.details?.contactPerson ?? '');
       text.write(',');
-      text.write(widget.item.contactPhone ?? '');
+      text.write(widget.item.details?.contactPhone ?? '');
     }
     return text.toString();
   }
@@ -25,9 +25,9 @@ class ContactWayFieldState extends State<ContactWayField>{
   @override
   Widget build(BuildContext context) {
     FocusNode _contactPersonFocusNode = FocusNode();
-    TextEditingController _contactPersonController = TextEditingController(text: widget.item.contactPerson ?? '');
+    TextEditingController _contactPersonController = TextEditingController(text: widget.item.details?.contactPerson ?? '');
     FocusNode _contactPhoneFocusNode = FocusNode();
-    TextEditingController _contactPhoneController = TextEditingController(text: widget.item.contactPhone ?? '');
+    TextEditingController _contactPhoneController = TextEditingController(text: widget.item.details?.contactPhone ?? '');
 
     return GestureDetector(
         child: Container(
@@ -80,8 +80,10 @@ class ContactWayFieldState extends State<ContactWayField>{
                   FlatButton(
                     child: Text('确定'),
                     onPressed: () {
-                      widget.item.contactPerson = _contactPersonController.text.trim() == '' ? null: _contactPersonController.text.trim();
-                      widget.item.contactPhone = _contactPhoneController.text.trim() == '' ? null: _contactPhoneController.text.trim();
+                      setState(() {
+                        widget.item.details.contactPerson = _contactPersonController.text.trim() == '' ? null: _contactPersonController.text.trim();
+                        widget.item.details.contactPhone = _contactPhoneController.text.trim() == '' ? null: _contactPhoneController.text.trim();
+                      });
                       Navigator.of(context).pop();
                     },
                   ),

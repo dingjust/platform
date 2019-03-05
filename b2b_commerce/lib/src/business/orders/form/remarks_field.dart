@@ -60,7 +60,9 @@ class RemarksFieldState extends State<RemarksField> {
                   FlatButton(
                     child: Text('确定'),
                     onPressed: () {
-                      widget.item.remarks = _remarksController.text.trim() == '' ? null: _remarksController.text.trim();
+                      setState(() {
+                        widget.item.remarks = _remarksController.text.trim() == '' ? null: _remarksController.text.trim();
+                      });
                       Navigator.of(context).pop();
                     },
                   ),

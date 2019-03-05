@@ -303,6 +303,8 @@ class FactoryModel extends B2BUnitModel {
 
   double locationY;
 
+  IndustrialClusterModel industrialCluster;
+
   FactoryModel({
     String profilePicture,
     String uid,
@@ -334,6 +336,7 @@ class FactoryModel extends B2BUnitModel {
     this.adeptAtCategories,
     this.locationX,
     this.locationY,
+    this.industrialCluster,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -361,30 +364,44 @@ class FactoryModel extends B2BUnitModel {
       _$FactoryModelToJson(model);
 }
 
+@JsonSerializable()
+class LabelModel extends ItemModel{
+  String name;
+  String group;
+  List<IndustrialClusterModel> clusters;
+
+  LabelModel({
+    this.group,
+    this.name,
+    this.clusters,
+  });
+
+  factory LabelModel.fromJson(Map<String, dynamic> json) =>
+      _$LabelModelFromJson(json);
+
+  static Map<String, dynamic> toJson(LabelModel model) =>
+      _$LabelModelToJson(model);
+}
+
+
 //产业集群
 @JsonSerializable()
-class IndustrialClusterFactoryModel {
-  FactoryModel factory;
+class IndustrialClusterModel extends ItemModel{
+  String code;
+  String name;
+  List<LabelModel> labels;
 
-  //标签
-  String tip;
+  IndustrialClusterModel({
+    this.code,
+    this.name,
+    this.labels,
+  });
 
-  //地区
-  String area;
+  factory IndustrialClusterModel.fromJson(Map<String, dynamic> json) =>
+      _$IndustrialClusterModelFromJson(json);
 
-  IndustrialClusterFactoryModel({
-    this.factory,
-    this.tip,
-    this.area,
-  }) : super(
-
-  );
-
-  factory IndustrialClusterFactoryModel.fromJson(Map<String, dynamic> json) =>
-      _$IndustrialClusterFactoryModelFromJson(json);
-
-  static Map<String, dynamic> toJson(IndustrialClusterFactoryModel model) =>
-      _$IndustrialClusterFactoryModelToJson(model);
+  static Map<String, dynamic> toJson(IndustrialClusterModel model) =>
+      _$IndustrialClusterModelToJson(model);
 }
 
 //合作方式枚举

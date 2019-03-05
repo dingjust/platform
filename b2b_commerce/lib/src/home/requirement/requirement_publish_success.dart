@@ -144,83 +144,78 @@ class _PublishRequirementSuccessDialogState
             builder: (context) =>
                 RequirementOrderDetailPage(order: widget.model)));
       },
-      child: Container(
-        child: Column(
-          children: _buildEntries() ?? [],
-        ),
-      ),
+      child: _buildEntries(),
     );
   }
 
-  List<Widget> _buildEntries() {
-    return widget.model?.entries
-        ?.map((entry) => Container(
-            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-            color: Colors.grey[50],
-            child: Column(
+  Widget _buildEntries() {
+    return Container(
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        color: Colors.grey[50],
+        child: Column(
+          children: <Widget>[
+            Row(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        '需求订单号：${widget.model.code ?? ''}',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    )
-                  ],
+                Container(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    '需求订单号：${widget.model.code ?? ''}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: widget.model.details.pictures != null &&  widget.model.details.pictures.isNotEmpty
+                            ? NetworkImage( widget.model.details.pictures[0].url)
+                            : AssetImage(
+                          'temp/picture.png',
+                          package: "assets",
+                        ),
+                        fit: BoxFit.cover,
+                      )),
                 ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: entry.product?.thumbnail != null
-                                ? NetworkImage(entry.product?.thumbnail)
-                                : AssetImage(
-                                    'temp/picture.png',
-                                    package: "assets",
-                                  ),
-                            fit: BoxFit.cover,
-                          )),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                        height: 80,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            entry.product?.name != null
-                                ? Text(
-                                    entry.product.name,
-                                    style: TextStyle(fontSize: 15),
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                : Text(
-                                    '暂无产品',
-                                    style: TextStyle(
-                                        fontSize: 15, color: Colors.red),
-                                  ),
-                            entry.product?.skuID != null
-                                ? Container(
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: Text(
-                                      '货号：' + entry.product.skuID,
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.grey),
-                                    ),
-                                  )
-                                : Container(),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    height: 80,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        widget.model.details.productName != null
+                            ? Text(
+                          widget.model.details.productName,
+                          style: TextStyle(fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
+                        )
+                            : Text(
+                          '暂无产品',
+                          style: TextStyle(
+                              fontSize: 15, color: Colors.red),
+                        ),
+                        widget.model.details.productSkuID != null
+                            ? Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Text(
+                            '货号：' + widget.model.details.productSkuID,
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.grey),
+                          ),
+                        )
+                            : Container(),
 //                            entry.product?.superCategories?.first?.name ==
 //                                        null &&
 //                                    entry.product?.majorCategory?.name ==
@@ -242,55 +237,54 @@ class _PublishRequirementSuccessDialogState
 //                                    ),
 //                                  )
 //                                : Container(),
-                            Container(
-                              padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow[50],
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Text(
-                                "${entry.product?.superCategories?.first?.name ?? ''}   ${widget.model?.majorCategory?.name ?? ''}   " +
-                                    (entry?.entryNumber == null
-                                        ? ''
-                                        : entry?.entryNumber.toString() +
-                                        '件'),
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.orange),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        '预计交货日期：${DateFormatUtil.formatYMD(widget.model?.expectedDeliveryDate) ?? ''}',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        '备注 ：${widget.model.remarks ?? ''}',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                        overflow: TextOverflow.clip,
-                      ),
-                    )
-                  ],
-                ),
+                        Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              color: Colors.yellow[50],
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Text(
+                            "${widget.model.details.category?.name ?? ''}   ${widget.model?.details?.majorCategory?.name ?? ''}   " +
+                                (widget.model.details.expectedMachiningQuantity == null
+                                    ? ''
+                                    : widget.model.details.expectedMachiningQuantity.toString() +
+                                    '件'),
+                            style: TextStyle(
+                                fontSize: 15, color: Colors.orange),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
               ],
-            )))
-        ?.toList();
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    '预计交货日期：${DateFormatUtil.formatYMD(widget.model?.details?.expectedDeliveryDate) ?? ''}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    '备注 ：${widget.model.remarks ?? ''}',
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                    overflow: TextOverflow.clip,
+                  ),
+                )
+              ],
+            ),
+          ],
+        ));
   }
 
   Widget _buildCheckLine() {
