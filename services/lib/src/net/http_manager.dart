@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 /// HTTP请求
 class HttpManager {
   final String baseSiteId;
+  static String authorization;
 
   HttpManager(this.baseSiteId);
 
@@ -21,10 +22,10 @@ class HttpManager {
   static Dio _getInstance() {
     if (_instance == null) {
       BaseOptions options = BaseOptions(
-        baseUrl: GlobalConfigs.BASE_URL,
-        connectTimeout: 5000,
-        receiveTimeout: 10000,
-      );
+          baseUrl: GlobalConfigs.BASE_URL,
+          connectTimeout: 5000,
+          receiveTimeout: 10000,
+          headers: {'Authorization': authorization});
       _instance = Dio(options);
 
       (_instance.httpClientAdapter as DefaultHttpClientAdapter)
@@ -45,8 +46,8 @@ class HttpManager {
         if (connectivityResult == ConnectivityResult.none) {
           throw -1; // network error
         }
-        options.headers['Authorization'] = getAuthorization();
-        return options; //continue
+        options.headers['Authorization'] = authorization;
+        // return options; //continue
         // 如果你想完成请求并返回一些自定义数据，可以返回一个`Response`对象或返回`dio.resolve(data)`。
         // 这样请求将会被终止，上层then会被调用，then中返回的数据将是你的自定义数据data.
         //
@@ -104,11 +105,17 @@ class HttpManager {
     data,
     Options options,
     CancelToken cancelToken,
+    ProgressCallback onSendProgress,
+    ProgressCallback onReceiveProgress,
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
     return instance.post(path,
-        data: data, options: options, cancelToken: cancelToken);
+        data: data,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress);
   }
 
   Future<Response<T>> put<T>(
@@ -152,19 +159,34 @@ class HttpManager {
     LocalStorage.remove(GlobalConfigs.ACCESS_TOKEN_KEY);
   }
 
-  ///获取授权token
-  static getAuthorization() async {
+  // ///获取授权token
+  // static getAuthorization() async {
+  //   String token = await LocalStorage.get(GlobalConfigs.ACCESS_TOKEN_KEY);
+  //   if (token == null) {
+  //     String basic = await LocalStorage.get(GlobalConfigs.BASIC_AUTH_TOKEN_KEY);
+  //     if (basic == null) {
+  //       // 提示输入账号密码
+  //     } else {
+  //       // 通过 basic 去获取token，获取到设置，返回token
+  //       return "Basic $basic";
+  //     }
+  //   } else {
+  //     return "Bearer $token";
+  //   }
+  // }
+
+  ///初始化，获取授权token记录
+  Future<void> initAuthorization() async {
     String token = await LocalStorage.get(GlobalConfigs.ACCESS_TOKEN_KEY);
     if (token == null) {
       String basic = await LocalStorage.get(GlobalConfigs.BASIC_AUTH_TOKEN_KEY);
       if (basic == null) {
         // 提示输入账号密码
       } else {
-        // 通过 basic 去获取token，获取到设置，返回token
-        return "Basic $basic";
+        authorization = "Basic $basic";
       }
     } else {
-      return "Bearer $token";
+      authorization = "Bearer $token";
     }
   }
 }
