@@ -64,7 +64,6 @@
 <script>
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
   import RequirementOrderRequestForm from './RequirementOrderRequestForm';
-  import RequirementOrderUpdateStatusForm from './RequirementOrderUpdateStatusForm';
   import RequirementOrderStatusBar from './RequirementOrderStatusBar';
 
   export default {
@@ -74,7 +73,6 @@
       RequirementOrderStatusBar,
       RequirementOrderRequestForm,
       RequirementOrderBaseForm,
-      RequirementOrderUpdateStatusForm,
     },
     methods: {
       onConfirmRequirementAudit() {
@@ -85,7 +83,7 @@
         }).then(() => this._onConfirmRequirementAudit());
       },
       async _onConfirmRequirementAudit() {
-        const result = await this.$http.put('/djbrand/processes/requirementOrder/confirmRequirementAudit/' + this.slotData.code);
+        const result = await this.$http.put('/b2b/orders/requirement/' + this.slotData.code + '/confirmRequirementAudit/');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -102,7 +100,7 @@
         }).then(() => this._onRejectRequirementAudit());
       },
       async _onRejectRequirementAudit() {
-        const result = await this.$http.put('/djbrand/processes/requirementOrder/rejectRequirementAudit/' + this.slotData.code, 'TODO：拒绝原因');
+        const result = await this.$http.put('/b2b/orders/requirement/' + this.slotData.code + '/rejectRequirementAudit', 'TODO：拒绝原因');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -112,7 +110,7 @@
         this.$set(this.slotData, 'status', result);
       },
       onUpdateRequest() {
-        Object.assign(this.requestData.details, this.slotData.details);
+        this.requestData.details = Object.assign({}, this.slotData.details);
         this.requestFormDialogVisible = true;
       },
       onSubmitRequestForm() {
@@ -127,7 +125,7 @@
         })
       },
       async _onSubmitRequestForm() {
-        const result = await this.$http.put('/djwebservices/orders/requirement/' + this.slotData.code + '/request', {
+        const result = await this.$http.put('/b2b/orders/requirement/' + this.slotData.code + '/request', {
           code: this.slotData.code,
           details: this.requestData.details
         });
