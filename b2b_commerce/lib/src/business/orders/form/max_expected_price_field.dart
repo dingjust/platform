@@ -1,6 +1,6 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 class MaxExpectedPriceField extends StatefulWidget{
   final RequirementOrderModel item;
@@ -12,9 +12,6 @@ class MaxExpectedPriceField extends StatefulWidget{
 class MaxExpectedPriceFieldState extends State<MaxExpectedPriceField>{
   @override
   Widget build(BuildContext context) {
-    FocusNode _maxExpectedPriceFocusNode = FocusNode();
-    TextEditingController _maxExpectedPriceController = TextEditingController(text: widget.item.details?.maxExpectedPrice == null ? '':widget.item.details?.maxExpectedPrice.toString());
-
     return GestureDetector(
         child: Container(
           child: ListTile(
@@ -34,44 +31,16 @@ class MaxExpectedPriceFieldState extends State<MaxExpectedPriceField>{
           ),
         ),
         onTap: () {
-          showDialog<void>(
-            context: context,
-            barrierDismissible: false, // user must tap button!
-            builder: (context) {
-              return AlertDialog(
-                title: Text('请输入期望价格'),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      TextFieldComponent(
-                        controller: _maxExpectedPriceController,
-                        focusNode: _maxExpectedPriceFocusNode,
-                        autofocus: true,
-                        inputType: TextInputType.number,
-                        hintText: '请输入期望价格',
-                        padding: EdgeInsets.all(0),
-                      ),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('确定'),
-                    onPressed: () {
-                      setState(() {
-                        if(_maxExpectedPriceController.text.trim() != ''){
-                          widget.item.details.maxExpectedPrice = double.parse(_maxExpectedPriceController.text);
-                        }else{
-                          widget.item.details.maxExpectedPrice = null;
-                        }
-                      });
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RequirementOrderInputPage(fieldText: '期望价格',inputType: TextInputType.number)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              widget.item.details.maxExpectedPrice = double.parse(value);
+            });
+          });
         });
   }
 }
