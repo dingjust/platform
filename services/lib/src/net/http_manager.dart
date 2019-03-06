@@ -47,12 +47,6 @@ class HttpManager {
           throw -1; // network error
         }
         options.headers['Authorization'] = authorization;
-        // return options; //continue
-        // 如果你想完成请求并返回一些自定义数据，可以返回一个`Response`对象或返回`dio.resolve(data)`。
-        // 这样请求将会被终止，上层then会被调用，then中返回的数据将是你的自定义数据data.
-        //
-        // 如果你想终止请求并触发一个错误,你可以返回一个`DioError`对象，或返回`dio.reject(errMsg)`，
-        // 这样请求将被中止并触发异常，上层catchError会被调用。
       }, onResponse: (Response response) {
         // 在返回响应数据之前做一些预处理
         if (GlobalConfigs.DEBUG) {
@@ -103,6 +97,7 @@ class HttpManager {
     String path, {
     BuildContext context,
     data,
+    Map<String, dynamic> queryParameters,
     Options options,
     CancelToken cancelToken,
     ProgressCallback onSendProgress,
@@ -115,7 +110,8 @@ class HttpManager {
         options: options,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress);
+        onReceiveProgress: onReceiveProgress,
+        queryParameters: queryParameters);
   }
 
   Future<Response<T>> put<T>(

@@ -10,7 +10,10 @@ class MediaModel extends ItemModel {
   String description;
   String mediaType;
 
-  MediaModel(this.url, {this.description, this.mediaType});
+  List<MediaModel> convertedMedias;
+
+  MediaModel(this.url,
+      {this.description, this.mediaType, this.convertedMedias});
 
   factory MediaModel.fromJson(Map<String, dynamic> json) =>
       _$MediaModelFromJson(json);

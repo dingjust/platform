@@ -92,7 +92,7 @@ class Apis {
       };
 
   /// 图片上传 （转换类型组）
-  static get upload => (conversionGroup) {
+  static get upload => () {
         return '/{baseSiteId}/media/file/upload';
       };
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -559,40 +560,6 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
   Future _uploadFile(File file) async {
     // TODO： 引入StreamBuilder实时更新进度条
-    // showDialog(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return SimpleDialog(
-    //       children: <Widget>[
-    //         Container(
-    //           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-    //           child: Column(
-    //             children: <Widget>[
-    //               Container(
-    //                 padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-    //                 child: Text(
-    //                   '上传中',
-    //                   style: TextStyle(fontSize: 12),
-    //                 ),
-    //               ),
-    //               Center(
-    //                 child: LinearProgressIndicator(),
-    //               ),
-    //               Row(
-    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                 children: <Widget>[
-    //                   Text('进度:', style: TextStyle(fontSize: 12)),
-    //                   Text('100%', style: TextStyle(fontSize: 12))
-    //                 ],
-    //               )
-    //             ],
-    //           ),
-    //         )
-    //       ],
-    //     );
-    //   },
-    // );
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -637,42 +604,29 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     );
 
     // /// TODO: 调用上传接口,更新上传进度条
-    // Future.delayed(const Duration(seconds: 2), () {
-    //   Navigator.pop(context);
-    //   Navigator.pop(context);
-    //   setState(() {
-    //     ///  TODO:用上传图片回调的URL更新图片列表
-    //     widget.list.add(MediaModel.fromJson({
-    //       'url':
-    //           'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-    //       'mediaType': 'webp'
-    //     }));
-    //   });
-    // });
-
     try {
       FormData formData = FormData.from({"file": UploadFileInfo(file, "file")});
       Response response = await http$.post(
-        Apis.upload('DefaultProductConversionGroup'),
+        Apis.upload(),
         data: formData,
-        options: Options(headers: {'Content-Type': 'multipart/form-data'}),
+        queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
+        options: Options(
+          headers: {'Content-Type': 'multipart/form-data'},
+        ),
         onSendProgress: (int sent, int total) {
           _streamController.sink.add(sent / total);
         },
       );
 
-      print(response.data);
-      var a = 1;
-      // print(response.request.path);
       Navigator.of(context).pop();
       Navigator.of(context).pop();
+      String baseUrl = response.data['url'];
+      String url = '${GlobalConfigs.BASE_URL}$baseUrl';
+      print(url);
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表
-        widget.list.add(MediaModel.fromJson({
-          'url':
-              'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-          'mediaType': 'webp'
-        }));
+        widget.list.add(MediaModel.fromJson(
+            {'url': url, 'mediaType': response.data['mime']}));
       });
     } catch (e) {
       print(e);
