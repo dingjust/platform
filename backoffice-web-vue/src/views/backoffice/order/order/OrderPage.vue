@@ -7,7 +7,6 @@
         </el-form-item>
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-          <el-button type="primary" icon="el-icon-plus" @click="onNew">创建订单</el-button>
         </el-button-group>
       </el-form>
       <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
