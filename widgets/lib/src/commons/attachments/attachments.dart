@@ -8,6 +8,7 @@ import 'package:models/models.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:services/services.dart';
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 ///横向滚动图片列表
@@ -592,22 +593,25 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
       },
     );
 
-    /// TODO: 调用上传接口,更新上传进度条
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pop(context);
-      Navigator.pop(context);
-      setState(() {
-        ///  TODO:用上传图片回调的URL更新图片列表
-        widget.list.add(MediaModel.fromJson({
-          'url':
-              'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-          'mediaType': 'webp'
-        }));
-      });
-    });
+    // /// TODO: 调用上传接口,更新上传进度条
+    // Future.delayed(const Duration(seconds: 2), () {
+    //   Navigator.pop(context);
+    //   Navigator.pop(context);
+    //   setState(() {
+    //     ///  TODO:用上传图片回调的URL更新图片列表
+    //     widget.list.add(MediaModel.fromJson({
+    //       'url':
+    //           'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+    //       'mediaType': 'webp'
+    //     }));
+    //   });
+    // });
 
-
-    // var dio = Dio();
+    // BaseOptions options = BaseOptions(headers: {
+    //   'Authorization': 'Bearer 7cfeebfb-3a13-4da3-aac9-86f0c07fbea8',
+    //   'Content-Type': 'multipart/form-data'
+    // });
+    // var dio = Dio(options);
     // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
     //     (client) {
     //   HttpClient httpClient = new HttpClient()
@@ -617,24 +621,27 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
     //   return httpClient;
     // };
-    // try {
-    //   FormData formData = FormData.from({
-    //     "file": UploadFileInfo(file, "file"),
-    //   });
 
-    //   Response response = await dio.post(
-    //     "https://47.106.112.137:9002/djwebservices/v2/apparel-zh/media/file/upload",
-    //     data: formData,
-    //     onSendProgress: (int sent, int total) {
-    //       print("$sent $total");
-    //     },
-    //   );
-    //   print(response);
-    // } catch (e) {
-    //   print(e);
-    // }
+    try {
+      FormData formData = FormData.from({
+        "file": UploadFileInfo(file, "file"),
+      });
+      // HttpManager.instance.options.headers['Content-Type']='multipart/form-data';
+      // print(HttpManager.instance.options.headers['Authorization']);
 
-
+      Response response = await HttpManager.instance.post(
+        "https://47.106.112.137:9002/djwebservices/v2/apparel-zh/media/file/upload?conversionGroup=DefaultProductConversionGroup",
+        data: formData,
+        options: Options(headers: {'Content-Type': 'multipart/form-data'}),
+        onSendProgress: (int sent, int total) {
+          print("$sent $total");
+        },
+      );
+      print(response);
+    } catch (e) {
+      // DioError error = e as DioError;
+      print(e);
+    }
   }
 
   //TODO :传入Media参数

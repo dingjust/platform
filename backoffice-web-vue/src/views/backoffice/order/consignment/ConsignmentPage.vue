@@ -7,7 +7,6 @@
         </el-form-item>
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-          <el-button type="primary" icon="el-icon-plus" @click="onNew">创建生产订单</el-button>
         </el-button-group>
         <el-popover placement="right" width="600" trigger="click">
           <el-row :gutter="10">
@@ -177,7 +176,7 @@
   const {mapGetters, mapActions} = createNamespacedHelpers('ProductionOrdersModule');
 
   import autoHeight from 'mixins/autoHeight';
-  import {ConsignmentForm, ConsignmentDetailsForm} from './';
+  import {ConsignmentDetailsForm} from './';
 
   export default {
     name: 'ConsignmentPage',
@@ -195,9 +194,6 @@
       onSearch() {
         this._onSearch(0);
       },
-      onNew() {
-        this.fn.openSlider('创建生产订单', ConsignmentForm, this.formData);
-      },
       onFilterCompanies(query) {
         this.companies = [];
         if (query && query !== '') {
@@ -208,7 +204,7 @@
       },
       async getCompanies(query) {
         if (query !== '') {
-          const results = await this.$http.get('/djfactory/factory', {
+          const results = await this.$http.get('/b2b/factories/approved', {
             text: query.trim()
           });
 
@@ -224,8 +220,8 @@
         }
       },
       async getBrands(query) {
-        const results = await this.$http.get('/djbrand/brand', {
-          text: query.trim()
+        const results = await this.$http.get('/b2b/brands/approved', {
+          keyword: query.trim()
         });
 
         this.brands = results.content;
@@ -239,7 +235,7 @@
         this.searchAdvanced({query, page, size});
       },
       async onDetails(item) {
-        const result = await this.$http.get('/djbackoffice/consignment/' + item.code);
+        const result = await this.$http.get('/b2b/orders/purchase/' + item.code);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

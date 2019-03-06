@@ -74,7 +74,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/djwebservices/orders/requirement', {
+    const response = await http.post('/b2b/orders/requirement', {
       code: state.keyword,
       statuses: state.statuses
     }, {
@@ -94,7 +94,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/djbrand/requirementOrder/advancedSearch', query, {
+    const response = await http.post('/b2b/orders/requirement', query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

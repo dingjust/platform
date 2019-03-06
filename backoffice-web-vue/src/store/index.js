@@ -24,7 +24,6 @@ import {
   RequirementOrdersModule,
   SalesOrdersModule,
   ProductionOrdersModule,
-  PickOrdersModule,
   QuotesModule
 } from './modules';
 
@@ -50,7 +49,6 @@ import {
   FactoryFabricProductsModule,
   FactoryFabricProductStocksModule,
   FactoryProductionOrdersModule,
-  FactoryPickOrdersModule,
   FactoryQuotesModule,
 } from './factory/modules';
 
@@ -100,7 +98,6 @@ export default new Vuex.Store({
     RequirementOrdersModule,
     SalesOrdersModule,
     ProductionOrdersModule,
-    PickOrdersModule,
     QuotesModule,
     // brand
     BrandEmployeesModule,
@@ -122,7 +119,6 @@ export default new Vuex.Store({
     FactoryFabricProductsModule,
     FactoryFabricProductStocksModule,
     FactoryProductionOrdersModule,
-    FactoryPickOrdersModule,
     FactoryQuotesModule,
   },
   state,

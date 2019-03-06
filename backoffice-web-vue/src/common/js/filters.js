@@ -112,17 +112,6 @@ const ENUMS = {
       name: "已发货"
     }
   },
-  //发料单状态
-  PickOrderStatus: {
-    WAIT_FOR_CONFIRM: {
-      code: "WAIT_FOR_CONFIRM",
-      name: "待处理"
-    },
-    CONFIRMED: {
-      code: "CONFIRMED",
-      name: "已确认"
-    }
-  },
   // 发货单状态
   ConsignmentStatus: {
     WAIT_FOR_ALLOCATION: {
@@ -200,7 +189,7 @@ const ENUMS = {
       name: "发货"
     }
   },
-  //发料单状态
+  //报价单状态
   QuoteState: {
     WAIT_FOR_CONFIRM: {
       code: "WAIT_FOR_CONFIRM",
