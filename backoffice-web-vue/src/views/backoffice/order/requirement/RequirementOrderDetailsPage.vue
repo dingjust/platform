@@ -23,10 +23,7 @@
         <span>基本信息</span>
         <span class="float-right" v-show="!readOnly">
           <!-- 基本信息始终放开 -->
-           <el-button type="primary" size="mini" @click="onUpdateBase">
-             编辑
-           </el-button>
-          <!--<el-button type="primary" size="mini" @click="onUpdateStatus">更新状态</el-button>-->
+          <!--<el-button type="primary" size="mini" @click="onUpdateBase">编辑</el-button>-->
         </span>
       </div>
       <requirement-order-base-form :slot-data="slotData"
@@ -37,11 +34,11 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>需求信息</span>
-        <span class="float-right" v-show="!readOnly">
+        <!--<span class="float-right" v-show="!readOnly">
            <el-button type="primary" size="mini" @click="onUpdateRequest" v-show="!disableEdit">
              编辑
            </el-button>
-        </span>
+        </span>-->
       </div>
       <requirement-order-request-form ref="requestForm"
                                       :slot-data="slotData"
@@ -78,17 +75,6 @@
         <el-button type="primary" @click="onSubmitBaseForm">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="更新订单状态" width="240px"
-               :visible.sync="statusFormDialogVisible" :close-on-click-modal="false" :modal="false">
-      <requirement-order-update-status-form ref="statusForm"
-                                            :slot-data="statusData"
-                                            :read-only="false">
-      </requirement-order-update-status-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="statusFormDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmitStatusForm">确 定</el-button>
-      </div>
-    </el-dialog>
     <el-dialog title="更新需求信息" width="60%"
                :visible.sync="requestFormDialogVisible" :close-on-click-modal="false" :modal="false">
       <requirement-order-request-form ref="requestForm"
@@ -106,7 +92,6 @@
 <script>
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
   import RequirementOrderRequestForm from './RequirementOrderRequestForm';
-  import RequirementOrderUpdateStatusForm from './RequirementOrderUpdateStatusForm';
   import RequirementOrderStatusBar from './RequirementOrderStatusBar';
 
   export default {
@@ -114,9 +99,8 @@
     props: ['slotData', 'readOnly', 'preview'],
     components: {
       RequirementOrderStatusBar,
-      RequirementOrderRequestForm,
       RequirementOrderBaseForm,
-      RequirementOrderUpdateStatusForm,
+      RequirementOrderRequestForm,
     },
     methods: {
       onRequirementAudit() {
@@ -127,7 +111,7 @@
         }).then(() => this._onRequirementAudit());
       },
       async _onRequirementAudit() {
-        const result = await this.$http.put('/djbackoffice/processes/requirementOrder/requirementAudit/' + this.slotData.code);
+        const result = await this.$http.put('/b2b/orders/requirement/' + this.slotData.code + '/requirementAudit/');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -145,7 +129,7 @@
         }).then(() => this._onConfirmProduction());
       },
       async _onConfirmProduction() {
-        const result = await this.$http.put('/djbackoffice/processes/requirementOrder/confirmProduction/' + this.slotData.code);
+        const result = await this.$http.put('/b2b/orders/requirement/' + this.slotData.code + '/confirmProduction/');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -164,7 +148,7 @@
         this.baseFormDialogVisible = true;
       },
       async onSubmitBaseForm() {
-        const result = await this.$http.put('/djbackoffice/requirementOrder/base', this.baseData);
+        const result = await this.$http.put('/b2b/orders/requirement/' + this.slotData.code + '/requirementOrder/base', this.baseData);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -173,24 +157,6 @@
         this.$message.success('更新基本信息成功');
 
         this.baseFormDialogVisible = false;
-      },
-      onUpdateStatus() {
-        this.statusFormDialogVisible = true;
-      },
-      async onSubmitStatusForm() {
-        const result = await this.$http.put('/djbackoffice/requirementOrder/status', {
-          code: this.slotData.code,
-          status: this.statusData.status
-        });
-
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.$message.success('更新订单状态成功');
-        this.$set(this.slotData, 'status', this.statusData.status);
-        this.statusFormDialogVisible = false;
       },
       onUpdateRequest() {
         Object.assign(this.requestData.details, JSON.parse(JSON.stringify(this.slotData.details)));

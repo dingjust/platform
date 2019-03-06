@@ -110,7 +110,7 @@
         this.$set(this.slotData, 'status', result);
       },
       onUpdateRequest() {
-        this.requestData.details = Object.assign({}, this.slotData.details);
+        Object.assign(this.requestData.details, JSON.parse(JSON.stringify(this.slotData.details)));
         this.requestFormDialogVisible = true;
       },
       onSubmitRequestForm() {
