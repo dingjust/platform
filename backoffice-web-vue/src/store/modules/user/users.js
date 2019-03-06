@@ -92,6 +92,9 @@ const getters = {
     }
 
     return state.currentUser;
+  },
+  token() {
+    return 'Bearer ' + sessionStorage.getItem('token');
   }
 };
 
