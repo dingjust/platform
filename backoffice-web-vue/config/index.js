@@ -32,45 +32,21 @@ module.exports = {
     assetsPublicPath: '',
     proxyTable: {
       '/medias': {
-        target: 'https://47.106.112.137:9002',
+        target: 'https://localhost:9002',
         "secure": false,
         pathRewrite: {
           '^/medias': 'djwebservices/medias'
         }
       },
       '/logout': {
-        target: 'https://47.106.112.137:9002',
+        target: 'https://localhost:9002',
         "secure": false,
         pathRewrite: {
           '^/logout': 'djwebservices/logout'
         }
       },
-      '/djbackoffice': {
-        target: 'https://47.106.112.137:9002',
-        "secure": false,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/djbackoffice': 'djwebservices/v2/apparel-zh/tenant'
-        }
-      },
-      '/djbrand': {
-        target: 'https://47.106.112.137:9002',
-        "secure": false,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/djbrand': 'djwebservices/v2/apparel-zh/brand'
-        }
-      },
-      '/djfactory': {
-        target: 'https://47.106.112.137:9002',
-        "secure": false,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/djfactory': 'djwebservices/v2/apparel-zh/factory'
-        }
-      },
       '/authorizationserver': {
-        target: 'https://47.106.112.137:9002',
+        target: 'https://localhost:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
@@ -78,11 +54,19 @@ module.exports = {
         }
       },
       '/djwebservices': {
-        target: 'https://47.106.112.137:9002',
+        target: 'https://localhost:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
           '^/djwebservices': 'djwebservices/v2/apparel-zh'
+        }
+      },
+      '/b2b': {
+        target: 'https://localhost:9002',
+        changeOrigin: true,
+        "secure": false,
+        pathRewrite: {
+          '^/b2b': 'djwebservices/v2/apparel-zh/b2b'
         }
       }
     },

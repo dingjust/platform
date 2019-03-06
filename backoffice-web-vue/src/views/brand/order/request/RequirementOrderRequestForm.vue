@@ -133,7 +133,7 @@
         this.$refs['form'].validate(callback);
       },
       async getMinorCategories() {
-        const result = await this.$http.get('/djbackoffice/product/category/cascaded');
+        const result = await this.$http.get('/b2b/categories/cascaded');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -142,7 +142,7 @@
         this.categories = result;
       },
       async getMajorCategories() {
-        const result = await this.$http.get('/djbackoffice/product/category/majors');
+        const result = await this.$http.get('/b2b/categories/majors');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
