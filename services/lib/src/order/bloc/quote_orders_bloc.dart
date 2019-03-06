@@ -56,27 +56,26 @@ class QuoteOrdersBLoC extends BLoCBase {
                 name: '广州旭日',
                 starLevel: 3,
                 contactAddress: AddressModel(
-                  region: RegionModel(name: '广东省'),
-                  city: CityModel(code: '', name: '广州市'),
-                  cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                    region: RegionModel(name: '广东省'),
+                    city: CityModel(code: '', name: '广州市'),
+                    cityDistrict: DistrictModel(code: '', name: '海珠区'),
                     cellphone: '',
                     fullname: '',
-                    line1: ''
-                ),
+                    line1: ''),
                 orderedSuccessRate: 0.3455,
                 historyOrdersCount: 214,
               ),
               attachments: [
-                MediaModel(
+                MediaModel(url:
                     'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
-                MediaModel(
+                MediaModel(url:
                     'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
-                MediaModel(
+                MediaModel(url:
                     'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
-                MediaModel(
+                MediaModel(url:
                     'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg')
               ],
@@ -108,28 +107,27 @@ class QuoteOrdersBLoC extends BLoCBase {
                 name: '广州旭日',
                 starLevel: 3,
                 contactAddress: AddressModel(
-                  region: RegionModel(name: '广东省'),
-                  city: CityModel(code: '', name: '广州市'),
-                  cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                    region: RegionModel(name: '广东省'),
+                    city: CityModel(code: '', name: '广州市'),
+                    cityDistrict: DistrictModel(code: '', name: '海珠区'),
                     cellphone: '',
                     fullname: '',
-                    line1: ''
-                ),
+                    line1: ''),
                 orderedSuccessRate: 0.3455,
                 historyOrdersCount: 214,
               ),
               attachments: [
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg')
               ],
               creationTime: DateTime.parse('2019-01-03 12:00'),
@@ -160,28 +158,27 @@ class QuoteOrdersBLoC extends BLoCBase {
                 name: '广州旭日',
                 starLevel: 3,
                 contactAddress: AddressModel(
-                  region: RegionModel(name: '广东省'),
-                  city: CityModel(code: '', name: '广州市'),
-                  cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                    region: RegionModel(name: '广东省'),
+                    city: CityModel(code: '', name: '广州市'),
+                    cityDistrict: DistrictModel(code: '', name: '海珠区'),
                     cellphone: '',
                     fullname: '',
-                    line1: ''
-                ),
+                    line1: ''),
                 orderedSuccessRate: 0.3455,
                 historyOrdersCount: 214,
               ),
               attachments: [
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg')
               ],
               creationTime: DateTime.parse('2019-01-03 12:00'),
@@ -212,28 +209,27 @@ class QuoteOrdersBLoC extends BLoCBase {
                 name: '广州旭日',
                 starLevel: 3,
                 contactAddress: AddressModel(
-                  region: RegionModel(name: '广东省'),
-                  city: CityModel(code: '', name: '广州市'),
-                  cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                    region: RegionModel(name: '广东省'),
+                    city: CityModel(code: '', name: '广州市'),
+                    cityDistrict: DistrictModel(code: '', name: '海珠区'),
                     cellphone: '',
                     fullname: '',
-                    line1: ''
-                ),
+                    line1: ''),
                 orderedSuccessRate: 0.3455,
                 historyOrdersCount: 214,
               ),
               attachments: [
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg'),
                 MediaModel(
-                    'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+                    url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                     mediaType: 'jpg')
               ],
               creationTime: DateTime.parse('2019-01-03 12:00'),
@@ -275,24 +271,27 @@ class QuoteOrdersBLoC extends BLoCBase {
               name: '广州旭日',
               starLevel: 3,
               contactAddress: AddressModel(
-                region: RegionModel(name: '广东省'),
-                city: CityModel(code: '', name: '广州市'),
-                cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                  region: RegionModel(name: '广东省'),
+                  city: CityModel(code: '', name: '广州市'),
+                  cityDistrict: DistrictModel(code: '', name: '海珠区'),
                   cellphone: '',
                   fullname: '',
-                  line1: ''
-              ),
+                  line1: ''),
               orderedSuccessRate: 0.3455,
               historyOrdersCount: 214,
             ),
             attachments: [
-              MediaModel('https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+              MediaModel(
+                  url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                   mediaType: 'jpg'),
-              MediaModel('https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+              MediaModel(
+                  url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                   mediaType: 'jpg'),
-              MediaModel('https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+              MediaModel(
+                  url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                   mediaType: 'jpg'),
-              MediaModel('https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+              MediaModel(
+                  url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                   mediaType: 'jpg')
             ],
             creationTime: DateTime.parse('2019-01-03'),
@@ -336,24 +335,27 @@ class QuoteOrdersBLoC extends BLoCBase {
             name: '广州旭日',
             starLevel: 3,
             contactAddress: AddressModel(
-              region: RegionModel(name: '广东省'),
-              city: CityModel(code: '', name: '广州市'),
-              cityDistrict: DistrictModel(code: '', name: '海珠区'),
-              cellphone: '',
-              fullname: '',
-              line1: ''
-            ),
+                region: RegionModel(name: '广东省'),
+                city: CityModel(code: '', name: '广州市'),
+                cityDistrict: DistrictModel(code: '', name: '海珠区'),
+                cellphone: '',
+                fullname: '',
+                line1: ''),
             orderedSuccessRate: 0.3455,
             historyOrdersCount: 214,
           ),
           attachments: [
-            MediaModel('https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+            MediaModel(
+                url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                 mediaType: 'jpg'),
-            MediaModel('https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+            MediaModel(
+                url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                 mediaType: 'jpg'),
-            MediaModel('https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+            MediaModel(
+                url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                 mediaType: 'jpg'),
-            MediaModel('https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
+            MediaModel(
+                url: 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg',
                 mediaType: 'jpg')
           ],
           creationTime: DateTime.parse('2019-01-03'),

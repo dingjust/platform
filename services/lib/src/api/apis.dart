@@ -91,8 +91,13 @@ class Apis {
         return '/{baseSiteId}/orders/quote/$code/reject';
       };
 
-  /// 图片上传 （转换类型组）
+  /// 图片上传
   static get upload => () {
         return '/{baseSiteId}/media/file/upload';
+      };
+
+  /// 文件删除
+  static get mediaDelete => (id) {
+        return '/{baseSiteId}/media/$id';
       };
 }

@@ -606,7 +606,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     // /// TODO: 调用上传接口,更新上传进度条
     try {
       FormData formData = FormData.from({"file": UploadFileInfo(file, "file")});
-      Response response = await http$.post(
+      Response<Map<String, dynamic>> response = await http$.post(
         Apis.upload(),
         data: formData,
         queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
@@ -620,13 +620,13 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
       Navigator.of(context).pop();
       Navigator.of(context).pop();
+      //写入具体url
       String baseUrl = response.data['url'];
       String url = '${GlobalConfigs.BASE_URL}$baseUrl';
-      print(url);
+      response.data['url'] = url;
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表
-        widget.list.add(MediaModel.fromJson(
-            {'url': url, 'mediaType': response.data['mime']}));
+        widget.list.add(MediaModel.fromJson(response.data));
       });
     } catch (e) {
       print(e);
@@ -646,12 +646,23 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
           actions: <Widget>[
             FlatButton(
               child: Text('确认'),
-              onPressed: () {
+              onPressed: () async {
                 //TODO :调用删除接口
-                setState(() {
-                  widget.list.remove(mediaModel);
-                });
-                Navigator.pop(context);
+                try {
+                  Response response = await http$.delete(
+                    Apis.mediaDelete(mediaModel.id),
+                  );
+                  if (response.statusCode == 200) {
+                    setState(() {
+                      widget.list.remove(mediaModel);
+                    });
+                    Navigator.pop(context);
+                  } else {
+                    print('删除失败');
+                  }
+                } catch (e) {
+                  print(e);
+                }
               },
             ),
             FlatButton(
