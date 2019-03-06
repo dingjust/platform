@@ -50,7 +50,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('QuotesModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('FactoryQuotesModule');
 
   import autoHeight from 'mixins/autoHeight'
 
@@ -72,7 +72,7 @@
         this._onSearch(0);
       },
       async onDetails(item) {
-        const result = await this.$http.get('/djwebservices/quotes/' + item.code);
+        const result = await this.$http.get('/b2b/orders/quote/' + item.code);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
@@ -101,7 +101,7 @@
     },
     data() {
       return {
-        text: this.$store.state.QuotesModule.keyword,
+        text: this.$store.state.FactoryQuotesModule.keyword,
       };
     },
     created() {
