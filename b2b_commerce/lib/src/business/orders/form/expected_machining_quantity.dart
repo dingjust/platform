@@ -1,6 +1,6 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 class ExpectedMachiningQuantityField extends StatefulWidget {
   RequirementOrderModel item;
@@ -13,8 +13,6 @@ class ExpectedMachiningQuantityField extends StatefulWidget {
 class ExpectedMachiningQuantityFieldState extends State<ExpectedMachiningQuantityField> {
   @override
   Widget build(BuildContext context) {
-    FocusNode _expectedMachiningQuantityFocusNode = FocusNode();
-    TextEditingController _expectedMachiningQuantityController =
         TextEditingController(
             text: widget.item.details.expectedMachiningQuantity == null
                 ? ''
@@ -39,49 +37,16 @@ class ExpectedMachiningQuantityFieldState extends State<ExpectedMachiningQuantit
         ),
       ),
       onTap: () {
-        showDialog(
-          context: context,
-          barrierDismissible: false, // user must tap button!
-          builder: (context) {
-            return AlertDialog(
-              title: Text('请输入加工数量'),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[
-                    TextFieldComponent(
-                      controller: _expectedMachiningQuantityController,
-                      focusNode: _expectedMachiningQuantityFocusNode,
-                      autofocus: true,
-                      inputType: TextInputType.number,
-                      hintText: '请输入加工数量',
-                      padding: EdgeInsets.all(0),
-                    ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text(
-                    '确定',
-                    style: TextStyle(color: Color(0xffFF9516)),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      if (_expectedMachiningQuantityController.text.trim() !=
-                          '') {
-                        widget.item.details.expectedMachiningQuantity =
-                            int.parse(_expectedMachiningQuantityController.text);
-                      } else {
-                        widget.item.details.expectedMachiningQuantity = null;
-                      }
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => RequirementOrderInputPage(fieldText: '加工数量',inputType: TextInputType.number)),
+          //接收返回数据并处理
+        ).then((value) {
+          setState(() {
+            widget.item.details.expectedMachiningQuantity = int.parse(value);
+          });
+        });
       },
     );
   }

@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_contact_input.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -36,40 +38,18 @@ class RemarksFieldState extends State<RemarksField> {
           ),
         ),
         onTap: () {
-          TextEditingController inputNumber = TextEditingController();
-          return showDialog<void>(
-            context: context,
-            barrierDismissible: false, // user must tap button!
-            builder: (context) {
-              return AlertDialog(
-                title: Text('备注'),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      TextFieldComponent(
-                        controller: _remarksController,
-                        focusNode: _remarksFocusNode,
-                        autofocus: true,
-                        hintText: '请输入订单备注',
-                        padding: EdgeInsets.all(0),
-                      )
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('确定'),
-                    onPressed: () {
-                      setState(() {
-                        widget.item.remarks = _remarksController.text.trim() == '' ? null: _remarksController.text.trim();
-                      });
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    RequirementOrderInputPage(
+                        fieldText: '订单备注', inputType: TextInputType.text)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              widget.item.remarks = value;
+            });
+          });
         });
   }
 }

@@ -7,7 +7,6 @@
         </el-form-item>
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-          <el-button type="primary" icon="el-icon-plus" @click="onNew">创建订单</el-button>
         </el-button-group>
       </el-form>
       <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
@@ -58,7 +57,7 @@
 
   import autoHeight from 'mixins/autoHeight';
 
-  import {OrderForm, OrderDetailsPage} from './';
+  import {OrderDetailsPage} from './';
 
   export default {
     name: 'OrderPage',
@@ -74,9 +73,6 @@
       }),
       onSearch() {
         this._onSearch(0);
-      },
-      onNew() {
-        this.fn.openSlider('创建订单', OrderForm, this.formData);
       },
       async onDetails(item) {
         const result = await this.$http.get('/djbrand/salesOrder/' + item.code);

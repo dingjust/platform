@@ -4,11 +4,13 @@
       <el-col :span="24">
         <el-upload
           name="file"
+          :disabled="readOnly"
           :action="mediaUploadUrl"
           list-type="picture-card"
           :data="uploadFormData"
           :before-upload="onBeforeUpload"
           :on-success="onSuccess"
+          :headers="headers"
           :file-list="slotData.details.pictures"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove">
@@ -67,7 +69,7 @@
                             type="date"
                             v-model="slotData.details.expectedDeliveryDate"
                             placeholder="选择日期"
-                            :value-format="defaultDateValueFormat">
+                            value-format="timestamp">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -133,7 +135,7 @@
         this.$refs['form'].validate(callback);
       },
       async getMinorCategories() {
-        const result = await this.$http.get('/djbackoffice/product/category/cascaded');
+        const result = await this.$http.get('/b2b/categories/cascaded');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -142,7 +144,7 @@
         this.categories = result;
       },
       async getMajorCategories() {
-        const result = await this.$http.get('/djbackoffice/product/category/majors');
+        const result = await this.$http.get('/b2b/categories/majors');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -165,17 +167,19 @@
         return true;
       },
       onSuccess(response) {
-        console.log(JSON.stringify(response));
         this.slotData.details.pictures.push(response);
-        this.$set(this.slotData.details, "pictures", this.slotData.details.pictures);
       },
       async handleRemove(file) {
         // console.log(JSON.stringify(file));
-        const result = await this.$http.delete('/djwebservices/media/' + file.response.id);
+        const result = await this.$http.delete('/djwebservices/media/' + file.id);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
+
+        const pictures = this.slotData.details.pictures || [];
+        const index = pictures.indexOf(file);
+        pictures.splice(index, 1);
 
         this.$message.success("删除成功");
       },
@@ -189,6 +193,11 @@
         return {
           fileFormat: 'DefaultFileFormat',
         };
+      },
+      headers: function () {
+        return {
+          Authorization: this.$store.getters.token
+        }
       }
     },
     data() {

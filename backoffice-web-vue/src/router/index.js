@@ -123,11 +123,6 @@ const router = new Router({
               path: 'quote',
               name: '报价单',
               component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/quote/QuotePage')
-            },
-            {
-              path: 'pick',
-              name: '发料单',
-              component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/pick/PickOrderPage')
             }
           ]
         },
@@ -386,11 +381,6 @@ const router = new Router({
               path: 'quote',
               name: '报价单',
               component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/quote/QuotePage'),
-            },
-            {
-              path: 'pick',
-              name: '发料单',
-              component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/pick/PickOrderPage'),
             }
           ]
         },
