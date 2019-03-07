@@ -12,16 +12,13 @@
 </template>
 
 <script>
-  import {OrderMixin} from '@/mixins';
-
   export default {
     name: 'OrderStatusBar',
     props: ['status'],
-    mixins: [OrderMixin],
     methods: {},
     computed: {
       active: function () {
-        return this.salesOrderStatusProcessFlow[this.status];
+        return this.$store.state.EnumsModule.salesOrderStatusProcessFlow[this.status];
       }
     }
   }

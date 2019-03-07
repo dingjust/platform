@@ -73,6 +73,20 @@ const ENUMS = {
       name: "需求订单"
     }
   },
+  RequirementOrderStatus: {
+    PENDING_QUOTE: {
+      code: "PENDING_QUOTE",
+      name: "报价中"
+    },
+    COMPLETED: {
+      code: "COMPLETED",
+      name: "已完成"
+    },
+    CANCELLED: {
+      code: "CANCELLED",
+      name: "已失效"
+    }
+  },
   //订单状态
   OrderStatus: {
     WAIT_FOR_PROCESSING: {
