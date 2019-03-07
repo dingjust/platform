@@ -21,63 +21,68 @@ class HttpManager {
 
   static Dio _getInstance() {
     if (_instance == null) {
-      BaseOptions options = BaseOptions(
-          baseUrl: GlobalConfigs.BASE_URL,
-          connectTimeout: 5000,
-          receiveTimeout: 10000,
-          headers: {'Authorization': authorization});
-      _instance = Dio(options);
-
-      (_instance.httpClientAdapter as DefaultHttpClientAdapter)
-          .onHttpClientCreate = (client) {
-        // you can also create a new HttpClient to dio
-        // return new HttpClient();
-        // 忽略证书
-        HttpClient httpClient = new HttpClient()
-          ..badCertificateCallback =
-              ((X509Certificate cert, String host, int port) => true);
-        return httpClient;
-      };
-
-      _instance.interceptors
-          .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-        // 在请求被发送之前做一些事情
-        var connectivityResult = await Connectivity().checkConnectivity();
-        if (connectivityResult == ConnectivityResult.none) {
-          throw -1; // network error
-        }
-        options.headers['Authorization'] = authorization;
-      }, onResponse: (Response response) {
-        // 在返回响应数据之前做一些预处理
-        if (GlobalConfigs.DEBUG) {
-          if (response != null) {
-            print('返回结果: ' + response.toString());
-          }
-        }
-        _clearContext();
-        return response; // continue
-      }, onError: (DioError e) {
-        // 当请求失败时做一些预处理
-        if (GlobalConfigs.DEBUG) {
-          print(e.toString());
-        }
-
-        // unauthorized
-        if (e.response != null && e.response.statusCode == 401) {
-          BuildContext currentContext =
-              _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY];
-          assert(currentContext != null);
-          Navigator.pushNamed(currentContext, GlobalRoutes.ROUTE_LOGIN);
-          return null;
-        }
-
-        _clearContext();
-
-        return e; //continue
-      }));
+      _updateInstance();
     }
 
     return _instance;
+  }
+
+  // 更新实列
+  static void _updateInstance() {
+    BaseOptions options = BaseOptions(
+        baseUrl: GlobalConfigs.BASE_URL,
+        connectTimeout: 5000,
+        receiveTimeout: 10000,
+        headers: {'Authorization': authorization});
+    _instance = Dio(options);
+
+    (_instance.httpClientAdapter as DefaultHttpClientAdapter)
+        .onHttpClientCreate = (client) {
+      // you can also create a new HttpClient to dio
+      // return new HttpClient();
+      // 忽略证书
+      HttpClient httpClient = new HttpClient()
+        ..badCertificateCallback =
+            ((X509Certificate cert, String host, int port) => true);
+      return httpClient;
+    };
+
+    _instance.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
+      // 在请求被发送之前做一些事情
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        throw -1; // network error
+      }
+      options.headers['Authorization'] = authorization;
+    }, onResponse: (Response response) {
+      // 在返回响应数据之前做一些预处理
+      if (GlobalConfigs.DEBUG) {
+        if (response != null) {
+          print('返回结果: ' + response.toString());
+        }
+      }
+      _clearContext();
+      return response; // continue
+    }, onError: (DioError e) {
+      // 当请求失败时做一些预处理
+      if (GlobalConfigs.DEBUG) {
+        print(e.toString());
+      }
+
+      // unauthorized
+      if (e.response != null && e.response.statusCode == 401) {
+        BuildContext currentContext =
+            _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY];
+        assert(currentContext != null);
+        Navigator.pushNamed(currentContext, GlobalRoutes.ROUTE_LOGIN);
+        return null;
+      }
+
+      _clearContext();
+
+      return e; //continue
+    }));
   }
 
   Future<Response<T>> get<T>(
@@ -155,22 +160,6 @@ class HttpManager {
     LocalStorage.remove(GlobalConfigs.ACCESS_TOKEN_KEY);
   }
 
-  // ///获取授权token
-  // static getAuthorization() async {
-  //   String token = await LocalStorage.get(GlobalConfigs.ACCESS_TOKEN_KEY);
-  //   if (token == null) {
-  //     String basic = await LocalStorage.get(GlobalConfigs.BASIC_AUTH_TOKEN_KEY);
-  //     if (basic == null) {
-  //       // 提示输入账号密码
-  //     } else {
-  //       // 通过 basic 去获取token，获取到设置，返回token
-  //       return "Basic $basic";
-  //     }
-  //   } else {
-  //     return "Bearer $token";
-  //   }
-  // }
-
   ///初始化，获取授权token记录
   Future<void> initAuthorization() async {
     String token = await LocalStorage.get(GlobalConfigs.ACCESS_TOKEN_KEY);
@@ -184,6 +173,11 @@ class HttpManager {
     } else {
       authorization = "Bearer $token";
     }
+  }
+
+  void updateAuthorization(token) {
+    authorization = "Bearer $token";
+    _updateInstance();
   }
 }
 

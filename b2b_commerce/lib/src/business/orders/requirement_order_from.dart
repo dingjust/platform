@@ -3,23 +3,24 @@ import 'dart:io';
 import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/delivery_address_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/max_expected_price_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_invoice_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
+import 'package:b2b_commerce/src/business/orders/form/max_expected_price_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/remarks_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:models/models.dart';
+
 import '../../home/requirement/requirement_publish_success.dart';
 import '../apparel_products.dart';
-import 'form/major_category_field.dart';
 import 'form/category_field.dart';
+import 'form/expected_machining_quantity.dart';
+import 'form/major_category_field.dart';
 import 'form/pictures_field.dart';
 import 'form/product_field.dart';
 import 'form/production_areas_field.dart';
-import 'form/expected_machining_quantity.dart';
 
 //final List<EnumModel> technologyList = [
 //  EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
@@ -42,7 +43,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   RequirementOrderModel model =
       RequirementOrderModel(details: RequirementInfoModel());
   FocusNode _expectedMachiningQuantityFocusNode = FocusNode();
-  TextEditingController _expectedMachiningQuantityController = TextEditingController();
+  TextEditingController _expectedMachiningQuantityController =
+      TextEditingController();
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
   List<File> _normalImages = [];

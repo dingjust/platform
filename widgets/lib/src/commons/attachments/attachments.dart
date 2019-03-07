@@ -622,7 +622,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
       Navigator.of(context).pop();
       //写入具体url
       String baseUrl = response.data['url'];
-      String url = '${GlobalConfigs.BASE_URL}$baseUrl';
+      String url = '${GlobalConfigs.IMAGE_BASIC_URL}$baseUrl';
       response.data['url'] = url;
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表

@@ -2,8 +2,9 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
   static const DEBUG = true;
 
-  static const CONTEXT_PATH = 'http://47.106.112.137:9001';
+  static const CONTEXT_PATH = 'https://47.106.112.137:9002';
   // static const CONTEXT_PATH = 'https://192.168.1.103:9002';
+  static const IMAGE_BASIC_URL='http://47.106.112.137:9001/djwebservices/v2';
   static const BASE_URL = '$CONTEXT_PATH/djwebservices/v2';
   static const ACCESS_TOKEN_KEY = 'access_token';
   static const USER_KEY = 'user';

@@ -1,30 +1,5 @@
-/// 公共API
-class Apis {
-  /// 获取省份列表 GET
-  static get regions => () {
-        return '/{baseSiteId}/regions';
-      };
-
-  /// 获取省份下的城市列表 GET
-  static get citiesForRegion => (region) {
-        return '/{baseSiteId}/regions/$region/cities';
-      };
-
-  /// 获取城市下的区域列表 GET
-  static get districtsForCity => (city) {
-        return '/{baseSiteId}/cities/$city/districts';
-      };
-
-  /// 获取品牌明细 GET
-  static get brand => (uid) {
-        return '/{baseSiteId}/brand/$uid';
-      };
-
-  /// 获取工厂明细 GET
-  static get factory => (uid) {
-        return '/{baseSiteId}/factory/$uid';
-      };
-
+/// 订单API
+class OrderApis {
   /// 根据条件获取需求订单列表 POST
   static get requirementOrders => () {
         return '/{baseSiteId}/orders/requirement';
@@ -78,15 +53,5 @@ class Apis {
   /// 拒绝报价 PUT
   static get quoteReject => (code) {
         return '/{baseSiteId}/orders/quote/$code/reject';
-      };
-
-  /// 图片上传
-  static get upload => () {
-        return '/{baseSiteId}/media/file/upload';
-      };
-
-  /// 文件删除
-  static get mediaDelete => (id) {
-        return '/{baseSiteId}/media/$id';
       };
 }
