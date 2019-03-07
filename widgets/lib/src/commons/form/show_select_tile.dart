@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 class ShowSelectTile extends StatelessWidget{
   String leadingText;
   String tralingText;
-  Color tralingTextColor;
-  ShowSelectTile({this.leadingText,this.tralingText,this.tralingTextColor});
+  TextStyle leadingTextStyle;
+  TextStyle tralingTextStyle;
+  ShowSelectTile({this.leadingText,this.tralingText,this.leadingTextStyle,this.tralingTextStyle,}){
+    leadingTextStyle = TextStyle(fontSize: 16,);
+    tralingTextStyle = TextStyle(fontSize: 16,color: Color(0xffFF9516));
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +20,8 @@ class ShowSelectTile extends StatelessWidget{
           padding: EdgeInsets.all(15),
           child: Row(
             children: <Widget>[
-              Expanded(child: Text(leadingText,style: TextStyle(fontSize: 16),),),
-              tralingText != null ? Text(tralingText,style: TextStyle(color: tralingTextColor),) : Text(''),
+              Expanded(child: Text(leadingText,style: leadingTextStyle,),),
+              tralingText != null ? Text(tralingText,style: tralingTextStyle,) : Text(''),
               Icon(Icons.chevron_right,color: Colors.grey[600],),
             ],
           ),

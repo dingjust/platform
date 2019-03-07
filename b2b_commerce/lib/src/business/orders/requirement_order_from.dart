@@ -41,17 +41,12 @@ class RequirementOrderFrom extends StatefulWidget {
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   RequirementOrderModel model =
       RequirementOrderModel(details: RequirementInfoModel());
-  FocusNode _expectedMachiningQuantityFocusNode = FocusNode();
-  TextEditingController _expectedMachiningQuantityController = TextEditingController();
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
   List<File> _normalImages = [];
 
   @override
   void initState() {
-    _expectedMachiningQuantityController.text =
-        '${model.details.expectedMachiningQuantity ?? ''}';
-
     if (widget.product != null) {
       if (widget.product.normal != null)
         model.details.pictures = widget.product.normal;

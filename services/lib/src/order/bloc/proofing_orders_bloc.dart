@@ -49,8 +49,8 @@ class ProofingOrdersBLoC extends BLoCBase {
             status: ProofingStatus.PENDING_PAYMENT,
             totalPrice: 54,
             totalQuantity: 554,
-            order: RequirementOrderModel(
-              code: '39492523423',
+            order: QuoteModel(
+              requirementOrderCode: '39492523423',
             ),
             deliveryAddress: AddressModel.fromJson({
               'fullname': "张三",
@@ -78,8 +78,8 @@ class ProofingOrdersBLoC extends BLoCBase {
             status: ProofingStatus.COMPLETED,
             totalPrice: 54,
             totalQuantity: 554,
-            order: RequirementOrderModel(
-              code: '39492523423',
+            order: QuoteModel(
+              requirementOrderCode: '39492523423',
             ),
             deliveryAddress: AddressModel.fromJson({
               'fullname': "张三",
@@ -116,8 +116,8 @@ class ProofingOrdersBLoC extends BLoCBase {
               'line1': '广州大道',
               'defaultAddress': true
             }),
-            order: RequirementOrderModel(
-              code: '39492523423',
+            order: QuoteModel(
+              requirementOrderCode: '39492523423',
             ),
             creationTime: DateTime.parse('2019-01-03'),
             product: ApparelProductModel(
@@ -136,8 +136,8 @@ class ProofingOrdersBLoC extends BLoCBase {
             status: ProofingStatus.PENDING_PAYMENT,
             totalPrice: 54,
             totalQuantity: 554,
-            order: RequirementOrderModel(
-              code: '39492523423',
+            order: QuoteModel(
+              requirementOrderCode: '39492523423',
             ),
             deliveryAddress: AddressModel.fromJson({
               'fullname': "张三",
@@ -165,8 +165,8 @@ class ProofingOrdersBLoC extends BLoCBase {
             status: ProofingStatus.PENDING_DELIVERY,
             totalPrice: 54,
             totalQuantity: 554,
-            order: RequirementOrderModel(
-              code: '39492523423',
+            order: QuoteModel(
+              requirementOrderCode: '39492523423',
             ),
             deliveryAddress: AddressModel.fromJson({
               'fullname': "张三",
@@ -205,8 +205,8 @@ class ProofingOrdersBLoC extends BLoCBase {
           status: ProofingStatus.PENDING_PAYMENT,
           totalPrice: 54,
           totalQuantity: 554,
-          order: RequirementOrderModel(
-            code: '39492523423',
+          order: QuoteModel(
+            requirementOrderCode: '39492523423',
           ),
           deliveryAddress: AddressModel.fromJson({
             'fullname': "张三",
@@ -247,8 +247,8 @@ class ProofingOrdersBLoC extends BLoCBase {
         status: ProofingStatus.PENDING_PAYMENT,
         totalPrice: 54,
         totalQuantity: 554,
-        order: RequirementOrderModel(
-          code: '39492523423',
+        order: QuoteModel(
+          requirementOrderCode: '39492523423',
         ),
         deliveryAddress: AddressModel.fromJson({
           'fullname': "张三",

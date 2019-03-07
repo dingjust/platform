@@ -35,3 +35,5 @@ export 'src/commons/stepbar/status_step.dart';
 export 'src/commons/filterTabBar/filter_select_menu.dart';
 export 'src/commons/table/color_size_num_table.dart';
 export 'src/report/site_statistics_section.dart';
+export 'src/commons/select/color_size_select.dart';
+export 'src/commons/form/popup_window.dart';

@@ -112,7 +112,6 @@ class ApparelProductAttributesInputPageState
               child: ShowSelectTile(
                 leadingText: '风格',
                 tralingText: formatEnumSelectsText(_styleCodes, StyleEnum,4),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -136,7 +135,6 @@ class ApparelProductAttributesInputPageState
                   FabricCompositionEnum,
                   _fabricCompositionCode,
                 ),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -158,7 +156,6 @@ class ApparelProductAttributesInputPageState
                 leadingText: '版型',
                 tralingText:
                     formatEnumSelectText(EditionTypeEnum, _editionTypeCode),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -179,7 +176,6 @@ class ApparelProductAttributesInputPageState
               child: ShowSelectTile(
                 leadingText: '款式',
                 tralingText: formatEnumSelectText(PatternEnum, _patternCode),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -201,7 +197,6 @@ class ApparelProductAttributesInputPageState
                 leadingText: '袖型',
                 tralingText:
                     formatEnumSelectText(SleeveTypeEnum, _sleeveTypeCode),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -223,7 +218,6 @@ class ApparelProductAttributesInputPageState
                 leadingText: '袖长/裤长',
                 tralingText:
                     formatEnumSelectText(SleeveLengthEnum, _sleeveLengthCode),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -246,7 +240,6 @@ class ApparelProductAttributesInputPageState
                 leadingText: '图案',
                 tralingText: formatEnumSelectsText(
                     _decorativePatternCodes, DecorativePatternEnum,4),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -269,7 +262,6 @@ class ApparelProductAttributesInputPageState
                 leadingText: '流行元素',
                 tralingText: formatEnumSelectsText(
                     _popularElementsCodes, PopularElementsEnum,4),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -290,7 +282,6 @@ class ApparelProductAttributesInputPageState
               child: ShowSelectTile(
                 leadingText: '填充物',
                 tralingText: formatEnumSelectText(FillerEnum, _fillerCode),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -312,7 +303,6 @@ class ApparelProductAttributesInputPageState
                 leadingText: '厚薄',
                 tralingText:
                     formatEnumSelectText(ThicknessEnum, _thicknessCode),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -333,7 +323,6 @@ class ApparelProductAttributesInputPageState
               child: ShowSelectTile(
                 leadingText: '季节',
                 tralingText: formatEnumSelectText(SeasonEnum, _seasonCode),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -360,7 +349,6 @@ class ApparelProductAttributesInputPageState
                   EnumModel('true', '有'),
                   EnumModel('false', '没有'),
                 ], _taggableCode),
-                tralingTextColor: Colors.orange,
               ),
             ),
             InkWell(
@@ -381,7 +369,6 @@ class ApparelProductAttributesInputPageState
               child: ShowSelectTile(
                 leadingText: '门襟',
                 tralingText: formatEnumSelectText(PlacketEnum, _placketCode),
-                tralingTextColor: Colors.orange,
               ),
             ),
           ],

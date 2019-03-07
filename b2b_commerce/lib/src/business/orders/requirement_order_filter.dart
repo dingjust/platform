@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import 'package:core/core.dart';
 
 class RequirementOrderFilterPage extends StatefulWidget {
   Map<String, Object> params;
@@ -41,35 +42,34 @@ class RequirementOrderFilterPageState
       ),
 //      resizeToAvoidBottomPadding: false,
 
-    persistentFooterButtons: <Widget>[
-      Container(
-        width: MediaQuery.of(context).size.width-40,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            ActionChip(
-              shape:
-              StadiumBorder(side: BorderSide(color: Color(0xffFF9516))),
-              labelPadding: EdgeInsets.symmetric(horizontal: 20),
-              backgroundColor: Colors.white,
-              label: Text('重置'),
-              labelStyle: TextStyle(color: Colors.grey),
-              onPressed: () {},
-            ),
-            ActionChip(
-              labelPadding:
-              EdgeInsets.symmetric(horizontal: 21, vertical: 1),
-              backgroundColor: Color(0xffFF9516),
-              label: Text('确定'),
-              labelStyle: TextStyle(color: Colors.white),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+      persistentFooterButtons: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width - 16,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ActionChip(
+                shape:
+                    StadiumBorder(side: BorderSide(color: Color(0xffFF9516))),
+                labelPadding: EdgeInsets.symmetric(horizontal: 20),
+                backgroundColor: Colors.white,
+                label: Text('重置'),
+                labelStyle: TextStyle(color: Colors.grey),
+                onPressed: () {},
+              ),
+              ActionChip(
+                labelPadding: EdgeInsets.symmetric(horizontal: 21, vertical: 1),
+                backgroundColor: Color(0xffFF9516),
+                label: Text('确定'),
+                labelStyle: TextStyle(color: Colors.white),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
         ),
-      ),
-    ],
+      ],
       body: ListView(
         children: <Widget>[
           Center(
@@ -83,8 +83,8 @@ class RequirementOrderFilterPageState
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ActionChip(
-                shape: StadiumBorder(
-                    side: BorderSide(color: Color(0xffFF9516))),
+                shape:
+                    StadiumBorder(side: BorderSide(color: Color(0xffFF9516))),
                 labelPadding: EdgeInsets.symmetric(horizontal: 20),
                 backgroundColor: Colors.white,
                 label: Text('选择省份'),
@@ -115,10 +115,15 @@ class RequirementOrderFilterPageState
                   });
                 },
               ),
-              Text(formatEnumSelectsText(
-                  widget.params['productiveOrientations'],
-                  ProvinceEnum,
-                  3)),
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  formatEnumSelectsText(
+                      widget.params['productiveOrientations'], ProvinceEnum, 3,
+                  ),
+                  textScaleFactor:0.8,
+                ),
+              ),
             ],
           ),
           Center(
@@ -132,11 +137,11 @@ class RequirementOrderFilterPageState
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ActionChip(
-                shape: StadiumBorder(
-                    side: BorderSide(color: Color(0xffFF9516))),
-                labelPadding: EdgeInsets.symmetric(horizontal: 40),
+                shape:
+                    StadiumBorder(side: BorderSide(color: Color(0xffFF9516))),
+                labelPadding: EdgeInsets.symmetric(horizontal: widget.params['startDate'] == null ? 40 : 23),
                 backgroundColor: Colors.white,
-                label: Text('日期'),
+                label: Text(DateFormatUtil.formatYMD(widget.params['startDate']) ?? '日期'),
                 labelStyle: TextStyle(color: Color(0xffFF9516)),
                 onPressed: () {
                   showDatePicker(
@@ -158,11 +163,11 @@ class RequirementOrderFilterPageState
                 child: Text('~'),
               ),
               ActionChip(
-                shape: StadiumBorder(
-                    side: BorderSide(color: Color(0xffFF9516))),
-                labelPadding: EdgeInsets.symmetric(horizontal: 40),
+                shape:
+                    StadiumBorder(side: BorderSide(color: Color(0xffFF9516))),
+                labelPadding: EdgeInsets.symmetric(horizontal: widget.params['endDate'] == null ? 40 : 23),
                 backgroundColor: Colors.white,
-                label: Text('日期'),
+                label: Text(DateFormatUtil.formatYMD(widget.params['endDate']) ?? '日期'),
                 labelStyle: TextStyle(color: Color(0xffFF9516)),
                 onPressed: () {
                   showDatePicker(
@@ -196,16 +201,29 @@ class RequirementOrderFilterPageState
                   child: TextFieldComponent(
                     focusNode: _startQuantityFocusNode,
                     controller: _startQuantityController,
+                    inputType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () {
+                      FocusScope.of(context).requestFocus(_endQuantityFocusNode);
+                    },
+                    onChanged: (value){
+                      widget.params['startQuantity'] = int.parse(value);
+                    },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: Text('~'),
-                ),
+                Text('~'),
                 Flexible(
                   child: TextFieldComponent(
                     focusNode: _endQuantityFocusNode,
                     controller: _endQuantityController,
+                    inputType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () {
+                      FocusScope.of(context).requestFocus(_startPriceFocusNode);
+                    },
+                    onChanged: (value){
+                      widget.params['endQuantity'] = int.parse(value);
+                    },
                   ),
                 ),
               ],
@@ -226,22 +244,30 @@ class RequirementOrderFilterPageState
                   child: TextFieldComponent(
                     focusNode: _startPriceFocusNode,
                     controller: _startPriceController,
+                    inputType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () {
+                      FocusScope.of(context).requestFocus(_endPriceFocusNode);
+                    },
+                    onChanged: (value){
+                      widget.params['startPrice'] = double.parse(value);
+                    },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: Text('~'),
-                ),
+                Text('~'),
                 Flexible(
                   child: TextFieldComponent(
                     focusNode: _endPriceFocusNode,
                     controller: _endPriceController,
+                    inputType: TextInputType.number,
+                    onChanged: (value){
+                      widget.params['endPrice'] = double.parse(value);
+                    },
                   ),
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );

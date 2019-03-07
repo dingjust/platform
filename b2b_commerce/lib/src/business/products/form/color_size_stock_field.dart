@@ -80,7 +80,6 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
           child: ShowSelectTile(
             leadingText: '颜色/尺码',
             tralingText: colorSizeSelectText(),
-            tralingTextColor: Color(0xffFF9516),
           ),
         ),
         Padding(
