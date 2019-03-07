@@ -48,6 +48,7 @@ import {
   FactoryRolesModule,
   FactoryFabricProductsModule,
   FactoryFabricProductStocksModule,
+  FactoryRequirementOrdersModule,
   FactoryProductionOrdersModule,
   FactoryQuotesModule,
 } from './factory/modules';
@@ -118,6 +119,7 @@ export default new Vuex.Store({
     FactoryRolesModule,
     FactoryFabricProductsModule,
     FactoryFabricProductStocksModule,
+    FactoryRequirementOrdersModule,
     FactoryProductionOrdersModule,
     FactoryQuotesModule,
   },

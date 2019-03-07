@@ -338,7 +338,8 @@ const router = new Router({
         {
           path: 'factory/dashboard',
           name: '仪表盘',
-          component: () => import(/* webpackChunkName: 'Dashboard' */ 'factory/Dashboard')
+          /*component: () => import(/!* webpackChunkName: 'Dashboard' *!/ 'factory/Dashboard')*/
+          component: () => import(/* webpackChunkName: 'Dashboard' */ 'factory/order/requirement/RequirementOrderPage')
         },
         {
           path: 'factory/product',

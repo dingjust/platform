@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <order-status-bar :status="slotData.status"></order-status-bar>
+    <sales-order-status-bar :status="slotData.status"></sales-order-status-bar>
     <div v-show="isPendingPayment" class="pt-2"></div>
     <el-row style="margin-left: 0px; margin-right: 0px; " v-show="isPendingPayment" :gutter="10">
       <el-col :span="24">
@@ -48,18 +48,6 @@
       <order-entries-form :slot-data="slotData" :read-only="true"></order-entries-form>
     </el-card>
 
-    <!--<el-dialog title="更新基本信息"
-               :visible.sync="baseFormDialogVisible"
-               :modal="false">
-      <order-base-form ref="baseForm"
-                       :slot-data="baseData"
-                       :read-only="false">
-      </order-base-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="baseFormDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmitBaseForm">确 定</el-button>
-      </div>
-    </el-dialog>-->
     <el-dialog title="更新地址"
                :visible.sync="addressFormDialogVisible" :close-on-click-modal="false" :modal="false">
       <order-delivery-address-form ref="addressForm"
@@ -96,15 +84,16 @@
 </template>
 
 <script>
+  import {SalesOrderStatusBar} from '@/views/shared/';
+
   import OrderBaseForm from './OrderBaseForm';
   import OrderEntriesForm from './OrderEntriesForm';
   import OrderDeliveryAddressForm from './OrderDeliveryAddressForm';
-  import OrderStatusBar from './OrderStatusBar';
 
   export default {
     name: 'OrderDetailsPage',
     props: ['slotData', 'readOnly'],
-    components: {OrderStatusBar, OrderBaseForm, OrderDeliveryAddressForm, OrderEntriesForm},
+    components: {SalesOrderStatusBar, OrderBaseForm, OrderDeliveryAddressForm, OrderEntriesForm},
     methods: {
       refresh() {
         this.$refs['orderDeliveryAddressForm'].refresh();

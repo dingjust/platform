@@ -67,10 +67,11 @@
 </template>
 
 <script>
+  import {RequirementOrderStatusBar} from '@/views/shared/';
+
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
   import RequirementOrderRequestForm from './RequirementOrderRequestForm';
   import RequirementOrderAttachmentsForm from './RequirementOrderAttachmentsForm';
-  import RequirementOrderStatusBar from './RequirementOrderStatusBar';
 
   export default {
     name: 'RequirementOrderDetailsPage',
