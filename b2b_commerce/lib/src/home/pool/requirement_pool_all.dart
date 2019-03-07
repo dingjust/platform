@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
 import 'package:b2b_commerce/src/home/pool/search/requirement_pool_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 List<RequirementOrderModel> orders = [
