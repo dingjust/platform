@@ -115,9 +115,9 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/consignment/ConsignmentPage')
             },
             {
-              path: 'request',
+              path: 'requirement',
               name: '需求订单',
-              component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/request/RequirementOrderPage')
+              component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/requirement/RequirementOrderPage')
             },
             {
               path: 'quote',
@@ -260,9 +260,9 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/order/OrderPage'),
             },
             {
-              path: 'request',
+              path: 'requirement',
               name: '需求订单',
-              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/request/RequirementOrderPage'),
+              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/requirement/RequirementOrderPage'),
             },
             {
               path: 'consignment',
@@ -338,7 +338,8 @@ const router = new Router({
         {
           path: 'factory/dashboard',
           name: '仪表盘',
-          component: () => import(/* webpackChunkName: 'Dashboard' */ 'factory/Dashboard')
+          /*component: () => import(/!* webpackChunkName: 'Dashboard' *!/ 'factory/Dashboard')*/
+          component: () => import(/* webpackChunkName: 'Dashboard' */ 'factory/order/requirement/RequirementOrderPage')
         },
         {
           path: 'factory/product',

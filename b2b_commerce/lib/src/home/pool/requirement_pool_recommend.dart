@@ -1,7 +1,293 @@
+import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
 import 'package:b2b_commerce/src/home/pool/search/requirement_pool_search.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+
+List<RequirementOrderModel> orders = [
+  RequirementOrderModel.fromJson({
+    "code": "34938475200045",
+    'totalQuotesCount': 120,
+    'belongTo':{
+      'brand' : '森马',
+      'profilePicture' : 'http://www.pptbz.com/pptpic/UploadFiles_6909/201203/2012031220134655.jpg'
+    },
+    'totalQuantity': 200,
+    "status": "PENDING_QUOTE",
+    'details': {
+      "expectedMachiningQuantity": 10,
+      "maxExpectedPrice": 300,
+      "expectedDeliveryDate": DateTime.now().toString(),
+      'productName': '山本风法少女长裙复古气质秋冬款',
+      'productSkuID': 'NA89852509',
+      'pictures': [
+        {
+          'url':
+          'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        },
+        {
+          'url':
+          'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        },
+        {
+          'url':
+          'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        },
+      ],
+      'majorCategory': {'name': '针织'},
+      'category': {'name': '男装-T恤'},
+      'proofingNeeded': true,
+      'samplesNeeded': true,
+      'invoiceNeeded': true,
+      'productiveOrientations': ['广东东莞'],
+      'machiningType': 'LIGHT_PROCESSING'
+    },
+    "creationtime": DateTime.parse('2019-03-01').toString(),
+    "remarks": "交货时间 2019-01-01\n确定前请先与我厂沟通好样衣事宜，谢谢",
+    "attachments": [
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'http://zb.guaihou.com/zdoc/03J012-2%20%E7%8E%AF%E5%A2%83%E6%99%AF%E8%A7%82--%E7%BB%BF%E5%8C%96%E7%A7%8D%E6%A4%8D%E8%AE%BE%E8%AE%A1.pdf',
+        'mediaType': 'pdf'
+      },
+      {
+        'url':
+        'http://www.gzedu.gov.cn/gzsjyj/zsks/201901/4cbfd27ec7cf47ecb8867bad65a57040/files/ed312aa5e162435f928614b9c79d8fab.docx',
+        'mediaType': 'docx'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+    ]
+  }),
+  RequirementOrderModel.fromJson({
+    "code": "34938475200045",
+    'totalQuotesCount': 120,
+    'totalQuantity': 200,
+    "status": "COMPLETED",
+    'belongTo':{
+      'brand' : '森马',
+      'profilePicture' : 'http://www.pptbz.com/pptpic/UploadFiles_6909/201203/2012031220134655.jpg'
+    },
+    'details': {
+      "expectedMachiningQuantity": 10,
+      "maxExpectedPrice": 300,
+      "expectedDeliveryDate": DateTime.now().toString(),
+      'productName': '山本风法少女长裙复古气质秋冬款',
+      'productSkuID': 'NA89852509',
+      'pictures': [
+        {
+          'url':
+          'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        },
+        {
+          'url':
+          'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        },
+        {
+          'url':
+          'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        },
+      ],
+      'majorCategory': {'name': '针织'},
+      'category': {'name': '男装-T恤'},
+      'proofingNeeded': true,
+      'samplesNeeded': true,
+      'invoiceNeeded': true,
+      'productiveOrientations': ['广东东莞'],
+      'machiningType': 'LABOR_AND_MATERIAL'
+    },
+    "creationtime": DateTime.parse('2019-03-01').toString(),
+    "remarks": "交货时间 2019-01-01\n确定前请先与我厂沟通好样衣事宜，谢谢",
+    "attachments": [
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'http://zb.guaihou.com/zdoc/03J012-2%20%E7%8E%AF%E5%A2%83%E6%99%AF%E8%A7%82--%E7%BB%BF%E5%8C%96%E7%A7%8D%E6%A4%8D%E8%AE%BE%E8%AE%A1.pdf',
+        'mediaType': 'pdf'
+      },
+      {
+        'url':
+        'http://www.gzedu.gov.cn/gzsjyj/zsks/201901/4cbfd27ec7cf47ecb8867bad65a57040/files/ed312aa5e162435f928614b9c79d8fab.docx',
+        'mediaType': 'docx'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+    ]
+  }),
+  RequirementOrderModel.fromJson({
+    "code": "34938475200045",
+    'totalQuotesCount': 120,
+    'totalQuantity': 200,
+    "status": "CANCELLED",
+    'belongTo':{
+      'brand' : '森马',
+      'profilePicture' : 'http://www.pptbz.com/pptpic/UploadFiles_6909/201203/2012031220134655.jpg'
+    },
+    'details': {
+      "expectedMachiningQuantity": 10,
+      "maxExpectedPrice": 300,
+      "expectedDeliveryDate": DateTime.now().toString(),
+      'productName': '山本风法少女长裙复古气质秋冬款',
+      'majorCategory': {'name': '针织'},
+      'category': {'name': '男装-T恤'},
+      'proofingNeeded': true,
+      'samplesNeeded': true,
+      'invoiceNeeded': true,
+      'productiveOrientations': ['广东东莞'],
+      'machiningType': 'LABOR_AND_MATERIAL'
+    },
+    "creationtime": DateTime.parse('2019-03-01').toString(),
+    "remarks": "交货时间 2019-01-01\n确定前请先与我厂沟通好样衣事宜，谢谢",
+    "attachments": [
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'http://zb.guaihou.com/zdoc/03J012-2%20%E7%8E%AF%E5%A2%83%E6%99%AF%E8%A7%82--%E7%BB%BF%E5%8C%96%E7%A7%8D%E6%A4%8D%E8%AE%BE%E8%AE%A1.pdf',
+        'mediaType': 'pdf'
+      },
+      {
+        'url':
+        'http://www.gzedu.gov.cn/gzsjyj/zsks/201901/4cbfd27ec7cf47ecb8867bad65a57040/files/ed312aa5e162435f928614b9c79d8fab.docx',
+        'mediaType': 'docx'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+    ]
+  }),
+  RequirementOrderModel.fromJson({
+    "code": "34938475200045",
+    'totalQuotesCount': 120,
+    'totalQuantity': 200,
+    "status": "CANCELLED",
+    'belongTo':{
+      'brand' : '森马',
+      'profilePicture' : 'http://www.pptbz.com/pptpic/UploadFiles_6909/201203/2012031220134655.jpg'
+    },
+    'details': {
+      "expectedMachiningQuantity": 10,
+      "maxExpectedPrice": 300,
+      "expectedDeliveryDate": DateTime.now().toString(),
+      'productName': '山本风法少女长裙复古气质秋冬款',
+      'productSkuID': 'NA89852509',
+      'pictures': [
+        {
+          'url':
+          'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        },
+        {
+          'url':
+          'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        },
+        {
+          'url':
+          'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+          'mediaType': 'webp'
+        },
+      ],
+      'majorCategory': {'name': '针织'},
+      'category': {'name': '男装-T恤'},
+      'proofingNeeded': true,
+      'samplesNeeded': true,
+      'invoiceNeeded': true,
+      'productiveOrientations': ['广东东莞'],
+      'machiningType': 'LABOR_AND_MATERIAL'
+    },
+    "creationtime": DateTime.parse('2019-03-01').toString(),
+    "remarks": "交货时间 2019-01-01\n确定前请先与我厂沟通好样衣事宜，谢谢",
+    "attachments": [
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'http://zb.guaihou.com/zdoc/03J012-2%20%E7%8E%AF%E5%A2%83%E6%99%AF%E8%A7%82--%E7%BB%BF%E5%8C%96%E7%A7%8D%E6%A4%8D%E8%AE%BE%E8%AE%A1.pdf',
+        'mediaType': 'pdf'
+      },
+      {
+        'url':
+        'http://www.gzedu.gov.cn/gzsjyj/zsks/201901/4cbfd27ec7cf47ecb8867bad65a57040/files/ed312aa5e162435f928614b9c79d8fab.docx',
+        'mediaType': 'docx'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+      {
+        'url':
+        'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+        'mediaType': 'webp'
+      },
+    ]
+  }),
+];
 
 class RequirementPoolRecommend extends StatefulWidget {
   _RequirementPoolRecommendState createState() => _RequirementPoolRecommendState();
@@ -20,38 +306,47 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-          '推荐需求',
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(B2BIcons.search,size: 20,),
-            onPressed: () =>
-                showSearch(
-                    context: context, delegate: RequirementPoolSearch()),
+        appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
+          title: Text(
+            '推荐需求',
+            style: TextStyle(color: Colors.black),
           ),
-        ],
-        bottom: _buildFilterBar(context),
-      ),
-      body:ListView(
-        children: <Widget>[
-          _buildFilterCategoryItem(context),
-          _buildFilterProcessItem(context),
-          _buildRequirementOrderItem(context),
-          _buildRequirementOrderItem(context),
-          _buildRequirementOrderItem(context),
-        ],
-      ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(B2BIcons.search,size: 20,),
+              onPressed: () =>
+                  showSearch(
+                      context: context, delegate: RequirementPoolSearch()),
+            ),
+          ],
+          bottom: _buildFilterBar(context),
+        ),
+        body:Container(
+            child: ListView(
+              children: <Widget>[
+                _buildFilterCategoryItem(context),
+                _buildFilterProcessItem(context),
+                _buildBody(context),
+              ],
+            )
+        )
     );
   }
 
+  Widget _buildBody(BuildContext context) {
+    return Container(
+        child: Column(
+          children: orders.map((item) =>
+              _buildRequirementOrderItem(context, item))
+              .toList(),
+        )
+    );
+  }
 
-  Widget _buildRequirementOrderItem(BuildContext context){
+  Widget _buildRequirementOrderItem(BuildContext context,RequirementOrderModel model){
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 15),
@@ -62,8 +357,8 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
           children: <Widget>[
             Container(
               margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-              width: 100,
-              height: 100,
+              width: 90,
+              height: 90,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
@@ -74,13 +369,13 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
             Expanded(
               flex: 1,
               child: Container(
-                height: 100,
+                height: 90,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(bottom: 5),
+                        padding: EdgeInsets.only(bottom: 5),
                         child: Row(
                           children: <Widget>[
                             Expanded(
@@ -88,7 +383,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                                 children: <Widget>[
                                   Container(
                                     child: Text(
-                                      '男装-羽绒服',
+                                      '${model.details.category.name}',
                                       style: TextStyle(
                                         fontSize: 18,
                                       ),
@@ -97,11 +392,11 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                                   Container(
                                     margin: EdgeInsets.only(left: 20),
                                     child: Text(
-                                        '500件',
+                                      '${model.totalQuotesCount}件',
                                       style: TextStyle(
-                                        fontSize: 18,
-                                        color: Color(0xffFF9516),
-                                        fontWeight: FontWeight.w500
+                                          fontSize: 18,
+                                          color: Color(0xffFF9516),
+                                          fontWeight: FontWeight.w500
                                       ),
                                     ),
                                   ),
@@ -109,27 +404,27 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(right: 5),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    '￥',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.w500
+                                margin: EdgeInsets.only(right: 5),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      '￥',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.w500
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    '500',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.w500
+                                    Text(
+                                      '${model.details.maxExpectedPrice}',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.w500
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
+                                  ],
+                                )
                             )
                           ],
                         )
@@ -139,7 +434,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              '交货日期： 2019-01-01',
+                              '交货日期： '+DateFormatUtil.formatYMD(model.details.expectedDeliveryDate),
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.black45,
@@ -151,7 +446,12 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                             height: 30,
                             width: 80,
                             child: FlatButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => RequirementQuoteOrderFrom(model: model,)),
+                                );
+                              },
                               color: Colors.orange,
                               child: Text(
                                 '去报价',
@@ -173,7 +473,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                           height: 25,
                           child: CircleAvatar(
                             backgroundImage: NetworkImage(
-                                'http://www.pptbz.com/pptpic/UploadFiles_6909/201203/2012031220134655.jpg'
+                                '${model.belongTo.profilePicture}'
                             ),
                             radius: 50.0,
                           ),
@@ -181,10 +481,10 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                         Container(
                           margin: EdgeInsets.only(left: 5),
                           child: Text(
-                            '森马服装',
+                            '${model.belongTo.brand}',
                             style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -349,87 +649,87 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
 
   Widget _buildFilterBar(BuildContext context) {
     return PreferredSize(
-        preferredSize: Size(35, 40),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-                child: Container(
-                  height: 30,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      Container(
-                        width: 118,
-                        child: FlatButton(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  '最新发布',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.black),
-                                ),
-                                Icon(_isSort==true?Icons.keyboard_arrow_up:Icons.keyboard_arrow_down)
-                              ],
+      preferredSize: Size(35, 40),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+              child: Container(
+                height: 30,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    Container(
+                      width: 118,
+                      child: FlatButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              '最新发布',
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.black),
                             ),
-                          onPressed: (){
-                            setState(() {
-                              _isSort = !_isSort;
-                            });
-                          },
+                            Icon(_isSort==true?Icons.keyboard_arrow_up:Icons.keyboard_arrow_down)
+                          ],
                         ),
+                        onPressed: (){
+                          setState(() {
+                            _isSort = !_isSort;
+                          });
+                        },
                       ),
-                      Container(
-                        width: 118,
-                        child: FlatButton(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  '加工方式',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.black),
-                                ),
-                              ],
+                    ),
+                    Container(
+                      width: 118,
+                      child: FlatButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              '加工方式',
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.black),
                             ),
-                          onPressed: (){
-                            setState(() {
-                              _isShowProcessItem = !_isShowProcessItem;
-                              _isShowCategoryItem = true;
-                            });
-                          },
+                          ],
                         ),
+                        onPressed: (){
+                          setState(() {
+                            _isShowProcessItem = !_isShowProcessItem;
+                            _isShowCategoryItem = true;
+                          });
+                        },
                       ),
-                      Container(
-                        width: 118,
-                        child: FlatButton(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  '商品大类',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.black),
-                                ),
-                              ],
+                    ),
+                    Container(
+                      width: 118,
+                      child: FlatButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              '商品大类',
+                              style: TextStyle(
+                                  fontSize: 15, color: Colors.black),
                             ),
-                          onPressed: (){
-                            setState(() {
-                              _isShowProcessItem = true;
-                              _isShowCategoryItem = !_isShowCategoryItem;
-                            });
-                          },
+                          ],
                         ),
+                        onPressed: (){
+                          setState(() {
+                            _isShowProcessItem = true;
+                            _isShowCategoryItem = !_isShowCategoryItem;
+                          });
+                        },
                       ),
-                    ],
-                  ),
-                )),
-            IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {},
-            ),
-          ],
-        ),
+                    ),
+                  ],
+                ),
+              )),
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {},
+          ),
+        ],
+      ),
     );
   }
 

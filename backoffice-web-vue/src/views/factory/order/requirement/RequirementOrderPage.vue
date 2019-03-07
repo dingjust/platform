@@ -8,20 +8,18 @@
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
         </el-button-group>
-        <el-popover placement="right" width="600" trigger="click">
+        <el-popover placement="bottom" width="800" trigger="click">
           <el-row :gutter="10">
-            <el-col :span="12">
+            <el-col :span="6">
               <el-form-item label="订单编号">
                 <el-input v-model="queryFormData.code"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="6">
               <el-form-item label="供应商商品编号">
                 <el-input v-model="queryFormData.skuID"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row :gutter="10">
             <el-col :span="12">
               <el-form-item label="状态">
                 <el-select v-model="queryFormData.statuses" placeholder="请选择"
@@ -31,21 +29,6 @@
                     :key="item.value"
                     :label="item.text"
                     :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="商家">
-                <el-select class="w-100" filterable remote reserve-keyword clearable
-                           placeholder="请输入商家名称查询"
-                           v-model="queryFormData.belongTos"
-                           :remote-method="onFilterCompanies"
-                           multiple>
-                  <el-option v-for="item in companies"
-                             :key="item.uid"
-                             :label="item.name"
-                             :value="item.uid">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -103,51 +86,66 @@
           <el-button type="primary" slot="reference">高级查询</el-button>
         </el-popover>
       </el-form>
-      <el-table ref="resultTable" stripe
-                :data="page.content"
-                @filter-change="handleFilterChange"
+      <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange"
                 v-if="isHeightComputed" :height="autoHeight">
-        <el-table-column label="订单编号" prop="code" width="250" fixed>
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <requirement-order-form :read-only="true" :slot-data="props.row"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="需求编号" prop="code" width="250">
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="订单状态" prop="status" :column-key="'status'"
-                         :filters="statuses" fixed>
+        <el-table-column label="需求状态" prop="status" :column-key="'status'"
+                         :filters="statuses">
           <template slot-scope="scope">
             <el-tag
               :type="scope.row.status === 'COMPLETED' ? 'success' : ''"
-              disable-transitions>{{scope.row.status|enumTranslate('OrderStatus')}}
+              disable-transitions>{{getEnum('requirementOrderStatuses', scope.row.status)}}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="创建用户" prop="user">
+        <el-table-column label="发布品牌" prop="user">
+          <template slot-scope="scope">
+            <span>{{scope.row.belongTo.name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="发布人" prop="user">
           <template slot-scope="scope">
             <span>{{scope.row.user.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createdTs">
+        <el-table-column label="发布时间" prop="createdTs">
           <template slot-scope="scope">
             <span>{{scope.row.creationtime | formatDate}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="商家" prop="belongTo.name"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">
-              明细
+            <!--<el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">
+               明细
+             </el-button>-->
+            <el-button type="text" icon="el-icon-edit" :disabled="!isPendingQuote(scope.row)"
+                       @click="onQuoting(scope.row)">
+              报价
             </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                     @size-change="onPageSizeChanged"
-                     @current-change="onCurrentPageChanged"
-                     :current-page="page.number + 1"
-                     :page-size="page.size"
-                     :page-count="page.totalPages"
-                     :total="page.totalElements">
-      </el-pagination>
+      <div class="pt-2"></div>
+      <div class="float-right">
+        <el-pagination layout="total, sizes, prev, pager, next, jumper"
+                       @size-change="onPageSizeChanged"
+                       @current-change="onCurrentPageChanged"
+                       :current-page="page.number + 1"
+                       :page-size="page.size"
+                       :page-count="page.totalPages"
+                       :total="page.totalElements">
+        </el-pagination>
+      </div>
+      <div class="clearfix"></div>
     </el-card>
   </div>
 </template>
@@ -155,25 +153,34 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('FactoryRequirementOrdersModule');
 
   import autoHeight from 'mixins/autoHeight';
 
+  import RequirementOrderForm from './RequirementOrderForm';
   import RequirementOrderDetailsPage from './RequirementOrderDetailsPage'
 
   export default {
     name: 'RequirementOrderPage',
     mixins: [autoHeight],
+    components: {RequirementOrderForm},
     computed: {
       ...mapGetters({
         page: 'page'
-      })
+      }),
     },
     methods: {
       ...mapActions({
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
+      async onQuoting(row) {
+        console.log('报价: ' + row.code);
+        // TODO: 转到报价页面
+      },
+      isPendingQuote: function (row) {
+        return row.status === 'PENDING_QUOTE';
+      },
       handleFilterChange(val) {
         this.statuses = val.status;
         this.onSearch();
@@ -183,7 +190,6 @@
         //   return row.status === value;
       },
       onSearch() {
-        this.advancedSearch = false;
         this._onSearch(0);
       },
       onAdvancedSearch() {
@@ -228,34 +234,19 @@
           this._onSearch(0, val);
         }
       },
-      onFilterCompanies(query) {
-        this.companies = [];
-        if (query && query !== '') {
-          setTimeout(() => {
-            this.getCompanies(query);
-          }, 200);
-        }
-      },
-      async getCompanies(keyword) {
-        this.companies = await this.$http.get('/b2b/brand', {
-          text: keyword.trim()
-        });
-      },
     },
     data() {
       return {
-        text: this.$store.state.RequirementOrdersModule.keyword,
-        statuses: this.$store.state.RequirementOrdersModule.statuses,
-        formData: this.$store.state.RequirementOrdersModule.formData,
-        queryFormData: this.$store.state.RequirementOrdersModule.queryFormData,
-        statusOptions: this.$store.state.RequirementOrdersModule.statusOptions,
+        text: this.$store.state.FactoryRequirementOrdersModule.keyword,
+        statuses: this.$store.state.FactoryRequirementOrdersModule.statuses,
+        formData: this.$store.state.FactoryRequirementOrdersModule.formData,
+        queryFormData: this.$store.state.FactoryRequirementOrdersModule.queryFormData,
+        statusOptions: this.$store.state.FactoryRequirementOrdersModule.statusOptions,
         advancedSearch: false,
-        companies: [],
       };
     },
     created() {
       this.onSearch();
-      this.getCompanies('');
     }
   };
 </script>

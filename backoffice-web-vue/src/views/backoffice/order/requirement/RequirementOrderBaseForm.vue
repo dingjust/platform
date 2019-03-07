@@ -42,8 +42,8 @@
         }
       },
       async getCompanies(query) {
-        const result = await this.$http.get('/djbrand/brand', {
-          text: query.trim()
+        const result = await this.$http.get('/b2b/brands/approved', {
+          keyword: query.trim()
         });
 
         if (result["errors"]) {

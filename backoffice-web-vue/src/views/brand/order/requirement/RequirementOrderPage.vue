@@ -99,7 +99,7 @@
           <template slot-scope="scope">
             <el-tag
               :type="scope.row.status === 'COMPLETED' ? 'success' : ''"
-              disable-transitions>{{scope.row.status|enumTranslate('OrderStatus')}}
+              disable-transitions>{{getEnum('requirementOrderStatuses', scope.row.status)}}
             </el-tag>
           </template>
         </el-table-column>

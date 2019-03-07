@@ -8,8 +8,8 @@ const URL = 'https://raw.githubusercontent.com/flutter/website/master/src/_inclu
 
 class MyApp extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
-    MediaModel(URL),
-    MediaModel(URL),
+    MediaModel(url:URL),
+    MediaModel(url:URL),
   ];
 
   // This widget is the root of your application.

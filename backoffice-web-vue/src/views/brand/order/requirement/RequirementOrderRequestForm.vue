@@ -12,7 +12,7 @@
           :on-success="onSuccess"
           :headers="headers"
           :file-list="slotData.details.pictures"
-          :on-preview="handlePictureCardPreview"
+          :on-preview="handlePreview"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -183,7 +183,7 @@
 
         this.$message.success("删除成功");
       },
-      handlePictureCardPreview(file) {
+      handlePreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       }

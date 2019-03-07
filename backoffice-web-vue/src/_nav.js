@@ -97,7 +97,7 @@ export default {
         },
         {
           name: '需求订单',
-          url: '/backoffice/order/request',
+          url: '/backoffice/order/requirement',
           icon: 'iconNone'
         },
         {
