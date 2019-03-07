@@ -20,14 +20,24 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>需求信息</span>
-        <span class="float-right" v-show="!readOnly">
+        <span class="float-right" v-show="!isNewlyCreated">
            <el-button type="primary" size="mini" @click="onUpdateRequest">编辑</el-button>
         </span>
       </div>
       <requirement-order-request-form ref="requestForm"
                                       :slot-data="slotData"
-                                      :read-only="true">
+                                      :read-only="!isNewlyCreated">
       </requirement-order-request-form>
+    </el-card>
+    <div class="pt-2"></div>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>附件</span>
+      </div>
+      <requirement-order-attachments-form ref="attachmentsForm"
+                                          :slot-data="slotData"
+                                          :read-only="!isNewlyCreated">
+      </requirement-order-attachments-form>
     </el-card>
     <div class="pt-2"></div>
     <div v-show="isPendingApproval" class="pt-2"></div>
@@ -64,15 +74,17 @@
 <script>
   import RequirementOrderBaseForm from './RequirementOrderBaseForm';
   import RequirementOrderRequestForm from './RequirementOrderRequestForm';
+  import RequirementOrderAttachmentsForm from './RequirementOrderAttachmentsForm';
   import RequirementOrderStatusBar from './RequirementOrderStatusBar';
 
   export default {
     name: 'RequirementOrderDetailsPage',
-    props: ['slotData', 'readOnly', 'preview'],
+    props: ['slotData'],
     components: {
       RequirementOrderStatusBar,
-      RequirementOrderRequestForm,
       RequirementOrderBaseForm,
+      RequirementOrderRequestForm,
+      RequirementOrderAttachmentsForm,
     },
     methods: {
       onConfirmRequirementAudit() {
@@ -141,6 +153,9 @@
       },
     },
     computed: {
+      isNewlyCreated: function () {
+        return this.slotData.id === null;
+      },
       isPendingApproval: function () {
         return this.slotData.status === 'PENDING_APPROVAL';
       }
