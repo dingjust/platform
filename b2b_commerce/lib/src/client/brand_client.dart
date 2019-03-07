@@ -6,15 +6,13 @@ import 'package:b2b_commerce/src/my/index.dart';
 import 'package:b2b_commerce/src/production/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'package:widgets/widgets.dart';
 
 class BrandClient extends StatefulWidget {
   BrandClient({Key key}) : super(key: key);
 
-    final List<Widget> modules = <Widget>[
+  final List<Widget> modules = <Widget>[
     HomePage(),
     ProductionPage(),
     BusinessHomePage(),
@@ -87,7 +85,6 @@ class _BrandClientState extends State<BrandClient> {
   }
 }
 
-
 class BottomNavigation extends StatelessWidget {
   BottomNavigation({Key key, this.currentIndex: 0, @required this.onChanged})
       : super(key: key);
@@ -101,13 +98,24 @@ class BottomNavigation extends StatelessWidget {
       title: const Text('首页'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(B2BIcons.production),
-      title: const Text('生产'),
+      icon: Container(
+        margin: EdgeInsets.only(right: 35),
+        child: const Icon(B2BIcons.production),
+      ),
+      title: Container(
+        margin: EdgeInsets.only(right: 40),
+        child: const Text('生产'),
+      ),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(B2BIcons.business),
-      title: const Text('生意'),
-    ),
+        icon: Container(
+          margin: EdgeInsets.only(left: 35),
+          child: const Icon(B2BIcons.business),
+        ),
+        title: Container(
+          margin: EdgeInsets.only(left: 40),
+          child: const Text('生意'),
+        )),
     BottomNavigationBarItem(
       icon: const Icon(B2BIcons.my),
       title: const Text('我的'),

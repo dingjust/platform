@@ -5,6 +5,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/api/user.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/net/http_utils.dart';
 import 'package:services/src/user/bloc/login.dart';
@@ -34,9 +35,9 @@ class UserBLoC extends BLoCBase {
     return _user;
   }
 
-  bool get isBrandUser => _user.userType == UserType.BRAND;
+  bool get isBrandUser => _user.type == UserType.BRAND;
 
-  bool get isFactoryUser => _user.userType == UserType.FACTORY;
+  bool get isFactoryUser => _user.type == UserType.FACTORY;
 
   bool get isAnonymousUser => !isBrandUser && !isFactoryUser;
 
@@ -51,9 +52,9 @@ class UserBLoC extends BLoCBase {
 
   Future<bool> login({String username, String password, bool remember}) async {
     // // TODO: call login service
-    Response loginRequest;
+    Response loginResponse;
     try {
-      loginRequest = await http$
+      loginResponse = await http$
           .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
         'username': username,
         'password': password,
@@ -67,17 +68,27 @@ class UserBLoC extends BLoCBase {
       _loginResultController.sink.add(e);
     }
 
-    if (loginRequest != null && loginRequest.statusCode == 200) {
-      LoginResponse _response = LoginResponse.fromJson(loginRequest.data);
+    if (loginResponse != null && loginResponse.statusCode == 200) {
+      LoginResponse _response = LoginResponse.fromJson(loginResponse.data);
 
-      // TODO: GET USER INFO
-      // http$.get('');
-      print(_response);
-      _user.name = '衣加衣管理员';
-      _user.uid = 'nbyjy';
+      // 记录http token 信息
+      http$.updateAuthorization(_response.accessToken);
 
-      /// 品牌用户
-      _user.userType = UserType.BRAND;
+      // 获取用户信息
+      Response infoResponse;
+      try {
+        infoResponse = await http$.get(UserApis.userInfo);
+      } on DioError catch (e) {
+        print(e);
+      }
+
+      if (infoResponse.statusCode == 200) {
+        _user = UserModel.fromJson(infoResponse.data);
+        _user.name = infoResponse.data['username'];
+      }
+
+      _user.type = UserType.BRAND;
+
       //  记录登陆用户信息
       if (remember) {
         LocalStorage.save(
@@ -108,7 +119,7 @@ class UserBLoC extends BLoCBase {
           json.decode(jsonStr) as Map<String, dynamic>;
       print(jsonStr);
       UserModel localUser = UserModel.fromJson(userJson);
-      _user.userType = localUser.userType;
+      _user.type = localUser.type;
       _user.name = localUser.name;
     }
   }
