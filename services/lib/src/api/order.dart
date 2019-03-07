@@ -3,9 +3,6 @@ class OrderApis {
   // ========需求=========
 
   /// 根据条件获取需求订单列表 POST
-  // static get requirementOrders => (page, size) {
-  //       return '/{baseSiteId}/b2b/orders/requirement?page=$page&size=$size';
-  //     };
   static get requirementOrders => '/{baseSiteId}/b2b/orders/requirement';
 
   /// 急速发布需求/发布需求 POST

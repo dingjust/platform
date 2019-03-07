@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -206,10 +207,20 @@ class RequirementOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => RequirementOrderDetailPage(order: order)));
+      onTap: () async {
+        //更具code查询明细
+        RequirementOrderModel detailModel;
+
+        Response<Map<String, dynamic>> response =
+            await http$.get(OrderApis.requirementOrderDetail(order.code));
+
+        if (response.statusCode == 200) {
+          RequirementOrderModel detailModel =
+              RequirementOrderModel.fromJson(response.data);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  RequirementOrderDetailPage(order: detailModel)));
+        }
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -292,7 +303,8 @@ class RequirementOrderItem extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               image: DecorationImage(
-                image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
+                image: NetworkImage(
+                    '${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
                 fit: BoxFit.cover,
               )),
         );

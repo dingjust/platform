@@ -108,10 +108,12 @@ class _RequirementOrderDetailPageState
 
   Widget _buildMain() {
     String addressStr = "";
-    widget.order.details.productiveOrientations.forEach((str) {
-      addressStr = "${addressStr} ${str}";
-    });
 
+    if (widget.order.details.productiveOrientations != null) {
+      widget.order.details.productiveOrientations.forEach((str) {
+        addressStr = "${addressStr} ${str}";
+      });
+    }
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
@@ -157,7 +159,7 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '是否需要打样',
             value: Text(
-              widget.order.details.proofingNeeded ? '是' : '否',
+              widget.order.details.proofingNeeded ?? true ? '是' : '否',
               style: TextStyle(fontSize: 16),
             ),
           ),
@@ -356,7 +358,7 @@ class _RequirementOrderDetailPageState
             ),
           ),
           Row(
-            children: <Widget>[Text(widget.order.remarks)],
+            children: <Widget>[Text(widget.order.remarks??'')],
           )
         ],
       ),

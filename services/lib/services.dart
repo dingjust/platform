@@ -1,6 +1,9 @@
 library app_services;
 
 export 'src/api/apis.dart';
+export 'src/api/order.dart';
+export 'src/api/product.dart';
+export 'src/api/user.dart';
 export 'src/home/factory/bloc/quick_reaction_factory_bloc.dart';
 export 'src/home/product/bloc/order_product_bloc.dart';
 export 'src/my/bloc/my_bill_bloc.dart';
