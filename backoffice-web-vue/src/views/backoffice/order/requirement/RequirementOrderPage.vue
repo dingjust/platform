@@ -117,7 +117,7 @@
           <template slot-scope="scope">
             <el-tag
               :type="scope.row.status === 'COMPLETED' ? 'success' : ''"
-              disable-transitions>{{scope.row.status|enumTranslate('OrderStatus')}}
+              disable-transitions>{{getEnum('requirementOrderStatuses', scope.row.status)}}
             </el-tag>
           </template>
         </el-table-column>
@@ -237,8 +237,8 @@
         }
       },
       async getCompanies(keyword) {
-        this.companies = await this.$http.get('/b2b/brand', {
-          text: keyword.trim()
+        this.companies = await this.$http.get('/b2b/brands/approved', {
+          keyword: keyword.trim()
         });
       },
     },

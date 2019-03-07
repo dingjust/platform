@@ -12,8 +12,18 @@ part 'user.g.dart';
 @JsonSerializable()
 class UserModel extends PrincipalModel {
   bool loginDisabled;
-  UserType userType;
+
+  /// 用户类型
+  UserType type;
+
+  /// 角色
   List<RoleModel> roles;
+
+  /// 公司id
+  String companyCode;
+
+  /// 公司名称
+  String companyName;
 
   Image get avatar => profilePicture ?? Image.network(profilePicture);
 
@@ -22,7 +32,7 @@ class UserModel extends PrincipalModel {
     String uid,
     String name,
     this.loginDisabled,
-    this.userType,
+    this.type,
     this.roles,
   }) : super(
           profilePicture: profilePicture,
@@ -35,7 +45,7 @@ class UserModel extends PrincipalModel {
     this.uid = "anonymous";
     this.name = "未登录用户";
     this.loginDisabled = false;
-    this.userType = UserType.ANONYMOUS;
+    this.type = UserType.ANONYMOUS;
   }
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

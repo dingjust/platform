@@ -98,7 +98,7 @@ class MyHomePage extends StatelessWidget {
                   initialData: bloc.currentUser,
                   builder: (BuildContext context,
                       AsyncSnapshot<UserModel> snapshot) {
-                    debugPrint('${snapshot.data.userType}');
+                    debugPrint('${snapshot.data.type}');
                     return Container(
                       child: Column(
                         children: <Widget>[
@@ -176,7 +176,7 @@ class MyHomePage extends StatelessWidget {
               children: <Widget>[
                 Container(
                     child: Text(
-                  "欧阳娜娜",
+                  "${UserBLoC.instance.currentUser.name}",
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -203,7 +203,7 @@ class MyHomePage extends StatelessWidget {
           Container(
             width: 210,
             child: Text(
-              '定制加（深圳）科技有限公司',
+              '${UserBLoC.instance.currentUser.companyName}',
               style: TextStyle(fontSize: 16, color: Colors.white),
             ),
           )

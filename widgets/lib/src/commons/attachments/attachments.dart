@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -564,82 +565,70 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    child: Text(
-                      '上传中',
-                      style: TextStyle(fontSize: 12),
+            StreamBuilder<double>(
+                stream: _streamController.stream,
+                initialData: 0.0,
+                builder:
+                    (BuildContext context, AsyncSnapshot<double> snapshot) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: Text(
+                            '上传中',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        Center(
+                          child: LinearProgressIndicator(
+                            value: snapshot.data,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('进度:', style: TextStyle(fontSize: 12)),
+                            Text('${((snapshot.data / 1) * 100).round()}%',
+                                style: TextStyle(fontSize: 12))
+                          ],
+                        )
+                      ],
                     ),
-                  ),
-                  Center(
-                    child: LinearProgressIndicator(),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('进度:', style: TextStyle(fontSize: 12)),
-                      Text('100%', style: TextStyle(fontSize: 12))
-                    ],
-                  )
-                ],
-              ),
-            )
+                  );
+                })
           ],
         );
       },
     );
 
     // /// TODO: 调用上传接口,更新上传进度条
-    // Future.delayed(const Duration(seconds: 2), () {
-    //   Navigator.pop(context);
-    //   Navigator.pop(context);
-    //   setState(() {
-    //     ///  TODO:用上传图片回调的URL更新图片列表
-    //     widget.list.add(MediaModel.fromJson({
-    //       'url':
-    //           'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-    //       'mediaType': 'webp'
-    //     }));
-    //   });
-    // });
-
-    // BaseOptions options = BaseOptions(headers: {
-    //   'Authorization': 'Bearer 7cfeebfb-3a13-4da3-aac9-86f0c07fbea8',
-    //   'Content-Type': 'multipart/form-data'
-    // });
-    // var dio = Dio(options);
-    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-    //     (client) {
-    //   HttpClient httpClient = new HttpClient()
-    //     ..badCertificateCallback =
-    //         ((X509Certificate cert, String host, int port) => true);
-    //   httpClient.idleTimeout = Duration(seconds: 0);
-
-    //   return httpClient;
-    // };
-
     try {
-      FormData formData = FormData.from({
-        "file": UploadFileInfo(file, "file"),
-      });
-      // HttpManager.instance.options.headers['Content-Type']='multipart/form-data';
-      // print(HttpManager.instance.options.headers['Authorization']);
-
-      Response response = await HttpManager.instance.post(
-        "https://47.106.112.137:9002/djwebservices/v2/apparel-zh/media/file/upload?conversionGroup=DefaultProductConversionGroup",
+      FormData formData = FormData.from({"file": UploadFileInfo(file, "file")});
+      Response<Map<String, dynamic>> response = await http$.post(
+        Apis.upload(),
         data: formData,
-        options: Options(headers: {'Content-Type': 'multipart/form-data'}),
+        queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
+        options: Options(
+          headers: {'Content-Type': 'multipart/form-data'},
+        ),
         onSendProgress: (int sent, int total) {
-          print("$sent $total");
+          _streamController.sink.add(sent / total);
         },
       );
-      print(response);
+
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      //写入具体url
+      String baseUrl = response.data['url'];
+      String url = '${GlobalConfigs.IMAGE_BASIC_URL}$baseUrl';
+      response.data['url'] = url;
+      setState(() {
+        ///  TODO:用上传图片回调的URL更新图片列表
+        widget.list.add(MediaModel.fromJson(response.data));
+      });
     } catch (e) {
-      // DioError error = e as DioError;
       print(e);
     }
   }
@@ -657,12 +646,23 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
           actions: <Widget>[
             FlatButton(
               child: Text('确认'),
-              onPressed: () {
+              onPressed: () async {
                 //TODO :调用删除接口
-                setState(() {
-                  widget.list.remove(mediaModel);
-                });
-                Navigator.pop(context);
+                try {
+                  Response response = await http$.delete(
+                    Apis.mediaDelete(mediaModel.id),
+                  );
+                  if (response.statusCode == 200) {
+                    setState(() {
+                      widget.list.remove(mediaModel);
+                    });
+                    Navigator.pop(context);
+                  } else {
+                    print('删除失败');
+                  }
+                } catch (e) {
+                  print(e);
+                }
               },
             ),
             FlatButton(

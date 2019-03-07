@@ -6,7 +6,6 @@ import 'package:b2b_commerce/src/production/production_earnest_money.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 class ProductionOfflineOrder extends StatefulWidget {
 

@@ -7,7 +7,6 @@
         </el-form-item>
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-          <el-button type="primary" icon="el-icon-plus" @click="onNew">发布需求</el-button>
         </el-button-group>
         <el-popover placement="bottom" width="800" trigger="click">
           <el-row :gutter="10">
@@ -89,12 +88,17 @@
       </el-form>
       <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange"
                 v-if="isHeightComputed" :height="autoHeight">
-        <el-table-column label="订单编号" prop="code" width="250">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <requirement-order-form :read-only="true" :slot-data="props.row"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="需求编号" prop="code" width="250">
           <template slot-scope="scope">
             <span>{{scope.row.code}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="订单状态" prop="status" :column-key="'status'"
+        <el-table-column label="需求状态" prop="status" :column-key="'status'"
                          :filters="statuses">
           <template slot-scope="scope">
             <el-tag
@@ -103,20 +107,29 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="创建用户" prop="user">
+        <el-table-column label="发布品牌" prop="user">
+          <template slot-scope="scope">
+            <span>{{scope.row.belongTo.name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="发布人" prop="user">
           <template slot-scope="scope">
             <span>{{scope.row.user.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createdTs">
+        <el-table-column label="发布时间" prop="createdTs">
           <template slot-scope="scope">
             <span>{{scope.row.creationtime | formatDate}}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">
-              明细
+            <!--<el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">
+               明细
+             </el-button>-->
+            <el-button type="text" icon="el-icon-edit" :disabled="!isPendingQuote(scope.row)"
+                       @click="onQuoting(scope.row)">
+              报价
             </el-button>
           </template>
         </el-table-column>
@@ -140,7 +153,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandRequirementOrdersModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('FactoryRequirementOrdersModule');
 
   import autoHeight from 'mixins/autoHeight';
 
@@ -150,16 +163,24 @@
   export default {
     name: 'RequirementOrderPage',
     mixins: [autoHeight],
+    components: {RequirementOrderForm},
     computed: {
       ...mapGetters({
         page: 'page'
-      })
+      }),
     },
     methods: {
       ...mapActions({
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
+      async onQuoting(row) {
+        console.log('报价: ' + row.code);
+        // TODO: 转到报价页面
+      },
+      isPendingQuote: function (row) {
+        return row.status === 'PENDING_QUOTE';
+      },
       handleFilterChange(val) {
         this.statuses = val.status;
         this.onSearch();
@@ -198,9 +219,6 @@
 
         this.fn.openSlider('需求订单：' + item.code, RequirementOrderDetailsPage, result);
       },
-      onNew() {
-        this.fn.openSlider('发布需求', RequirementOrderForm, this.formData);
-      },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
           this._onAdvancedSearch(val - 1);
@@ -219,11 +237,11 @@
     },
     data() {
       return {
-        text: this.$store.state.BrandRequirementOrdersModule.keyword,
-        statuses: this.$store.state.BrandRequirementOrdersModule.statuses,
-        formData: this.$store.state.BrandRequirementOrdersModule.formData,
-        queryFormData: this.$store.state.BrandRequirementOrdersModule.queryFormData,
-        statusOptions: this.$store.state.BrandRequirementOrdersModule.statusOptions,
+        text: this.$store.state.FactoryRequirementOrdersModule.keyword,
+        statuses: this.$store.state.FactoryRequirementOrdersModule.statuses,
+        formData: this.$store.state.FactoryRequirementOrdersModule.formData,
+        queryFormData: this.$store.state.FactoryRequirementOrdersModule.queryFormData,
+        statusOptions: this.$store.state.FactoryRequirementOrdersModule.statusOptions,
         advancedSearch: false,
       };
     },

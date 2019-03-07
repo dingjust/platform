@@ -200,16 +200,20 @@ class RequirementOrderItem extends StatelessWidget {
   static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
     RequirementOrderStatus.PENDING_QUOTE: Colors.green,
     RequirementOrderStatus.COMPLETED: Colors.orange,
-    RequirementOrderStatus.CANCELLED: Colors.red
+    RequirementOrderStatus.CANCELLED: Colors.red,
   };
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => RequirementOrderDetailPage(order: order)));
+      onTap: () async {
+        //根据code查询明
+        RequirementOrderModel model = await RequirementOrderBLoC.instance
+            .getRequirementOrderDetail(order.code);
+        if (model != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => RequirementOrderDetailPage(order: model)));
+        }
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -292,7 +296,8 @@ class RequirementOrderItem extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               image: DecorationImage(
-                image: NetworkImage(order.details.pictures[0].url),
+                image: NetworkImage(
+                    '${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
                 fit: BoxFit.cover,
               )),
         );

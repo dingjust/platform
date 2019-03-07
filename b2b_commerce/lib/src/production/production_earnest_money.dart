@@ -2,7 +2,6 @@ import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 class ProductionEarnestMoney extends StatefulWidget {
   final ApparelProductModel product;

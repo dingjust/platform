@@ -6,34 +6,25 @@
       </div>
       <requirement-order-request-form ref="requestForm"
                                       :slot-data="slotData"
-                                      :read-only="false">
+                                      :read-only="readOnly">
       </requirement-order-request-form>
     </el-card>
     <div class="pt-2"></div>
-    <el-card class="box-card">
+    <el-card class="box-card" v-show="slotData.attachments.length">
       <div slot="header" class="clearfix">
         <span>附件</span>
       </div>
       <requirement-order-attachments-form :slot-data="slotData"
-                                          :read-only="false">
+                                          :read-only="readOnly">
       </requirement-order-attachments-form>
     </el-card>
-    <div class="pt-2"></div>
-    <el-row :gutter="10">
-      <el-col :span="12">
-        <el-button class="btn-block" size="mini" type="primary" @click="onSubmit()">提交</el-button>
-      </el-col>
-      <el-col :span="12">
-        <el-button class="btn-block" size="mini" @click="onCancel">取消</el-button>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapActions} = createNamespacedHelpers('BrandRequirementOrdersModule');
+  const {mapActions} = createNamespacedHelpers('FactoryRequirementOrdersModule');
 
   import RequirementOrderRequestForm from './RequirementOrderRequestForm';
   import RequirementOrderAttachmentsForm from './RequirementOrderAttachmentsForm';
@@ -49,7 +40,7 @@
       RequirementOrderDetailsPage
     },
     mixins: [OrderMixin],
-    props: ['slotData'],
+    props: ['slotData', 'readOnly'],
     methods: {
       ...mapActions({
         refresh: 'refresh'

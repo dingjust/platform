@@ -67,7 +67,12 @@ Vue.mixin({
       }
 
       return "未知错误";
-    }
+    },
+    // 枚举类型
+    getEnum(enumsName, code) {
+      const result = this.$store.state.EnumsModule[enumsName].find(e => e.code === code);
+      return result ? result['name'] : 'UNKNOWN';
+    },
   }
 });
 /* eslint-disable no-new */

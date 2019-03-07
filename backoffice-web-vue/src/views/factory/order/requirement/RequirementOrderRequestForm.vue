@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-row :gutter="10">
+    <el-row :gutter="10" v-show="slotData.details.pictures.length">
       <el-col :span="24">
         <el-upload
           name="file"
