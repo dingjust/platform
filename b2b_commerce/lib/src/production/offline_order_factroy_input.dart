@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/production/production_offline_order.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 

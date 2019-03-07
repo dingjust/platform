@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/home/pool/search/requirement_pool_search.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementPoolRecommend extends StatefulWidget {

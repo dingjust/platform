@@ -87,7 +87,7 @@ class UserBLoC extends BLoCBase {
         _user.name = infoResponse.data['username'];
       }
 
-      _user.type = UserType.BRAND;
+      // _user.type = UserType.BRAND;
 
       //  记录登陆用户信息
       if (remember) {
@@ -117,10 +117,13 @@ class UserBLoC extends BLoCBase {
     if (jsonStr != null && jsonStr.isNotEmpty) {
       Map<String, dynamic> userJson =
           json.decode(jsonStr) as Map<String, dynamic>;
-      print(jsonStr);
       UserModel localUser = UserModel.fromJson(userJson);
       _user.type = localUser.type;
       _user.name = localUser.name;
+      _user.companyCode=localUser.companyCode;
+      _user.companyName=localUser.companyName;
+      _user.profilePicture=localUser.profilePicture;
+      _user.phone=localUser.phone;
     }
   }
 
