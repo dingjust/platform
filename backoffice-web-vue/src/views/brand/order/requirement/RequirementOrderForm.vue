@@ -79,6 +79,7 @@
 
         this.$message.success('发布需求成功，订单编号： ' + result);
         this.$set(this.slotData, 'code', result);
+        this.refresh();
         this.fn.closeSlider(true);
       }
     },
