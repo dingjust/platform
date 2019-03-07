@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:core/core.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -208,18 +207,12 @@ class RequirementOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        //更具code查询明细
-        RequirementOrderModel detailModel;
-
-        Response<Map<String, dynamic>> response =
-            await http$.get(OrderApis.requirementOrderDetail(order.code));
-
-        if (response.statusCode == 200) {
-          RequirementOrderModel detailModel =
-              RequirementOrderModel.fromJson(response.data);
+        //根据code查询明
+        RequirementOrderModel model = await RequirementOrderBLoC.instance
+            .getRequirementOrderDetail(order.code);
+        if (model != null) {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  RequirementOrderDetailPage(order: detailModel)));
+              builder: (context) => RequirementOrderDetailPage(order: model)));
         }
       },
       child: Container(

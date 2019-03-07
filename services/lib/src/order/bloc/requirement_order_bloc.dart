@@ -101,11 +101,23 @@ class RequirementOrderBLoC extends BLoCBase {
     _controller.sink.add(_ordersMap[status].data);
   }
 
+  Future<RequirementOrderModel> getRequirementOrderDetail(String code) async {
+    Response<Map<String, dynamic>> response =
+        await http$.get(OrderApis.requirementOrderDetail(code));
+
+    if (response.statusCode == 200) {
+      RequirementOrderModel model =
+          RequirementOrderModel.fromJson(response.data);
+      return model;
+    } else
+      return null;
+  }
+
   //下拉刷新
-  Future refreshData(String status) async {
+  refreshData(String status) async {
     //重置信息
     _ordersMap[status].data.clear();
-    _ordersMap[status].currentPage=0;
+    _ordersMap[status].currentPage = 0;
     //  分页拿数据，response.data;
     //请求参数
     Map data = {};

@@ -96,7 +96,7 @@ class _RequirementOrderDetailPageState
                 flex: 1,
               ),
               Text(
-                '已报价 6',
+                '已报价 ${widget.order.totalQuotesCount}',
                 style: TextStyle(fontSize: 15, color: Colors.red),
               )
             ],
@@ -123,15 +123,6 @@ class _RequirementOrderDetailPageState
           Column(children: [
             _buildEntries(),
           ]),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Text(
-                '共${widget.order.details.expectedMachiningQuantity}件商品',
-                style: TextStyle(color: Colors.red, fontSize: 18),
-              )
-            ],
-          ),
           InfoRow(
             label: '期望价格',
             value: Text(
@@ -152,7 +143,7 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '交货时间',
             value: Text(
-              '${DateFormatUtil.format(widget.order.details.expectedDeliveryDate)}',
+              '${DateFormatUtil.formatYMD(widget.order.details.expectedDeliveryDate)}',
               style: TextStyle(fontSize: 16),
             ),
           ),
@@ -227,7 +218,8 @@ class _RequirementOrderDetailPageState
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               image: DecorationImage(
-                image: NetworkImage(widget.order.details.pictures[0].url),
+                image: NetworkImage(
+                    '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.details.pictures[0].url}'),
                 fit: BoxFit.cover,
               )),
         );
@@ -277,7 +269,7 @@ class _RequirementOrderDetailPageState
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.order.details.majorCategory.name}   ${widget.order.details.category.name}   ${widget.order.totalQuantity}件",
+                      "${widget.order.details.majorCategory.name}   ${widget.order.details.category.name}   ${widget.order.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -358,7 +350,7 @@ class _RequirementOrderDetailPageState
             ),
           ),
           Row(
-            children: <Widget>[Text(widget.order.remarks??'')],
+            children: <Widget>[Text(widget.order.remarks ?? '')],
           )
         ],
       ),
