@@ -97,7 +97,7 @@ export default {
         },
         {
           name: '需求订单',
-          url: '/backoffice/order/request',
+          url: '/backoffice/order/requirement',
           icon: 'iconNone'
         },
         {
@@ -108,11 +108,6 @@ export default {
         {
           name: '生产订单',
           url: '/backoffice/order/consignment',
-          icon: 'iconNone'
-        },
-        {
-          name: '发料单',
-          url: '/backoffice/order/pick',
           icon: 'iconNone'
         }
       ]

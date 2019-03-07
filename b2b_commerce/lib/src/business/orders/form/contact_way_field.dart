@@ -1,6 +1,6 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_contact_input.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 class ContactWayField extends StatefulWidget{
   RequirementOrderModel item;
@@ -12,23 +12,18 @@ class ContactWayField extends StatefulWidget{
 class ContactWayFieldState extends State<ContactWayField>{
   formatContactWayText(){
     StringBuffer text = StringBuffer();
-    if(widget.item.details?.contactPerson == null && widget.item.details?.contactPhone == null){
+    if(widget.item.details?.contactPerson == null){
       text.write('填写');
     }else{
       text.write(widget.item.details?.contactPerson ?? '');
-      text.write(',');
-      text.write(widget.item.details?.contactPhone ?? '');
+//      text.write(',');
+//      text.write(widget.item.details?.contactPhone ?? '');
     }
     return text.toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    FocusNode _contactPersonFocusNode = FocusNode();
-    TextEditingController _contactPersonController = TextEditingController(text: widget.item.details?.contactPerson ?? '');
-    FocusNode _contactPhoneFocusNode = FocusNode();
-    TextEditingController _contactPhoneController = TextEditingController(text: widget.item.details?.contactPhone ?? '');
-
     return GestureDetector(
         child: Container(
           child: ListTile(
@@ -49,48 +44,16 @@ class ContactWayFieldState extends State<ContactWayField>{
           ),
         ),
         onTap: () {
-          showDialog<void>(
-            context: context,
-            barrierDismissible: false, // user must tap button!
-            builder: (context) {
-              return AlertDialog(
-                title: Text('请输入联系方式'),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      TextFieldComponent(
-                        controller: _contactPersonController,
-                        focusNode: _contactPersonFocusNode,
-                        autofocus: true,
-                        hintText: '请输入联系人',
-                        padding: EdgeInsets.all(0),
-                      ),
-                      SizedBox(height: 10,),
-                      TextFieldComponent(
-                        controller: _contactPhoneController,
-                        focusNode: _contactPhoneFocusNode,
-                        inputType: TextInputType.number,
-                        hintText: '请输入手机号码',
-                        padding: EdgeInsets.all(0),
-                      ),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('确定'),
-                    onPressed: () {
-                      setState(() {
-                        widget.item.details.contactPerson = _contactPersonController.text.trim() == '' ? null: _contactPersonController.text.trim();
-                        widget.item.details.contactPhone = _contactPhoneController.text.trim() == '' ? null: _contactPhoneController.text.trim();
-                      });
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RequirmentOrderContactInput()),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              widget.item.details.contactPerson = value;
+            });
+          });
         });
   }
 }

@@ -60,7 +60,7 @@ const actions = {
     commit('authorized', true);
 
     // 获取当前登录用户信息
-    const userInfo = await http.get('/djwebservices/login/profile');
+    const userInfo = await http.get('/b2b/users/profile');
     axios.defaults.headers.common['company'] = userInfo['companyCode'];
     // 'type' : 'TENANT', 'BRAND', 'FACTORY',
     // userInfo['type'];
@@ -92,6 +92,9 @@ const getters = {
     }
 
     return state.currentUser;
+  },
+  token() {
+    return 'Bearer ' + sessionStorage.getItem('token');
   }
 };
 

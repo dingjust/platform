@@ -55,7 +55,7 @@ export default {
         },
         {
           name: '需求订单',
-          url: '/brand/order/request',
+          url: '/brand/order/requirement',
           icon: 'iconNone'
         },
         {

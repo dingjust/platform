@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -11,20 +12,12 @@ class ProductionEarnestMoney extends StatefulWidget {
 }
 
 class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
-  FocusNode _expectedPriceFocusNode = FocusNode();
   String earnestMoney;
   String tailMoney;
   bool isEarnestPayment = false;
   String estimatePaymentDate;
   bool isTailPayment = false;
   String tailPaymentDate;
-  ApparelProductModel _product;
-
-  @override
-  void initState() {
-    _product = widget.product;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +40,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
                     ),
                   ),
                   onTap: () async {
-
+                    Navigator.of(context).pop(earnestMoney);
                   }
               )
             ]
@@ -124,7 +117,16 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
           ),
         ),
         onTap: () {
-          _neverEarnestMoney(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OfflineOrderInputPage(fieldText: '定金金额',inputType: TextInputType.number)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              earnestMoney = value;
+            });
+          });
         });
   }
 
@@ -204,7 +206,16 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
           ),
         ),
         onTap: () {
-          _neverTailMoney(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OfflineOrderInputPage(fieldText: '定金金额',inputType: TextInputType.number)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              tailMoney = value;
+            });
+          });
         });
   }
 
@@ -262,101 +273,6 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
 
 
 
-  //定金金额
-  Future<void> _neverEarnestMoney(BuildContext context) async {
-    TextEditingController inputNumber = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入定金金额'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextFieldComponent(
-                  controller: inputNumber,
-                  focusNode: _expectedPriceFocusNode,
-                  autofocus: true,
-                  inputType: TextInputType.number,
-                  hintText: '请输入定金金额',
-                  padding: EdgeInsets.all(0),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                if (inputNumber.text != null) {
-                  print(inputNumber.text);
-                  setState(() {
-                    earnestMoney = inputNumber.text;
-                  });
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  //尾款金额
-  Future<void> _neverTailMoney(BuildContext context) async {
-    TextEditingController inputNumber = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入尾款金额'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextFieldComponent(
-                  controller: inputNumber,
-                  focusNode: _expectedPriceFocusNode,
-                  autofocus: true,
-                  inputType: TextInputType.number,
-                  hintText: '请输入生产单价',
-                  padding: EdgeInsets.all(0),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                if (inputNumber.text != null) {
-                  print(inputNumber.text);
-                  setState(() {
-                    tailMoney = inputNumber.text;
-                  });
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   //打开日期选择器
   void _showDatePicker(String type) {

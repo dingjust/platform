@@ -1,5 +1,7 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
+import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +23,14 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   String processingType;
   String isInvoice;
   String remarks;
-  String processCount;
+  String factory;
   String price;
   String deliveryDate;
   String orderStatus;
   String statusCode;
+  String processingCount;
+  String productName;
+  String earnestMoney;
   ApparelProductModel _product;
 
   @override
@@ -124,17 +129,15 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              trailing:
-//            price == null || price == ''
-//                ?
-              Icon(Icons.keyboard_arrow_right)
-//                : Text(price,
-//              style: TextStyle(
-//                  fontSize: 16,
-//                  fontWeight: FontWeight.w500,
-//                  color: Colors.grey
-//              ),
-//            ),
+            trailing: productName == null || productName == ''
+                ? Icon(Icons.keyboard_arrow_right)
+                : Text(productName,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey
+              ),
+            ),
           ),
         ),
           onTap: () async {
@@ -148,6 +151,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                     ),
               ),
             );
+              setState(() {
+                productName = result.name;
+              });
         });
   }
 
@@ -163,9 +169,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: processCount == null || processCount == ''
+            trailing: processingCount == null || processingCount == ''
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(processCount,
+                : Text(processingCount,
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -175,7 +181,16 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           ),
         ),
         onTap: () {
-          _neverProcessCount(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OfflineOrderInputPage(fieldText: '加工数量',inputType: TextInputType.number)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              processingCount = value;
+            });
+          });
         });
   }
 
@@ -191,9 +206,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: processCount == null || processCount == ''
+            trailing: factory == null || factory == ''
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(processCount,
+                : Text(factory,
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -203,8 +218,18 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           ),
         ),
         onTap: () {
-          _neverFactory(context);
-        });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OfflineOrderFactroyInput()),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              factory = value;
+            });
+          });
+        }
+    );
   }
 
   //价格
@@ -231,7 +256,16 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           ),
         ),
         onTap: () {
-          _neverPrice(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OfflineOrderInputPage(fieldText: '生产单价',inputType: TextInputType.number)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              price = value;
+            });
+          });
         });
   }
 
@@ -281,7 +315,15 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              trailing:Icon(Icons.keyboard_arrow_right)
+            trailing: earnestMoney == null || earnestMoney == ''
+                ? Icon(Icons.keyboard_arrow_right)
+                : Text(earnestMoney,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey
+              ),
+            ),
           ),
         ),
         onTap: () {
@@ -290,7 +332,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             MaterialPageRoute(
               builder: (context) => ProductionEarnestMoney(),
             ),
-          );
+          ).then((value) {
+            setState(() {
+              earnestMoney = value;
+            });
+          });
         });
   }
 
@@ -413,14 +459,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               ),
             ),
             trailing: remarks == null || remarks == '' ?
-            Text(
-              '请输入留言备注',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
-            )
+              Icon(Icons.keyboard_arrow_right)
                 :
             Text(
               remarks,
@@ -433,7 +472,16 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           ),
         ),
         onTap: () {
-          _neverOrderRemarks(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OfflineOrderInputPage(fieldText: '订单备注',inputType: TextInputType.text)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              remarks = value;
+            });
+          });
         });
   }
 
@@ -464,165 +512,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       decoration: BoxDecoration(
         color: Color.fromRGBO(242, 242, 242, 1),
       ),
-    );
-  }
-
-  //加工数量
-  Future<void> _neverProcessCount(BuildContext context) async {
-    TextEditingController inputNumber = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入加工数量'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextField(
-                  controller: inputNumber,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: '请输入加工数量',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                if (inputNumber.text != null) {
-                  print(inputNumber.text);
-                  setState(() {
-                    processCount = inputNumber.text;
-                  });
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  //生产工厂
-  Future<void> _neverFactory(BuildContext context) async {
-    TextEditingController inputNumber = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入生产工厂信息'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextFieldComponent(
-                  controller: inputNumber,
-                  focusNode: _expectedPriceFocusNode,
-                  autofocus: true,
-                  inputType: TextInputType.number,
-                  hintText: '请输入工厂名',
-                  padding: EdgeInsets.all(0),
-                ),
-                TextFieldComponent(
-                  controller: inputNumber,
-                  focusNode: _expectedPriceFocusNode,
-                  autofocus: true,
-                  inputType: TextInputType.number,
-                  hintText: '请输入联系人',
-                  padding: EdgeInsets.all(0),
-                ),
-                TextFieldComponent(
-                  controller: inputNumber,
-                  focusNode: _expectedPriceFocusNode,
-                  autofocus: true,
-                  inputType: TextInputType.number,
-                  hintText: '请输入联系电话',
-                  padding: EdgeInsets.all(0),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                if (inputNumber.text != null) {
-                  print(inputNumber.text);
-                  setState(() {
-                    processCount = inputNumber.text;
-                  });
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  //价格
-  Future<void> _neverPrice(BuildContext context) async {
-    TextEditingController inputNumber = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入生产单价'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextFieldComponent(
-                  controller: inputNumber,
-                  focusNode: _expectedPriceFocusNode,
-                  autofocus: true,
-                  inputType: TextInputType.number,
-                  hintText: '请输入生产单价',
-                  padding: EdgeInsets.all(0),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                if (inputNumber.text != null) {
-                  print(inputNumber.text);
-                  setState(() {
-                    price = inputNumber.text;
-                  });
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -681,52 +570,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     );
   }
 
-  //订单备注
-  Future<void> _neverOrderRemarks(BuildContext context) async {
-    TextEditingController inputNumber = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('备注'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextField(
-                  controller: inputNumber,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: '请输入订单备注',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                if (inputNumber.text != null) {
-                  print(inputNumber.text);
-                  setState(() {
-                    remarks = inputNumber.text;
-                  });
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   //是否开具发票选项
   void _showIsInvoiceSelect() async {
@@ -756,62 +599,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                     Navigator.pop(context);
                   },
                 )
-              ],
-            ));
-      },
-    );
-  }
-
-  //订单状态
-  void _showStatusSelect() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-            height: 300,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  title: Text('待付定金'),
-                  onTap: () async {
-                    setState(() {
-                      statusCode = 'WAIT_FOR_DEPOSIT_PAYABLE';
-                      orderStatus = '待付定金';
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('生产中'),
-                  onTap: () async {
-                    setState(() {
-                      statusCode = 'IN_PRODUCTION';
-                      orderStatus = '生产中';
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('已出库'),
-                  onTap: () async {
-                    setState(() {
-                      statusCode = 'OUT_OF_STORE';
-                      orderStatus = '已出库';
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('已完成'),
-                  onTap: () async {
-                    setState(() {
-                      statusCode = 'COMPLETED';
-                      orderStatus = '已完成';
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
               ],
             ));
       },

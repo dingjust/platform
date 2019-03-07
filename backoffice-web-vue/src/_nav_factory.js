@@ -45,11 +45,6 @@ export default {
           name: '报价单',
           url: '/factory/order/quote',
           icon: 'iconNone'
-        },
-        {
-          name: '发料单',
-          url: '/factory/order/pick',
-          icon: 'iconNone'
         }
       ]
     },

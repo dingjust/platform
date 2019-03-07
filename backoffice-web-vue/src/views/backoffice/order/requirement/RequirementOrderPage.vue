@@ -7,7 +7,6 @@
         </el-form-item>
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-          <!--<el-button type="primary" icon="el-icon-plus" @click="onNew">创建需求订单</el-button>-->
         </el-button-group>
         <el-popover placement="right" width="600" trigger="click">
           <el-row :gutter="10">
@@ -160,7 +159,6 @@
 
   import autoHeight from 'mixins/autoHeight';
 
-  import RequirementOrderForm from './RequirementOrderForm';
   import RequirementOrderDetailsPage from './RequirementOrderDetailsPage'
 
   export default {
@@ -207,16 +205,13 @@
         this.$refs.resultTable.clearSelection();
       },
       async onDetails(item) {
-        const result = await this.$http.get('/djbackoffice/requirementOrder/' + item.code);
+        const result = await this.$http.get('/b2b/orders/requirement/' + item.code);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
 
         this.fn.openSlider('需求订单：' + item.code, RequirementOrderDetailsPage, result);
-      },
-      onNew() {
-        this.fn.openSlider('创建需求订单', RequirementOrderForm, this.formData);
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
@@ -242,7 +237,7 @@
         }
       },
       async getCompanies(keyword) {
-        this.companies = await this.$http.get('/djbrand/brand', {
+        this.companies = await this.$http.get('/b2b/brand', {
           text: keyword.trim()
         });
       },

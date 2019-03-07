@@ -72,7 +72,7 @@
         this._onSearch(0);
       },
       async onDetails(item) {
-        const result = await this.$http.get('/djwebservices/quotes/' + item.code);
+        const result = await this.$http.get('/b2b/orders/quote/' + item.code);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
