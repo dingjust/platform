@@ -9,9 +9,11 @@ class LoginRequest {
 
   LoginRequest(this.username, this.password);
 
-  factory LoginRequest.fromJson(Map<String, dynamic> json) => _$LoginRequestFromJson(json);
+  factory LoginRequest.fromJson(Map<String, dynamic> json) =>
+      _$LoginRequestFromJson(json);
 
-  static Map<String, dynamic> toJson(LoginRequest model) => _$LoginRequestToJson(model);
+  static Map<String, dynamic> toJson(LoginRequest model) =>
+      _$LoginRequestToJson(model);
 }
 
 ///
@@ -28,9 +30,23 @@ class LoginResponse {
   @JsonKey(name: 'access_token')
   final String accessToken;
 
-  LoginResponse(this.accessToken);
+  @JsonKey(name: 'token_type')
+  final String tokenType;
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
+  @JsonKey(name: 'refresh_token')
+  final String refreshToken;
 
-  static Map<String, dynamic> toJson(LoginResponse model) => _$LoginResponseToJson(model);
+  @JsonKey(name: 'expires_in')
+  final int expiresIn;
+
+  @JsonKey(name: 'scope')
+  final String scope;
+
+  LoginResponse(this.accessToken, this.tokenType, this.refreshToken, this.expiresIn, this.scope);
+
+  factory LoginResponse.fromJson(Map<String, dynamic> json) =>
+      _$LoginResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(LoginResponse model) =>
+      _$LoginResponseToJson(model);
 }

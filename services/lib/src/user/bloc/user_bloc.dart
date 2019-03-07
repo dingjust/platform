@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
@@ -51,7 +50,7 @@ class UserBLoC extends BLoCBase {
   Stream<DioError> get loginStream => _loginResultController.stream;
 
   Future<bool> login({String username, String password, bool remember}) async {
-    // // TODO: call login service
+    // // login service
     Response loginResponse;
     try {
       loginResponse = await http$
@@ -87,14 +86,10 @@ class UserBLoC extends BLoCBase {
         _user.name = infoResponse.data['username'];
       }
 
-      // _user.type = UserType.BRAND;
-
       //  记录登陆用户信息
       if (remember) {
         LocalStorage.save(
-            GlobalConfigs.ACCESS_TOKEN_KEY, _response.accessToken);
-        LocalStorage.save(
-            GlobalConfigs.USER_KEY, json.encode(UserModel.toJson(_user)));
+            GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
       }
       _controller.sink.add(_user);
       return true;
@@ -106,24 +101,54 @@ class UserBLoC extends BLoCBase {
   Future<void> logout() async {
     _user = UserModel.empty();
     //  清理本地记录
-    LocalStorage.remove(GlobalConfigs.USER_KEY);
-    LocalStorage.remove(GlobalConfigs.ACCESS_TOKEN_KEY);
+    LocalStorage.remove(GlobalConfigs.REFRESH_TOKEN_KEY);
     _controller.sink.add(_user);
   }
 
   //检测本地用户记录
   Future<void> checkLocalUser() async {
-    String jsonStr = await LocalStorage.get(GlobalConfigs.USER_KEY);
-    if (jsonStr != null && jsonStr.isNotEmpty) {
-      Map<String, dynamic> userJson =
-          json.decode(jsonStr) as Map<String, dynamic>;
-      UserModel localUser = UserModel.fromJson(userJson);
-      _user.type = localUser.type;
-      _user.name = localUser.name;
-      _user.companyCode=localUser.companyCode;
-      _user.companyName=localUser.companyName;
-      _user.profilePicture=localUser.profilePicture;
-      _user.phone=localUser.phone;
+    // 检测本地是否有refresh_token
+    String local_refresh_token =
+        await LocalStorage.get(GlobalConfigs.REFRESH_TOKEN_KEY);
+
+    if (local_refresh_token != null && local_refresh_token != '') {
+      //调用刷新token接口
+      Response loginResponse;
+      try {
+        loginResponse = await http$.post(
+            HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+          'grant_type': GlobalConfigs.GRANT_TYPE_REFRESH_TOKEN,
+          'client_id': 'asm',
+          'client_secret': 'password',
+          'refresh_token': local_refresh_token
+        }));
+      } on DioError catch (e) {
+        print(e);
+      }
+
+      if (loginResponse != null && loginResponse.statusCode == 200) {
+        LoginResponse _response = LoginResponse.fromJson(loginResponse.data);
+
+        // 记录http token 信息
+        http$.updateAuthorization(_response.accessToken);
+
+        // 获取用户信息
+        Response infoResponse;
+        try {
+          infoResponse = await http$.get(UserApis.userInfo);
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (infoResponse.statusCode == 200) {
+          _user = UserModel.fromJson(infoResponse.data);
+          _user.name = infoResponse.data['username'];
+        }
+
+        //  记录refresh_token
+        LocalStorage.save(
+            GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
+      }
     }
   }
 

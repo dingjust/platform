@@ -12,13 +12,8 @@ import 'src/common/app_bloc.dart';
 void main() async {
   debugInstrumentationEnabled = true;
 
-//初始化信息
-
   // 初始化,检测是否有用户登陆信息
   await UserBLoC.instance.checkLocalUser();
-
-  ///初始化，获取授权token记录
-  await http$.initAuthorization();
 
   runApp(BLoCProvider<AppBLoC>(
     bloc: AppBLoC(),
