@@ -134,8 +134,7 @@ const QuoteStateLocalizedMap = {
   QuoteState.BUYER_REJECTED: "拒绝"
 };
 
-
-enum MachiningType{
+enum MachiningType {
   //包工包料
   LABOR_AND_MATERIAL,
   //清加工
@@ -143,8 +142,8 @@ enum MachiningType{
 }
 
 const MachiningTypeLocalizedMap = {
-  MachiningType.LABOR_AND_MATERIAL : '包工包料',
-  MachiningType.LIGHT_PROCESSING : '清加工',
+  MachiningType.LABOR_AND_MATERIAL: '包工包料',
+  MachiningType.LIGHT_PROCESSING: '清加工',
 };
 
 enum ProductionProgressPhase {
@@ -394,7 +393,7 @@ class ConsignmentEntryModel extends ItemModel {
 
 ///需求订单信息
 @JsonSerializable()
-class RequirementInfoModel extends ItemModel{
+class RequirementInfoModel extends ItemModel {
   /// 期望交货时间
   DateTime expectedDeliveryDate;
 
@@ -474,23 +473,29 @@ class RequirementInfoModel extends ItemModel{
 class RequirementOrderModel extends OrderModel {
   /// 订单状态
   RequirementOrderStatus status;
+
   /// 发布者
   BrandModel belongTo;
+
   ///需求信息
   RequirementInfoModel details;
+
   ///总报价数
   int totalQuotesCount;
+
   ///最近报价的报价单
   List<QuoteModel> latestQuotes;
+
   ///附件
   List<MediaModel> attachments;
+
   ///订单行
   List<RequirementOrderEntryModel> entries;
+
   ///延期天数
   int delayDays;
 
-
- RequirementOrderModel({
+  RequirementOrderModel({
     this.status,
     this.belongTo,
     this.details,

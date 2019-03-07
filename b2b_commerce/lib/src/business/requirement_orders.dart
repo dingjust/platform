@@ -200,7 +200,7 @@ class RequirementOrderItem extends StatelessWidget {
   static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
     RequirementOrderStatus.PENDING_QUOTE: Colors.green,
     RequirementOrderStatus.COMPLETED: Colors.orange,
-    RequirementOrderStatus.CANCELLED: Colors.red
+    RequirementOrderStatus.CANCELLED: Colors.red,
   };
 
   @override
@@ -292,7 +292,7 @@ class RequirementOrderItem extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               image: DecorationImage(
-                image: NetworkImage(order.details.pictures[0].url),
+                image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
                 fit: BoxFit.cover,
               )),
         );

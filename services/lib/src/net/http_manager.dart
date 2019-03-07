@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:services/src/user/bloc/user_bloc.dart';
 
 /// HTTP请求
 class HttpManager {
@@ -55,6 +56,9 @@ class HttpManager {
         throw -1; // network error
       }
       options.headers['Authorization'] = authorization;
+
+      // 所属信息
+      options.headers['company']=UserBLoC.instance.currentUser.companyCode;
     }, onResponse: (Response response) {
       // 在返回响应数据之前做一些预处理
       if (GlobalConfigs.DEBUG) {
