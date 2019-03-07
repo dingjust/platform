@@ -101,6 +101,7 @@ class RequirementOrderBLoC extends BLoCBase {
     _controller.sink.add(_ordersMap[status].data);
   }
 
+  // 获取订单明细
   Future<RequirementOrderModel> getRequirementOrderDetail(String code) async {
     Response<Map<String, dynamic>> response =
         await http$.get(OrderApis.requirementOrderDetail(code));

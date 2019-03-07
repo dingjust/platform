@@ -58,7 +58,7 @@ class HttpManager {
       options.headers['Authorization'] = authorization;
 
       // 所属信息
-      options.headers['company']=UserBLoC.instance.currentUser.companyCode;
+      options.headers['company'] = UserBLoC.instance.currentUser.companyCode;
     }, onResponse: (Response response) {
       // 在返回响应数据之前做一些预处理
       if (GlobalConfigs.DEBUG) {
@@ -162,21 +162,6 @@ class HttpManager {
   ///清除授权
   static clearAuthorization() {
     LocalStorage.remove(GlobalConfigs.ACCESS_TOKEN_KEY);
-  }
-
-  ///初始化，获取授权token记录
-  Future<void> initAuthorization() async {
-    String token = await LocalStorage.get(GlobalConfigs.ACCESS_TOKEN_KEY);
-    if (token == null) {
-      String basic = await LocalStorage.get(GlobalConfigs.BASIC_AUTH_TOKEN_KEY);
-      if (basic == null) {
-        // 提示输入账号密码
-      } else {
-        authorization = "Basic $basic";
-      }
-    } else {
-      authorization = "Bearer $token";
-    }
   }
 
   void updateAuthorization(token) {

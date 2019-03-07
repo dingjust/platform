@@ -6,7 +6,6 @@ import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
-  // final String code;
   final RequirementOrderModel order;
 
   const RequirementOrderDetailPage({Key key, this.order}) : super(key: key);

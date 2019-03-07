@@ -4,10 +4,11 @@ class GlobalConfigs {
 
   static const CONTEXT_PATH = 'https://47.106.112.137:9002';
   // static const CONTEXT_PATH = 'https://192.168.1.103:9002';
-  static const IMAGE_BASIC_URL='http://47.106.112.137:9001/djwebservices/v2';
+  static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
   static const BASE_URL = '$CONTEXT_PATH/djwebservices/v2';
   static const ACCESS_TOKEN_KEY = 'access_token';
   static const USER_KEY = 'user';
+  static const REFRESH_TOKEN_KEY = 'refresh_token';
   static const BASIC_AUTH_TOKEN_KEY = 'basic_auth_token';
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
   static const AUTH_TOKEN_URL = '$AUTH_SERVER_URL/oauth/token';
