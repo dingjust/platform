@@ -188,7 +188,7 @@ class AbstractOrderModel extends ItemModel {
   double totalPrice;
 
   /// 创建时间
-  @JsonKey(name: "creationtime")
+  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
   DateTime creationTime;
 
   /// 地址
@@ -208,6 +208,9 @@ class AbstractOrderModel extends ItemModel {
       this.deliveryAddress,
       this.remarks,
       this.salesApplication});
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 /// 订单
@@ -395,6 +398,7 @@ class ConsignmentEntryModel extends ItemModel {
 @JsonSerializable()
 class RequirementInfoModel extends ItemModel {
   /// 期望交货时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime expectedDeliveryDate;
 
   ///预计加工数量
@@ -466,6 +470,9 @@ class RequirementInfoModel extends ItemModel {
 
   static Map<String, dynamic> toJson(RequirementInfoModel model) =>
       _$RequirementInfoModelToJson(model);
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 /// 需求订单
@@ -580,6 +587,7 @@ class PurchaseOrderModel extends OrderModel {
   String requirementOrderCode;
 
   /// 预计交货时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime expectedDeliveryDate;
 
   //生产进度
@@ -616,6 +624,9 @@ class PurchaseOrderModel extends OrderModel {
 
   static Map<String, dynamic> toJson(PurchaseOrderModel model) =>
       _$PurchaseOrderModelToJson(model);
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 /// 采购订单行
@@ -718,6 +729,7 @@ class QuoteModel extends AbstractOrderModel {
   String purchaseOrderCode;
 
   /// 交货时间，工厂自己填写的交货时间，而不是需求订单中的交货时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime expectedDeliveryDate;
 
   /// 报价工厂
@@ -773,6 +785,9 @@ class QuoteModel extends AbstractOrderModel {
 
   static Map<String, dynamic> toJson(QuoteModel model) =>
       _$QuoteModelToJson(model);
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 /// 报价单行
@@ -818,6 +833,7 @@ class ProductionProgressModel extends ItemModel {
   int sequence;
 
   /// 预计完成时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime estimatedDate;
 
   /// 实际完成时间
@@ -844,6 +860,9 @@ class ProductionProgressModel extends ItemModel {
 
   static Map<String, dynamic> toJson(ProductionProgressModel model) =>
       _$ProductionProgressModelToJson(model);
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 //订单状态model，用于订单状态控件的List传入
