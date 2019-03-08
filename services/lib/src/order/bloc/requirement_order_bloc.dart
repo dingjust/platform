@@ -65,7 +65,7 @@ class RequirementOrderBLoC extends BLoCBase {
         print(e);
       }
 
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         RequirementOrdersResponse ordersResponse =
             RequirementOrdersResponse.fromJson(response.data);
         _ordersMap[status].totalPages = ordersResponse.totalPages;
@@ -101,7 +101,7 @@ class RequirementOrderBLoC extends BLoCBase {
         print(e);
       }
 
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         RequirementOrdersResponse ordersResponse =
             RequirementOrdersResponse.fromJson(response.data);
         _ordersMap[status].totalPages = ordersResponse.totalPages;
@@ -111,19 +111,6 @@ class RequirementOrderBLoC extends BLoCBase {
     }
     _loadingController.sink.add(false);
     _controller.sink.add(_ordersMap[status].data);
-  }
-
-  // 获取订单明细
-  Future<RequirementOrderModel> getRequirementOrderDetail(String code) async {
-    Response<Map<String, dynamic>> response =
-        await http$.get(OrderApis.requirementOrderDetail(code));
-
-    if (response.statusCode == 200) {
-      RequirementOrderModel model =
-          RequirementOrderModel.fromJson(response.data);
-      return model;
-    } else
-      return null;
   }
 
   //下拉刷新

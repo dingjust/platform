@@ -652,7 +652,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                   Response response = await http$.delete(
                     Apis.mediaDelete(mediaModel.id),
                   );
-                  if (response.statusCode == 200) {
+                  if (response != null && response.statusCode == 200) {
                     setState(() {
                       widget.list.remove(mediaModel);
                     });
