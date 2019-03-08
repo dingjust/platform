@@ -484,6 +484,7 @@ class RequirementOrderModel extends OrderModel {
   BrandModel belongTo;
 
   ///需求信息
+  @JsonKey(toJson: infoToJson)
   RequirementInfoModel details;
 
   ///总报价数
@@ -496,6 +497,7 @@ class RequirementOrderModel extends OrderModel {
   List<MediaModel> attachments;
 
   ///订单行
+  @JsonKey(toJson: entriesToJson)
   List<RequirementOrderEntryModel> entries;
 
   ///延期天数
@@ -529,12 +531,21 @@ class RequirementOrderModel extends OrderModel {
 
   static Map<String, dynamic> toJson(RequirementOrderModel model) =>
       _$RequirementOrderModelToJson(model);
+
+  static Map<String, dynamic> infoToJson(RequirementInfoModel detail) =>
+      RequirementInfoModel.toJson(detail);
+
+  static List<Map<String, dynamic>> entriesToJson(
+          List<RequirementOrderEntryModel> entries) =>
+      entries.map((entry) => RequirementOrderEntryModel.toJson(entry)).toList();
 }
 
 /// 需求订单行
 @JsonSerializable()
 class RequirementOrderEntryModel extends OrderEntryModel {
   ApparelProductModel product;
+
+  @JsonKey(toJson: orderToJson)
   RequirementOrderModel order;
 
   RequirementOrderEntryModel({
@@ -556,6 +567,9 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 
   static Map<String, dynamic> toJson(RequirementOrderEntryModel model) =>
       _$RequirementOrderEntryModelToJson(model);
+
+  static Map<String, String> orderToJson(RequirementOrderModel order) =>
+      {'code': order.code??''};
 }
 
 /// 采购订单
