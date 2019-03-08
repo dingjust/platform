@@ -18,7 +18,7 @@ class _RequirementOrderDetailPageState
     extends State<RequirementOrderDetailPage> {
   QuoteModel quoteModel = QuoteModel.fromJson({
     "code": "34938475200045",
-    "creationtime": DateTime.now().toString(),
+    "creationtime": DateTime.now().millisecondsSinceEpoch,
     "belongTo": {"name": "广州好辣制衣厂", "starLevel": 3},
     "state": "BUYER_REJECTED",
     "totalPrice": 360.00,

@@ -53,11 +53,17 @@ class RequirementOrderBLoC extends BLoCBase {
           'statuses': [status]
         };
       }
-      Response<Map<String, dynamic>> response = await http$
-          .post(OrderApis.requirementOrders, data: data, queryParameters: {
-        'page': _ordersMap[status].currentPage,
-        'size': _ordersMap[status].size
-      });
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$.post(OrderApis.requirementOrders,
+            data: data,
+            queryParameters: {
+              'page': _ordersMap[status].currentPage,
+              'size': _ordersMap[status].size
+            });
+      } on DioError catch (e) {
+        print(e);
+      }
 
       if (response.statusCode == 200) {
         RequirementOrdersResponse ordersResponse =
@@ -83,11 +89,17 @@ class RequirementOrderBLoC extends BLoCBase {
           'statuses': [status]
         };
       }
-      Response<Map<String, dynamic>> response = await http$
-          .post(OrderApis.requirementOrders, data: data, queryParameters: {
-        'page': ++_ordersMap[status].currentPage,
-        'size': _ordersMap[status].size
-      });
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$.post(OrderApis.requirementOrders,
+            data: data,
+            queryParameters: {
+              'page': ++_ordersMap[status].currentPage,
+              'size': _ordersMap[status].size
+            });
+      } on DioError catch (e) {
+        print(e);
+      }
 
       if (response.statusCode == 200) {
         RequirementOrdersResponse ordersResponse =
