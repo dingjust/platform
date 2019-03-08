@@ -1183,7 +1183,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                 await launch(url);
               },
             ),
-            ListTile(
+            tel.indexOf('-')>-1?Container():ListTile(
               leading: Icon(Icons.message),
               title: Text('发送短信'),
               onTap: () async {

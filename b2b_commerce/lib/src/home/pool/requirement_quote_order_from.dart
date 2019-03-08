@@ -36,19 +36,52 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
         elevation: 0.5,
         title: Text('填写报价'),
       ),
-      body: Container(
-          child: ListView(
-            children: <Widget>[
-              _buildRequirementInfo(context),
-              _buildQuoteInfo(context),
-              _buildProofingInfo(context),
-              _buildConfirmationDeliveryDate(context),
-              _buildAccessory(context),
-              _buildRemarks(context),
-              _buildCommitButton(context),
-            ],
-          )
+        body: Container(
+            color: Color(0xffF0F0F0),
+            margin: EdgeInsets.only(bottom: 70),
+            child: ListView(
+              children: <Widget>[
+                _buildRequirementInfo(context),
+                _buildQuoteInfo(context),
+                _buildProofingInfo(context),
+                _buildConfirmationDeliveryDate(context),
+                _buildAccessory(context),
+                _buildRemarks(context),
+//              _buildCommitButton(context),
+              ],
+            )
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          icon: Container(
+          width: 0,
+          child: Icon(
+            null,
+            color: Colors.white,
+          ),
+        ),
+        label: Container(
+            width: 250,
+            child:  Center(
+              child: Text(
+                '去报价',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            )
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RequirementPoolAll()),
+          );
+        },
+        backgroundColor: Colors.amberAccent,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        backgroundColor:Colors.white
     );
   }
 

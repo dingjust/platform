@@ -1,7 +1,9 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementOrderDetailForFactory extends StatefulWidget {
@@ -25,6 +27,8 @@ class _RequirementOrderDetailForFactoryState
         title: Text('需求订单明细'),
       ),
       body: Container(
+          color: Color(0xffF0F0F0),
+          margin: EdgeInsets.only(bottom: 70),
           child: ListView(
             children: <Widget>[
               _buildTop(context),
@@ -34,10 +38,41 @@ class _RequirementOrderDetailForFactoryState
               _buildRemarks(context),
               _buildEnclosure(context),
               _buildDeliveryAddress(context),
-              _buildCommitButton(context),
+//              _buildCommitButton(context),
             ],
           )
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Container(
+          width: 0,
+          child: Icon(
+            null,
+            color: Colors.white,
+          ),
+        ),
+        label: Container(
+          width: 250,
+          child:  Center(
+            child: Text(
+              '去报价',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RequirementQuoteOrderFrom(model: widget.model,)),
+          );
+        },
+        backgroundColor: Colors.amberAccent,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      backgroundColor: Colors.white,
     );
   }
 
@@ -114,7 +149,7 @@ class _RequirementOrderDetailForFactoryState
                       Text(
                         widget.model.belongTo.brand,
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 22,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -183,30 +218,35 @@ class _RequirementOrderDetailForFactoryState
                   flex: 1,
                 ),
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 1.5),
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 20),
-                    height: 45,
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: Icon(
-                            Icons.phone,
-                            size: 20,
-                            color: Color(0xffFF9516),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            widget.model.belongTo.contactPhone,
-                            style: TextStyle(
-                              fontSize: 18,
+                  child: GestureDetector(
+                    child: Container(
+                      margin: EdgeInsets.only(left: 1.5),
+                      color: Colors.white,
+                      padding: EdgeInsets.only(left: 20),
+                      height: 45,
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            child: Icon(
+                              Icons.phone,
+                              size: 20,
+                              color: Color(0xffFF9516),
                             ),
                           ),
-                        )
-                      ],
+                          Container(
+                            child: Text(
+                              widget.model.belongTo.contactPhone,
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
+                    onTap: (){
+                      _selectActionButton(widget.model.belongTo.contactPhone);
+                    },
                   ),
                   flex: 1,
                 ),
@@ -480,7 +520,6 @@ class _RequirementOrderDetailForFactoryState
   Widget _buildDeliveryAddress(BuildContext context) {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(bottom: 5),
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Column(
         children: <Widget>[
@@ -538,6 +577,36 @@ class _RequirementOrderDetailForFactoryState
             );
           },
         )
+    );
+  }
+
+
+  void _selectActionButton(String tel) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text('拨打电话'),
+              onTap: () async {
+                var url = 'tel:' + tel;
+                await launch(url);
+              },
+            ),
+            tel.indexOf('-')>-1?Container():ListTile(
+              leading: Icon(Icons.message),
+              title: Text('发送短信'),
+              onTap: () async {
+                var url = 'sms:' + tel;
+                await launch(url);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
