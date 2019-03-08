@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+*.g.dart
 
 # dependencies
 /node_modules

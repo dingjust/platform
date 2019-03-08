@@ -3,7 +3,7 @@
     <el-card>
       <el-form :inline="true">
         <el-form-item label="">
-          <el-input placeholder="请输入编号" v-model="text"></el-input>
+          <el-input placeholder="请输入单号" v-model="text"></el-input>
         </el-form-item>
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
@@ -13,7 +13,7 @@
         <el-table-column label="报价单号" prop="code" width="250" fixed></el-table-column>
         <el-table-column label="状态" prop="state" fixed>
           <template slot-scope="scope">
-            <span>{{scope.row.status | enumTranslate('QuoteState')}}</span>
+            <span>{{getEnum('quoteStates', scope.row.state)}}</span>
           </template>
         </el-table-column>
         <el-table-column label="创建用户" prop="user">
@@ -26,7 +26,6 @@
             <span>{{scope.row.creationtime | formatDate}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="工厂" prop="belongTo.name"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">
@@ -78,7 +77,7 @@
           return;
         }
 
-        this.fn.openSlider('报价单明细', QuoteDetailsPage, result);
+        this.fn.openSlider('报价单明细，单号：' + item.code, QuoteDetailsPage, result);
       },
       onPageSizeChanged(val) {
         this.reset();
