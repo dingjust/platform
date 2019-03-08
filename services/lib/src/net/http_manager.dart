@@ -76,11 +76,8 @@ class HttpManager {
 
       // unauthorized
       if (e.response != null && e.response.statusCode == 401) {
-        BuildContext currentContext =
-            _instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY];
-        assert(currentContext != null);
-        Navigator.pushNamed(currentContext, GlobalRoutes.ROUTE_LOGIN);
-        return null;
+        //token过期，用户记录清空
+        UserBLoC.instance.logout();
       }
 
       _clearContext();
@@ -157,6 +154,10 @@ class HttpManager {
 
   static _clearContext() {
     instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = null;
+  }
+
+  void initContext(BuildContext context) {
+    context = context;
   }
 
   ///清除授权
