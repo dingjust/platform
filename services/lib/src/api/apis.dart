@@ -36,4 +36,9 @@ class Apis {
   static get mediaDelete => (id) {
         return '/{baseSiteId}/media/$id';
       };
+
+  ///需求发布
+  static get publishNewRequirement => (){
+    return '/{baseSiteId}/b2b/orders/requirement/new';
+  };
 }

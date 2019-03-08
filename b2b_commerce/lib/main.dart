@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
             if (snapshot.data.type == UserType.BRAND) {
               return BrandClient();
             }
-            //TODO:工厂
+            //TODO:工厂z
             //未登陆
             else {
               return MaterialApp(

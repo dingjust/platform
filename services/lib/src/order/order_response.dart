@@ -21,3 +21,4 @@ class RequirementOrdersResponse {
   static Map<String, dynamic> toJson(RequirementOrdersResponse model) =>
       _$RequirementOrdersResponseToJson(model);
 }
+

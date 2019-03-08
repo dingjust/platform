@@ -12,6 +12,7 @@ import 'package:b2b_commerce/src/business/orders/form/remarks_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 import '../../home/requirement/requirement_publish_success.dart';
 import '../apparel_products.dart';
@@ -293,6 +294,12 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                     '${model.deliveryAddress},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
                 print(
                     '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
+
+                model.details = null;
+                OrderRepositoryImpl().publishNewRequirement(model).then((orderCode){
+                  print(orderCode);
+                });
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(

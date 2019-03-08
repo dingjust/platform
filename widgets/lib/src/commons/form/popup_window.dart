@@ -85,9 +85,6 @@ class _PopupWindowPageState extends State<PopupWindowPage>{
               autofocus:true,
               leadingText: '${widget.fieldText}',
               hintText: '请输入${widget.fieldText}',
-              onChanged: (value){
-
-              },
             ),
           ),
         ],
