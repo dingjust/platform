@@ -33,6 +33,20 @@ const state = {
     'SHIPPED': 2,
     'COMPLETED': 3
   },
+  quoteStates: [
+    {
+      code: 'SELLER_SUBMITTED',
+      name: '待处理'
+    },
+    {
+      code: 'BUYER_APPROVED',
+      name: '通过'
+    },
+    {
+      code: 'BUYER_REJECTED',
+      name: '拒绝'
+    }
+  ],
   approvalStatuses: [{
     code: 'approved',
     name: '上架'
