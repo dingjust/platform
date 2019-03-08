@@ -168,7 +168,6 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                   child: ShowSelectTile(
                     leadingText: '角色/岗位',
                     tralingText: formatRoleSelectsText(),
-                    tralingTextColor: Color(0xffFF9516),
                   )),
             ],
           ),

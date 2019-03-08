@@ -21,6 +21,7 @@ const state = {
     id: null,
     code: '',
     details: {
+      pictures: [],
       minorCategories: [],
       category: {
         code: '',
@@ -42,7 +43,8 @@ const state = {
     belongTo: {
       uid: '',
       name: ''
-    }
+    },
+    attachments: []
   },
   queryFormData: {
     code: '',

@@ -52,7 +52,6 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
           child: ShowSelectTile(
             leadingText: '商品类目',
             tralingText: _minorCategoryText,
-            tralingTextColor: Colors.orange,
           ),
         ),
         Padding(

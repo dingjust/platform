@@ -157,13 +157,14 @@
 
   import autoHeight from 'mixins/autoHeight';
 
-  import RequirementOrderForm from './RequirementOrderForm';
+  import QuoteForm from '@/views/factory/order/quote/QuoteForm';
+
   import RequirementOrderDetailsPage from './RequirementOrderDetailsPage'
 
   export default {
     name: 'RequirementOrderPage',
     mixins: [autoHeight],
-    components: {RequirementOrderForm},
+    components: {QuoteForm},
     computed: {
       ...mapGetters({
         page: 'page'
@@ -175,8 +176,13 @@
         searchAdvanced: 'searchAdvanced'
       }),
       async onQuoting(row) {
-        console.log('报价: ' + row.code);
+        // console.log('报价: ' + JSON.stringify(row));
         // TODO: 转到报价页面
+        Object.assign(this.quoteFormData.requirementOrder, JSON.parse(JSON.stringify(row)));
+
+        // console.log(JSON.stringify(this.quoteFormData));
+        this.quoteFormData.requirementOrderRef = row.code;
+        this.fn.openSlider('填写报价单，需求编号：' + row.code, QuoteForm, this.quoteFormData);
       },
       isPendingQuote: function (row) {
         return row.status === 'PENDING_QUOTE';
@@ -243,6 +249,34 @@
         queryFormData: this.$store.state.FactoryRequirementOrdersModule.queryFormData,
         statusOptions: this.$store.state.FactoryRequirementOrdersModule.statusOptions,
         advancedSearch: false,
+        quoteFormData: {
+          requirementOrderRef: '',
+          requirementOrder: {
+            id: null,
+            code: '',
+            details: {
+              productImage: '',
+              productSkuID: '',
+              productName: '',
+              category: {
+                code: '',
+                name: ''
+              },
+              majorCategory: {
+                code: '',
+                name: ''
+              },
+            }
+          },
+          expectedDeliveryDate: null,
+          unitPriceOfFabric: 0.00,
+          unitPriceOfExcipients: 0.00,
+          unitPriceOfProcessing: 0.00,
+          costOfOther: 0.00,
+          costOfSamples: 0.00,
+          attachments: [],
+          remarks: '',
+        },
       };
     },
     created() {

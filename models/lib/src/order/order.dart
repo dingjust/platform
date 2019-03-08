@@ -81,7 +81,6 @@ enum SalesApplication {
 
   ///
   WEBMOBILE,
-
   CALLCENTER
 }
 
@@ -899,21 +898,29 @@ class ProofingModel extends OrderModel {
 
   ApparelProductModel product;
 
-  RequirementOrderModel order;
+  QuoteModel order;
 
-  ProofingModel(
-      {String code,
-      this.status,
-      int totalQuantity,
-      double totalPrice,
-      this.belongTo,
-      this.factory,
-      DateTime creationTime,
-      AddressModel deliveryAddress,
-      String remarks,
-      this.product,
-      this.order})
-      : super(
+  List<ProofingEntryModel> entries;
+
+  List<ApparelSizeVariantProductModel> variants;
+
+  //打样费用单价
+  double unitPrice;
+
+  ProofingModel({
+    String code,
+    this.status,
+    int totalQuantity,
+    double totalPrice,
+    this.belongTo,
+    this.factory,
+    DateTime creationTime,
+    AddressModel deliveryAddress,
+    String remarks,
+    this.product,
+    this.order,
+    this.unitPrice,
+  }) : super(
           code: code,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
@@ -927,4 +934,31 @@ class ProofingModel extends OrderModel {
 
   static Map<String, dynamic> toJson(ProofingModel model) =>
       _$ProofingModelToJson(model);
+}
+
+/// 打样订单行
+@JsonSerializable()
+class ProofingEntryModel extends OrderEntryModel {
+  ApparelProductModel product;
+  ProofingModel order;
+
+  ProofingEntryModel({
+    int entryNumber,
+    this.product,
+    this.order,
+    double price,
+    int quantity,
+    double totalPrice,
+  }) : super(
+          entryNumber: entryNumber,
+          price: price,
+          quantity: quantity,
+          totalPrice: totalPrice,
+        );
+
+  factory ProofingEntryModel.fromJson(Map<String, dynamic> json) =>
+      _$ProofingEntryModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ProofingEntryModel model) =>
+      _$ProofingEntryModelToJson(model);
 }
