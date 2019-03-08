@@ -14,7 +14,7 @@ class OrderRepositoryImpl {
   }
 
   /// 获取订单明细
-  static Future<RequirementOrderModel> getRequirementOrderDetail(
+  Future<RequirementOrderModel> getRequirementOrderDetail(
       String code) async {
     Response<Map<String, dynamic>> response;
     try {

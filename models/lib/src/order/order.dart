@@ -191,6 +191,7 @@ class AbstractOrderModel extends ItemModel {
   DateTime creationTime;
 
   /// 地址
+  @JsonKey(name: 'deliveryAddress',toJson: _deliverAddressToJson)
   AddressModel deliveryAddress;
 
   /// 备注
@@ -210,6 +211,8 @@ class AbstractOrderModel extends ItemModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+
+  static Map<String,dynamic> _deliverAddressToJson(AddressModel model) => AddressModel.toJson(model);
 }
 
 /// 订单
@@ -419,6 +422,7 @@ class RequirementInfoModel extends ItemModel {
   bool invoiceNeeded;
 
   ///图片
+  @JsonKey(toJson:_mediaToJson)
   List<MediaModel> pictures;
 
   ///商品名称
@@ -428,9 +432,11 @@ class RequirementInfoModel extends ItemModel {
   String productSkuID;
 
   ///大类
+  @JsonKey(toJson :_categoryToJson)
   CategoryModel majorCategory;
 
   ///小类
+  @JsonKey(toJson :_categoryToJson)
   CategoryModel category;
 
   ///联系人
@@ -444,6 +450,8 @@ class RequirementInfoModel extends ItemModel {
 
   ///是否发布到需求池
   bool isToRequirementPool;
+
+
 
   RequirementInfoModel({
     this.expectedDeliveryDate,
@@ -472,6 +480,12 @@ class RequirementInfoModel extends ItemModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+
+  static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
+      CategoryModel.toJson(model);
+
+  static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
 }
 
 /// 需求订单
@@ -543,6 +557,7 @@ class RequirementOrderModel extends OrderModel {
 /// 需求订单行
 @JsonSerializable()
 class RequirementOrderEntryModel extends OrderEntryModel {
+  @JsonKey(toJson: productToJson)
   ApparelProductModel product;
 
   @JsonKey(toJson: orderToJson)
@@ -568,8 +583,11 @@ class RequirementOrderEntryModel extends OrderEntryModel {
   static Map<String, dynamic> toJson(RequirementOrderEntryModel model) =>
       _$RequirementOrderEntryModelToJson(model);
 
-  static Map<String, String> orderToJson(RequirementOrderModel order) =>
-      {'code': order.code??''};
+  static Map<String, String> orderToJson(RequirementOrderModel model) =>
+      {'code': model.code??''};
+
+  static Map<String, String> productToJson(ApparelProductModel model) =>
+      ApparelProductModel.toJson(model);
 }
 
 /// 采购订单

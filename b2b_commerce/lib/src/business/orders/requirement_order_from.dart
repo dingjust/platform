@@ -280,25 +280,22 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              onPressed: () {
-                model.entries = [
-                  RequirementOrderEntryModel(
-                      product: widget.product, order: model)
-                ];
-                print('${_normalImages}');
-                print(
-                    '${model.code},${model.entries[0].product?.name},${model.entries[0].product?.code},${model.details.majorCategory},${model.details.category}');
-                print(
-                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
-                print(
-                    '${model.deliveryAddress},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
-                print(
-                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
+              onPressed: () async{
+//                model.entries = [
+//                  RequirementOrderEntryModel(
+//                      product: widget.product, order: model)
+//                ];
+//                print('${_normalImages}');
+//                print(
+//                    '${model.code},${model.entries[0].product?.name},${model.entries[0].product?.code},${model.details.majorCategory},${model.details.category}');
+//                print(
+//                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
+//                print(
+//                    '${model.deliveryAddress},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
+//                print(
+//                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
 
-                model.details = null;
-                OrderRepositoryImpl().publishNewRequirement(model).then((orderCode){
-                  print(orderCode);
-                });
+                String code = await OrderRepositoryImpl().publishNewRequirement(model);
 
                 Navigator.push(
                   context,

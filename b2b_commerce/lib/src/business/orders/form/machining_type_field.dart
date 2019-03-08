@@ -25,7 +25,7 @@ class MachiningTypeFieldState extends State<MachiningTypeField> {
             ),
             trailing: Text(
               widget.item.details?.machiningType != null
-                  ? widget.item.details.machiningType
+                  ? MachiningTypeLocalizedMap[widget.item.details.machiningType]
                   : '选取',
               style: TextStyle(
                 fontSize: 16,

@@ -41,6 +41,7 @@ const SampleProductReturnStateLocalizedMap = {
 class CategoryModel extends ItemModel {
   String code;
   String name;
+  @JsonKey(toJson: _categoryToJson)
   CategoryModel parent;
 
   CategoryModel({
@@ -54,6 +55,9 @@ class CategoryModel extends ItemModel {
 
   static Map<String, dynamic> toJson(CategoryModel model) =>
       _$CategoryModelToJson(model);
+
+  static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
+      CategoryModel.toJson(model);
 }
 
 @JsonSerializable()
