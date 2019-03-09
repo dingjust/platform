@@ -3,13 +3,16 @@ import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
   final RequirementOrderModel order;
 
-  const RequirementOrderDetailPage({Key key, this.order}) : super(key: key);
+  final List<QuoteModel> quotes;
+
+  const RequirementOrderDetailPage(
+      {Key key, @required this.order, @required this.quotes})
+      : super(key: key);
 
   _RequirementOrderDetailPageState createState() =>
       _RequirementOrderDetailPageState();
@@ -23,22 +26,9 @@ class _RequirementOrderDetailPageState
     RequirementOrderStatus.CANCELLED: Colors.red
   };
 
-  // _RequirementOrderDetailPageState()  {
-
-  // }
-
-  //最新报价信息
-  final List<QuoteModel> quotes = [];
-
   void initState() {
     super.initState();
-    // initQuote();
   }
-
-  // void initQuote() async {
-  //   quotes = await QuoteOrderRepository().getQuotesByRequirement(
-  //       requirementOrderCode: widget.order.code, page: 0, size: 1);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -292,11 +282,11 @@ class _RequirementOrderDetailPageState
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: quotes.isNotEmpty
+      child: widget.quotes.isNotEmpty
           ? Column(
               children: <Widget>[
                 QuoteItem(
-                  model: quotes[0],
+                  model: widget.quotes[0],
                 ),
                 FlatButton(
                   onPressed: () {
