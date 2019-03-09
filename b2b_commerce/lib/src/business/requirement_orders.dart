@@ -208,7 +208,7 @@ class RequirementOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         //根据code查询明
-        RequirementOrderModel model = await OrderRepositoryImpl().getRequirementOrderDetail(order.code);
+        RequirementOrderModel model = await RequirementOrderRepository().getRequirementOrderDetail(order.code);
         if (model != null) {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => RequirementOrderDetailPage(order: model)));

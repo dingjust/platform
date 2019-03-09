@@ -167,7 +167,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                           model.details.expectedMachiningQuantity = requirementNum;
                           model.details.expectedDeliveryDate = expectedDeliveryDate;
 
-                          String code = await OrderRepositoryImpl().publishNewRequirement(model);
+                          String code = await RequirementOrderRepository().publishNewRequirement(model);
                           print(code);
                           //清空数据
                           expectedDeliveryDate = null;

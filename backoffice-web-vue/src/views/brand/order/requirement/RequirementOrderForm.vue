@@ -39,7 +39,7 @@
   import RequirementOrderAttachmentsForm from './RequirementOrderAttachmentsForm';
   import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
 
-  import {OrderMixin} from '@/mixins';
+  // import {OrderMixin} from '@/mixins';
 
   export default {
     name: 'RequirementOrderFrom',
@@ -48,7 +48,7 @@
       RequirementOrderAttachmentsForm,
       RequirementOrderDetailsPage
     },
-    mixins: [OrderMixin],
+    // mixins: [OrderMixin],
     props: ['slotData'],
     methods: {
       ...mapActions({

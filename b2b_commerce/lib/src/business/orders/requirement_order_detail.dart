@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
@@ -16,24 +17,28 @@ class RequirementOrderDetailPage extends StatefulWidget {
 
 class _RequirementOrderDetailPageState
     extends State<RequirementOrderDetailPage> {
-  QuoteModel quoteModel = QuoteModel.fromJson({
-    "code": "34938475200045",
-    "creationtime": DateTime.now().millisecondsSinceEpoch,
-    "belongTo": {"name": "广州好辣制衣厂", "starLevel": 3},
-    "state": "BUYER_REJECTED",
-    "totalPrice": 360.00,
-    "deliveryAddress": {
-      "region": {"name": "广东"},
-      "city": {"name": "广州"},
-      "cityDistrict": {"name": "白云"}
-    }
-  });
-
   static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
     RequirementOrderStatus.PENDING_QUOTE: Colors.green,
     RequirementOrderStatus.COMPLETED: Colors.orange,
     RequirementOrderStatus.CANCELLED: Colors.red
   };
+
+  // _RequirementOrderDetailPageState()  {
+
+  // }
+
+  //最新报价信息
+  final List<QuoteModel> quotes = [];
+
+  void initState() {
+    super.initState();
+    // initQuote();
+  }
+
+  // void initQuote() async {
+  //   quotes = await QuoteOrderRepository().getQuotesByRequirement(
+  //       requirementOrderCode: widget.order.code, page: 0, size: 1);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +48,7 @@ class _RequirementOrderDetailPageState
         centerTitle: true,
         elevation: 0.5,
         title: Text(
-          '需求订单明细',
+          '需求订明细',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -286,24 +291,31 @@ class _RequirementOrderDetailPageState
   Widget _buildQuote() {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          QuoteItem(
-            model: quoteModel,
-          ),
-          FlatButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => RequirementQuoteDetailPage()));
-            },
-            child: Text(
-              '查看全部报价>>',
-              style: TextStyle(color: Colors.orange),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: quotes.isNotEmpty
+          ? Column(
+              children: <Widget>[
+                QuoteItem(
+                  model: quotes[0],
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RequirementQuoteDetailPage()));
+                  },
+                  child: Text(
+                    '查看全部报价>>',
+                    style: TextStyle(color: Colors.orange),
+                  ),
+                )
+              ],
+            )
+          : Center(
+              child: Text(
+                '暂无报价',
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
-          )
-        ],
-      ),
     );
   }
 

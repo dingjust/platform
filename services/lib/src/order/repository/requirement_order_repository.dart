@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-class OrderRepositoryImpl {
+class RequirementOrderRepository {
   /// 发布需求
   Future<String> publishNewRequirement(RequirementOrderModel form) async {
     Map<String, dynamic> jsonMap = RequirementOrderModel.toJson(form);
