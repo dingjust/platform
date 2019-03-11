@@ -149,7 +149,7 @@
           })
         }
 
-        const result = await request('/djbrand/product', formData);
+        const result = await request('/b2b/products/apparel/create', formData);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;

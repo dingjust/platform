@@ -157,7 +157,7 @@
           })
         }
 
-        const result = await request('/djbackoffice/product', formData);
+        const result = await request('/b2b/products/apparel', formData);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;

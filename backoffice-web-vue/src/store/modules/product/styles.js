@@ -36,11 +36,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get('/djbackoffice/product/style', {
-      text: state.keyword,
-      page: state.currentPageNumber,
-      size: state.currentPageSize
-    });
+    const response = await http.get('/djwebservices/styles/all'); 
 
     // console.log(JSON.stringify(response));
     if (!response['errors']) {

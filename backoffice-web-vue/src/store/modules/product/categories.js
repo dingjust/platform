@@ -21,7 +21,7 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}) {
-    const response = await http.get('/djbackoffice/product/category/categories');
+    const response = await http.get('/b2b/categories/categories');
 
     // console.log(JSON.stringify(response));
     if (!response['errors']) {

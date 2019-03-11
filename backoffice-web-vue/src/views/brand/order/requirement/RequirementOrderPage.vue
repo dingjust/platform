@@ -145,7 +145,7 @@
   import autoHeight from 'mixins/autoHeight';
 
   import RequirementOrderForm from './RequirementOrderForm';
-  import RequirementOrderDetailsPage from './RequirementOrderDetailsPage'
+  import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
 
   export default {
     name: 'RequirementOrderPage',
@@ -154,6 +154,9 @@
       ...mapGetters({
         page: 'page'
       })
+    },
+    components:{
+
     },
     methods: {
       ...mapActions({
@@ -199,6 +202,7 @@
         this.fn.openSlider('需求订单：' + item.code, RequirementOrderDetailsPage, result);
       },
       onNew() {
+        console.log('aaaaaaaaa');
         this.fn.openSlider('发布需求', RequirementOrderForm, this.formData);
       },
       onCurrentPageChanged(val) {

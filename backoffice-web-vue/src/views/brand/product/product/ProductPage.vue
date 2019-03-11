@@ -266,7 +266,7 @@
         this.onSearch();
       },
       async getCategories() {
-        const results = await this.$http.get('/djbackoffice/product/category/cascaded');
+        const results = await this.$http.get('/b2b/categories/cascaded');
         if (!results['errors']) {
           this.categories = results;
         }

@@ -83,14 +83,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="风格" prop="style">
-            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
-              <el-option v-for="style in styles"
-                         :key="style.code"
-                         :label="style.name"
-                         :value="style.code">
-              </el-option>
-            </el-select>
+          <el-form-item label="克重（KG）" prop="gramWeight">
+            <el-input-number class="w-100"
+                             v-model="slotData.gramWeight"
+                             :precision="3"
+                             :min="0">
+            </el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -102,57 +100,194 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="克重（KG）" prop="gramWeight">
-            <el-input-number class="w-100"
-                             v-model="slotData.gramWeight"
-                             :precision="3"
-                             :min="0">
-            </el-input-number>
+          <el-form-item label="是否有吊牌" prop="postageFree">
+            <el-radio-group v-model="slotData.postageFree">
+              <el-radio :label="true">是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="风格" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="面料" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="版式" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="款式" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="袖型" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="袖长/裤长" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="图案" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="流行元素" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="填充物" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="厚薄" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="季节" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="门襟" prop="style">
+            <el-select class="w-100" placeholder="请选择" v-model="slotData.style.code">
+              <el-option v-for="style in styles"
+                         :key="style.code"
+                         :label="style.name"
+                         :value="style.code">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
       <hr/>
-      <el-row :gutter="15">
-        <el-col :span="6">
-          <el-form-item label="建议零售价" prop="suggestedPrice">
-            <el-input-number class="w-100"
-                             v-model="slotData.suggestedPrice"
-                             :precision="2"
-                             :min="0">
-            </el-input-number>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="会员价(A)" prop="price1">
-            <el-input-number class="w-100"
-                             v-model="slotData.price1"
-                             :precision="2"
-                             :min="0">
-            </el-input-number>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="会员价(B)" prop="price2">
-            <el-input-number class="w-100"
-                             v-model="slotData.price2"
-                             :precision="2"
-                             :min="0">
-            </el-input-number>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="会员价(C)" prop="price3">
-            <el-input-number class="w-100"
-                             v-model="slotData.price3"
-                             :precision="2"
-                             :min="0">
-            </el-input-number>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="15">
-        <product-prices-entries-form ref="ProductPricesEntriesForm" :slot-data="slotData" :read-only="readOnly"/>
-      </el-row>
+      <!--<el-row :gutter="15">-->
+        <!--<el-col :span="6">-->
+          <!--<el-form-item label="建议零售价" prop="suggestedPrice">-->
+            <!--<el-input-number class="w-100"-->
+                             <!--v-model="slotData.suggestedPrice"-->
+                             <!--:precision="2"-->
+                             <!--:min="0">-->
+            <!--</el-input-number>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col :span="6">-->
+          <!--<el-form-item label="会员价(A)" prop="price1">-->
+            <!--<el-input-number class="w-100"-->
+                             <!--v-model="slotData.price1"-->
+                             <!--:precision="2"-->
+                             <!--:min="0">-->
+            <!--</el-input-number>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col :span="6">-->
+          <!--<el-form-item label="会员价(B)" prop="price2">-->
+            <!--<el-input-number class="w-100"-->
+                             <!--v-model="slotData.price2"-->
+                             <!--:precision="2"-->
+                             <!--:min="0">-->
+            <!--</el-input-number>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col :span="6">-->
+          <!--<el-form-item label="会员价(C)" prop="price3">-->
+            <!--<el-input-number class="w-100"-->
+                             <!--v-model="slotData.price3"-->
+                             <!--:precision="2"-->
+                             <!--:min="0">-->
+            <!--</el-input-number>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
+      <!--<el-row :gutter="15">-->
+        <!--<product-prices-entries-form ref="ProductPricesEntriesForm" :slot-data="slotData" :read-only="readOnly"/>-->
+      <!--</el-row>-->
     </el-form>
   </div>
 </template>
@@ -187,7 +322,7 @@
         return this.slotData;
       },
       async getCategories(query) {
-        const result = await this.$http.get('/djbackoffice/product/category/cascaded');
+        const result = await this.$http.get('/b2b/categories/cascaded');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -195,7 +330,7 @@
         this.categories = result;
       },
       async getStyles() {
-        const result = await this.$http.get('/djbackoffice/product/style/all');
+        const result = await this.$http.get('/djwebservices/styles/all');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
