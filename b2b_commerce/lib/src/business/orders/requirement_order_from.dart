@@ -295,7 +295,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 //                print(
 //                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
 
-                String code = await OrderRepositoryImpl().publishNewRequirement(model);
+                String code = await RequirementOrderRepository().publishNewRequirement(model);
 
                 Navigator.push(
                   context,

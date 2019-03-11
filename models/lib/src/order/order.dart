@@ -191,7 +191,7 @@ class AbstractOrderModel extends ItemModel {
   DateTime creationTime;
 
   /// 地址
-  @JsonKey(name: 'deliveryAddress',toJson: _deliverAddressToJson)
+  @JsonKey(name: 'deliveryAddress', toJson: _deliverAddressToJson)
   AddressModel deliveryAddress;
 
   /// 备注
@@ -212,7 +212,8 @@ class AbstractOrderModel extends ItemModel {
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
 
-  static Map<String,dynamic> _deliverAddressToJson(AddressModel model) => AddressModel.toJson(model);
+  static Map<String, dynamic> _deliverAddressToJson(AddressModel model) =>
+      AddressModel.toJson(model);
 }
 
 /// 订单
@@ -422,7 +423,7 @@ class RequirementInfoModel extends ItemModel {
   bool invoiceNeeded;
 
   ///图片
-  @JsonKey(toJson:_mediaToJson)
+  @JsonKey(toJson: _mediaToJson)
   List<MediaModel> pictures;
 
   ///商品名称
@@ -432,11 +433,11 @@ class RequirementInfoModel extends ItemModel {
   String productSkuID;
 
   ///大类
-  @JsonKey(toJson :_categoryToJson)
+  @JsonKey(toJson: _categoryToJson)
   CategoryModel majorCategory;
 
   ///小类
-  @JsonKey(toJson :_categoryToJson)
+  @JsonKey(toJson: _categoryToJson)
   CategoryModel category;
 
   ///联系人
@@ -450,8 +451,6 @@ class RequirementInfoModel extends ItemModel {
 
   ///是否发布到需求池
   bool isToRequirementPool;
-
-
 
   RequirementInfoModel({
     this.expectedDeliveryDate,
@@ -584,7 +583,7 @@ class RequirementOrderEntryModel extends OrderEntryModel {
       _$RequirementOrderEntryModelToJson(model);
 
   static Map<String, String> orderToJson(RequirementOrderModel model) =>
-      {'code': model.code??''};
+      {'code': model.code ?? ''};
 
   static Map<String, String> productToJson(ApparelProductModel model) =>
       ApparelProductModel.toJson(model);
@@ -868,6 +867,7 @@ class ProductionProgressModel extends ItemModel {
   DateTime estimatedDate;
 
   /// 实际完成时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime finishDate;
 
   ///备注

@@ -37,7 +37,7 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
             return <QuoteModel>[
               QuoteModel.fromJson({
                 "code": "34938475200045",
-                "creationtime": DateTime.now().toString(),
+                "creationtime": DateTime.now().millisecondsSinceEpoch,
                 "belongTo": {"name": "广州好辣制衣厂", "starLevel": 3},
                 "state": "BUYER_APPROVED",
                 "totalPrice": 360.00,
@@ -49,7 +49,7 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
               }),
               QuoteModel.fromJson({
                 "code": "34938475200045",
-                "creationtime": DateTime.now().toString(),
+                "creationtime": DateTime.now().millisecondsSinceEpoch,
                 "belongTo": {"name": "广州好辣制衣厂", "starLevel": 2},
                 "state": "BUYER_REJECTED",
                 "totalPrice": 360.00,
@@ -61,7 +61,7 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
               }),
               QuoteModel.fromJson({
                 "code": "34938475200045",
-                "creationtime": DateTime.now().toString(),
+                "creationtime": DateTime.now().millisecondsSinceEpoch,
                 "belongTo": {"name": "广州好辣制衣厂", "starLevel": 4},
                 "state": "SELLER_SUBMITTED",
                 "totalPrice": 360.00,
@@ -73,7 +73,7 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
               }),
               QuoteModel.fromJson({
                 "code": "34938475200045",
-                "creationtime": DateTime.now().toString(),
+                "creationtime": DateTime.now().millisecondsSinceEpoch,
                 "belongTo": {"name": "广州好辣制衣厂", "starLevel": 5},
                 "state": "BUYER_APPROVED",
                 "totalPrice": 360.00,
@@ -95,7 +95,7 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
       this.quotesList.add(await Future.delayed(const Duration(seconds: 1), () {
             return QuoteModel.fromJson({
               "code": "34938475200045",
-              "creationtime": DateTime.now().toString(),
+              "creationtime": DateTime.now().millisecondsSinceEpoch,
               "belongTo": {"name": "广州好辣制衣厂", "starLevel": 5},
               "state": "BUYER_APPROVED",
               "totalPrice": 360.00,
@@ -120,7 +120,7 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
     this.quotesList.add(await Future.delayed(const Duration(seconds: 1), () {
           return QuoteModel.fromJson({
             "code": "34938475200045",
-            "creationtime": DateTime.now().toString(),
+            "creationtime": DateTime.now().millisecondsSinceEpoch,
             "belongTo": {"name": "广州好辣制衣厂", "starLevel": 5},
             "state": "BUYER_APPROVED",
             "totalPrice": 360.00,

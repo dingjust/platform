@@ -5,7 +5,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/api/order.dart';
 import 'package:services/src/order/PageEntry.dart';
-import 'package:services/src/order/order_response.dart';
+import 'package:services/src/order/response/order_response.dart';
 
 class RequirementOrderBLoC extends BLoCBase {
   // 工厂模式

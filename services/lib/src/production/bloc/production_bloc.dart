@@ -101,8 +101,8 @@ class ProductionBLoC extends BLoCBase {
             'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
             'totalPrice': 300,
-            'creationtime': DateTime.now().toString(),
-            'expectedDeliveryDate': DateTime.now().toString(),
+            'creationtime': DateTime.now().millisecondsSinceEpoch,
+            'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
             'currentPhase': 'CUTTING',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
@@ -133,8 +133,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'MATERIAL_PREPARATION',
                 'quantity': 70,
                 'sequence': 0,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -158,8 +158,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'CUTTING',
                 'quantity': 70,
                 'sequence': 1,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -183,8 +183,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'STITCHING',
                 'quantity': 70,
                 'sequence': 2,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -208,8 +208,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'AFTER_FINISHING',
                 'quantity': 70,
                 'sequence': 3,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -233,8 +233,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'INSPECTION',
                 'quantity': 70,
                 'sequence': 4,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -258,8 +258,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'DELIVERY',
                 'quantity': 70,
                 'sequence': 5,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -311,8 +311,8 @@ class ProductionBLoC extends BLoCBase {
             'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
             'totalPrice': 300,
-            'creationtime': DateTime.now().toString(),
-            'expectedDeliveryDate': DateTime.now().toString(),
+            'creationtime': DateTime.now().millisecondsSinceEpoch,
+            'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
             'currentPhase': 'MATERIAL_PREPARATION',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
@@ -343,8 +343,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'MATERIAL_PREPARATION',
                 'quantity': 70,
                 'sequence': 0,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -368,8 +368,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'CUTTING',
                 'quantity': 70,
                 'sequence': 1,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -393,8 +393,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'STITCHING',
                 'quantity': 70,
                 'sequence': 2,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -418,8 +418,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'AFTER_FINISHING',
                 'quantity': 70,
                 'sequence': 3,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -443,8 +443,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'INSPECTION',
                 'quantity': 70,
                 'sequence': 4,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -468,8 +468,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'DELIVERY',
                 'quantity': 70,
                 'sequence': 5,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -521,8 +521,8 @@ class ProductionBLoC extends BLoCBase {
             'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
             'totalPrice': 300,
-            'creationtime': DateTime.now().toString(),
-            'expectedDeliveryDate': DateTime.now().toString(),
+            'creationtime': DateTime.now().millisecondsSinceEpoch,
+            'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
             'currentPhase': 'DELIVERY',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
@@ -553,8 +553,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'MATERIAL_PREPARATION',
                 'quantity': 70,
                 'sequence': 0,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -578,8 +578,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'CUTTING',
                 'quantity': 70,
                 'sequence': 1,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -603,8 +603,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'STITCHING',
                 'quantity': 70,
                 'sequence': 2,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -628,8 +628,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'AFTER_FINISHING',
                 'quantity': 70,
                 'sequence': 3,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -653,8 +653,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'INSPECTION',
                 'quantity': 70,
                 'sequence': 4,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -678,8 +678,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'DELIVERY',
                 'quantity': 70,
                 'sequence': 5,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -731,8 +731,8 @@ class ProductionBLoC extends BLoCBase {
             'status': 'IN_PRODUCTION',
             'totalQuantity': 10,
             'totalPrice': 300,
-            'creationtime': DateTime.now().toString(),
-            'expectedDeliveryDate': DateTime.now().toString(),
+            'creationtime': DateTime.now().millisecondsSinceEpoch,
+            'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
             'currentPhase': 'INSPECTION',
             'machiningType': '包工包料',
             'invoiceNeeded': true,
@@ -763,8 +763,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'MATERIAL_PREPARATION',
                 'quantity': 70,
                 'sequence': 0,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -788,8 +788,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'CUTTING',
                 'quantity': 70,
                 'sequence': 1,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -813,8 +813,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'STITCHING',
                 'quantity': 70,
                 'sequence': 2,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -838,8 +838,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'AFTER_FINISHING',
                 'quantity': 70,
                 'sequence': 3,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -863,8 +863,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'INSPECTION',
                 'quantity': 70,
                 'sequence': 4,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -888,8 +888,8 @@ class ProductionBLoC extends BLoCBase {
                 'phase': 'DELIVERY',
                 'quantity': 70,
                 'sequence': 5,
-                'estimatedDate': DateTime.now().toString(),
-                'finishDate': DateTime.now().toString(),
+                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+                'finishDate': DateTime.now().millisecondsSinceEpoch,
                 'remarks': '延期了12天',
                 'medias': [
                   {
@@ -1032,8 +1032,8 @@ class ProductionBLoC extends BLoCBase {
         'status': 'IN_PRODUCTION',
         'totalQuantity': 10,
         'totalPrice': 300,
-        'creationtime': DateTime.now().toString(),
-        'expectedDeliveryDate': DateTime.now().toString(),
+        'creationtime': DateTime.now().millisecondsSinceEpoch,
+        'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
         'currentPhase': 'CUTTING',
         'machiningType': '包工包料',
         'invoiceNeeded': true,
@@ -1064,8 +1064,8 @@ class ProductionBLoC extends BLoCBase {
             'phase': 'MATERIAL_PREPARATION',
             'quantity': 70,
             'sequence': 0,
-            'estimatedDate': DateTime.now().toString(),
-            'finishDate': DateTime.now().toString(),
+            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+            'finishDate': DateTime.now().millisecondsSinceEpoch,
             'remarks': '延期了12天',
             'medias': [
               {
@@ -1089,8 +1089,8 @@ class ProductionBLoC extends BLoCBase {
             'phase': 'SAMPLE_CONFIRM',
             'quantity': 70,
             'sequence': 1,
-            'estimatedDate': DateTime.now().toString(),
-            'finishDate': DateTime.now().toString(),
+            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+            'finishDate': DateTime.now().millisecondsSinceEpoch,
             'remarks': '延期了12天',
             'medias': [
               {
@@ -1114,8 +1114,8 @@ class ProductionBLoC extends BLoCBase {
             'phase': 'CUTTING',
             'quantity': 70,
             'sequence': 2,
-            'estimatedDate': DateTime.now().toString(),
-            'finishDate': DateTime.now().toString(),
+            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+            'finishDate': DateTime.now().millisecondsSinceEpoch,
             'remarks': '延期了12天',
             'medias': [
               {
@@ -1139,8 +1139,8 @@ class ProductionBLoC extends BLoCBase {
             'phase': 'STITCHING',
             'quantity': 70,
             'sequence': 3,
-            'estimatedDate': DateTime.now().toString(),
-            'finishDate': DateTime.now().toString(),
+            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+            'finishDate': DateTime.now().millisecondsSinceEpoch,
             'remarks': '延期了12天',
             'medias': [
               {
@@ -1164,8 +1164,8 @@ class ProductionBLoC extends BLoCBase {
             'phase': 'INSPECTION',
             'quantity': 70,
             'sequence': 4,
-            'estimatedDate': DateTime.now().toString(),
-            'finishDate': DateTime.now().toString(),
+            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+            'finishDate': DateTime.now().millisecondsSinceEpoch,
             'remarks': '延期了12天',
             'medias': [
               {
@@ -1189,8 +1189,8 @@ class ProductionBLoC extends BLoCBase {
             'phase': 'DELIVERY',
             'quantity': 70,
             'sequence': 5,
-            'estimatedDate': DateTime.now().toString(),
-            'finishDate': DateTime.now().toString(),
+            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+            'finishDate': DateTime.now().millisecondsSinceEpoch,
             'remarks': '延期了12天',
             'medias': [
               {
