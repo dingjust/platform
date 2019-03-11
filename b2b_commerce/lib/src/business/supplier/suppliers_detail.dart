@@ -11,12 +11,14 @@ class SuppliersDetail extends StatefulWidget {
   final SupplierModel supplierModel;
   final bool isSupplier;
 
-  SuppliersDetail({Key key, @required this.supplierModel,@required this.isSupplier}) : super(key: key);
+  SuppliersDetail(
+      {Key key, @required this.supplierModel, @required this.isSupplier})
+      : super(key: key);
 
   _SuppliersDetailState createState() => _SuppliersDetailState();
 }
 
-class _SuppliersDetailState extends State<SuppliersDetail>{
+class _SuppliersDetailState extends State<SuppliersDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,8 +51,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                     builder: (context) => ContactFactoryPage(),
                   ),
                 );
-              }
-          )
+              })
         ],
       ),
       body: Container(child: _buildSuppliersWidget(context)),
@@ -109,7 +110,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
   Widget _buildTop(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 5, 0, 5),
-      padding: EdgeInsets.fromLTRB(10,0,10,0),
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Row(
         children: <Widget>[
           Container(
@@ -158,15 +159,14 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                   child: Row(
                     children: <Widget>[
                       Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          widget.supplierModel.factory.address,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        )
-                      ),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            widget.supplierModel.factory.address,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          )),
                     ],
                   ),
                 ),
@@ -1057,7 +1057,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '报价单号：${widget.supplierModel.quoteOrder.order.code}',
+                '报价单号：${widget.supplierModel.quoteOrder.code}',
                 style: TextStyle(fontSize: 15),
               ),
               RichText(
@@ -1066,15 +1066,13 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                     style: TextStyle(fontSize: 15, color: Colors.black),
                     children: <TextSpan>[
                       TextSpan(
-                          text:
-                              '${widget.supplierModel.quoteOrder.order.totalPrice}',
+                          text: '${widget.supplierModel.quoteOrder.totalPrice}',
                           style: TextStyle(color: Colors.red)),
                       TextSpan(text: '元'),
                     ]),
               ),
               Text(
-                  QuoteStateLocalizedMap[
-                      widget.supplierModel.quoteOrder.order.state],
+                  QuoteStateLocalizedMap[widget.supplierModel.quoteOrder.state],
                   style: TextStyle(color: Colors.blue, fontSize: 15))
             ],
           ),
@@ -1082,7 +1080,7 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '报价时间：${DateFormatUtil.formatYMD(widget.supplierModel.quoteOrder.order.creationTime)}',
+                '报价时间：${DateFormatUtil.formatYMD(widget.supplierModel.quoteOrder.creationTime)}',
                 style: TextStyle(fontSize: 15),
               ),
             ],
@@ -1104,14 +1102,17 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image:
-                      widget.supplierModel.quoteOrder.product.thumbnail != null
-                          ? NetworkImage(
-                              widget.supplierModel.quoteOrder.product.thumbnail)
-                          : AssetImage(
-                              'temp/picture.png',
-                              package: "assets",
-                            ),
+                  image: widget.supplierModel.quoteOrder.requirementOrder
+                                  .details.pictures !=
+                              null &&
+                          widget.supplierModel.quoteOrder.requirementOrder
+                              .details.pictures.isNotEmpty
+                      ? NetworkImage(widget.supplierModel.quoteOrder
+                          .requirementOrder.details.pictures[0].url)
+                      : AssetImage(
+                          'temp/picture.png',
+                          package: "assets",
+                        ),
                   fit: BoxFit.cover,
                 )),
           ),
@@ -1124,9 +1125,12 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  widget.supplierModel.quoteOrder.product.name != null
+                  widget.supplierModel.quoteOrder.requirementOrder.details
+                              .productName !=
+                          null
                       ? Text(
-                          widget.supplierModel.quoteOrder.product.name,
+                          widget.supplierModel.quoteOrder.requirementOrder
+                              .details.productName,
                           style: TextStyle(fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         )
@@ -1134,14 +1138,16 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                           '暂无产品',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
-                  widget.supplierModel.quoteOrder.product.skuID != null
+                  widget.supplierModel.quoteOrder.requirementOrder.details
+                              .productSkuID !=
+                          null
                       ? Container(
                           padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(5)),
                           child: Text(
-                            '货号：${widget.supplierModel.quoteOrder.product.skuID}',
+                            '货号：${widget.supplierModel.quoteOrder.requirementOrder.details.productSkuID}',
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         )
@@ -1150,13 +1156,13 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        "${widget.supplierModel.quoteOrder.order.totalQuantity}件",
+                        "${widget.supplierModel.quoteOrder.totalQuantity}件",
                         style: TextStyle(fontSize: 16, color: Colors.orange),
                       )
                     ],
                   ),
                   Text(
-                    '需求订单号：${widget.supplierModel.quoteOrder.order.requirementOrderCode}',
+                    '需求订单号：${widget.supplierModel.quoteOrder.requirementOrderRef}',
                     style: TextStyle(fontSize: 13, color: Colors.grey),
                   )
                 ],
@@ -1183,14 +1189,16 @@ class _SuppliersDetailState extends State<SuppliersDetail>{
                 await launch(url);
               },
             ),
-            tel.indexOf('-')>-1?Container():ListTile(
-              leading: Icon(Icons.message),
-              title: Text('发送短信'),
-              onTap: () async {
-                var url = 'sms:' + tel;
-                await launch(url);
-              },
-            ),
+            tel.indexOf('-') > -1
+                ? Container()
+                : ListTile(
+                    leading: Icon(Icons.message),
+                    title: Text('发送短信'),
+                    onTap: () async {
+                      var url = 'sms:' + tel;
+                      await launch(url);
+                    },
+                  ),
           ],
         );
       },

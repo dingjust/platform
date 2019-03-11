@@ -365,7 +365,7 @@ class FactoryModel extends B2BUnitModel {
 }
 
 @JsonSerializable()
-class LabelModel extends ItemModel{
+class LabelModel extends ItemModel {
   String name;
   String group;
   List<IndustrialClusterModel> clusters;
@@ -383,10 +383,9 @@ class LabelModel extends ItemModel{
       _$LabelModelToJson(model);
 }
 
-
 //产业集群
 @JsonSerializable()
-class IndustrialClusterModel extends ItemModel{
+class IndustrialClusterModel extends ItemModel {
   String code;
   String name;
   List<LabelModel> labels;
@@ -526,7 +525,7 @@ class SupplierModel extends ItemModel {
   int quoteCount;
 
   //报价单信息（取最新一条）
-  QuoteEntryModel quoteOrder;
+  QuoteModel quoteOrder;
 
   //采购订单信息（取最新一条）
   PurchaseOrderModel purchaseOrder;

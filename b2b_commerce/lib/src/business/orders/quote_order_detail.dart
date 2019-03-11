@@ -1,9 +1,10 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class QuoteOrderDetailPage extends StatelessWidget {
-  final QuoteEntryModel item;
+  final QuoteModel item;
 
   const QuoteOrderDetailPage({this.item});
 
@@ -60,25 +61,25 @@ class QuoteOrderDetailPage extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(bottom: 10),
-              child: Text('需求订单号：' + item.order.requirementOrderCode),
+              child: Text('需求订单号：' + item.requirementOrderRef),
             ),
             Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('报价单号：' + item.order.code),
+                  child: Text('报价单号：' + item.code),
                 ),
                 Text(
-                  QuoteStateLocalizedMap[item.order.state],
+                  QuoteStateLocalizedMap[item.state],
                   style: TextStyle(
-                    color: _statesColor[item.order.state],
+                    color: _statesColor[item.state],
                   ),
                 ),
               ],
             ),
             Padding(
               padding: EdgeInsets.only(top: 10),
-              child: Text('报价时间：' +
-                  item.order.creationTime.toString().substring(0, 10)),
+              child:
+                  Text('报价时间：' + item.creationTime.toString().substring(0, 10)),
             )
           ],
         ),
@@ -87,13 +88,14 @@ class QuoteOrderDetailPage extends StatelessWidget {
   }
 
   _buildFactory() {
-    return Card(
-      elevation: 0,
+    return Container(
+      color: Colors.white,
       margin: EdgeInsets.only(top: 15),
       child: Container(
         padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(
               '报价工厂',
@@ -101,69 +103,53 @@ class QuoteOrderDetailPage extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Text(
+                      item.belongTo.name,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  Stars(
+                    starLevel: item.belongTo.starLevel ?? 1,
+                    highlightOnly: false,
+                  )
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  '${item.belongTo.contactAddress?.city?.name} ${item.belongTo.contactAddress?.cityDistrict?.name}',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  size: 22,
+                  color: Colors.grey,
+                )
+              ],
+            ),
             Row(
               children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Text(
-                                item.order.belongTo.name,
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-                            Stars(
-                              starLevel: item.order.belongTo.starLevel,
-                              highlightOnly: false,
-                            )
-                          ],
-                        ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Text('历史接单'),
-                          Text(
-                            item.order.belongTo.historyOrdersCount.toString(),
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          Text('单，报价成功率'),
-                          Text(
-                            (item.order.belongTo.orderedSuccessRate * 100)
-                                    .round()
-                                    .toString() +
-                                '%',
-                            style: TextStyle(color: Colors.red),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                Text('历史接单'),
+                Text(
+                  item.belongTo.historyOrdersCount.toString(),
+                  style: TextStyle(color: Colors.red),
                 ),
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          item.order.belongTo.contactAddress.city.name +
-                              item.order.belongTo.contactAddress.cityDistrict
-                                  .name,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          size: 22,
-                          color: Colors.grey,
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                Text('单，报价成功率'),
+                Text(
+                  (item.belongTo.orderedSuccessRate ?? 0 * 100)
+                          .round()
+                          .toString() +
+                      '%',
+                  style: TextStyle(color: Colors.red),
+                )
               ],
             ),
           ],
@@ -181,8 +167,10 @@ class QuoteOrderDetailPage extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image: item.product.thumbnail != null
-                    ? NetworkImage(item.product.thumbnail)
+                image: item.requirementOrder.details.pictures != null &&
+                        item.requirementOrder.details.pictures.isNotEmpty
+                    ? NetworkImage(
+                        item.requirementOrder.details.pictures[0].url)
                     : AssetImage(
                         'temp/picture.png',
                         package: "assets",
@@ -198,9 +186,9 @@ class QuoteOrderDetailPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                item.product?.name != null
+                item.requirementOrder.details.productName != null
                     ? Text(
-                        item.product.name,
+                        item.requirementOrder.details.productName,
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -213,7 +201,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                           color: Colors.red,
                         ),
                       ),
-                item.product?.skuID != null
+                item.requirementOrder.details?.productSkuID != null
                     ? Container(
                         padding:
                             EdgeInsets.symmetric(vertical: 1, horizontal: 5),
@@ -222,7 +210,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: Text(
-                          '货号：' + item.product.skuID,
+                          '货号：' + item.requirementOrder.details.productSkuID,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 12,
@@ -237,12 +225,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    item.product.majorCategory.name +
-                        "," +
-                        item.product.minorCategory.name +
-                        "," +
-                        item.order.totalQuantity.toString() +
-                        '件',
+                    '${item.requirementOrder.details?.majorCategory.name},${item.requirementOrder.details?.category.name},${item.requirementOrder.totalQuantity}件',
                     style: TextStyle(
                       color: Colors.orange,
                       fontSize: 15,
@@ -280,7 +263,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     child: Text('面料单价'),
                   ),
                   Text(
-                    '￥' + item.order.unitPriceOfFabric.toString(),
+                    '￥ ${item.unitPriceOfFabric}',
                     style: TextStyle(
                       color: Colors.red,
                     ),
@@ -299,7 +282,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     child: Text('辅料单价'),
                   ),
                   Text(
-                    '￥' + item.order.unitPriceOfExcipients.toString(),
+                    '￥ ${item.unitPriceOfExcipients}',
                     style: TextStyle(
                       color: Colors.red,
                     ),
@@ -318,7 +301,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     child: Text('加工单价'),
                   ),
                   Text(
-                    '￥' + item.order.unitPriceOfProcessing.toString(),
+                    '￥ ${item.unitPriceOfProcessing}',
                     style: TextStyle(
                       color: Colors.red,
                     ),
@@ -337,7 +320,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     child: Text('其他'),
                   ),
                   Text(
-                    '￥ ${item.order.costOfOther}',
+                    '￥ ${item.costOfOther}',
                     style: TextStyle(
                       color: Colors.red,
                     ),
@@ -356,10 +339,10 @@ class QuoteOrderDetailPage extends StatelessWidget {
                   Text(
                     '费用合计'
                         '￥' +
-                        (item.order.unitPriceOfFabric +
-                                item.order.unitPriceOfExcipients +
-                                item.order.unitPriceOfProcessing +
-                                item.order.costOfOther)
+                        (item.unitPriceOfFabric +
+                                item.unitPriceOfExcipients +
+                                item.unitPriceOfProcessing +
+                                item.costOfOther)
                             .toString(),
                     style: TextStyle(
                       color: Colors.red,
@@ -379,7 +362,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                     child: Text('打样费'),
                   ),
                   Text(
-                    '￥' + item.order.costOfSamples.toString(),
+                    '￥' + item.costOfSamples.toString(),
                     style: TextStyle(
                       color: Colors.red,
                     ),
@@ -399,8 +382,8 @@ class QuoteOrderDetailPage extends StatelessWidget {
       margin: EdgeInsets.only(top: 15),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        child: Text('交货时间：' +
-            item.order.expectedDeliveryDate.toString().substring(0, 10)),
+        child:
+            Text('交货时间：${DateFormatUtil.formatYMD(item.expectedDeliveryDate)}'),
       ),
     );
   }
@@ -418,7 +401,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
                 '附件',
                 style: TextStyle(color: Colors.grey),
               ),
-              Attachments(list: item.order.attachments),
+              Attachments(list: item.attachments),
             ],
           )),
     );
@@ -439,7 +422,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Text('确定前请先与我厂沟通好样衣事宜，谢谢。'),
+                child: Text('${item.remarks}'),
               ),
             ],
           )),
@@ -448,7 +431,7 @@ class QuoteOrderDetailPage extends StatelessWidget {
 
   Widget _buildActionChip() {
     return Offstage(
-      offstage: item.order.state != QuoteState.SELLER_SUBMITTED ? true : false,
+      offstage: item.state != QuoteState.SELLER_SUBMITTED ? true : false,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
         child: Row(

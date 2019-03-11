@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -181,12 +182,14 @@ class QuoteItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => QuoteOrderDetailPage(
-        //           item: model,
-        //         )));
+      onTap: () async {
+        //查询明细
+        QuoteModel detailModel =
+            await QuoteOrderRepository().getquoteDetail(model.code);
+        if (detailModel != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuoteOrderDetailPage(item: detailModel)));
+        }
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -311,7 +314,13 @@ class QuoteItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           FlatButton(
-              onPressed: () {},
+              onPressed: () async {
+                int statusCode =
+                    await QuoteOrderRepository().quoteReject(model.code);
+                if (statusCode == 200) {
+                  //TODO
+                }
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Colors.red,
@@ -321,7 +330,13 @@ class QuoteItem extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               )),
           FlatButton(
-              onPressed: () {},
+              onPressed: () async {
+                int statusCode =
+                    await QuoteOrderRepository().quoteApprove(model.code);
+                if (statusCode == 200) {
+                  //TODO
+                }
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 149, 22, 1),
