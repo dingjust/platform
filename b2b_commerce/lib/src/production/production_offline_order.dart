@@ -1,8 +1,10 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
+import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
+import 'package:b2b_commerce/src/production/production_offline_product_color_size.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -11,13 +13,14 @@ class ProductionOfflineOrder extends StatefulWidget {
 
   final ApparelProductModel product;
 
-  ProductionOfflineOrder({this.product});
+  Map<ColorModel, List<SizeQuantityItem>> colorSizeQuantityList;
+
+  ProductionOfflineOrder({this.product , this.colorSizeQuantityList});
 
   _ProductionOfflineOrderState createState() => _ProductionOfflineOrderState();
 }
 
 class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
-  FocusNode _expectedPriceFocusNode = FocusNode();
   String address;
   String processingType;
   String isInvoice;
@@ -35,9 +38,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   @override
   void initState() {
     _product = widget.product;
-//    if (_product?.normal != null) _normalMedias = _product?.normal;
-
-    // TODO: implement initState
     super.initState();
   }
 
@@ -168,9 +168,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: processingCount == null || processingCount == ''
+            trailing: widget.colorSizeQuantityList == null
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(processingCount,
+                : Text('已选择',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -183,11 +183,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(fieldText: '加工数量',inputType: TextInputType.number)),
+                builder: (context) => OfflineProductColorSizePage(colorSizeQuantityList: widget.colorSizeQuantityList,)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
-              processingCount = value;
+              if(value != null){
+                widget.colorSizeQuantityList = value;
+              }
             });
           });
         });
