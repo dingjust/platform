@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/order/PageEntry.dart';
-import 'package:services/src/order/order_response.dart';
 import 'package:dio/dio.dart';
+import 'package:services/src/order/response/order_response.dart';
 
 class PurchaseOrderBLoC extends BLoCBase {
 
