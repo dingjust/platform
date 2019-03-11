@@ -156,7 +156,7 @@
         });
       },
       async _onSubmitBaseForm(formData) {
-        const result = await this.$http.put('/djbrand/product', formData);
+        const result = await this.$http.put('/b2b/products/apparel', formData);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;

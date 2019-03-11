@@ -68,7 +68,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get('/djbackoffice/product', {
+    const response = await http.post('/b2b/products/apparel/all', {
       code: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize

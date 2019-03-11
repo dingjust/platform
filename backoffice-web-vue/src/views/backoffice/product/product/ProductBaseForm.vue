@@ -213,7 +213,7 @@
         }
       },
       async getCategories(query) {
-        const result = await this.$http.get('/djbackoffice/product/category/cascaded');
+        const result = await this.$http.get('/b2b/categories/cascaded');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;

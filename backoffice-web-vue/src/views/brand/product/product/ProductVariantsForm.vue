@@ -128,13 +128,13 @@
       axios
         .all([
           axios
-            .get('/djbackoffice/product/color/all')
+            .get('/djwebservices/colors/all')
             .then(response => {
               this.colors = response.data;
             }),
 
           axios
-            .get('/djbackoffice/product/size/all')
+            .get('/djwebservices/sizes/all')
             .then(response => {
               this.sizes = response.data;
             })
