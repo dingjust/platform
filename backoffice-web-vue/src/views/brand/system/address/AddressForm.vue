@@ -28,7 +28,7 @@
     props: ['slotData', 'readOnly'],
     components: {AddressBaseForm},
     methods: {
-      onSubmit() {
+        onSubmit() {
         const baseForm = this.$refs['baseForm'];
         baseForm.validate(valid => {
           if (!valid) {
@@ -46,7 +46,7 @@
           request = this.$http.put;
         }
 
-        const result = await request('/djbrand/system/address', this.slotData);
+        const result = await request('/b2b/company/addresses', this.slotData);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;

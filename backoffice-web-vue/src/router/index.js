@@ -352,6 +352,16 @@ const router = new Router({
           },
           children: [
             {
+              path: 'product',
+              name: '产品',
+              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/product/ProductPage'),
+            },
+            {
+              path: 'deleted',
+              name: '已删除产品',
+              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/product/ProductDeletedPage'),
+            },
+            {
               path: 'fabric',
               name: '面辅料',
               component: () => import(/* webpackChunkName: 'factory-products' */ 'factory/product/fabric/FabricProductPage'),
