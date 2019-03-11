@@ -291,7 +291,9 @@ class _RequirementOrderDetailPageState
                 FlatButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RequirementQuoteDetailPage()));
+                        builder: (context) => RequirementQuoteDetailPage(
+                              order: widget.order,
+                            )));
                   },
                   child: Text(
                     '查看全部报价>>',

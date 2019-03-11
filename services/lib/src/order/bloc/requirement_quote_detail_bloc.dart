@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/order/response/order_response.dart';
 
 class RequirementQuoteDetailBLoC extends BLoCBase {
-  static final List<QuoteModel> quotes = [];
-
   // 工厂模式
   factory RequirementQuoteDetailBLoC() => _getInstance();
 
@@ -23,114 +23,93 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
     return _instance;
   }
 
+  /// 数据列
+  static List<QuoteModel> quotes;
+
+  /// 当前页数
+  int currentPage = 0;
+
+  /// 总页数
+  int totalPages = 0;
+
+  /// 显示数据条数
+  int size = 10;
+
+  /// 总条数
+  int totalElements = 0;
+
   List<QuoteModel> get quotesList => quotes;
 
   var _controller = StreamController<List<QuoteModel>>.broadcast();
 
   Stream<List<QuoteModel>> get stream => _controller.stream;
 
-  getData() async {
-    //若没有数据则查询
-    if (quotes.isEmpty) {
-      // TODO: 分页拿数据，response.data;
-      this.quotesList.addAll(await Future.delayed(const Duration(seconds: 1), () {
-            return <QuoteModel>[
-              QuoteModel.fromJson({
-                "code": "34938475200045",
-                "creationtime": DateTime.now().millisecondsSinceEpoch,
-                "belongTo": {"name": "广州好辣制衣厂", "starLevel": 3},
-                "state": "BUYER_APPROVED",
-                "totalPrice": 360.00,
-                "deliveryAddress": {
-                  "region": {"name": "广东"},
-                  "city": {"name": "广州"},
-                  "cityDistrict": {"name": "白云"}
-                }
-              }),
-              QuoteModel.fromJson({
-                "code": "34938475200045",
-                "creationtime": DateTime.now().millisecondsSinceEpoch,
-                "belongTo": {"name": "广州好辣制衣厂", "starLevel": 2},
-                "state": "BUYER_REJECTED",
-                "totalPrice": 360.00,
-                "deliveryAddress": {
-                  "region": {"name": "广东"},
-                  "city": {"name": "广州"},
-                  "cityDistrict": {"name": "白云"}
-                }
-              }),
-              QuoteModel.fromJson({
-                "code": "34938475200045",
-                "creationtime": DateTime.now().millisecondsSinceEpoch,
-                "belongTo": {"name": "广州好辣制衣厂", "starLevel": 4},
-                "state": "SELLER_SUBMITTED",
-                "totalPrice": 360.00,
-                "deliveryAddress": {
-                  "region": {"name": "广东"},
-                  "city": {"name": "广州"},
-                  "cityDistrict": {"name": "白云"}
-                }
-              }),
-              QuoteModel.fromJson({
-                "code": "34938475200045",
-                "creationtime": DateTime.now().millisecondsSinceEpoch,
-                "belongTo": {"name": "广州好辣制衣厂", "starLevel": 5},
-                "state": "BUYER_APPROVED",
-                "totalPrice": 360.00,
-                "deliveryAddress": {
-                  "region": {"name": "广东"},
-                  "city": {"name": "广州"},
-                  "cityDistrict": {"name": "白云"}
-                }
-              })
-            ];
-          }));
+  getData(String code) async {
+    //重置当前页计数
+    currentPage = 0;
+    // TODO: 分页拿数据;
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.get(OrderApis.requirementOrderQuotes(code),
+          data: {'page': currentPage, 'size': size});
+    } on DioError catch (e) {
+      print(e);
     }
+    if (response != null && response.statusCode == 200) {
+      QuoteOrdersResponse ordersResponse =
+          QuoteOrdersResponse.fromJson(response.data);
+      quotes = ordersResponse.content;
+      totalPages = ordersResponse.totalPages;
+      totalElements = ordersResponse.totalElements;
+    } else
+      quotes = null;
     _controller.sink.add(this.quotesList);
   }
 
-  loadingMore() async {
-    //模拟数据到底
-    if (this.quotesList.length < 10) {
-      this.quotesList.add(await Future.delayed(const Duration(seconds: 1), () {
-            return QuoteModel.fromJson({
-              "code": "34938475200045",
-              "creationtime": DateTime.now().millisecondsSinceEpoch,
-              "belongTo": {"name": "广州好辣制衣厂", "starLevel": 5},
-              "state": "BUYER_APPROVED",
-              "totalPrice": 360.00,
-              "deliveryAddress": {
-                "region": {"name": "广东"},
-                "city": {"name": "广州"},
-                "cityDistrict": {"name": "白云"}
-              }
-            });
-          }));
-    } else {
+  loadingMore(code) async {
+    //数据到底
+    if (currentPage + 1 == totalPages) {
       //通知显示已经到底部
       _bottomController.sink.add(true);
+    } else {
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$.get(OrderApis.requirementOrderQuotes(code),
+            data: {'page': ++currentPage, 'size': size});
+      } on DioError catch (e) {
+        print(e);
+      }
+      if (response != null && response.statusCode == 200) {
+        QuoteOrdersResponse ordersResponse =
+            QuoteOrdersResponse.fromJson(response.data);
+        quotes.addAll(ordersResponse.content);
+      }
+      _loadingController.sink.add(false);
+      _controller.sink.add(this.quotesList);
     }
-    _loadingController.sink.add(false);
-    _controller.sink.add(this.quotesList);
   }
 
   //下拉刷新
-  Future refreshData() async {
-    this.quotesList.clear();
-    this.quotesList.add(await Future.delayed(const Duration(seconds: 1), () {
-          return QuoteModel.fromJson({
-            "code": "34938475200045",
-            "creationtime": DateTime.now().millisecondsSinceEpoch,
-            "belongTo": {"name": "广州好辣制衣厂", "starLevel": 5},
-            "state": "BUYER_APPROVED",
-            "totalPrice": 360.00,
-            "deliveryAddress": {
-              "region": {"name": "广东"},
-              "city": {"name": "广州"},
-              "cityDistrict": {"name": "白云"}
-            }
-          });
-        }));
+  Future refreshData(code) async {
+    quotes.clear();
+    //重置当前页计数
+    currentPage = 0;
+    // TODO: 分页拿数据;
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.get(OrderApis.requirementOrderQuotes(code),
+          data: {'page': currentPage, 'size': size});
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      QuoteOrdersResponse ordersResponse =
+          QuoteOrdersResponse.fromJson(response.data);
+      quotes = ordersResponse.content;
+      totalPages = ordersResponse.totalPages;
+      totalElements = ordersResponse.totalElements;
+    } else
+      quotes = null;
     _controller.sink.add(this.quotesList);
   }
 

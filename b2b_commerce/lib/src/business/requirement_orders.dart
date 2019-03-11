@@ -211,9 +211,8 @@ class RequirementOrderItem extends StatelessWidget {
         RequirementOrderModel model = await RequirementOrderRepository()
             .getRequirementOrderDetail(order.code);
 
-        List<QuoteModel> quotes = await QuoteOrderRepository()
-            .getQuotesByRequirement(
-                requirementOrderCode: model.code, page: 0, size: 1);
+        List<QuoteModel> quotes = await RequirementOrderRepository()
+            .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
 
         if (model != null) {
           Navigator.of(context).push(MaterialPageRoute(
