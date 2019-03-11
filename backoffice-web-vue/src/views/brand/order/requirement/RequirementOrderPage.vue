@@ -145,7 +145,7 @@
   import autoHeight from 'mixins/autoHeight';
 
   import RequirementOrderForm from './RequirementOrderForm';
-  import RequirementOrderDetailsPage from './RequirementOrderDetailsPage'
+  import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
 
   export default {
     name: 'RequirementOrderPage',
@@ -154,6 +154,9 @@
       ...mapGetters({
         page: 'page'
       })
+    },
+    components:{
+
     },
     methods: {
       ...mapActions({

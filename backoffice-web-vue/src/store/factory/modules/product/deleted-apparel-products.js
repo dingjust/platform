@@ -15,9 +15,39 @@ const state = {
     id: null,
     code: '',
     name: '',
-    description: '',
-    sequence: 0,
-    active: true
+    price: 0.00,
+    suggestedPrice: 0.00,
+    price1: 0.00,
+    price2: 0.00,
+    price3: 0.00,
+    categories: [],
+    staircasePrices: [],
+    startingAmount: '',
+    skuID: '',
+    year: '',
+    season: '',
+    placeOfOrigin: '',
+    brand: '',
+    style: {
+      id: null,
+      code: '',
+      name: ''
+    },
+    material: '',
+    content: '',
+    belongTo: {
+      uid: '',
+      name: ''
+    },
+    postageFree: true,
+    gramWeight: 0.0,
+    variants: []
+  },
+  queryFormData: {
+    skuID: '',
+    name: '',
+    approvalStatuses: [],
+    categories: []
   }
 };
 
@@ -25,6 +55,7 @@ const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
+  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page
 };
 
@@ -36,7 +67,28 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get('/djwebservices/styles/all'); 
+    const response = await http.get('/djbrand/product/deleteds', {
+      text: state.keyword,
+      page: state.currentPageNumber,
+      size: state.currentPageSize
+    });
+
+    // console.log(JSON.stringify(response));
+    if (!response['errors']) {
+      commit('page', response);
+    }
+  },
+  async searchAdvanced({dispatch, commit, state}, {query, page, size}) {
+    commit('queryFormData', query);
+    commit('currentPageNumber', page);
+    if (size) {
+      commit('currentPageSize', size);
+    }
+
+    const response = await http.post('/djbrand/product/advancedSearch', query, {
+      page: state.currentPageNumber,
+      size: state.currentPageSize
+    });
 
     // console.log(JSON.stringify(response));
     if (!response['errors']) {
@@ -54,6 +106,7 @@ const actions = {
 
 const getters = {
   keyword: state => state.keyword,
+  queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page

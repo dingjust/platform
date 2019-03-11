@@ -13,11 +13,12 @@ const state = {
   },
   formData: {
     id: null,
-    code: '',
+    uid: '',
     name: '',
-    description: '',
-    sequence: 0,
-    active: true
+    mobileNumber: '',
+    password: '',
+    confirmPassword: '',
+    roles: []
   }
 };
 
@@ -36,7 +37,11 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get('/djwebservices/styles/all'); 
+    const response = await http.get('/djbrand/stockLevel', {
+      text: state.keyword,
+      page: state.currentPageNumber,
+      size: state.currentPageSize
+    });
 
     // console.log(JSON.stringify(response));
     if (!response['errors']) {

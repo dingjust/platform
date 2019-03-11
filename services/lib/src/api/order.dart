@@ -32,9 +32,7 @@ class OrderApis {
       };
 
   /// 根据条件获取报价单列表 POST
-  static get quotes => () {
-        return '/{baseSiteId}/b2b/orders/quote';
-      };
+  static get quotes => '/{baseSiteId}/b2b/orders/quote';
 
   /// 根据报价单编号获取明细 GET
   static get quoteDetail => (code) {

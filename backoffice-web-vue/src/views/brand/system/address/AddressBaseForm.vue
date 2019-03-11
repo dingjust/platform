@@ -96,7 +96,7 @@
         this.$refs['form'].validate(callback);
       },
       async getRegions() {
-        const result = await this.$http.get('/djbackoffice/address/getRegionsForDefaultCountry');
+        const result = await this.$http.get('/djwebservices/regions');
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -115,9 +115,7 @@
         this._onRegionChanged(current);
       },
       async _onRegionChanged(current) {
-        const result = await this.$http.get('/djbackoffice/address/getCitiesForRegion', {
-          regionCode: current
-        });
+        const result = await this.$http.get('/djwebservices/regions/'+current+'/cities');
 
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -137,9 +135,7 @@
         this._onCityChanged(current);
       },
       async _onCityChanged(current) {
-        const result = await this.$http.get('/djbackoffice/address/getDistrictsForCity', {
-          cityCode: current
-        });
+        const result = await this.$http.get('/djwebservices/cities/'+current+'/districts');
 
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);

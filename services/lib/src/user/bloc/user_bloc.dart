@@ -81,7 +81,7 @@ class UserBLoC extends BLoCBase {
         print(e);
       }
 
-      if (infoResponse.statusCode == 200) {
+      if (infoResponse != null && infoResponse.statusCode == 200) {
         _user = UserModel.fromJson(infoResponse.data);
         _user.name = infoResponse.data['username'];
       }
@@ -140,7 +140,7 @@ class UserBLoC extends BLoCBase {
           print(e);
         }
 
-        if (infoResponse.statusCode == 200) {
+        if (infoResponse != null && infoResponse.statusCode == 200) {
           _user = UserModel.fromJson(infoResponse.data);
           _user.name = infoResponse.data['username'];
         }

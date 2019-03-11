@@ -5,6 +5,11 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementQuoteDetailPage extends StatefulWidget {
+  final RequirementOrderModel order;
+
+  const RequirementQuoteDetailPage({Key key, @required this.order})
+      : super(key: key);
+
   _RequirementQuoteDetailPageState createState() =>
       _RequirementQuoteDetailPageState();
 }
@@ -28,7 +33,9 @@ class _RequirementQuoteDetailPageState
             style: TextStyle(color: Colors.black),
           ),
         ),
-        body: QuotesListView(),
+        body: QuotesListView(
+          order: widget.order,
+        ),
         floatingActionButton: _ToTopBtn(),
       ),
     );
@@ -36,7 +43,11 @@ class _RequirementQuoteDetailPageState
 }
 
 class QuotesListView extends StatelessWidget {
+  final RequirementOrderModel order;
+
   ScrollController _scrollController = new ScrollController();
+
+  QuotesListView({Key key, @required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +57,7 @@ class QuotesListView extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMore();
+        bloc.loadingMore(order.code);
       }
     });
 
@@ -73,7 +84,7 @@ class QuotesListView extends StatelessWidget {
       color: Colors.grey[100],
       child: RefreshIndicator(
         onRefresh: () async {
-          return await bloc.refreshData();
+          return await bloc.refreshData(order.code);
         },
         child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -85,7 +96,7 @@ class QuotesListView extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<QuoteModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.getData();
+                    bloc.getData(order.code);
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
                       child: Center(child: CircularProgressIndicator()),
@@ -213,7 +224,7 @@ class QuoteItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Stars(
-                            starLevel: model.belongTo.starLevel,
+                            starLevel: model.belongTo.starLevel ?? 1,
                             color: Color.fromRGBO(255, 183, 0, 1),
                             highlightOnly: false,
                           ),
@@ -263,7 +274,8 @@ class QuoteItem extends StatelessWidget {
                           text: '￥',
                           style: TextStyle(fontSize: 14, color: Colors.red)),
                       TextSpan(
-                          text: '${model.totalPrice}',
+                          text:
+                              '${model.unitPriceOfFabric + model.unitPriceOfExcipients + model.unitPriceOfProcessing + model.costOfSamples + model.costOfOther}',
                           style: TextStyle(color: Colors.red)),
                     ]),
               ),
