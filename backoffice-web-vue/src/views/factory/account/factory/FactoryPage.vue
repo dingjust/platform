@@ -152,7 +152,7 @@
         this.categories = await this.$http.get('/b2b/categories/majors');
       },
       async getFactory() {
-        this.slotData = await this.$http.get('/djfactory/factory/findByUid');
+        this.slotData = await this.$http.get('/b2b/factories/'+this.$store.getters.currentUser.companyCode);
       }
     },
     data() {

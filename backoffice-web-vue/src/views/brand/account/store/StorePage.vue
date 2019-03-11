@@ -157,13 +157,13 @@
     mixins: [CompanyMixin],
     methods: {
       async getStyles() {
-        this.styles = await this.$http.get('/djbackoffice/product/style/all');
+        this.styles = await this.$http.get('/djwebservices/styles/all');
       },
       async getCategories() {
-        this.adeptAtCategories = await this.$http.get('/djbackoffice/product/category/majors');
+        this.adeptAtCategories = await this.$http.get('/b2b/categories/majors');
       },
       async getBrand() {
-        this.slotData = await this.$http.get('/djbrand/brand/store');
+        this.slotData = await this.$http.get('/b2b/brands/'+this.$store.getters.currentUser.companyCode);
       }
     },
     data() {

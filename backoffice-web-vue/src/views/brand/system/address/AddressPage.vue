@@ -97,7 +97,7 @@
           page: page,
           size: size
         };
-        const result = await this.$http.get('/djbrand/system/address', params);
+        const result = await this.$http.get('/b2b/company/addresses', params);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
