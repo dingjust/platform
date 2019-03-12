@@ -3,37 +3,22 @@
     <el-card>
       <el-form :inline="true">
         <el-form-item label="">
-          <el-input placeholder="请输入产品编码" v-model="text"></el-input>
+          <el-input placeholder="请输入商品编码/货号/名称查询" v-model="text"></el-input>
         </el-form-item>
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-          <el-button type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>
-          <el-button type="primary" icon="el-icon-plus" @click="onBatchLaunch">批量上架</el-button>
-          <el-button type="primary" icon="el-icon-minus" @click="onBatchWithdraw">批量下架</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="onNew">创建商品</el-button>
         </el-button-group>
         <el-popover placement="bottom" width="800" trigger="click">
           <el-row :gutter="10">
-            <el-col :span="8">
-              <el-form-item label="供应商商品编号">
+            <el-col :span="12">
+              <el-form-item label="商品货号">
                 <el-input v-model="queryFormData.skuID"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="商品名称">
                 <el-input v-model="queryFormData.name"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="商品状态（上下架）">
-                <el-select v-model="queryFormData.approvalStatuses" placeholder="请选择"
-                           multiple class="w-100">
-                  <el-option
-                    v-for="item in approvalStatuses"
-                    :key="item.code"
-                    :label="item.name"
-                    :value="item.code">
-                  </el-option>
-                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -86,35 +71,14 @@
                 @selection-change="handleSelectionChange"
                 v-if="isHeightComputed" :height="autoHeight">
         <el-table-column type="selection" width="32" fixed></el-table-column>
-        <el-table-column label="编码" prop="code" width="120" fixed></el-table-column>
-        <el-table-column label="供应商产品编码" prop="skuID" width="120" fixed></el-table-column>
-        <el-table-column label="名称" prop="name" width="480"></el-table-column>
-        <el-table-column label="价格" prop="price" :formatter="numberFormatter"></el-table-column>
+        <el-table-column label="商品编码" prop="code" width="120" fixed></el-table-column>
+        <el-table-column label="商品货号" prop="skuID" width="120" fixed></el-table-column>
+        <el-table-column label="商品名称" prop="name" width="480"></el-table-column>
+        <el-table-column label="供货价" prop="price" :formatter="numberFormatter"></el-table-column>
         <el-table-column label="商家" prop="belongTo.name"></el-table-column>
-        <el-table-column label="上下架">
-          <template slot-scope="scope">
-            <el-switch active-color="#13ce66" inactive-color="#ff4949"
-                       v-model="scope.row.approvalStatus === 'approved'"
-                       @change="changeShelfStatus(scope.row)">
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column label="店铺首页推荐">
-          <template slot-scope="scope">
-            <el-switch active-color="#13ce66" inactive-color="#ff4949"
-                       v-model="scope.row.recommended"
-                       @change="changeRecommendedStatus(scope.row)">
-            </el-switch>
-          </template>
-        </el-table-column>
         <el-table-column label=" 操作" width="120">
           <template slot-scope="scope">
-            <!--<el-button type="text" icon="el-icon-edit" @click="onReview(scope.row)">
-              评价
-            </el-button>-->
-            <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">
-              明细
-            </el-button>
+            <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -137,21 +101,16 @@
 
   import autoHeight from 'mixins/autoHeight';
 
-  import {ProductForm, ProductDetailsPage} from './';
+  import ApparelProductForm from './ApparelProductForm';
+  import ApparelProductDetailsPage from './ApparelProductDetailsPage';
 
   export default {
-    name: 'ProductPage',
+    name: 'ApparelProductPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
         page: 'page'
       }),
-      // 批量上下架code数组
-      codes: function () {
-        return this.multipleSelection.map((item, number, any) => {
-          return item.code;
-        });
-      }
     },
     methods: {
       ...mapActions({
@@ -179,55 +138,16 @@
         this._onAdvancedSearch(0)
       },
       onNew() {
-        this.fn.openSlider('创建产品', ProductForm, this.formData);
-      },
-      onBatchLaunch() {
-        if (this.multipleSelection.length < 1) {
-          this.$message.info('请选择产品');
-
-          return;
-        }
-
-        this._onBatchLaunch();
-      },
-      async _onBatchLaunch() {
-        const result = await this.$http.put('/djbackoffice/product/shelf/list', this.codes);
-        if (result['errors']) {
-          this.$message.error('批量上架失败，原因：' + result['errors'][0].message);
-          return;
-        }
-
-        this.$message.success('批量上架成功');
-        this._onSearchDelegated();
-      },
-      onBatchWithdraw() {
-        if (this.multipleSelection.length < 1) {
-          this.$message.info('请选择产品');
-
-          return;
-        }
-
-        this._onBatchWithdraw();
-      },
-      async _onBatchWithdraw() {
-        const result = await this.$http.post('/djbackoffice/product/shelf/list', this.codes);
-        if (result['errors']) {
-          this.$message.error('批量下架失败，原因：' + result['errors'][0].message);
-          return;
-        }
-
-        this.$message.success('批量下架成功');
-
-        this._onSearchDelegated();
+        this.fn.openSlider('创建产品', ApparelProductForm, Object.assign({}, this.formData));
       },
       async onDetails(item) {
-        const result = await this.$http.get('/djbackoffice/product/details/' + item.code);
+        const result = await this.$http.get('/b2b/products/apparel/' + item.code);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider('产品明细', ProductDetailsPage, result);
+        this.fn.openSlider('产品明细', ApparelProductDetailsPage, result);
       },
       onPageSizeChanged(val) {
         this.reset();
@@ -259,15 +179,15 @@
         }
       },
       async getCompanies(query) {
-        const results = await this.$http.get('/djbrand/brand', {
-          text: query.trim()
+        const results = await this.$http.get('/b2b/brands/approved', {
+          keyword: query.trim()
         });
         if (!results['errors']) {
           this.companies = results['content'];
         }
       },
       async getCategories() {
-        const results = await this.$http.get('/djbackoffice/product/category/cascaded');
+        const results = await this.$http.get('/b2b/categories/cascaded');
         if (!results['errors']) {
           this.categories = results;
         }
@@ -279,48 +199,6 @@
       _onAdvancedSearch(page, size) {
         const query = this.queryFormData;
         this.searchAdvanced({query, page, size});
-      },
-      async changeShelfStatus(row) {
-        let request = this.$http.put;
-        if (row.approvalStatus === 'approved') {
-          request = this.$http.post;
-        }
-        let message = '上架';
-        if (row.approvalStatus === 'approved') {
-          request = this.$http.post;
-          message = '下架';
-        }
-
-        const result = await request('/djbackoffice/product/shelf/' + row.code);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        if (row.approvalStatus === 'approved') {
-          this.$set(row, 'approvalStatus', 'unapproved')
-        } else {
-          this.$set(row, 'approvalStatus', 'approved')
-        }
-
-        this.$message.success(message + '成功');
-      },
-      async changeRecommendedStatus(row) {
-        let request = this.$http.put;
-        let message = '推荐';
-        if (!row.recommended) {
-          request = this.$http.post;
-          message = '取消推荐';
-        }
-
-        const result = await request('/djbackoffice/product/recommended/' + row.code);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        this.$set(row, 'recommended', row.recommended);
-        this.$message.success(message + '成功');
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;

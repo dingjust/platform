@@ -11,7 +11,7 @@
           :before-upload="onBeforeUpload"
           :on-success="onSuccess"
           :headers="headers"
-          :file-list="slotData.images"
+          :file-list="slotData.others"
           :on-preview="handlePreview"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
@@ -26,7 +26,7 @@
 
 <script>
   export default {
-    name: 'RequirementOrderAttachmentsForm',
+    name: 'ApparelProductImagesForm',
     props: ['slotData', 'readOnly'],
     methods: {
       onBeforeUpload(file) {
@@ -48,9 +48,9 @@
           return;
         }
 
-        const images = this.slotData.images || [];
-        const index = images.indexOf(file);
-        images.splice(index, 1);
+        const attachments = this.slotData.attachments || [];
+        const index = attachments.indexOf(file);
+        attachments.splice(index, 1);
 
         this.$message.success("删除成功");
       },

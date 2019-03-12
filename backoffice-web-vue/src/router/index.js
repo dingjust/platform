@@ -51,9 +51,9 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/category/CategoryPage')
             },
             {
-              path: 'product',
+              path: 'apparel',
               name: '产品',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/product/ProductPage')
+              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/apparel/ApparelProductPage')
             },
             {
               path: 'fabric',
