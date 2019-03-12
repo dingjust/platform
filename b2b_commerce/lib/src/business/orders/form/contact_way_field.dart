@@ -16,8 +16,8 @@ class ContactWayFieldState extends State<ContactWayField>{
       text.write('填写');
     }else{
       text.write(widget.item.details?.contactPerson ?? '');
-//      text.write(',');
-//      text.write(widget.item.details?.contactPhone ?? '');
+      text.write(',');
+      text.write(widget.item.details?.contactPhone ?? '');
     }
     return text.toString();
   }
@@ -47,13 +47,8 @@ class ContactWayFieldState extends State<ContactWayField>{
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => RequirmentOrderContactInput()),
-            //接收返回数据并处理
-          ).then((value) {
-            setState(() {
-              widget.item.details.contactPerson = value;
-            });
-          });
+                builder: (context) => RequirmentOrderContactInput(widget.item)),
+          );
         });
   }
 }

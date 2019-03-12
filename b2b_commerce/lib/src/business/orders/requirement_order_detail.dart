@@ -38,7 +38,7 @@ class _RequirementOrderDetailPageState
         centerTitle: true,
         elevation: 0.5,
         title: Text(
-          '需求订明细',
+          '需求订单明细',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -46,11 +46,11 @@ class _RequirementOrderDetailPageState
         color: Colors.grey[100],
         child: ListView(
           children: <Widget>[
-            _buildHeader(),
             _buildMain(),
             _buildQuote(),
             _buildAttachments(),
             _buildRemarks(),
+            _buildHeader(),
             _buildButtonGroups()
           ],
         ),
@@ -61,6 +61,7 @@ class _RequirementOrderDetailPageState
   Widget _buildHeader() {
     return Container(
       color: Colors.white,
+      margin: EdgeInsets.only(bottom: 20),
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
@@ -111,7 +112,7 @@ class _RequirementOrderDetailPageState
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
         children: <Widget>[
           Column(children: [
@@ -144,14 +145,18 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '是否需要打样',
             value: Text(
-              widget.order.details.proofingNeeded ?? true ? '是' : '否',
+              widget.order.details.proofingNeeded == null
+                  ? ''
+                  : widget.order.details.proofingNeeded ? '是' : '否',
               style: TextStyle(fontSize: 16),
             ),
           ),
           InfoRow(
             label: '是否提供样衣',
             value: Text(
-              widget.order.details.samplesNeeded ? '是' : '否',
+              widget.order.details.samplesNeeded == null
+                  ? ''
+                  : widget.order.details.samplesNeeded ? '是' : '否',
               style: TextStyle(fontSize: 16),
             ),
           ),
@@ -165,7 +170,9 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '是否开票',
             value: Text(
-              widget.order.details.invoiceNeeded ? '是' : '否',
+              widget.order.details.invoiceNeeded == null
+                  ? ''
+                  : widget.order.details.invoiceNeeded ? '是' : '否',
               style: TextStyle(fontSize: 16),
             ),
             hasBottomBorder: false,
@@ -263,7 +270,7 @@ class _RequirementOrderDetailPageState
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.order.details.majorCategory.name}   ${widget.order.details.category.name}   ${widget.order.details.expectedMachiningQuantity}件",
+                      "${widget.order.details.majorCategory?.name}   ${widget.order.details.category?.name}   ${widget.order.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -315,7 +322,7 @@ class _RequirementOrderDetailPageState
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      margin: EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
           Row(

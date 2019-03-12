@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:city_pickers/city_pickers.dart';
 
 class ProductionAreasField extends StatefulWidget {
   RequirementOrderModel item;
@@ -13,6 +13,35 @@ class ProductionAreasField extends StatefulWidget {
 
 class ProductionAreasFieldState extends State<ProductionAreasField> {
   List<EnumModel> _productionAreasSelected = [];
+  List<RegionModel> _regions = [];
+
+  @override
+  void initState() {
+    RegionRepositoryImpl().list().then((regions)=>_regions.addAll(regions));
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  //格式选中的地区（多选）
+  String formatAreaSelectsText(List<EnumModel> selects,int count) {
+    String text = '';
+
+    for (int i = 0; i < selects.length; i++) {
+      if (i > count-1) {
+        text += '...';
+        break;
+      }
+
+      if (i == selects.length - 1) {
+        text += selects[i].name;
+      } else {
+        text += selects[i].name + '、';
+      }
+    }
+
+    return text;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +58,7 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
             trailing: Text(
               widget.item.details?.productiveOrientations == null
                   ? '选取'
-                  : formatEnumSelectsText(
-                  widget.item.details?.productiveOrientations, ProvinceEnum, 3),
+                  : formatAreaSelectsText(_productionAreasSelected, 2),
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -52,7 +80,7 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
               return Container(
                 height: 300,
                 child: EnumSelection(
-                  enumModels: ProvinceEnum,
+                  enumModels: _regions.map((region)=>EnumModel(region.isocode, region.name)).toList(),
                   multiple: true,
                   enumSelect: _productionAreasSelected,
                   hasButton: true,
@@ -63,7 +91,7 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
             setState(() {
               if (_productionAreasSelected.length > 0) {
                 widget.item.details.productiveOrientations =
-                    _productionAreasSelected.map((area) => area.code).toList();
+                    _productionAreasSelected.map((area) => RegionModel(isocode: area.code,name: area.name)).toList();
               } else {
                 widget.item.details.productiveOrientations = null;
               }

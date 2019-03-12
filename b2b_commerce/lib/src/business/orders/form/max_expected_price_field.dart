@@ -1,6 +1,6 @@
-import 'package:b2b_commerce/src/business/orders/requirement_order_input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class MaxExpectedPriceField extends StatefulWidget{
   final RequirementOrderModel item;
@@ -34,12 +34,19 @@ class MaxExpectedPriceFieldState extends State<MaxExpectedPriceField>{
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => RequirementOrderInputPage(fieldText: '期望价格',inputType: TextInputType.number)),
+              builder: (context) => PopupWindowPage(
+                fieldText: '期望价格',
+                inputType: TextInputType.number,
+                text:widget.item.details.maxExpectedPrice == null ? null : widget.item.details.maxExpectedPrice.toString(),
+              ),
+            ),
             //接收返回数据并处理
-          ).then((value) {
-            setState(() {
+          ).then((value){
+            if(value.trim() == ''){
+              widget.item.details.maxExpectedPrice = null;
+            }else{
               widget.item.details.maxExpectedPrice = double.parse(value);
-            });
+            }
           });
         });
   }

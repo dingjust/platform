@@ -14,7 +14,10 @@ export 'src/order/bloc/quote_orders_bloc.dart';
 export 'src/order/bloc/requirement_order_bloc.dart';
 export 'src/order/bloc/requirement_quote_detail_bloc.dart';
 export 'src/order/bloc/sales_order_bloc.dart';
+export 'src/order/repository/quote_order_respository.dart';
+export 'src/order/repository/requirement_order_repository.dart';
 export 'src/product/bloc/apparel_product_bloc.dart';
+export 'src/product/product_repository_impl.dart';
 export 'src/production/bloc/production_bloc.dart';
 export 'src/production/bloc/production_search_result_bloc.dart';
 export 'src/supplier/bloc/suppliers_bloc.dart';
@@ -34,8 +37,6 @@ export 'src/user/region_repository_impl.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/wechat/wechat_service_impl.dart';
-export 'src/order/repository/quote_order_respository.dart';
-export 'src/order/repository/requirement_order_repository.dart';
 
 abstract class BLoCBase {
   void dispose();

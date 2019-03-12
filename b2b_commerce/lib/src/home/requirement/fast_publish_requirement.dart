@@ -2,8 +2,8 @@ import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.da
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class FastPublishRequirement extends StatefulWidget {
   _FastPublishRequirementState createState() => _FastPublishRequirementState();
@@ -22,6 +22,14 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
 
   List<CategoryModel> _categorySelected = [];
   String category = '点击选择分类';
+
+  @override
+  void initState() {
+    ProductRepositoryImpl().cascadedCategories().then((categorys)=>_categorys = categorys);
+
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,12 +171,11 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: FlatButton(
                         onPressed: () async{
-//                          model.details.category = _categorySelected == [] ? null : _categorySelected[0];
+                          model.details.category = _categorySelected == [] ? null : _categorySelected[0];
                           model.details.expectedMachiningQuantity = requirementNum;
                           model.details.expectedDeliveryDate = expectedDeliveryDate;
 
                           String code = await RequirementOrderRepository().publishNewRequirement(model);
-                          print(code);
                           //清空数据
                           expectedDeliveryDate = null;
                           _requirementNumController.clear();
@@ -267,7 +274,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
       builder: (BuildContext context) {
         return Container(
           child: CategorySelect(
-            categorys: _category,
+            categorys: _categorys,
             multiple: false,
             verticalDividerOpacity: 1,
             categorySelect: _categorySelected,
@@ -290,107 +297,4 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   }
 }
 
-final List<Map<CategoryModel, List<CategoryModel>>> _category = [
-  {
-    CategoryModel(code: 'C01', name: '男装'): [
-      CategoryModel(
-          code: 'C001',
-          name: 'T恤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C002',
-          name: '衬衫',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C003',
-          name: '卫衣',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C004',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C005',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C006',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C007',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C008',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C009',
-          name: '羽绒服',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C010',
-          name: '绒服地方',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C011',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C012',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-    ],
-    CategoryModel(code: 'C02', name: '女装'): [
-      CategoryModel(
-          code: 'C013',
-          name: '棉服服',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C014',
-          name: '羽绒服地方',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C015',
-          name: '背带裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C016',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C017',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C018',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C019',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C020',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C021',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C022',
-          name: '牛仔裤裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C023',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C024',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-    ],
-  },
-];
+List<CategoryModel> _categorys;
