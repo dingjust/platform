@@ -19,9 +19,9 @@ class QuoteOrderRepository {
       return null;
   }
 
-  /// 根据报价单编号获取明细
+  /// 确认报价
   Future<int> quoteApprove(String code) async {
-    Response<Map<String, dynamic>> response;
+    Response response;
     try {
       response = await http$.put(OrderApis.quoteApprove(code));
     } on DioError catch (e) {
@@ -32,11 +32,12 @@ class QuoteOrderRepository {
     }
   }
 
-  /// 根据报价单编号获取明细
-  Future<int> quoteReject(String code) async {
-    Response<Map<String, dynamic>> response;
+  /// 拒绝报价
+  Future<int> quoteReject(String code, String reason) async {
+    Response response;
     try {
-      response = await http$.put(OrderApis.quoteReject(code));
+      response = await http$
+          .put(OrderApis.quoteReject(code), data: {'reason': reason});
     } on DioError catch (e) {
       print(e);
     }

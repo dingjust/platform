@@ -25,20 +25,20 @@ class _RequirementQuoteDetailPageState
       key: _requirementQuoteDetailBLoCKey,
       bloc: RequirementQuoteDetailBLoC.instance,
       child: Scaffold(
-        appBar: AppBar(
-          brightness: Brightness.light,
-          centerTitle: true,
-          elevation: 0.5,
-          title: Text(
-            '报价详情',
-            style: TextStyle(color: Colors.black),
+          appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: true,
+            elevation: 0.5,
+            title: Text(
+              '报价详情',
+              style: TextStyle(color: Colors.black),
+            ),
           ),
-        ),
-        body: QuotesListView(
-          order: widget.order,
-        ),
-        floatingActionButton: _ToTopBtn(),
-      ),
+          body: QuotesListView(
+            order: widget.order,
+            pageContext: context,
+          ),
+          floatingActionButton: _ToTopBtn()),
     );
   }
 }
@@ -46,13 +46,21 @@ class _RequirementQuoteDetailPageState
 class QuotesListView extends StatelessWidget {
   final RequirementOrderModel order;
 
+  /// 顶级页面context
+  final BuildContext pageContext;
+
   ScrollController _scrollController = new ScrollController();
 
-  QuotesListView({Key key, @required this.order}) : super(key: key);
+  QuotesListView({Key key, @required this.order, @required this.pageContext})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final bloc = BLoCProvider.of<RequirementQuoteDetailBLoC>(context);
+
+    void _handleRefresh() {
+      bloc.refreshData(order.code);
+    }
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -116,6 +124,8 @@ class QuotesListView extends StatelessWidget {
                                 padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                                 child: QuoteItem(
                                   model: quote,
+                                  onRefresh: _handleRefresh,
+                                  pageContext: pageContext,
                                 ),
                               ))
                           .toList(),
@@ -168,16 +178,33 @@ class QuotesListView extends StatelessWidget {
   }
 }
 
-class QuoteItem extends StatelessWidget {
-  const QuoteItem({Key key, this.model}) : super(key: key);
-
+class QuoteItem extends StatefulWidget {
   final QuoteModel model;
 
+  /// 更新方法
+  final VoidCallback onRefresh;
+
+  /// 顶级页面context
+  final BuildContext pageContext;
+
+  QuoteItem(
+      {Key key,
+      this.model,
+      @required this.onRefresh,
+      @required this.pageContext})
+      : super(key: key);
+
+  _QuoteItemState createState() => _QuoteItemState();
+}
+
+class _QuoteItemState extends State<QuoteItem> {
   static Map<QuoteState, MaterialColor> _statusColors = {
     QuoteState.SELLER_SUBMITTED: Colors.green,
     QuoteState.BUYER_APPROVED: Colors.blue,
     QuoteState.BUYER_REJECTED: Colors.red
   };
+
+  TextEditingController rejectController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +212,7 @@ class QuoteItem extends StatelessWidget {
       onTap: () async {
         //查询明细
         QuoteModel detailModel =
-            await QuoteOrderRepository().getquoteDetail(model.code);
+            await QuoteOrderRepository().getquoteDetail(widget.model.code);
         if (detailModel != null) {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => QuoteOrderDetailPage(item: detailModel)));
@@ -198,7 +225,8 @@ class QuoteItem extends StatelessWidget {
           children: <Widget>[
             _buildHeader(),
             _buildMain(),
-            model.state == QuoteState.SELLER_SUBMITTED
+            widget.model.state == QuoteState.SELLER_SUBMITTED &&
+                    UserBLoC.instance.currentUser.type == UserType.BRAND
                 ? _buildSummary()
                 : Container(),
           ],
@@ -227,7 +255,7 @@ class QuoteItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Stars(
-                            starLevel: model.belongTo.starLevel ?? 1,
+                            starLevel: widget.model.belongTo.starLevel ?? 1,
                             color: Color.fromRGBO(255, 183, 0, 1),
                             highlightOnly: false,
                           ),
@@ -278,13 +306,13 @@ class QuoteItem extends StatelessWidget {
                           style: TextStyle(fontSize: 14, color: Colors.red)),
                       TextSpan(
                           text:
-                              '${model.unitPriceOfFabric + model.unitPriceOfExcipients + model.unitPriceOfProcessing + model.costOfSamples + model.costOfOther}',
+                              '${widget.model.unitPriceOfFabric + widget.model.unitPriceOfExcipients + widget.model.unitPriceOfProcessing + widget.model.costOfSamples + widget.model.costOfOther}',
                           style: TextStyle(color: Colors.red)),
                     ]),
               ),
-              Text(QuoteStateLocalizedMap[model.state],
+              Text(QuoteStateLocalizedMap[widget.model.state],
                   style: TextStyle(
-                      color: _statusColors[model.state], fontSize: 18))
+                      color: _statusColors[widget.model.state], fontSize: 18))
             ],
           ),
           Container(
@@ -293,11 +321,11 @@ class QuoteItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '${model.belongTo.name}',
+                  '${widget.model.belongTo.name}',
                   style: TextStyle(fontSize: 15),
                 ),
                 Text(
-                  '报价时间：${DateFormatUtil.format(model.creationTime)}',
+                  '报价时间：${DateFormatUtil.format(widget.model.creationTime)}',
                   style: TextStyle(fontSize: 15),
                 ),
               ],
@@ -314,13 +342,7 @@ class QuoteItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           FlatButton(
-              onPressed: () async {
-                int statusCode =
-                    await QuoteOrderRepository().quoteReject(model.code);
-                if (statusCode == 200) {
-                  //TODO
-                }
-              },
+              onPressed: onReject,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Colors.red,
@@ -330,13 +352,7 @@ class QuoteItem extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               )),
           FlatButton(
-              onPressed: () async {
-                int statusCode =
-                    await QuoteOrderRepository().quoteApprove(model.code);
-                if (statusCode == 200) {
-                  //TODO
-                }
-              },
+              onPressed: onApprove,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 149, 22, 1),
@@ -347,6 +363,90 @@ class QuoteItem extends StatelessWidget {
               )),
         ],
       ),
+    );
+  }
+
+  void alertMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[Text(message)],
+            ),
+          ),
+    );
+  }
+
+  void onReject() {
+    showDialog<void>(
+      context: widget.pageContext,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('请输入拒绝原因?'),
+          content: TextField(
+            controller: rejectController,
+            autofocus: true,
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () async {
+                int statusCode = await QuoteOrderRepository()
+                    .quoteReject(widget.model.code, rejectController.text);
+                Navigator.of(context).pop();
+                if (statusCode == 200) {
+                  //触发刷新
+                  widget.onRefresh();
+                } else {
+                  alertMessage('拒绝失败');
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onApprove() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('是否确认?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('否'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('是'),
+              onPressed: () async {
+                int statusCode = await QuoteOrderRepository()
+                    .quoteApprove(widget.model.code);
+                Navigator.of(context).pop();
+                if (statusCode == 200) {
+                  //触发刷新
+                  widget.onRefresh();
+                } else {
+                  alertMessage('确认失败');
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
