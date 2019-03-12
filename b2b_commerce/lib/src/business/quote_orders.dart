@@ -64,6 +64,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
                 children: statuses
                     .map((status) => QuoteOrdersList(
                           status: status,
+                          pageContext: context,
                         ))
                     .toList(),
               ),
@@ -75,15 +76,23 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
 }
 
 class QuoteOrdersList extends StatelessWidget {
-  QuoteOrdersList({Key key, this.status}) : super(key: key);
+  QuoteOrdersList({Key key, @required this.status, @required this.pageContext})
+      : super(key: key);
 
   final EnumModel status;
+
+  final BuildContext pageContext;
 
   ScrollController _scrollController = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
+
+    //子组件刷新数据方法
+    void _handleRefresh() {
+      bloc.refreshData(status.code);
+    }
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -138,6 +147,8 @@ class QuoteOrdersList extends StatelessWidget {
                       children: snapshot.data.map((order) {
                         return QuoteItem(
                           model: order,
+                          onRefresh: _handleRefresh,
+                          pageContext: pageContext,
                         );
                       }).toList(),
                     );
@@ -188,7 +199,6 @@ class QuoteOrdersList extends StatelessWidget {
         ));
   }
 }
-
 
 class _ToTopBtn extends StatelessWidget {
   @override
