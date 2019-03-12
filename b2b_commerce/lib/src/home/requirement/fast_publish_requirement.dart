@@ -2,8 +2,8 @@ import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.da
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class FastPublishRequirement extends StatefulWidget {
   _FastPublishRequirementState createState() => _FastPublishRequirementState();

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:city_pickers/city_pickers.dart';
 
 class ProductionAreasField extends StatefulWidget {
   RequirementOrderModel item;
