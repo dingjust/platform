@@ -107,7 +107,7 @@ class _AttachmentsState extends State<Attachments> {
           (model) {
             // 附件类型
             switch (model.mediaType) {
-              case 'pdf':
+              case 'application/pdf':
                 return GestureDetector(
                   child: CommonImage.pdf(),
                   onTap: () {
@@ -115,7 +115,7 @@ class _AttachmentsState extends State<Attachments> {
                   },
                 );
                 break;
-              case 'docx':
+              case 'application/msword':
                 return GestureDetector(
                   child: CommonImage.word(),
                   onTap: () {
@@ -123,9 +123,17 @@ class _AttachmentsState extends State<Attachments> {
                   },
                 );
                 break;
-              case 'xlsx':
+              case 'application/xlsx':
                 return GestureDetector(
                   child: CommonImage.excel(),
+                  onTap: () {
+                    _previewFile(model.url, 'yijiayi', model.mediaType);
+                  },
+                );
+                break;
+              case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                return GestureDetector(
+                  child: CommonImage.word(),
                   onTap: () {
                     _previewFile(model.url, 'yijiayi', model.mediaType);
                   },
@@ -141,13 +149,15 @@ class _AttachmentsState extends State<Attachments> {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey,
                       image: DecorationImage(
-                        image: NetworkImage(model.url),
+                        image: NetworkImage(
+                            '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}'),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   onTap: () {
-                    onPreview(context, model.url);
+                    onPreview(context,
+                        '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}');
                   },
                 );
             }
@@ -172,6 +182,7 @@ class _AttachmentsState extends State<Attachments> {
 
   //文件下载打开
   Future<String> _previewFile(String url, String name, String mediaType) async {
+    String downloadUrl = '${GlobalConfigs.IMAGE_BASIC_URL}${url}';
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -217,7 +228,7 @@ class _AttachmentsState extends State<Attachments> {
 
     //获取应用目录路径
     String dir = (await getApplicationDocumentsDirectory()).path;
-    String filePath = "$dir/$name.$mediaType";
+    String filePath = "$dir/$name.${FileFormatUtil.mediaFormat(mediaType)}";
     var dio = new Dio();
 
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
@@ -226,7 +237,7 @@ class _AttachmentsState extends State<Attachments> {
     };
 
     try {
-      Response response = await dio.download(url, filePath,
+      Response response = await dio.download(downloadUrl, filePath,
           onReceiveProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
         _streamController.sink.add(received / total);
@@ -371,7 +382,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
       (model) {
         // 附件类型
         switch (model.mediaType) {
-          case 'pdf':
+          case 'application/pdf':
             return GestureDetector(
               child: CommonImage.pdf(),
               onTap: () {
@@ -382,7 +393,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
               },
             );
             break;
-          case 'docx':
+          case 'application/msword':
             return GestureDetector(
               child: CommonImage.word(),
               onTap: () {
@@ -393,7 +404,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
               },
             );
             break;
-          case 'xlsx':
+          case 'application/xlsx':
             return GestureDetector(
               child: CommonImage.excel(),
               onTap: () {
@@ -414,13 +425,15 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.grey,
                   image: DecorationImage(
-                    image: NetworkImage(model.url),
+                    image: NetworkImage(
+                        '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}'),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               onTap: () {
-                onPreview(context, model.url);
+                onPreview(
+                    context, '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}');
               },
               onLongPress: () {
                 _deleteFile(model);
@@ -457,6 +470,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
   //文件下载打开
   Future<String> _previewFile(String url, String name, String mediaType) async {
+    String downloadUrl = '${GlobalConfigs.IMAGE_BASIC_URL}${url}';
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -502,14 +516,14 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
     //获取应用目录路径
     String dir = (await getApplicationDocumentsDirectory()).path;
-    String filePath = "$dir/$name.$mediaType";
+    String filePath = "$dir/$name.${FileFormatUtil.mediaFormat(mediaType)}";
     var dio = new Dio();
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
       client.idleTimeout = new Duration(seconds: 0);
     };
     try {
-      Response response = await dio.download(url, filePath,
+      Response response = await dio.download(downloadUrl, filePath,
           onReceiveProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
         _streamController.sink.add(received / total);

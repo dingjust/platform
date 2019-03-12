@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +39,7 @@ class _RequirementOrderDetailForFactoryState
               _buildDeliveryAddress(context),
 //              _buildCommitButton(context),
             ],
-          )
-      ),
+          )),
       floatingActionButton: FloatingActionButton.extended(
         icon: Container(
           width: 0,
@@ -51,22 +49,24 @@ class _RequirementOrderDetailForFactoryState
           ),
         ),
         label: Container(
-          width: 250,
-          child:  Center(
-            child: Text(
-              '去报价',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            width: 250,
+            child: Center(
+              child: Text(
+                '去报价',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          )
-        ),
+            )),
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => RequirementQuoteOrderFrom(model: widget.model,)),
+            MaterialPageRoute(
+                builder: (context) => RequirementQuoteOrderFrom(
+                      model: widget.model,
+                    )),
           );
         },
         backgroundColor: Colors.amberAccent,
@@ -125,18 +125,18 @@ class _RequirementOrderDetailForFactoryState
         children: <Widget>[
           Row(
             children: <Widget>[
-               Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            '${widget.model.belongTo.profilePicture}'),
-                        fit: BoxFit.cover,
-                      )),
-                ),
+              Container(
+                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          '${widget.model.belongTo.profilePicture}'),
+                      fit: BoxFit.cover,
+                    )),
+              ),
               Expanded(
                 flex: 1,
                 child: Container(
@@ -154,14 +154,14 @@ class _RequirementOrderDetailForFactoryState
                         ),
                       ),
                       Container(
-                          margin: EdgeInsets.only(left: 5),
-                          child: Text(
-                            '已认证',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.deepOrange),
-                          ),
+                        margin: EdgeInsets.only(left: 5),
+                        child: Text(
+                          '已认证',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.deepOrange),
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.amberAccent,
                           borderRadius: BorderRadius.circular(5),
@@ -179,7 +179,7 @@ class _RequirementOrderDetailForFactoryState
     );
   }
 
-  Widget _buildContact(BuildContext context){
+  Widget _buildContact(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 4),
       child: Column(
@@ -244,7 +244,7 @@ class _RequirementOrderDetailForFactoryState
                         ],
                       ),
                     ),
-                    onTap: (){
+                    onTap: () {
                       _selectActionButton(widget.model.belongTo.contactPhone);
                     },
                   ),
@@ -288,9 +288,7 @@ class _RequirementOrderDetailForFactoryState
                       Container(
                         child: Text(
                           widget.model.details.productName,
-                          style: TextStyle(
-                            fontSize: 16
-                          ),
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
                       Container(
@@ -332,8 +330,8 @@ class _RequirementOrderDetailForFactoryState
               ),
               trailing: Text(
                 widget.model.details.maxExpectedPrice == null
-                    ? '':
-                '${widget.model.details.maxExpectedPrice}',
+                    ? ''
+                    : '${widget.model.details.maxExpectedPrice}',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -357,7 +355,7 @@ class _RequirementOrderDetailForFactoryState
                 widget.model.details.machiningType == null
                     ? ''
                     : MachiningTypeLocalizedMap[
-                widget.model.details.machiningType],
+                        widget.model.details.machiningType],
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -379,9 +377,9 @@ class _RequirementOrderDetailForFactoryState
               ),
               trailing: Text(
                 widget.model.details.expectedDeliveryDate == null
-                    ? '' :
-                DateFormatUtil.formatYMD(
-                    widget.model.details.expectedDeliveryDate),
+                    ? ''
+                    : DateFormatUtil.formatYMD(
+                        widget.model.details.expectedDeliveryDate),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -402,8 +400,9 @@ class _RequirementOrderDetailForFactoryState
                 ),
               ),
               trailing: Text(
-                widget.model.details.proofingNeeded == null ? '' :
-                widget.model.details.proofingNeeded ? '是' : '否',
+                widget.model.details.proofingNeeded == null
+                    ? ''
+                    : widget.model.details.proofingNeeded ? '是' : '否',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -424,8 +423,9 @@ class _RequirementOrderDetailForFactoryState
                 ),
               ),
               trailing: Text(
-                widget.model.details.samplesNeeded == null ? '' :
-                widget.model.details.samplesNeeded ? '是' : '否',
+                widget.model.details.samplesNeeded == null
+                    ? ''
+                    : widget.model.details.samplesNeeded ? '是' : '否',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -446,8 +446,9 @@ class _RequirementOrderDetailForFactoryState
                 ),
               ),
               trailing: Text(
-                widget.model.details.invoiceNeeded == null ? '' :
-                widget.model.details.invoiceNeeded ? '是' : '否',
+                widget.model.details.invoiceNeeded == null
+                    ? ''
+                    : widget.model.details.invoiceNeeded ? '是' : '否',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -568,18 +569,18 @@ class _RequirementOrderDetailForFactoryState
             ),
           ),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(20))),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RequirementQuoteOrderFrom(model: widget.model,)),
+              MaterialPageRoute(
+                  builder: (context) => RequirementQuoteOrderFrom(
+                        model: widget.model,
+                      )),
             );
           },
-        )
-    );
+        ));
   }
-
 
   void _selectActionButton(String tel) async {
     showModalBottomSheet(
@@ -596,18 +597,19 @@ class _RequirementOrderDetailForFactoryState
                 await launch(url);
               },
             ),
-            tel.indexOf('-')>-1?Container():ListTile(
-              leading: Icon(Icons.message),
-              title: Text('发送短信'),
-              onTap: () async {
-                var url = 'sms:' + tel;
-                await launch(url);
-              },
-            ),
+            tel.indexOf('-') > -1
+                ? Container()
+                : ListTile(
+                    leading: Icon(Icons.message),
+                    title: Text('发送短信'),
+                    onTap: () async {
+                      var url = 'sms:' + tel;
+                      await launch(url);
+                    },
+                  ),
           ],
         );
       },
     );
   }
-
 }

@@ -38,7 +38,7 @@ class _RequirementOrderDetailPageState
         centerTitle: true,
         elevation: 0.5,
         title: Text(
-          '需求订明细',
+          '需求订单明细',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -46,11 +46,11 @@ class _RequirementOrderDetailPageState
         color: Colors.grey[100],
         child: ListView(
           children: <Widget>[
-            _buildHeader(),
             _buildMain(),
             _buildQuote(),
             _buildAttachments(),
             _buildRemarks(),
+            _buildHeader(),
             _buildButtonGroups()
           ],
         ),
@@ -61,6 +61,7 @@ class _RequirementOrderDetailPageState
   Widget _buildHeader() {
     return Container(
       color: Colors.white,
+      margin: EdgeInsets.only(bottom: 20),
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
@@ -111,7 +112,7 @@ class _RequirementOrderDetailPageState
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
         children: <Widget>[
           Column(children: [
@@ -315,7 +316,7 @@ class _RequirementOrderDetailPageState
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      margin: EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
           Row(

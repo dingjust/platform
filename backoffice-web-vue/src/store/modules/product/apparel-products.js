@@ -13,6 +13,8 @@ const state = {
   },
   formData: {
     id: null,
+    images: [],
+    skuID: '',
     code: '',
     name: '',
     price: 0.00,
@@ -23,7 +25,6 @@ const state = {
     categories: [],
     staircasePrices: [],
     startingAmount: '',
-    skuID: '',
     year: '',
     season: '',
     placeOfOrigin: '',
@@ -70,6 +71,8 @@ const actions = {
 
     const response = await http.post('/b2b/products/apparel/all', {
       code: state.keyword,
+      name: state.keyword
+    }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -86,7 +89,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/djbackoffice/product/advancedSearch', query, {
+    const response = await http.post('/b2b/products/apparel/all', query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

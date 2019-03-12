@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 /// 产品搜索页
-class QuotesSearchDelegate extends SearchDelegate<QuoteEntryModel> {
+class QuotesSearchDelegate extends SearchDelegate<QuoteModel> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [

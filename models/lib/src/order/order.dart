@@ -780,7 +780,10 @@ class QuoteModel extends AbstractOrderModel {
   QuoteState state;
 
   /// 需求订单号
-  String requirementOrderCode;
+  String requirementOrderRef;
+
+  /// 需求订单
+  RequirementOrderModel requirementOrder;
 
   /// 生产订单号
   String purchaseOrderCode;
@@ -818,7 +821,8 @@ class QuoteModel extends AbstractOrderModel {
     AddressModel deliveryAddress,
     String remarks,
     this.state,
-    this.requirementOrderCode,
+    this.requirementOrder,
+    this.requirementOrderRef,
     this.purchaseOrderCode,
     this.belongTo,
     this.attachments,
@@ -845,33 +849,6 @@ class QuoteModel extends AbstractOrderModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
-}
-
-/// 报价单行
-@JsonSerializable()
-class QuoteEntryModel extends AbstractOrderEntryModel {
-  ApparelProductModel product;
-  QuoteModel order;
-
-  QuoteEntryModel({
-    int entryNumber,
-    double price,
-    int quantity,
-    double totalPrice,
-    this.product,
-    this.order,
-  }) : super(
-          entryNumber: entryNumber,
-          price: price,
-          quantity: quantity,
-          totalPrice: totalPrice,
-        );
-
-  factory QuoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      _$QuoteEntryModelFromJson(json);
-
-  static Map<String, dynamic> toJson(QuoteEntryModel model) =>
-      _$QuoteEntryModelToJson(model);
 }
 
 /// 生产进度
