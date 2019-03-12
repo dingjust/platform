@@ -26,7 +26,7 @@ export default {
         },
         {
           name: '产品',
-          url: '/backoffice/product/product',
+          url: '/backoffice/product/apparel',
           icon: 'iconNone'
         },
         {

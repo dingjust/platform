@@ -452,10 +452,21 @@ class RequirementInfoModel extends ItemModel {
   String contactPhone;
 
   ///生产地区
-  List<String> productiveOrientations;
+  @JsonKey(toJson: _regionsToJson)
+  List<RegionModel> productiveOrientations;
 
   ///是否发布到需求池
   bool isToRequirementPool;
+
+  ///省
+  @JsonKey(toJson: _regionToJson)
+  RegionModel region;
+  ///市
+  @JsonKey(toJson: _cityToJson)
+  CityModel city;
+  ///区
+  @JsonKey(toJson: _cityDistrictToJson)
+  DistrictModel cityDistrict;
 
   RequirementInfoModel({
     this.expectedDeliveryDate,
@@ -490,6 +501,18 @@ class RequirementInfoModel extends ItemModel {
 
   static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
       models.map((model) => MediaModel.toJson(model)).toList();
+
+  static Map<String, dynamic> _regionToJson(RegionModel model) =>
+      RegionModel.toJson(model);
+
+  static Map<String, dynamic> _cityToJson(CityModel model) =>
+     CityModel.toJson(model);
+
+  static Map<String, dynamic> _cityDistrictToJson(DistrictModel model) =>
+      DistrictModel.toJson(model);
+
+  static List<Map<String, dynamic>> _regionsToJson(List<RegionModel> models) =>
+      models.map((model) => RegionModel.toJson(model)).toList();
 
   static MachiningType _machiningTypeFromJson(String machiningType) {
     if (machiningType == '') {

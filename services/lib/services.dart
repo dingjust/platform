@@ -36,6 +36,7 @@ export 'src/user/user_repository_impl.dart';
 export 'src/wechat/wechat_service_impl.dart';
 export 'src/order/repository/quote_order_respository.dart';
 export 'src/order/repository/requirement_order_repository.dart';
+export 'src/product/product_repository_impl.dart';
 
 abstract class BLoCBase {
   void dispose();
