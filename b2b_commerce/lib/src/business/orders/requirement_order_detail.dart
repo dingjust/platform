@@ -145,14 +145,18 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '是否需要打样',
             value: Text(
-              widget.order.details.proofingNeeded ?? true ? '是' : '否',
+              widget.order.details.proofingNeeded == null
+                  ? ''
+                  : widget.order.details.proofingNeeded ? '是' : '否',
               style: TextStyle(fontSize: 16),
             ),
           ),
           InfoRow(
             label: '是否提供样衣',
             value: Text(
-              widget.order.details.samplesNeeded ? '是' : '否',
+              widget.order.details.samplesNeeded == null
+                  ? ''
+                  : widget.order.details.samplesNeeded ? '是' : '否',
               style: TextStyle(fontSize: 16),
             ),
           ),
@@ -166,7 +170,9 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '是否开票',
             value: Text(
-              widget.order.details.invoiceNeeded ? '是' : '否',
+              widget.order.details.invoiceNeeded == null
+                  ? ''
+                  : widget.order.details.invoiceNeeded ? '是' : '否',
               style: TextStyle(fontSize: 16),
             ),
             hasBottomBorder: false,
@@ -264,7 +270,7 @@ class _RequirementOrderDetailPageState
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.order.details.majorCategory.name}   ${widget.order.details.category.name}   ${widget.order.details.expectedMachiningQuantity}件",
+                      "${widget.order.details.majorCategory?.name}   ${widget.order.details.category?.name}   ${widget.order.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
