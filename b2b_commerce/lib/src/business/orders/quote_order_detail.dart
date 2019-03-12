@@ -47,7 +47,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
       ),
       body: ListView(
         children: <Widget>[
-          _buildOrderState(),
           _buildFactory(),
           Card(
             elevation: 0,
@@ -61,6 +60,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           _buildDeliveryDate(),
           _buildAttachment(),
           _buildRemark(),
+          _buildOrderState(),
           _buildActionChip(context),
         ],
       ),
@@ -68,9 +68,9 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   }
 
   Widget _buildOrderState() {
-    return Card(
-      elevation: 0,
-      margin: EdgeInsets.all(0),
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         child: Column(
