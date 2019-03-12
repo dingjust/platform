@@ -49,7 +49,10 @@ const RequirementOrderStatusLocalizedMap = {
 /// 采购订单状态
 enum PurchaseOrderStatus {
   /// 待付定金
-  WAIT_FOR_DEPOSIT_PAYABLE,
+  WAIT_PAY_EARNEST_MONEY,
+
+  // 待付尾款
+  WAIT_PAY_TAIL_MONEY,
 
   /// 生产中
   IN_PRODUCTION,
@@ -63,7 +66,8 @@ enum PurchaseOrderStatus {
 
 // TODO: i18n处理
 const PurchaseOrderStatusLocalizedMap = {
-  PurchaseOrderStatus.WAIT_FOR_DEPOSIT_PAYABLE: "待付定金",
+  PurchaseOrderStatus.WAIT_PAY_EARNEST_MONEY: "待付定金",
+  PurchaseOrderStatus.WAIT_PAY_TAIL_MONEY: "待付尾款",
   PurchaseOrderStatus.IN_PRODUCTION: "生产中",
   PurchaseOrderStatus.OUT_OF_STORE: "已出库",
   PurchaseOrderStatus.COMPLETED: "已完成"
@@ -753,7 +757,10 @@ class QuoteModel extends AbstractOrderModel {
   QuoteState state;
 
   /// 需求订单号
-  String requirementOrderCode;
+  String requirementOrderRef;
+
+  /// 需求订单
+  RequirementOrderModel requirementOrder;
 
   /// 生产订单号
   String purchaseOrderCode;
@@ -791,7 +798,8 @@ class QuoteModel extends AbstractOrderModel {
     AddressModel deliveryAddress,
     String remarks,
     this.state,
-    this.requirementOrderCode,
+    this.requirementOrder,
+    this.requirementOrderRef,
     this.purchaseOrderCode,
     this.belongTo,
     this.attachments,
@@ -818,33 +826,6 @@ class QuoteModel extends AbstractOrderModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
-}
-
-/// 报价单行
-@JsonSerializable()
-class QuoteEntryModel extends AbstractOrderEntryModel {
-  ApparelProductModel product;
-  QuoteModel order;
-
-  QuoteEntryModel({
-    int entryNumber,
-    double price,
-    int quantity,
-    double totalPrice,
-    this.product,
-    this.order,
-  }) : super(
-          entryNumber: entryNumber,
-          price: price,
-          quantity: quantity,
-          totalPrice: totalPrice,
-        );
-
-  factory QuoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      _$QuoteEntryModelFromJson(json);
-
-  static Map<String, dynamic> toJson(QuoteEntryModel model) =>
-      _$QuoteEntryModelToJson(model);
 }
 
 /// 生产进度

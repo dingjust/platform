@@ -1,6 +1,5 @@
-import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/business/search/quotes_search.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -65,6 +64,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
                 children: statuses
                     .map((status) => QuoteOrdersList(
                           status: status,
+                          pageContext: context,
                         ))
                     .toList(),
               ),
@@ -76,15 +76,23 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
 }
 
 class QuoteOrdersList extends StatelessWidget {
-  QuoteOrdersList({Key key, this.status}) : super(key: key);
+  QuoteOrdersList({Key key, @required this.status, @required this.pageContext})
+      : super(key: key);
 
   final EnumModel status;
+
+  final BuildContext pageContext;
 
   ScrollController _scrollController = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
+
+    //子组件刷新数据方法
+    void _handleRefresh() {
+      bloc.refreshData(status.code);
+    }
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -123,10 +131,10 @@ class QuoteOrdersList extends StatelessWidget {
             physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             children: <Widget>[
-              StreamBuilder<List<QuoteEntryModel>>(
+              StreamBuilder<List<QuoteModel>>(
                 stream: bloc.stream,
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<QuoteEntryModel>> snapshot) {
+                    AsyncSnapshot<List<QuoteModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses(status.code);
                     return Padding(
@@ -137,8 +145,10 @@ class QuoteOrdersList extends StatelessWidget {
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((order) {
-                        return QuoteOrderItem(
+                        return QuoteItem(
                           model: order,
+                          onRefresh: _handleRefresh,
+                          pageContext: pageContext,
                         );
                       }).toList(),
                     );
@@ -187,207 +197,6 @@ class QuoteOrdersList extends StatelessWidget {
             ],
           ),
         ));
-  }
-}
-
-class QuoteOrderItem extends StatelessWidget {
-  const QuoteOrderItem({Key key, this.model}) : super(key: key);
-
-  final QuoteEntryModel model;
-
-  static Map<QuoteState, MaterialColor> _statusColors = {
-    QuoteState.SELLER_SUBMITTED: Colors.green,
-    QuoteState.BUYER_APPROVED: Colors.blue,
-    QuoteState.BUYER_REJECTED: Colors.red
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS_DETAIL);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => QuoteOrderDetailPage(
-                  item: model,
-                )));
-      },
-      child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: Column(
-          children: <Widget>[
-            _buildHeader(),
-            _buildEntries(),
-            model.order.state == QuoteState.SELLER_SUBMITTED
-                ? _buildSummary()
-                : Container()
-          ],
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              RichText(
-                text: TextSpan(
-                    text: '报价：',
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: '￥',
-                          style: TextStyle(fontSize: 14, color: Colors.red)),
-                      TextSpan(
-                          text: '${model.order.totalPrice}',
-                          style: TextStyle(color: Colors.red)),
-                    ]),
-              ),
-              Text(QuoteStateLocalizedMap[model.order.state],
-                  style: TextStyle(
-                      color: _statusColors[model.order.state], fontSize: 18))
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '工厂：${model.order.belongTo.name}',
-                  style: TextStyle(fontSize: 15),
-                ),
-                Text(
-                  '报价时间：${DateFormatUtil.format(model.order.creationTime)}',
-                  style: TextStyle(fontSize: 15),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEntries() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-      child: Row(
-        children: <Widget>[
-          model.product.thumbnail != null
-              ? Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image: NetworkImage(model.product.thumbnail),
-                        fit: BoxFit.cover,
-                      )),
-                )
-              : Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color.fromRGBO(243, 243, 243, 1)),
-                  child: Icon(
-                    B2BIcons.noPicture,
-                    color: Color.fromRGBO(200, 200, 200, 1),
-                    size: 25,
-                  ),
-                ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 80,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  model.product.name != null
-                      ? Text(
-                          model.product.name,
-                          style: TextStyle(fontSize: 15),
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      : Text(
-                          '暂无产品',
-                          style: TextStyle(fontSize: 15, color: Colors.red),
-                        ),
-                  model.product.skuID != null
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '货号：${model.product.skuID}',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                        )
-                      : Container(),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      "${model.product.majorCategory.name}   ${model.product.minorCategory.name}   ${model.order.totalQuantity}件",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Color.fromRGBO(255, 133, 148, 1)),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummary() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          FlatButton(
-              onPressed: () {},
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Colors.red,
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '拒绝报价',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              )),
-          FlatButton(
-              onPressed: () {},
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 149, 22, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '确认报价',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              )),
-        ],
-      ),
-    );
   }
 }
 

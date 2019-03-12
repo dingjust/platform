@@ -8,8 +8,8 @@ import 'package:widgets/widgets.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
-  EnumModel('WAIT_FOR_PROCESSING', '待处理'),
-  EnumModel('PENDING_APPROVAL', '待确认'),
+  EnumModel('WAIT_PAY_EARNEST_MONEY', '待付定金'),
+  EnumModel('WAIT_PAY_TAIL_MONEY', '待付尾款'),
   EnumModel('IN_PRODUCTION', '生产中'),
   EnumModel('OUT_OF_STORE', '已出库'),
   EnumModel('COMPLETED', '已完成'),
@@ -54,14 +54,11 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                 isScrollable: true,
               ),
               body: TabBarView(
-                children: <Widget>[
-                  PurchaseOrderList(statuses[0]),
-                  PurchaseOrderList(statuses[1]),
-                  PurchaseOrderList(statuses[2]),
-                  PurchaseOrderList(statuses[3]),
-                  PurchaseOrderList(statuses[4]),
-                  PurchaseOrderList(statuses[5]),
-                ],
+                children: statuses
+                    .map((status) => PurchaseOrderList(
+                  status: status,
+                ))
+                    .toList(),
               ),
             ),
           ),
@@ -71,15 +68,15 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
 }
 
 class PurchaseOrderList extends StatelessWidget {
+  PurchaseOrderList({Key key, this.status}) : super(key: key);
+
   final EnumModel status;
 
   ScrollController _scrollController = new ScrollController();
 
-  PurchaseOrderList(this.status);
-
   @override
   Widget build(BuildContext context) {
-    final bloc = BLoCProvider.of<PurchaseOrderBLoC>(context);
+    var bloc = BLoCProvider.of<PurchaseOrderBLoC>(context);
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -120,7 +117,7 @@ class PurchaseOrderList extends StatelessWidget {
               children: <Widget>[
                 StreamBuilder<List<PurchaseOrderModel>>(
                   stream: bloc.stream,
-                  initialData: null,
+                  // initialData: null,
                   builder: (BuildContext context,
                       AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                     if (snapshot.data == null) {
@@ -134,7 +131,7 @@ class PurchaseOrderList extends StatelessWidget {
                       return Column(
                         children: snapshot.data.map((order) {
                           return PurchaseOrderItem(
-                            order,
+                            order: order,
                           );
                         }).toList(),
                       );
@@ -188,9 +185,10 @@ class PurchaseOrderList extends StatelessWidget {
 }
 
 class PurchaseOrderItem extends StatelessWidget {
+  const PurchaseOrderItem({Key key, this.order}) : super(key: key);
+
   final PurchaseOrderModel order;
 
-  PurchaseOrderItem(this.order);
 
   @override
   Widget build(BuildContext context) {
@@ -241,7 +239,7 @@ class PurchaseOrderItem extends StatelessWidget {
                 Text(
                   PurchaseOrderStatusLocalizedMap[order.status],
                   textAlign: TextAlign.end,
-                  style: TextStyle(fontSize: 18, color: Colors.green),
+                  style: TextStyle(fontSize: 18, color: Colors.orangeAccent),
                 )
               ],
             ),

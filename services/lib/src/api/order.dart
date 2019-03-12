@@ -24,9 +24,7 @@ class OrderApis {
       };
 
   /// 根据条件获取采购订单列表 POST
-  static get purchaseOrders => () {
-        return '/{baseSiteId}/b2b/orders/purchase';
-      };
+  static get purchaseOrders => '/{baseSiteId}/b2b/orders/purchase';
 
   /// 根据采购订单编号获取明细 GET
   static get purchaseOrderDetail => (code) {

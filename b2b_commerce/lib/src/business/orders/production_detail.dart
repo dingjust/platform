@@ -526,11 +526,6 @@ class _ProductionDetailPage extends State<ProductionDetailPage> {
     );
   }
 
-Widget _createRowView(){
-
-}
-
-
 //生成日期选择器
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime _picked = await showDatePicker(

@@ -50,7 +50,7 @@ class ProofingOrdersBLoC extends BLoCBase {
             totalPrice: 54,
             totalQuantity: 554,
             order: QuoteModel(
-              requirementOrderCode: '39492523423',
+              requirementOrderRef: '39492523423',
             ),
             deliveryAddress: AddressModel.fromJson({
               'fullname': "张三",
@@ -79,7 +79,7 @@ class ProofingOrdersBLoC extends BLoCBase {
             totalPrice: 54,
             totalQuantity: 554,
             order: QuoteModel(
-              requirementOrderCode: '39492523423',
+              requirementOrderRef: '39492523423',
             ),
             deliveryAddress: AddressModel.fromJson({
               'fullname': "张三",
@@ -117,7 +117,7 @@ class ProofingOrdersBLoC extends BLoCBase {
               'defaultAddress': true
             }),
             order: QuoteModel(
-              requirementOrderCode: '39492523423',
+              requirementOrderRef: '39492523423',
             ),
             creationTime: DateTime.parse('2019-01-03'),
             product: ApparelProductModel(
@@ -137,7 +137,7 @@ class ProofingOrdersBLoC extends BLoCBase {
             totalPrice: 54,
             totalQuantity: 554,
             order: QuoteModel(
-              requirementOrderCode: '39492523423',
+              requirementOrderRef: '39492523423',
             ),
             deliveryAddress: AddressModel.fromJson({
               'fullname': "张三",
@@ -166,7 +166,7 @@ class ProofingOrdersBLoC extends BLoCBase {
             totalPrice: 54,
             totalQuantity: 554,
             order: QuoteModel(
-              requirementOrderCode: '39492523423',
+              requirementOrderRef: '39492523423',
             ),
             deliveryAddress: AddressModel.fromJson({
               'fullname': "张三",
@@ -206,7 +206,7 @@ class ProofingOrdersBLoC extends BLoCBase {
           totalPrice: 54,
           totalQuantity: 554,
           order: QuoteModel(
-            requirementOrderCode: '39492523423',
+            requirementOrderRef: '39492523423',
           ),
           deliveryAddress: AddressModel.fromJson({
             'fullname': "张三",
@@ -248,7 +248,7 @@ class ProofingOrdersBLoC extends BLoCBase {
         totalPrice: 54,
         totalQuantity: 554,
         order: QuoteModel(
-          requirementOrderCode: '39492523423',
+          requirementOrderRef: '39492523423',
         ),
         deliveryAddress: AddressModel.fromJson({
           'fullname': "张三",
