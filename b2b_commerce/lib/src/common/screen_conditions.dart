@@ -7,6 +7,7 @@ import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 
+List<CategoryModel> _categorys;
 final List<Map<CategoryModel, List<CategoryModel>>> _category = [
   {
     CategoryModel(code: 'C01', name: '男装'): [
@@ -587,7 +588,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       builder: (BuildContext context) {
         return Container(
           child: CategorySelect(
-            categorys: _category,
+            categorys: _categorys,
             multiple: false,
             verticalDividerOpacity: 1,
             categorySelect: _categorySelected,

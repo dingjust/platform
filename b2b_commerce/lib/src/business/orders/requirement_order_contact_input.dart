@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 
 class RequirmentOrderContactInput extends StatefulWidget{
+  RequirementOrderModel item;
+
+  RequirmentOrderContactInput(this.item);
   _RequirmentOrderContactInputState createState() => _RequirmentOrderContactInputState();
 }
 
@@ -12,8 +16,13 @@ class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInpu
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   Map<String,Object> map;
-  String contactName;
-  String contactPhone;
+
+  void initState(){
+    _nameController.text = widget.item.details.contactPerson;
+    _phoneController.text = widget.item.details.contactPhone;
+    
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +45,9 @@ class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInpu
                     ),
                   ),
                   onTap: () async {
-                    //带值返回上一页
-                    Navigator.of(context).pop(contactName + ',' + contactPhone);
+                    widget.item.details.contactPerson = _nameController.text == '' ? null : _nameController.text;
+                    widget.item.details.contactPhone = _phoneController.text == '' ? null : _phoneController.text;
+                    Navigator.pop(context);
                   }
               )
             ]
@@ -62,16 +72,10 @@ class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInpu
             child: TextFieldComponent(
               focusNode: _nameFocusNode,
               controller: _nameController,
+              autofocus: true,
               leadingText: '联系人名',
               hintText: '请输入联系人名',
-                  onChanged: (value){
-                    contactName = value;
-                  },
             ),
-//            decoration: new BoxDecoration(
-//              border: new Border.all(width: 1.0, color: Colors.black26),
-//              borderRadius: new BorderRadius.all(new Radius.circular(20.0)),
-//            ),
           ),
           Container(
             padding: EdgeInsets.all(5),
@@ -82,14 +86,7 @@ class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInpu
               leadingText: '联系电话',
               hintText: '请输入联系电话',
               inputType: TextInputType.phone,
-                  onChanged: (value){
-                    contactPhone = value;
-                  },
             ),
-//            decoration: new BoxDecoration(
-//              border: new Border.all(width: 1.0, color: Colors.black26),
-//              borderRadius: new BorderRadius.all(new Radius.circular(20.0)),
-//            ),
           ),
         ],
       ),

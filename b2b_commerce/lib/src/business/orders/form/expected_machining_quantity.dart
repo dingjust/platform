@@ -1,22 +1,25 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class ExpectedMachiningQuantityField extends StatefulWidget {
   RequirementOrderModel item;
 
   ExpectedMachiningQuantityField(this.item);
 
-  ExpectedMachiningQuantityFieldState createState() => ExpectedMachiningQuantityFieldState();
+  ExpectedMachiningQuantityFieldState createState() =>
+      ExpectedMachiningQuantityFieldState();
 }
 
-class ExpectedMachiningQuantityFieldState extends State<ExpectedMachiningQuantityField> {
+class ExpectedMachiningQuantityFieldState
+    extends State<ExpectedMachiningQuantityField> {
   @override
   Widget build(BuildContext context) {
-        TextEditingController(
-            text: widget.item.details.expectedMachiningQuantity == null
-                ? ''
-                : widget.item.details.expectedMachiningQuantity.toString());
+    TextEditingController(
+        text: widget.item.details.expectedMachiningQuantity == null
+            ? ''
+            : widget.item.details.expectedMachiningQuantity.toString());
     return GestureDetector(
       child: Container(
         child: ListTile(
@@ -40,12 +43,19 @@ class ExpectedMachiningQuantityFieldState extends State<ExpectedMachiningQuantit
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => RequirementOrderInputPage(fieldText: '加工数量',inputType: TextInputType.number)),
+            builder: (context) => PopupWindowPage(
+                  fieldText: '加工数量',
+                  inputType: TextInputType.number,
+                  text:widget.item.details.expectedMachiningQuantity == null ? null : widget.item.details.expectedMachiningQuantity.toString(),
+                ),
+          ),
           //接收返回数据并处理
-        ).then((value) {
-          setState(() {
+        ).then((value){
+          if(value.trim() == ''){
+            widget.item.details.expectedMachiningQuantity = null;
+          }else{
             widget.item.details.expectedMachiningQuantity = int.parse(value);
-          });
+          }
         });
       },
     );

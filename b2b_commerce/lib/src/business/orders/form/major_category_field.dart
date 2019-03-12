@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import 'package:services/services.dart';
 
 class MajorCategoryField extends StatefulWidget{
   final RequirementOrderModel item;
@@ -11,16 +12,20 @@ class MajorCategoryField extends StatefulWidget{
 
 class MajorCategoryFieldState extends State<MajorCategoryField>{
   List<EnumModel> _mojarEnumSelected = [];
-  final List<CategoryModel> _majorCategory = [
-    CategoryModel(code: 'C2', name: '针织'),
-    CategoryModel(code: 'C3', name: '梭织'),
-    CategoryModel(code: 'C4', name: '尼龙'),
-  ];
+  List<CategoryModel> _majorCategory ;
 
   String formatEnumSelectText(List<EnumModel> enums) {
     String text = '选取';
     if (enums != null && enums.length > 0) text = enums[0].name;
     return text;
+  }
+
+  @override
+  void initState() {
+    ProductRepositoryImpl().majorCategories().then((categorys)=>_majorCategory = categorys);
+
+    // TODO: implement initState
+    super.initState();
   }
 
   @override

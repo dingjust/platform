@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class CategorySelect extends StatefulWidget {
-  final List<Map<CategoryModel, List<CategoryModel>>> categorys;
+  List<CategoryModel> categorys;
   final bool multiple;
   final double verticalDividerOpacity;
   final bool hasButton;
@@ -26,7 +27,7 @@ class CategorySelectState extends State<CategorySelect> {
   //是否多选
   bool _multiple;
   List<Widget> _keyItem;
-  List<Widget> _valueItem = <Widget>[];
+  List<CategoryModel> _valueItem = [];
   String _selectLeft;
   Color _color;
   List<String> _selectRights = [];
@@ -40,32 +41,65 @@ class CategorySelectState extends State<CategorySelect> {
     if(widget.categorySelect.isNotEmpty){
       _selectLeft = widget.categorySelect[0].parent?.code;
       _selectRights = widget.categorySelect.map((category) => category.code).toList();
+//      _valueItem = widget.categorySelect[0].parent.children;
+      _valueItem = widget.categorys[0].children;
     }else {
-      _selectLeft = widget.categorys[0].keys.toList()[0].code;
+      _selectLeft = widget.categorys[0].code;
+      _valueItem = widget.categorys[0].children;
     }
-
     _color = Colors.black;
     // TODO: implement initState
     super.initState();
   }
 
+  Widget buildValueItem(CategoryModel category){
+      return ChoiceChip(
+        selectedColor: Colors.orange,
+        label: Text(
+          category.name,
+          style: TextStyle(color: Colors.black),
+        ),
+        selected: _selectRights.contains(category.code),
+        onSelected: (select) {
+          if (select) {
+            setState(() {
+              if (!_multiple) {
+                widget.categorySelect.clear();
+                _selectRights.clear();
+              }
+              widget.categorySelect.add(category);
+              _selectRights.add(category.code);
+            });
+          } else {
+            setState(() {
+              widget.categorySelect.removeWhere((category) => category.code == category.code);
+              _selectRights.remove(category.code);
+              print(widget.categorySelect);
+              print(_selectRights);
+            });
+          }
+        },
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
-    widget.categorys.forEach((category) {
-      _keyItem = category.keys.map((key) {
-        if (_selectLeft == key.code) {
+      _keyItem = widget.categorys.map((category) {
+        if (_selectLeft == category.code) {
           _color = Colors.orange;
         } else {
           _color = Colors.black;
         }
         return GestureDetector(
           onTap: () {
-            if (!(_selectLeft == key.code)) {
+            if (_selectLeft != category.code) {
               setState(() {
 //                widget.categorySelect.clear();
-                _selectLeft = key.code;
+                _selectLeft = category.code;
               });
             }
+
+            _valueItem = category.children;
           },
           child: Container(
             width: 60,
@@ -75,51 +109,13 @@ class CategorySelectState extends State<CategorySelect> {
               padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
               height: 40,
               child: Text(
-                key.name,
+                category.name,
                 style: TextStyle(color: _color),
               ),
             ),
           ),
         );
       }).toList();
-    });
-
-    widget.categorys.forEach((map) {
-      final entry = map.entries.toList().firstWhere(
-          (entry) => _selectLeft == entry.key.code,
-          orElse: () => null);
-      if (entry != null) {
-        _valueItem = entry.value.map((value) {
-          return ChoiceChip(
-            selectedColor: Colors.orange,
-            label: Text(
-              value.name,
-              style: TextStyle(color: Colors.black),
-            ),
-            selected: _selectRights.contains(value.code),
-            onSelected: (select) {
-              if (select) {
-                setState(() {
-                  if (!_multiple) {
-                    widget.categorySelect.clear();
-                    _selectRights.clear();
-                  }
-                  widget.categorySelect.add(value);
-                  _selectRights.add(value.code);
-                });
-              } else {
-                setState(() {
-                  widget.categorySelect.removeWhere((category) => category.code == value.code);
-                  _selectRights.remove(value.code);
-                  print(widget.categorySelect);
-                  print(_selectRights);
-                });
-              }
-            },
-          );
-        }).toList();
-      }
-    });
 
     return Row(
       children: <Widget>[
@@ -140,12 +136,11 @@ class CategorySelectState extends State<CategorySelect> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(left: 10, top: 5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: ListView(
               children: <Widget>[
                 Wrap(
                   spacing: 5,
-                  children: _valueItem,
+                  children: _valueItem.map((category)=>buildValueItem(category)).toList(),
                 ),
                 Offstage(
                   offstage: !widget.hasButton,

@@ -43,11 +43,13 @@ class CategoryModel extends ItemModel {
   String name;
   @JsonKey(toJson: _categoryToJson)
   CategoryModel parent;
+  List<CategoryModel> children;
 
   CategoryModel({
     this.code,
     this.name,
     this.parent,
+    this.children,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
@@ -58,6 +60,7 @@ class CategoryModel extends ItemModel {
 
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
       CategoryModel.toJson(model);
+
 }
 
 @JsonSerializable()

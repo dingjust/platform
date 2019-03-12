@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class RemarksField extends StatefulWidget {
   RequirementOrderModel item;
@@ -39,14 +40,18 @@ class RemarksFieldState extends State<RemarksField> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    RequirementOrderInputPage(
-                        fieldText: '订单备注', inputType: TextInputType.text)),
+              builder: (context) => PopupWindowPage(
+                fieldText: '订单备注',
+                text:widget.item.remarks == null ? null : widget.item.remarks.toString(),
+              ),
+            ),
             //接收返回数据并处理
-          ).then((value) {
-            setState(() {
+          ).then((value){
+            if(value.trim() == ''){
+              widget.item.remarks = null;
+            }else{
               widget.item.remarks = value;
-            });
+            }
           });
         });
   }

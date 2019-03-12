@@ -165,9 +165,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               offstage: widget.product == null,
               child: ProductField(widget.product),
             ),
-            MajorCategoryField(model),
+            CategoryField(model,widget.product),
             new Divider(height: 0),
-            CategoryField(model, _categorySelected),
+            MajorCategoryField(model),
             new Divider(height: 0),
             ExpectedMachiningQuantityField(model),
             new Divider(height: 0),
@@ -281,19 +281,20 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               onPressed: () async{
-//                model.entries = [
-//                  RequirementOrderEntryModel(
-//                      product: widget.product, order: model)
-//                ];
-//                print('${_normalImages}');
-//                print(
-//                    '${model.code},${model.entries[0].product?.name},${model.entries[0].product?.code},${model.details.majorCategory},${model.details.category}');
-//                print(
-//                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
-//                print(
-//                    '${model.deliveryAddress},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
-//                print(
-//                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
+                model.entries = [
+                  RequirementOrderEntryModel(
+                      product: widget.product, order: model)
+                ];
+                print('${_normalImages}');
+                print(
+                    '${model.code},${model.details.majorCategory},${model.details.category}');
+                print(
+                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
+                print(
+                    '${model.details.region},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
+                print(
+                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
+
 
                 String code = await RequirementOrderRepository().publishNewRequirement(model);
 

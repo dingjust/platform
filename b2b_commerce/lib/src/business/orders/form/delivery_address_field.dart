@@ -11,15 +11,6 @@ class DeliveryAddressField extends StatefulWidget {
 }
 
 class DeliveryAddressFieldState extends State<DeliveryAddressField> {
-  AddressModel addressModel = AddressModel(
-    region: null,
-    fullname: null,
-    cellphone: null,
-    city: null,
-    cityDistrict: null,
-    line1: null,
-  );
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -33,30 +24,33 @@ class DeliveryAddressFieldState extends State<DeliveryAddressField> {
             ),
           ),
           trailing: Text(
-            widget.item.deliveryAddress?.regionCityAndDistrict ?? '选取',
+            widget.item.details.region != null
+                ? '${widget.item.details.region?.name}${widget.item.details.city?.name}${widget.item.details.cityDistrict?.name}'
+                : '选取',
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
           ),
         ),
       ),
       onTap: () {
-        AddressPicker(cacel:(){
+        AddressPicker(cacel: () {
           setState(() {
-            widget.item.deliveryAddress = null;
+            widget.item.details.region = null;
+            widget.item.details.city = null;
+            widget.item.details.cityDistrict= null;
           });
           Navigator.pop(context);
         }).showAddressPicker(
           context,
           selectProvince: (province) {
-            addressModel.region = RegionModel.fromJson(province);
+            widget.item.details.region = RegionModel.fromJson(province);
           },
           selectCity: (city) {
-            addressModel.city = CityModel.fromJson(city);
+            widget.item.details.city = CityModel.fromJson(city);
           },
           selectArea: (area) {
-            addressModel.cityDistrict = DistrictModel.fromJson(area);
             setState(() {
-              widget.item.deliveryAddress = addressModel;
+              widget.item.details.cityDistrict = DistrictModel.fromJson(area);
             });
           },
         );
