@@ -155,7 +155,7 @@ class ProofingOrderQuantityInputItemState
                 hintStyle: TextStyle(color: Colors.grey[400]),
                 border: InputBorder.none,
               ),
-              autofocus: true,
+              autofocus: false,
             ),
           ),
         ]);
