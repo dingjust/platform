@@ -999,8 +999,6 @@ class ProofingModel extends OrderModel {
 
   List<ProofingEntryModel> entries;
 
-  List<ApparelSizeVariantProductModel> variants;
-
   //打样费用单价
   double unitPrice;
 

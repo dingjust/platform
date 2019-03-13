@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import '../apparel_product_stock_input.dart';
 import '../apparel_product_variants_input.dart';
-import '../apparel_product_size_stock_item.dart';
 import 'package:widgets/widgets.dart';
+import 'package:services/services.dart';
 
 class ColorSizeStockField extends StatefulWidget {
   ColorSizeStockField(this.item);
@@ -17,14 +16,29 @@ class ColorSizeStockField extends StatefulWidget {
 class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
   List<ColorModel> _colorFilters = <ColorModel>[];
   List<SizeModel> _sizeFilters = <SizeModel>[];
-  Map<ColorModel,List<SizeStockItem>> _items = Map();
-  Map<ColorModel,List<SizeStockItem>> _newItems;
+  List<ColorModel> _colors;
+  List<SizeModel> _sizes;
+//  Map<ColorModel,List<SizeStockItem>> _items = Map();
+//  Map<ColorModel,List<SizeStockItem>> _newItems;
 
   @override
   void initState() {
+    ProductRepositoryImpl().colors().then((colors)=>_colors = colors);
+    ProductRepositoryImpl().sizes().then((sizes)=>_sizes = sizes);
+
+    List<String> colorCodes = [];
+    List<String> sizeCodes = [];
     if(widget.item?.variants != null){
-      _colorFilters = widget.item.variants.map((variant) => variant.color).toList();
-      _sizeFilters = widget.item.variants.map((variant) => variant.size).toList();
+      widget.item.variants.forEach((variant){
+        if(!colorCodes.contains(variant.color.code)) {
+          colorCodes.add(variant.color.code);
+          _colorFilters.add(variant.color);
+        }
+        if(!sizeCodes.contains(variant.size.code)){
+          sizeCodes.add(variant.size.code);
+          _sizeFilters.add(variant.size);
+        }
+      });
     }
 
     // TODO: implement initState
@@ -40,8 +54,7 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    ApparelProductVariantsInputPage(colorFilters: _colorFilters,sizeFilters: _sizeFilters,),
+                builder: (context) => ColorSizeSelectPage(colorFilters: _colorFilters,sizeFilters: _sizeFilters,colors: _colors,sizes: _sizes,),
               ),
             );
 
@@ -50,11 +63,13 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
               _sizeFilters = result[1];
             }
 
+            List<ApparelSizeVariantProductModel> variants = [];
             _colorFilters.forEach((color){
-              widget.item.variants = _sizeFilters.map((size){
+              variants.addAll(_sizeFilters.map((size){
                 return ApparelSizeVariantProductModel(baseProduct:widget.item.code,color: color,size:size);
-              }).toList();
+              }).toList());
             });
+            widget.item.variants = variants;
 
             //选择完颜色，生成库存item
 //            _newItems = Map.from(_items);
