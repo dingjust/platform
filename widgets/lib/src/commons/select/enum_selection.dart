@@ -36,7 +36,7 @@ class EnumSelectionState extends State<EnumSelection> {
       return Container(
         width: MediaQuery.of(context).size.width / widget.count,
         child: ChoiceChip(
-          selectedColor: Colors.orange,
+          selectedColor: Color.fromRGBO(255,214,12, 1),
           label: Text(style.name,style: TextStyle(color: Colors.black),),
           selected: _enumCodeSelect.contains(style.code),
           onSelected: (select){

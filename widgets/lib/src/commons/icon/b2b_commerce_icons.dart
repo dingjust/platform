@@ -65,6 +65,10 @@ class B2BIcons {
       const IconData(0xe6ba, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData arrow_left_bottom =
       const IconData(0xeb0c, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData arrow_right =
+      const IconData(0xe681, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData hot =
+      const IconData(0xe6a9, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

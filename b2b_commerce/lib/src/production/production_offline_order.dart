@@ -5,10 +5,10 @@ import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
-import 'package:b2b_commerce/src/production/production_offline_product_color_size.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class ProductionOfflineOrder extends StatefulWidget {
 
@@ -30,15 +30,14 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     cityDistrict: null,
     line1: null,
   );
-  PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
   PurchaseOrderEntryModel entryModel = new PurchaseOrderEntryModel();
   String address;
-  String processingType;
-  String isInvoice;
+  MachiningType machiningType;
+  bool isInvoice;
   String remarks;
-  String factory;
+  FactoryModel factory = new FactoryModel();
   String price;
-  String deliveryDate;
+  DateTime deliveryDate;
   String orderStatus;
   String statusCode;
   String processingCount;
@@ -157,80 +156,82 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             ),
           ),
         ),
-          onTap: () async {
-            dynamic result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ApparelProductsPage(
-                      isRequirement: true,
-                      item: _product,
-                    ),
-              ),
-            );
+        onTap: () async {
+          dynamic result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ApparelProductsPage(
+                    isRequirement: true,
+                    item: _product,
+                  ),
+            ),
+          );
+          if (result != null) {
+            productName = result.name;
+            ApparelProductModel productModel = result;
 
-                productName = result.name;
-                ApparelProductModel productModel = result;
-                
-                entryModel.product = productModel;
-                
-                if(productModel.variants != null){
-                  List<ColorModel> colors = List();
-                  List<SizeModel> sizes = List();
-                  //把每个款的颜色记录下,并去重
-                  for (int i = 0; i < productModel.variants.length; i++) {
-                    colors.add(productModel.variants[i].color);
+            entryModel.product = productModel;
+
+            if (productModel.variants != null) {
+              List<ColorModel> colors = List();
+              List<SizeModel> sizes = List();
+              //把每个款的颜色记录下,并去重
+              for (int i = 0; i < productModel.variants.length; i++) {
+                colors.add(productModel.variants[i].color);
+              }
+              for (int i = 0; i < colors.length - 1; i ++) {
+                for (int j = colors.length - 1; j > i; j --) {
+                  if (colors[j].code.contains(colors[i].code)) {
+                    colors.removeAt(j);
                   }
-                  for  ( int  i  =   0 ; i  <  colors.length  -   1 ; i ++ )  {
-                    for  ( int  j  =  colors.length  -   1 ; j  >  i; j -- )  {
-                      if  (colors[j].code.contains(colors[i].code))  {
-                        colors.removeAt(j);
-                      }
-                    }
-                  }
-
-                  //尺码
-                  for (int i = 0; i < productModel.variants.length; i++) {
-                    sizes.add(productModel.variants[i].size);
-                  }
-                  for  ( int  i  =   0 ; i  <  sizes.length  -   1 ; i ++ )  {
-                    for  ( int  j  =  sizes.length  -   1 ; j  >  i; j -- )  {
-                      if  (sizes[j].code.contains(sizes[i].code))  {
-                        sizes.removeAt(j);
-                      }
-                    }
-                  }
-
-
-                  _newItems = Map.from(_items);
-                  _items.clear();
-                  _newItems.clear();
-                  _totalQuantity = 0;
-
-                  colors.forEach((color) {
-                    ColorModel itemColor = _newItems.keys.firstWhere(
-                            (key) => key.code == color.code,
-                        orElse: () => null);
-
-                    if (itemColor != null) {
-                        _items[itemColor] = sizes.map((size) {
-                          SizeQuantityItem item = _newItems[itemColor]
-                              .firstWhere(
-                                  (SizeQuantityItem) =>
-                              SizeQuantityItem.size.code == size.code,
-                              orElse: () => null);
-                          if (item != null) {
-                            return item;
-                          } else {
-                            return SizeQuantityItem(size: size);
-                          }
-                        }).toList();
-                    } else {
-                        _items[color] = sizes.map((size) => SizeQuantityItem(size: size)).toList();
-                    }
-                  });
                 }
+              }
 
+              //尺码
+              for (int i = 0; i < productModel.variants.length; i++) {
+                sizes.add(productModel.variants[i].size);
+              }
+              for (int i = 0; i < sizes.length - 1; i ++) {
+                for (int j = sizes.length - 1; j > i; j --) {
+                  if (sizes[j].code.contains(sizes[i].code)) {
+                    sizes.removeAt(j);
+                  }
+                }
+              }
+
+
+              _newItems = Map.from(_items);
+              _items.clear();
+              _newItems.clear();
+              _totalQuantity = 0;
+
+              colors.forEach((color) {
+                ColorModel itemColor = _newItems.keys.firstWhere(
+                        (key) => key.code == color.code,
+                    orElse: () => null);
+
+                if (itemColor != null) {
+                  _items[itemColor] = sizes.map((size) {
+                    SizeQuantityItem item = _newItems[itemColor]
+                        .firstWhere(
+                            (SizeQuantityItem) =>
+                        SizeQuantityItem.size.code == size.code,
+                        orElse: () => null);
+                    if (item != null) {
+                      return item;
+                    } else {
+                      return SizeQuantityItem(size: size);
+                    }
+                  }).toList();
+                } else {
+                  _items[color] =
+                      sizes.map((size) => SizeQuantityItem(size: size))
+                          .toList();
+                }
+              });
+            }
+          }
         });
   }
 
@@ -276,7 +277,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                       : item.quantityController.text);
                 });
               });
-              entryModel.quantity = _totalQuantity;
               
             });
           });
@@ -296,9 +296,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: factory == null || factory == ''
+            trailing: factory == null || factory.name == null
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(factory,
+                : Text(factory.name,
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -371,13 +371,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              trailing: deliveryDate == null || deliveryDate == ''
+              trailing: deliveryDate == null
                   ? Icon(Icons.keyboard_arrow_right)
                   : Container(
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(deliveryDate,
+                    child: Text(DateFormatUtil.formatYMD(deliveryDate),
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -474,7 +474,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               address += area['name'];
               addressModel.cityDistrict = DistrictModel.fromJson(area);
               setState(() {
-                purchaseOrder.deliveryAddress = addressModel;
                 address = address;
               });
             },
@@ -494,10 +493,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: processingType == null || processingType == ''
+            trailing: machiningType == null
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
-              processingType,
+              MachiningTypeLocalizedMap[machiningType],
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -523,10 +522,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: isInvoice == null || isInvoice == ''
+            trailing: isInvoice == null
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
-              isInvoice,
+              isInvoice == true ? '开发票' : '不开发票',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -574,7 +573,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           ).then((value) {
             setState(() {
               remarks = value;
-              purchaseOrder.remarks = remarks;
             });
           });
         });
@@ -582,6 +580,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
 
   Widget _buildCommitButton(BuildContext context) {
+    PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
     return Container(
       child: Column(
         children: <Widget>[
@@ -601,10 +600,20 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   ),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  onPressed: () {
+                  onPressed: () async {
+                    purchaseOrder.factory = factory;
+                    purchaseOrder.deliveryAddress = addressModel;
+                    purchaseOrder.expectedDeliveryDate = deliveryDate;
+                    purchaseOrder.machiningType = machiningType;
+                    purchaseOrder.invoiceNeeded = isInvoice;
+                    purchaseOrder.totalQuantity = _totalQuantity;
+                    entryModel.price = double.parse(price);
+                    purchaseOrder.remarks = remarks;
                     entryList.add(entryModel);
                     purchaseOrder.entries = entryList;
-                    print(purchaseOrder);
+
+                    String code = await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
+
                   })
           ),
         ],
@@ -631,8 +640,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     if (_picked != null) {
       print(_picked);
       setState(() {
-        deliveryDate = DateFormatUtil.formatYMD(_picked);
-        purchaseOrder.expectedDeliveryDate = _picked;
+        deliveryDate = _picked;
       });
     }
   }
@@ -651,8 +659,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   title: Text('清加工'),
                   onTap: () async {
                     setState(() {
-                      processingType = '清加工';
-                      purchaseOrder.machiningType = '清加工';
+                      machiningType = MachiningType.LIGHT_PROCESSING;
                     });
                     Navigator.pop(context);
                   },
@@ -661,8 +668,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   title: Text('包工包料'),
                   onTap: () async {
                     setState(() {
-                      processingType = '包工包料';
-                      purchaseOrder.machiningType = '包工包料';
+                      machiningType = MachiningType.LABOR_AND_MATERIAL;
                     });
                     Navigator.pop(context);
                   },
@@ -688,8 +694,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   title: Text('开发票'),
                   onTap: () async {
                     setState(() {
-                      isInvoice = '开发票';
-                      purchaseOrder.invoiceNeeded = true;
+                      isInvoice =  true;
+                      
                     });
                     Navigator.pop(context);
                   },
@@ -698,8 +704,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   title: Text('不开发票'),
                   onTap: () async {
                     setState(() {
-                      isInvoice = '不开发票';
-                      purchaseOrder.invoiceNeeded = false;
+                      isInvoice = false;
                     });
                     Navigator.pop(context);
                   },

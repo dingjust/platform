@@ -114,6 +114,7 @@ class HomeTabSection extends StatelessWidget {
                   )));
         },
         title: '地图找厂',
+        isHot: true,
         icon: Icon(
           B2BIcons.factory_map,
           color: Color.fromRGBO(97, 164, 251, 1.0),
@@ -180,66 +181,16 @@ class HomeTabSection extends StatelessWidget {
     ];
 
     return Container(
-        height: height,
+      height: height,
+      color: Colors.white,
+      child: Container(
         color: Colors.white,
-        child: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: TabBar(
-              unselectedLabelColor: Colors.black26,
-              labelColor: Colors.orange,
-              indicatorSize: TabBarIndicatorSize.label,
-              tabs: [
-                Tab(
-                  text: '找工厂',
-                ),
-                Tab(
-                  text: '找设计',
-                ),
-                Tab(
-                  text: '找面辅料',
-                )
-              ],
-              labelStyle: TextStyle(fontSize: 18, color: Colors.black),
-              isScrollable: false,
-            ),
-            body: TabBarView(
-              children: <Widget>[
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: iconList),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        '功能完善中，敬请期待！',
-                        style: TextStyle(color: Colors.red, fontSize: 20),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        '功能完善中，敬请期待！',
-                        style: TextStyle(color: Colors.red, fontSize: 20),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ));
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: iconList),
+      ),
+    );
   }
 }

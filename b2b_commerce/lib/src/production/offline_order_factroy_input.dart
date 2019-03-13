@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 
@@ -13,13 +14,13 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
   final TextEditingController _factoryController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  String factory;
+  FactoryModel factory = new FactoryModel();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text('输入生产信息'),
+            title: Text('工厂信息'),
             elevation: 0.5,
             brightness: Brightness.light,
             centerTitle: true,
@@ -37,6 +38,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
                   ),
                   onTap: () async {
                     //带值返回上一页
+
                     Navigator.of(context).pop(factory);
                   }
               )
@@ -63,17 +65,15 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
             child: TextFieldComponent(
               focusNode: _factoryFocusNode,
               controller: _factoryController,
-              autofocus:true,
+              autofocus: true,
               leadingText: '工厂名称',
               hintText: '请输入工厂名称',
-                  onChanged: (value){
-                    factory = value;
-                  },
+              onChanged: (value) {
+                setState(() {
+                  factory.name = value;
+                });
+              },
             ),
-//            decoration: new BoxDecoration(
-//              border: new Border.all(width: 1.0, color: Colors.black26),
-//              borderRadius: new BorderRadius.all(new Radius.circular(20.0)),
-//            ),
           ),
           Container(
             padding: EdgeInsets.all(5),
@@ -83,14 +83,12 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
               controller: _nameController,
               leadingText: '联系人名',
               hintText: '请输入联系人名',
-//                  onChanged: (value){
-//                    widget.item.name = value;
-//                  },
+              onChanged: (value) {
+                setState(() {
+                  factory.contactPerson = value;
+                });
+              },
             ),
-//            decoration: new BoxDecoration(
-//              border: new Border.all(width: 1.0, color: Colors.black26),
-//              borderRadius: new BorderRadius.all(new Radius.circular(20.0)),
-//            ),
           ),
           Container(
             padding: EdgeInsets.all(5),
@@ -101,14 +99,12 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
               leadingText: '联系电话',
               hintText: '请输入联系电话',
               inputType: TextInputType.phone,
-//                  onChanged: (value){
-//                    widget.item.name = value;
-//                  },
+              onChanged: (value) {
+                setState(() {
+                  factory.contactPhone = value;
+                });
+              },
             ),
-//            decoration: new BoxDecoration(
-//              border: new Border.all(width: 1.0, color: Colors.black26),
-//              borderRadius: new BorderRadius.all(new Radius.circular(20.0)),
-//            ),
           ),
         ],
       ),

@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+
 import 'sample_products.dart';
-import 'package:core/core.dart';
 
 class SampleProductHistoryFormPage extends StatefulWidget {
   SampleProductHistoryFormPageState createState() =>
@@ -61,14 +62,14 @@ class SampleProductHistoryFormPageState
                 shape: StadiumBorder(
                     side: BorderSide(
                         color: _type == LendBorrowType.BORROW
-                            ? Colors.orange
+                            ? Color.fromRGBO(255,214,12, 1)
                             : Colors.white)),
                 labelPadding: EdgeInsets.symmetric(horizontal: 50, vertical: 4),
                 backgroundColor: Colors.white,
                 label: Text('借出'),
                 labelStyle: TextStyle(
                     color: _type == LendBorrowType.BORROW
-                        ? Colors.orange
+                        ? Color.fromRGBO(255,214,12, 1)
                         : Colors.black),
                 onPressed: () {
                   setState(() {
@@ -80,14 +81,14 @@ class SampleProductHistoryFormPageState
                 shape: StadiumBorder(
                     side: BorderSide(
                         color: _type == LendBorrowType.LEND
-                            ? Colors.orange
+                            ? Color.fromRGBO(255,214,12, 1)
                             : Colors.white)),
                 labelPadding: EdgeInsets.symmetric(horizontal: 50, vertical: 4),
                 backgroundColor: Colors.white,
                 label: Text('借入'),
                 labelStyle: TextStyle(
                     color: _type == LendBorrowType.LEND
-                        ? Colors.orange
+                        ? Color.fromRGBO(255,214,12, 1)
                         : Colors.black),
                 onPressed: () {
                   setState(() {

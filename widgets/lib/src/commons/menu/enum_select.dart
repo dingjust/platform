@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 /// 枚举选择器
 class EnumSelectPage extends StatefulWidget {
@@ -59,7 +58,7 @@ class EnumSelectPageState extends State<EnumSelectPage> {
       return Container(
         width: MediaQuery.of(context).size.width / widget.count,
         child: ChoiceChip(
-          selectedColor: Colors.orange,
+          selectedColor: Color.fromRGBO(255,214,12, 1),
           label: Text(item.name,style: TextStyle(color: Colors.black),),
           selected: widget.codes.contains(item.code),
           onSelected: (value) {

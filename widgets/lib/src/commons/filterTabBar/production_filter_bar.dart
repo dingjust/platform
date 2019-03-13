@@ -11,7 +11,7 @@ class ProductionFilterBar extends StatefulWidget
       this.itemWidth = 75,
       @required this.entries,
       this.unselectedColor = Colors.black54,
-      this.color = Colors.orange,
+      this.color =const Color.fromRGBO(255,214,12, 1),
       @required this.streamController,
       @required this.action,
       @required this.leading,

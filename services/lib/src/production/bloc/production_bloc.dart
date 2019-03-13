@@ -104,7 +104,7 @@ class ProductionBLoC extends BLoCBase {
             'creationtime': DateTime.now().millisecondsSinceEpoch,
             'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
             'currentPhase': 'CUTTING',
-            'machiningType': '包工包料',
+            'machiningType': 'LABOR_AND_MATERIAL',
             'invoiceNeeded': true,
             'attachments': [
               {
@@ -314,7 +314,7 @@ class ProductionBLoC extends BLoCBase {
             'creationtime': DateTime.now().millisecondsSinceEpoch,
             'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
             'currentPhase': 'MATERIAL_PREPARATION',
-            'machiningType': '包工包料',
+            'machiningType': 'LABOR_AND_MATERIAL',
             'invoiceNeeded': true,
             'attachments': [
               {
@@ -524,7 +524,7 @@ class ProductionBLoC extends BLoCBase {
             'creationtime': DateTime.now().millisecondsSinceEpoch,
             'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
             'currentPhase': 'DELIVERY',
-            'machiningType': '包工包料',
+            'machiningType': 'LABOR_AND_MATERIAL',
             'invoiceNeeded': true,
             'attachments': [
               {
@@ -734,7 +734,7 @@ class ProductionBLoC extends BLoCBase {
             'creationtime': DateTime.now().millisecondsSinceEpoch,
             'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
             'currentPhase': 'INSPECTION',
-            'machiningType': '包工包料',
+            'machiningType': 'LABOR_AND_MATERIAL',
             'invoiceNeeded': true,
             'attachments': [
               {
@@ -1035,7 +1035,7 @@ class ProductionBLoC extends BLoCBase {
         'creationtime': DateTime.now().millisecondsSinceEpoch,
         'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
         'currentPhase': 'CUTTING',
-        'machiningType': '包工包料',
+        'machiningType': 'LABOR_AND_MATERIAL',
         'invoiceNeeded': true,
         'attachments': [
           {

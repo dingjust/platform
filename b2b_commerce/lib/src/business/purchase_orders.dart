@@ -239,7 +239,7 @@ class PurchaseOrderItem extends StatelessWidget {
                 Text(
                   PurchaseOrderStatusLocalizedMap[order.status],
                   textAlign: TextAlign.end,
-                  style: TextStyle(fontSize: 18, color: Colors.orangeAccent),
+                  style: TextStyle(fontSize: 18, color: Color.fromRGBO(255,214,12, 1)),
                 )
               ],
             ),

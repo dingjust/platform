@@ -222,7 +222,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        order.belongTo.name,
+                        order.factory.name,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
@@ -251,7 +251,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         alignment: Alignment.centerRight,
                         child: Row(
                           children: <Widget>[
-                            Text(order.belongTo.address),
+                            Text(order.factory.address),
                             Icon(Icons.chevron_right),
                           ],
                         ))
@@ -267,7 +267,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           ListTile(
             title: Text('加工类型'),
-            trailing: Text(order.machiningType),
+            trailing: Text(MachiningTypeLocalizedMap[order.machiningType]),
           ),
           new Divider(),
           ListTile(
@@ -645,7 +645,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             height: 40,
                             child: RaisedButton(
-                                color: Colors.orange,
+                                color: Color.fromRGBO(255,214,12, 1),
                                 child: Text(
                                   '唯一码',
                                   style: TextStyle(
