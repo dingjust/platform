@@ -91,7 +91,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
             body: Column(
               children: <Widget>[
                 FilterSelectMenu(
-                  color: Colors.orange,
+                  color: Color.fromRGBO(255,214,12, 1),
                   height: showFilterMenu ? 150 : 0,
                   entries: filterConditionEntries,
                   streamController:
@@ -106,7 +106,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
           ),
           floatingActionButton: FloatingActionButton(
               onPressed: () {},
-              backgroundColor: Colors.orangeAccent,
+              backgroundColor: Color.fromRGBO(255,214,12, 1),
               child: Center(
                 child: Container(
                   width: 35,

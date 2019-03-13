@@ -453,7 +453,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                                   MaterialPageRoute(builder: (context) => RequirementQuoteOrderFrom(model: model,)),
                                 );
                               },
-                              color: Colors.orange,
+                              color: Color.fromRGBO(255,214,12, 1),
                               child: Text(
                                 '去报价',
                                 style: TextStyle(

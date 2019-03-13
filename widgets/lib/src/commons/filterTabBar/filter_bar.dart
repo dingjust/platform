@@ -6,7 +6,7 @@ class FilterBar extends StatefulWidget implements PreferredSizeWidget {
       this.itemHeight = 20,
       this.itemWidth = 100,
       this.unselectedColor = Colors.black54,
-      this.color = Colors.orange,
+      this.color =const Color.fromRGBO(255,214,12, 1),
       this.action,
       @required this.onPressed,
       @required this.label,
@@ -48,12 +48,12 @@ class _FilterBarState extends State<FilterBar> {
                     FlatButton(
                       onPressed: widget.onCategoryPressed,
                       shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.orange),
+                          side: BorderSide(color: Color.fromRGBO(255,214,12, 1)),
                           borderRadius: BorderRadius.circular(20)),
                       color: Colors.white,
                       child: Text(
                         widget.categoryLabel,
-                        style: TextStyle(fontSize: 15, color: Colors.orange),
+                        style: TextStyle(fontSize: 15, color: Color.fromRGBO(255,214,12, 1)),
                       ),
                     ),
                     Container(

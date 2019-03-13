@@ -13,8 +13,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="商品类目" prop="categories">
-            <el-select v-model="slotData.categories" placeholder="请选择" class="w-100" multiple>
+          <el-form-item label="商品类目" prop="category">
+            <el-select v-model="slotData.category.code" placeholder="请选择" class="w-100">
               <el-option-group
                 v-for="level1 in categories"
                 :key="level1.code"
@@ -102,7 +102,7 @@
         rules: {
           name: [{required: true, message: '必填', trigger: 'blur'}],
           skuID: [{required: true, message: '必填', trigger: 'blur'}],
-          categories: [{required: true, message: '必填', trigger: 'blur'}],
+          category: [{required: true, message: '必填', trigger: 'blur'}],
           price: [{required: true, message: '必填', trigger: 'blur'}]
         },
         categories: [],

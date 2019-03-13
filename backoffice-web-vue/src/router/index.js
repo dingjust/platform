@@ -41,11 +41,6 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/size/SizePage')
             },
             {
-              path: 'style',
-              name: '风格',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/style/StylePage')
-            },
-            {
               path: 'category',
               name: '分类',
               component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/category/CategoryPage')

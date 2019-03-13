@@ -102,7 +102,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
           ),
         );
       },
-      backgroundColor: Colors.orangeAccent,
+      backgroundColor: Color.fromRGBO(255,214,12, 1),
     );
   }
 
@@ -1157,7 +1157,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                     children: <Widget>[
                       Text(
                         "${widget.supplierModel.quoteOrder.totalQuantity}件",
-                        style: TextStyle(fontSize: 16, color: Colors.orange),
+                        style: TextStyle(fontSize: 16, color: Color.fromRGBO(255,214,12, 1)),
                       )
                     ],
                   ),

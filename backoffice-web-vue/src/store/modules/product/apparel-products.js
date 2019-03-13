@@ -18,7 +18,10 @@ const state = {
     skuID: '',
     name: '',
     price: 0.00,
-    categories: [],
+    category: {
+      code: '',
+      name: ''
+    },
     brand: '',
     gramWeight: 0.0,
     variants: [],

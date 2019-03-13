@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-//fluwx引入
 import 'package:fluwx/fluwx.dart' as fluwx;
 
 import 'wechatpay_constants.dart';
+//fluwx引入
+
 
 void main() {
   //注册微信信息
@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
       title: '支付',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        accentColor: Colors.orangeAccent[400],
+        accentColor: Color.fromRGBO(255,214,12, 1),
       ),
       home: Scaffold(
         body: null,

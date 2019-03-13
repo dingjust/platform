@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class SampleProductFormPage extends StatefulWidget {
   SampleProductModel item;
@@ -57,7 +57,7 @@ class SampleProductFormPageState extends State<SampleProductFormPage>{
             leadingText: '货号',
             hintText: '请输入样衣名称',
           ),
-          Expanded(child: ListTile(title:  RaisedButton(onPressed: (){Navigator.pop(context);},child: Text('确认'),color: Colors.orange,),)),
+          Expanded(child: ListTile(title:  RaisedButton(onPressed: (){Navigator.pop(context);},child: Text('确认'),color: Color.fromRGBO(255,214,12, 1),),)),
         ],
       ),
     );

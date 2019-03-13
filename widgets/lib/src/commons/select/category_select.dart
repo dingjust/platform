@@ -53,7 +53,7 @@ class CategorySelectState extends State<CategorySelect> {
 
   Widget buildValueItem(CategoryModel category){
       return ChoiceChip(
-        selectedColor: Colors.orange,
+        selectedColor: Color.fromRGBO(255,214,12, 1),
         label: Text(
           category.name,
           style: TextStyle(color: Colors.black),
@@ -85,7 +85,7 @@ class CategorySelectState extends State<CategorySelect> {
   Widget build(BuildContext context) {
       _keyItem = widget.categorys.map((category) {
         if (_selectLeft == category.code) {
-          _color = Colors.orange;
+          _color = Color.fromRGBO(255,214,12, 1);
         } else {
           _color = Colors.black;
         }

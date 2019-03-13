@@ -100,7 +100,7 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
                             style: TextStyle(
                               fontSize: 18,
                             )),
-                        selectedColor: Colors.orange,
+                        selectedColor: Color.fromRGBO(255,214,12, 1),
                         backgroundColor: Colors.white,
                         selected: entry.checked,
                         onSelected: ((value) {

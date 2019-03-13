@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:core/core.dart';
@@ -304,7 +305,7 @@ class _RequirementOrderDetailPageState
                   },
                   child: Text(
                     '查看全部报价>>',
-                    style: TextStyle(color: Colors.orange),
+                    style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
                   ),
                 )
               ],
