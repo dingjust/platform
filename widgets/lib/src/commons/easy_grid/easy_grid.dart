@@ -38,50 +38,64 @@ class _EasyGridState extends State<EasyGrid> {
         height: widget.height,
         margin: EdgeInsets.all(5),
         child: GridView(
-          physics: widget.primary==false?NeverScrollableScrollPhysics():null,
-          padding: EdgeInsets.zero,
+          physics:
+              widget.primary == false ? NeverScrollableScrollPhysics() : null,
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: widget.itemWidth,
-              childAspectRatio: 2.35 //宽高比为2
-              ),
+              childAspectRatio: 2.35, //宽高比为2
+              crossAxisSpacing: 10),
           children: List.generate(widget.dataList.length, (index) {
             return GestureDetector(
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(5, 5, 15, 5),
-                  margin: EdgeInsets.all(3),
-                  child: Center(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: ListTile(
-                          title: Text(
-                            widget.dataList[index].title,
-                            style: widget.titleFont == null
-                                ? TextStyle(
-                                    fontSize: 16,
-                                    color: Color.fromRGBO(32, 32, 32, 1),
-                                    fontWeight: FontWeight.bold)
-                                : widget.titleFont,
-                          ),
-                          subtitle: widget.dataList[index].subtitle != null
-                              ? Text(
-                                  widget.dataList[index].subtitle,
-                                  style: widget.subtitleFont == null
-                                      ? TextStyle(
-                                          fontSize: 14, color: Colors.grey)
-                                      : widget.subtitleFont,
-                                )
-                              : null,
-                        )),
-                        widget.dataList[index].pic,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey[200],
+                          blurRadius: 5.0,
+                          spreadRadius: 2.0,
+                          offset: Offset(0, 3.0),
+                        ),
                       ],
                     ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(5, 5, 15, 5),
+                      child: Center(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                                child: ListTile(
+                              title: Text(
+                                widget.dataList[index].title,
+                                style: widget.titleFont == null
+                                    ? TextStyle(
+                                        fontSize: 16,
+                                        color: Color.fromRGBO(32, 32, 32, 1),
+                                        fontWeight: FontWeight.bold)
+                                    : widget.titleFont,
+                              ),
+                              subtitle: widget.dataList[index].subtitle != null
+                                  ? Text(
+                                      widget.dataList[index].subtitle,
+                                      style: widget.subtitleFont == null
+                                          ? TextStyle(
+                                              fontSize: 14, color: Colors.grey)
+                                          : widget.subtitleFont,
+                                    )
+                                  : null,
+                            )),
+                            widget.dataList[index].pic,
+                          ],
+                        ),
+                      ),
+                    )
+                    // decoration: BoxDecoration(
+                    //   color: Colors.white,
+                    //   borderRadius: BorderRadius.circular(5),
+                    // ),
+                    ),
                 onTap: widget.dataList[index].onPressed);
           }),
         ));

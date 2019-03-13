@@ -150,7 +150,6 @@ class _CarouselState extends State<Carousel> {
         child: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
           image: item.url,
-          // height: widget.height,
           fit: BoxFit.cover,
         ),
       ),
@@ -160,7 +159,6 @@ class _CarouselState extends State<Carousel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height,
       //指示器覆盖在pager view上，所以用Stack
       child: Stack(
         children: <Widget>[
