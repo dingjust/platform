@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
+import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -147,13 +148,19 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               ),
             trailing: productName == null || productName == ''
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(productName,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
+                : Container(
+              width: 150,
+              child: Text(
+                productName,
+                textAlign:TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey
+                ),
               ),
-            ),
+            )
           ),
         ),
         onTap: () async {
@@ -262,7 +269,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProofingOrderQuantityInputPage(
+              builder: (context) => OfflineOrderQuantityInputPage(
                 items: _items,
               ),
             ),
@@ -298,20 +305,26 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             ),
             trailing: factory == null || factory.name == null
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(factory.name,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
+                : Container(
+              width: 150,
+              child: Text(
+                factory.name,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey
+                ),
               ),
-            ),
+            )
           ),
         ),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderFactroyInput()),
+                builder: (context) => OfflineOrderFactroyInput(model: factory,)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
@@ -444,13 +457,19 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             ),
             trailing: address == null || address == ''
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(address,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
+                :
+            Container(
+              width: 150,
+              child: Text(
+                address,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey
+                ),
               ),
-            ),
+            )
           ),
         ),
         onTap: () {
@@ -554,14 +573,18 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             trailing: remarks == null || remarks == '' ?
               Icon(Icons.keyboard_arrow_right)
                 :
-            Text(
-              remarks,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
+            Container(
+              width: 150,
+              child: Text(
+                remarks,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey
+                ),
               ),
-            ),
+            )
           ),
         ),
         onTap: () {
@@ -589,7 +612,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               height: 50,
               margin: EdgeInsets.fromLTRB(20, 15, 20, 0),
               child: RaisedButton(
-                  color: Color(0xFFFF9516),
+                  color: Color.fromRGBO(255, 214, 12, 1),
                   child: Text(
                     '确认',
                     style: TextStyle(

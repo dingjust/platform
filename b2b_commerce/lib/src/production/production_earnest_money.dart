@@ -34,7 +34,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
                       child: Text(
                         '确定',
                         style: TextStyle(
-                            color: Color.fromRGBO(255, 149, 22, 1)),
+                            color: Color.fromRGBO(255, 214, 12, 1)),
                       ),
                     ),
                   ),
@@ -130,8 +130,8 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
   }
 
   Widget _buildPaymentSelection(BuildContext context) {
-    return CheckboxListTile(
-        value: isEarnestPayment,
+    return GestureDetector(
+      child: ListTile(
         title: new Text(
           '是否已付',
           style: TextStyle(
@@ -139,12 +139,17 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        controlAffinity: ListTileControlAffinity.platform,
-        onChanged: (bool) {
-          setState(() {
-            isEarnestPayment = bool;
-          });
+        trailing: Icon(
+          isEarnestPayment==true?Icons.check_circle_outline:Icons.radio_button_unchecked,
+          color: Color.fromRGBO(255, 214, 12, 1),
+        ),
+      ),
+      onTap: (){
+        setState(() {
+          isEarnestPayment = !isEarnestPayment;
         });
+      },
+    );
   }
 
   //预计支付日期
@@ -219,8 +224,8 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
   }
 
   Widget _buildTailPaymentSelection(BuildContext context) {
-    return CheckboxListTile(
-        value: isTailPayment,
+    return GestureDetector(
+      child: ListTile(
         title: new Text(
           '是否已付',
           style: TextStyle(
@@ -228,12 +233,17 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        controlAffinity: ListTileControlAffinity.platform,
-        onChanged: (bool) {
-          setState(() {
-            isTailPayment = bool;
-          });
+        trailing: Icon(
+          isTailPayment==true?Icons.check_circle_outline:Icons.radio_button_unchecked,
+          color: Color.fromRGBO(255, 214, 12, 1),
+        ),
+      ),
+      onTap: (){
+        setState(() {
+          isTailPayment = !isTailPayment;
         });
+      },
+    );
   }
 
   //预计支付日期

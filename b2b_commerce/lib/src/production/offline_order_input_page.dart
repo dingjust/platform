@@ -21,7 +21,7 @@ class _OfflineOrderInputPageState extends State<OfflineOrderInputPage>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text('输入${widget.fieldText}'),
+            title: Text('${widget.fieldText}'),
             elevation: 0.5,
             brightness: Brightness.light,
             centerTitle: true,
@@ -33,7 +33,7 @@ class _OfflineOrderInputPageState extends State<OfflineOrderInputPage>{
                       child: Text(
                         '确定',
                         style: TextStyle(
-                            color: Color.fromRGBO(255, 149, 22, 1)),
+                            color: Color.fromRGBO(255, 214, 12, 1)),
                       ),
                     ),
                   ),
@@ -66,7 +66,6 @@ class _OfflineOrderInputPageState extends State<OfflineOrderInputPage>{
               controller: _controller,
               inputType: widget.inputType,
               autofocus:true,
-              leadingText: '${widget.fieldText}',
               hintText: '请输入${widget.fieldText}',
                   onChanged: (value){
                     result = value;
