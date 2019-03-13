@@ -18,7 +18,10 @@ const state = {
     skuID: '',
     name: '',
     price: 0.00,
-    categories: [],
+    category: {
+      code: '',
+      name: ''
+    },
     brand: '',
     gramWeight: 0.0,
     variants: [],
@@ -70,8 +73,7 @@ const actions = {
     }
 
     const response = await http.post('/b2b/products/apparel/all', {
-      code: state.keyword,
-      name: state.keyword
+      keyword: state.keyword
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize

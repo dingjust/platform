@@ -41,11 +41,6 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/size/SizePage')
             },
             {
-              path: 'style',
-              name: '风格',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/style/StylePage')
-            },
-            {
               path: 'category',
               name: '分类',
               component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/category/CategoryPage')
@@ -338,7 +333,7 @@ const router = new Router({
         },
         {
           path: 'factory/product',
-          redirect: '/factory/product/product',
+          redirect: '/factory/product/apparel',
           name: '产品管理',
           component: {
             render(c) {
@@ -347,14 +342,14 @@ const router = new Router({
           },
           children: [
             {
-              path: 'product',
+              path: 'apparel',
               name: '产品',
-              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/product/ProductPage'),
+              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/apparel/ApparelProductPage'),
             },
             {
               path: 'deleted',
               name: '已删除产品',
-              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/product/ProductDeletedPage'),
+              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/apparel/ApparelProductDeletedPage'),
             },
             {
               path: 'fabric',

@@ -79,7 +79,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandApparelProductsModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('FactoryApparelProductsModule');
 
   import autoHeight from 'mixins/autoHeight';
 
@@ -172,9 +172,9 @@
     },
     data() {
       return {
-        text: this.$store.state.BrandApparelProductsModule.keyword,
-        formData: this.$store.state.BrandApparelProductsModule.formData,
-        queryFormData: this.$store.state.BrandApparelProductsModule.queryFormData,
+        text: this.$store.state.FactoryApparelProductsModule.keyword,
+        formData: this.$store.state.FactoryApparelProductsModule.formData,
+        queryFormData: this.$store.state.FactoryApparelProductsModule.queryFormData,
         approvalStatuses: this.$store.state.EnumsModule.approvalStatuses,
         advancedSearch: false,
         multipleSelection: [],

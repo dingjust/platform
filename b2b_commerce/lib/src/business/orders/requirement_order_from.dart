@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import '../../home/requirement/requirement_publish_success.dart';
 import '../apparel_products.dart';
@@ -46,6 +47,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
   List<File> _normalImages = [];
+  List<MediaModel> medias = [];
 
   @override
   void initState() {
@@ -71,10 +73,19 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
     // TODO: implement initState
     super.initState();
+
+    print(_normalImages);
+
+  }
+
+  Future<void> _uploadFile() async{
+    if(_normalImages.length>0)
+     await MultipartFileUpload().multipartFileUpload(_normalImages,medias,context);
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('需求发布'),
@@ -122,6 +133,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   _categorySelected = [result.minorCategory];
                 }
 
+                print('${model.details.pictures}=================');
                 model.details.category =
                     _categorySelected.length > 0 ? _categorySelected[0] : null;
                 if (model.details.pictures != null) {
@@ -146,10 +158,50 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: ListView(
           children: <Widget>[
             _buildBody(context),
-            _buildCommitButton(context),
+//            _buildCommitButton(context),
           ],
         ),
       ),
+      persistentFooterButtons: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width - 16,
+          child: ActionChip(
+            shape:
+            StadiumBorder(side: BorderSide(color: Color(0xffFF9516))),
+            labelPadding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width/2.8,vertical: 8),
+            backgroundColor: Color(0xffFF9516),
+            label: Text('确定发布'),
+            labelStyle: TextStyle(color: Colors.white,fontSize: 20),
+            onPressed: () async{
+              model.entries = [
+                RequirementOrderEntryModel(
+                    product: widget.product, order: model)
+              ];
+//                print('${_normalImages}');
+//                print(
+//                    '${model.code},${model.details.majorCategory},${model.details.category}');
+//                print(
+//                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
+//                print(
+//                    '${model.details.region},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
+//                print(
+//                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
+
+
+              await RequirementOrderRepository().publishNewRequirement(model);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PublishRequirementSuccessDialog(
+                    model: model,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -160,7 +212,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Column(
           children: <Widget>[
 //            _buildPic(context),
-            PicturesField(_normalImages),
+            PicturesField(_normalImages,medias),
             Offstage(
               offstage: widget.product == null,
               child: ProductField(widget.product),
@@ -178,9 +230,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             ContactWayField(model),
             new Divider(height: 0),
             DeliveryAddressField(model),
-            _isShowMore ? Container() : new Divider(height: 0),
+//            _isShowMore ? Container() : new Divider(height: 0),
             _buildHideBody(context),
-            _buildHideTips(context),
+//            _buildHideTips(context),
           ],
         ),
       ),
@@ -188,27 +240,25 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   }
 
   Widget _buildHideBody(BuildContext context) {
-    return Offstage(
-        offstage: _isShowMore,
-        child: Container(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                ProductionAreasField(model),
-                new Divider(height: 0),
-                MachiningTypeField(model),
-                new Divider(height: 0),
-                IsProofingField(model),
-                new Divider(height: 0),
-                IsProvideSampleProductField(model),
-                new Divider(height: 0),
-                IsInvoiceField(model),
-                new Divider(height: 0),
-                RemarksField(model),
-              ],
-            ),
-          ),
-        ));
+    return Container(
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            ProductionAreasField(model),
+            new Divider(height: 0),
+            MachiningTypeField(model),
+            new Divider(height: 0),
+            IsProofingField(model),
+            new Divider(height: 0),
+            IsProvideSampleProductField(model),
+            new Divider(height: 0),
+            IsInvoiceField(model),
+            new Divider(height: 0),
+            RemarksField(model),
+          ],
+        ),
+      ),
+    );
   }
 
   //是否展开更多
@@ -285,18 +335,18 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   RequirementOrderEntryModel(
                       product: widget.product, order: model)
                 ];
-                print('${_normalImages}');
-                print(
-                    '${model.code},${model.details.majorCategory},${model.details.category}');
-                print(
-                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
-                print(
-                    '${model.details.region},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
-                print(
-                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
+//                print('${_normalImages}');
+//                print(
+//                    '${model.code},${model.details.majorCategory},${model.details.category}');
+//                print(
+//                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
+//                print(
+//                    '${model.details.region},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
+//                print(
+//                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
 
 
-                String code = await RequirementOrderRepository().publishNewRequirement(model);
+                await RequirementOrderRepository().publishNewRequirement(model);
 
                 Navigator.push(
                   context,
@@ -309,29 +359,29 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               },
             ),
           ),
-          Container(
-            margin: EdgeInsets.all(0),
-            padding: EdgeInsets.all(0),
-            width: 200,
-            child: Center(
-              child: CheckboxListTile(
-                title: Text(
-                  '发布到需求池',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: Colors.grey),
-                ),
-                value: model.details.isToRequirementPool,
-                onChanged: (T) {
-                  setState(() {
-                    model.details.isToRequirementPool =
-                        !model.details.isToRequirementPool;
-                  });
-                },
-              ),
-            ),
-          )
+//          Container(
+//            margin: EdgeInsets.all(0),
+//            padding: EdgeInsets.all(0),
+//            width: 200,
+//            child: Center(
+//              child: CheckboxListTile(
+//                title: Text(
+//                  '发布到需求池',
+//                  style: TextStyle(
+//                      fontWeight: FontWeight.w500,
+//                      fontSize: 14,
+//                      color: Colors.grey),
+//                ),
+//                value: model.details.isToRequirementPool,
+//                onChanged: (T) {
+//                  setState(() {
+//                    model.details.isToRequirementPool =
+//                        !model.details.isToRequirementPool;
+//                  });
+//                },
+//              ),
+//            ),
+//          )
         ],
       ),
       decoration: BoxDecoration(

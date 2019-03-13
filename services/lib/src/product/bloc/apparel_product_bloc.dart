@@ -117,7 +117,7 @@ class ApparelProductBLoC extends BLoCBase {
           ApparelProductModel.fromJson({
             'approvalStatus': 'APPROVED',
             'code': 'C0001',
-            'name': '山',
+            'name': '山本风少女长裙复古气质秋冬流行新款',
             'price': 100.00,
 //            'suggestedPrice': 99,
 //            'price1': 98,
@@ -186,62 +186,21 @@ class ApparelProductBLoC extends BLoCBase {
                 'color': {'code': 'C01', 'name': '红色', 'colorCode': 'FF0033'},
                 'size': {
                   'code': 'S01',
-                  'name': 'L',
+                  'name': 'XXXL',
                 }
               },
               {
-                'color': {'code': 'C01', 'name': '红色', 'colorCode': 'FF0033'},
+                'color': {'code': 'C04', 'name': '海军蓝', 'colorCode': '0066FF'},
+                'size': {
+                  'code': 'S01',
+                  'name': 'XXXL',
+                }
+              },
+              {
+                'color': {'code': 'C04', 'name': '海军蓝', 'colorCode': '0066FF'},
                 'size': {
                   'code': 'S02',
-                  'name': 'XL',
-                }
-              },
-              {
-                'color': {'code': 'C01', 'name': '红色', 'colorCode': 'FF0033'},
-                'size': {
-                  'code': 'S03',
                   'name': 'XXL',
-                }
-              },
-              {
-                'color': {
-                  'code': 'C01', 'name': '红色', 'colorCode': 'FF0033'
-                },
-                'size': {
-                  'code': 'S04',
-                  'name': 'XXXL',
-                }
-              },
-              {
-                'color': {
-                  'code': 'C02', 'name': '蓝色', 'colorCode': '00BBFF'
-                },
-                'size': {
-                  'code': 'S04',
-                  'name': 'XXXL',
-                }
-              },
-              {
-                'color': {'code': 'C03', 'name': '绿色', 'colorCode': '00FF00'},
-                'size': {
-                  'code': 'S04',
-                  'name': 'XXXL',
-                }
-              },
-              {
-                'color': {'code': 'C04', 'name': '灰色', 'colorCode': 'AAAAAA'},
-                'size': {
-                  'code': 'S04',
-                  'name': 'XXXL',
-                }
-              },
-              {
-                'color': {
-                  'code': 'C01', 'name': '红色', 'colorCode': 'FF0033'
-                },
-                'size': {
-                  'code': 'S05',
-                  'name': 'S',
                 }
               },
             ],
@@ -249,7 +208,7 @@ class ApparelProductBLoC extends BLoCBase {
           ApparelProductModel.fromJson({
             'approvalStatus': 'APPROVED',
             'code': 'C0002',
-            'name': '女长裙',
+            'name': '山本风少女长裙复古气质秋冬流行新款',
             'price': 102.00,
 //            'suggestedPrice': 89,
 //            'price1': 88,
@@ -299,6 +258,22 @@ class ApparelProductBLoC extends BLoCBase {
                 'name': '女装',
               }
             },
+            'variants': [
+              {
+                'color': {'code': 'C01', 'name': '红色', 'colorCode': 'FF0033'},
+                'size': {
+                  'code': 'S01',
+                  'name': 'XXXL',
+                }
+              },
+              {
+                'color': {'code': 'C04', 'name': '海军蓝', 'colorCode': '0066FF'},
+                'size': {
+                  'code': 'S01',
+                  'name': 'XXXL',
+                }
+              },
+            ],
           }),
           ApparelProductModel.fromJson({
             'approvalStatus': 'APPROVED',

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class ApparelProductVariantsInputPage extends StatefulWidget {
+  List<ColorModel> colors;
+  List<SizeModel> sizes;
   List<ColorModel> colorFilters;
   List<SizeModel> sizeFilters;
 
-  ApparelProductVariantsInputPage({this.colorFilters, this.sizeFilters});
+  ApparelProductVariantsInputPage({this.colorFilters, this.sizeFilters,this.colors,this.sizes});
 
   ApparelProductVariantsInputState createState() =>
       ApparelProductVariantsInputState();
@@ -18,31 +20,12 @@ class ApparelProductVariantsInputState
   List<ColorModel> _beforeColors = [];
   List<SizeModel> _beforeSizes = [];
 
-  final List<ColorModel> _colors = <ColorModel>[
-    ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'),
-    ColorModel(code: 'C02', name: '黄色', colorCode: 'FFCC00'),
-    ColorModel(code: 'C03', name: '粉红', colorCode: 'FF9999'),
-    ColorModel(code: 'C04', name: '海军蓝', colorCode: '0066FF'),
-    ColorModel(code: 'C05', name: '浅紫', colorCode: 'CC99CC'),
-    ColorModel(code: 'C06', name: '藏青', colorCode: '000033'),
-  ];
-  final List<SizeModel> _sizes = <SizeModel>[
-    SizeModel(code: 'S01', name: 'XXXL'),
-    SizeModel(code: 'S02', name: 'XXL'),
-    SizeModel(code: 'S03', name: 'XL'),
-    SizeModel(code: 'S04', name: 'L'),
-    SizeModel(code: 'S05', name: 'M'),
-    SizeModel(code: 'S06', name: 'S'),
-    SizeModel(code: 'S07', name: 'XS')
-  ];
-
   @override
   void initState() {
     _colorCodes = widget.colorFilters.map((color) => color.code).toList();
     _sizeCodes = widget.sizeFilters.map((size) => size.code).toList();
     _beforeColors.addAll(widget.colorFilters);
     _beforeSizes.addAll(widget.sizeFilters);
-
 
     // TODO: implement initState
     super.initState();
@@ -51,7 +34,7 @@ class ApparelProductVariantsInputState
   @override
   Widget build(BuildContext context) {
 
-    List<Widget> colorFilterChips = _colors.map((ColorModel color) {
+    List<Widget> colorFilterChips = widget.colors.map((ColorModel color) {
       return ChoiceChip(
         avatar: _colorCodes.contains(color.code)
             ? Icon(
@@ -63,12 +46,17 @@ class ApparelProductVariantsInputState
         labelPadding: _colorCodes.contains(color)
             ? EdgeInsets.only(right: 10)
             : null,
-        backgroundColor: Color(int.parse('0xFF' + color.colorCode)),
-        selectedColor: Color(int.parse('0xFF' + color.colorCode)),
+        backgroundColor: Color(int.parse('0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}')),
+        selectedColor: Color(int.parse('0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}')),
         key: ValueKey<String>(color.code),
-        label: Text(
-          color.name,
-          style: TextStyle(color: Colors.white),
+        label: Container(
+          decoration: BoxDecoration(
+
+          ),
+          child: Text(
+            color.name,
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         selected: _colorCodes.contains(color.code),
         onSelected: (value) {
@@ -85,7 +73,7 @@ class ApparelProductVariantsInputState
       );
     }).toList();
 
-    List<Widget> sizeFilterChips = _sizes.map((SizeModel size) {
+    List<Widget> sizeFilterChips = widget.sizes.map((SizeModel size) {
       return FilterChip(
         labelPadding: _sizeCodes.contains(size.code)
             ? EdgeInsets.only(right: 10)

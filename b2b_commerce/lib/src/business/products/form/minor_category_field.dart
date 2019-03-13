@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 import '../product_category.dart';
 
@@ -15,6 +16,7 @@ class MinorCategoryField extends StatefulWidget {
 class _MinorCategoryFieldState extends State<MinorCategoryField> {
   String _minorCategoryText;
   List<CategoryModel> _minCategorySelect = [];
+  List<CategoryModel> _categorys;
 
   @override
   void initState() {
@@ -23,6 +25,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
     if(widget.item?.minorCategory != null){
       _minCategorySelect = [widget.item?.minorCategory];
     }
+    ProductRepositoryImpl().cascadedCategories().then((categorys)=>_categorys = categorys);
 
   }
 
@@ -36,7 +39,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
              dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductCategorySelectPage(minCategorySelect: _minCategorySelect,)
+                builder: (context) => ProductCategorySelectPage(minCategorySelect: _minCategorySelect,categorys:_categorys)
               ),
             );
 

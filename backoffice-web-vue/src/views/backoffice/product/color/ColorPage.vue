@@ -102,7 +102,7 @@
         this.search({keyword, page, size});
       },
       async onUpdate(item) {
-        const result = await this.$http.put('/djbackoffice/product/color', item);
+        const result = await this.$http.put('/djwebservices/colors', item);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

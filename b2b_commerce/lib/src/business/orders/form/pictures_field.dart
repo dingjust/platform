@@ -6,13 +6,13 @@ import 'package:widgets/widgets.dart';
 
 class PicturesField extends StatefulWidget{
   List<File> normalImages;
-  PicturesField(this.normalImages);
+  List<MediaModel> medias;
+  PicturesField(this.normalImages,this.medias);
 
   PicturesFieldState createState() => PicturesFieldState();
 }
 
 class PicturesFieldState extends State<PicturesField>{
-  List<MediaModel> medias = [];
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class PicturesFieldState extends State<PicturesField>{
         ),
 //        PhotoPicker(images: widget.normalImages, width: 350),
         EditableAttachments(
-          list: medias,
+          list: widget.medias,
 //          maxNum: widget.normalImages.length,
         )
       ],

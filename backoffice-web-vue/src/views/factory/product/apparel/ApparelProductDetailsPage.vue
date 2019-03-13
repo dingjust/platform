@@ -2,27 +2,28 @@
   <div class="animated fadeIn">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>基本信息</span>
-        <span class="float-right">
-          <el-button type="primary" size="mini" @click="onUpdateBase">编辑</el-button>
-        </span>
-      </div>
-      <product-base-form :slot-data="slotData"
-                         :read-only="true"
-                         :is-newly-created="isNewlyCreated">
-      </product-base-form>
-    </el-card>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
         <span>产品图片</span>
         <span class="float-right">
           <el-button type="primary" size="mini" @click="onUpdateMedias">编辑</el-button>
         </span>
       </div>
-      <product-medias-form ref="productMediasForm"
-                           :slot-data="slotData"
-                           :is-newly-created="isNewlyCreated">
-      </product-medias-form>
+      <apparel-product-images-form ref="productImagesForm"
+                                   :slot-data="slotData"
+                                   :is-newly-created="isNewlyCreated">
+      </apparel-product-images-form>
+    </el-card>
+    <div class="pt-2"></div>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>基本信息</span>
+        <span class="float-right">
+          <el-button type="primary" size="mini" @click="onUpdateBase">编辑</el-button>
+        </span>
+      </div>
+      <apparel-product-base-form :slot-data="slotData"
+                                 :read-only="true"
+                                 :is-newly-created="isNewlyCreated">
+      </apparel-product-base-form>
     </el-card>
     <div class="pt-2"></div>
     <el-card class="box-card">
@@ -32,78 +33,51 @@
           <el-button type="primary" size="mini" @click="onUpdateVariants">编辑</el-button>
         </span>
       </div>
-      <product-variants-form ref="productVariantsForm"
-                             :slot-data="slotData"
-                             :read-only="true"
-                             :is-newly-created="isNewlyCreated">
-      </product-variants-form>
+      <apparel-product-variants-form ref="productVariantsForm"
+                                     :slot-data="slotData"
+                                     :read-only="true"
+                                     :is-newly-created="isNewlyCreated">
+      </apparel-product-variants-form>
     </el-card>
-
+    <div class="pt-2"></div>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>商品属性</span>
+   <!--     <span class="float-right">
+          <el-button type="primary" size="mini" @click="onUpdateAttributes">编辑</el-button>
+        </span>-->
+      </div>
+      <apparel-product-attributes-form :slot-data="slotData"
+                                 :read-only="true"
+                                 :is-newly-created="isNewlyCreated">
+      </apparel-product-attributes-form>
+    </el-card>
     <div class="pt-2"></div>
     <el-row :gutter="10" v-show="!preview">
       <el-col :span="24">
         <el-button class="btn-block" size="mini" @click="onClose()">关闭</el-button>
       </el-col>
     </el-row>
-
-    <el-dialog title="更新基本信息" width="80%"
-               :visible.sync="baseFormDialogVisible" :close-on-click-modal="false" :modal="false">
-      <product-base-form ref="baseForm"
-                         :slot-data="baseData"
-                         :read-only="false"
-                         :is-newly-created="false">
-      </product-base-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="baseFormDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmitBaseForm">确 定</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog title="更新颜色/尺码" width="60%"
-               :visible.sync="variantsFormDialogVisible" :close-on-click-modal="false" :modal="false">
-      <product-variants-form ref="variantsForm"
-                             :slot-data="variantsData"
-                             :read-only="false"
-                             :is-newly-created="false">
-      </product-variants-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="variantsFormDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmitVariantsForm">确 定</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog title="更新图片" width="80%"
-               :visible.sync="mediasFormDialogVisible" :close-on-click-modal="false" :modal="false">
-      <product-media-upload-form ref="mediasForm"
-                                 :slot-data="mediasData"
-                                 :read-only="false">
-      </product-media-upload-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeMediasForm">取 消</el-button>
-        <el-button type="primary" @click="onSubmitMediasForm">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-  import ProductBaseForm from './ProductBaseForm';
-  import ProductStockLevelsForm from './ProductStockLevelsForm';
-  import ProductMediasForm from './ProductMediasForm';
-  import ProductMediaUploadForm from './ProductMediaUploadForm';
-  import ProductVariantsForm from './ProductVariantsForm';
+  import ApparelProductBaseForm from './ApparelProductBaseForm';
+  import ApparelProductImagesForm from './ApparelProductImagesForm';
+  import ApparelProductVariantsForm from './ApparelProductVariantsForm';
+  import ApparelProductAttributesForm from "./ApparelProductAttributesForm";
 
   export default {
     name: 'ProductDetailsPage',
     components: {
-      ProductVariantsForm,
-      ProductMediaUploadForm,
-      ProductBaseForm,
-      ProductMediasForm,
-      ProductStockLevelsForm
+      ApparelProductImagesForm,
+      ApparelProductBaseForm,
+      ApparelProductVariantsForm,
+      ApparelProductAttributesForm,
     },
     props: ['slotData', 'isNewlyCreated', 'preview'],
     methods: {
       refresh() {
-        this.$refs['productMediasForm'].refresh();
         this.$refs['productVariantsForm'].refresh();
       },
       onClose() {
@@ -128,7 +102,6 @@
 
           return 0;
         });
-        // console.log(JSON.stringify(staircasePrices));
 
         const len = staircasePrices.length;
         if (len > 1) {
@@ -156,7 +129,8 @@
         });
       },
       async _onSubmitBaseForm(formData) {
-        const result = await this.$http.put('/b2b/products/apparel', formData);
+        const result = await this.$http.put('/djbackoffice/product', formData);
+
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -166,7 +140,6 @@
         this.$message.success('更新成功，产品编码：' + product.code);
 
         this.baseFormDialogVisible = false;
-
         this.$set(this.slotData, 'name', this.baseData.name);
         this.$set(this.slotData, 'categories', this.baseData.categories);
         this.$set(this.slotData, 'belongTo', this.baseData.belongTo);
@@ -210,7 +183,7 @@
         this._onSubmitVariantsForm(formData);
       },
       async _onSubmitVariantsForm(formData) {
-        const result = await this.$http.put('/djbrand/product/variants', formData);
+        const result = await this.$http.put('/djbackoffice/product/variants', formData);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -269,7 +242,9 @@
           suggestedPrice: 0,
           price1: 0,
           price2: 0,
-          price3: 0
+          price3: 0,
+          postageFree: '',
+          gramWeight: ''
         },
         variantsFormDialogVisible: false,
         variantsData: {

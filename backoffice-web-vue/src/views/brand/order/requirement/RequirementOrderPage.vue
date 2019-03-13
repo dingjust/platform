@@ -7,6 +7,7 @@
         </el-form-item>
         <el-button-group>
           <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="onSimpleNew">急速发布需求</el-button>
           <el-button type="primary" icon="el-icon-plus" @click="onNew">发布需求</el-button>
         </el-button-group>
         <el-popover placement="bottom" width="800" trigger="click">
@@ -145,6 +146,7 @@
   import autoHeight from 'mixins/autoHeight';
 
   import RequirementOrderForm from './RequirementOrderForm';
+  import RequirementOrderSimpleForm from './RequirementOrderSimpleForm';
   import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
 
   export default {
@@ -202,7 +204,14 @@
         this.fn.openSlider('需求订单：' + item.code, RequirementOrderDetailsPage, result);
       },
       onNew() {
-        this.fn.openSlider('发布需求', RequirementOrderForm, this.formData);
+        let formData = {};
+        Object.assign(formData, this.formData);
+        this.fn.openSlider('发布需求', RequirementOrderForm, formData);
+      },
+      onSimpleNew() {
+        let formData = {};
+        Object.assign(formData, this.formData);
+        this.fn.openSlider('发布需求', RequirementOrderSimpleForm, formData);
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
