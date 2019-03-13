@@ -29,7 +29,7 @@ class EnumSelectPageState extends State<EnumSelectPage> {
       return Container(
 //        width: 65,
         child: ChoiceChip(
-          selectedColor: Colors.orange,
+          selectedColor: Color.fromRGBO(255,214,12, 1),
           label: Text(style.name,style: TextStyle(color: Colors.black),),
           selected: widget.enumSelect.contains(style),
           onSelected: (select){

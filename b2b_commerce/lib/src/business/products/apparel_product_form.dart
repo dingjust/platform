@@ -157,7 +157,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   ),
                   Expanded(
                     child: ActionChip(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Color.fromRGBO(255,214,12, 1),
                       labelPadding:
                           EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                       labelStyle: TextStyle(fontSize: 16),

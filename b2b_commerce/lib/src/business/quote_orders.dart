@@ -49,7 +49,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
             child: Scaffold(
               appBar: TabBar(
                 unselectedLabelColor: Colors.black26,
-                labelColor: Colors.orange,
+                labelColor: Color.fromRGBO(255,214,12, 1),
                 indicatorSize: TabBarIndicatorSize.label,
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);

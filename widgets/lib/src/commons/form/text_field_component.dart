@@ -46,7 +46,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
     widget.focusNode.addListener(() {
       if (widget.focusNode.hasFocus) {
         setState(() {
-          _dividerColor = Colors.orange;
+          _dividerColor = Color.fromRGBO(255,214,12, 1);
         });
       } else {
         setState(() {

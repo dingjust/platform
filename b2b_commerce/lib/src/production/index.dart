@@ -32,7 +32,7 @@ class _ProductionPageState extends State<ProductionPage> {
               IconButton(
                 padding: EdgeInsets.only(right: 20),
                 icon: const Icon(B2BIcons.message),
-                color: Colors.orange,
+                color: Color.fromRGBO(255,214,12, 1),
                 tooltip: 'message',
                 onPressed: () {
                   Navigator.push(
@@ -111,7 +111,7 @@ class _ProductionPageState extends State<ProductionPage> {
             onClose: () => print('DIAL CLOSED'),
             tooltip: 'Speed Dial',
             heroTag: 'speed-dial-hero-tag',
-            // backgroundColor: Colors.orange,
+            // backgroundColor: Color.fromRGBO(255,214,12, 1),
             foregroundColor: Colors.black,
             elevation: 8.0,
             shape: CircleBorder(),

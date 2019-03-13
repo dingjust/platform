@@ -269,7 +269,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                             },
                             child: Text(
                               '检索',
-                              style: TextStyle(color: Colors.orange),
+                              style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
                             ),
                           )),
                         )
@@ -336,7 +336,7 @@ class UniqueCodeItem extends StatelessWidget {
   // 订单渠道类型
   // static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
   //   RequirementOrderStatus.PENDING_QUOTE: Colors.green,
-  //   RequirementOrderStatus.COMPLETED: Colors.orange,
+  //   RequirementOrderStatus.COMPLETED: Color.fromRGBO(255,214,12, 1),
   //   RequirementOrderStatus.CANCELLED: Colors.red
   // };
 

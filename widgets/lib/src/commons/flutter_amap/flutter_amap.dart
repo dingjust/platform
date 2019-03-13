@@ -1,8 +1,8 @@
+import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:models/models.dart';
-import 'package:b2b_commerce/src/home/factory/factory.dart';
 
 class FlutterAMap extends StatefulWidget {
     //地图定位纬度
@@ -104,7 +104,7 @@ class _FlutterAMapState extends State<FlutterAMap>{
                       icon: Icon(
                         Icons.location_on,
                       ),
-                      color: Colors.orangeAccent,
+                      color: Color.fromRGBO(255,214,12, 1),
                       iconSize: 40,
                       tooltip: widget.factoryList[i].name,
                       onPressed: () {
@@ -164,7 +164,7 @@ class _FlutterAMapState extends State<FlutterAMap>{
                         icon: Icon(
                           Icons.location_on,
                         ),
-                        color: Colors.orangeAccent,
+                        color: Color.fromRGBO(255,214,12, 1),
                         iconSize: 40,
                         tooltip: widget.factoryList[i].name,
                         onPressed: () {

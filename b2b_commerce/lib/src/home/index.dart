@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //TODO:调用接口查询推荐工厂,mock数据待删除
-  static Color orange = Colors.orange;
+  static Color orange = Color.fromRGBO(255,214,12, 1);
   static Color white = Colors.white;
 
   ///图标颜色

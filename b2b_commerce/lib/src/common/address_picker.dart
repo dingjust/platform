@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
 
 typedef void ChangeData(Map<String, dynamic> map);
 typedef List<Widget> CreateWidgetList();
@@ -191,7 +192,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                       child: new Text(
                         '取消',
                         style: new TextStyle(
-                          color: Colors.orangeAccent,
+                          color: Color.fromRGBO(255,214,12, 1),
                         ),
                       ),
                     ),
@@ -227,7 +228,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                       child: new Text(
                         '确定',
                         style: new TextStyle(
-                          color: Colors.orangeAccent,
+                          color: Color.fromRGBO(255,214,12, 1),
                         ),
                       ),
                     ),

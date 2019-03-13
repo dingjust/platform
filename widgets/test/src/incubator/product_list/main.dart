@@ -10,7 +10,7 @@ void main() {
       // primarySwatch: Colors.blue,
       primaryColor: Colors.white,
       textSelectionColor: Colors.black,
-      accentColor: Colors.orangeAccent[400],
+      accentColor: Color.fromRGBO(255,214,12, 1),
       bottomAppBarColor: Colors.grey,
     ),
     home: ProductPage(),
@@ -94,7 +94,7 @@ class FilterTabBar extends StatefulWidget implements PreferredSizeWidget {
       this.itemWidth = 100,
       @required this.entries,
       this.unselectedColor = Colors.black54,
-      this.color = Colors.orange,
+      this.color =const Color.fromRGBO(255,214,12, 1),
       @required this.streamController,
       this.action})
       : super(key: key);

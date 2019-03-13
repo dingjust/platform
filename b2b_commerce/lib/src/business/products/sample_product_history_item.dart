@@ -1,6 +1,6 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:core/core.dart';
 
 class SampleProductHistoryItemPage extends StatelessWidget {
   SampleBorrowReturnHistoryModel item;
@@ -34,7 +34,7 @@ class SampleProductHistoryItemPage extends StatelessWidget {
                       : Text(
                           '已还',
                           style: TextStyle(
-                            color: Colors.orange,
+                            color: Color.fromRGBO(255,214,12, 1),
                             fontWeight: FontWeight.w800,
                             fontSize: 16,
                           ),

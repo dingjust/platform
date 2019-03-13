@@ -365,12 +365,12 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                     "更多条件",
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.orangeAccent,
+                      color: Color.fromRGBO(255,214,12, 1),
                     ),
                   ),
                   Icon(
                     _isShowMore?Icons.keyboard_arrow_up:Icons.keyboard_arrow_down,
-                    color: Colors.orangeAccent,
+                    color: Color.fromRGBO(255,214,12, 1),
                     size: 28,
                   ),
                 ],
@@ -502,7 +502,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         height: 50,
         margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
         child: RaisedButton(
-          color: Colors.orange,
+          color: Color.fromRGBO(255,214,12, 1),
           child: Text(
             '确定',
             style: TextStyle(

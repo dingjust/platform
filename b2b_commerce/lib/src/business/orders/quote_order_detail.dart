@@ -239,13 +239,13 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
                   decoration: BoxDecoration(
-                    color: Colors.orange[50],
+                    color: Color.fromRGBO(255,214,12, 1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
                     '${pageItem.requirementOrder.details?.majorCategory.name},${pageItem.requirementOrder.details?.category.name},${pageItem.requirementOrder.totalQuantity}件',
                     style: TextStyle(
-                      color: Colors.orange,
+                      color: Color.fromRGBO(255,214,12, 1),
                       fontSize: 15,
                     ),
                   ),
@@ -508,7 +508,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             ),
             Expanded(
               child: ActionChip(
-                backgroundColor: Colors.orange,
+                backgroundColor: Color.fromRGBO(255,214,12, 1),
                 labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                 labelStyle: TextStyle(fontSize: 16),
                 label: Text('确认报价'),

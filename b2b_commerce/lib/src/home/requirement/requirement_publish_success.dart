@@ -122,12 +122,12 @@ class _PublishRequirementSuccessDialogState
                       child: Icon(
                         B2BIcons.publish_requirement_success,
                         size: 60,
-                        color: Colors.orange,
+                        color: Color.fromRGBO(255,214,12, 1),
                       ),
                     ),
                     Text(
                       '需求发布成功!',
-                      style: TextStyle(fontSize: 20, color: Colors.orange),
+                      style: TextStyle(fontSize: 20, color: Color.fromRGBO(255,214,12, 1)),
                     )
                   ],
                 ),
@@ -233,7 +233,7 @@ class _PublishRequirementSuccessDialogState
 //                                              : entry?.entryNumber.toString() +
 //                                                  '件'),
 //                                      style: TextStyle(
-//                                          fontSize: 15, color: Colors.orange),
+//                                          fontSize: 15, color: Color.fromRGBO(255,214,12, 1)),
 //                                    ),
 //                                  )
 //                                : Container(),
@@ -249,7 +249,7 @@ class _PublishRequirementSuccessDialogState
                                     : widget.model.details.expectedMachiningQuantity.toString() +
                                     '件'),
                             style: TextStyle(
-                                fontSize: 15, color: Colors.orange),
+                                fontSize: 15, color: Color.fromRGBO(255,214,12, 1)),
                           ),
                         )
                       ],
@@ -337,16 +337,16 @@ class _PublishRequirementSuccessDialogState
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 30),
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.orange),
+                      side: BorderSide(color: Color.fromRGBO(255,214,12, 1)),
                       borderRadius: BorderRadius.circular(20)),
                   child: Text(
                     '回到首页',
-                    style: TextStyle(color: Colors.orange, fontSize: 14),
+                    style: TextStyle(color: Color.fromRGBO(255,214,12, 1), fontSize: 14),
                   ),
                 ),
                 FlatButton(
                   onPressed: () {},
-                  color: Colors.orange,
+                  color: Color.fromRGBO(255,214,12, 1),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   child: Text(

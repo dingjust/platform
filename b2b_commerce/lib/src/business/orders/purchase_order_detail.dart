@@ -645,7 +645,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             height: 40,
                             child: RaisedButton(
-                                color: Colors.orange,
+                                color: Color.fromRGBO(255,214,12, 1),
                                 child: Text(
                                   '唯一码',
                                   style: TextStyle(

@@ -152,26 +152,26 @@ class CircleStepItem {
 const ProductionStepConstants = [
   {
     "phase": ProductionProgressPhase.MATERIAL_PREPARATION,
-    "color": Color.fromRGBO(255, 194, 108, 1)
+    "color": Color.fromRGBO(255, 214, 12, 1)
   },
   {
     "phase": ProductionProgressPhase.CUTTING,
-    "color": Color.fromRGBO(255, 194, 108, 1)
+    "color": Color.fromRGBO(255, 214, 12, 1)
   },
   {
     "phase": ProductionProgressPhase.STITCHING,
-    "color": Color.fromRGBO(255, 194, 108, 1)
+    "color": Color.fromRGBO(255, 214, 12, 1)
   },
   {
     "phase": ProductionProgressPhase.AFTER_FINISHING,
-    "color": Color.fromRGBO(255, 194, 108, 1)
+    "color": Color.fromRGBO(255, 214, 12, 1)
   },
   {
     "phase": ProductionProgressPhase.INSPECTION,
-    "color": Color.fromRGBO(255, 194, 108, 1)
+    "color": Color.fromRGBO(255, 214, 12, 1)
   },
   {
     "phase": ProductionProgressPhase.DELIVERY,
-    "color": Color.fromRGBO(255, 194, 108, 1)
+    "color": Color.fromRGBO(255, 214, 12, 1)
   }
 ];

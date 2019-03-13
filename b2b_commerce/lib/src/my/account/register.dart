@@ -88,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           suffixIcon: FlatButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50)),
-                            color: Colors.orange,
+                            color: Color.fromRGBO(255,214,12, 1),
                             onPressed: (_seconds == 0)
                                 ? () {
                                     setState(() {
@@ -192,7 +192,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       : null,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)),
-              color: Colors.orange,
+              color: Color.fromRGBO(255,214,12, 1),
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 '下一步',
@@ -215,7 +215,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Text(
                     '已经阅读或同意《衣加衣协议》',
                     style: TextStyle(
-                        color: _isAgree ? Colors.orange : Colors.black54),
+                        color: _isAgree ? Color.fromRGBO(255,214,12, 1) : Colors.black54),
                   ),
                 ],
               ),
@@ -282,7 +282,7 @@ class UserTypeSelector extends StatelessWidget {
                       v.label,
                       style: TextStyle(
                           color: v.value == value
-                              ? Colors.orange
+                              ? Color.fromRGBO(255,214,12, 1)
                               : Colors.black54),
                     )
                   ],
