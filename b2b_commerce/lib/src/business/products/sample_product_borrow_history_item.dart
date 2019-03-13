@@ -92,7 +92,7 @@ class SampleProductBorrowHistoryItem extends StatelessWidget {
                             padding:
                             EdgeInsets.symmetric(vertical: 1, horizontal: 5),
                             decoration: BoxDecoration(
-                              color: Colors.orange[200],
+                              color: Color.fromRGBO(255,214,12, 1),
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Text(
@@ -135,7 +135,7 @@ class SampleProductBorrowHistoryItem extends StatelessWidget {
                         ),
                         Text(
                           item.quantity.toString(),
-                          style: TextStyle(color: Colors.orange),
+                          style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
                         )
                       ],
                     ),

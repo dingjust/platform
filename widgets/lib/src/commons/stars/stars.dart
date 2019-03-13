@@ -6,7 +6,7 @@ class Stars extends StatelessWidget {
   const Stars(
       {Key key,
       this.starLevel = 1,
-      this.color = Colors.orange,
+      this.color =const Color.fromRGBO(255,214,12, 1),
       this.highlightOnly = true,
       this.size = 20})
       : super(key: key);

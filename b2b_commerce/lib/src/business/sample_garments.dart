@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+
 import 'products/sample_product_borrow_history_item.dart';
-import 'search/apparel_product_search.dart';
-import 'products/sample_products.dart';
 import 'products/sample_product_history_form.dart';
 import 'products/sample_product_lend_history_item.dart';
+import 'products/sample_products.dart';
+import 'search/apparel_product_search.dart';
 
 class SampleGarmentsPage extends StatefulWidget {
   SampleGarmentsPageState createState() => SampleGarmentsPageState();
@@ -216,7 +217,7 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
                               ),
                               Text(
                                 '3',
-                                style: TextStyle(color: Colors.orange),
+                                style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
                               ),
                               Icon(Icons.chevron_right, color: Colors.grey),
                             ],

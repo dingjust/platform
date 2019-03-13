@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
 import '../orders/requirement_order_from.dart';
 
 class ApparelProductItem extends StatefulWidget {
@@ -116,13 +117,13 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                   ),
 //                  Row(
 //                    children: <Widget>[
-//                      Text('￥', style: TextStyle(color: Colors.orange)),
+//                      Text('￥', style: TextStyle(color: Color.fromRGBO(255,214,12, 1))),
 //                      Expanded(
 //                          child: Text(
 //                        widget.item.price.toString(),
 //                        style: TextStyle(
 //                          fontSize: 20,
-//                          color: Colors.orange,
+//                          color: Color.fromRGBO(255,214,12, 1),
 //                          fontWeight: FontWeight.w600,
 //                        ),
 //                      )),
@@ -174,13 +175,13 @@ class ApparelProductItemState extends State<ApparelProductItem> {
 //                      Container(
 //                        padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
 //                        decoration: BoxDecoration(
-//                          color: Colors.orange[50],
+//                          color: Color.fromRGBO(255,214,12, 1)[50],
 //                          borderRadius: BorderRadius.circular(5),
 //                        ),
 //                        child: Text(
 //                          '实际库存 ' + widget.item.stockLevel.available.toString(),
 //                          style: TextStyle(
-//                            color: Colors.orange,
+//                            color: Color.fromRGBO(255,214,12, 1),
 //                            fontSize: 12,
 //                          ),
 //                        ),
@@ -189,13 +190,13 @@ class ApparelProductItemState extends State<ApparelProductItem> {
 //                        margin: EdgeInsets.only(left: 10),
 //                        padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
 //                        decoration: BoxDecoration(
-//                          color: Colors.orange[50],
+//                          color: Color.fromRGBO(255,214,12, 1)[50],
 //                          borderRadius: BorderRadius.circular(5),
 //                        ),
 //                        child: Text(
 //                          '平台库存 ' + widget.item.stockLevel.available.toString(),
 //                          style: TextStyle(
-//                            color: Colors.orange,
+//                            color: Color.fromRGBO(255,214,12, 1),
 //                            fontSize: 12,
 //                          ),
 //                        ),
@@ -230,11 +231,11 @@ class ApparelProductItemState extends State<ApparelProductItem> {
             onPressed: () {},
           ),
           ActionChip(
-            shape: StadiumBorder(side: BorderSide(color: Colors.orange)),
+            shape: StadiumBorder(side: BorderSide(color: Color.fromRGBO(255,214,12, 1))),
             labelPadding: EdgeInsets.symmetric(horizontal: 15),
             backgroundColor: Colors.white,
             label: Text('编辑'),
-            labelStyle: TextStyle(color: Colors.orange),
+            labelStyle: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
             onPressed: () {
               Navigator.push(
                 context,
@@ -250,16 +251,16 @@ class ApparelProductItemState extends State<ApparelProductItem> {
             },
           ),
 //          ActionChip(
-//            shape: StadiumBorder(side: BorderSide(color: Colors.orange)),
+//            shape: StadiumBorder(side: BorderSide(color: Color.fromRGBO(255,214,12, 1))),
 //            labelPadding: EdgeInsets.symmetric(horizontal: 15),
 //            backgroundColor: Colors.white,
 //            label: Text(_approvalStatusText),
-//            labelStyle: TextStyle(color: Colors.orange),
+//            labelStyle: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
 //            onPressed: () {},
 //          ),
           ActionChip(
             labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-            backgroundColor: Colors.orange,
+            backgroundColor: Color.fromRGBO(255,214,12, 1),
             label: Text('生产'),
             labelStyle: TextStyle(color: Colors.white),
             onPressed: () {

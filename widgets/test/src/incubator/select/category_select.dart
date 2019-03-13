@@ -40,7 +40,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
       _keyItem = category.keys.map((key) {
         print(key.name);
         if(_selectLeft == key.code){
-          _color = Colors.orange;
+          _color = Color.fromRGBO(255,214,12, 1);
         }else{
           _color = Colors.black;
         }
@@ -73,7 +73,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
               return Container(
                 width: 65,
                 child: ChoiceChip(
-                  selectedColor: Colors.orange,
+                  selectedColor: Color.fromRGBO(255,214,12, 1),
                   label: Text(value.name,style: TextStyle(color: Colors.black),),
                   selected: widget.categorySelect.contains(value),
                   onSelected: (select){

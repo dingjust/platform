@@ -138,7 +138,7 @@ class _ProductionGenerateUniqueCodePageState
                 Container(
                   width: 180,
                   child: FlatButton(
-                    color: Colors.orange,
+                    color: Color.fromRGBO(255,214,12, 1),
                     onPressed: () {
                       _smsInvite();
                     },
@@ -159,10 +159,10 @@ class _ProductionGenerateUniqueCodePageState
                     },
                     child: Text(
                       '线上邀请',
-                      style: TextStyle(color: Colors.orange),
+                      style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
                     ),
                     shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 0.5, color: Colors.orange),
+                        side: BorderSide(width: 0.5, color: Color.fromRGBO(255,214,12, 1)),
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                   ),
                 ),
@@ -284,17 +284,17 @@ class _ProductionGenerateUniqueCodePageState
                     },
                     child: Text(
                       '不，再看看',
-                      style: TextStyle(color: Colors.orange),
+                      style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
                     ),
                     shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 0.5, color: Colors.orange),
+                        side: BorderSide(width: 0.5, color: Color.fromRGBO(255,214,12, 1)),
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                   ),
                 ),
                 Container(
                   width: 100,
                   child: FlatButton(
-                    color: Colors.orange,
+                    color: Color.fromRGBO(255,214,12, 1),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -558,17 +558,17 @@ class CompleteTextFieldDialog extends StatelessWidget {
                 },
                 child: Text(
                   '不，再看看',
-                  style: TextStyle(color: Colors.orange),
+                  style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
                 ),
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 0.5, color: Colors.orange),
+                    side: BorderSide(width: 0.5, color: Color.fromRGBO(255,214,12, 1)),
                     borderRadius: BorderRadius.all(Radius.circular(20))),
               ),
             ),
             Container(
               width: 100,
               child: FlatButton(
-                color: Colors.orange,
+                color: Color.fromRGBO(255,214,12, 1),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

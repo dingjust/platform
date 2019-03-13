@@ -38,7 +38,7 @@ class StatusStep extends StatefulWidget {
       this.height,
       this.notActiveColor = const Color.fromRGBO(237, 237, 237, 1.0),
       this.activeColor = const Color.fromRGBO(255, 239, 221, 1.0),
-      this.nowActiveColor = Colors.orange,
+      this.nowActiveColor =const Color.fromRGBO(255,214,12, 1),
       this.notActiveBorderColor = const Color.fromRGBO(180, 180, 180, 1.0),
       this.activeBorderColor = const Color.fromRGBO(255, 161, 71, 1.0),
       this.nowActiveBorderColor = Colors.deepOrange});

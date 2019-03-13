@@ -183,7 +183,7 @@ class FactoryItem extends StatelessWidget {
           width: 80,
           child: FlatButton(
             onPressed: () {},
-            color: Colors.orange,
+            color: Color.fromRGBO(255,214,12, 1),
             child: Text(
               '邀请报价',
               style: TextStyle(color: Colors.white, fontSize: 12),

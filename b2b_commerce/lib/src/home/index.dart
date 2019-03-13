@@ -1,12 +1,10 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
-import 'package:b2b_commerce/src/my/my_client_services.dart';
+import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 /// 网站主页
@@ -19,233 +17,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //TODO:调用接口查询推荐工厂,mock数据待删除
-  Map<String, dynamic> mockFactory = {
-    'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-    'uid': 'BB123456',
-    'name': '森马',
-    'starLevel': 5,
-    'describe': '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-    'historyOrdersCount': 35,
-    'responseQuotedTime': 50,
-    'email': 'monkey.D.luffy@163.com',
-    'phone': '020-12345678',
-    'cooperationModes': ['FOB'],
-    'developmentCapacity': true,
-    'monthlyCapacityRanges': 'MCR003',
-    'latheQuantity': 5,
-    'contactPerson': 'luffy',
-    'contactPhone': '13123456789',
-    'address': '广东省广州市海珠区广州大道南',
-    'contactAddress': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {'isocode': 'R123', 'name': '广东省'},
-      'city': {'code': 'C123', 'name': '广州市'},
-      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-      'line1': '广州大道南',
-    },
-    'categories': [
-      {
-        'code': '1001',
-        'name': '卫衣',
-      },
-      {
-        'code': '1002',
-        'name': '毛衣',
-      },
-    ],
-    'scaleRange': 'SR005',
-    'registrationDate': DateTime.now().toString(),
-    'taxNumber': '41553315446687844',
-    'bankOfDeposit': '中国工商银行',
-    'certificate': [
-      {
-        'url':
-            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-        'mediaType': 'jpg',
-      },
-      {
-        'url':
-            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-        'mediaType': 'jpg',
-      },
-      {
-        'url':
-            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-        'mediaType': 'jpg',
-      },
-    ],
-    'cooperativeBrands': [
-      {
-        'profilePicture':
-            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-        'uid': 'BB123456',
-        'name': '森马',
-        'starLevel': 5,
-        'email': 'monkey.D.luffy@163.com',
-        'phone': '020-12345678',
-        'cooperationModes': ['FOB'],
-        'developmentCapacity': true,
-        'monthlyCapacityRanges': 'MCR003',
-        'latheQuantity': 5,
-        'contactPerson': 'luffy',
-        'contactPhone': '13123456789',
-      },
-      {
-        'profilePicture':
-            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-        'uid': 'BB123456',
-        'name': '森马',
-        'starLevel': 5,
-        'email': 'monkey.D.luffy@163.com',
-        'phone': '020-12345678',
-        'cooperationModes': ['FOB'],
-        'developmentCapacity': true,
-        'monthlyCapacityRanges': 'MCR003',
-        'latheQuantity': 5,
-        'contactPerson': 'luffy',
-        'contactPhone': '13123456789',
-      },
-      {
-        'profilePicture':
-            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-        'uid': 'BB123456',
-        'name': '森马',
-        'starLevel': 5,
-        'email': 'monkey.D.luffy@163.com',
-        'phone': '020-12345678',
-        'cooperationModes': ['FOB'],
-        'developmentCapacity': true,
-        'monthlyCapacityRanges': 'MCR003',
-        'latheQuantity': 5,
-        'contactPerson': 'luffy',
-        'contactPhone': '13123456789',
-      },
-      {
-        'profilePicture':
-            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-        'uid': 'BB123456',
-        'name': '森马',
-        'starLevel': 5,
-        'email': 'monkey.D.luffy@163.com',
-        'phone': '020-12345678',
-        'cooperationModes': ['FOB'],
-        'developmentCapacity': true,
-        'monthlyCapacityRanges': 'MCR003',
-        'latheQuantity': 5,
-        'contactPerson': 'luffy',
-        'contactPhone': '13123456789',
-      },
-      {
-        'profilePicture':
-            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-        'uid': 'BB123456',
-        'name': '森马',
-        'starLevel': 5,
-        'email': 'monkey.D.luffy@163.com',
-        'phone': '020-12345678',
-        'cooperationModes': ['FOB'],
-        'developmentCapacity': true,
-        'monthlyCapacityRanges': 'MCR003',
-        'latheQuantity': 5,
-        'contactPerson': 'luffy',
-        'contactPhone': '13123456789',
-      },
-      {
-        'profilePicture':
-            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-        'uid': 'BB123456',
-        'name': '森马',
-        'starLevel': 5,
-        'email': 'monkey.D.luffy@163.com',
-        'phone': '020-12345678',
-        'cooperationModes': ['FOB'],
-        'developmentCapacity': true,
-        'monthlyCapacityRanges': 'MCR003',
-        'latheQuantity': 5,
-        'contactPerson': 'luffy',
-        'contactPhone': '13123456789',
-      },
-      {
-        'profilePicture':
-            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-        'uid': 'BB123456',
-        'name': '森马',
-        'starLevel': 5,
-        'email': 'monkey.D.luffy@163.com',
-        'phone': '020-12345678',
-        'cooperationModes': ['FOB'],
-        'developmentCapacity': true,
-        'monthlyCapacityRanges': 'MCR003',
-        'latheQuantity': 5,
-        'contactPerson': 'luffy',
-        'contactPhone': '13123456789',
-      },
-    ],
-    'products': [
-      {
-        'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
-        'price': 33.3,
-      },
-      {
-        'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
-        'price': 33.3,
-      },
-      {
-        'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
-        'price': 33.3,
-      },
-      {
-        'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
-        'price': 33.3,
-      },
-      {
-        'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
-        'price': 33.3,
-      },
-    ]
-  };
-  List<FactoryModel> factories = <FactoryModel>[];
-
-  static Color orange = Colors.orange;
+  static Color orange = Color.fromRGBO(255,214,12, 1);
   static Color white = Colors.white;
 
   ///图标颜色
   Color iconColor = white;
 
+  TextEditingController _uniqueCodeTextController = TextEditingController();
+
   void initState() {
     super.initState();
-    //TODO 假数据，待删除
-    for (int i = 0; i < 5; i++) {
-      FactoryModel factoryModel=FactoryModel.fromJson(mockFactory);
-      factoryModel.name='森马${i+1}';
-      factories.add(factoryModel);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final double _appBarHeight = 200.0;
+    final double _appBarHeight = 150.0;
     ScrollController _scrollController = ScrollController();
 
     // 监听滚动变化该表图标颜色, _appBarHeight - kToolbarHeight为顶部标题栏底部与轮播图底部之间高度
@@ -267,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       body: Container(
-        color: Color.fromRGBO(245, 245, 245, 1),
+        color: Colors.white,
         child: CustomScrollView(
           controller: _scrollController,
           slivers: <Widget>[
@@ -278,23 +64,22 @@ class _HomePageState extends State<HomePage> {
               title: HomeSearchInputBox(
                 height: 35,
               ),
-              // centerTitle: true,
               brightness: Brightness.dark,
               actions: <Widget>[
-                IconButton(
-                  padding: EdgeInsets.only(right: 20),
-                  icon: const Icon(B2BIcons.message),
-                  color: iconColor,
-                  tooltip: 'message',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MyClientServicesPage(),
-                      ),
-                    );
-                  },
-                ),
+                // IconButton(
+                //   padding: EdgeInsets.only(right: 20),
+                //   icon: const Icon(B2BIcons.message),
+                //   color: iconColor,
+                //   tooltip: 'message',
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => MyClientServicesPage(),
+                //       ),
+                //     );
+                //   },
+                // ),
               ],
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
@@ -307,16 +92,27 @@ class _HomePageState extends State<HomePage> {
             ),
             SliverList(
                 delegate: SliverChildListDelegate(<Widget>[
+              Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: Text(
+                    '找工厂',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Color.fromRGBO(100, 100, 100, 1),
+                        fontWeight: FontWeight.w500),
+                  )),
               EasyGrid(
-                height: 163,
+                height: 90,
                 dataList: _gridItemList(),
               ),
-              _buildInfoSection(),
               HomeTabSection(
-                height: 150,
+                height: 100,
               ),
+              _buildBroadcast(),
               FastPublishRequirement(),
-              _buildRecommend(),
+              _buildSpacing(15),
+              _buildTrackingProgress(),
+              _buildSpacing(40),
             ])),
           ],
         ),
@@ -338,84 +134,112 @@ class _HomePageState extends State<HomePage> {
             Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_PRODUCT);
           },
           pic: B2BImage.order(width: 60, height: 80)),
-      GridItem(
-          title: '空闲产能',
-          onPressed: () {},
-          pic: B2BImage.idle_capacity(width: 60, height: 80)),
-      GridItem(
-          title: '电商找厂',
-          onPressed: () {},
-          pic: B2BImage.find_factory(width: 60, height: 60)),
+      // GridItem(
+      //     title: '空闲产能',
+      //     onPressed: () {},
+      //     pic: B2BImage.idle_capacity(width: 60, height: 80)),
+      // GridItem(
+      //     title: '电商找厂',
+      //     onPressed: () {},
+      //     pic: B2BImage.find_factory(width: 60, height: 60)),
     ];
   }
 
-  Widget _buildInfoSection() {
+  Widget _buildSpacing(double height) {
     return Container(
-      margin: EdgeInsets.fromLTRB(8, 2, 8, 10),
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(4)),
+      color: Color.fromRGBO(246, 247, 249, 1),
+      height: height,
+    );
+  }
+
+  Widget _buildBroadcast() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      color: Color.fromRGBO(246, 247, 249, 1),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.volume_up,
+              color: Color.fromRGBO(255, 102, 102, 1),
+            ),
+          ),
           Text(
-            '衣报送',
-            style: TextStyle(
-                color: Colors.orange,
-                fontSize: 16,
-                fontWeight: FontWeight.bold),
+            '进入蕉衣请优先注册并提交认证资料',
+            style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
           ),
-          HomeInfoItem(
-            label: '接单工厂',
-            value: '566',
-            end: '家',
-          ),
-          HomeInfoItem(
-            label: '正在报价',
-            value: '376',
-            end: '单',
-          ),
-          HomeInfoItem(
-            label: '今日成交',
-            value: '106',
-            end: '单',
-          )
         ],
       ),
     );
   }
 
-  Widget _buildRecommend() {
+  Widget _buildTrackingProgress() {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
       child: Column(
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                      text: '-',
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: '推荐工厂',
-                            style: TextStyle(color: Colors.black)),
-                        TextSpan(text: '-')
-                      ]),
+              Text(
+                '跟踪进度',
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Color.fromRGBO(100, 100, 100, 1),
+                    fontWeight: FontWeight.w500),
+              ),
+              Text(
+                '线下订单',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Color.fromRGBO(150, 150, 150, 1),
                 ),
               )
             ],
           ),
-          Column(
-            children: factories
-                .map((item) => FactoryItem(
-                      model: item,
-                    ))
-                .toList(),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductionUniqueCodePage(),
+                ),
+              );
+            },
+            child: Container(
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(248, 248, 248, 1),
+                    borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      '请输入工厂发来的唯一码',
+                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    )
+                  ],
+                )),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '没有唯一码？点击这里',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 15),
+                ),
+                Icon(
+                  B2BIcons.arrow_right,
+                  color: Color.fromRGBO(255, 45, 45, 1),
+                  size: 12,
+                )
+              ],
+            ),
           )
         ],
       ),

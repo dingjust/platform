@@ -39,7 +39,7 @@ class _BrandClientState extends State<BrandClient> {
         // primarySwatch: Colors.blue,
         primaryColor: Colors.white,
         textSelectionColor: Colors.black,
-        accentColor: Colors.orangeAccent[400],
+        accentColor: Color.fromRGBO(255, 214, 12, 1),
         bottomAppBarColor: Colors.grey,
       ),
       home: Builder(
@@ -55,7 +55,8 @@ class _BrandClientState extends State<BrandClient> {
                 tooltip: '发布需求',
                 child: Icon(
                   Icons.add,
-                  color: Colors.white,
+                  color: Colors.black,
+                  size: 45,
                 ),
                 onPressed: () {
                   Navigator.push(
