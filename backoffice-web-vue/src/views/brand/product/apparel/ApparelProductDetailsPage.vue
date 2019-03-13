@@ -25,6 +25,7 @@
                                  :is-newly-created="isNewlyCreated">
       </apparel-product-base-form>
     </el-card>
+    <div class="pt-2"></div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>产品颜色/尺码</span>
@@ -39,6 +40,19 @@
       </apparel-product-variants-form>
     </el-card>
     <div class="pt-2"></div>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>商品属性</span>
+   <!--     <span class="float-right">
+          <el-button type="primary" size="mini" @click="onUpdateAttributes">编辑</el-button>
+        </span>-->
+      </div>
+      <apparel-product-attributes-form :slot-data="slotData"
+                                 :read-only="true"
+                                 :is-newly-created="isNewlyCreated">
+      </apparel-product-attributes-form>
+    </el-card>
+    <div class="pt-2"></div>
     <el-row :gutter="10" v-show="!preview">
       <el-col :span="24">
         <el-button class="btn-block" size="mini" @click="onClose()">关闭</el-button>
@@ -51,6 +65,7 @@
   import ApparelProductBaseForm from './ApparelProductBaseForm';
   import ApparelProductImagesForm from './ApparelProductImagesForm';
   import ApparelProductVariantsForm from './ApparelProductVariantsForm';
+  import ApparelProductAttributesForm from "./ApparelProductAttributesForm";
 
   export default {
     name: 'ProductDetailsPage',
@@ -58,6 +73,7 @@
       ApparelProductImagesForm,
       ApparelProductBaseForm,
       ApparelProductVariantsForm,
+      ApparelProductAttributesForm,
     },
     props: ['slotData', 'isNewlyCreated', 'preview'],
     methods: {
