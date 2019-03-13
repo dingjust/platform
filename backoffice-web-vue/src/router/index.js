@@ -333,7 +333,7 @@ const router = new Router({
         },
         {
           path: 'factory/product',
-          redirect: '/factory/product/product',
+          redirect: '/factory/product/apparel',
           name: '产品管理',
           component: {
             render(c) {
@@ -342,14 +342,14 @@ const router = new Router({
           },
           children: [
             {
-              path: 'product',
+              path: 'apparel',
               name: '产品',
-              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/product/ProductPage'),
+              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/apparel/ApparelProductPage'),
             },
             {
               path: 'deleted',
               name: '已删除产品',
-              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/product/ProductDeletedPage'),
+              component: () => import(/* webpackChunkName: 'brand-products' */ 'factory/product/apparel/ApparelProductDeletedPage'),
             },
             {
               path: 'fabric',

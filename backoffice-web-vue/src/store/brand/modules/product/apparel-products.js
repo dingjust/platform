@@ -72,7 +72,8 @@ const actions = {
     }
 
     const response = await http.post('/b2b/products/apparel', {
-      text: state.keyword,
+      keyword: state.keyword
+    },{
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
