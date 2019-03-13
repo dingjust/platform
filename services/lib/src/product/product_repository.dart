@@ -9,4 +9,10 @@ abstract class ProductRepository {
 
   //获取商品大类
   Future<List<CategoryModel>> majorCategories();
+  
+  //获取所有颜色
+  Future<List<ColorModel>> colors();
+
+  //获取所有尺码
+  Future<List<SizeModel>> sizes();
 }
