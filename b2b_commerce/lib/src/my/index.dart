@@ -202,8 +202,8 @@ class MyHomePage extends StatelessWidget {
             width: 210,
             child: Text(
               '${UserBLoC.instance.currentUser.companyName}',
-              style:
-                  TextStyle(fontSize: 16, color: Color.fromRGBO(132,114,1, 1)),
+              style: TextStyle(
+                  fontSize: 16, color: Color.fromRGBO(132, 114, 1, 1)),
             ),
           )
         ],

@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
+import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/search/quotes_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -145,7 +145,7 @@ class QuoteOrdersList extends StatelessWidget {
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((order) {
-                        return QuoteItem(
+                        return QuoteManageItem(
                           model: order,
                           onRefresh: _handleRefresh,
                           pageContext: pageContext,
