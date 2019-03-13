@@ -22,9 +22,19 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
 
   @override
   void initState() {
+    List<String> colorCodes = [];
+    List<String> sizeCodes = [];
     if(widget.item?.variants != null){
-      _colorFilters = widget.item.variants.map((variant) => variant.color).toList();
-      _sizeFilters = widget.item.variants.map((variant) => variant.size).toList();
+      widget.item.variants.forEach((variant){
+        if(!colorCodes.contains(variant.color.code)) {
+          colorCodes.add(variant.color.code);
+          _colorFilters.add(variant.color);
+        }
+        if(!sizeCodes.contains(variant.size.code)){
+          sizeCodes.add(variant.size.code);
+          _sizeFilters.add(variant.size);
+        }
+      });
     }
 
     // TODO: implement initState
@@ -50,11 +60,14 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
               _sizeFilters = result[1];
             }
 
+            List<ApparelSizeVariantProductModel> variants = [];
             _colorFilters.forEach((color){
-              widget.item.variants = _sizeFilters.map((size){
+              variants.addAll(_sizeFilters.map((size){
                 return ApparelSizeVariantProductModel(baseProduct:widget.item.code,color: color,size:size);
-              }).toList();
+              }).toList());
             });
+            widget.item.variants = variants;
+            print(widget.item.variants);
 
             //选择完颜色，生成库存item
 //            _newItems = Map.from(_items);

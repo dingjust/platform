@@ -188,7 +188,21 @@ class ApparelProductBLoC extends BLoCBase {
                   'code': 'S01',
                   'name': 'XXXL',
                 }
-              }
+              },
+              {
+                'color': {'code': 'C04', 'name': '海军蓝', 'colorCode': '0066FF'},
+                'size': {
+                  'code': 'S01',
+                  'name': 'XXXL',
+                }
+              },
+              {
+                'color': {'code': 'C04', 'name': '海军蓝', 'colorCode': '0066FF'},
+                'size': {
+                  'code': 'S02',
+                  'name': 'XXL',
+                }
+              },
             ],
           }),
           ApparelProductModel.fromJson({
@@ -244,6 +258,22 @@ class ApparelProductBLoC extends BLoCBase {
                 'name': '女装',
               }
             },
+            'variants': [
+              {
+                'color': {'code': 'C01', 'name': '红色', 'colorCode': 'FF0033'},
+                'size': {
+                  'code': 'S01',
+                  'name': 'XXXL',
+                }
+              },
+              {
+                'color': {'code': 'C04', 'name': '海军蓝', 'colorCode': '0066FF'},
+                'size': {
+                  'code': 'S01',
+                  'name': 'XXXL',
+                }
+              },
+            ],
           }),
           ApparelProductModel.fromJson({
             'approvalStatus': 'APPROVED',

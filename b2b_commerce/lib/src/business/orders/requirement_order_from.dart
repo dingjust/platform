@@ -285,18 +285,18 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   RequirementOrderEntryModel(
                       product: widget.product, order: model)
                 ];
-                print('${_normalImages}');
-                print(
-                    '${model.code},${model.details.majorCategory},${model.details.category}');
-                print(
-                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
-                print(
-                    '${model.details.region},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
-                print(
-                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
+//                print('${_normalImages}');
+//                print(
+//                    '${model.code},${model.details.majorCategory},${model.details.category}');
+//                print(
+//                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
+//                print(
+//                    '${model.details.region},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
+//                print(
+//                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
 
 
-                String code = await RequirementOrderRepository().publishNewRequirement(model);
+                await RequirementOrderRepository().publishNewRequirement(model);
 
                 Navigator.push(
                   context,
