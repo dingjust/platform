@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.d
 import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
+import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
 import 'package:b2b_commerce/src/production/production_offline_product_color_size.dart';
 import 'package:core/core.dart';
@@ -21,6 +22,16 @@ class ProductionOfflineOrder extends StatefulWidget {
 }
 
 class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
+  AddressModel addressModel = AddressModel(
+    region: null,
+    fullname: null,
+    cellphone: null,
+    city: null,
+    cityDistrict: null,
+    line1: null,
+  );
+  PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
+  PurchaseOrderEntryModel entryModel = new PurchaseOrderEntryModel();
   String address;
   String processingType;
   String isInvoice;
@@ -34,6 +45,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   String productName;
   String earnestMoney;
   ApparelProductModel _product;
+  Map<ColorModel, List<SizeQuantityItem>> colorSizeList = Map();
+  Map<ColorModel, List<SizeQuantityItem>> _items = Map();
+  Map<ColorModel, List<SizeQuantityItem>> _newItems;
+  Map<ColorModel, List<SizeQuantityItem>> sizeQuantityList;
+  int _totalQuantity;
+  List<ApparelSizeVariantProductModel> variants;
+  List<PurchaseOrderEntryModel> entryList = List();
 
   @override
   void initState() {
@@ -150,27 +168,87 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                     ),
               ),
             );
-              setState(() {
+
                 productName = result.name;
-              });
+                ApparelProductModel productModel = result;
+                
+                entryModel.product = productModel;
+                
+                if(productModel.variants != null){
+                  List<ColorModel> colors = List();
+                  List<SizeModel> sizes = List();
+                  //把每个款的颜色记录下,并去重
+                  for (int i = 0; i < productModel.variants.length; i++) {
+                    colors.add(productModel.variants[i].color);
+                  }
+                  for  ( int  i  =   0 ; i  <  colors.length  -   1 ; i ++ )  {
+                    for  ( int  j  =  colors.length  -   1 ; j  >  i; j -- )  {
+                      if  (colors[j].code.contains(colors[i].code))  {
+                        colors.removeAt(j);
+                      }
+                    }
+                  }
+
+                  //尺码
+                  for (int i = 0; i < productModel.variants.length; i++) {
+                    sizes.add(productModel.variants[i].size);
+                  }
+                  for  ( int  i  =   0 ; i  <  sizes.length  -   1 ; i ++ )  {
+                    for  ( int  j  =  sizes.length  -   1 ; j  >  i; j -- )  {
+                      if  (sizes[j].code.contains(sizes[i].code))  {
+                        sizes.removeAt(j);
+                      }
+                    }
+                  }
+
+
+                  _newItems = Map.from(_items);
+                  _items.clear();
+                  _newItems.clear();
+                  _totalQuantity = 0;
+
+                  colors.forEach((color) {
+                    ColorModel itemColor = _newItems.keys.firstWhere(
+                            (key) => key.code == color.code,
+                        orElse: () => null);
+
+                    if (itemColor != null) {
+                        _items[itemColor] = sizes.map((size) {
+                          SizeQuantityItem item = _newItems[itemColor]
+                              .firstWhere(
+                                  (SizeQuantityItem) =>
+                              SizeQuantityItem.size.code == size.code,
+                              orElse: () => null);
+                          if (item != null) {
+                            return item;
+                          } else {
+                            return SizeQuantityItem(size: size);
+                          }
+                        }).toList();
+                    } else {
+                        _items[color] = sizes.map((size) => SizeQuantityItem(size: size)).toList();
+                    }
+                  });
+                }
+
         });
   }
 
-//加工数量
+//生产数量
   Widget _buildProcessCount(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
             leading: Text(
-              '加工数量',
+              '生产数量',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: widget.colorSizeQuantityList == null
+            trailing: _totalQuantity == null || _totalQuantity < 0
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text('已选择',
+                : Text(_totalQuantity.toString(),
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -179,19 +257,30 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             ),
           ),
         ),
-        onTap: () {
+        onTap: ()  {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineProductColorSizePage(colorSizeQuantityList: widget.colorSizeQuantityList,)),
-            //接收返回数据并处理
-          ).then((value) {
+              builder: (context) => ProofingOrderQuantityInputPage(
+                items: _items,
+              ),
+            ),
+          ).then((result){
+            if (result != null) _items = result;
             setState(() {
-              if(value != null){
-                widget.colorSizeQuantityList = value;
-              }
+              _totalQuantity = 0;
+              _items.forEach((color, items) {
+                items.forEach((item) {
+                  _totalQuantity += int.parse(item.quantityController.text == ''
+                      ? '0'
+                      : item.quantityController.text);
+                });
+              });
+              entryModel.quantity = _totalQuantity;
+              
             });
           });
+
         });
   }
 
@@ -375,13 +464,17 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             context,
             selectProvince: (province) {
               address += province['name'];
+              addressModel.region = RegionModel.fromJson(province);
             },
             selectCity: (city) {
               address += city['name'];
+              addressModel.city = CityModel.fromJson(city);
             },
             selectArea: (area) {
               address += area['name'];
+              addressModel.cityDistrict = DistrictModel.fromJson(area);
               setState(() {
+                purchaseOrder.deliveryAddress = addressModel;
                 address = address;
               });
             },
@@ -476,11 +569,12 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(fieldText: '订单备注',inputType: TextInputType.text)),
+                builder: (context) => OfflineOrderInputRemarksPage(fieldText: '订单备注',inputType: TextInputType.text)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
               remarks = value;
+              purchaseOrder.remarks = remarks;
             });
           });
         });
@@ -507,7 +601,12 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   ),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  onPressed: () {})),
+                  onPressed: () {
+                    entryList.add(entryModel);
+                    purchaseOrder.entries = entryList;
+                    print(purchaseOrder);
+                  })
+          ),
         ],
       ),
       decoration: BoxDecoration(
@@ -533,6 +632,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       print(_picked);
       setState(() {
         deliveryDate = DateFormatUtil.formatYMD(_picked);
+        purchaseOrder.expectedDeliveryDate = _picked;
       });
     }
   }
@@ -552,6 +652,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   onTap: () async {
                     setState(() {
                       processingType = '清加工';
+                      purchaseOrder.machiningType = '清加工';
                     });
                     Navigator.pop(context);
                   },
@@ -561,6 +662,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   onTap: () async {
                     setState(() {
                       processingType = '包工包料';
+                      purchaseOrder.machiningType = '包工包料';
                     });
                     Navigator.pop(context);
                   },
@@ -587,6 +689,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   onTap: () async {
                     setState(() {
                       isInvoice = '开发票';
+                      purchaseOrder.invoiceNeeded = true;
                     });
                     Navigator.pop(context);
                   },
@@ -596,6 +699,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   onTap: () async {
                     setState(() {
                       isInvoice = '不开发票';
+                      purchaseOrder.invoiceNeeded = false;
                     });
                     Navigator.pop(context);
                   },

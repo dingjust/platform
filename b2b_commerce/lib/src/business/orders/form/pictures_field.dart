@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class PicturesField extends StatefulWidget{
@@ -11,6 +12,7 @@ class PicturesField extends StatefulWidget{
 }
 
 class PicturesFieldState extends State<PicturesField>{
+  List<MediaModel> medias = [];
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,11 @@ class PicturesFieldState extends State<PicturesField>{
             ],
           ),
         ),
-        PhotoPicker(images: widget.normalImages, width: 350),
+//        PhotoPicker(images: widget.normalImages, width: 350),
+        EditableAttachments(
+          list: medias,
+//          maxNum: widget.normalImages.length,
+        )
       ],
     );
   }
