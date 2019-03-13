@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/my/account/register_brand.dart';
+import 'package:b2b_commerce/src/my/account/register_customer.dart';
+import 'package:b2b_commerce/src/my/account/register_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
@@ -55,8 +57,13 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
+        iconTheme: IconThemeData(color: Color.fromRGBO(36, 38, 41, 1)),
+        backgroundColor: Colors.white,
         centerTitle: true,
-        title: const Text('注册'),
+        title: const Text(
+          '注册',
+          style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -88,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           suffixIcon: FlatButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50)),
-                            color: Color.fromRGBO(255,214,12, 1),
+                            color: Color.fromRGBO(255, 214, 12, 1),
                             onPressed: (_seconds == 0)
                                 ? () {
                                     setState(() {
@@ -192,7 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       : null,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)),
-              color: Color.fromRGBO(255,214,12, 1),
+              color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 '下一步',
@@ -215,7 +222,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   Text(
                     '已经阅读或同意《衣加衣协议》',
                     style: TextStyle(
-                        color: _isAgree ? Color.fromRGBO(255,214,12, 1) : Colors.black54),
+                        color: _isAgree
+                            ? Color.fromRGBO(255, 214, 12, 1)
+                            : Colors.black54),
                   ),
                 ],
               ),
@@ -227,17 +236,20 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _nextStep() {
+    Widget _nextPage;
     switch (_userType) {
       case 'brand':
-        Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_BRAND);
+        _nextPage = RegisterBrandPage();
         break;
       case 'factory':
-        Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_FACTORY);
+        _nextPage = RegisterFactoryPage();
         break;
       case 'purchase':
-        Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_CUSTOMER);
+        _nextPage = RegisterCustomerPage();
         break;
     }
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => _nextPage));
   }
 }
 
@@ -282,7 +294,7 @@ class UserTypeSelector extends StatelessWidget {
                       v.label,
                       style: TextStyle(
                           color: v.value == value
-                              ? Color.fromRGBO(255,214,12, 1)
+                              ? Color.fromRGBO(255, 214, 12, 1)
                               : Colors.black54),
                     )
                   ],

@@ -165,7 +165,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               offstage: widget.product == null,
               child: ProductField(widget.product),
             ),
-            CategoryField(model,widget.product),
+            CategoryField(model, widget.product),
             new Divider(height: 0),
             MajorCategoryField(model),
             new Divider(height: 0),
@@ -269,18 +269,18 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             height: 50,
             margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
             child: RaisedButton(
-              color: Color(0xFFFF9516),
+              color: Color.fromRGBO(255, 214, 12, 1),
               child: Text(
                 '确定发布',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Color.fromRGBO(36, 38, 41, 1),
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
                 ),
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              onPressed: () async{
+              onPressed: () async {
                 model.entries = [
                   RequirementOrderEntryModel(
                       product: widget.product, order: model)
@@ -295,8 +295,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 print(
                     '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
 
-
-                String code = await RequirementOrderRepository().publishNewRequirement(model);
+                String code = await RequirementOrderRepository()
+                    .publishNewRequirement(model);
 
                 Navigator.push(
                   context,
