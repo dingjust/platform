@@ -50,7 +50,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapActions} = createNamespacedHelpers('ApparelProductsModule');
+  const {mapActions} = createNamespacedHelpers('BrandApparelProductsModule');
 
   import ApparelProductImagesForm from './ApparelProductImagesForm';
   import ApparelProductBaseForm from './ApparelProductBaseForm';
@@ -90,8 +90,8 @@
         });
       },
       async _onSubmit(formData) {
-        console.log(JSON.stringify(formData))
-        /*const result = await this.$http.post('/b2b/products/apparel', formData);
+        // console.log(JSON.stringify(formData))
+        const result = await this.$http.post('/b2b/products/apparel/create', formData);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -103,7 +103,7 @@
         this.$set(this.slotData, 'code', result.code);
 
         this.refresh();
-        this.fn.closeSlider();*/
+        this.fn.closeSlider();
       },
       onCancel() {
         this.fn.closeSlider();

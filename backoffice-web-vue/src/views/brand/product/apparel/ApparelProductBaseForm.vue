@@ -29,20 +29,6 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="商家" prop="belongTo">
-            <el-select class="w-100" filterable remote reserve-keyword clearable
-                       placeholder="请输入商家名称查询"
-                       v-model="slotData.belongTo.uid"
-                       :remote-method="onFilterCompanies">
-              <el-option v-for="item in companies"
-                         :key="item.uid"
-                         :label="item.name"
-                         :value="item.uid">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
@@ -100,26 +86,6 @@
 
         this.categories = result;
       },
-      onFilterCompanies(query) {
-        this.companies = [];
-        if (query && query !== '') {
-          setTimeout(() => {
-            this.getCompanies(query);
-          }, 200);
-        }
-      },
-      async getCompanies(query) {
-        const result = await this.$http.get('/b2b/brands/approved', {
-          keyword: query.trim()
-        });
-
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.companies = result.content;
-      },
       async getStyles() {
         const result = await this.$http.get('/djwebservices/styles/all');
         if (result["errors"]) {
@@ -151,7 +117,6 @@
     },
     created() {
       this.getCategories('');
-      this.getCompanies('');
       this.getStyles();
     }
   };
