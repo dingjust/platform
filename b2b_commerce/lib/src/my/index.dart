@@ -112,7 +112,7 @@ class MyHomePage extends StatelessWidget {
                   },
                 ),
                 background: Stack(
-//                  fit: StackFit.expand,
+                  fit: StackFit.expand,
                   children: <Widget>[
                     _buildTopBackgroud(context),
                   ],
@@ -138,16 +138,14 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Color.fromRGBO(255, 80, 1, 1),
-          Color.fromRGBO(255, 140, 0, 1)
-        ]),
+        color: Color.fromRGBO(255, 219, 0, 1),
       ),
     );
   }
 
   Widget _buildPortrait(BuildContext context) {
     return Container(
+      height: 80,
       margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
       child: Container(
           child: CircleAvatar(
@@ -166,9 +164,9 @@ class MyHomePage extends StatelessWidget {
 
   Widget _buildInfomation(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 85),
+      height: 80,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Container(
             width: 210,
@@ -180,7 +178,7 @@ class MyHomePage extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      color: Color.fromRGBO(36, 38, 41, 1)),
                 )),
                 Container(
                   padding: EdgeInsets.all(3),
@@ -190,10 +188,10 @@ class MyHomePage extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                        color: Color.fromRGBO(255, 214, 12, 1)),
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.black26,
+                    color: Color.fromRGBO(36, 38, 41, 1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                 )
@@ -204,7 +202,8 @@ class MyHomePage extends StatelessWidget {
             width: 210,
             child: Text(
               '${UserBLoC.instance.currentUser.companyName}',
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style:
+                  TextStyle(fontSize: 16, color: Color.fromRGBO(132,114,1, 1)),
             ),
           )
         ],
