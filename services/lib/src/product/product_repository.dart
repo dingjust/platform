@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 
 /// 市

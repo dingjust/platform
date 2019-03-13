@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:models/models.dart';

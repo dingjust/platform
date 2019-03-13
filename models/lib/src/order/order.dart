@@ -415,6 +415,7 @@ class RequirementInfoModel extends ItemModel {
   double maxExpectedPrice;
 
   /// 加工类型
+  @JsonKey(fromJson: _machiningTypeFromJson)
   MachiningType machiningType;
 
   ///是否需要打样
@@ -512,6 +513,14 @@ class RequirementInfoModel extends ItemModel {
 
   static List<Map<String, dynamic>> _regionsToJson(List<RegionModel> models) =>
       models.map((model) => RegionModel.toJson(model)).toList();
+
+  static MachiningType _machiningTypeFromJson(String machiningType) {
+    if (machiningType == '') {
+      return null;
+    } else {
+      return _$enumDecodeNullable(_$MachiningTypeEnumMap, machiningType);
+    }
+  }
 }
 
 /// 需求订单
