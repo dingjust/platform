@@ -21,12 +21,11 @@ export default {
       children: [
         {
           name: '产品',
-          url: '/brand/product/product',
           icon: 'fa fa-check',
           children:[
             {
               name: '产品',
-              url: '/brand/product',
+              url: '/brand/product/apparel',
               icon: 'iconNone',
             },
             {

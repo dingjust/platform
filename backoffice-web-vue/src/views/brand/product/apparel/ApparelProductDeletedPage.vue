@@ -11,19 +11,17 @@
         </el-button-group>
         <el-popover placement="bottom" width="800" trigger="click">
           <el-row :gutter="10">
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="商品货号">
                 <el-input v-model="queryFormData.skuID"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="商品名称">
                 <el-input v-model="queryFormData.name"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row :gutter="10">
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="产品分类">
                 <el-select v-model="queryFormData.categories" placeholder="请选择" class="w-100"
                            filterable reserve-keyword clearable
@@ -39,21 +37,6 @@
                       :value="level2.code">
                     </el-option>
                   </el-option-group>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="商家">
-                <el-select class="w-100" filterable remote reserve-keyword clearable
-                           placeholder="请输入商家名称查询"
-                           v-model="queryFormData.belongTos"
-                           :remote-method="onFilterCompanies"
-                           multiple>
-                  <el-option v-for="item in companies"
-                             :key="item.uid"
-                             :label="item.name"
-                             :value="item.uid">
-                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -97,7 +80,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('ApparelProductsModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandDeletedApparelProductsModule');
 
   import autoHeight from 'mixins/autoHeight';
 
@@ -105,7 +88,7 @@
   import ApparelProductDetailsPage from './ApparelProductDetailsPage';
 
   export default {
-    name: 'ApparelProductPage',
+    name: 'ApparelProductDeletedPage',
     mixins: [autoHeight],
     computed: {
       ...mapGetters({
@@ -170,22 +153,6 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onFilterCompanies(query) {
-        this.companies = [];
-        if (query && query !== '') {
-          setTimeout(() => {
-            this.getCompanies(query);
-          }, 200);
-        }
-      },
-      async getCompanies(query) {
-        const results = await this.$http.get('/b2b/brands/approved', {
-          keyword: query.trim()
-        });
-        if (!results['errors']) {
-          this.companies = results['content'];
-        }
-      },
       async getCategories() {
         const results = await this.$http.get('/b2b/categories/cascaded');
         if (!results['errors']) {
@@ -206,20 +173,18 @@
     },
     data() {
       return {
-        text: this.$store.state.ApparelProductsModule.keyword,
+        text: this.$store.state.BrandDeletedApparelProductsModule.keyword,
+        formData: this.$store.state.BrandDeletedApparelProductsModule.formData,
+        queryFormData: this.$store.state.BrandDeletedApparelProductsModule.queryFormData,
         approvalStatuses: this.$store.state.EnumsModule.approvalStatuses,
-        formData: this.$store.state.ApparelProductsModule.formData,
-        queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
         advancedSearch: false,
         multipleSelection: [],
         categories: [],
-        companies: [],
       };
     },
     created() {
       this.search({keyword: '', page: 0});
       this.getCategories('');
-      this.getCompanies('');
     }
   };
 </script>
