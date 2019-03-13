@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/search/existing_product_search.dart';
 import 'package:b2b_commerce/src/common/screen_conditions.dart';
+import 'package:b2b_commerce/src/home/product/product_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
@@ -82,7 +83,9 @@ class _ExistingProductState extends State<ExistingProduct> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ScreenConditions(),
+                  builder: (context) => ProductDetailPage(
+                    productCode: '',
+                  ),
                 ),
               );
             },

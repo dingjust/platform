@@ -161,23 +161,35 @@ class ProductModel extends ItemModel {
   double minPrice;
   double maxPrice;
   String thumbnail;
+
+  @JsonKey(toJson: _mediaToJson)
   List<MediaModel> normal;
+
+  @JsonKey(toJson: _mediaToJson)
   List<MediaModel> detail;
+
+  @JsonKey(toJson: _mediaToJson)
   List<MediaModel> master;
   int salesVolume;
+
+  @JsonKey(toJson: _staircasePricesToJson)
   List<StaircasePriceModel> staircasePrices;
+
   bool privacy;
   @JsonKey(name: 'supercategories')
   List<CategoryModel> superCategories;
+
   ArticleApprovalStatus approvalStatus;
 
   /// 对于会员可见性，A/B/C
   MemberRating ratingIfPrivacy;
 
   //库存
+  @JsonKey(toJson: stockLevelToJson)
   StockLevelModel stockLevel;
 
   ///所属
+  @JsonKey(toJson: companyToJson)
   CompanyModel belongTo;
 
   ProductModel(
@@ -204,6 +216,18 @@ class ProductModel extends ItemModel {
 
   static Map<String, dynamic> toJson(ProductModel model) =>
       _$ProductModelToJson(model);
+
+  static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
+
+  static List<Map<String, dynamic>> _staircasePricesToJson(List<StaircasePriceModel> models) =>
+      models.map((model) => StaircasePriceModel.toJson(model)).toList();
+
+  static Map<String, dynamic> stockLevelToJson(StockLevelModel model) =>
+      StockLevelModel.toJson(model);
+
+  static Map<String, dynamic> companyToJson(CompanyModel model) =>
+      CompanyModel.toJson(model);
 }
 
 /// 变式产品
@@ -247,11 +271,20 @@ class VariantProductModel extends ProductModel {
 
 @JsonSerializable()
 class ApparelProductModel extends ProductModel {
+
+  @JsonKey(toJson: variantsToJson)
   List<ApparelSizeVariantProductModel> variants;
+
+  @JsonKey(toJson: _attributesToJson)
   ApparelProductAttributesModel attributes;
+
   String skuID;
   String brand;
+
+  @JsonKey(toJson: _categoryToJson)
   CategoryModel majorCategory;
+
+  @JsonKey(toJson: _categoryToJson)
   CategoryModel minorCategory;
   double price1;
   double price2;
@@ -312,10 +345,21 @@ class ApparelProductModel extends ProductModel {
 
   static Map<String, dynamic> toJson(ApparelProductModel model) =>
       _$ApparelProductModelToJson(model);
+
+  static List<Map<String, dynamic>> variantsToJson(
+      List<ApparelSizeVariantProductModel> entries) =>
+      entries.map((entry) => ApparelSizeVariantProductModel.toJson(entry)).toList();
+
+  static Map<String, dynamic> _attributesToJson(ApparelProductAttributesModel model) =>
+      ApparelProductAttributesModel.toJson(model);
+
+  static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
+      CategoryModel.toJson(model);
 }
 
 @JsonSerializable()
 class ApparelStyleVariantProductModel extends VariantProductModel {
+  @JsonKey(toJson: _colorToJson)
   ColorModel color;
 
   ApparelStyleVariantProductModel(
@@ -353,10 +397,14 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
 
   static Map<String, dynamic> toJson(ApparelStyleVariantProductModel model) =>
       _$ApparelStyleVariantProductModelToJson(model);
+
+  static Map<String, dynamic> _colorToJson(ColorModel model) =>
+      ColorModel.toJson(model);
 }
 
 @JsonSerializable()
 class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
+  @JsonKey(toJson: _sizeToJson)
   SizeModel size;
 
   ApparelSizeVariantProductModel(
@@ -396,6 +444,9 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
 
   static Map<String, dynamic> toJson(ApparelSizeVariantProductModel model) =>
       _$ApparelSizeVariantProductModelToJson(model);
+
+  static Map<String, dynamic> _sizeToJson(SizeModel model) =>
+      SizeModel.toJson(model);
 }
 
 @JsonSerializable()
