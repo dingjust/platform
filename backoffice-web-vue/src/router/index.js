@@ -219,7 +219,7 @@ const router = new Router({
         },
         {
           path: 'brand/product',
-          redirect: '/brand/product/product',
+          redirect: '/brand/product/apparel',
           name: '产品管理',
           component: {
             render(c) {
@@ -228,19 +228,14 @@ const router = new Router({
           },
           children: [
             {
-              path: 'product',
+              path: 'apparel',
               name: '产品',
-              component: () => import(/* webpackChunkName: 'brand-products' */ 'brand/product/product/ProductPage'),
+              component: () => import(/* webpackChunkName: 'brand-products' */ 'brand/product/apparel/ApparelProductPage'),
             },
             {
               path: 'deleted',
               name: '已删除产品',
-              component: () => import(/* webpackChunkName: 'brand-products' */ 'brand/product/product/ProductDeletedPage'),
-            },
-            {
-              path: 'inventory',
-              name: '库存',
-              component: () => import(/* webpackChunkName: 'brand-products' */ 'brand/product/inventory/InventoryPage'),
+              component: () => import(/* webpackChunkName: 'brand-products' */ 'brand/product/apparel/ApparelProductDeletedPage'),
             }
           ]
         },
