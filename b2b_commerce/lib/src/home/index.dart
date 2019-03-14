@@ -92,15 +92,6 @@ class _HomePageState extends State<HomePage> {
             ),
             SliverList(
                 delegate: SliverChildListDelegate(<Widget>[
-              Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: Text(
-                    '找工厂',
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Color.fromRGBO(100, 100, 100, 1),
-                        fontWeight: FontWeight.w500),
-                  )),
               EasyGrid(
                 height: 90,
                 dataList: _gridItemList(),

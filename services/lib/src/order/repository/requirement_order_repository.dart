@@ -6,21 +6,19 @@ import 'package:services/src/order/response/order_response.dart';
 class RequirementOrderRepository {
   /// 发布需求
   Future<String> publishNewRequirement(RequirementOrderModel form) async {
-    Response<String> response;
-    try{
-      await http$.post(
-        OrderApis.requirementOrderNew,
-        data: RequirementOrderModel.toJson(form),
-      );
-    }on DioError catch(e){
+    Response response;
+    try {
+      response = await http$.post(OrderApis.requirementOrderNew,
+          data: RequirementOrderModel.toJson(form),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
       print(e);
     }
-
     if (response != null && response.statusCode == 200) {
       return response.data;
-    } else
+    } else {
       return null;
-
+    }
   }
 
   /// 获取订单明细

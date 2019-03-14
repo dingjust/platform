@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
 
 class RegisterPage extends StatefulWidget {
   _RegisterPageState createState() => _RegisterPageState();
@@ -14,7 +13,6 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _captchaController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _passwordAgainController = TextEditingController();
 
   bool _isAgree = true;
   String _userType = "brand";
@@ -55,8 +53,13 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
+        iconTheme: IconThemeData(color: Color.fromRGBO(36, 38, 41, 1)),
+        backgroundColor: Colors.white,
         centerTitle: true,
-        title: const Text('注册'),
+        title: const Text(
+          '注册',
+          style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -65,134 +68,68 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: const EdgeInsets.all(10.0),
           children: <Widget>[
             Container(
+              margin: EdgeInsets.only(bottom: 50),
               padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
               child: Column(
                 children: <Widget>[
-                  TextFormField(
+                  InputRow(
+                    label: '手机号',
+                    field: TextFormField(
                       autofocus: false,
                       controller: _phoneController,
                       decoration: InputDecoration(
-                        labelText: '手机号码',
-                        hintText: '请输入',
-                      ),
-                      // 校验用户名
-                      validator: (v) {
-                        return v.trim().length > 0 ? null : '手机号码不能为空';
-                      }),
-                  TextFormField(
+                          hintText: '请输入', border: InputBorder.none),
+                    ),
+                  ),
+                  InputRow(
+                    label: '验证码',
+                    field: TextFormField(
                       autofocus: false,
                       controller: _captchaController,
                       decoration: InputDecoration(
-                          labelText: '验证码',
-                          hintText: '请输入',
-                          suffixIcon: FlatButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            color: Color.fromRGBO(255,214,12, 1),
-                            onPressed: (_seconds == 0)
-                                ? () {
-                                    setState(() {
-                                      _startTimer();
-                                    });
-                                  }
-                                : null,
-                            child: Text(
-                              '$_verifyStr',
-                              style: TextStyle(
-                                  color: (_seconds == 0)
-                                      ? Colors.white
-                                      : Colors.black45),
-                            ),
-                          )),
-                      // 校验用户名
-                      validator: (v) {
-                        return v.trim().length > 0 ? null : '验证码不能为空';
-                      }),
-                  TextFormField(
-                      autofocus: false,
-                      obscureText: true,
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        labelText: '密码',
-                        hintText: '请输入',
+                          hintText: '请输入', border: InputBorder.none),
+                    ),
+                    surfix: FlatButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: (_seconds == 0)
+                          ? () {
+                              setState(() {
+                                _startTimer();
+                              });
+                            }
+                          : null,
+                      child: Text(
+                        '$_verifyStr',
+                        style: TextStyle(
+                            color: (_seconds == 0)
+                                ? Colors.white
+                                : Colors.black45),
                       ),
-                      // 校验用户名
-                      validator: (v) {
-                        return v.trim().length > 0 ? null : '密码不能为空';
-                      }),
-                  TextFormField(
-                      autofocus: false,
-                      obscureText: true,
-                      controller: _passwordAgainController,
-                      decoration: InputDecoration(
-                        labelText: '确认密码',
-                        hintText: '再次输入密码',
-                      ),
-                      // 校验用户名
-                      validator: (v) {
-                        return v.trim().length > 0 ? null : '请再次输入密码';
-                      }),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 30.0, 0, 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text('请选择一种角色'),
-                        Text(
-                          '对角色有疑问？',
-                          style: TextStyle(
-                              color: Colors.red,
-                              decoration: TextDecoration.underline),
-                        )
-                      ],
                     ),
                   ),
-                  Container(
-                    child: UserTypeSelector(
-                      userTypeEntries: [
-                        UserTypeEntry(
-                            value: 'brand',
-                            label: '品牌商',
-                            icon: Icon(
-                              B2BIcons.brand,
-                              size: 40,
-                              color: Color.fromRGBO(255, 184, 2, 1.0),
-                            )),
-                        UserTypeEntry(
-                            value: 'factory',
-                            label: '工厂',
-                            icon: Icon(
-                              B2BIcons.factory,
-                              size: 40,
-                              color: Color.fromRGBO(111, 142, 244, 1.0),
-                            )),
-                        UserTypeEntry(
-                            value: 'purchase',
-                            label: '采购商',
-                            icon: Icon(
-                              B2BIcons.purchase,
-                              size: 40,
-                              color: Color.fromRGBO(62, 185, 254, 1.0),
-                            ))
-                      ],
-                      onChanged: _handleUserTypeChanged,
-                      value: _userType,
-                    ),
-                  ),
+                  InputRow(
+                      label: '设置密码',
+                      field: TextFormField(
+                        autofocus: false,
+                        obscureText: true,
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                            hintText: '请输入', border: InputBorder.none),
+                      )),
                 ],
               ),
             ),
             RaisedButton(
-              onPressed: (_formKey.currentState as FormState) == null
-                  ? null
-                  : (_formKey.currentState as FormState).validate()
-                      ? () {
-                          _nextStep();
-                        }
-                      : null,
+              onPressed: formValidate()
+                  ? () {
+                      //TODO:注册接口
+                    }
+                  : null,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)),
-              color: Color.fromRGBO(255,214,12, 1),
+              color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 '下一步',
@@ -215,7 +152,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   Text(
                     '已经阅读或同意《衣加衣协议》',
                     style: TextStyle(
-                        color: _isAgree ? Color.fromRGBO(255,214,12, 1) : Colors.black54),
+                        color: _isAgree
+                            ? Color.fromRGBO(255, 214, 12, 1)
+                            : Colors.black54),
                   ),
                 ],
               ),
@@ -226,18 +165,11 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void _nextStep() {
-    switch (_userType) {
-      case 'brand':
-        Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_BRAND);
-        break;
-      case 'factory':
-        Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_FACTORY);
-        break;
-      case 'purchase':
-        Navigator.pushNamed(context, AppRoutes.ROUTE_MY_REGISTER_CUSTOMER);
-        break;
-    }
+  bool formValidate() {
+    return _phoneController.text.trim().length > 0 &&
+        _captchaController.text.trim().length > 0 &&
+        _passwordController.text.trim().length > 0 &&
+        _isAgree;
   }
 }
 
@@ -282,7 +214,7 @@ class UserTypeSelector extends StatelessWidget {
                       v.label,
                       style: TextStyle(
                           color: v.value == value
-                              ? Color.fromRGBO(255,214,12, 1)
+                              ? Color.fromRGBO(255, 214, 12, 1)
                               : Colors.black54),
                     )
                   ],

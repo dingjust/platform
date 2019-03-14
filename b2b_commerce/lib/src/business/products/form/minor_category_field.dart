@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
 import '../product_category.dart';
 
 class MinorCategoryField extends StatefulWidget {

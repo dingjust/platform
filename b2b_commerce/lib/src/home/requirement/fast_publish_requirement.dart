@@ -1,5 +1,4 @@
-import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
-import 'package:core/core.dart';
+import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -24,12 +23,16 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   List<CategoryModel> _categorySelected = [];
   String category = '点击选择分类';
 
+  /// 快速需求表单
+  FastRequirementForm fastRequirementForm = FastRequirementForm(
+      categories: [],
+      deliveryDate: DateTime.now(),
+      contactPerson: TextEditingController(),
+      phone: TextEditingController(),
+      requirementNum: TextEditingController());
+
   @override
   void initState() {
-    ProductRepositoryImpl()
-        .cascadedCategories()
-        .then((categorys) => _categorys = categorys);
-
     // TODO: implement initState
     super.initState();
   }
@@ -39,67 +42,88 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
     FocusNode _focusNode = FocusNode();
 
     return Form(
-      key: _formKey,
-      child: Container(
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.fromLTRB(8, 15, 8, 10),
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    B2BIcons.left_quotation,
-                    color: Color.fromRGBO(255, 234, 234, 1),
-                    size: 12,
+        key: _formKey,
+        child: GestureDetector(
+          onTap: () async {
+            //加载条
+            showDialog(
+                context: context,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ));
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categorys) {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ProductCategorySelectPage(
+                        minCategorySelect: fastRequirementForm.categories,
+                        fastRequirementForm: fastRequirementForm,
+                        categorys: categorys,
+                      )));
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.fromLTRB(8, 15, 8, 10),
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        B2BIcons.left_quotation,
+                        color: Color.fromRGBO(255, 234, 234, 1),
+                        size: 12,
+                      ),
+                      Text(
+                        '   急速发布需求   ',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Icon(
+                        B2BIcons.right_quotation,
+                        color: Color.fromRGBO(255, 234, 234, 1),
+                        size: 12,
+                      )
+                    ],
                   ),
-                  Text(
-                    '   急速发布需求   ',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '点击',
+                        style: TextStyle(
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                            fontSize: 18),
+                      ),
+                      Text(
+                        '   填写三步，剩下的工作交给蕉衣   ',
+                        style: TextStyle(
+                          color: Color.fromRGBO(180, 180, 180, 1),
+                          fontSize: 15,
+                        ),
+                      ),
+                      Icon(
+                        B2BIcons.arrow_right,
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        size: 12,
+                      )
+                    ],
                   ),
-                  Icon(
-                    B2BIcons.right_quotation,
-                    color: Color.fromRGBO(255, 234, 234, 1),
-                    size: 12,
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-            Container(
-              padding: EdgeInsets.only(bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '点击',
-                    style: TextStyle(
-                        color: Color.fromRGBO(255, 214, 12, 1), fontSize: 18),
-                  ),
-                  Text(
-                    '   填写三步，剩下的工作交给蕉衣   ',
-                    style: TextStyle(
-                      color: Color.fromRGBO(180, 180, 180, 1),
-                      fontSize: 15,
-                    ),
-                  ),
-                  Icon(
-                    B2BIcons.arrow_right,
-                    color: Color.fromRGBO(255, 214, 12, 1),
-                    size: 12,
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
   // GestureDetector(
@@ -297,33 +321,46 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   }
 
   //小类
-  void _showCategorySelect() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          child: CategorySelect(
-            categorys: _categorys,
-            multiple: false,
-            verticalDividerOpacity: 1,
-            categorySelect: _categorySelected,
-          ),
-        );
-      },
-    ).then((val) {
-      category = '';
-      if (_categorySelected.isNotEmpty) {
-        for (int i = 0; i < _categorySelected.length; i++) {
-          category += _categorySelected[i].name + ',';
-        }
-      } else {
-        category = '点击选择分类';
-      }
-      setState(() {
-        category = category;
-      });
-    });
-  }
+  // void _showCategorySelect() async {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         child: CategorySelect(
+  //           categorys: _categorys,
+  //           multiple: false,
+  //           verticalDividerOpacity: 1,
+  //           categorySelect: _categorySelected,
+  //         ),
+  //       );
+  //     },
+  //   ).then((val) {
+  //     category = '';
+  //     if (_categorySelected.isNotEmpty) {
+  //       for (int i = 0; i < _categorySelected.length; i++) {
+  //         category += _categorySelected[i].name + ',';
+  //       }
+  //     } else {
+  //       category = '点击选择分类';
+  //     }
+  //     setState(() {
+  //       category = category;
+  //     });
+  //   });
+  // }
 }
 
-List<CategoryModel> _categorys;
+class FastRequirementForm {
+  List<CategoryModel> categories;
+  DateTime deliveryDate;
+  TextEditingController requirementNum;
+  TextEditingController contactPerson;
+  TextEditingController phone;
+
+  FastRequirementForm(
+      {this.categories,
+      this.contactPerson,
+      this.deliveryDate,
+      this.phone,
+      this.requirementNum});
+}
