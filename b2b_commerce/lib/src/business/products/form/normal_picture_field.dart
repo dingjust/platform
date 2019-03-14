@@ -6,22 +6,18 @@ import 'package:widgets/widgets.dart';
 
 /// 主图
 class NormalPictureField extends StatefulWidget {
-  NormalPictureField(this.item,this.isCreate);
+  NormalPictureField(this.item);
 
   final ApparelProductModel item;
-  final bool isCreate;
 
   @override
   State<StatefulWidget> createState() => _NormalPictureFieldState();
 }
 
 class _NormalPictureFieldState extends State<NormalPictureField> {
-  List<MediaModel> _normalMedias = [];
-  List<File> _normalImages = [];
-
   @override
   void initState() {
-    if(widget.item?.normal != null) _normalMedias = widget.item?.normal;
+    if(widget.item.images == null) widget.item.images = [];
 
     super.initState();
   }
@@ -47,15 +43,13 @@ class _NormalPictureFieldState extends State<NormalPictureField> {
         ),
 //        AlbumsAndCameras(
 //          images: _normalImages,
-//          pictureUrls: widget.item?.normal,
+//          pictureUrls: widget.item?.images,
 //          height: 100,
 //          width: 100,
 //          iconSize: 100,
 //          count: 5,
 //        ),
-        !widget.isCreate
-            ? EditableAttachments(list: _normalMedias)
-            : PhotoPicker(images: _normalImages, width: 350),
+          EditableAttachments(list: widget.item.images)
       ],
     );
   }

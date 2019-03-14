@@ -267,7 +267,7 @@ class PurchaseOrderItem extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                      image: NetworkImage(entry.product.thumbnail),
+                      image: NetworkImage(entry.product.thumbnail.url),
                       fit: BoxFit.cover,
                     )),
               ),

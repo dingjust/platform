@@ -292,7 +292,7 @@ class ProofingOrderItem extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: NetworkImage(model.product.thumbnail),
+                        image: NetworkImage(model.product.thumbnail.url),
                         fit: BoxFit.cover,
                       )),
                 )
@@ -345,7 +345,7 @@ class ProofingOrderItem extends StatelessWidget {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${model.product.majorCategory.name}   ${model.product.minorCategory.name}   ${model.totalQuantity}件",
+                      "${model.product.category.name}   ${model.totalQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

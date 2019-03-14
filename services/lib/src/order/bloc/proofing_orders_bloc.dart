@@ -65,10 +65,9 @@ class ProofingOrdersBLoC extends BLoCBase {
             product: ApparelProductModel(
               name: '山本风少女长裙复古气质秋冬流行新款',
               skuID: 'NA89852631',
-              thumbnail:
-                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              majorCategory: CategoryModel(name: '针织'),
-              minorCategory: CategoryModel(name: '女装-T恤'),
+//              thumbnail:
+//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              category: CategoryModel(name: '女装-T恤'),
             ),
           ),
           ProofingModel(
@@ -94,10 +93,9 @@ class ProofingOrdersBLoC extends BLoCBase {
             product: ApparelProductModel(
               name: '山本风少女长裙复古气质秋冬流行新款',
               skuID: 'NA89852631',
-              thumbnail:
-                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              majorCategory: CategoryModel(name: '针织'),
-              minorCategory: CategoryModel(name: '女装-T恤'),
+//              thumbnail:
+//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              category: CategoryModel(name: '女装-T恤'),
             ),
           ),
           ProofingModel(
@@ -123,10 +121,9 @@ class ProofingOrdersBLoC extends BLoCBase {
             product: ApparelProductModel(
               name: '山本风少女长裙复古气质秋冬流行新款',
               skuID: 'NA89852631',
-              thumbnail:
-                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              majorCategory: CategoryModel(name: '针织'),
-              minorCategory: CategoryModel(name: '女装-T恤'),
+//              thumbnail:
+//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              category: CategoryModel(name: '女装-T恤'),
             ),
           ),
           ProofingModel(
@@ -152,10 +149,9 @@ class ProofingOrdersBLoC extends BLoCBase {
             product: ApparelProductModel(
               name: '山本风少女长裙复古气质秋冬流行新款',
               skuID: 'NA89852631',
-              thumbnail:
-                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              majorCategory: CategoryModel(name: '针织'),
-              minorCategory: CategoryModel(name: '女装-T恤'),
+//              thumbnail:
+//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              category: CategoryModel(name: '女装-T恤'),
             ),
           ),
           ProofingModel(
@@ -181,10 +177,9 @@ class ProofingOrdersBLoC extends BLoCBase {
             product: ApparelProductModel(
               name: '山本风少女长裙复古气质秋冬流行新款',
               skuID: 'NA89852631',
-              thumbnail:
-                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              majorCategory: CategoryModel(name: '针织'),
-              minorCategory: CategoryModel(name: '女装-T恤'),
+//              thumbnail:
+//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+              category: CategoryModel(name: '女装-T恤'),
             ),
           ),
         ];
@@ -221,10 +216,9 @@ class ProofingOrdersBLoC extends BLoCBase {
           product: ApparelProductModel(
             name: '山本风少女长裙复古气质秋冬流行新款',
             skuID: 'NA89852631',
-            thumbnail:
-                'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-            majorCategory: CategoryModel(name: '针织'),
-            minorCategory: CategoryModel(name: '女装-T恤'),
+//            thumbnail:
+//                'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+            category: CategoryModel(name: '女装-T恤'),
           ),
         );
       }));
@@ -263,10 +257,9 @@ class ProofingOrdersBLoC extends BLoCBase {
         product: ApparelProductModel(
           name: '山本风少女长裙复古气质秋冬流行新款',
           skuID: 'NA89852631',
-          thumbnail:
-              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-          majorCategory: CategoryModel(name: '针织'),
-          minorCategory: CategoryModel(name: '女装-T恤'),
+//          thumbnail:
+//              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+          category: CategoryModel(name: '女装-T恤'),
         ),
       );
     }));
