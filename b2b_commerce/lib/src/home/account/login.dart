@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/my/account/register.dart';
+import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
@@ -13,6 +14,7 @@ class B2BLoginPage extends StatelessWidget {
         height: 100.0,
       ),
       registerPage: RegisterPage(),
+      forgetPasswordPage: ResetPasswordPage(),
     );
   }
 }

@@ -45,9 +45,16 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
         key: _formKey,
         child: GestureDetector(
           onTap: () async {
+            //加载条
+            showDialog(
+                context: context,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ));
             await ProductRepositoryImpl()
                 .cascadedCategories()
                 .then((categorys) {
+              Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ProductCategorySelectPage(
                         minCategorySelect: fastRequirementForm.categories,

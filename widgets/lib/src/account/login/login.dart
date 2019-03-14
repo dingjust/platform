@@ -11,12 +11,12 @@ class LoginPage extends StatefulWidget {
     Key key,
     @required this.logo,
     this.registerPage,
-    this.forgetPasswordRoute,
+    this.forgetPasswordPage,
   }) : super(key: key);
 
   final Image logo;
   final Widget registerPage;
-  final String forgetPasswordRoute;
+  final Widget forgetPasswordPage;
 
   _LoginPageState createState() => _LoginPageState();
 }
@@ -80,7 +80,8 @@ class _LoginPageState extends State<LoginPage> {
           _isPasswordLogin
               ? GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, widget.forgetPasswordRoute);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => widget.forgetPasswordPage));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
@@ -93,7 +94,6 @@ class _LoginPageState extends State<LoginPage> {
               : Container(),
           GestureDetector(
             onTap: () {
-              // Navigator.pushNamed(context, widget.registerRoute);
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => widget.registerPage));
             },
@@ -117,7 +117,19 @@ class _LoginPageState extends State<LoginPage> {
         controller: _passwordController,
         obscureText: _isPasswordHide,
         decoration: InputDecoration(
-            hintText: '请输入',
+            hintText: '请输入密码',
+            focusedErrorBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+            errorBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+            focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+            border: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
             suffixIcon: GestureDetector(
               onTap: () {
                 setState(() {
@@ -140,6 +152,14 @@ class _LoginPageState extends State<LoginPage> {
         decoration: InputDecoration(
           labelText: '验证码',
           hintText: '请输入',
+          focusedErrorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+          errorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+          border: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
           suffixIcon: FlatButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
@@ -172,18 +192,6 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
       child: Column(
         children: <Widget>[
-          // Container(
-          //   padding: EdgeInsets.all(5),
-          //   margin: EdgeInsets.all(10),
-          //   child: TextFieldComponent(
-          //     focusNode: _phoneFocusNode,
-          //     controller: _phoneController,
-          //     autofocus: true,
-          //     leadingText: '联系人名',
-          //     hintText: '请输入联系人名',
-
-          //   ),
-          // ),
           TextFormField(
               autofocus: false,
               keyboardType: TextInputType.phone,
@@ -194,8 +202,19 @@ class _LoginPageState extends State<LoginPage> {
                 WhitelistingTextInputFormatter.digitsOnly,
               ],
               decoration: InputDecoration(
-                hintText: '请输入',
-              ),
+                  hintText: '请输入手机号码',
+                  focusedErrorBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+                  errorBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+                  border: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1)))),
               // 校验用户名
               validator: (v) {
                 return v.trim().length > 0 ? null : '手机号不能为空';
@@ -232,6 +251,7 @@ class _LoginPageState extends State<LoginPage> {
                         _isRemember = v;
                       });
                     },
+                    activeColor: Colors.orange,
                     value: _isRemember,
                   )
                 ],
