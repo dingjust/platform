@@ -49,7 +49,7 @@ export default {
       children: [
         {
           name: '销售订单',
-          url: '/brand/order/order',
+          url: '/brand/order/sales',
           icon: 'iconNone'
         },
         {
@@ -59,7 +59,7 @@ export default {
         },
         {
           name: '生产订单',
-          url: '/brand/order/consignment',
+          url: '/brand/order/purchase',
           icon: 'iconNone'
         }
       ]

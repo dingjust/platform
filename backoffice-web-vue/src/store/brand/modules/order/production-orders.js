@@ -26,21 +26,28 @@ const state = {
   formData: {
     id: null,
     code: '',
-    order: {
-      id: '',
-      code: '',
-      entries: []
-    },
-    assignedTo: {
+    belongTo: {
       uid: '',
       name: ''
     },
+    companyOfSeller: '',
+    contactPersonOfSeller: '',
+    contactOfSeller: '',
+    expectedDeliveryDate: null,
+    deposit: 0,
+    depositPaid: false,
+    depositPaidDate: null,
+    balance: 0,
+    balancePaid: false,
+    balancePaidDate: null,
+    machiningType: null,
+    invoiceNeeded: false,
+    uniqueCode: '',
+    requirementOrderCode: '',
+    entries: [],
+    remarks: '',
     shippingAddress: {
       fullname: '',
-      title: {
-        code: '',
-        name: ''
-      },
       region: {
         isocode: '',
         name: ''
@@ -53,17 +60,14 @@ const state = {
         code: '',
         name: ''
       },
-      line1: '',
-      remarks: ''
-    },
-    consignmentEntries: []
+      line1: ''
+    }
   },
   queryFormData: {
     productionOrderCode: '',
     requirementOrderCode: '',
     skuID: '',
     statuses: [],
-    factory: [],
     expectedDeliveryDateFrom: null,
     expectedDeliveryDateTo: null,
     createdDateFrom: null,
@@ -83,13 +87,16 @@ const mutations = {
 const actions = {
   async search({dispatch, commit, state}, {keyword, statuses, page, size}) {
     commit('keyword', keyword);
-    commit('currentPageNumber', page);
+    if (page) {
+      commit('currentPageNumber', page);
+    }
+
     if (size) {
       commit('currentPageSize', size);
     }
 
     const response = await http.post('/b2b/orders/purchase', {
-      code: state.keyword
+      skuID: state.keyword
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
