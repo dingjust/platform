@@ -80,7 +80,8 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
                       MaterialPageRoute(
                           builder: (context) => ProductCategorySelectPage(
                                 minCategorySelect: _minCategorySelect,
-                              )));
+                              ))
+                              );
                 },
                 action: IconButton(
                   icon: Icon(Icons.menu),

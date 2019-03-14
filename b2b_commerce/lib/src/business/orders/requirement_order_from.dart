@@ -23,15 +23,6 @@ import 'form/pictures_field.dart';
 import 'form/product_field.dart';
 import 'form/production_areas_field.dart';
 
-//final List<EnumModel> technologyList = [
-//  EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
-//  EnumModel.fromJson({'code': '打板', 'name': '打板'}),
-//  EnumModel.fromJson({'code': '车缝', 'name': '车缝'}),
-//  EnumModel.fromJson({'code': '裁剪', 'name': '裁剪'}),
-//  EnumModel.fromJson({'code': '印花', 'name': '印花'}),
-//  EnumModel.fromJson({'code': '后枕', 'name': '后枕'}),
-//];
-
 class RequirementOrderFrom extends StatefulWidget {
   ApparelProductModel product;
 
@@ -46,6 +37,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
   List<File> _normalImages = [];
+
+  DateTime selectDate = DateTime.now();
 
   @override
   void initState() {

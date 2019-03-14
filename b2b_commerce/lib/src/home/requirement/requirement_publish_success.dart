@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/main.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
-import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -19,71 +18,6 @@ class PublishRequirementSuccessDialog extends StatefulWidget {
 class _PublishRequirementSuccessDialogState
     extends State<PublishRequirementSuccessDialog> {
   bool _isSelected = true;
-
-  //TODO:调用接口查询推荐工厂
-  List<FactoryModel> factories = <FactoryModel>[
-    FactoryModel(
-        historyOrdersCount: 214,
-        name: '广州旭日4',
-        starLevel: 4,
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
-    FactoryModel(
-        historyOrdersCount: 214,
-        name: '广州旭日3',
-        starLevel: 4,
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
-    FactoryModel(
-        historyOrdersCount: 214,
-        name: '广州旭日2',
-        starLevel: 4,
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
-    FactoryModel(
-        historyOrdersCount: 214,
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        name: '广州旭日1',
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        starLevel: 4,
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
-    FactoryModel(
-        historyOrdersCount: 214,
-        profilePicture:
-            'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        name: '广州旭日0',
-        starLevel: 4,
-        describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-        categories: [
-          CategoryModel(name: '牛仔'),
-          CategoryModel(name: '衬衫'),
-          CategoryModel(name: '夹克'),
-        ]),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,14 +25,13 @@ class _PublishRequirementSuccessDialogState
         elevation: 0.5,
       ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.grey[100]),
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
         child: ListView(
           children: <Widget>[
             _buildTitle(),
             _buildOrderInfo(),
-//            _buildCheckLine(),
             _buildButtonGroup(),
-            _buildRecommend()
           ],
         ),
       ),
@@ -111,23 +44,24 @@ class _PublishRequirementSuccessDialogState
         Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              color: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 20),
+              // color: Colors.white,
               child: Center(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.fromLTRB(18, 0, 0, 10),
+                      padding: EdgeInsets.fromLTRB(0, 0, 50, 20),
                       child: Icon(
                         B2BIcons.publish_requirement_success,
-                        size: 60,
-                        color: Color.fromRGBO(255,214,12, 1),
+                        size: 100,
+                        color: Color.fromRGBO(255, 214, 12, 1),
                       ),
                     ),
                     Text(
                       '需求发布成功!',
-                      style: TextStyle(fontSize: 20, color: Color.fromRGBO(255,214,12, 1)),
+                      style: TextStyle(
+                          fontSize: 20, color: Color.fromRGBO(255, 214, 12, 1)),
                     )
                   ],
                 ),
@@ -139,152 +73,135 @@ class _PublishRequirementSuccessDialogState
 
   Widget _buildOrderInfo() {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                RequirementOrderDetailPage(order: widget.model)));
-      },
-      child: _buildEntries(),
-    );
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  RequirementOrderDetailPage(order: widget.model)));
+        },
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              color: Colors.white,
+              padding: EdgeInsets.all(10),
+              child: Text('需求订单号: ${widget.model.code}'),
+            ),
+            _buildEntries(),
+            Container(
+              width: double.infinity,
+              color: Color.fromRGBO(250, 250, 250, 1),
+              padding: EdgeInsets.all(10),
+              child: Text(
+                '交货时间: ${DateFormatUtil.formatYMD(widget.model.details.expectedDeliveryDate)}',
+                style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget _buildEntries() {
+    Widget _pictureWidget;
+
+    if (widget.model.details.pictures == null) {
+      _pictureWidget = Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Color.fromRGBO(243, 243, 243, 1)),
+        child: Icon(
+          B2BIcons.noPicture,
+          color: Color.fromRGBO(200, 200, 200, 1),
+          size: 25,
+        ),
+      );
+    } else {
+      if (widget.model.details.pictures.isEmpty) {
+        _pictureWidget = Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color.fromRGBO(243, 243, 243, 1)),
+          child: Icon(
+            B2BIcons.noPicture,
+            color: Color.fromRGBO(200, 200, 200, 1),
+            size: 25,
+          ),
+        );
+      } else {
+        _pictureWidget = Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              image: DecorationImage(
+                image: NetworkImage(
+                    '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.details.pictures[0].url}'),
+                fit: BoxFit.cover,
+              )),
+        );
+      }
+    }
+
     return Container(
-        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-        color: Colors.grey[50],
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    '需求订单号：${widget.model.code ?? ''}',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: widget.model.details.pictures != null &&  widget.model.details.pictures.isNotEmpty
-                            ? NetworkImage( widget.model.details.pictures[0].url)
-                            : AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ),
-                        fit: BoxFit.cover,
-                      )),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    height: 80,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        widget.model.details.productName != null
-                            ? Text(
+      color: Color.fromRGBO(250, 250, 250, 1),
+      padding: EdgeInsets.all(10),
+      child: Row(
+        children: <Widget>[
+          _pictureWidget,
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              height: 80,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  widget.model.details.productName != null
+                      ? Text(
                           widget.model.details.productName,
                           style: TextStyle(fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         )
-                            : Text(
+                      : Text(
                           '暂无产品',
-                          style: TextStyle(
-                              fontSize: 15, color: Colors.red),
+                          style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
-                        widget.model.details.productSkuID != null
-                            ? Container(
-                          padding: EdgeInsets.all(3),
+                  widget.model.details.productSkuID != null
+                      ? Container(
+                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                           decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(5)),
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           child: Text(
-                            '货号：' + widget.model.details.productSkuID,
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey),
+                            '货号：${widget.model.details.productSkuID}',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         )
-                            : Container(),
-//                            entry.product?.superCategories?.first?.name ==
-//                                        null &&
-//                                    entry.product?.majorCategory?.name ==
-//                                        null &&
-//                                    entry?.entryNumber == null
-//                                ? Container(
-//                                    padding: EdgeInsets.all(3),
-//                                    decoration: BoxDecoration(
-//                                        color: Colors.yellow[50],
-//                                        borderRadius: BorderRadius.circular(5)),
-//                                    child: Text(
-//                                      "${entry.product?.superCategories?.first?.name ?? ''}   ${widget.model?.majorCategory?.name ?? ''}   " +
-//                                          (entry?.entryNumber == null
-//                                              ? ''
-//                                              : entry?.entryNumber.toString() +
-//                                                  '件'),
-//                                      style: TextStyle(
-//                                          fontSize: 15, color: Color.fromRGBO(255,214,12, 1)),
-//                                    ),
-//                                  )
-//                                : Container(),
-                        Container(
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                              color: Colors.yellow[50],
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Text(
-                            "${widget.model.details.category?.name ?? ''}   ${widget.model?.details?.majorCategory?.name ?? ''}   " +
-                                (widget.model.details.expectedMachiningQuantity == null
-                                    ? ''
-                                    : widget.model.details.expectedMachiningQuantity.toString() +
-                                    '件'),
-                            style: TextStyle(
-                                fontSize: 15, color: Color.fromRGBO(255,214,12, 1)),
-                          ),
-                        )
-                      ],
+                      : Container(),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 243, 243, 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "${widget.model.details.majorCategory?.name}   ${widget.model.details.category?.name}   ${widget.model.totalQuantity}件",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Color.fromRGBO(255, 133, 148, 1)),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-            Row(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    '预计交货日期：${DateFormatUtil.formatYMD(widget.model?.details?.expectedDeliveryDate) ?? ''}',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    '备注 ：${widget.model.remarks ?? ''}',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                    overflow: TextOverflow.clip,
-                  ),
-                )
-              ],
-            ),
-          ],
-        ));
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildCheckLine() {
@@ -317,86 +234,68 @@ class _PublishRequirementSuccessDialogState
   }
 
   Widget _buildButtonGroup() {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(bottom: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                FlatButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MyApp()));
-                  },
-                  color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Color.fromRGBO(255,214,12, 1)),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Text(
-                    '回到首页',
-                    style: TextStyle(color: Color.fromRGBO(255,214,12, 1), fontSize: 14),
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {},
-                  color: Color.fromRGBO(255,214,12, 1),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Text(
-                    '邀请更多工厂',
-                    style: TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                )
-              ],
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _buildRecommend() {
     return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                      text: '———',
-                      style: TextStyle(fontSize: 15, color: Colors.grey),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: '工厂推荐',
-                            style: TextStyle(color: Colors.black)),
-                        TextSpan(text: '———')
-                      ]),
+        margin: EdgeInsets.only(top: 100),
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              width: double.infinity,
+              height: 45,
+              child: FlatButton(
+                onPressed: () {
+                  //TODO:工厂列表
+                },
+                color: Color.fromRGBO(255, 214, 12, 1),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text(
+                  '邀请工厂',
+                  style: TextStyle(
+                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
                 ),
-              )
-            ],
-          ),
-          Column(
-            children: factories
-                .map((item) => FactoryItem(
-                      model: item,
-                      showButton: true,
-                    ))
-                .toList(),
-          )
-        ],
-      ),
-    );
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              width: double.infinity,
+              height: 45,
+              child: FlatButton(
+                onPressed: () {},
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text(
+                  '完善需求',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 18),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              width: double.infinity,
+              height: 45,
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => MyApp()));
+                },
+                color: Color.fromRGBO(255, 245, 193, 1),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text(
+                  '回到首页',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 169, 0, 1), fontSize: 18),
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 }
