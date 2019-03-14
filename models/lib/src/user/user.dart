@@ -112,9 +112,16 @@ class B2BCustomerModel extends CustomerModel {
 class AddressModel extends ItemModel {
   String fullname;
   String cellphone;
+
+  @JsonKey(toJson: _regionToJson)
   RegionModel region;
+
+  @JsonKey(toJson: _cityToJson)
   CityModel city;
+
+  @JsonKey(toJson: _cityDistrictToJson)
   DistrictModel cityDistrict;
+
   String line1;
   bool defaultAddress;
 
@@ -134,6 +141,16 @@ class AddressModel extends ItemModel {
   factory AddressModel.fromJson(Map<String, dynamic> json) => _$AddressModelFromJson(json);
 
   static Map<String, dynamic> toJson(AddressModel model) => _$AddressModelToJson(model);
+
+  static Map<String, dynamic> _regionToJson(RegionModel model) =>
+      RegionModel.toJson(model);
+
+  static Map<String, dynamic> _cityToJson(CityModel model) =>
+      CityModel.toJson(model);
+
+  static Map<String, dynamic> _cityDistrictToJson(DistrictModel model) =>
+      DistrictModel.toJson(model);
+
 }
 
 /// 省份

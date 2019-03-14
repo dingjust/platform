@@ -11,7 +11,7 @@
           :before-upload="onBeforeUpload"
           :on-success="onSuccess"
           :headers="headers"
-          :file-list="slotData.others"
+          :file-list="slotData.images"
           :on-preview="handlePreview"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
@@ -38,7 +38,7 @@
         return true;
       },
       onSuccess(response) {
-        this.slotData.attachments.push(response);
+        this.slotData.images.push(response);
       },
       async handleRemove(file) {
         // console.log(JSON.stringify(file));
@@ -48,9 +48,9 @@
           return;
         }
 
-        const attachments = this.slotData.attachments || [];
-        const index = attachments.indexOf(file);
-        attachments.splice(index, 1);
+        const images = this.slotData.images || [];
+        const index = images.indexOf(file);
+        images.splice(index, 1);
 
         this.$message.success("删除成功");
       },

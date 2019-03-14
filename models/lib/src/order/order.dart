@@ -202,6 +202,7 @@ class AbstractOrderModel extends ItemModel {
   String remarks;
 
   //线上线下订单
+
   SalesApplication salesApplication;
 
   AbstractOrderModel(
@@ -628,14 +629,20 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 /// 采购订单
 @JsonSerializable()
 class PurchaseOrderModel extends OrderModel {
-  /// 采购者
-  BrandModel belongTo;
+
+  @JsonKey(toJson: _brandToJson)
+  BrandModel brandModel;
+
+  @JsonKey(toJson: _factoryToJson)
+  FactoryModel factory;
 
   /// 采购行
+  @JsonKey(toJson: entriesToJson)
   List<PurchaseOrderEntryModel> entries;
 
   /// 加工类型
-  String machiningType;
+  @JsonKey(fromJson: _machiningTypeFromJson)
+  MachiningType machiningType;
 
   /// 是否开具发票
   bool invoiceNeeded;
@@ -644,6 +651,7 @@ class PurchaseOrderModel extends OrderModel {
   ProductionProgressPhase currentPhase;
 
   /// 附件
+  @JsonKey(toJson: _mediaToJson)
   List<MediaModel> attachments;
 
   /// 订单状态
@@ -657,33 +665,34 @@ class PurchaseOrderModel extends OrderModel {
   DateTime expectedDeliveryDate;
 
   //生产进度
+  @JsonKey(toJson: productionProgressesToJson)
   List<ProductionProgressModel> productionProgresses;
 
-  PurchaseOrderModel(
-      {String code,
-      this.status,
-      int totalQuantity,
-      double totalPrice,
-      DateTime creationTime,
-      AddressModel deliveryAddress,
-      String remarks,
-      this.belongTo,
-      this.entries,
-      this.machiningType,
-      this.currentPhase,
-      this.attachments,
-      this.requirementOrderCode,
-      this.expectedDeliveryDate,
-      this.productionProgresses,
-      SalesApplication salesApplication})
+  PurchaseOrderModel({String code,
+    this.status,
+    int totalQuantity,
+    double totalPrice,
+    DateTime creationTime,
+    AddressModel deliveryAddress,
+    String remarks,
+    this.brandModel,
+    this.factory,
+    this.entries,
+    this.machiningType,
+    this.currentPhase,
+    this.attachments,
+    this.requirementOrderCode,
+    this.expectedDeliveryDate,
+    this.productionProgresses,
+    SalesApplication salesApplication})
       : super(
-            code: code,
-            totalQuantity: totalQuantity,
-            totalPrice: totalPrice,
-            creationTime: creationTime,
-            deliveryAddress: deliveryAddress,
-            remarks: remarks,
-            salesApplication: salesApplication);
+      code: code,
+      totalQuantity: totalQuantity,
+      totalPrice: totalPrice,
+      creationTime: creationTime,
+      deliveryAddress: deliveryAddress,
+      remarks: remarks,
+      salesApplication: salesApplication);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
       _$PurchaseOrderModelFromJson(json);
@@ -693,12 +702,41 @@ class PurchaseOrderModel extends OrderModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+
+  static Map<String, dynamic> _brandToJson(BrandModel model) =>
+      BrandModel.toJson(model);
+
+  static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
+      FactoryModel.toJson(model);
+
+  static List<Map<String, dynamic>> entriesToJson(
+      List<PurchaseOrderEntryModel> entries) =>
+      entries.map((entry) => PurchaseOrderEntryModel.toJson(entry)).toList();
+
+  static MachiningType _machiningTypeFromJson(String machiningType) {
+    if (machiningType == '') {
+      return null;
+    } else {
+      return _$enumDecodeNullable(_$MachiningTypeEnumMap, machiningType);
+    }
+  }
+
+  static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
+
+  static List<Map<String, dynamic>> productionProgressesToJson(
+      List<ProductionProgressModel> entries) =>
+      entries.map((entry) => ProductionProgressModel.toJson(entry)).toList();
 }
 
 /// 采购订单行
 @JsonSerializable()
 class PurchaseOrderEntryModel extends OrderEntryModel {
+
+  @JsonKey(toJson: productToJson)
   ApparelProductModel product;
+
+  @JsonKey(toJson: orderToJson)
   PurchaseOrderModel order;
 
   PurchaseOrderEntryModel({
@@ -720,6 +758,12 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
 
   static Map<String, dynamic> toJson(PurchaseOrderEntryModel model) =>
       _$PurchaseOrderEntryModelToJson(model);
+
+  static Map<String, dynamic> productToJson(ApparelProductModel model) =>
+      ApparelProductModel.toJson(model);
+
+  static Map<String, dynamic> orderToJson(PurchaseOrderModel model) =>
+      {'code': model.code ?? ''};
 }
 
 /// 销售订单
@@ -870,6 +914,7 @@ class ProductionProgressModel extends ItemModel {
   int quantity;
 
   /// 凭证
+  @JsonKey(toJson: _mediaToJson)
   List<MediaModel> medias;
 
   /// 生产阶段顺序
@@ -887,6 +932,7 @@ class ProductionProgressModel extends ItemModel {
   String remarks;
 
   /// 采购订单
+  @JsonKey(toJson: _purchaseOrderToJson)
   PurchaseOrderModel order;
 
   ProductionProgressModel(
@@ -907,6 +953,12 @@ class ProductionProgressModel extends ItemModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+
+  static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
+
+  static Map<String, dynamic> _purchaseOrderToJson(PurchaseOrderModel model) =>
+      PurchaseOrderModel.toJson(model);
 }
 
 //订单状态model，用于订单状态控件的List传入
@@ -946,8 +998,6 @@ class ProofingModel extends OrderModel {
   QuoteModel order;
 
   List<ProofingEntryModel> entries;
-
-  List<ApparelSizeVariantProductModel> variants;
 
   //打样费用单价
   double unitPrice;

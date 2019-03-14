@@ -13,35 +13,39 @@ const state = {
   },
   formData: {
     id: null,
+    images: [],
     code: '',
+    skuID: '',
     name: '',
     price: 0.00,
-    suggestedPrice: 0.00,
-    price1: 0.00,
-    price2: 0.00,
-    price3: 0.00,
-    categories: [],
-    staircasePrices: [],
-    startingAmount: '',
-    skuID: '',
-    year: '',
-    season: '',
-    placeOfOrigin: '',
-    brand: '',
-    style: {
-      id: null,
+    category: {
       code: '',
       name: ''
     },
-    material: '',
-    content: '',
+    brand: '',
+    gramWeight: 0.0,
+    variants: [],
+    colors: [],
+    sizes: [],
+    attributes: {
+      styles: [],
+      fabricComposition: '',
+      editionType: '',
+      pattern: '',
+      sleeveType: '',
+      sleeveLength: '',
+      decorativePatterns: [],
+      popularElements: [],
+      filler: '',
+      thickness: '',
+      season: '',
+      taggable: false,
+      placket: ''
+    },
     belongTo: {
       uid: '',
       name: ''
     },
-    postageFree: true,
-    gramWeight: 0.0,
-    variants: []
   },
   queryFormData: {
     skuID: '',
@@ -68,7 +72,8 @@ const actions = {
     }
 
     const response = await http.post('/b2b/products/apparel', {
-      text: state.keyword,
+      keyword: state.keyword
+    }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

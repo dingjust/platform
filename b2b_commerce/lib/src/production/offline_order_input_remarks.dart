@@ -33,7 +33,7 @@ class _OfflineOrderInputRemarksPageState extends State<OfflineOrderInputRemarksP
                       child: Text(
                         '确定',
                         style: TextStyle(
-                            color: Color.fromRGBO(255, 149, 22, 1)),
+                            color: Color.fromRGBO(255, 214, 12, 1)),
                       ),
                     ),
                   ),

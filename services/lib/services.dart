@@ -12,6 +12,7 @@ export 'src/order/bloc/proofing_orders_bloc.dart';
 export 'src/order/bloc/purchase_order_bloc.dart';
 export 'src/order/bloc/quote_orders_bloc.dart';
 export 'src/order/bloc/requirement_order_bloc.dart';
+export 'src/order/repository/purchase_order_repository.dart';
 export 'src/order/bloc/requirement_quote_detail_bloc.dart';
 export 'src/order/bloc/sales_order_bloc.dart';
 export 'src/order/repository/quote_order_respository.dart';

@@ -115,7 +115,7 @@ Map<String, dynamic> mockData = {
   'creationtime': DateTime.now().toString(),
   'expectedDeliveryDate': DateTime.now().toString(),
   'currentPhase': 'CUTTING',
-  'machiningType': '包工包料',
+  'machiningType': 'LABOR_AND_MATERIAL',
   'invoiceNeeded': true,
   'attachments': [
     {

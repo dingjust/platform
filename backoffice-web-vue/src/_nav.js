@@ -43,11 +43,6 @@ export default {
           name: '尺码',
           url: '/backoffice/product/size',
           icon: 'iconNone'
-        },
-        {
-          name: '风格',
-          url: '/backoffice/product/style',
-          icon: 'iconNone'
         }
       ]
     },

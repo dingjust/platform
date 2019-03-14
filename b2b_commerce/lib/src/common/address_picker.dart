@@ -199,7 +199,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                     FlatButton(
                       onPressed: () {
                         Map<String, dynamic> provinceMap = {
-                          "code": province[provinceIndex]['code'],
+                          "isocode": province[provinceIndex]['code'],
                           "name": province[provinceIndex]['name']
                         };
                         Map<String, dynamic> cityMap = {

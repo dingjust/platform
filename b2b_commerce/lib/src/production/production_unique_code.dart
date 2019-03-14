@@ -23,7 +23,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
     'creationtime': DateTime.now().millisecondsSinceEpoch,
     'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
     'currentPhase': 'CUTTING',
-    'machiningType': '包工包料',
+    'machiningType': 'LABOR_AND_MATERIAL',
     'invoiceNeeded': true,
     'attachments': [
       {
@@ -380,7 +380,7 @@ class UniqueCodeItem extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  '工厂：' + order.belongTo.name,
+                  '工厂：' + order.factory.name,
                   style: TextStyle(fontSize: 15),
                 ),
               ),

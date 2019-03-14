@@ -222,7 +222,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        order.belongTo.name,
+                        order.factory.name,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
@@ -251,7 +251,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         alignment: Alignment.centerRight,
                         child: Row(
                           children: <Widget>[
-                            Text(order.belongTo.address),
+                            Text(order.factory.address),
                             Icon(Icons.chevron_right),
                           ],
                         ))
@@ -267,7 +267,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           ListTile(
             title: Text('加工类型'),
-            trailing: Text(order.machiningType),
+            trailing: Text(MachiningTypeLocalizedMap[order.machiningType]),
           ),
           new Divider(),
           ListTile(
