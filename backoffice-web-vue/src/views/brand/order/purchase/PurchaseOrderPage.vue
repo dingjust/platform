@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <purchase-order-toolbar @onSearch="onSearch"/>
+      <purchase-order-toolbar @onSearch="onSearch" @onNew="onNew"/>
       <purchase-order-search-result-list :page="page"/>
     </el-card>
   </div>
@@ -14,6 +14,7 @@
 
   import PurchaseOrderToolbar from './toolbar/Toolbar';
   import PurchaseOrderSearchResultList from './list/SearchResultList';
+  import PurchaseOrderForm from './form/PurchaseOrderForm';
 
   export default {
     name: 'PurchaseOrderPage',
@@ -33,6 +34,9 @@
       }),
       onSearch(keyword) {
         this.search({keyword});
+      },
+      onNew(formData) {
+        this.fn.openSlider('创建生产订单', PurchaseOrderForm, formData);
       }
     },
     data() {

@@ -96,7 +96,7 @@
                 },
                 size: {
                   code: 'S01',
-                  name: 'XXL'
+                  name: 'XL'
                 }
               },
               {

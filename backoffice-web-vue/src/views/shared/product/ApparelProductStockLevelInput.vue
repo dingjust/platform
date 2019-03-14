@@ -12,7 +12,7 @@
           <td v-if="index === 0" :rowspan="variant.sizes.length">{{variant.color.name}}</td>
           <td>{{size.name}}</td>
           <td>
-            <el-input-number v-model="size.quantity"></el-input-number>
+            <el-input-number v-model="size.quantity" @change="onQuantityChanged"></el-input-number>
           </td>
         </tr>
       </template>
@@ -35,7 +35,11 @@
     components: {},
     mixins: [],
     computed: {},
-    methods: {},
+    methods: {
+      onQuantityChanged(value) {
+        this.$emit('onQuantityChanged', value);
+      }
+    },
     data() {
       return {
         headers: ['颜色', '尺码', '数量'],

@@ -49,13 +49,16 @@
     name: 'PurchaseOrderForm',
     props: ['slotData', 'readOnly'],
     components: {
+      PurchaseOrderBasicForm,
+      PurchaseOrderSellerForm,
       PurchaseOrderEntriesForm,
-      PurchaseOrderDeliveryAddressForm, PurchaseOrderSellerForm, PurchaseOrderBasicForm},
+      PurchaseOrderDeliveryAddressForm,
+    },
     mixins: [],
     computed: {},
     methods: {
       onSubmit() {
-        console.log("submitted data: " + JSON.stringify(this.slotData));
+        // console.log("submitted data: " + JSON.stringify(this.slotData));
         this.fn.closeSlider();
       },
       onCancel() {

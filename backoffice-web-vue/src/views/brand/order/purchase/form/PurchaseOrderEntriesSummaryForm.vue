@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     生产单价：
-    <el-input-number v-model="basePrice"></el-input-number>
+    <el-input-number v-model="basePrice" @change="onPriceChanged"></el-input-number>
     ，生产数量： {{totalQuantity}}，生产总价： {{totalPrice}}
   </div>
 </template>
@@ -27,7 +27,11 @@
         return result;
       }
     },
-    methods: {},
+    methods: {
+      onPriceChanged(value) {
+        this.$emit('onPriceChanged', value);
+      }
+    },
     data() {
       return {
         basePrice: 0

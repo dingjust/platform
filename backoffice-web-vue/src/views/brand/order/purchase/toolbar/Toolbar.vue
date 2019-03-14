@@ -12,7 +12,6 @@
 
 <script>
   import PurchaseOrderAdvancedSearchForm from '../form/PurchaseOrderAdvancedSearchForm';
-  import PurchaseOrderForm from '../form/PurchaseOrderForm';
 
   export default {
     name: 'PurchaseOrderToolbar',
@@ -29,8 +28,9 @@
       onNew() {
         let formData = {};
         Object.assign(formData, this.formData);
-        console.log(JSON.stringify(formData))
-        this.fn.openSlider('创建生产订单', PurchaseOrderForm, formData);
+        // console.log(JSON.stringify(formData));
+
+        this.$emit('onNew', formData);
       }
     },
     data() {
