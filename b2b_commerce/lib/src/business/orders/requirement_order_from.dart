@@ -24,15 +24,6 @@ import 'form/pictures_field.dart';
 import 'form/product_field.dart';
 import 'form/production_areas_field.dart';
 
-//final List<EnumModel> technologyList = [
-//  EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
-//  EnumModel.fromJson({'code': '打板', 'name': '打板'}),
-//  EnumModel.fromJson({'code': '车缝', 'name': '车缝'}),
-//  EnumModel.fromJson({'code': '裁剪', 'name': '裁剪'}),
-//  EnumModel.fromJson({'code': '印花', 'name': '印花'}),
-//  EnumModel.fromJson({'code': '后枕', 'name': '后枕'}),
-//];
-
 class RequirementOrderFrom extends StatefulWidget {
   ApparelProductModel product;
 
@@ -49,14 +40,16 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   List<File> _normalImages = [];
   List<MediaModel> medias = [];
 
+  DateTime selectDate = DateTime.now();
+
   @override
   void initState() {
     if (widget.product != null) {
-      if (widget.product.normal != null)
-        model.details.pictures = widget.product.normal;
-      model.details.category = widget.product.minorCategory;
-      if (widget.product?.minorCategory != null) {
-        _categorySelected = [widget.product.minorCategory];
+      if (widget.product.images != null)
+        model.details.pictures = widget.product.images;
+      model.details.category = widget.product.category;
+      if (widget.product?.category != null) {
+        _categorySelected = [widget.product.category];
       }
     }
 
@@ -85,7 +78,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('需求发布'),
@@ -130,10 +122,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   model.details.productName = result.name;
                   model.details.productSkuID = result.skuID;
                   model.details.pictures = result?.normal;
-                  _categorySelected = [result.minorCategory];
+                  _categorySelected = [result.category];
                 }
 
-                print('${model.details.pictures}=================');
                 model.details.category =
                     _categorySelected.length > 0 ? _categorySelected[0] : null;
                 if (model.details.pictures != null) {
@@ -217,7 +208,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               offstage: widget.product == null,
               child: ProductField(widget.product),
             ),
-            CategoryField(model,widget.product),
+            CategoryField(model, widget.product),
             new Divider(height: 0),
             MajorCategoryField(model),
             new Divider(height: 0),
@@ -319,18 +310,18 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             height: 50,
             margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
             child: RaisedButton(
-              color: Color(0xFFFF9516),
+              color: Color.fromRGBO(255, 214, 12, 1),
               child: Text(
                 '确定发布',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Color.fromRGBO(36, 38, 41, 1),
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
                 ),
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              onPressed: () async{
+              onPressed: () async {
                 model.entries = [
                   RequirementOrderEntryModel(
                       product: widget.product, order: model)
@@ -345,8 +336,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 //                print(
 //                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
 
-
-                await RequirementOrderRepository().publishNewRequirement(model);
+                String code = await RequirementOrderRepository()
+                    .publishNewRequirement(model);
 
                 Navigator.push(
                   context,

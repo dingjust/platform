@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import 'package:services/services.dart';
 
 import 'form/attributes_field.dart';
 import 'form/color_size_stock_field.dart';
@@ -50,127 +51,159 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 //        initialData: bloc.currentProduct,
 //        builder: (BuildContext context,
 //            AsyncSnapshot<ApparelProductModel> snapshot) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.5,
-        centerTitle: true,
-        title: Text('编辑商品'),
-        actions: <Widget>[
-          IconButton(
-            icon: Text(
-              '确定',
-              style: TextStyle(color: Color(0xffFF9516)),
-            ),
-            onPressed: () {
-              print("${widget.item.normal}  code : ${widget.item.hashCode}");
-              print("${widget.item.name} code : ${widget.item.hashCode}");
-              print("${widget.item.skuID}  code : ${widget.item.hashCode}");
-              print(
-                  "${widget.item.minorCategory?.name} code : ${widget.item.hashCode}");
-              print("${widget.item.brand} code : ${widget.item.hashCode}");
-              print(widget.item.price);
-              print(widget.item.gramWeight);
-              if (widget.item.variants != null) {
+    return WillPopScope(
+      onWillPop: (){
+        widget.item.images = null;
+        Navigator.pop(context);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.5,
+          centerTitle: true,
+          title: Text('编辑商品'),
+          actions: <Widget>[
+            IconButton(
+              icon: Text(
+                '确定',
+                style: TextStyle(color: Color(0xffFF9516)),
+              ),
+              onPressed: () async{
+                if(widget.item.name == null){
+                  showDialog(context: context,builder: (context)=>AlertDialog(content: Text('请输入商品名称'),));
+                  return;
+                }else if(widget.item.skuID == null){
+                  print(widget.item.category);
+                  showDialog(context: context,builder: (context)=>AlertDialog(content: Text('请输入商品货号'),));
+                  return;
+                }else if(widget.item.category == null){
+                  showDialog(context: context,builder: (context)=>AlertDialog(content: Text('请输入商品类别'),));
+                  return;
+                }
+
+
+                if(widget.item.attributes == null) widget.item.attributes = ApparelProductAttributesModel();
+                print("${widget.item.images}  code : ${widget.item.hashCode}");
+                print("${widget.item.name} code : ${widget.item.hashCode}");
+                print("${widget.item.skuID}  code : ${widget.item.hashCode}");
                 print(
-                    'color' + widget.item?.variants[0]?.color?.name.toString());
-                print('size' + widget.item?.variants[0]?.size?.name.toString());
+                    "${widget.item.category?.name} code : ${widget.item.hashCode}");
+                print("${widget.item.brand} code : ${widget.item.hashCode}");
+                print(widget.item.price);
+                print(widget.item.gramWeight);
+                print(widget.item.attributes.styles);
+               print(widget.item.variants);
+
+               String code = await ProductRepositoryImpl().create(widget.item);
+              if(code != null){
+                widget.item.name = null;
+                widget.item.skuID = null;
+                widget.item.attributes = null;
+                widget.item.category = null;
+                widget.item.brand = null;
+                widget.item.variants = null;
+                widget.item.price = null;
+                widget.item.gramWeight = null;
               }
+              widget.item.images = null;
+
 //              print(widget.item.attributes.styles[0]);
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-      body: Form(
-        key: _apparelProductForm,
-        child: ListView(
-          children: <Widget>[
-            NormalPictureField(widget.item, widget.isCreate),
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+        body: Form(
+          key: _apparelProductForm,
+          child: ListView(
+            children: <Widget>[
+              NormalPictureField(widget.item),
 //            DetailPictureField(widget.item),
-            TextFieldComponent(
-              focusNode: _nameFocusNode,
-              controller: _nameController,
-              leadingText: '商品名称',
-              hintText: '请输入商品名称',
-              onChanged: (value){
-                widget.item.name = value;
-              },
-            ),
-            TextFieldComponent(
-              focusNode: _skuIDFocusNode,
-              controller: _skuIDController,
-              leadingText: '商品货号',
-              hintText: '请输入商品货号',
-              onChanged: (value){
-                widget.item.skuID = value;
-              },
-            ),
-            MinorCategoryField(widget.item),
-            ColorSizeStockField(widget.item),
-            TextFieldComponent(
-              focusNode: _brandFocusNode,
-              controller: _brandController,
-              leadingText: '品牌',
-              hintText: '请输入品牌',
-              onChanged: (value){
-                widget.item.brand = value;
-              },
-            ),
-            TextFieldComponent(
-              focusNode: _priceFocusNode,
-              controller: _priceController,
-              inputType: TextInputType.number,
-              leadingText: '供货价',
-              hintText: '请输入供货价',
-              onChanged: (value){
-                widget.item.price = double.parse(value);
-              },
-            ),
-            TextFieldComponent(
-              focusNode: _gramWeightFocusNode,
-              controller: _gramWeightController,
-              inputType: TextInputType.number,
-              leadingText: '重量',
-              hintText: '请输入重量',
-              onChanged: (value){
-                widget.item.gramWeight = double.parse(value);
-              },
-            ),
-            AttributesField(widget.item),
+              TextFieldComponent(
+                focusNode: _nameFocusNode,
+                controller: _nameController,
+                leadingText: '商品名称',
+                hintText: '请输入商品名称',
+                onChanged: (value){
+                  widget.item.name = value;
+                },
+              ),
+              TextFieldComponent(
+                focusNode: _skuIDFocusNode,
+                controller: _skuIDController,
+                leadingText: '商品货号',
+                hintText: '请输入商品货号',
+                onChanged: (value){
+                  widget.item.skuID = value;
+                },
+              ),
+              MinorCategoryField(widget.item),
+              ColorSizeStockField(widget.item),
+              TextFieldComponent(
+                focusNode: _brandFocusNode,
+                controller: _brandController,
+                leadingText: '品牌',
+                hintText: '请输入品牌',
+                onChanged: (value){
+                  widget.item.brand = value;
+                },
+              ),
+              TextFieldComponent(
+                focusNode: _priceFocusNode,
+                controller: _priceController,
+                inputType: TextInputType.number,
+                leadingText: '供货价',
+                hintText: '请输入供货价',
+                onChanged: (value){
+                  widget.item.price = double.parse(value);
+                },
+              ),
+              TextFieldComponent(
+                focusNode: _gramWeightFocusNode,
+                controller: _gramWeightController,
+                inputType: TextInputType.number,
+                leadingText: '重量',
+                hintText: '请输入重量',
+                onChanged: (value){
+                  widget.item.gramWeight = double.parse(value);
+                },
+              ),
+              AttributesField(widget.item),
 //            PrivacyField(widget.item),
 //            PostageFreeField(widget.item),
-            /*Container(
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ActionChip(
-                      backgroundColor: Colors.red,
-                      labelPadding:
-                          EdgeInsets.symmetric(vertical: 4, horizontal: 22),
-                      labelStyle: TextStyle(fontSize: 16),
-                      label: Text('发布商品'),
-                      onPressed: () {
-                        // TODO:默认下架
-                      },
+              /*Container(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: ActionChip(
+                        backgroundColor: Colors.red,
+                        labelPadding:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                        labelStyle: TextStyle(fontSize: 16),
+                        label: Text('发布商品'),
+                        onPressed: () {
+                          // TODO:默认下架
+                        },
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: ActionChip(
-                      backgroundColor: Color.fromRGBO(255,214,12, 1),
-                      labelPadding:
-                          EdgeInsets.symmetric(vertical: 4, horizontal: 22),
-                      labelStyle: TextStyle(fontSize: 16),
-                      label: Text('直接上架'),
-                      onPressed: () {
-                        // TODO:直接上架
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),*/
-          ],
+                    Expanded(
+                      child: ActionChip(
+                        backgroundColor: Color.fromRGBO(255,214,12, 1),
+                        labelPadding:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                        labelStyle: TextStyle(fontSize: 16),
+                        label: Text('直接上架'),
+                        onPressed: () {
+                          // TODO:直接上架
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),*/
+            ],
+          ),
         ),
       ),
     );

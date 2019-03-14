@@ -4,6 +4,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 class ApparelProductBLoC extends BLoCBase {
+  ProductsResponse productsResponse;
   List<ApparelProductModel> products;
   ApparelProductModel currentProduct;
 
@@ -19,6 +20,7 @@ class ApparelProductBLoC extends BLoCBase {
     // 初始化
     products = List<ApparelProductModel>();
     currentProduct = ApparelProductModel.empty();
+    productsResponse = ProductsResponse(0, 10, 0, 0, []);
 
     newProduct = ApparelProductModel();
   }
@@ -109,402 +111,30 @@ class ApparelProductBLoC extends BLoCBase {
   }
 
   filterByStatuses() async {
-    //若没有数据则查询
-    if (products.isEmpty) {
-      // TODO: 分页拿数据，response.data;
-      products.addAll(await Future.delayed(const Duration(seconds: 1), () {
-        return <ApparelProductModel>[
-          ApparelProductModel.fromJson({
-            'approvalStatus': 'APPROVED',
-            'code': 'C0001',
-            'name': '山本风少女长裙复古气质秋冬流行新款',
-            'price': 100.00,
-//            'suggestedPrice': 99,
-//            'price1': 98,
-//            'price2': 97,
-//            'price3': 96,
-            'staircasePrices': [
-              {
-                'minQuantity': 50,
-                'price': 59,
-              },
-              {
-                'minQuantity': 100,
-                'price': 119,
-              },
-              {
-                'minQuantity': 200,
-                'price': 199,
-              },
-            ],
-            'skuID': 'SKU0001',
-            'salesVolume': 10,
-            'isRecommend': true,
-            'brand': '云顶',
-            'gramWeight': 1.00,
-            'thumbnail':
-                'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-            'normal': [
-              {
-                'url':
-                    'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg',
-              },
-              {
-                'url':
-                    'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg'
-              }
-            ],
-            'stockLevel': {
-              'available': 99,
-              'maxPreOrder': 120,
-            },
-            'attributes': {
-              'styles': ['FG0001', 'FG0002'],
-              'fabricComposition': 'B001',
-              'editionType': 'C001',
-              'pattern': 'D001',
-              'sleeveType': 'E001',
-              'sleeveLength': 'F001',
-              'decorativePattern': ['G001', 'G002'],
-              'popularElements': ['H001', 'H002'],
-              'filler': 'J001',
-              'taggable': true,
-              'thickness': 'K001',
-              'season': 'L001',
-              'placket': 'M001',
-            },
-            'minorCategory': {
-              'code': 'W0106',
-              'name': '女式棉衣',
-              'parent': {
-                'code': 'W01',
-                'name': '女装',
-              }
-            },
-            'variants': [
-              {
-                'color': {'code': 'C01', 'name': '红色', 'colorCode': 'FF0033'},
-                'size': {
-                  'code': 'S01',
-                  'name': 'XXXL',
-                }
-              },
-              {
-                'color': {'code': 'C04', 'name': '海军蓝', 'colorCode': '0066FF'},
-                'size': {
-                  'code': 'S01',
-                  'name': 'XXXL',
-                }
-              },
-              {
-                'color': {'code': 'C04', 'name': '海军蓝', 'colorCode': '0066FF'},
-                'size': {
-                  'code': 'S02',
-                  'name': 'XXL',
-                }
-              },
-            ],
-          }),
-          ApparelProductModel.fromJson({
-            'approvalStatus': 'APPROVED',
-            'code': 'C0002',
-            'name': '山本风少女长裙复古气质秋冬流行新款',
-            'price': 102.00,
-//            'suggestedPrice': 89,
-//            'price1': 88,
-//            'price2': 87,
-//            'price3': 86,
-            'skuID': 'SKU0002',
-            'salesVolume': 12,
-            'isRecommend': false,
-            'brand': '同创',
-            'gramWeight': 1.50,
-            'thumbnail':
-                'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-            'normal': [
-              {
-                'url':
-                    'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg',
-              },
-              {
-                'url':
-                    'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg'
-              }
-            ],
-//            'detail': [
-//              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-//              'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'
-//            ],
-            'attributes': {
-              'styles': ['FG0001', 'FG0002'],
-              'fabricComposition': 'B001',
-              'editionType': 'C001',
-              'pattern': 'D001',
-              'sleeveType': 'E001',
-              'sleeveLength': 'F001',
-              'decorativePattern': ['G001', 'G002'],
-              'popularElements': ['H001', 'H002'],
-              'filler': 'J001',
-              'thickness': 'K001',
-              'season': 'L001',
-              'taggable': false,
-              'placket': 'M001',
-            },
-            'minorCategory': {
-              'code': 'W0106',
-              'name': '女式棉衣',
-              'parent': {
-                'code': 'W01',
-                'name': '女装',
-              }
-            },
-            'variants': [
-              {
-                'color': {'code': 'C01', 'name': '红色', 'colorCode': 'FF0033'},
-                'size': {
-                  'code': 'S01',
-                  'name': 'XXXL',
-                }
-              },
-              {
-                'color': {'code': 'C04', 'name': '海军蓝', 'colorCode': '0066FF'},
-                'size': {
-                  'code': 'S01',
-                  'name': 'XXXL',
-                }
-              },
-            ],
-          }),
-          ApparelProductModel.fromJson({
-            'approvalStatus': 'APPROVED',
-            'code': 'C0002',
-            'name': '山本风少女长裙复古气质秋冬流行新款',
-            'price': 102.00,
-            'suggestedPrice': 89,
-            'price1': 88,
-            'price2': 87,
-            'price3': 86,
-            'skuID': 'SKU0002',
-            'salesVolume': 12,
-            'isRecommend': false,
-            'brand': '同创',
-            'gramWeight': 1.50,
-            'thumbnail':
-                'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-            'attributes': {
-              'styles': ['FG0001', 'FG0002'],
-              'fabricComposition': 'B001',
-              'editionType': 'C001',
-              'pattern': 'D001',
-              'sleeveType': 'E001',
-              'sleeveLength': 'F001',
-              'decorativePattern': ['G001', 'G002'],
-              'popularElements': ['H001', 'H002'],
-              'filler': 'J001',
-              'thickness': 'K001',
-              'season': 'L001',
-              'placket': 'M001',
-            },
-            'minorCategory': {
-              'code': 'W0106',
-              'name': '女式棉衣',
-              'parent': {
-                'code': 'W01',
-                'name': '女装',
-              }
-            },
-          }),
-          ApparelProductModel.fromJson({
-            'approvalStatus': 'APPROVED',
-            'code': 'C0002',
-            'name': '山本风少女长裙复古气质秋冬流行新款',
-            'price': 102.00,
-            'suggestedPrice': 89,
-            'price1': 88,
-            'price2': 87,
-            'price3': 86,
-            'skuID': 'SKU0002',
-            'salesVolume': 12,
-            'isRecommend': false,
-            'brand': '同创',
-            'gramWeight': 1.50,
-            'thumbnail':
-                'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-            'attributes': {
-              'styles': ['FG0001', 'FG0002'],
-              'fabricComposition': 'B001',
-              'editionType': 'C001',
-              'pattern': 'D001',
-              'sleeveType': 'E001',
-              'sleeveLength': 'F001',
-              'decorativePattern': ['G001', 'G002'],
-              'popularElements': ['H001', 'H002'],
-              'filler': 'J001',
-              'thickness': 'K001',
-              'season': 'L001',
-              'placket': 'M001',
-            },
-            'minorCategory': {
-              'code': 'W0106',
-              'name': '女式棉衣',
-              'parent': {
-                'code': 'W01',
-                'name': '女装',
-              }
-            },
-          }),
-          ApparelProductModel.fromJson({
-            'approvalStatus': 'APPROVED',
-            'code': 'C0002',
-            'name': '山本风少女长裙复古气质秋冬流行新款',
-            'price': 102.00,
-            'suggestedPrice': 89,
-            'price1': 88,
-            'price2': 87,
-            'price3': 86,
-            'skuID': 'SKU0002',
-            'salesVolume': 12,
-            'isRecommend': false,
-            'brand': '同创',
-            'gramWeight': 1.50,
-            'thumbnail':
-                'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-            'attributes': {
-              'styles': ['FG0001', 'FG0002'],
-              'fabricComposition': 'B001',
-              'editionType': 'C001',
-              'pattern': 'D001',
-              'sleeveType': 'E001',
-              'sleeveLength': 'F001',
-              'decorativePattern': ['G001', 'G002'],
-              'popularElements': ['H001', 'H002'],
-              'filler': 'J001',
-              'thickness': 'K001',
-              'season': 'L001',
-              'placket': 'M001',
-            },
-            'minorCategory': {
-              'code': 'W0106',
-              'name': '女式棉衣',
-              'parent': {
-                'code': 'W01',
-                'name': '女装',
-              }
-            },
-          }),
-        ];
-      }));
-    }
+    products.clear();
+    productsResponse = await ProductRepositoryImpl().list({},{});
+    products.addAll(productsResponse.content);
     _controller.sink.add(products);
   }
 
   loadingMoreByStatuses() async {
-    //模拟数据到底
-    if (products.length < 6) {
-      products.add(await Future.delayed(const Duration(seconds: 1), () {
-        return ApparelProductModel.fromJson({
-          'approvalStatus': 'APPROVED',
-          'code': 'C0002',
-          'name': '山本风少女长裙复古气质秋冬流行新款',
-          'price': 102.00,
-          'suggestedPrice': 89,
-          'price1': 88,
-          'price2': 87,
-          'price3': 86,
-          'skuID': 'SKU0002',
-          'salesVolume': 12,
-          'isRecommend': false,
-          'brand': '同创',
-          'gramWeight': 1.50,
-          'thumbnail':
-              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-          'stockLevel': {
-            'available': 97,
-            'maxPreOrder': 122,
-          },
-          'attributes': {
-            'styles': ['FG0001', 'FG0002'],
-            'fabricComposition': 'B001',
-            'editionType': 'C001',
-            'pattern': 'D001',
-            'sleeveType': 'E001',
-            'sleeveLength': 'F001',
-            'decorativePattern': ['G001', 'G002'],
-            'popularElements': ['H001', 'H002'],
-            'filler': 'J001',
-            'thickness': 'K001',
-            'season': 'L001',
-            'placket': 'M001',
-          },
-          'minorCategory': {
-            'code': 'W0106',
-            'name': '女式棉衣',
-            'parent': {
-              'code': 'W01',
-              'name': '女装',
-            }
-          },
-        });
-      }));
-    } else {
-      //通知显示已经到底部
+    if(productsResponse.number < productsResponse.totalPages-1){
+      productsResponse = await ProductRepositoryImpl().list({
+        'page':productsResponse.number+1,
+      },{});
+      products.addAll(productsResponse.content);
+    }else{
       _bottomController.sink.add(true);
     }
-    _loadingController.sink.add(false);
+//    _loadingController.sink.add(false);
     _controller.sink.add(products);
   }
 
   //下拉刷新
-  Future refreshData() async {
-    products.clear();
-    products.add(await Future.delayed(const Duration(seconds: 1), () {
-      return ApparelProductModel.fromJson({
-        'approvalStatus': 'APPROVED',
-        'code': 'C0002',
-        'name': '山本风少女长裙复古气质秋冬流行新款',
-        'price': 102.00,
-        'suggestedPrice': 89,
-        'price1': 88,
-        'price2': 87,
-        'price3': 86,
-        'skuID': 'SKU0002',
-        'salesVolume': 12,
-        'isRecommend': false,
-        'brand': '同创',
-        'gramWeight': 1.50,
-        'thumbnail':
-            'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-        'stockLevel': {
-          'available': 97,
-          'maxPreOrder': 122,
-        },
-        'attributes': {
-          'styles': ['FG0001', 'FG0002'],
-          'fabricComposition': 'B001',
-          'editionType': 'C001',
-          'pattern': 'D001',
-          'sleeveType': 'E001',
-          'sleeveLength': 'F001',
-          'decorativePattern': ['G001', 'G002'],
-          'popularElements': ['H001', 'H002'],
-          'filler': 'J001',
-          'thickness': 'K001',
-          'season': 'L001',
-          'placket': 'M001',
-          'taggable': true,
-        },
-        'minorCategory': {
-          'code': 'W0106',
-          'name': '女式棉衣',
-          'parent': {
-            'code': 'W01',
-            'name': '女装',
-          }
-        },
-      });
-    }));
-    _controller.sink.add(products);
-  }
+//  Future refreshData() async {
+//    productsResponse = await ProductRepositoryImpl().list({},{});
+//    _controller.sink.add(productsResponse.content);
+//  }
 
   //页面控制
 

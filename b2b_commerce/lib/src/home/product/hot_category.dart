@@ -12,54 +12,54 @@ class ProductHotCategoryPage extends StatefulWidget {
 class _ProductHotCategoryPageState extends State<ProductHotCategoryPage> {
   //TODO:调用接口查询推荐款式
   List<ProductModel> recommendProducts = <ProductModel>[
-    ProductModel(
-        name: '冬季女棉服',
-        thumbnail:
-            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        minPrice: 99.0,
-        maxPrice: 500.0),
-    ProductModel(
-        name: '冬季女棉服',
-        thumbnail:
-            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        minPrice: 99.0,
-        maxPrice: 500.0),
-    ProductModel(
-        name: '冬季女棉服',
-        thumbnail:
-            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        minPrice: 99.0,
-        maxPrice: 500.0),
-    ProductModel(
-        name: '冬季女棉服',
-        thumbnail:
-            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        minPrice: 99.0,
-        maxPrice: 500.0),
-    ProductModel(
-        name: '冬季女棉服',
-        thumbnail:
-            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        minPrice: 99.0,
-        maxPrice: 500.0),
-    ProductModel(
-        name: '冬季女棉服',
-        thumbnail:
-            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        minPrice: 99.0,
-        maxPrice: 500.0),
-    ProductModel(
-        name: '冬季女棉服',
-        thumbnail:
-            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        minPrice: 99.0,
-        maxPrice: 500.0),
-    ProductModel(
-        name: '冬季女棉服',
-        thumbnail:
-            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        minPrice: 99.0,
-        maxPrice: 500.0),
+//    ProductModel(
+//        name: '冬季女棉服',
+//        thumbnail:
+//            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//        minPrice: 99.0,
+//        maxPrice: 500.0),
+//    ProductModel(
+//        name: '冬季女棉服',
+//        thumbnail:
+//            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//        minPrice: 99.0,
+//        maxPrice: 500.0),
+//    ProductModel(
+//        name: '冬季女棉服',
+//        thumbnail:
+//            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//        minPrice: 99.0,
+//        maxPrice: 500.0),
+//    ProductModel(
+//        name: '冬季女棉服',
+//        thumbnail:
+//            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//        minPrice: 99.0,
+//        maxPrice: 500.0),
+//    ProductModel(
+//        name: '冬季女棉服',
+//        thumbnail:
+//            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//        minPrice: 99.0,
+//        maxPrice: 500.0),
+//    ProductModel(
+//        name: '冬季女棉服',
+//        thumbnail:
+//            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//        minPrice: 99.0,
+//        maxPrice: 500.0),
+//    ProductModel(
+//        name: '冬季女棉服',
+//        thumbnail:
+//            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//        minPrice: 99.0,
+//        maxPrice: 500.0),
+//    ProductModel(
+//        name: '冬季女棉服',
+//        thumbnail:
+//            'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//        minPrice: 99.0,
+//        maxPrice: 500.0),
   ];
 
   //TODO:调用接口查询热门品类

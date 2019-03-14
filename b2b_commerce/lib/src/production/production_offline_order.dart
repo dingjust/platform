@@ -44,12 +44,14 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   String processingCount;
   String productName;
   String earnestMoney;
+  String detailAddress;
   ApparelProductModel _product;
   Map<ColorModel, List<SizeQuantityItem>> colorSizeList = Map();
   Map<ColorModel, List<SizeQuantityItem>> _items = Map();
   Map<ColorModel, List<SizeQuantityItem>> _newItems;
   Map<ColorModel, List<SizeQuantityItem>> sizeQuantityList;
   int _totalQuantity;
+  ApparelProductModel productModel = new ApparelProductModel();
   List<ApparelSizeVariantProductModel> variants;
   List<PurchaseOrderEntryModel> entryList = List();
 
@@ -128,6 +130,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Divider(
             height: 0,
           ),
+          _buildDetailAddress(context),
+          Divider(
+            height: 0,
+          ),
           _buildRemarks(context),
         ],
       ),
@@ -176,9 +182,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           );
           if (result != null) {
             productName = result.name;
-            ApparelProductModel productModel = result;
-
-            entryModel.product = productModel;
+            productModel = result;
 
             if (productModel.variants != null) {
               List<ColorModel> colors = List();
@@ -500,6 +504,43 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         });
   }
 
+  //详细地址
+  Widget _buildDetailAddress(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '详细地址',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: addressModel.line1 == null || addressModel.line1 == ''
+                ? Icon(Icons.keyboard_arrow_right)
+                : Text(addressModel.line1,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OfflineOrderInputPage(fieldText: '详细地址',inputType: TextInputType.text)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              addressModel.line1 = value;
+            });
+          });
+        });
+  }
+
   //加工类型
   Widget _buildCooperationModes(BuildContext context) {
     return GestureDetector(
@@ -624,18 +665,23 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   onPressed: () async {
+
                     purchaseOrder.factory = factory;
                     purchaseOrder.deliveryAddress = addressModel;
                     purchaseOrder.expectedDeliveryDate = deliveryDate;
                     purchaseOrder.machiningType = machiningType;
                     purchaseOrder.invoiceNeeded = isInvoice;
                     purchaseOrder.totalQuantity = _totalQuantity;
-                    entryModel.price = double.parse(price);
                     purchaseOrder.remarks = remarks;
+
+                    entryModel.product = productModel;
+                    entryModel.price = double.parse(price);
                     entryList.add(entryModel);
                     purchaseOrder.entries = entryList;
 
                     String code = await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
+
+
 
                   })
           ),

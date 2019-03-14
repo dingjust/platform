@@ -30,8 +30,8 @@ class ApparelProductAttributesInputPageState
   @override
   void initState() {
     if (widget.item?.styles != null) _styleCodes.addAll(widget.item?.styles);
-    if (widget.item?.decorativePattern != null)
-      _decorativePatternCodes.addAll(widget.item?.decorativePattern);
+    if (widget.item?.decorativePatterns != null)
+      _decorativePatternCodes.addAll(widget.item?.decorativePatterns);
     if (widget.item?.popularElements != null)
       _popularElementsCodes.addAll(widget.item?.popularElements);
     if (widget.item?.fabricComposition != null)
@@ -69,7 +69,7 @@ class ApparelProductAttributesInputPageState
       season: _seasonCode.length > 0 ? _seasonCode[0] : null,
       thickness: _thicknessCode.length > 0 ? _thicknessCode[0] : null,
       popularElements: _popularElementsCodes,
-      decorativePattern: _decorativePatternCodes,
+      decorativePatterns: _decorativePatternCodes,
       filler: _fillerCode.length > 0 ? _fillerCode[0] : null,
       taggable:
           _taggableCode.length > 0 ? _taggableCode[0] == 'true' : null,

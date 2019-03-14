@@ -43,8 +43,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   //TODO 根据code查询款式详情
   final product = ProductModel(
       name: '冬季女棉服',
-      thumbnail:
-          'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//      thumbnail:
+//          'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
       minPrice: 99.00,
       maxPrice: 500.00,
       belongTo: FactoryModel.fromJson({

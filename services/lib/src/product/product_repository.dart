@@ -1,8 +1,13 @@
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 /// 市
 abstract class ProductRepository {
-  Future<List<ProductModel>> list();
+  ///获取商品列表
+  Future<ProductsResponse> list(Map<String,Object> params,dynamic data);
+
+  //创建商品
+  Future<String> create(ApparelProductModel form);
 
   //获取商品小类
   Future<List<CategoryModel>> cascadedCategories();
@@ -15,4 +20,5 @@ abstract class ProductRepository {
 
   //获取所有尺码
   Future<List<SizeModel>> sizes();
+
 }

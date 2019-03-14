@@ -11,7 +11,6 @@ class ApparelProductList extends StatelessWidget {
 
   ScrollController _scrollController = new ScrollController();
 
-
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<ApparelProductBLoC>(context);
@@ -45,7 +44,7 @@ class ApparelProductList extends StatelessWidget {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.refreshData();
+            return await bloc.filterByStatuses();
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
