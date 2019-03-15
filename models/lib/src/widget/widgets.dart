@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FilterConditionEntry {
+class FilterConditionEntry<T> {
   FilterConditionEntry(
       {@required this.label,
       this.value,
@@ -13,7 +13,7 @@ class FilterConditionEntry {
   final String label;
 
   ///Tab筛选值
-  final String value;
+  final T value;
 
   ///选中状态
   bool checked;
