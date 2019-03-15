@@ -47,7 +47,7 @@
   import autoHeight from '@/mixins/autoHeight';
 
   export default {
-    name: 'PurchaseOrderSearchResultList',
+    name: 'ProofingSearchResultList',
     props: ["page"],
     mixins: [autoHeight],
     computed: {},

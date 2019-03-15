@@ -69,10 +69,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     //把颜色尺码封装成ApparelSizeVariantProductEntry
     if(order.entries.isNotEmpty){
       for (int i = 0; i < order.entries.length; i++) {
-        ApparelSizeVariantProductEntry entry = new ApparelSizeVariantProductEntry();
-        entry.quantity = order.entries[i].quantity;
-        entry.model = order.entries[i].product;
-        mockData.add(entry);
+        if(order.entries[i].product.color != null && order.entries[i].product.size != null){
+          ApparelSizeVariantProductEntry entry = new ApparelSizeVariantProductEntry();
+          entry.quantity = order.entries[i].quantity;
+          entry.model = order.entries[i].product;
+          mockData.add(entry);
+        }
       }
     }
     //控制是否显示按钮
@@ -119,9 +121,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             _buildEntries(context),
             _buildProductEntry(context),
             _buildRemarks(context),
-            order.status != PurchaseOrderStatus.PENDING_PAYMENT ?
-            _buildPurchaseProductionProgresse(context)
-            : _buildTipsPayment(context),
+//            order.status != PurchaseOrderStatus.PENDING_PAYMENT ?
+            _buildPurchaseProductionProgresse(context),
+//            : _buildTipsPayment(context)
             order.belongTo == null ?
             Container():
             _buildFactoryInfo(context),
@@ -144,7 +146,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         children: <Widget>[
-          order.entries.isNotEmpty
+          order.entries.isNotEmpty  && order.entries != null && order.entries.length > 0 && order.entries[0].product.thumbnail != null
+              && order.entries[0].product.thumbnail.name != null
               ? Container(
             width: 80,
             height: 80,
@@ -200,7 +203,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
-                    child: order.entries[0].product.superCategories.name == null ?
+                    child: order.entries[0].product.superCategories == null ?
                     Container() :
                     Text(
                       "${order.entries[0].product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
@@ -487,16 +490,16 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 //构建生产进度UI
   Widget _buildPurchaseProductionProgresse(BuildContext context) {
     int _index = 0;
-    if(order.productionProgresses.isNotEmpty){
-      for (int i = 0; i < order.productionProgresses.length; i++) {
-        if (order.currentPhase == order.productionProgresses[i].phase) {
-          _index = order.productionProgresses[i].sequence;
+    if(order.progresses != null ){
+      for (int i = 0; i < order.progresses.length; i++) {
+        if (order.currentPhase == order.progresses[i].phase) {
+          _index = order.progresses[i].sequence;
           break;
         }
       }
     }
 
-    return order.productionProgresses.isEmpty?
+    return order.progresses == null ?
     Container():
     Container(
       padding: EdgeInsets.only(right: 15),
@@ -504,9 +507,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ? Column(
               children: <Widget>[
                 _buildProductionProgress(
-                    context, order.productionProgresses[_index], true),
+                    context, order.progresses[_index], true),
                 _buildProductionProgress(
-                    context, order.productionProgresses[_index + 1], false),
+                    context, order.progresses[_index + 1], false),
                 Container(
                     width: double.infinity,
                     padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
@@ -532,9 +535,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           : Column(
               children: <Widget>[
                 _buildProductionProgress(
-                    context, order.productionProgresses[_index - 1], false),
+                    context, order.progresses[_index - 1], false),
                 _buildProductionProgress(
-                    context, order.productionProgresses[_index], true),
+                    context, order.progresses[_index], true),
                 Container(
                     width: double.infinity,
                     padding: EdgeInsets.fromLTRB(50, 0, 10, 0),

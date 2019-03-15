@@ -266,7 +266,7 @@ class PurchaseOrderItem extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                    image: order.entries.isEmpty?
+                    image: order.entries.isEmpty || order.entries == null || order.entries.length <= 0 || order.entries[0].product.thumbnail == null?
                     AssetImage(
                       'temp/picture.png',
                       package: "assets",
@@ -285,7 +285,7 @@ class PurchaseOrderItem extends StatelessWidget {
                       children: <Widget>[
                         Align(
                             alignment: Alignment.topLeft,
-                            child: order.entries.isEmpty?
+                            child: order.entries.isEmpty|| order.entries == null || order.entries.length <= 0 || order.entries[0].product.name == null?
                             Container():
                             Text(
                               order.entries[0].product.name,
@@ -305,7 +305,7 @@ class PurchaseOrderItem extends StatelessWidget {
                                     fontSize: 12, color: Colors.grey),
                               ),
                             )),
-                        order.entries.isEmpty ?
+                        order.entries.isEmpty|| order.entries == null || order.entries.length <= 0 || order.entries[0].product.superCategories == null?
                         Container() :
                         Container(
                             padding: EdgeInsets.all(3),

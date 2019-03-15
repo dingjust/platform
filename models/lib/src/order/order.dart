@@ -669,8 +669,8 @@ class PurchaseOrderModel extends OrderModel {
   DateTime expectedDeliveryDate;
 
   //生产进度
-  @JsonKey(toJson: productionProgressesToJson)
-  List<ProductionProgressModel> productionProgresses;
+  @JsonKey(toJson: progressesToJson)
+  List<ProductionProgressModel> progresses;
 
   //是否已付定金
   bool depositPaid;
@@ -711,7 +711,7 @@ class PurchaseOrderModel extends OrderModel {
     this.attachments,
     this.requirementOrderCode,
     this.expectedDeliveryDate,
-    this.productionProgresses,
+    this.progresses,
     this.balance,
     this.balancePaid,
     this.invoiceNeeded,
@@ -761,7 +761,7 @@ class PurchaseOrderModel extends OrderModel {
   static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
       models.map((model) => MediaModel.toJson(model)).toList();
 
-  static List<Map<String, dynamic>> productionProgressesToJson(
+  static List<Map<String, dynamic>> progressesToJson(
       List<ProductionProgressModel> entries) =>
       entries.map((entry) => ProductionProgressModel.toJson(entry)).toList();
 }
