@@ -35,7 +35,7 @@ class RecommendProductItem extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5), topRight: Radius.circular(5)),
                 image: DecorationImage(
-                  image: NetworkImage(model.thumbnail),
+                  image: NetworkImage(model.thumbnail.url),
                   fit: BoxFit.cover,
                 ),
               ),

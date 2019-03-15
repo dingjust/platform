@@ -245,9 +245,9 @@ const router = new Router({
           },
           children: [
             {
-              path: 'order',
+              path: 'sales',
               name: '销售订单',
-              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/order/OrderPage'),
+              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/sales/SalesOrderPage'),
             },
             {
               path: 'requirement',
@@ -255,9 +255,9 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/requirement/RequirementOrderPage'),
             },
             {
-              path: 'consignment',
+              path: 'purchase',
               name: '生产订单',
-              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/consignment/ConsignmentPage'),
+              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/purchase/PurchaseOrderPage'),
             }
           ]
         },

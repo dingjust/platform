@@ -139,7 +139,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         child: Row(
           children: <Widget>[
             Image.network(
-              entry.product.thumbnail,
+              entry.product.thumbnail.url,
               width: 110,
               height: 110,
               fit: BoxFit.fill,

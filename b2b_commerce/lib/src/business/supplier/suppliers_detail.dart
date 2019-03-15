@@ -650,7 +650,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                             Container(
                               child: Image.network(
                                 widget.supplierModel.factory.products[index]
-                                    .normal[0].url,
+                                    .images[0].url,
                                 width: 100,
                                 height: 100,
                                 fit: BoxFit.fill,
@@ -994,7 +994,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
           child: Row(
             children: <Widget>[
               Image.network(
-                entry.product.thumbnail,
+                entry.product.thumbnail.url,
                 width: 110,
                 height: 110,
                 fit: BoxFit.fill,

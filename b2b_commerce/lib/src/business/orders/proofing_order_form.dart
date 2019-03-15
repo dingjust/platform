@@ -33,7 +33,7 @@ class ProofingOrderFormPageState extends State<ProofingOrderFormPage> {
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
                   image: widget.item.product.thumbnail != null
-                      ? NetworkImage(widget.item.product.thumbnail)
+                      ? NetworkImage(widget.item.product.thumbnail.url)
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",
@@ -75,7 +75,7 @@ class ProofingOrderFormPageState extends State<ProofingOrderFormPage> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.item.product?.minorCategory?.name}",
+                      "${widget.item.product?.category?.name}",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

@@ -86,7 +86,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: NetworkImage(widget.model.product.thumbnail),
+                        image: NetworkImage(widget.model.product.thumbnail.url),
                         fit: BoxFit.cover,
                       )),
                 )
@@ -132,7 +132,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.product.majorCategory.name}   ${widget.model.product.minorCategory.name}   ${widget.model.totalQuantity}件",
+                      "${widget.model.product.category.name}   ${widget.model.product.category.name}   ${widget.model.totalQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

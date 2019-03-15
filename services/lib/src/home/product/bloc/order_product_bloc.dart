@@ -38,8 +38,8 @@ class OrderByProductBLoc extends BLoCBase {
   ProductModel mockData1() {
     return ProductModel(
       name: '冬季女棉服',
-      thumbnail:
-          'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//      thumbnail:
+//          'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
       minPrice: 99.0,
       maxPrice: 500.0,
     );
@@ -48,8 +48,8 @@ class OrderByProductBLoc extends BLoCBase {
   ProductModel mockData2() {
     return ProductModel(
       name: 'Vero Moda秋季新款高冷气质女装百褶针织连衣裙女',
-      thumbnail:
-          'https://img.alicdn.com/imgextra/i4/17971277/O1CN01Qgn0h01LIuGFhUVFf_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//      thumbnail:
+//          'https://img.alicdn.com/imgextra/i4/17971277/O1CN01Qgn0h01LIuGFhUVFf_!!0-saturn_solar.jpg_220x220.jpg_.webp',
       minPrice: 99.0,
       maxPrice: 500.0,
     );

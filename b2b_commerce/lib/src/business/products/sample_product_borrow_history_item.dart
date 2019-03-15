@@ -26,8 +26,8 @@ class SampleProductBorrowHistoryItem extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 image: DecorationImage(
-                  image: item.sampleProduct.thumbnail != null
-                      ? NetworkImage(item.sampleProduct.thumbnail)
+                  image: item.sampleProduct.pictures[0].url != null
+                      ? NetworkImage(item.sampleProduct.thumbnail.url)
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",

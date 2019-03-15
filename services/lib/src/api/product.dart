@@ -8,4 +8,8 @@ abstract class ProductApis {
   static get colors => '/{baseSiteId}/colors/all';
   ///获取尺码
   static get sizes => '/{baseSiteId}/sizes/all';
+  ///获取商品列表
+  static get list => '/{baseSiteId}/b2b/products/apparel';
+  ///创建商品
+  static get create => '/{baseSiteId}/b2b/products/apparel/create';
 }

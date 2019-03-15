@@ -29,7 +29,7 @@ class CategoryFieldState extends State<CategoryField>{
 
   @override
   Widget build(BuildContext context) {
-    if(widget.product?.minorCategory != null) _categorySelected = [widget.product.minorCategory];
+    if(widget.product?.category != null) _categorySelected = [widget.product.category];
     return GestureDetector(
         child: Container(
           child: ListTile(

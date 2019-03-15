@@ -22,9 +22,9 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
   @override
   void initState() {
     super.initState();
-    _minorCategoryText = widget.item?.minorCategory?.name;
-    if(widget.item?.minorCategory != null){
-      _minCategorySelect = [widget.item?.minorCategory];
+    _minorCategoryText = widget.item?.category?.name;
+    if(widget.item?.category != null){
+      _minCategorySelect = [widget.item?.category];
     }
     ProductRepositoryImpl().cascadedCategories().then((categorys)=>_categorys = categorys);
 
@@ -47,10 +47,11 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
            if(result != null) _minCategorySelect = result;
 
             if (_minCategorySelect.length > 0) {
-              widget.item.minorCategory = _minCategorySelect[0];
+              widget.item.category = _minCategorySelect[0];
               _minorCategoryText = _minCategorySelect[0]?.name;
             }else{
               _minorCategoryText = '';
+              widget.item.category = null;
             }
           },
           child: ShowSelectTile(

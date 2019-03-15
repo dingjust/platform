@@ -45,11 +45,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   @override
   void initState() {
     if (widget.product != null) {
-      if (widget.product.normal != null)
-        model.details.pictures = widget.product.normal;
-      model.details.category = widget.product.minorCategory;
-      if (widget.product?.minorCategory != null) {
-        _categorySelected = [widget.product.minorCategory];
+      if (widget.product.images != null)
+        model.details.pictures = widget.product.images;
+      model.details.category = widget.product.category;
+      if (widget.product?.category != null) {
+        _categorySelected = [widget.product.category];
       }
     }
 
@@ -122,7 +122,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   model.details.productName = result.name;
                   model.details.productSkuID = result.skuID;
                   model.details.pictures = result?.normal;
-                  _categorySelected = [result.minorCategory];
+                  _categorySelected = [result.category];
                 }
 
                 model.details.category =
