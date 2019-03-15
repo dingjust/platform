@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //TODO:调用接口查询推荐工厂,mock数据待删除
-  static Color orange = Color.fromRGBO(255,214,12, 1);
+  static Color orange = Color.fromRGBO(255, 214, 12, 1);
   static Color white = Colors.white;
 
   ///图标颜色
@@ -116,7 +117,9 @@ class _HomePageState extends State<HomePage> {
       GridItem(
           title: '当季快反',
           onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_FACTORY);
+            // Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_FACTORY);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => RequirementPoolAllPage()));
           },
           pic: B2BImage.fast_factory(width: 60, height: 80)),
       GridItem(

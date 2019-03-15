@@ -75,7 +75,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => RequirementPoolAll()),
+            MaterialPageRoute(builder: (context) => RequirementPoolAllPage()),
           );
         },
         backgroundColor: Colors.amberAccent,
@@ -602,7 +602,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
 
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RequirementPoolAll()),
+              MaterialPageRoute(builder: (context) => RequirementPoolAllPage()),
             );
           },
         )
