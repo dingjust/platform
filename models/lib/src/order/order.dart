@@ -48,29 +48,33 @@ const RequirementOrderStatusLocalizedMap = {
 
 /// 采购订单状态
 enum PurchaseOrderStatus {
-  /// 待付定金
-  WAIT_PAY_EARNEST_MONEY,
-
-  // 待付尾款
-  WAIT_PAY_TAIL_MONEY,
+  /// 待付款
+  PENDING_PAYMENT,
 
   /// 生产中
   IN_PRODUCTION,
+
+  // 待出库
+  WAIT_FOR_OUT_OF_STORE,
 
   /// 已出库
   OUT_OF_STORE,
 
   /// 已完成
-  COMPLETED
+  COMPLETED,
+
+  ///已取消
+  CANCELLED
 }
 
 // TODO: i18n处理
 const PurchaseOrderStatusLocalizedMap = {
-  PurchaseOrderStatus.WAIT_PAY_EARNEST_MONEY: "待付定金",
-  PurchaseOrderStatus.WAIT_PAY_TAIL_MONEY: "待付尾款",
+  PurchaseOrderStatus.PENDING_PAYMENT: "待付款",
   PurchaseOrderStatus.IN_PRODUCTION: "生产中",
+  PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: "待出库",
   PurchaseOrderStatus.OUT_OF_STORE: "已出库",
-  PurchaseOrderStatus.COMPLETED: "已完成"
+  PurchaseOrderStatus.COMPLETED: "已完成",
+  PurchaseOrderStatus.CANCELLED: '已取消',
 };
 
 enum SalesApplication {
@@ -631,10 +635,10 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 class PurchaseOrderModel extends OrderModel {
 
   @JsonKey(toJson: _brandToJson)
-  BrandModel brandModel;
+  BrandModel purchaser;
 
   @JsonKey(toJson: _factoryToJson)
-  FactoryModel factory;
+  FactoryModel belongTo;
 
   /// 采购行
   @JsonKey(toJson: entriesToJson)
@@ -668,6 +672,30 @@ class PurchaseOrderModel extends OrderModel {
   @JsonKey(toJson: productionProgressesToJson)
   List<ProductionProgressModel> productionProgresses;
 
+  //是否已付定金
+  bool depositPaid;
+
+  //是否已付尾款
+  bool balancePaid;
+
+  //定金
+  double deposit;
+
+  //尾款
+  double balance;
+
+  //卖方
+  String companyOfSeller;
+
+  //卖方联系人
+  String contactPersonOfSeller;
+
+  //卖方联系电话
+  String contactOfSeller;
+
+  //单价
+  double unitPrice;
+
   PurchaseOrderModel({String code,
     this.status,
     int totalQuantity,
@@ -675,8 +703,8 @@ class PurchaseOrderModel extends OrderModel {
     DateTime creationTime,
     AddressModel deliveryAddress,
     String remarks,
-    this.brandModel,
-    this.factory,
+    this.purchaser,
+    this.belongTo,
     this.entries,
     this.machiningType,
     this.currentPhase,
@@ -684,6 +712,15 @@ class PurchaseOrderModel extends OrderModel {
     this.requirementOrderCode,
     this.expectedDeliveryDate,
     this.productionProgresses,
+    this.balance,
+    this.balancePaid,
+    this.invoiceNeeded,
+    this.companyOfSeller,
+    this.contactOfSeller,
+    this.contactPersonOfSeller,
+    this.deposit,
+    this.depositPaid,
+    this.unitPrice,
     SalesApplication salesApplication})
       : super(
       code: code,
@@ -734,7 +771,7 @@ class PurchaseOrderModel extends OrderModel {
 class PurchaseOrderEntryModel extends OrderEntryModel {
 
   @JsonKey(toJson: productToJson)
-  ApparelProductModel product;
+  ApparelSizeVariantProductModel product;
 
   @JsonKey(toJson: orderToJson)
   PurchaseOrderModel order;
@@ -759,8 +796,8 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
   static Map<String, dynamic> toJson(PurchaseOrderEntryModel model) =>
       _$PurchaseOrderEntryModelToJson(model);
 
-  static Map<String, dynamic> productToJson(ApparelProductModel model) =>
-      ApparelProductModel.toJson(model);
+  static Map<String, dynamic> productToJson(ApparelSizeVariantProductModel model) =>
+      ApparelSizeVariantProductModel.toJson(model);
 
   static Map<String, dynamic> orderToJson(PurchaseOrderModel model) =>
       {'code': model.code ?? ''};

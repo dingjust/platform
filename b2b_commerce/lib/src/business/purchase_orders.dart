@@ -8,11 +8,12 @@ import 'package:widgets/widgets.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
-  EnumModel('WAIT_PAY_EARNEST_MONEY', '待付定金'),
-  EnumModel('WAIT_PAY_TAIL_MONEY', '待付尾款'),
+  EnumModel('PENDING_PAYMENT', '待付款'),
   EnumModel('IN_PRODUCTION', '生产中'),
+  EnumModel('WAIT_FOR_OUT_OF_STORE', '待出库'),
   EnumModel('OUT_OF_STORE', '已出库'),
   EnumModel('COMPLETED', '已完成'),
+  EnumModel('CANCELLED','已取消'),
 ];
 
 class PurchaseOrdersPage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
             brightness: Brightness.light,
             centerTitle: true,
             elevation: 0.5,
-            title: Text('采购订单'),
+            title: Text('生产订单'),
             actions: <Widget>[
               IconButton(
                 icon: Icon(B2BIcons.search,size: 20,),
@@ -57,8 +58,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                 children: statuses
                     .map((status) => PurchaseOrderList(
                   status: status,
-                ))
-                    .toList(),
+                )).toList(),
               ),
             ),
           ),
@@ -199,9 +199,7 @@ class PurchaseOrderItem extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildOrderHeader(context),
-            Column(
-              children: _buildContent(context),
-            ),
+            _buildContent(context),
             _buildOrderBottom(context),
           ],
         ),
@@ -230,23 +228,25 @@ class PurchaseOrderItem extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     child: Text(
-                  '生产订单号：' + order.code,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                )),
+                      '生产订单号：${order.code == null ? '' : order.code}',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    )),
+                order.status == null ? Container() :
                 Text(
                   PurchaseOrderStatusLocalizedMap[order.status],
                   textAlign: TextAlign.end,
-                  style: TextStyle(fontSize: 18, color: Color.fromRGBO(255,214,12, 1)),
+                  style: TextStyle(
+                      fontSize: 18, color: Color.fromRGBO(255, 214, 12, 1)),
                 )
               ],
             ),
             Row(
               children: <Widget>[
                 Text(
-                  '创建时间：${DateFormatUtil.formatYMD(order.creationTime)}',
+                  '创建时间：${order.creationTime == null ? '' : DateFormatUtil.formatYMD(order.creationTime)}',
                   style: TextStyle(fontSize: 14),
                 )
               ],
@@ -255,59 +255,74 @@ class PurchaseOrderItem extends StatelessWidget {
         ));
   }
 
-  List<Widget> _buildContent(BuildContext context) {
-    return order.entries.map((entry) {
-      return Container(
-          padding: EdgeInsets.all(10),
-          child: Row(
-            children: <Widget>[
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: NetworkImage(entry.product.thumbnail.url),
-                      fit: BoxFit.cover,
-                    )),
-              ),
-              Expanded(
-                  child: Container(
-                      padding: EdgeInsets.all(5),
-                      height: 100,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Align(
-                              alignment: Alignment.topLeft,
+  Widget _buildContent(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: order.entries.isEmpty?
+                    AssetImage(
+                      'temp/picture.png',
+                      package: "assets",
+                    ):
+                    NetworkImage(order.entries[0].product.thumbnail.url),
+                    fit: BoxFit.cover,
+                  )),
+            ),
+            Expanded(
+                child: Container(
+                    padding: EdgeInsets.all(5),
+                    height: 80,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: order.entries.isEmpty?
+                            Container():
+                            Text(
+                              order.entries[0].product.name,
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            )),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(5)),
                               child: Text(
-                                entry.product.name,
+                                '货号：${order.entries.isEmpty? '' : order.entries[0].product.skuID}',
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
-                              )),
-                          Align(
-                              alignment: Alignment.topLeft,
-                              // child: Text(
-                              //   '货号：' + entry.product.skuID,
-                              //   style: TextStyle(
-                              //       fontSize: 14, fontWeight: FontWeight.w500),
-                              // ))
-                              child: Container(
-                                padding: EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Text(
-                                  '货号：' + entry.product.skuID,
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey),
-                                ),
-                              ))
-                        ],
-                      )))
-            ],
-          ));
-    }).toList();
+                                    fontSize: 12, color: Colors.grey),
+                              ),
+                            )),
+                        order.entries.isEmpty ?
+                        Container() :
+                        Container(
+                            padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 243, 243, 1),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            "${order.entries[0].product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromRGBO(255, 133, 148, 1)),
+                          ),
+                        )
+                      ],
+                    )))
+          ],
+        ));
   }
 
   Widget _buildOrderBottom(BuildContext context) {
@@ -316,10 +331,10 @@ class PurchaseOrderItem extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: Text(
-            '共' +
-                order.totalQuantity.toString() +
-                '件商品   合计： ￥' +
-                order.totalPrice.toString(),
+            '共 ${order.totalQuantity == null ? ' ' : order
+                .totalQuantity} 件商品   合计： ￥ ${order.totalPrice == null
+                ? ' '
+                : order.totalPrice}',
             style: TextStyle(fontSize: 16, color: Colors.red),
           ),
         )

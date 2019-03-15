@@ -666,15 +666,18 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   onPressed: () async {
 
-                    purchaseOrder.factory = factory;
+                    purchaseOrder.belongTo = factory;
                     purchaseOrder.deliveryAddress = addressModel;
                     purchaseOrder.expectedDeliveryDate = deliveryDate;
                     purchaseOrder.machiningType = machiningType;
                     purchaseOrder.invoiceNeeded = isInvoice;
                     purchaseOrder.totalQuantity = _totalQuantity;
                     purchaseOrder.remarks = remarks;
+                    for(int i = 0; i < _items.length; i++){
+//                      entryModel.product = productModel;
+//                      entryModel.quantity
+                    }
 
-                    entryModel.product = productModel;
                     entryModel.price = double.parse(price);
                     entryList.add(entryModel);
                     purchaseOrder.entries = entryList;

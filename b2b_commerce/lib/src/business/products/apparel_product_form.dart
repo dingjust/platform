@@ -33,6 +33,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 
   @override
   void initState() {
+    print(widget.item.code);
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
@@ -53,7 +54,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 //            AsyncSnapshot<ApparelProductModel> snapshot) {
     return WillPopScope(
       onWillPop: (){
-        widget.item.images = null;
         Navigator.pop(context);
         return Future.value(false);
       },
@@ -73,40 +73,31 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   showDialog(context: context,builder: (context)=>AlertDialog(content: Text('请输入商品名称'),));
                   return;
                 }else if(widget.item.skuID == null){
-                  print(widget.item.category);
                   showDialog(context: context,builder: (context)=>AlertDialog(content: Text('请输入商品货号'),));
                   return;
                 }else if(widget.item.category == null){
                   showDialog(context: context,builder: (context)=>AlertDialog(content: Text('请输入商品类别'),));
                   return;
                 }
-
-
                 if(widget.item.attributes == null) widget.item.attributes = ApparelProductAttributesModel();
-                print("${widget.item.images}  code : ${widget.item.hashCode}");
-                print("${widget.item.name} code : ${widget.item.hashCode}");
-                print("${widget.item.skuID}  code : ${widget.item.hashCode}");
-                print(
-                    "${widget.item.category?.name} code : ${widget.item.hashCode}");
-                print("${widget.item.brand} code : ${widget.item.hashCode}");
-                print(widget.item.price);
-                print(widget.item.gramWeight);
-                print(widget.item.attributes.styles);
-               print(widget.item.variants);
+                if(widget.isCreate){
+                  String code = await ProductRepositoryImpl().create(widget.item);
+                  if(code != null){
+                    widget.item.name = null;
+                    widget.item.skuID = null;
+                    widget.item.attributes = null;
+                    widget.item.category = null;
+                    widget.item.brand = null;
+                    widget.item.variants = null;
+                    widget.item.price = null;
+                    widget.item.gramWeight = null;
+                    widget.item.images = null;
+                  }
+                }else{
+                  await ProductRepositoryImpl().update(widget.item);
+                }
 
-               String code = await ProductRepositoryImpl().create(widget.item);
-              if(code != null){
-                widget.item.name = null;
-                widget.item.skuID = null;
-                widget.item.attributes = null;
-                widget.item.category = null;
-                widget.item.brand = null;
-                widget.item.variants = null;
-                widget.item.price = null;
-                widget.item.gramWeight = null;
-              }
-              widget.item.images = null;
-
+                ApparelProductBLoC.instance.filterByStatuses();
 //              print(widget.item.attributes.styles[0]);
                 Navigator.pop(context);
               },

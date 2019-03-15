@@ -374,7 +374,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  '工厂：' + order.factory.name,
+                  '工厂：' + order.belongTo.name,
                   style: TextStyle(fontSize: 15),
                 ),
               ),

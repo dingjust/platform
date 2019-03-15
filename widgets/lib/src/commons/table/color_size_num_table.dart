@@ -156,12 +156,12 @@ class ColorSizeNumTable extends StatelessWidget {
   }
 }
 
-///颜色尺码产品,待删除
+///颜色尺码产品
 class ApparelSizeVariantProductEntry {
-  final ApparelSizeVariantProductModel model;
+  ApparelSizeVariantProductModel model;
 
   ///数量
-  final int quantity;
+  int quantity;
 
   ApparelSizeVariantProductEntry({this.model, this.quantity});
 }
