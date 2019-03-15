@@ -60,6 +60,12 @@
       async onSubmit() {
         console.log("submitted data: " + JSON.stringify(this.slotData));
 
+        const deliveryAddress = this.slotData.deliveryAddress;
+        // 地址信息未填时，清除deliveryAddress节点
+        if (!deliveryAddress.region || !deliveryAddress.region.isocode) {
+          delete this.slotData.deliveryAddress;
+        }
+
         const result = await this.$http.post('/b2b/orders/purchase/create', this.slotData);
         if (result['errors']) {
           this.$message.error('获取数据失败，原因：' + result['errors'][0].message);

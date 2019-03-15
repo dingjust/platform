@@ -6,19 +6,21 @@
                                        :variants="variants"
                                        @onQuantityChanged="onQuantityChanged">
       <template slot='summary'>
-        <purchase-order-entries-summary-form :read-only="readOnly"
-                                             :variants="variants"
-                                             :unit-price="unitPrice"
-                                             @onPriceChanged="onPriceChanged"/>
+        <order-entries-summary-form :read-only="readOnly"
+                                    :variants="variants"
+                                    :unit-price="unitPrice"
+                                    @onPriceChanged="onPriceChanged"/>
       </template>
     </apparel-product-stock-level-input>
   </div>
 </template>
 
 <script>
-  import {ProductSelect, ApparelProductStockLevelInput} from "@/views/shared/";
-
-  import PurchaseOrderEntriesSummaryForm from "./PurchaseOrderEntriesSummaryForm";
+  import {
+    ProductSelect,
+    ApparelProductStockLevelInput,
+    OrderEntriesSummaryForm
+  } from "@/views/shared/";
 
   export default {
     name: 'PurchaseOrderEntriesForm',
@@ -26,7 +28,7 @@
     components: {
       ProductSelect,
       ApparelProductStockLevelInput,
-      PurchaseOrderEntriesSummaryForm,
+      OrderEntriesSummaryForm,
     },
     mixins: [],
     computed: {},
