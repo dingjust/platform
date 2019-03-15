@@ -22,7 +22,7 @@
             <el-button type="primary" size="mini" @click="onUpdateBase">编辑</el-button>
          </span>-->
       </div>
-      <order-base-form :slot-data="slotData" :read-only="true"></order-base-form>
+      <sales-order-base-form :slot-data="slotData" :read-only="true"></sales-order-base-form>
     </el-card>
     <div class="pt-2"></div>
     <el-card class="box-card">
@@ -32,10 +32,10 @@
            <el-button type="primary" size="mini" @click="onUpdateAddress">编辑</el-button>
         </span>
       </div>
-      <order-delivery-address-form ref="orderDeliveryAddressForm"
-                                   :slot-data="slotData"
-                                   :read-only="true">
-      </order-delivery-address-form>
+      <sales-order-delivery-address-form ref="orderDeliveryAddressForm"
+                                         :slot-data="slotData"
+                                         :read-only="true">
+      </sales-order-delivery-address-form>
     </el-card>
     <div class="pt-2"></div>
     <el-card class="box-card">
@@ -45,15 +45,15 @@
            <el-button type="primary" size="mini" @click="onUpdateEntries">编辑</el-button>
         </span>
       </div>
-      <order-entries-form :slot-data="slotData" :read-only="true"></order-entries-form>
+      <sales-order-entries-form :slot-data="slotData" :read-only="true"></sales-order-entries-form>
     </el-card>
 
     <el-dialog title="更新地址"
                :visible.sync="addressFormDialogVisible" :close-on-click-modal="false" :modal="false">
-      <order-delivery-address-form ref="addressForm"
-                                   :slot-data="addressData"
-                                   :read-only="false">
-      </order-delivery-address-form>
+      <sales-order-delivery-address-form ref="addressForm"
+                                         :slot-data="addressData"
+                                         :read-only="false">
+      </sales-order-delivery-address-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addressFormDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="onSubmitAddressForm">确 定</el-button>
@@ -61,10 +61,10 @@
     </el-dialog>
     <el-dialog title="更新订单行" width="80%"
                :visible.sync="entriesFormDialogVisible" :close-on-click-modal="false" :modal="false">
-      <order-entries-form ref="entriesForm"
-                          :slot-data="entriesData"
-                          :read-only="false">
-      </order-entries-form>
+      <sales-order-entries-form ref="entriesForm"
+                                :slot-data="entriesData"
+                                :read-only="false">
+      </sales-order-entries-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="entriesFormDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="onSubmitEntriesForm">确 定</el-button>
@@ -86,14 +86,14 @@
 <script>
   import {SalesOrderStatusBar} from '@/views/shared/';
 
-  import OrderBaseForm from './OrderBaseForm';
-  import OrderEntriesForm from './OrderEntriesForm';
-  import OrderDeliveryAddressForm from './OrderDeliveryAddressForm';
+  import SalesOrderBaseForm from './SalesOrderBaseForm';
+  import SalesOrderEntriesForm from './SalesOrderEntriesForm';
+  import SalesOrderDeliveryAddressForm from './SalesOrderDeliveryAddressForm';
 
   export default {
     name: 'OrderDetailsPage',
     props: ['slotData', 'readOnly'],
-    components: {SalesOrderStatusBar, OrderBaseForm, OrderDeliveryAddressForm, OrderEntriesForm},
+    components: {SalesOrderStatusBar, SalesOrderBaseForm, SalesOrderDeliveryAddressForm, SalesOrderEntriesForm},
     methods: {
       refresh() {
         this.$refs['orderDeliveryAddressForm'].refresh();

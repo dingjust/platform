@@ -182,11 +182,12 @@ class _QuoteItemState extends State<QuoteItem> {
               onPressed: onApprove,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 149, 22, 1),
+              color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '确认报价',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
               )),
         ],
       ),
@@ -401,8 +402,8 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: NetworkImage(widget
-                            .model.requirementOrder.details.pictures[0].url),
+                        image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget
+                            .model.requirementOrder.details.pictures[0].url}'),
                         fit: BoxFit.cover,
                       )),
                 )
@@ -455,7 +456,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.requirementOrder.details.majorCategory?.name}   ${widget.model.requirementOrder.details.category?.name}   ${widget.model.totalQuantity??0}件",
+                      "${widget.model.requirementOrder.details.majorCategory?.name}   ${widget.model.requirementOrder.details.category?.name}   ${widget.model.totalQuantity ?? 0}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -489,11 +490,12 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               onPressed: onApprove,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 149, 22, 1),
+              color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '确认报价',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
               )),
         ],
       ),

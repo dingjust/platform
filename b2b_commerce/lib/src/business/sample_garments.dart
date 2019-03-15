@@ -29,8 +29,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
         sampleProduct: SampleProductModel(
           name: '样衣1',
           skuID: 'NA893151351',
-          thumbnail:
-              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+//          thumbnail:
+//              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
         ),
         type: LendBorrowType.BORROW,
         state: SampleProductReturnState.NO_RETURN,
@@ -45,8 +45,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
         sampleProduct: SampleProductModel(
           name: '样衣2',
           skuID: 'NA893151352',
-          thumbnail:
-              'http://img.alicdn.com/bao/uploaded/O1CN017h2qoE1X6KmcjQRml_!!595412874.jpg_80x80.jpg',
+//          thumbnail:
+//              'http://img.alicdn.com/bao/uploaded/O1CN017h2qoE1X6KmcjQRml_!!595412874.jpg_80x80.jpg',
         ),
         type: LendBorrowType.BORROW,
         state: SampleProductReturnState.RETURNED,
@@ -61,8 +61,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
         sampleProduct: SampleProductModel(
           name: '样衣3',
           skuID: 'NA893151353',
-          thumbnail:
-              'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//          thumbnail:
+//              'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         ),
         type: LendBorrowType.BORROW,
         state: SampleProductReturnState.RETURNED,
@@ -81,8 +81,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
         sampleProduct: SampleProductModel(
           name: '样衣1',
           skuID: 'NA893151351',
-          thumbnail:
-              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+//          thumbnail:
+//              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
         ),
         type: LendBorrowType.LEND,
         state: SampleProductReturnState.NO_RETURN,
@@ -97,8 +97,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
         sampleProduct: SampleProductModel(
           name: '样衣2',
           skuID: 'NA893151352',
-          thumbnail:
-              'http://img.alicdn.com/bao/uploaded/O1CN017h2qoE1X6KmcjQRml_!!595412874.jpg_80x80.jpg',
+//          thumbnail:
+//              'http://img.alicdn.com/bao/uploaded/O1CN017h2qoE1X6KmcjQRml_!!595412874.jpg_80x80.jpg',
         ),
         type: LendBorrowType.LEND,
         state: SampleProductReturnState.RETURNED,
@@ -113,8 +113,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
         sampleProduct: SampleProductModel(
           name: '样衣3',
           skuID: 'NA893151353',
-          thumbnail:
-              'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//          thumbnail:
+//              'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
         ),
         type: LendBorrowType.LEND,
         state: SampleProductReturnState.RETURNED,

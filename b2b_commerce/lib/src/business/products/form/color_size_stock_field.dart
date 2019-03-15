@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import '../apparel_product_variants_input.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class ColorSizeStockField extends StatefulWidget {
   ColorSizeStockField(this.item);

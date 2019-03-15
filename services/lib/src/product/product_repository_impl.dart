@@ -8,8 +8,16 @@ import 'product_repository.dart';
 class ProductRepositoryImpl extends ProductRepository{
 
   @override
-  Future<List<ProductModel>> list() {
-   return null;
+  Future<ProductsResponse> list(Map<String,dynamic> params,dynamic data) async{
+    Response response = await http$.post(ProductApis.list,data: data,queryParameters: params);
+    return ProductsResponse.fromJson(response.data);
+  }
+
+  @override
+  Future<String> create(ApparelProductModel form) async{
+    print(ApparelProductModel.toJson(form));
+    Response response = await http$.post(ProductApis.create,data: ApparelProductModel.toJson(form));
+    return response.data;
   }
 
   @override

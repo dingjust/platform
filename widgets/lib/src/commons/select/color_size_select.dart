@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'dart:math';
 
 class ColorSizeSelectPage extends StatefulWidget {
   List<ColorModel> colors;

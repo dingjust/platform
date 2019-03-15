@@ -415,7 +415,7 @@ class UniqueCodeItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5),
                         image: DecorationImage(
                           image: entry.product.thumbnail != null
-                              ? NetworkImage(entry.product.thumbnail)
+                              ? NetworkImage(entry.product.thumbnail.url)
                               : AssetImage(
                                   'temp/picture.png',
                                   package: "assets",

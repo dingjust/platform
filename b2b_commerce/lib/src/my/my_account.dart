@@ -31,7 +31,7 @@ class MyAccountPage extends StatelessWidget {
                   Container(
                       child: IconButton(
                     icon: Icon(Icons.chevron_left),
-                    color: Colors.white,
+                    color: Color.fromRGBO(36, 38, 41, 1),
                     iconSize: 30,
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -44,7 +44,7 @@ class MyAccountPage extends StatelessWidget {
                       child: Text(
                         '我的账户',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Color.fromRGBO(36, 38, 41, 1),
                           fontSize: 22,
                         ),
                       ),
@@ -57,7 +57,7 @@ class MyAccountPage extends StatelessWidget {
                           child: Text(
                             '提现',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Color.fromRGBO(36, 38, 41, 1),
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -85,17 +85,19 @@ class MyAccountPage extends StatelessWidget {
                       child: Text(
                     "￥",
                     style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(36, 38, 41, 1),
+                    ),
                   )),
                   Container(
                       child: Text(
                     "987652.00",
                     style: TextStyle(
-                        fontSize: 44,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                      fontSize: 44,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(36, 38, 41, 1),
+                    ),
                   ))
                 ],
               ),
@@ -106,19 +108,15 @@ class MyAccountPage extends StatelessWidget {
             child: Text(
               '余额',
               style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white),
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Color.fromRGBO(36, 38, 41, 1),
+              ),
             ),
           )
         ],
       )),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Color.fromRGBO(255, 80, 1, 1),
-          Color.fromRGBO(255, 140, 0, 1)
-        ]),
-      ),
+      decoration: BoxDecoration(color: Color.fromRGBO(255, 219, 0, 1)),
     );
   }
 
@@ -182,10 +180,10 @@ class MyAccountPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBlankCard(BuildContext context){
+  Widget _buildBlankCard(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20,0,20,20),
-      margin: EdgeInsets.fromLTRB(10,20, 10, 10),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+      margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
       child: Column(
         children: <Widget>[
           Container(
@@ -201,11 +199,11 @@ class MyAccountPage extends StatelessWidget {
                 ),
                 Expanded(
                     child: Align(
-                        alignment:Alignment.centerLeft,
+                        alignment: Alignment.centerLeft,
                         child: Container(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment:MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                 width: 150,
@@ -214,18 +212,12 @@ class MyAccountPage extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                child: Text(
-                                    '6212***************4243'
-                                ),
+                                child: Text('6212***************4243'),
                               )
                             ],
                           ),
-                        )
-                    )
-                ),
-                Icon(
-                    B2BIcons.del_blank_card
-                )
+                        ))),
+                Icon(B2BIcons.del_blank_card)
               ],
             ),
           ),
@@ -235,16 +227,14 @@ class MyAccountPage extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Container(
-                      child:
-                      Text(
-                        '＋ 添加银行卡',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: Color(0xFFFF9516),
-                        ),
-                      )
-                  ),
+                      child: Text(
+                    '＋ 添加银行卡',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: Color(0xFFFF9516),
+                    ),
+                  )),
                   Container(
                     child: Text(
                       '支持农行、工行、招行和建行',

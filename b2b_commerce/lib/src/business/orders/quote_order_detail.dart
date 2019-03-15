@@ -179,15 +179,15 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     return Row(
       children: <Widget>[
         Container(
-          width: 100,
-          height: 100,
+          width: 80,
+          height: 80,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
                 image: pageItem.requirementOrder.details.pictures != null &&
                         pageItem.requirementOrder.details.pictures.isNotEmpty
                     ? NetworkImage(
-                        pageItem.requirementOrder.details.pictures[0].url)
+                        '${GlobalConfigs.IMAGE_BASIC_URL}${pageItem.requirementOrder.details.pictures[0].url}')
                     : AssetImage(
                         'temp/picture.png',
                         package: "assets",
@@ -213,10 +213,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                       )
                     : Text(
                         '暂无产品',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.red,
-                        ),
+                        style: TextStyle(fontSize: 15, color: Colors.red),
                       ),
                 pageItem.requirementOrder.details?.productSkuID != null
                     ? Container(
@@ -239,13 +236,13 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(255,214,12, 1),
+                    color: Color.fromRGBO(255, 243, 243, 1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
                     '${pageItem.requirementOrder.details?.majorCategory.name},${pageItem.requirementOrder.details?.category.name},${pageItem.requirementOrder.totalQuantity}件',
                     style: TextStyle(
-                      color: Color.fromRGBO(255,214,12, 1),
+                      color: Color.fromRGBO(255, 133, 148, 1),
                       fontSize: 15,
                     ),
                   ),
@@ -508,7 +505,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             ),
             Expanded(
               child: ActionChip(
-                backgroundColor: Color.fromRGBO(255,214,12, 1),
+                backgroundColor: Color.fromRGBO(255, 214, 12, 1),
                 labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                 labelStyle: TextStyle(fontSize: 16),
                 label: Text('确认报价'),

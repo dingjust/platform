@@ -27,7 +27,7 @@ class SampleProductLendHistoryItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0),
                 image: DecorationImage(
                   image: item.sampleProduct.thumbnail != null
-                      ? NetworkImage(item.sampleProduct.thumbnail)
+                      ? NetworkImage(item.sampleProduct.thumbnail.url)
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",

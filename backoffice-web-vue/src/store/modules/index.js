@@ -17,7 +17,7 @@ import FabricProductsModule from './product/fabric-products';
 import ApparelProductsModule from './product/apparel-products';
 import RequirementOrdersModule from './order/requirement-orders';
 import SalesOrdersModule from './order/sales-orders';
-import ProductionOrdersModule from './order/production-orders';
+import PurchaseOrdersModule from './order/purchase-orders';
 import QuotesModule from './order/quotes';
 
 export {
@@ -40,6 +40,6 @@ export {
   ApparelProductsModule,
   RequirementOrdersModule,
   SalesOrdersModule,
-  ProductionOrdersModule,
+  PurchaseOrdersModule,
   QuotesModule
 }

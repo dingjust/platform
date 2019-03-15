@@ -13,20 +13,20 @@ class SampleProductsPage extends StatelessWidget {
     SampleProductModel(
       skuID: 'SKUID001',
       name: '样衣1',
-      thumbnail:
-          'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
+//      thumbnail:
+//          'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
     ),
     SampleProductModel(
       skuID: 'SKUID002',
       name: '样衣2',
-      thumbnail:
-          'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//      thumbnail:
+//          'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
     ),
     SampleProductModel(
       skuID: 'SKUID003',
       name: '样衣3',
-      thumbnail:
-          'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
+//      thumbnail:
+//          'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
     ),
   ];
 

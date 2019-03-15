@@ -57,7 +57,7 @@
 
   import autoHeight from 'mixins/autoHeight';
 
-  import {OrderDetailsPage} from './';
+  import {SalesOrderDetailsPage} from './SalesOrderDetailsPage';
 
   export default {
     name: 'OrderPage',
@@ -81,7 +81,7 @@
           return;
         }
 
-        this.fn.openSlider('订单明细', OrderDetailsPage, result);
+        this.fn.openSlider('订单明细', SalesOrderDetailsPage, result);
       },
       onPageSizeChanged(val) {
         this.reset();

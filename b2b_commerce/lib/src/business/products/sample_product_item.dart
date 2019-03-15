@@ -22,7 +22,7 @@ class SampleProductItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0),
                 image: DecorationImage(
                   image: item?.thumbnail != null
-                      ? NetworkImage(item.thumbnail)
+                      ? NetworkImage(item.thumbnail.url)
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",
