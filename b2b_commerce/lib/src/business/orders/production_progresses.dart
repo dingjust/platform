@@ -52,17 +52,17 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   List<Widget> _buildPurchaseProductionProgresses(BuildContext context) {
     List<Widget> _list = new List();
     int _index = 0;
-    for(int i =0; i< order.productionProgresses.length; i++){
-      if (ProductionProgressPhaseLocalizedMap[order.productionProgresses[i].phase] == ProductionProgressPhaseLocalizedMap[order.currentPhase]) {
-        _index = order.productionProgresses[i].sequence;
+    for(int i =0; i< order.progresses.length; i++){
+      if (ProductionProgressPhaseLocalizedMap[order.progresses[i].phase] == ProductionProgressPhaseLocalizedMap[order.currentPhase]) {
+        _index = order.progresses[i].sequence;
       }
     }
-    for (int i = 0; i < order.productionProgresses.length; i++) {
+    for (int i = 0; i < order.progresses.length; i++) {
       _list.add(Container(
         child: _buildProductionProgress(context,
-          order.productionProgresses[i],
+          order.progresses[i],
             ProductionProgressPhaseLocalizedMap[order.currentPhase],
-            order.productionProgresses[i].sequence,_index
+            order.progresses[i].sequence,_index
         ),
       ));
     }
