@@ -6,7 +6,7 @@ import BrandOrgsModule from './user/orgs';
 import BrandRolesModule from './user/roles';
 import BrandRequirementOrdersModule from './order/requirement-orders';
 import BrandSalesOrdersModule from './order/sales-orders';
-import BrandProductionOrdersModule from './order/production-orders';
+import BrandPurchaseOrdersModule from './order/purchase-orders';
 import BrandApparelProductsModule from './product/apparel-products';
 import BrandDeletedApparelProductsModule from './product/deleted-apparel-products';
 import BrandApparelProductStocksModule from './product/apparel-product-stocks';
@@ -20,7 +20,7 @@ export {
   BrandRolesModule,
   BrandRequirementOrdersModule,
   BrandSalesOrdersModule,
-  BrandProductionOrdersModule,
+  BrandPurchaseOrdersModule,
   BrandApparelProductsModule,
   BrandDeletedApparelProductsModule,
   BrandApparelProductStocksModule,

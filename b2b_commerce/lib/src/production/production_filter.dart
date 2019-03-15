@@ -105,6 +105,20 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
                         selected: entry.checked,
                         onSelected: ((value) {
                           setState(() {
+                            if (entry.value == 'ALL') {
+                              for (int i = 0; i < conditions.length; i++) {
+                                if (conditions[i].value != 'ALL') {
+                                  conditions[i].checked = false;
+                                }
+                              }
+                            }
+                            if (entry.value != 'ALL') {
+                              for (int i = 0; i < conditions.length; i++) {
+                                if (conditions[i].value == 'ALL') {
+                                  conditions[i].checked = false;
+                                }
+                              }
+                            }
                             entry.checked = value;
                           });
                         }),

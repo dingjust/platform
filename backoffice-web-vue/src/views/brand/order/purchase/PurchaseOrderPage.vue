@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-card>
       <purchase-order-toolbar @onSearch="onSearch" @onNew="onNew"/>
-      <purchase-order-search-result-list :page="page"/>
+      <purchase-order-search-result-list :page="page" @onDetails="onDetails"/>
     </el-card>
   </div>
 </template>
@@ -36,13 +36,18 @@
         this.search({keyword});
       },
       onNew(formData) {
+        // console.log('onNew: ' + JSON.stringify(formData));
         this.fn.openSlider('创建生产订单', PurchaseOrderForm, formData);
+      },
+      onDetails(row) {
+        console.log('onDetails: ' + JSON.stringify(row));
       }
     },
     data() {
       return {}
     },
     created() {
+      this.search('');
     }
   }
 </script>

@@ -95,7 +95,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                 offstage: widget.leadingText == null,
                 child: Container(
                   width: widget.leadingWidth,
-                  child: Text(widget.leadingText ?? ''),
+                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16),),
                 ),
               ),
               Expanded(

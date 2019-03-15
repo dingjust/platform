@@ -108,29 +108,30 @@ class ProductionSearchResultBLoC extends BLoCBase {
 
 //TODO mock数据，待删除
 Map<String, dynamic> mockData = {
+  'salesApplication': 'ONLINE',
   'code': 'PO34938475200045',
   'status': 'IN_PRODUCTION',
   'totalQuantity': 10,
   'totalPrice': 300,
-  'creationtime': DateTime.now().toString(),
-  'expectedDeliveryDate': DateTime.now().toString(),
-  'currentPhase': 'CUTTING',
+  'creationtime': DateTime.now().millisecondsSinceEpoch,
+  'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
+  'currentPhase': 'INSPECTION',
   'machiningType': 'LABOR_AND_MATERIAL',
   'invoiceNeeded': true,
   'attachments': [
     {
       'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
       'mediaType': 'jpg'
     },
     {
       'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
       'mediaType': 'jpg'
     },
     {
       'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+      'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
       'mediaType': 'jpg'
     },
   ],
@@ -144,23 +145,23 @@ Map<String, dynamic> mockData = {
       'phase': 'MATERIAL_PREPARATION',
       'quantity': 70,
       'sequence': 0,
-      'estimatedDate': DateTime.now().toString(),
-      'finishDate': DateTime.now().toString(),
+      'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+      'finishDate': DateTime.now().millisecondsSinceEpoch,
       'remarks': '延期了12天',
       'medias': [
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
       ],
@@ -168,24 +169,24 @@ Map<String, dynamic> mockData = {
     {
       'phase': 'CUTTING',
       'quantity': 70,
-      'sequence': 2,
-      'estimatedDate': DateTime.now().toString(),
-      'finishDate': DateTime.now().toString(),
+      'sequence': 1,
+      'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+      'finishDate': DateTime.now().millisecondsSinceEpoch,
       'remarks': '延期了12天',
       'medias': [
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
       ],
@@ -193,24 +194,24 @@ Map<String, dynamic> mockData = {
     {
       'phase': 'STITCHING',
       'quantity': 70,
-      'sequence': 3,
-      'estimatedDate': DateTime.now().toString(),
-      'finishDate': DateTime.now().toString(),
+      'sequence': 2,
+      'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+      'finishDate': DateTime.now().millisecondsSinceEpoch,
       'remarks': '延期了12天',
       'medias': [
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
       ],
@@ -218,24 +219,24 @@ Map<String, dynamic> mockData = {
     {
       'phase': 'AFTER_FINISHING',
       'quantity': 70,
-      'sequence': 1,
-      'estimatedDate': DateTime.now().toString(),
-      'finishDate': DateTime.now().toString(),
+      'sequence': 3,
+      'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+      'finishDate': DateTime.now().millisecondsSinceEpoch,
       'remarks': '延期了12天',
       'medias': [
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
       ],
@@ -244,23 +245,23 @@ Map<String, dynamic> mockData = {
       'phase': 'INSPECTION',
       'quantity': 70,
       'sequence': 4,
-      'estimatedDate': DateTime.now().toString(),
-      'finishDate': DateTime.now().toString(),
+      'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+      'finishDate': DateTime.now().millisecondsSinceEpoch,
       'remarks': '延期了12天',
       'medias': [
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
       ],
@@ -269,23 +270,23 @@ Map<String, dynamic> mockData = {
       'phase': 'DELIVERY',
       'quantity': 70,
       'sequence': 5,
-      'estimatedDate': DateTime.now().toString(),
-      'finishDate': DateTime.now().toString(),
+      'estimatedDate': DateTime.now().millisecondsSinceEpoch,
+      'finishDate': DateTime.now().millisecondsSinceEpoch,
       'remarks': '延期了12天',
       'medias': [
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
         {
           'url':
-              'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
+          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
           'mediaType': 'jpg'
         },
       ],
@@ -308,10 +309,10 @@ Map<String, dynamic> mockData = {
       'requirementOrderCode': 'RC34938475200045',
       'product': {
         'code': 'NA89852509',
-        'name': '山本风法少女长裙复古气质秋冬款',
+        'name': '森马2018冬装男装新款休闲中长款呢大衣',
         'skuID': 'NA89852509',
         'thumbnail':
-            'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
+        'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
       },
     }
   ],

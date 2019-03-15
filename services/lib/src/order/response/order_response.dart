@@ -47,7 +47,7 @@ class PurchaseOrdersResponse {
   final int size;
   final int totalPages;
   final int totalElements;
-  final List<RequirementOrderModel> content;
+  final List<PurchaseOrderModel> content;
 
   PurchaseOrdersResponse(this.number, this.size, this.totalPages, this.totalElements,
       this.content);
@@ -55,6 +55,6 @@ class PurchaseOrdersResponse {
   factory PurchaseOrdersResponse.fromJson(Map<String, dynamic> json) =>
       _$PurchaseOrdersResponseFromJson(json);
 
-  static Map<String, dynamic> toJson(RequirementOrdersResponse model) =>
-      _$RequirementOrdersResponseToJson(model);
+  static Map<String, dynamic> toJson(PurchaseOrdersResponse model) =>
+      _$PurchaseOrdersResponseToJson(model);
 }

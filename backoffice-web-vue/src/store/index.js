@@ -23,7 +23,7 @@ import {
   ApparelProductsModule,
   RequirementOrdersModule,
   SalesOrdersModule,
-  ProductionOrdersModule,
+  PurchaseOrdersModule,
   QuotesModule
 } from './modules';
 
@@ -36,7 +36,7 @@ import {
   BrandRolesModule,
   BrandRequirementOrdersModule,
   BrandSalesOrdersModule,
-  BrandProductionOrdersModule,
+  BrandPurchaseOrdersModule,
   BrandApparelProductsModule,
   BrandDeletedApparelProductsModule,
   BrandApparelProductStocksModule,
@@ -49,7 +49,7 @@ import {
   FactoryFabricProductsModule,
   FactoryFabricProductStocksModule,
   FactoryRequirementOrdersModule,
-  FactoryProductionOrdersModule,
+  FactoryPurchaseOrdersModule,
   FactoryQuotesModule,
 } from './factory/modules';
 
@@ -98,7 +98,7 @@ export default new Vuex.Store({
     ApparelProductsModule,
     RequirementOrdersModule,
     SalesOrdersModule,
-    ProductionOrdersModule,
+    ProductionOrdersModule: PurchaseOrdersModule,
     QuotesModule,
     // brand
     BrandEmployeesModule,
@@ -109,7 +109,7 @@ export default new Vuex.Store({
     BrandRolesModule,
     BrandRequirementOrdersModule,
     BrandSalesOrdersModule,
-    BrandProductionOrdersModule,
+    BrandProductionOrdersModule: BrandPurchaseOrdersModule,
     BrandApparelProductsModule,
     BrandDeletedApparelProductsModule,
     BrandApparelProductStocksModule,
@@ -120,7 +120,7 @@ export default new Vuex.Store({
     FactoryFabricProductsModule,
     FactoryFabricProductStocksModule,
     FactoryRequirementOrdersModule,
-    FactoryProductionOrdersModule,
+    FactoryProductionOrdersModule: FactoryPurchaseOrdersModule,
     FactoryQuotesModule,
   },
   state,

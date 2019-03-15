@@ -1,14 +1,14 @@
 <template>
   <div class="animated fadeIn">
-    生产单价：
-    <el-input-number v-model="basePrice" @change="onPriceChanged"></el-input-number>
-    ，生产数量： {{totalQuantity}}，生产总价： {{totalPrice}}
+    单价：<el-input-number v-model="basePrice"
+                        @change="onPriceChanged">
+  </el-input-number>，数量： {{totalQuantity}}，总价： {{totalPrice}}
   </div>
 </template>
 
 <script>
   export default {
-    name: 'PurchaseOrderEntriesSummaryForm',
+    name: 'OrderEntriesSummaryForm',
     props: ['variants', 'readOnly', 'unitPrice'],
     mixins: [],
     computed: {

@@ -38,14 +38,11 @@ class ProductCategorySelectPageState extends State<ProductCategorySelectPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0,
+          elevation: widget.hasNextPage ? 0 : 0.5,
           centerTitle: true,
           title: Text('选择分类'),
           leading: IconButton(
-              icon: Text(
-                '取消',
-                style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
-              ),
+              icon: Text('取消',style: TextStyle(color: widget.hasNextPage ? Color.fromRGBO(255, 214, 12, 1) : Colors.black),),
               onPressed: () {
                 Navigator.pop(context, _beforeMinCategorySelect);
               }),
@@ -63,7 +60,14 @@ class ProductCategorySelectPageState extends State<ProductCategorySelectPage> {
                       style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
                     ),
                   )
-                : Container()
+                : IconButton(
+                    icon: Text(
+                      '确定',
+                      style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
           ],
         ),
         body: Column(

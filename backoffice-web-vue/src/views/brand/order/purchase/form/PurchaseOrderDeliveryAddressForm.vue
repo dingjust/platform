@@ -1,5 +1,5 @@
 <template>
-  <address-form :slot-data="slotData.shippingAddress" :read-only="readOnly"/>
+  <address-form :slot-data="slotData.deliveryAddress" :read-only="readOnly"/>
 </template>
 
 <script>
