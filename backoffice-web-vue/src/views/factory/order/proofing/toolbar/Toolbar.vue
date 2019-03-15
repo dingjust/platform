@@ -11,14 +11,14 @@
 </template>
 
 <script>
-  import PurchaseOrderAdvancedSearchForm from '../form/PurchaseOrderAdvancedSearchForm';
+  import ProofingAdvancedSearchForm from '../form/ProofingAdvancedSearchForm';
 
   export default {
     name: 'PurchaseOrderToolbar',
     props: [],
     mixins: [],
     components: {
-      PurchaseOrderAdvancedSearchForm
+      ProofingAdvancedSearchForm
     },
     computed: {},
     methods: {
@@ -35,8 +35,8 @@
     },
     data() {
       return {
-        keyword: this.$store.state.BrandPurchaseOrdersModule.keyword,
-        formData: this.$store.state.BrandPurchaseOrdersModule.formData,
+        keyword: this.$store.state.BrandProofingsModule.keyword,
+        formData: this.$store.state.BrandProofingsModule.formData,
       }
     }
   }

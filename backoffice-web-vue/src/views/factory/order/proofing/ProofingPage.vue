@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <purchase-order-toolbar @onSearch="onSearch" @onNew="onNew"/>
-      <purchase-order-search-result-list :page="page" @onDetails="onDetails"/>
+      <proofing-toolbar @onSearch="onSearch" @onNew="onNew"/>
+      <proofing-search-result-list :page="page" @onDetails="onDetails"/>
     </el-card>
   </div>
 </template>
@@ -10,17 +10,17 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandPurchaseOrdersModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('BrandProofingsModule');
 
-  import PurchaseOrderToolbar from './toolbar/Toolbar';
-  import PurchaseOrderSearchResultList from './list/SearchResultList';
-  import PurchaseOrderForm from './form/PurchaseOrderForm';
+  import ProofingToolbar from './toolbar/Toolbar';
+  import ProofingSearchResultList from './list/SearchResultList';
+  import ProofingForm from './form/ProofingForm';
 
   export default {
-    name: 'PurchaseOrderPage',
+    name: 'ProofingPage',
     components: {
-      PurchaseOrderToolbar,
-      PurchaseOrderSearchResultList
+      ProofingToolbar,
+      ProofingSearchResultList
     },
     computed: {
       ...mapGetters({
@@ -37,7 +37,7 @@
       },
       onNew(formData) {
         // console.log('onNew: ' + JSON.stringify(formData));
-        this.fn.openSlider('创建生产订单', PurchaseOrderForm, formData);
+        this.fn.openSlider('创建生产订单', ProofingForm, formData);
       },
       onDetails(row) {
         console.log('onDetails: ' + JSON.stringify(row));

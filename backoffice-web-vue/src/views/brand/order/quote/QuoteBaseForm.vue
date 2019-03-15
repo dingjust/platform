@@ -6,7 +6,7 @@
              :disabled="readOnly">
       <el-row :gutter="10">
         <el-col :span="8">
-          <el-form-item label="生产单号" prop="code">
+          <el-form-item label="报价单号" prop="code">
             <el-input v-model="slotData.code" disabled placeholder="系统自动生成"></el-input>
           </el-form-item>
         </el-col>
@@ -16,25 +16,14 @@
 </template>
 
 <script>
-  import {ConsignmentMixin} from '@/mixins';
-
   export default {
-    name: 'ConsignmentBaseForm',
+    name: 'QuoteBaseForm',
     props: ['slotData', 'readOnly'],
-    methods: {
-      validate(callback) {
-        this.$refs['form'].validate(callback);
-      },
-      getValue() {
-        return this.slotData;
-      }
-    },
-    computed: {},
-    mixins: [ConsignmentMixin],
+    methods: {},
     data() {
-      return {
-        active: 0
-      }
+      return {}
+    },
+    created() {
     }
   }
 </script>

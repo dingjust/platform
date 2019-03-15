@@ -255,10 +255,20 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/requirement/RequirementOrderPage'),
             },
             {
+              path: 'quote',
+              name: '报价单',
+              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/quote/QuotePage'),
+            },
+            {
               path: 'purchase',
               name: '生产订单',
               component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/purchase/PurchaseOrderPage'),
-            }
+            },
+            {
+              path: 'proofing',
+              name: '打样单',
+              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/proofing/ProofingPage'),
+            },
           ]
         },
         {
@@ -374,15 +384,20 @@ const router = new Router({
           },
           children: [
             {
-              path: 'consignment',
-              name: '生产订单',
-              component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/consignment/ConsignmentPage'),
-            },
-            {
               path: 'quote',
               name: '报价单',
               component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/quote/QuotePage'),
-            }
+            },
+            {
+              path: 'purchase',
+              name: '生产订单',
+              component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/purchase/PurchaseOrderPage'),
+            },
+            {
+              path: 'proofing',
+              name: '打样单',
+              component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/proofing/ProofingPage'),
+            },
           ]
         },
         {

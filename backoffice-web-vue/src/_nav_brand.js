@@ -58,6 +58,11 @@ export default {
           icon: 'iconNone'
         },
         {
+          name: '打样单',
+          url: '/brand/order/proofing',
+          icon: 'iconNone'
+        },
+        {
           name: '生产订单',
           url: '/brand/order/purchase',
           icon: 'iconNone'
