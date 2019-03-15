@@ -9,6 +9,14 @@ const state = {
     COMPLETED: 1,
     CANCELLED: 1
   },
+  purchaseOrderStatuses: [
+    {code: 'PENDING_PAYMENT', name: '待付款'},
+    {code: 'IN_PRODUCTION', name: '生产中'},
+    {code: 'WAIT_FOR_OUT_OF_STORE', name: '待出库'},
+    {code: 'OUT_OF_STORE', name: '已出库'},
+    {code: 'COMPLETED', name: '已完成'},
+    {code: 'CANCELLED', name: '已取消'},
+  ],
   salesOrderStatuses: [
     {code: 'PENDING_PAYMENT', name: '待付款'},
     {code: 'PENDING_DELIVERY', name: '待发货'},

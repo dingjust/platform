@@ -4,7 +4,7 @@ import FactoryRolesModule from './user/roles';
 import FactoryFabricProductsModule from './product/fabric-products';
 import FactoryFabricProductStocksModule from './product/fabric-product-stocks';
 import FactoryRequirementOrdersModule from './order/requirement-orders';
-import FactoryProductionOrdersModule from './order/production-orders';
+import FactoryPurchaseOrdersModule from './order/purchase-orders';
 import FactoryQuotesModule from './order/quotes';
 
 export {
@@ -14,6 +14,6 @@ export {
   FactoryFabricProductsModule,
   FactoryFabricProductStocksModule,
   FactoryRequirementOrdersModule,
-  FactoryProductionOrdersModule,
+  FactoryPurchaseOrdersModule,
   FactoryQuotesModule,
 }

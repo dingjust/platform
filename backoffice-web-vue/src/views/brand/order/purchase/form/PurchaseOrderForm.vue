@@ -57,8 +57,16 @@
     mixins: [],
     computed: {},
     methods: {
-      onSubmit() {
-        // console.log("submitted data: " + JSON.stringify(this.slotData));
+      async onSubmit() {
+        console.log("submitted data: " + JSON.stringify(this.slotData));
+
+        const result = await this.$http.post('/b2b/orders/purchase/create', this.slotData);
+        if (result['errors']) {
+          this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('生产订单创建成功，订单号：' + result);
         this.fn.closeSlider();
       },
       onCancel() {
