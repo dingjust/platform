@@ -151,7 +151,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 image: DecorationImage(
-                  image: NetworkImage(order.entries[0].product.thumbnail),
+                  image: NetworkImage(order.entries[0].product.thumbnail.url),
                   fit: BoxFit.cover,
                 )),
           )

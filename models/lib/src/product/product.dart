@@ -176,7 +176,7 @@ class ProductModel extends ItemModel {
   List<StaircasePriceModel> staircasePrices;
 
   @JsonKey(name: 'supercategories')
-  List<CategoryModel> superCategories;
+  CategoryModel superCategories;
 
   //库存
   @JsonKey(toJson: stockLevelToJson)
@@ -371,7 +371,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     List<VariantProductModel> variants,
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
-    List<CategoryModel> superCategories,
+    CategoryModel superCategories,
     MemberRating ratingIfPrivacy,
     String baseProduct,
     this.color,
