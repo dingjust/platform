@@ -47,7 +47,7 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
             AdvanceMenu('订单管理', <AdvanceMenuItem>[
               AdvanceMenuItem(MenuItemImage.requirement_order, '需求订单',
                   AppRoutes.ROUTE_REQUIREMENT_ORDERS),
-              AdvanceMenuItem(MenuItemImage.purchase_order, '采购订单',
+              AdvanceMenuItem(MenuItemImage.purchase_order, '生产订单',
                   AppRoutes.ROUTE_PURCHASE_ORDERS),
               AdvanceMenuItem(MenuItemImage.sale_order, '销售订单',
                   AppRoutes.ROUTE_SALES_ORDERS),

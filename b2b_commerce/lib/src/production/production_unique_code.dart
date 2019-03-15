@@ -214,13 +214,11 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
         'quantity': 23,
         'totalPrice': 999.9,
         'requirementOrderCode': 'RC34938475200045',
-        'product': {
-          'code': 'NA89852509',
-          'name': '山本风法少女长裙复古气质秋冬款',
-          'skuID': 'NA89852509',
-          'thumbnail':
-              'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
-        },
+        'code': 'NA89852509',
+        'name': '山本风法少女长裙复古气质秋冬款',
+        'skuID': 'NA89852509',
+        'thumbnail':
+        'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
       }
     ],
   });
@@ -380,7 +378,7 @@ class UniqueCodeItem extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  '工厂：' + order.factory.name,
+                  '工厂：' + order.belongTo.name,
                   style: TextStyle(fontSize: 15),
                 ),
               ),

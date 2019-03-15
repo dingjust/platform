@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/order/response/order_response.dart';
 
 class ProductionBLoC extends BLoCBase {
   // 工厂模式
@@ -34,16 +36,18 @@ class ProductionBLoC extends BLoCBase {
 
   List<FilterConditionEntry> _currentStatus = [
     FilterConditionEntry(label: '全部', value: 'ALL', checked: true),
-    FilterConditionEntry(label: '备料', value: 'MATERIAL_PREPARATION'),
-    FilterConditionEntry(label: '裁剪', value: 'CUTTING'),
-    FilterConditionEntry(label: '车缝', value: 'STITCHING'),
-    FilterConditionEntry(label: '后整', value: 'AFTER_FINISHING'),
-    FilterConditionEntry(label: '验货', value: 'INSPECTION'),
-    FilterConditionEntry(label: '发货', value: 'DELIVERY'),
+  FilterConditionEntry(label: '备料', value: 'MATERIAL_PREPARATION'),
+  FilterConditionEntry(label: '裁剪', value: 'CUTTING'),
+  FilterConditionEntry(label: '车缝', value: 'STITCHING'),
+  FilterConditionEntry(label: '后整', value: 'AFTER_FINISHING'),
+  FilterConditionEntry(label: '验货', value: 'INSPECTION'),
+  FilterConditionEntry(label: '发货', value: 'DELIVERY'),
   ];
 
   DateTime _startDate;
   DateTime _endDate;
+
+  String _status;
 
   List<PurchaseOrderModel> orders() => _purchaseOrders;
 
@@ -52,6 +56,8 @@ class ProductionBLoC extends BLoCBase {
   List<FilterConditionEntry> get orderType => _orderType;
 
   List<FilterConditionEntry> get currentStatus => _currentStatus;
+
+  String get status => _status;
 
   DateTime get startDate => _startDate;
   DateTime get endDate => _endDate;
@@ -72,6 +78,10 @@ class ProductionBLoC extends BLoCBase {
     _endDate = date;
   }
 
+  void setStatus(String status) {
+    _status = status;
+  }
+
   var _controller = StreamController<List<PurchaseOrderModel>>.broadcast();
 
   var _recommendController = StreamController<List<FactoryModel>>.broadcast();
@@ -82,15 +92,41 @@ class ProductionBLoC extends BLoCBase {
 
   var conditionController = StreamController<FilterConditionEntry>.broadcast();
 
-  Stream<FilterConditionEntry> get conditionStream =>
-      conditionController.stream;
+  Stream<FilterConditionEntry> get conditionStream => conditionController.stream;
 
   getData() async {
     //若没有数据则查询
     if (_purchaseOrders.isEmpty) {
-      // TODO: 分页拿数据，response.data;
+          //  分页拿数据，response.data;
+          //请求参数
+          Map data = {
+            'orderType': orderType,
+            'currentStatus': currentStatus,
+            'startDate': startDate,
+            'endDate' : endDate,
+            'status' : status,
+          };
+          Response<Map<String, dynamic>> response;
 
-      // TODO :根据_orderType、_currentStatus、_startDate、_endDate筛选条件
+          try {
+            response = await http$.post(OrderApis.purchaseOrders,
+                queryParameters:{
+                  'orderType': orderType,
+                  'currentStatus': currentStatus,
+                  'startDate': startDate,
+                  'endDate' : endDate,
+                }
+            );
+          } on DioError catch (e) {
+            print(e);
+          }
+
+//          if (response.statusCode == 200) {
+//            PurchaseOrdersResponse ordersResponse =
+//            PurchaseOrdersResponse.fromJson(response.data);
+//           _purchaseOrders.addAll(ordersResponse.content);
+//          }
+//        _controller.sink.add(_purchaseOrders);
 
       _purchaseOrders
           .addAll(await Future.delayed(const Duration(seconds: 1), () {
@@ -1086,7 +1122,7 @@ class ProductionBLoC extends BLoCBase {
             ],
           },
           {
-            'phase': 'SAMPLE_CONFIRM',
+            'phase': 'MATERIAL_PREPARATION',
             'quantity': 70,
             'sequence': 1,
             'estimatedDate': DateTime.now().millisecondsSinceEpoch,

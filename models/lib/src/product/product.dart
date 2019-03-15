@@ -177,7 +177,7 @@ class ProductModel extends ItemModel {
 
   bool privacy;
   @JsonKey(name: 'supercategories')
-  List<CategoryModel> superCategories;
+  CategoryModel superCategories;
 
   ArticleApprovalStatus approvalStatus;
 
@@ -234,21 +234,23 @@ class ProductModel extends ItemModel {
 @JsonSerializable()
 class VariantProductModel extends ProductModel {
   String baseProduct;
+  String skuID;
 
-  VariantProductModel(
-      {String code,
-      String name,
-      double price,
-      String thumbnail,
-      List<VariantProductModel> variants,
-      List<StaircasePriceModel> staircasePrices,
-      bool privacy,
-      MemberRating ratingIfPrivacy,
-      List<CategoryModel> superCategories,
-      this.baseProduct,
-      double minPrice,
-      double maxPrice,
-      CompanyModel belongTo})
+  VariantProductModel({
+    String code,
+    String name,
+    double price,
+    String thumbnail,
+    List<VariantProductModel> variants,
+    List<StaircasePriceModel> staircasePrices,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    CategoryModel superCategories,
+    this.baseProduct,
+    this.skuID,
+    double minPrice,
+    double maxPrice,
+    CompanyModel belongTo})
       : super(
             code: code,
             name: name,
@@ -293,7 +295,7 @@ class ApparelProductModel extends ProductModel {
   double gramWeight;
   bool isRecommend;
 
-  CategoryModel get superCategory => superCategories[0];
+  CategoryModel get superCategory => superCategories;
 
   ApparelProductModel({
     String code,
@@ -303,7 +305,7 @@ class ApparelProductModel extends ProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     MemberRating ratingIfPrivacy,
-    List<CategoryModel> superCategories,
+    CategoryModel superCategories,
     int salesVolume,
     StockLevelModel stockLevel,
     List<MediaModel> normal,
@@ -370,7 +372,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
       List<VariantProductModel> variants,
       List<StaircasePriceModel> staircasePrices,
       bool privacy,
-      List<CategoryModel> superCategories,
+      CategoryModel superCategories,
       MemberRating ratingIfPrivacy,
       String baseProduct,
       this.color,
@@ -415,7 +417,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
       List<VariantProductModel> variants,
       List<StaircasePriceModel> staircasePrices,
       bool privacy,
-      List<CategoryModel> superCategories,
+      CategoryModel superCategories,
       MemberRating ratingIfPrivacy,
       String baseProduct,
       ColorModel color,
@@ -461,7 +463,7 @@ class FabricProductModel extends ProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     MemberRating ratingIfPrivacy,
-    List<CategoryModel> superCategories,
+    CategoryModel superCategories,
     this.variants,
   }) : super(
           code: code,
@@ -493,7 +495,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     MemberRating ratingIfPrivacy,
-    List<CategoryModel> superCategories,
+    CategoryModel superCategories,
     this.color,
   }) : super(
           code: code,
@@ -583,7 +585,7 @@ class SampleProductModel extends ApparelProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     MemberRating ratingIfPrivacy,
-    List<CategoryModel> superCategories,
+    CategoryModel superCategories,
   }) : super(
           skuID: skuID,
           code: code,
