@@ -7,9 +7,17 @@
           <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="预计交货时间" prop="expectedDeliveryDate"></el-table-column>
+      <el-table-column label="预计交货时间" prop="expectedDeliveryDate">
+        <template slot-scope="scope">
+          <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="工厂" prop="belongTo.name"></el-table-column>
-      <el-table-column label="订单生成时间" prop="creationtime"></el-table-column>
+      <el-table-column label="订单生成时间" prop="creationtime">
+        <template slot-scope="scope">
+          <span>{{scope.row.creationtime | formatDate}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="需求订单号" prop="requirementOrderCode"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
