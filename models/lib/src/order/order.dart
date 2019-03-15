@@ -142,9 +142,9 @@ const QuoteStateLocalizedMap = {
 };
 
 enum MachiningType {
-  //包工包料
+  ///包工包料
   LABOR_AND_MATERIAL,
-  //清加工
+  ///清加工
   LIGHT_PROCESSING,
 }
 

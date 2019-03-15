@@ -22,7 +22,7 @@ export default {
         {
           name: '产品',
           icon: 'fa fa-check',
-          children:[
+          children: [
             {
               name: '产品',
               url: '/factory/product/apparel',
@@ -53,13 +53,18 @@ export default {
       icon: 'icon-puzzle',
       children: [
         {
-          name: '生产订单',
-          url: '/factory/order/consignment',
+          name: '报价单',
+          url: '/factory/order/quote',
           icon: 'iconNone'
         },
         {
-          name: '报价单',
-          url: '/factory/order/quote',
+          name: '生产订单',
+          url: '/factory/order/purchase',
+          icon: 'iconNone'
+        },
+        {
+          name: '打样单',
+          url: '/factory/order/proofing',
           icon: 'iconNone'
         }
       ]
