@@ -8,9 +8,13 @@ class ProductCategorySelectPage extends StatefulWidget {
   FastRequirementForm fastRequirementForm;
   List<CategoryModel> minCategorySelect;
   List<CategoryModel> categorys;
+  bool hasNextPage;
 
   ProductCategorySelectPage(
-      {this.minCategorySelect, this.fastRequirementForm, this.categorys});
+      {this.minCategorySelect,
+      this.fastRequirementForm,
+      this.categorys,
+      this.hasNextPage = false});
 
   ProductCategorySelectPageState createState() =>
       ProductCategorySelectPageState();
@@ -46,18 +50,20 @@ class ProductCategorySelectPageState extends State<ProductCategorySelectPage> {
                 Navigator.pop(context, _beforeMinCategorySelect);
               }),
           actions: <Widget>[
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RequirementDatePick(
-                          fastRequirementForm: widget.fastRequirementForm,
-                        )));
-              },
-              child: Text(
-                '下一步',
-                style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
-              ),
-            )
+            widget.hasNextPage
+                ? FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RequirementDatePick(
+                                fastRequirementForm: widget.fastRequirementForm,
+                              )));
+                    },
+                    child: Text(
+                      '下一步',
+                      style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                    ),
+                  )
+                : Container()
           ],
         ),
         body: Column(

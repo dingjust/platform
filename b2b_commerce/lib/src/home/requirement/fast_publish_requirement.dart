@@ -60,6 +60,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                         minCategorySelect: fastRequirementForm.categories,
                         fastRequirementForm: fastRequirementForm,
                         categorys: categorys,
+                        hasNextPage: true,
                       )));
             });
           },
