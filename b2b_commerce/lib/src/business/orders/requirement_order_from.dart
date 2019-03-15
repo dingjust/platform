@@ -37,43 +37,20 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       RequirementOrderModel(details: RequirementInfoModel());
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
-  List<File> _normalImages = [];
-  List<MediaModel> medias = [];
 
   DateTime selectDate = DateTime.now();
 
   @override
   void initState() {
     if (widget.product != null) {
-      if (widget.product.images != null)
-        model.details.pictures = widget.product.images;
       model.details.category = widget.product.category;
       if (widget.product?.category != null) {
         _categorySelected = [widget.product.category];
       }
     }
 
-    if (model.details.pictures != null) {
-      model.details.pictures.forEach((media) {
-        //缓存图片并获取缓存图片
-        DefaultCacheManager().getSingleFile(media.url).then((file) {
-          setState(() {
-            _normalImages.add(file);
-          });
-        });
-      });
-    }
-
     // TODO: implement initState
     super.initState();
-
-    print(_normalImages);
-
-  }
-
-  Future<void> _uploadFile() async{
-    if(_normalImages.length>0)
-     await MultipartFileUpload().multipartFileUpload(_normalImages,medias,context);
   }
 
   @override
@@ -116,32 +93,30 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 );
 
                 //TODO：导入商品后的一系列操作
-                _normalImages.clear();
                 widget.product = result;
                 if (result != null) {
-                  model.details.productName = result.name;
-                  model.details.productSkuID = result.skuID;
-                  model.details.pictures = result?.normal;
-                  _categorySelected = [result.category];
+                  model.details.productName = widget.product.name;
+                  model.details.productSkuID = widget.product.skuID;
+                  _categorySelected = [widget.product.category];
                 }
 
                 model.details.category =
                     _categorySelected.length > 0 ? _categorySelected[0] : null;
-                if (model.details.pictures != null) {
-                  model.details.pictures.forEach((media) {
-                    //缓存图片并获取缓存图片
-//                      CacheManager.getInstance().then((cacheManager){
-//                        cacheManager.getFile(media.url).then((file){
-//                          _normalImages.add(file);
-//                        });
+//                if (model.details.pictures != null) {
+//                  model.details.pictures.forEach((media) {
+//                    //缓存图片并获取缓存图片
+////                      CacheManager.getInstance().then((cacheManager){
+////                        cacheManager.getFile(media.url).then((file){
+////                          _normalImages.add(file);
+////                        });
+////                      });
+//                    DefaultCacheManager().getSingleFile(media.url).then((file) {
+//                      setState(() {
+//                        _normalImages.add(file);
 //                      });
-                    DefaultCacheManager().getSingleFile(media.url).then((file) {
-                      setState(() {
-                        _normalImages.add(file);
-                      });
-                    });
-                  });
-                }
+//                    });
+//                  });
+//                }
               })
         ],
       ),
@@ -203,7 +178,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Column(
           children: <Widget>[
 //            _buildPic(context),
-            PicturesField(_normalImages,medias),
+            PicturesField(widget.product  ),
             Offstage(
               offstage: widget.product == null,
               child: ProductField(widget.product),

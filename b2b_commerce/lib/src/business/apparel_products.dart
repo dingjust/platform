@@ -7,6 +7,7 @@ import 'apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
 import 'search/apparel_product_search.dart';
 
+
 class ApparelProductsPage extends StatelessWidget {
 //  final List<ApparelProductModel> items = <ApparelProductModel>[];
   final bool isRequirement;
@@ -14,13 +15,18 @@ class ApparelProductsPage extends StatelessWidget {
 
   ApparelProductsPage({this.isRequirement = false, this.item});
 
+  List<EnumModel> _statuses = <EnumModel>[
+    EnumModel('APPROVED', '全部商品'),
+//    EnumModel('APPROVED', '上架商品'),
+//    EnumModel('UNAPPROVED', '下架商品'),
+  ];
+
   @override
   Widget build(BuildContext context) {
 //    List<ApparelProductItem> _items = items.map((item) {
 //      return ApparelProductItem(item);
 //    }).toList();
 //    print("${ApparelProductBLoC.instance.newProduct.hashCode}=============");
-
     return BLoCProvider<ApparelProductBLoC>(
       bloc: ApparelProductBLoC.instance,
       child: WillPopScope(
@@ -46,35 +52,32 @@ class ApparelProductsPage extends StatelessWidget {
               ),
             ],
           ),
-          body: Container(
-            color: Colors.grey[200],
-            child: Column(
-              children: <Widget>[
-//              Menu('', <MenuItem>[
-//                MenuItem(
-//                  Icons.shopping_basket,
-//                  '下架商品',
-//                  AppRoutes.ROUTE_PRODUCTS_OFF_THE_SHELF,
-//                )
-//              ]),
-                SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                  child: ApparelProductList(
-                    isRequirement: isRequirement,
-                  ),
-//                ListView.builder(
-//                  shrinkWrap: true,
-//                  itemCount: _items.length,
-//                  itemBuilder: (context, index) {
-//                    return _items[index];
-//                  },
-//                ),
-                ),
-              ],
+          body:DefaultTabController(
+            length: _statuses.length,
+            child: Scaffold(
+              appBar: TabBar(
+                unselectedLabelColor: Colors.black26,
+                labelColor: Color.fromRGBO(255,214,12, 1),
+                indicatorSize: TabBarIndicatorSize.label,
+                tabs: _statuses.map((status) {
+                  return Tab(text: status.name);
+                }).toList(),
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black),
+                isScrollable: false,
+              ),
+              body: TabBarView(
+                children: _statuses
+                    .map((status) => ApparelProductList(
+                  isRequirement: isRequirement,
+                ),)
+                    .toList(),
+              ),
             ),
           ),
+
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {

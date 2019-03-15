@@ -126,17 +126,14 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
           centerTitle: true,
           elevation: 0.5,
           title: Text('颜色/尺码'),
-          leading: IconButton(
-            icon: Text('取消'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+          leading: IconButton(icon: Text('取消'), onPressed: () => Navigator.pop(context,[_beforeColors,_beforeSizes])),
           actions: <Widget>[
             IconButton(
-                icon: Text('确定'),
-                onPressed: () => Navigator.pop(
-                    context, [widget.colorFilters, widget.sizeFilters]))
+              icon: Text('确定'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
           ],
         ),
         body: Padding(
