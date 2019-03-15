@@ -35,15 +35,16 @@
         // console.log(JSON.stringify(product));
 
         this.initializeVariantsFormProduct(product);
-
-        // console.log('variants: ' + JSON.stringify(this.variants));
+        this._updateEntries();
+        console.log('entries:' + JSON.stringify(this.slotData.entries));
       },
       onQuantityChanged(value) {
-        console.log('value: ' + value);
+        // console.log('value: ' + value);
         this._updateQuantityOfEntries();
       },
       onPriceChanged(value) {
-        console.log('value: ' + value);
+        this.unitPrice = value;
+        // console.log('value: ' + value);
         this._updatePriceOfEntries();
       },
       initializeVariantsFormProduct(product) {
@@ -64,13 +65,14 @@
         }
       },
       _initializeVariantsFormVariantProduct(product, quantity) {
+        const code = product.code;
         const color = product.color;
         const size = product.size;
 
         const _variants = [...this.variants];
-        this._updateVariants(_variants, color, size, quantity);
+        this._updateVariants(_variants, color, size, quantity, code);
       },
-      _updateVariants(_variants, color, size, quantity) {
+      _updateVariants(_variants, color, size, quantity, code) {
         let index = -1;
         for (let i = 0; i < _variants.length; i++) {
           let variant = _variants[i];
@@ -83,6 +85,7 @@
         // 已存在
         if (index !== -1) {
           this.variants[index].sizes.push({
+            productCode: code,
             code: size.code,
             name: size.name,
             quantity: quantity
@@ -94,6 +97,7 @@
         this.variants.push({
           color: color,
           sizes: [{
+            productCode: code,
             code: size.code,
             name: size.name,
             quantity: quantity
@@ -101,10 +105,43 @@
         });
       },
       _updateQuantityOfEntries() {
-        // TODO: 使用variants同步更新slotData.entries中的数量
+        this.$set(this.slotData, 'entries', []);
+        // 使用variants同步更新slotData.entries中的数量
+        console.log('variants: ' + JSON.stringify(this.variants));
+
+        this._updateEntries();
+
+        console.log('entries:' + JSON.stringify(this.slotData.entries));
       },
       _updatePriceOfEntries() {
-        // TODO: 使用variants同步更新slotData.entries中的单价
+        this.$set(this.slotData, 'entries', []);
+        // 使用variants同步更新slotData.entries中的单价
+        console.log('variants: ' + JSON.stringify(this.variants));
+
+        this._updateEntries();
+
+        console.log('entries:' + JSON.stringify(this.slotData.entries));
+      },
+      _updateEntries() {
+        let entries = [];
+
+        let entryNumber = 0;
+        for (let variant of this.variants) {
+          for (let size of variant.sizes) {
+            entries.push({
+              entryNumber: entryNumber,
+              quantity: size.quantity,
+              basePrice: this.unitPrice,
+              product: {
+                code: size.productCode
+              }
+            });
+
+            entryNumber++;
+          }
+        }
+
+        this.$set(this.slotData, 'entries', entries);
       }
     },
     data() {
