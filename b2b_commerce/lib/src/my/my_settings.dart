@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_filter.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -56,9 +55,12 @@ class _MySettingsPageState extends State<MySettingsPage> {
             trailing: const Icon(Icons.chevron_right),
             title: const Text('工厂需求订单筛选条件'),
             leading: const Icon(Icons.lock),
-            onTap: () async{
-              Map<String,Object> map = Map();
-              await Navigator.push(context, MaterialPageRoute(builder: (context)=> RequirementOrderFilterPage(map)));
+            onTap: () async {
+              Map<String, Object> map = Map();
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RequirementOrderFilterPage(map)));
               print(map);
             },
           ),
@@ -68,14 +70,14 @@ class _MySettingsPageState extends State<MySettingsPage> {
             leading: const Icon(Icons.shopping_basket),
             onTap: () {
               ProofingModel proofing = ProofingModel(
-                belongTo: BrandModel(
-                  profilePicture: 'http://down.52pk.com/uploads/190218/5039_164753_4095.jpg',
-                  name: '森马集团有限公司'
-                )
-              );
+                  belongTo: BrandModel(
+                      profilePicture:
+                          'http://down.52pk.com/uploads/190218/5039_164753_4095.jpg',
+                      name: '森马集团有限公司'));
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProofingOrderFormPage(proofing)),
+                MaterialPageRoute(
+                    builder: (context) => ProofingOrderFormPage(proofing)),
               );
             },
           ),
@@ -86,7 +88,8 @@ class _MySettingsPageState extends State<MySettingsPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => RequirementPoolAll()),
+                MaterialPageRoute(
+                    builder: (context) => RequirementPoolAllPage()),
               );
             },
           ),

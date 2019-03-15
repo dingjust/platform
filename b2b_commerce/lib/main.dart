@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/client/brand_client.dart';
+import 'package:b2b_commerce/src/client/factor_client.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
@@ -38,6 +39,9 @@ class _MyAppState extends State<MyApp> {
             //品牌
             if (snapshot.data.type == UserType.BRAND) {
               return BrandClient();
+            } else if (snapshot.data.type == UserType.FACTORY) {
+              //TODO 工厂
+              return FactorClient();
             }
             //TODO:工厂
             //未登陆
