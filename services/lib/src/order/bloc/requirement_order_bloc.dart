@@ -109,7 +109,7 @@ class RequirementOrderBLoC extends BLoCBase {
         _ordersMap[status].data.addAll(ordersResponse.content);
       }
     }
-    _loadingController.sink.add(false);
+//    _loadingController.sink.add(false);
     _controller.sink.add(_ordersMap[status].data);
   }
 

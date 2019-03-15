@@ -592,7 +592,7 @@ class SizeModel extends ItemModel {
 }
 
 @JsonSerializable()
-class SampleProductModel {
+class SampleProductModel extends ItemModel {
   String code;
   String name;
   String skuID;

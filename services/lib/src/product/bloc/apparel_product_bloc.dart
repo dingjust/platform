@@ -43,76 +43,11 @@ class ApparelProductBLoC extends BLoCBase {
 
   Stream<ApparelProductModel> get detailStream => _detailController.stream;
 
-  getProduct(String code) {
-    _detailController.sink.add(ApparelProductModel.fromJson({
-      'approvalStatus': 'APPROVED',
-      'code': 'C0001',
-      'name': '山本风少女长裙复古气质秋冬流行新款',
-      'price': 100.00,
-//      'suggestedPrice': 99.00,
-//      'price1': 98.00,
-//      'price2': 97.00,
-//      'price3': 96.00,
-      /* 'variants':[
-        {
-          'color':{
-            'code':'C01',
-            'name':'海军蓝',
-            'colorCode':'0066FF',
-          },
-          'size':{
-
-          }
-        }
-      ],*/
-      'skuID': 'SKU0001',
-      'salesVolume': 10,
-      'isRecommend': true,
-      'brand': '云顶',
-      'gramWeight': 1.00,
-      'thumbnail':
-          'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-      'normal': [
-        'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg',
-        'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg'
-      ],
-      'detail': [
-        'https://goss1.vcg.com/creative/vcg/800/version23/VCG41471820341.jpg',
-        'https://goss.vcg.com/creative/vcg/800/version23/VCG41471820015.jpg'
-      ],
-      'stockLevel': {
-        'available': 99,
-        'maxPreOrder': 120,
-      },
-      'attributes': {
-        'styles': ['FG0001', 'FG0002'],
-        'fabricComposition': 'B001',
-        'editionType': 'C001',
-        'pattern': 'D001',
-        'sleeveType': 'E001',
-        'sleeveLength': 'F001',
-        'decorativePattern': ['G001', 'G002'],
-        'popularElements': ['H001', 'H002'],
-        'filler': 'J001',
-        'thickness': 'K001',
-        'season': 'L001',
-        'placket': 'M001',
-        'taggable': true,
-      },
-      'minorCategory': {
-        'code': 'W0106',
-        'name': '女式棉衣',
-        'parent': {
-          'code': 'W01',
-          'name': '女装',
-        }
-      },
-    }));
-  }
-
   filterByStatuses() async {
     products.clear();
-    productsResponse = await ProductRepositoryImpl().list({},{});
+    productsResponse = await ProductRepositoryImpl().list({},{
+      'approvalStatuses':['check']
+    });
     products.addAll(productsResponse.content);
     _controller.sink.add(products);
   }
@@ -126,7 +61,7 @@ class ApparelProductBLoC extends BLoCBase {
     }else{
       _bottomController.sink.add(true);
     }
-//    _loadingController.sink.add(false);
+    _loadingController.sink.add(false);
     _controller.sink.add(products);
   }
 
