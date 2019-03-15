@@ -35,7 +35,7 @@ const state = {
       uid: '',
       name: ''
     },
-    shippingAddress: {
+    deliveryAddress: {
       fullname: '',
       title: {
         code: '',

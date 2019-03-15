@@ -30,6 +30,7 @@ const state = {
       uid: '',
       name: ''
     },
+    salesApplication: 'BELOW_THE_LINE',
     companyOfSeller: '',
     contactPersonOfSeller: '',
     contactOfSeller: '',
@@ -46,7 +47,7 @@ const state = {
     requirementOrderCode: '',
     entries: [],
     remarks: '',
-    shippingAddress: {
+    deliveryAddress: {
       fullname: '',
       region: {
         isocode: '',

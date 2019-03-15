@@ -2,7 +2,11 @@
   <div>
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
       <el-table-column label="生产订单号" prop="code"></el-table-column>
-      <el-table-column label="生产订单状态" prop="status"></el-table-column>
+      <el-table-column label="生产订单状态" prop="status">
+        <template slot-scope="scope">
+          <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="预计交货时间" prop="expectedDeliveryDate"></el-table-column>
       <el-table-column label="工厂" prop="belongTo.name"></el-table-column>
       <el-table-column label="订单生成时间" prop="creationtime"></el-table-column>
@@ -78,7 +82,7 @@
         this.search({keyword, page, size});
       },
       onDetails(row) {
-        console.log("row selected")
+        this.$emit('onDetails', row);
       }
     },
     data() {
