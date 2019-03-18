@@ -153,7 +153,7 @@ class SampleProductHistoryFormPageState
                                                             true)));
                                     _nameText = Text(model.name,
                                         style: TextStyle(color: Colors.black));
-                                    _skuIDText = model.skuID;
+                                    _skuIDText = model.code;
                                   },
                                 ),
                               ),
@@ -172,7 +172,7 @@ class SampleProductHistoryFormPageState
                                 style: TextStyle(fontSize: 16),
                               ),
                               title: Padding(
-                                padding: const EdgeInsets.only(left: 60),
+                                padding: const EdgeInsets.only(left: 45),
                                 child: Text(_skuIDText),
                               ),
                             ),

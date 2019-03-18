@@ -64,19 +64,9 @@
 
   const {mapActions} = createNamespacedHelpers('BrandRequirementOrdersModule');
 
-  import RequirementOrderRequestForm from './RequirementOrderRequestForm';
-  import RequirementOrderAttachmentsForm from './RequirementOrderAttachmentsForm';
-  import RequirementOrderDetailsPage from './RequirementOrderDetailsPage';
-
-  // import {OrderMixin} from '@/mixins';
-
   export default {
     name: 'RequirementOrderSimpleFrom',
-    components: {
-      RequirementOrderRequestForm,
-      RequirementOrderAttachmentsForm,
-      RequirementOrderDetailsPage
-    },
+    components: {},
     // mixins: [OrderMixin],
     props: ['slotData'],
     methods: {
@@ -121,11 +111,7 @@
         this.fn.closeSlider(true);
       }
     },
-    computed: {
-      isNewlyCreated: function () {
-        return this.slotData.id === null;
-      }
-    },
+    computed: {},
     data() {
       return {
         categories: [],

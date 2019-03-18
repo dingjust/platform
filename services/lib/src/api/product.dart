@@ -28,5 +28,15 @@ abstract class ProductApis {
   static get sampleCreate => '/{baseSiteId}/b2b/products/sample/create';
   ///更新样衣
   static get sampleUpdate => '/{baseSiteId}/b2b/products/sample/update';
+  //获取样衣借还记录
+  static get sampleHistorys => '/{baseSiteId}/b2b/products/sampleCheckoutHist/search';
+  //获取样衣借还记录明细
+
+  //创建样衣借还记录
+  static get sampleHistoryCreate => '/{baseSiteId}/b2b/products/sampleCheckoutHist/create';
+  //更新样衣借还记录
+  static get sampleHistoryUpdate => (id) => '/{baseSiteId}/b2b/products/sampleCheckoutHist/$id';
+  //删除样衣借还记录
+  static get sampleHistoryDelete => (id) => '/{baseSiteId}/b2b/products/sampleCheckoutHist/$id';
 
 }
