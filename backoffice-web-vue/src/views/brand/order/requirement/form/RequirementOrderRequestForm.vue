@@ -29,8 +29,8 @@
         <el-col :span="6">
           <el-form-item label="产品类别" prop="category">
             <el-select class="w-100"
-                        placeholder="请选择"
-                        v-model="slotData.details.category.code">
+                       placeholder="请选择"
+                       v-model="slotData.details.category.code">
               <el-option-group
                 v-for="group in categories"
                 :key="group.code"
@@ -135,7 +135,8 @@
         this.$refs['form'].validate(callback);
       },
       async getMinorCategories() {
-        const result = await this.$http.get('/b2b/categories/cascaded');
+        const url = this.apis().getMinorCategories();
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -144,7 +145,8 @@
         this.categories = result;
       },
       async getMajorCategories() {
-        const result = await this.$http.get('/b2b/categories/majors');
+        const url = this.apis().getMajorCategories();
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;

@@ -74,7 +74,8 @@
         refresh: 'refresh'
       }),
       async getMinorCategories() {
-        const result = await this.$http.get('/b2b/categories/cascaded');
+        const url = this.apis().getMinorCategories();
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -99,7 +100,9 @@
       },
       async _onSubmit() {
         let formData = this.slotData;
-        const result = await this.$http.post('/b2b/orders/requirement/new', formData);
+
+        const url = this.apis().createPurchaseOrder();
+        const result = await this.$http.post(url, formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

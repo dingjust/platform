@@ -2,15 +2,12 @@ import http from '@/common/js/http';
 
 const state = {
   statusOptions: [
-    {text: '待分配', value: 'WAIT_FOR_ALLOCATION'},
-    {text: '备料中', value: 'WAIT_FOR_PURCHASE'},
-    {text: '待裁剪', value: 'PENDING_CUTTING'},
-    {text: '裁剪中', value: 'CUTTING'},
-    {text: '车缝中', value: 'STITCHING'},
-    {text: '待验货', value: 'QC'},
-    {text: '待发货', value: 'PENDING_DELIVERY'},
-    {text: '已发货', value: 'DELIVERING'},
-    {text: '已完成', value: 'DELIVERY_COMPLETED'}
+    {text: '待付款', value: 'PENDING_PAYMENT'},
+    {text: '生产中', value: 'IN_PRODUCTION'},
+    {text: '待出库', value: 'WAIT_FOR_OUT_OF_STORE'},
+    {text: '已出库', value: 'OUT_OF_STORE'},
+    {text: '已完成', value: 'COMPLETED'},
+    {text: '已取消', value: 'CANCELLED'}
   ],
   keyword: '',
   statuses: [],
