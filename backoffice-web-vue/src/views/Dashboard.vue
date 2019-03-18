@@ -138,23 +138,13 @@
     data() {
       return {
         trafficDimension: 'Month',
-        product:'',
-        order:'',
+        product: '',
+        order: '',
         brand: '',
-        factory:'',
+        factory: '',
       }
     },
     mounted() {
-      /*axios.get('/djbackoffice/report/statistics/dashboard')
-        .then(response =>{
-          console.log(response.data);
-          this.product = response.data.allProduct;
-          this.order = response.data.allOrder;
-          this.brand = response.data.allBrand;
-          this.factory = response.data.allFactory;
-        }).catch(error =>{
-        this.$message.error('获取数据失败：' + error.response.data);
-      });*/
     },
   }
 </script>
