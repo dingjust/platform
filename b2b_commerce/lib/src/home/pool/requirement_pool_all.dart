@@ -189,7 +189,8 @@ class OrdersListView extends StatelessWidget {
           currentCodition.machiningType = condition.value;
         }
       }
-      bloc.filterByCondition(currentCodition);
+      // bloc.filterByCondition(currentCodition);
+      bloc.clear();
     });
 
     _scrollController.addListener(() {

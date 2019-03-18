@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
@@ -92,50 +95,14 @@ class _HomePageState extends State<HomePage> {
             ),
             SliverList(
                 delegate: SliverChildListDelegate(<Widget>[
-              EasyGrid(
-                height: 90,
-                dataList: _gridItemList(),
-              ),
-              HomeTabSection(
-                height: 100,
-              ),
+              RequirementPool(),
               _buildBroadcast(),
-              FastPublishRequirement(),
-              _buildSpacing(15),
-              _buildTrackingProgress(),
-              _buildSpacing(40),
+              _buildManagement()
             ])),
           ],
         ),
       ),
     );
-  }
-
-  List<GridItem> _gridItemList() {
-    return [
-      GridItem(
-          title: '当季快反',
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_FACTORY);
-            // Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) => RequirementPoolAllPage()));
-          },
-          pic: B2BImage.fast_factory(width: 60, height: 80)),
-      GridItem(
-          title: '看款下单',
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_PRODUCT);
-          },
-          pic: B2BImage.order(width: 60, height: 80)),
-      // GridItem(
-      //     title: '空闲产能',
-      //     onPressed: () {},
-      //     pic: B2BImage.idle_capacity(width: 60, height: 80)),
-      // GridItem(
-      //     title: '电商找厂',
-      //     onPressed: () {},
-      //     pic: B2BImage.find_factory(width: 60, height: 60)),
-    ];
   }
 
   Widget _buildSpacing(double height) {
@@ -167,73 +134,233 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildTrackingProgress() {
+  Widget _buildManagement() {
     return Container(
-      color: Colors.white,
-      padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Column(
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '跟踪进度',
+                '协同管理',
                 style: TextStyle(
-                    fontSize: 18,
                     color: Color.fromRGBO(100, 100, 100, 1),
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18),
               ),
               Text(
                 '线下订单',
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Color.fromRGBO(150, 150, 150, 1),
-                ),
+                style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
               )
             ],
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductionUniqueCodePage(),
+          Container(
+            width: double.infinity,
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: FlatButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              onPressed: () {},
+              child: Text(
+                '创建线下订单',
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1),
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Container(
+              width: double.infinity,
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '• 使用蕉衣APP统一管理生产订单;',
+                    style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
+                  ),
+                  Text(
+                    '• 创建后生成唯一码，邀请品牌线上查看生成进度;',
+                    style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
+                  )
+                ],
+              )),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            width: double.infinity,
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 0.8, color: Color.fromRGBO(200, 200, 200, 1)))),
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(240, 240, 240, 1),
+                borderRadius: BorderRadius.circular(20)),
+            child: TextField(
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: '请输入品牌发来的唯一码',
+                  hintStyle: TextStyle(fontSize: 15)),
+            ),
+          ),
+          Container(
+              width: double.infinity,
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                '• 品牌已创建线下订单，直接通过唯一码导入;',
+                style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+class RequirementPool extends StatelessWidget {
+  /// 全部需求streamController
+  final StreamController _allRequirementStreamController =
+      StreamController<int>.broadcast();
+
+  /// 推荐需求streamController
+  final StreamController _recommendRequirementStreamController =
+      StreamController<int>.broadcast();
+
+  @override
+  Widget build(BuildContext context) {
+    //TODO调用查询需求数量接口,触发stream控制
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          StreamBuilder<int>(
+            stream: _allRequirementStreamController.stream,
+            initialData: 0,
+            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RequirementPoolAllPage()));
+                },
+                child: Container(
+                  height: 50,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        '全部需求',
+                        style: TextStyle(
+                            color: Color.fromRGBO(36, 38, 41, 1),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                            text: '${snapshot.data}+',
+                            style: TextStyle(
+                              color: Color.fromRGBO(255, 45, 45, 1),
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: '需求等待回复',
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(100, 100, 100, 1)))
+                            ]),
+                      )
+                    ],
+                  ),
                 ),
               );
             },
-            child: Container(
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Color.fromRGBO(248, 248, 248, 1),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '请输入工厂发来的唯一码',
-                      style: TextStyle(color: Colors.grey, fontSize: 15),
-                    )
-                  ],
-                )),
           ),
-          GestureDetector(
-            onTap: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '没有唯一码？点击这里',
-                  style: TextStyle(
-                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 15),
+          Container(
+            height: 35,
+            decoration: BoxDecoration(
+                border: Border(
+                    left: BorderSide(
+                        width: 1, color: Color.fromRGBO(220, 220, 220, 1)))),
+          ),
+          StreamBuilder<int>(
+            stream: _recommendRequirementStreamController.stream,
+            initialData: 0,
+            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+              return GestureDetector(
+                onTap: () {
+                  //TODO推荐需求
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RequirementPoolAllPage()));
+                },
+                child: Container(
+                  height: 50,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        width: 100,
+                        child: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: <Widget>[
+                            Text(
+                              '推荐需求',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(36, 38, 41, 1),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                width: 18,
+                                height: 18,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color.fromRGBO(255, 38, 38, 1),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${snapshot.data}',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                            text: '待我',
+                            style: TextStyle(
+                              color: Color.fromRGBO(100, 100, 100, 1),
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: '报价',
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(255, 45, 45, 1))),
+                              TextSpan(
+                                  text: '的需求',
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(100, 100, 100, 1)))
+                            ]),
+                      )
+                    ],
+                  ),
                 ),
-                Icon(
-                  B2BIcons.arrow_right,
-                  color: Color.fromRGBO(255, 45, 45, 1),
-                  size: 12,
-                )
-              ],
-            ),
-          )
+              );
+            },
+          ),
         ],
       ),
     );

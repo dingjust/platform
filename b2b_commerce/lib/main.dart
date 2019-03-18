@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
               return BrandClient();
             } else if (snapshot.data.type == UserType.FACTORY) {
               //TODO 工厂
-              return FactorClient();
+              return FactoryClient();
             }
             //TODO:工厂
             //未登陆
