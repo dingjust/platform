@@ -46,7 +46,7 @@ class ApparelProductBLoC extends BLoCBase {
   filterByStatuses() async {
     products.clear();
     productsResponse = await ProductRepositoryImpl().list({},{
-      'approvalStatuses':['check']
+      'approvalStatuses':['approved']
     });
     products.addAll(productsResponse.content);
     _controller.sink.add(products);

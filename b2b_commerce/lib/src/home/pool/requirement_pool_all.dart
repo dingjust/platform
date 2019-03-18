@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -189,7 +190,8 @@ class OrdersListView extends StatelessWidget {
           currentCodition.machiningType = condition.value;
         }
       }
-      bloc.filterByCondition(currentCodition);
+      // bloc.filterByCondition(currentCodition);
+      bloc.clear();
     });
 
     _scrollController.addListener(() {
@@ -291,19 +293,19 @@ class RequirementPoolOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         //根据code查询明
-        // RequirementOrderModel model = await RequirementOrderRepository()
-        //     .getRequirementOrderDetail(order.code);
+        RequirementOrderModel model = await RequirementOrderRepository()
+            .getRequirementOrderDetail(order.code);
 
-        // List<QuoteModel> quotes = await RequirementOrderRepository()
-        //     .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
+        List<QuoteModel> quotes = await RequirementOrderRepository()
+            .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
 
-        // if (model != null) {
-        //   Navigator.of(context).push(MaterialPageRoute(
-        //       builder: (context) => RequirementOrderDetailPage(
-        //             order: model,
-        //             quotes: quotes,
-        //           )));
-        // }
+        if (model != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => RequirementOrderDetailPage(
+                    order: model,
+                    quotes: quotes,
+                  )));
+        }
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),

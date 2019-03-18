@@ -117,8 +117,6 @@ class _HomePageState extends State<HomePage> {
           title: '当季快反',
           onPressed: () {
             Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_FACTORY);
-            // Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) => RequirementPoolAllPage()));
           },
           pic: B2BImage.fast_factory(width: 60, height: 80)),
       GridItem(
