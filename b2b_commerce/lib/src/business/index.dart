@@ -16,27 +16,19 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('生意'),
-      //   actions: <Widget>[
-      //     IconButton(
-      //       icon: Icon(B2BIcons.search,size: 20,),
-      //       onPressed: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
-      //     ),
-      //     IconButton(
-      //       icon: Icon(Icons.message),
-      //       onPressed: () {},
-      //     )
-      //   ],
-      // ),
+      appBar: AppBar(
+        title: Text('统计'),
+        centerTitle: true,
+        elevation: 0.5,
+      ),
       body: Container(
         color: Color.fromRGBO(245, 245, 245, 1),
         child: ListView(
           children: <Widget>[
             SiteStatisticsSection(<SiteStatisticsModel>[
-              SiteStatisticsModel('今日销售', '561', '件'),
-              SiteStatisticsModel('今日销量', '2500.00', '元'),
-              SiteStatisticsModel('在架商品', '15', '款')
+              SiteStatisticsModel(label: '今日销售', value: '561', unit: '件'),
+              SiteStatisticsModel(label: '今日销量', value: '2500', unit: '元'),
+              SiteStatisticsModel(label: '在架商品', value: '15', unit: '款'),
             ]),
             AdvanceMenu('我的待办', <AdvanceMenuItem>[
               AdvanceMenuItem(

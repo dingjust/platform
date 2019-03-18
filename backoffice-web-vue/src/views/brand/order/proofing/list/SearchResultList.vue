@@ -1,27 +1,23 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
-      <el-table-column label="生产订单号" prop="code"></el-table-column>
-      <el-table-column label="生产订单状态" prop="status">
+      <el-table-column label="打样订单号" prop="code"></el-table-column>
+      <el-table-column label="打样订单状态" prop="status">
         <template slot-scope="scope">
-          <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag>
+          <el-tag disable-transitions>{{getEnum('proofingOrderStatuses', scope.row.status)}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="预计交货时间" prop="expectedDeliveryDate">
-        <template slot-scope="scope">
-          <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="工厂" prop="belongTo.name"></el-table-column>
       <el-table-column label="订单生成时间" prop="creationtime">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="需求订单号" prop="requirementOrderCode"></el-table-column>
+      <el-table-column label="需求订单号" prop="requirementOrderRef"></el-table-column>
+      <el-table-column label="报价订单号" prop="quoteRef"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">修改地址</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="showQuote(scope.row.quoteRef)">查看报价单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -91,6 +87,9 @@
       },
       onDetails(row) {
         this.$emit('onDetails', row);
+      },
+      showQuote(quoteRef) {
+        this.$emit('showQuote', quoteRef);
       }
     },
     data() {

@@ -8,7 +8,7 @@ import 'product_repository.dart';
 class ProductRepositoryImpl extends ProductRepository{
 
   @override
-  Future<ProductsResponse> list(Map<String,dynamic> params,dynamic data) async{
+  Future<ProductsResponse> list(dynamic data,Map<String,dynamic> params) async{
     Response response = await http$.post(ProductApis.list,data: data,queryParameters: params);
     return ProductsResponse.fromJson(response.data);
   }
@@ -90,5 +90,52 @@ class ProductRepositoryImpl extends ProductRepository{
     return response.data.map<StyleModel>((style)=>StyleModel.fromJson(style)).toList();
   }
 
+  @override
+  Future<SampleProductsResponse> samples(Map<String,dynamic> data) async {
+    Response response = await http$.get(ProductApis.samples,data: data);
+    return SampleProductsResponse.fromJson(response.data);
+  }
+
+  @override
+  Future<SampleProductModel> getSample(String code)async {
+   Response response = await http$.get(ProductApis.sampleDetail(code));
+   return SampleProductModel.fromJson(response.data);
+  }
+
+  @override
+  Future<String> createSample(SampleProductModel smaple) async{
+    Response response = await http$.post(ProductApis.sampleCreate,data: SampleProductModel.toJson(smaple));
+    return response.data;
+  }
+
+  @override
+  Future<String> updateSample(SampleProductModel smaple) async{
+    print(SampleProductModel.toJson(smaple));
+    Response response = await http$.put(ProductApis.sampleUpdate,data: SampleProductModel.toJson(smaple));
+    return response.data;
+  }
+
+  @override
+  Future<SampleProductHistorysResponse> sampleHistorys(dynamic data, Map<String, dynamic> params) async{
+    Response response = await http$.post(ProductApis.sampleHistorys,data: data,queryParameters: params);
+    return SampleProductHistorysResponse.fromJson(response.data);
+  }
+
+  @override
+  Future<SampleBorrowReturnHistoryModel> getSampleHistory(String code) async{
+
+  }
+
+  @override
+  Future<String> createSampleHistory(SampleBorrowReturnHistoryModel sample) async{
+    Response response = await http$.post(ProductApis.sampleHistoryCreate,data: SampleBorrowReturnHistoryModel.toJson(sample));
+    return response.data;
+  }
+
+  @override
+  Future<String> updateSampleHistory(SampleBorrowReturnHistoryModel sample)async {
+    Response response = await http$.put(ProductApis.sampleHistoryUpdate,data: SampleBorrowReturnHistoryModel.toJson(sample));
+    return response.data;
+  }
 
 }

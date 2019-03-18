@@ -15,6 +15,7 @@
   import ProofingToolbar from './toolbar/Toolbar';
   import ProofingSearchResultList from './list/SearchResultList';
   import ProofingForm from './form/ProofingForm';
+  import ProofingDetailForm from './list/ProofingDetailForm';
 
   export default {
     name: 'ProofingPage',
@@ -37,10 +38,11 @@
       },
       onNew(formData) {
         // console.log('onNew: ' + JSON.stringify(formData));
-        this.fn.openSlider('创建生产订单', ProofingForm, formData);
+        this.fn.openSlider('创建打样订单', ProofingForm, formData);
       },
       onDetails(row) {
         console.log('onDetails: ' + JSON.stringify(row));
+        this.fn.openSlider('查看打样订单明细', ProofingDetailForm, row);
       }
     },
     data() {

@@ -7,8 +7,11 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementPoolAllPage extends StatefulWidget {
+  final List<CategoryModel> categories;
+
   RequirementPoolAllPage({
     Key key,
+    this.categories,
   });
 
   ///当前选中条件
@@ -53,10 +56,17 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   List<FilterConditionEntry> categoriesConditionEntries =
       <FilterConditionEntry>[
     FilterConditionEntry(label: '全部', value: null, checked: true),
-    FilterConditionEntry(
-        label: '包工包料', value: MachiningType.LABOR_AND_MATERIAL),
-    FilterConditionEntry(label: '清加工', value: MachiningType.LIGHT_PROCESSING),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    categoriesConditionEntries.addAll(widget.categories
+        .map((category) =>
+            FilterConditionEntry(label: category.name, value: category.code))
+        .toList());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +158,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                 ),
                 FilterSelectMenu(
                   color: Color.fromRGBO(255, 214, 12, 1),
-                  height: showCategoriesFilterMenu ? 150 : 0,
+                  height: showCategoriesFilterMenu ? 250 : 0,
                   entries: categoriesConditionEntries,
                   streamController:
                       RequirementPoolBLoC.instance.conditionController,

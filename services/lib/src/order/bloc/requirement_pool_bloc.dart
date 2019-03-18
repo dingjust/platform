@@ -185,12 +185,22 @@ class RequirementPoolBLoC extends BLoCBase {
     }
 
     if (conditions.machiningType != null) {
-      data['machiningType'] = '${conditions.machiningType}';
+      data['machiningTypes'] = [MachiningTYpeMap[conditions.machiningType]];
+    }
+
+    if (conditions.categories != null) {
+      data['majorCategories'] =
+          conditions.categories.map((category) => category.code).toList();
     }
 
     return data;
   }
 }
+
+const MachiningTYpeMap = {
+  MachiningType.LABOR_AND_MATERIAL: 'LABOR_AND_MATERIAL',
+  MachiningType.LIGHT_PROCESSING: 'LIGHT_PROCESSING',
+};
 
 class RequirementFilterCondition {
   RequirementOrderDateRange dateRange;

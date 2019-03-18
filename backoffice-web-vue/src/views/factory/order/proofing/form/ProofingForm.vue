@@ -9,13 +9,6 @@
     <div class="pt-2"></div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>生产工厂</span>
-      </div>
-      <proofing-seller-form :slot-data="slotData" :read-only="readOnly"/>
-    </el-card>
-    <div class="pt-2"></div>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
         <span>待打样商品</span>
       </div>
       <proofing-entries-form :slot-data="slotData" :read-only="readOnly"/>
@@ -66,13 +59,13 @@
           delete this.slotData.deliveryAddress;
         }
 
-        const result = await this.$http.post('/b2b/orders/proofing/create', this.slotData);
+        const result = await this.$http.post('/b2b/orders/proofing/create/'+this.slotData.code, this.slotData);
         if (result['errors']) {
           this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success('生产订单创建成功，订单号：' + result);
+        this.$message.success('打样订单创建成功，订单号：' + result);
         this.fn.closeSlider();
       },
       onCancel() {

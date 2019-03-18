@@ -96,7 +96,7 @@ class BottomNavigation extends StatelessWidget {
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
       icon: const Icon(B2BIcons.home),
-      title: const Text('首页'),
+      title: const Text('商机'),
     ),
     BottomNavigationBarItem(
       icon: Container(
@@ -115,7 +115,7 @@ class BottomNavigation extends StatelessWidget {
         ),
         title: Container(
           margin: EdgeInsets.only(left: 40),
-          child: const Text('生意'),
+          child: const Text('统计'),
         )),
     BottomNavigationBarItem(
       icon: const Icon(B2BIcons.my),
