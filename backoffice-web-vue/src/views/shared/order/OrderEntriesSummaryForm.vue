@@ -1,8 +1,11 @@
 <template>
   <div class="animated fadeIn">
-    单价：<el-input-number v-model="basePrice"
-                        @change="onPriceChanged">
-  </el-input-number>，数量： {{totalQuantity}}，总价： {{totalPrice}}
+    单价：
+    <el-input-number v-model="basePrice"
+                     :disabled="readOnly"
+                     @change="onPriceChanged">
+    </el-input-number>
+    ，数量： {{totalQuantity}}，总价： {{totalPrice}}
   </div>
 </template>
 

@@ -40,6 +40,10 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('BrandPurchaseOrdersModule');
+
   import PurchaseOrderBasicForm from "./PurchaseOrderBasicForm";
   import PurchaseOrderSellerForm from "./PurchaseOrderSellerForm";
   import PurchaseOrderDeliveryAddressForm from "./PurchaseOrderDeliveryAddressForm";
@@ -57,6 +61,9 @@
     mixins: [],
     computed: {},
     methods: {
+      ...mapActions({
+        refresh: 'refresh'
+      }),
       async onSubmit() {
         console.log("submitted data: " + JSON.stringify(this.slotData));
 
@@ -73,6 +80,9 @@
         }
 
         this.$message.success('生产订单创建成功，订单号：' + result);
+
+        this.refresh();
+
         this.fn.closeSlider();
       },
       onCancel() {

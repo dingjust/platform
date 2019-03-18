@@ -15,6 +15,7 @@
   import PurchaseOrderToolbar from './toolbar/Toolbar';
   import PurchaseOrderSearchResultList from './list/SearchResultList';
   import PurchaseOrderForm from './form/PurchaseOrderForm';
+  import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
 
   export default {
     name: 'PurchaseOrderPage',
@@ -39,8 +40,15 @@
         // console.log('onNew: ' + JSON.stringify(formData));
         this.fn.openSlider('创建生产订单', PurchaseOrderForm, formData);
       },
-      onDetails(row) {
-        console.log('onDetails: ' + JSON.stringify(row));
+      async onDetails(row) {
+        // console.log('onDetails: ' + JSON.stringify(row));
+        const result = await this.$http.get('/b2b/orders/purchase/' + row.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.fn.openSlider('订单明细', PurchaseOrderDetailsPage, result);
       }
     },
     data() {
