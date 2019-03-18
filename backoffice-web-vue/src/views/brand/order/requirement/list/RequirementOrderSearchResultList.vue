@@ -49,59 +49,38 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
-
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandRequirementOrdersModule');
-
   export default {
     name: 'RequirementOrderSearchResultList',
     props: ["page"],
     computed: {},
     methods: {
-      ...mapActions({
-        search: 'search',
-        searchAdvanced: 'searchAdvanced'
-      }),
       handleFilterChange(val) {
         this.statuses = val.status;
-        this._onSearch(0);
-      },
-      //如只需当前页面筛选不需调后台查询的使用该方法！
-      filterTag(value, row) {
-        //   return row.status === value;
-      },
-      onAdvancedSearch() {
-        this.advancedSearch = true;
-        this._onAdvancedSearch(0)
-      },
-      _onAdvancedSearch(page, size) {
-        const query = this.queryFormData;
-        this.searchAdvanced({query, page, size});
+
+        this.$emit('onSearch', 0);
       },
       onPageSizeChanged(val) {
-        this.reset();
+        this._reset();
 
-        if (this.advancedSearch) {
-          this._onAdvancedSearch(0, val);
-        } else {
-          this._onSearch(0, val);
+        if (this.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val);
+          return;
         }
+
+        this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
-        if (this.advancedSearch) {
-          this._onAdvancedSearch(val - 1);
-        } else {
-          this._onSearch(val - 1);
+        if (this.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val - 1);
+          return;
         }
+
+        this.$emit('onSearch', val - 1);
       },
-      reset() {
+      _reset() {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
-      },
-      _onSearch(page, size) {
-        const keyword = this.keyword;
-        this.search({keyword, page, size});
       },
       onDetails(row) {
         this.$emit('onDetails', row);
@@ -110,9 +89,8 @@
     data() {
       return {
         statuses: this.$store.state.BrandRequirementOrdersModule.statuses,
+        isAdvancedSearch: this.$store.state.BrandRequirementOrdersModule.isAdvancedSearch,
       }
-    },
-    created() {
     }
   }
 </script>

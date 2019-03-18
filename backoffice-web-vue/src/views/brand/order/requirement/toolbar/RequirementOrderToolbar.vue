@@ -91,16 +91,15 @@
 <script>
   export default {
     name: 'RequirementOrderToolbar',
-    props: ['queryFormData'],
     mixins: [],
     components: {},
     computed: {},
     methods: {
       onSearch() {
-        this.$emit('onSearch', this.keyword);
+        this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
-        this.$emit('onAdvancedSearch');
+        this.$emit('onAdvancedSearch', 0);
       },
       onNew() {
         let formData = {};
@@ -119,6 +118,7 @@
       return {
         keyword: this.$store.state.BrandRequirementOrdersModule.keyword,
         formData: this.$store.state.BrandRequirementOrdersModule.formData,
+        queryFormData: this.$store.state.BrandRequirementOrdersModule.queryFormData,
         statusOptions: this.$store.state.BrandRequirementOrdersModule.statusOptions,
       }
     }

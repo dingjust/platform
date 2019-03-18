@@ -27,8 +27,6 @@
     },
     data() {
       return {}
-    },
-    created() {
     }
   }
 </script>

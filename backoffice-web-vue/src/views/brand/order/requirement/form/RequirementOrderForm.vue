@@ -32,7 +32,11 @@
       RequirementOrderAttachmentsForm,
     },
     props: ['slotData', 'readOnly'],
-    methods: {},
+    methods: {
+      validate(callback) {
+        return this.$refs['requestForm'].validate(callback);
+      }
+    },
     computed: {},
     data() {
       return {}

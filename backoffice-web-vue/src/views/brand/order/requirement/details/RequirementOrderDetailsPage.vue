@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <requirement-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
     <div class="pt-2"></div>
-    <requirement-order-form :slot-data="slotData" :read-only="!isNewlyCreated"/>
+    <requirement-order-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
     <div class="pt-2"></div>
     <requirement-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
   </div>
@@ -25,16 +25,14 @@
         refresh: 'refresh'
       }),
       onSubmit() {
-        this.$refs['requestForm'].validate((valid) => {
-            if (!valid) {
-              return false;
-            }
-
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
             this._onSubmit();
-
             return true;
           }
-        );
+
+          return false;
+        });
       },
       onCancel() {
         this.fn.closeSlider();
