@@ -5,7 +5,7 @@ import BootstrapVue from "bootstrap-vue";
 import ElementUI from "element-ui";
 import router from "./router";
 import store from "./store/index.js";
-import {formatDate, enumTranslate,timestampToTime,postponedDays} from "./common/js/filters";
+import {formatDate, enumTranslate, timestampToTime, postponedDays} from "./common/js/filters";
 import HttpServletPlugin from "./plugins/HttpServletPlugin.js";
 import http from "./common/js/http";
 
@@ -23,14 +23,14 @@ Vue.filter("enumTranslate", (enumVal, enumType) => {
   return enumTranslate(enumVal, enumType);
 });
 //时间戳转成日期字符串格式
-Vue.filter("timestampToTime", function(timestamp){
-  if(timestamp == null){
+Vue.filter("timestampToTime", function (timestamp) {
+  if (timestamp == null) {
     return "";
   }
   return timestampToTime(timestamp);
 });
 // 计算延期天数
-Vue.filter('postponedDays', function(timestamp){
+Vue.filter('postponedDays', function (timestamp) {
   return postponedDays(timestamp);
 });
 Vue.use(BootstrapVue);
@@ -50,20 +50,27 @@ Vue.prototype.CONFIG = {
 };
 
 Vue.mixin({
-  data(){
+  data() {
     return {
       defaultDateValueFormat: "yyyy-MM-dd'T'HH:mm:ssZ",
       mediaUploadUrl: '/djwebservices/media/file/upload'
     }
   },
+  computed: {},
   methods: {
+    isBrand() {
+      return this.$store.getters.currentUser.type === 'BRAND';
+    },
+    isFactory() {
+      return this.$store.getters.currentUser.type === 'FACTORY';
+    },
+    isTenant() {
+      return this.$store.getters.currentUser.type === 'TENANT';
+    },
     // 统一错误处理mixin
-    getErrorMessage(error) {
-      const data = error.response.data;
-
-      console.log("DEBUG: " + JSON.stringify(data["errors"]));
-      if (data["errors"] && data["errors"].length) {
-        return data["errors"][0].message;
+    getErrorMessage(result) {
+      if (result["errors"]) {
+        return result["errors"][0].message;
       }
 
       return "未知错误";
