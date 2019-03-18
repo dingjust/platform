@@ -1,8 +1,10 @@
 <template>
   <div>
-    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
+    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange"
+              v-if="isHeightComputed" :height="autoHeight">
       <el-table-column label="生产订单号" prop="code"></el-table-column>
-      <el-table-column label="生产订单状态" prop="status">
+      <el-table-column label="生产订单状态" prop="status" :column-key="'status'"
+                       :filters="statuses">
         <template slot-scope="scope">
           <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag>
         </template>
@@ -40,63 +42,48 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
-
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandPurchaseOrdersModule');
-
-  import autoHeight from '@/mixins/autoHeight';
-
   export default {
     name: 'PurchaseOrderSearchResultList',
     props: ["page"],
-    mixins: [autoHeight],
     computed: {},
     methods: {
-      ...mapActions({
-        search: 'search',
-        searchAdvanced: 'searchAdvanced'
-      }),
-      onAdvancedSearch() {
-        this.advancedSearch = true;
-        this._onAdvancedSearch(0)
-      },
-      _onAdvancedSearch(page, size) {
-        const query = this.queryFormData;
-        this.searchAdvanced({query, page, size});
+      handleFilterChange(val) {
+        this.statuses = val.status;
+
+        this.$emit('onSearch', 0);
       },
       onPageSizeChanged(val) {
-        this.reset();
+        this._reset();
 
-        if (this.advancedSearch) {
-          this._onAdvancedSearch(0, val);
-        } else {
-          this._onSearch(0, val);
+        if (this.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val);
+          return;
         }
+
+        this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
-        if (this.advancedSearch) {
-          this._onAdvancedSearch(val - 1);
-        } else {
-          this._onSearch(val - 1);
+        if (this.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val - 1);
+          return;
         }
+
+        this.$emit('onSearch', val - 1);
       },
-      reset() {
+      _reset() {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
-      },
-      _onSearch(page, size) {
-        const keyword = this.keyword;
-        this.search({keyword, page, size});
       },
       onDetails(row) {
         this.$emit('onDetails', row);
       }
     },
     data() {
-      return {}
-    },
-    created() {
+      return {
+        statuses: this.$store.state.BrandPurchaseOrdersModule.statuses,
+        isAdvancedSearch: this.$store.state.BrandPurchaseOrdersModule.isAdvancedSearch,
+      }
     }
   }
 </script>

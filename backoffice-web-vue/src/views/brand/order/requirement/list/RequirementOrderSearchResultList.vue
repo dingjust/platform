@@ -10,10 +10,7 @@
       <el-table-column label="订单状态" prop="status" :column-key="'status'"
                        :filters="statuses">
         <template slot-scope="scope">
-          <el-tag
-            :type="scope.row.status === 'COMPLETED' ? 'success' : ''"
-            disable-transitions>{{getEnum('requirementOrderStatuses', scope.row.status)}}
-          </el-tag>
+          <el-tag disable-transitions>{{getEnum('requirementOrderStatuses', scope.row.status)}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="创建用户" prop="user">
@@ -28,9 +25,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">
-            明细
-          </el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
         </template>
       </el-table-column>
     </el-table>

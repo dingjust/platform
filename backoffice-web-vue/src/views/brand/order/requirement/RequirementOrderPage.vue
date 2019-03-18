@@ -25,14 +25,14 @@
 
   export default {
     name: 'RequirementOrderPage',
+    components: {
+      RequirementOrderToolbar,
+      RequirementOrderSearchResultList
+    },
     computed: {
       ...mapGetters({
         page: 'page'
       })
-    },
-    components: {
-      RequirementOrderToolbar,
-      RequirementOrderSearchResultList
     },
     methods: {
       ...mapActions({

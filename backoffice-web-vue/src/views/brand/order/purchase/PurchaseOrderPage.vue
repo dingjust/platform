@@ -1,8 +1,13 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <purchase-order-toolbar @onSearch="onSearch" @onNew="onNew"/>
-      <purchase-order-search-result-list :page="page" @onDetails="onDetails"/>
+      <purchase-order-toolbar @onNew="onNew"
+                              @onSearch="onSearch"
+                              @onAdvancedSearch="onAdvancedSearch"/>
+      <purchase-order-search-result-list :page="page"
+                                         @onDetails="onDetails"
+                                         @onSearch="onSearch"
+                                         @onAdvancedSearch="onAdvancedSearch"/>
     </el-card>
   </div>
 </template>
@@ -32,29 +37,40 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch(keyword) {
-        this.search({keyword});
+      onSearch(page, size) {
+        const keyword = this.keyword;
+        const statuses = this.statuses;
+        this.search({keyword, statuses, page, size});
       },
-      onNew(formData) {
-        // console.log('onNew: ' + JSON.stringify(formData));
-        this.fn.openSlider('创建生产订单', PurchaseOrderDetailsPage, formData);
+      onAdvancedSearch(page, size) {
+        this.isAdvancedSearch = true;
+
+        const query = this.queryFormData;
+        this.searchAdvanced({query, page, size});
       },
       async onDetails(row) {
-        // console.log('onDetails: ' + JSON.stringify(row));
         const result = await this.$http.get('/b2b/orders/purchase/' + row.code);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
         }
 
-        this.fn.openSlider('明细，订单编号：' + result.code, PurchaseOrderDetailsPage, result);
-      }
+        this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
+      },
+      onNew(formData) {
+        this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
+      },
     },
     data() {
-      return {}
+      return {
+        keyword: this.$store.state.BrandPurchaseOrdersModule.keyword,
+        formData: this.$store.state.BrandPurchaseOrdersModule.formData,
+        queryFormData: this.$store.state.BrandPurchaseOrdersModule.queryFormData,
+        isAdvancedSearch: this.$store.state.BrandPurchaseOrdersModule.isAdvancedSearch,
+      }
     },
     created() {
-      this.search('');
+      this.onSearch();
     }
   }
 </script>

@@ -91,7 +91,6 @@
 <script>
   export default {
     name: 'RequirementOrderToolbar',
-    mixins: [],
     components: {},
     computed: {},
     methods: {

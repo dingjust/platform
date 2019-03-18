@@ -5,7 +5,7 @@
     </el-form-item>
     <el-button-group>
       <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-      <el-button type="primary" icon="el-icon-plus" @click="onNew">创建生产订单</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="onNew">创建手工单</el-button>
     </el-button-group>
   </el-form>
 </template>
@@ -15,28 +15,30 @@
 
   export default {
     name: 'PurchaseOrderToolbar',
-    props: [],
-    mixins: [],
     components: {
       PurchaseOrderAdvancedSearchForm
     },
     computed: {},
     methods: {
       onSearch() {
-        this.$emit('onSearch', this.keyword);
+        this.$emit('onSearch', 0);
+      },
+      onAdvancedSearch() {
+        this.$emit('onAdvancedSearch', 0);
       },
       onNew() {
         let formData = {};
         Object.assign(formData, this.formData);
-        // console.log(JSON.stringify(formData));
 
         this.$emit('onNew', formData);
-      }
+      },
     },
     data() {
       return {
         keyword: this.$store.state.BrandPurchaseOrdersModule.keyword,
         formData: this.$store.state.BrandPurchaseOrdersModule.formData,
+        queryFormData: this.$store.state.BrandPurchaseOrdersModule.queryFormData,
+        statusOptions: this.$store.state.BrandPurchaseOrdersModule.statusOptions,
       }
     }
   }

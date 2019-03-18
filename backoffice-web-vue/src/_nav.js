@@ -85,11 +85,11 @@ export default {
       url: '/backoffice/order',
       icon: 'icon-puzzle',
       children: [
-        {
+        /*{
           name: '销售订单',
           url: '/backoffice/order/order',
           icon: 'iconNone'
-        },
+        },*/
         {
           name: '需求订单',
           url: '/backoffice/order/requirement',

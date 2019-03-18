@@ -14,6 +14,7 @@ const state = {
   ],
   keyword: '',
   statuses: [],
+  isAdvancedSearch: false,
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -81,13 +82,16 @@ const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
+  statuses: (state, statuses) => state.statuses = statuses,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
 };
 
 const actions = {
   async search({dispatch, commit, state}, {keyword, statuses, page, size}) {
     commit('keyword', keyword);
+    commit('statuses', statuses);
     if (page) {
       commit('currentPageNumber', page);
     }
@@ -97,7 +101,8 @@ const actions = {
     }
 
     const response = await http.post('/b2b/orders/purchase', {
-      skuID: state.keyword
+      skuID: state.keyword,
+      statuses: state.statuses
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -127,15 +132,18 @@ const actions = {
   },
   refresh({dispatch, commit, state}) {
     const keyword = state.keyword;
+    const statuses = state.statuses;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {keyword, statuses, page: currentPageNumber, size: currentPageSize});
   }
 };
 
 const getters = {
   keyword: state => state.keyword,
+  statuses: state => state.statuses,
+  isAdvancedSearch: state => state.isAdvancedSearch,
   statusOptions: state => state.statusOptions,
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
