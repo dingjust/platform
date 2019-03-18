@@ -13,19 +13,13 @@
 
   const {mapActions} = createNamespacedHelpers('BrandPurchaseOrdersModule');
 
-  import PurchaseOrderForm from '../form/PurchaseOrderForm';
   import PurchaseOrderFormToolbar from "../toolbar/PurchaseOrderFormToolbar";
+  import PurchaseOrderForm from '../form/PurchaseOrderForm';
 
   export default {
     name: 'PurchaseOrderDetailsPage',
     props: ['slotData'],
     components: {PurchaseOrderFormToolbar, PurchaseOrderForm},
-    mixins: [],
-    computed: {
-      isNewlyCreated: function () {
-        return this.slotData.id === null;
-      }
-    },
     methods: {
       ...mapActions({
         refresh: 'refresh'
@@ -55,10 +49,13 @@
         this.fn.closeSlider();
       }
     },
+    computed: {
+      isNewlyCreated: function () {
+        return this.slotData.id === null;
+      }
+    },
     data() {
       return {}
-    },
-    created() {
     }
   }
 </script>
