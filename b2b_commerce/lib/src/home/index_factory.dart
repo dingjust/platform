@@ -1,15 +1,9 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
-import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
-import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
-
 /// 网站主页
 class HomePage extends StatefulWidget {
   HomePage() : super(key: AppKeys.homePage);

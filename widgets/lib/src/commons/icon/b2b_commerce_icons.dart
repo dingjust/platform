@@ -24,13 +24,13 @@ class B2BIcons {
   static const IconData right_quotation =
       const IconData(0xe6a6, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData production =
-      const IconData(0xe696, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6be, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData home =
-      const IconData(0xe64d, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6c0, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData business =
-      const IconData(0xe650, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6bd, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData my =
-      const IconData(0xe64c, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6bf, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData delay =
       const IconData(0xe6a8, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData brand =
