@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <proofing-toolbar @onSearch="onSearch" @onNew="onNew"/>
+      <proofing-toolbar @onSearch="onSearch"/>
       <proofing-search-result-list :page="page" @onDetails="onDetails"/>
     </el-card>
   </div>
@@ -15,6 +15,7 @@
   import ProofingToolbar from './toolbar/Toolbar';
   import ProofingSearchResultList from './list/SearchResultList';
   import ProofingForm from './form/ProofingForm';
+  import ProofingDetailForm from './list/ProofingDetailForm';
 
   export default {
     name: 'ProofingPage',
@@ -30,21 +31,21 @@
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        searchRequirementRef: 'searchRequirementRef',
       }),
-      onSearch(keyword) {
-        this.search({keyword});
-      },
-      onNew(formData) {
-        // console.log('onNew: ' + JSON.stringify(formData));
-        this.fn.openSlider('创建生产订单', ProofingForm, formData);
+      onSearch(requirementOrderRef) {
+        console.log(requirementOrderRef);
+        this.searchRequirementRef({requirementOrderRef});
       },
       onDetails(row) {
         console.log('onDetails: ' + JSON.stringify(row));
+        this.fn.openSlider('查看打样订单明细', ProofingDetailForm, row);
       }
     },
     data() {
-      return {}
+      return {
+      }
     },
     created() {
       this.search('');

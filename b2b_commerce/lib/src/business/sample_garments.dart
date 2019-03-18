@@ -1,12 +1,18 @@
+import 'package:b2b_commerce/src/business/products/sample_product_history_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'products/sample_product_borrow_history_item.dart';
 import 'products/sample_product_history_form.dart';
-import 'products/sample_product_lend_history_item.dart';
 import 'products/sample_products.dart';
 import 'search/apparel_product_search.dart';
+
+List<EnumModel> _states = <EnumModel>[
+  EnumModel('ALL', '全部'),
+  EnumModel('NOT_RETURNED', '未还'),
+  EnumModel('RETURNED', '已还'),
+];
 
 class SampleGarmentsPage extends StatefulWidget {
   SampleGarmentsPageState createState() => SampleGarmentsPageState();
@@ -15,237 +21,319 @@ class SampleGarmentsPage extends StatefulWidget {
 class SampleGarmentsPageState extends State<SampleGarmentsPage> {
   LendBorrowType _type = LendBorrowType.BORROW;
 
+  List<SampleBorrowReturnHistoryModel> _sampleProductHistoryList;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<EnumModel> states = <EnumModel>[
-      EnumModel('ALL', '全部'),
-      EnumModel('NO_RETURN', '未还'),
-      EnumModel('RETURNED', '已还'),
-    ];
-
-    List<SampleBorrowReturnHistoryModel> _sampleBorrowHistoryList =
-        <SampleBorrowReturnHistoryModel>[
-      SampleBorrowReturnHistoryModel(
-        sampleProduct: SampleProductModel(
-          name: '样衣1',
-          skuID: 'NA893151351',
-//          thumbnail:
-//              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-        ),
-        type: LendBorrowType.BORROW,
-        state: SampleProductReturnState.NO_RETURN,
-        creationDate: DateTime.parse('2019-02-11'),
-        expectedReturnDate: DateTime.parse('2019-03-01'),
-//        returnedDate: DateTime.parse('2019-03-18'),
-        relatedParty: '老刘',
-        quantity: 10,
-        contactWay: 'weixin',
-      ),
-      SampleBorrowReturnHistoryModel(
-        sampleProduct: SampleProductModel(
-          name: '样衣2',
-          skuID: 'NA893151352',
-//          thumbnail:
-//              'http://img.alicdn.com/bao/uploaded/O1CN017h2qoE1X6KmcjQRml_!!595412874.jpg_80x80.jpg',
-        ),
-        type: LendBorrowType.BORROW,
-        state: SampleProductReturnState.RETURNED,
-        creationDate: DateTime.parse('2019-02-11'),
-        expectedReturnDate: DateTime.parse('2019-03-01'),
-        returnedDate: DateTime.parse('2019-03-18'),
-        relatedParty: '老刘',
-        quantity: 10,
-        contactWay: 'weixin',
-      ),
-      SampleBorrowReturnHistoryModel(
-        sampleProduct: SampleProductModel(
-          name: '样衣3',
-          skuID: 'NA893151353',
-//          thumbnail:
-//              'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        ),
-        type: LendBorrowType.BORROW,
-        state: SampleProductReturnState.RETURNED,
-        creationDate: DateTime.parse('2019-02-11'),
-        expectedReturnDate: DateTime.parse('2019-03-01'),
-        returnedDate: DateTime.parse('2019-03-18'),
-        relatedParty: '老刘',
-        quantity: 10,
-        contactWay: 'weixin',
-      ),
-    ];
-
-    List<SampleBorrowReturnHistoryModel> _sampleLendHistoryList =
-        <SampleBorrowReturnHistoryModel>[
-      SampleBorrowReturnHistoryModel(
-        sampleProduct: SampleProductModel(
-          name: '样衣1',
-          skuID: 'NA893151351',
-//          thumbnail:
-//              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-        ),
-        type: LendBorrowType.LEND,
-        state: SampleProductReturnState.NO_RETURN,
-        creationDate: DateTime.parse('2019-02-11'),
-        expectedReturnDate: DateTime.parse('2019-03-01'),
-//        returnedDate: DateTime.parse('2019-03-18'),
-        relatedParty: '老刘',
-        quantity: 10,
-        contactWay: 'weixin',
-      ),
-      SampleBorrowReturnHistoryModel(
-        sampleProduct: SampleProductModel(
-          name: '样衣2',
-          skuID: 'NA893151352',
-//          thumbnail:
-//              'http://img.alicdn.com/bao/uploaded/O1CN017h2qoE1X6KmcjQRml_!!595412874.jpg_80x80.jpg',
-        ),
-        type: LendBorrowType.LEND,
-        state: SampleProductReturnState.RETURNED,
-        creationDate: DateTime.parse('2019-02-11'),
-        expectedReturnDate: DateTime.parse('2019-03-01'),
-        returnedDate: DateTime.parse('2019-03-18'),
-        relatedParty: '老刘',
-        quantity: 10,
-        contactWay: 'weixin',
-      ),
-      SampleBorrowReturnHistoryModel(
-        sampleProduct: SampleProductModel(
-          name: '样衣3',
-          skuID: 'NA893151353',
-//          thumbnail:
-//              'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-        ),
-        type: LendBorrowType.LEND,
-        state: SampleProductReturnState.RETURNED,
-        creationDate: DateTime.parse('2019-02-11'),
-        expectedReturnDate: DateTime.parse('2019-03-01'),
-        returnedDate: DateTime.parse('2019-03-18'),
-        relatedParty: '老刘',
-        quantity: 10,
-        contactWay: 'weixin',
-      ),
-    ];
-
-    // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(_type == LendBorrowType.BORROW ? '样衣借出' : '样衣借入'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(B2BIcons.search,size: 20,),
-            onPressed: () => showSearch(
-                  context: context,
-                  delegate: ApparelProductSearchDelegate(),
-                ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductHistoryFormPage())),
-      ),
-      body: DefaultTabController(
-        length: states.length,
-        child: Scaffold(
-          appBar: TabBar(
-            tabs: states.map((state) {
-              return Tab(
-                text: state.name,
-              );
-            }).toList(),
-          ),
-          body: TabBarView(
-            children: states.map((state) {
-              return ListView(
+    List<Widget> _widgets = [
+      GestureDetector(
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SampleProductsPage())),
+        child: Card(
+          elevation: 0,
+          margin: EdgeInsets.symmetric(vertical: 5),
+          child: Padding(
+            padding: EdgeInsets.only(left: 15, right: 5),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15.0),
+              child: Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SampleProductsPage())),
-                    child: Card(
-                      elevation: 0,
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 15, right: 5),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15.0),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Text(
-                                  '我的样衣',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                              Icon(Icons.chevron_right, color: Colors.grey),
-                            ],
-                          ),
-                        ),
-                      ),
+                  Expanded(
+                    child: Text(
+                      '我的样衣',
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (_type == LendBorrowType.BORROW) {
-                          _type = LendBorrowType.LEND;
-                        } else {
-                          _type = LendBorrowType.BORROW;
-                        }
-                      });
-                    },
-                    child: Card(
-                      elevation: 0,
-                      margin: EdgeInsets.only(bottom: 5),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15, right: 5),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15.0),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Text(
-                                  _type == LendBorrowType.BORROW
-                                      ? '借入样衣'
-                                      : '借出样衣',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                              Text(
-                                '3',
-                                style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
-                              ),
-                              Icon(Icons.chevron_right, color: Colors.grey),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Column(
-                    children: _type == LendBorrowType.BORROW
-                        ? _sampleBorrowHistoryList
-                            .map((borrowHistory) =>
-                                SampleProductBorrowHistoryItem(
-                                  item: borrowHistory,
-                                ))
-                            .toList()
-                        : _sampleLendHistoryList
-                            .map((lendHistory) => SampleProductLendHistoryItem(
-                                  item: lendHistory,
-                                ))
-                            .toList(),
-                  )
+                  Icon(Icons.chevron_right, color: Colors.grey),
                 ],
-              );
-            }).toList(),
+              ),
+            ),
           ),
+        ),
+      ),
+      GestureDetector(
+        onTap: () {
+          setState(() {
+            if (_type == LendBorrowType.BORROW) {
+              _type = LendBorrowType.LEND;
+            } else {
+              _type = LendBorrowType.BORROW;
+            }
+          });
+        },
+        child: Card(
+          elevation: 0,
+          margin: EdgeInsets.only(bottom: 5),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 5),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      _type == LendBorrowType.BORROW
+                          ? '借入样衣'
+                          : '借出样衣',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  Text(
+                    '3',
+                    style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
+                  ),
+                  Icon(Icons.chevron_right, color: Colors.grey),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    ];
+
+    return BLoCProvider<SampleProductHistoryBLoC>(
+      bloc: SampleProductHistoryBLoC.instance,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.5,
+          centerTitle: true,
+          title: Text(_type == LendBorrowType.BORROW ? '样衣借出' : '样衣借入'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                B2BIcons.search,
+                size: 20,
+              ),
+              onPressed: () => showSearch(
+                context: context,
+                delegate: ApparelProductSearchDelegate(),
+              ),
+            ),
+          ],
+        ),
+        body:DefaultTabController(
+          length: _states.length,
+          child: Scaffold(
+            appBar: TabBar(
+              unselectedLabelColor: Colors.black26,
+              labelColor: Color.fromRGBO(255,214,12, 1),
+              indicatorSize: TabBarIndicatorSize.label,
+              tabs: _states.map((status) {
+                return Tab(text: status.name);
+              }).toList(),
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black),
+              isScrollable: false,
+            ),
+            body: TabBarView(
+              children: _states.map((state) {
+                return  SampleProductHistoryList(state.code,_widgets);
+//                  ListView(
+//                  children: <Widget>[
+//                    GestureDetector(
+//                      onTap: () => Navigator.push(
+//                          context,
+//                          MaterialPageRoute(
+//                              builder: (context) => SampleProductsPage())),
+//                      child: Card(
+//                        elevation: 0,
+//                        margin: EdgeInsets.symmetric(vertical: 5),
+//                        child: Padding(
+//                          padding: EdgeInsets.only(left: 15, right: 5),
+//                          child: Padding(
+//                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+//                            child: Row(
+//                              children: <Widget>[
+//                                Expanded(
+//                                  child: Text(
+//                                    '我的样衣',
+//                                    style: TextStyle(fontSize: 16),
+//                                  ),
+//                                ),
+//                                Icon(Icons.chevron_right, color: Colors.grey),
+//                              ],
+//                            ),
+//                          ),
+//                        ),
+//                      ),
+//                    ),
+//                    GestureDetector(
+//                      onTap: () {
+//                        setState(() {
+//                          if (_type == LendBorrowType.BORROW) {
+//                            _type = LendBorrowType.LEND;
+//                          } else {
+//                            _type = LendBorrowType.BORROW;
+//                          }
+//                        });
+//                      },
+//                      child: Card(
+//                        elevation: 0,
+//                        margin: EdgeInsets.only(bottom: 5),
+//                        child: Padding(
+//                          padding: const EdgeInsets.only(left: 15, right: 5),
+//                          child: Padding(
+//                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+//                            child: Row(
+//                              children: <Widget>[
+//                                Expanded(
+//                                  child: Text(
+//                                    _type == LendBorrowType.BORROW
+//                                        ? '借入样衣'
+//                                        : '借出样衣',
+//                                    style: TextStyle(fontSize: 16),
+//                                  ),
+//                                ),
+//                                Text(
+//                                  '3',
+//                                  style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
+//                                ),
+//                                Icon(Icons.chevron_right, color: Colors.grey),
+//                              ],
+//                            ),
+//                          ),
+//                        ),
+//                      ),
+//                    ),
+//                    SampleProductHistoryList(state.code),
+//                  ],
+//                );
+              }).toList(),
+            ),
+          ),
+        ),
+
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductHistoryFormPage())),
         ),
       ),
     );
+
+  }
+}
+
+class SampleProductHistoryList extends StatelessWidget {
+  String state;
+  List<Widget> widgets;
+  SampleProductHistoryList(this.state,this.widgets);
+
+  ScrollController _scrollController = new ScrollController();
+
+  @override
+  Widget build(BuildContext context) {
+    var bloc = BLoCProvider.of<SampleProductHistoryBLoC>(context);
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        bloc.loadingStart();
+        bloc.loadingMoreByStatuses();
+      }
+    });
+
+    //监听滚动事件，打印滚动位置
+    _scrollController.addListener(() {
+      if (_scrollController.offset < 500) {
+        bloc.hideToTopBtn();
+      } else if (_scrollController.offset >= 500) {
+        bloc.showToTopBtn();
+      }
+    });
+
+    //状态管理触发的返回顶部
+    bloc.returnToTopStream.listen((data) {
+      //返回到顶部时执行动画
+      if (data) {
+        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+      }
+    });
+
+
+    return Container(
+        decoration: BoxDecoration(color: Colors.grey[100]),
+//        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            return await bloc.filterByStatuses(state);
+          },
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _scrollController,
+            children: <Widget>[
+              StreamBuilder<List<SampleBorrowReturnHistoryModel>>(
+                stream: bloc.stream,
+                // initialData: null,
+                builder: (BuildContext context, AsyncSnapshot<List<SampleBorrowReturnHistoryModel>> snapshot) {
+                  if (snapshot.data == null) {
+                    bloc.filterByStatuses(state);
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 200),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    widgets.addAll(snapshot.data
+                        .map((borrowHistory) =>
+                        SampleProductHistoryItem(
+                          item: borrowHistory,
+                        ))
+                        .toList());
+                    return Column(
+                        children: widgets,
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                },
+              ),
+              StreamBuilder<bool>(
+                stream: bloc.bottomStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  if (snapshot.data) {
+                    _scrollController.animateTo(_scrollController.offset - 70,
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                  }
+                  return snapshot.data
+                      ? Container(
+                    padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                    child: Center(
+                      child: Text(
+                        "┑(￣Д ￣)┍ 已经到底了",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  )
+                      : Container();
+                },
+              ),
+              StreamBuilder<bool>(
+                stream: bloc.loadingStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: new Center(
+                      child: new Opacity(
+                        opacity: snapshot.data ? 1.0 : 0,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ));
   }
 }
