@@ -1,163 +1,162 @@
-import 'dart:io';
-
-import 'package:b2b_commerce/src/home/pool/quote_order_input_page.dart';
+import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementQuoteOrderFrom extends StatefulWidget {
   RequirementOrderModel model;
   QuoteModel quoteModel;
 
-  RequirementQuoteOrderFrom({@required this.model});
+  RequirementQuoteOrderFrom({@required this.model, this.quoteModel});
 
-  _RequirementQuoteOrderFromState createState() => _RequirementQuoteOrderFromState();
+  _RequirementQuoteOrderFromState createState() =>
+      _RequirementQuoteOrderFromState();
 }
 
 class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
-  double fabricPrice = 0.00;
-  double accessoriesPrice = 0.00;
-  double machiningPrice = 0.00;
-  double otherPrice = 0.00;
-  double totalPrice = 0.00;
-  double proofingPrice = 0.00;
-  String remarks;
-  String deliveryDate;
-  List<MediaModel> _normalImages = [];
+  TextEditingController _fabricController = TextEditingController();
+  TextEditingController _excipientsController = TextEditingController();
+  TextEditingController _processingController = TextEditingController();
+  TextEditingController _otherController = TextEditingController();
+  TextEditingController _remarksController = TextEditingController();
+  TextEditingController _sampleController = TextEditingController();
+
+  double fabric = 0.0;
+  double excipients = 0.0;
+  double processing = 0.0;
+  double other = 0.0;
+  double totalPrice = 0.0;
+  double sample = 0.0;
+  List<MediaModel> attachments = [];
+  DateTime expectedDeliveryDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text('填写报价'),
-      ),
+        appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
+          title: Text('填写报价'),
+        ),
         body: Container(
-            color: Color(0xffF0F0F0),
+            color: Color.fromRGBO(245, 245, 245, 1),
             margin: EdgeInsets.only(bottom: 70),
             child: ListView(
               children: <Widget>[
-                _buildRequirementInfo(context),
-                _buildQuoteInfo(context),
-                _buildProofingInfo(context),
-                _buildConfirmationDeliveryDate(context),
-                _buildAccessory(context),
-                _buildRemarks(context),
-//              _buildCommitButton(context),
+                _buildRequirementInfo(),
+                _buildQuoteInfo(),
+                _buildProofingInfo(),
+                _buildConfirmationDeliveryDate(),
+                _buildAccessory(),
+                _buildRemarks()
               ],
-            )
-        ),
+            )),
         floatingActionButton: FloatingActionButton.extended(
           icon: Container(
-          width: 0,
-          child: Icon(
-            null,
-            color: Colors.white,
+            width: 0,
+            child: Icon(
+              null,
+              color: Colors.white,
+            ),
           ),
-        ),
-        label: Container(
-            width: 250,
-            child:  Center(
-              child: Text(
-                '去报价',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+          label: Container(
+              width: 300,
+              child: Center(
+                child: Text(
+                  '提交报价',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color.fromRGBO(36, 38, 41, 1),
+                  ),
                 ),
-              ),
-            )
+              )),
+          onPressed: () async {
+            //拼装数据
+            QuoteModel model = QuoteModel(
+                unitPriceOfFabric: fabric,
+                unitPriceOfExcipients: excipients,
+                unitPriceOfProcessing: processing,
+                costOfOther: other,
+                costOfSamples: sample,
+                requirementOrderRef: widget.model.code,
+                remarks: _remarksController.text,
+                expectedDeliveryDate: expectedDeliveryDate,
+                attachments: attachments);
+
+            String response = await QuoteOrderRepository().quoteCreate(model);
+
+            if (response == '') {
+              showDialog<void>(
+                context: context,
+                barrierDismissible: true, // user must tap button!
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('报价失败'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('确定'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              showDialog<void>(
+                context: context,
+                barrierDismissible: true, // user must tap button!
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('报价成功'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('确定'),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          //查询明细
+                          QuoteModel detailModel = await QuoteOrderRepository()
+                              .getquoteDetail(response);
+                          if (detailModel != null) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    QuoteOrderDetailPage(item: detailModel)));
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+          },
+          backgroundColor: Colors.amberAccent,
         ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RequirementPoolAllPage()),
-          );
-        },
-        backgroundColor: Colors.amberAccent,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        backgroundColor:Colors.white
-    );
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        backgroundColor: Colors.white);
   }
 
-  Widget _buildRequirementInfo(BuildContext context) {
+  Widget _buildRequirementInfo() {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 15),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 15),
       color: Colors.white,
       child: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(13, 5, 10, 5),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'),
-                        fit: BoxFit.cover,
-                      )),
-                ),
-                Container(
-                  height: 80,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          widget.model.details.productName,
-                          style: TextStyle(
-                              fontSize: 16
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Text(
-                          '${widget.model.details.productSkuID}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Text(
-                          '${widget.model.details.majorCategory.name} ${widget.model.details.category.name} ${widget.model.totalQuantity}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Color(0xffFFBBFF),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
+          _buildEntries(),
           Container(
             margin: EdgeInsets.only(top: 10),
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.only(left: 13),
                     child: Text(
-                      '交货日期',
+                      '交货时间',
                       style: TextStyle(
                         fontSize: 16,
                       ),
@@ -165,10 +164,8 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(right: 17),
                   child: Text(
-                    DateFormatUtil.formatYMD(
-                        widget.model.details.expectedDeliveryDate),
+                    DateFormatUtil.formatYMD(expectedDeliveryDate),
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -182,17 +179,119 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
     );
   }
 
-  Widget _buildQuoteInfo(BuildContext context){
+  Widget _buildEntries() {
+    Widget _pictureWidget;
+
+    if (widget.model.details.pictures == null) {
+      _pictureWidget = Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Color.fromRGBO(243, 243, 243, 1)),
+        child: Icon(
+          B2BIcons.noPicture,
+          color: Color.fromRGBO(200, 200, 200, 1),
+          size: 25,
+        ),
+      );
+    } else {
+      if (widget.model.details.pictures.isEmpty) {
+        _pictureWidget = Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color.fromRGBO(243, 243, 243, 1)),
+          child: Icon(
+            B2BIcons.noPicture,
+            color: Color.fromRGBO(200, 200, 200, 1),
+            size: 25,
+          ),
+        );
+      } else {
+        _pictureWidget = Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              image: DecorationImage(
+                image: NetworkImage(
+                    '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.details.pictures[0].url}'),
+                fit: BoxFit.cover,
+              )),
+        );
+      }
+    }
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+      child: Row(
+        children: <Widget>[
+          _pictureWidget,
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              height: 80,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  widget.model.details.productName != null
+                      ? Text(
+                          widget.model.details.productName,
+                          style: TextStyle(fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      : Text(
+                          '暂无产品',
+                          style: TextStyle(fontSize: 15, color: Colors.red),
+                        ),
+                  widget.model.details.productSkuID != null
+                      ? Container(
+                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '货号：${widget.model.details.productSkuID}',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        )
+                      : Container(),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 243, 243, 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "${widget.model.details.majorCategory?.name}   ${widget.model.details.category?.name}   ${widget.model.details.expectedMachiningQuantity}件",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Color.fromRGBO(255, 133, 148, 1)),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuoteInfo() {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(top: 5),
-      padding: EdgeInsets.fromLTRB(0,10,0,10),
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Column(
         children: <Widget>[
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              padding: EdgeInsets.only(left: 10),
               child: Text(
                 '报价明细',
                 style: TextStyle(
@@ -202,259 +301,153 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
               ),
             ),
           ),
-          Container(
-            child: GestureDetector(
-              child: ListTile(
-                leading: Text(
-                  '面料单价',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+          InputRow(
+              label: '面料单价',
+              field: TextField(
+                autofocus: false,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.right,
+                controller: _fabricController,
+                onChanged: _countTotalPrice,
+                //只能输入数字
+                decoration: InputDecoration(
+                  hintText: '填写',
+                  border: InputBorder.none,
                 ),
-                trailing: Text(
-                  fabricPrice == 0.00 ? '填写' : '${fabricPrice}',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey),
+              )),
+          InputRow(
+              label: '辅料单价',
+              field: TextField(
+                autofocus: false,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.right,
+                controller: _excipientsController,
+                onChanged: _countTotalPrice,
+                //只能输入数字
+                inputFormatters: <TextInputFormatter>[
+                  WhitelistingTextInputFormatter.digitsOnly,
+                ],
+                decoration:
+                    InputDecoration(hintText: '填写', border: InputBorder.none),
+              )),
+          InputRow(
+              label: '加工单价',
+              field: TextField(
+                autofocus: false,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.right,
+                onChanged: _countTotalPrice,
+                controller: _processingController,
+                //只能输入数字
+                inputFormatters: <TextInputFormatter>[
+                  WhitelistingTextInputFormatter.digitsOnly,
+                ],
+                decoration:
+                    InputDecoration(hintText: '填写', border: InputBorder.none),
+              )),
+          InputRow(
+              label: '其他单价',
+              field: TextField(
+                autofocus: false,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.right,
+                onChanged: _countTotalPrice,
+                controller: _otherController,
+                //只能输入数字
+                inputFormatters: <TextInputFormatter>[
+                  WhitelistingTextInputFormatter.digitsOnly,
+                ],
+                decoration:
+                    InputDecoration(hintText: '填写', border: InputBorder.none),
+              )),
+          Container(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    '生产单价：',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey),
+                  ),
+                  Text(
+                    '￥${totalPrice ?? 0}',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red),
+                  ),
+                ],
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProofingInfo() {
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: InputRow(
+          hasBottom: false,
+          label: '打样费',
+          field: TextField(
+            autofocus: false,
+            keyboardType: TextInputType.number,
+            textAlign: TextAlign.right,
+            controller: _sampleController,
+            //只能输入数字
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly,
+            ],
+            decoration:
+                InputDecoration(hintText: '填写', border: InputBorder.none),
+          )),
+    );
+  }
+
+  Widget _buildConfirmationDeliveryDate() {
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10),
+      child: Column(
+        children: <Widget>[
+          Container(
+              child: GestureDetector(
+            child: ListTile(
+              leading: Text(
+                '确认交货日期',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => QuoteOrderInputPage(fieldText: '面料单价',inputType: TextInputType.number)),
-                  //接收返回数据并处理
-                ).then((value) {
-                  setState(() {
-                    fabricPrice = double.parse(value);
-                    totalPrice = fabricPrice + accessoriesPrice + machiningPrice +otherPrice;
-                  });
-                });
-              },
-            )
-          ),
-          Divider(
-            height: 1,
-          ),
-          Container(
-              child: GestureDetector(
-                child: ListTile(
-                  leading: Text(
-                    '辅料单价',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: Text(
-                    accessoriesPrice == 0.00 ? '填写' : '${accessoriesPrice}',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                ),
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QuoteOrderInputPage(fieldText: '辅料单价',inputType: TextInputType.number)),
-                    //接收返回数据并处理
-                  ).then((value) {
-                    setState(() {
-                      accessoriesPrice = double.parse(value);
-                      totalPrice = fabricPrice + accessoriesPrice + machiningPrice +otherPrice;
-                    });
-                  });
-                },
-              )
-          ),
-          Divider(
-            height: 1,
-          ),
-          Container(
-              child: GestureDetector(
-                child: ListTile(
-                  leading: Text(
-                    '加工单价',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: Text(
-                    machiningPrice == 0.00 ? '填写' : '${machiningPrice}',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                ),
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QuoteOrderInputPage(fieldText: '加工单价',inputType: TextInputType.number)),
-                    //接收返回数据并处理
-                  ).then((value) {
-                    setState(() {
-                      machiningPrice = double.parse(value);
-                      totalPrice = fabricPrice + accessoriesPrice + machiningPrice +otherPrice;
-                    });
-                  });
-                },
-              )
-          ),
-          Divider(
-            height: 1,
-          ),
-          Container(
-              child: GestureDetector(
-                child: ListTile(
-                  leading: Text(
-                    '其他',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: Text(
-                    otherPrice == 0.00 ? '填写' : '${otherPrice}',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                ),
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QuoteOrderInputPage(fieldText: '其他',inputType: TextInputType.number)),
-                    //接收返回数据并处理
-                  ).then((value) {
-                    setState(() {
-                      otherPrice = double.parse(value);
-                      totalPrice = fabricPrice + accessoriesPrice + machiningPrice +otherPrice;
-                    });
-                  });
-                },
-              )
-          ),
-          Divider(
-            height: 1,
-          ),
-          Container(
-              child: ListTile(
-                  trailing: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                         '生产单价：',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey),
-                      ),
-                      Text(
-                        '￥${totalPrice}',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red),
-                      ),
-                    ],
-                  )
-                ),
-          ),
+              trailing: Text(
+                expectedDeliveryDate == null
+                    ? '选择'
+                    : DateFormatUtil.formatYMD(expectedDeliveryDate),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey),
+              ),
+            ),
+            onTap: () {
+              _showDatePicker();
+            },
+          )),
         ],
       ),
     );
   }
 
-  Widget _buildProofingInfo(BuildContext context){
+  Widget _buildAccessory() {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(top: 5),
-      child: Column(
-        children: <Widget>[
-          Container(
-              child: GestureDetector(
-                child: ListTile(
-                  leading: Text(
-                    '打样费',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: Text(
-                    proofingPrice == 0.00 ? '填写' : '${proofingPrice}',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                ),
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QuoteOrderInputPage(fieldText: '打样费',inputType: TextInputType.number)),
-                    //接收返回数据并处理
-                  ).then((value) {
-                    setState(() {
-                      proofingPrice = double.parse(value);
-                    });
-                  });
-                },
-              )
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildConfirmationDeliveryDate(BuildContext context){
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 5),
-      child: Column(
-        children: <Widget>[
-          Container(
-              child: GestureDetector(
-                child: ListTile(
-                  leading: Text(
-                    '确认交货日期',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: Text(
-                    deliveryDate == null ? '选择' : deliveryDate,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                ),
-                onTap: (){
-                  _showDatePicker();
-                },
-              )
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAccessory(BuildContext context){
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 5),
+      margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Column(children: <Widget>[
         Align(
@@ -471,144 +464,45 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
             alignment: Alignment.centerLeft,
             child: Container(
               padding: EdgeInsets.only(left: 10),
-              child: EditableAttachments(list: _normalImages),
+              child: EditableAttachments(list: attachments),
             )),
       ]),
     );
   }
 
-  Widget _buildRemarks(BuildContext context) {
-    return remarks == null || remarks == '' ?
-    Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 5),
-      child: Column(
-        children: <Widget>[
-          Container(
-              child: GestureDetector(
-                child: ListTile(
-                  leading: Text(
-                    '备注',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: Text(
-                    remarks == null ? '填写' : remarks,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            QuoteOrderInputPage(fieldText: '备注',
-                                inputType: TextInputType.text)),
-                    //接收返回数据并处理
-                  ).then((value) {
-                    setState(() {
-                      remarks = value;
-                    });
-                  });
-                },
-              )
-          ),
-        ],
-      ),
-    )
-        :
-    GestureDetector(
-        child: Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(top: 5),
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 15),
-          child: Column(children: <Widget>[
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "备注",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    remarks,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                )),
-
-          ]
-          ),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    QuoteOrderInputPage(
-                        fieldText: '备注', inputType: TextInputType.text)),
-            //接收返回数据并处理
-          ).then((value) {
-            setState(() {
-              remarks = value;
-            });
-          });
-        }
-    );
-  }
-
-  Widget _buildCommitButton(BuildContext context) {
+  Widget _buildRemarks() {
     return Container(
-        height: 50,
-        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-        child: RaisedButton(
-          color: Colors.amberAccent,
-          child: Text(
-            '提交报价',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
-          ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))
-          ),
-          onPressed: () {
-//            widget.quoteModel.unitPriceOfFabric = fabricPrice;
-//            widget.quoteModel.unitPriceOfExcipients = accessoriesPrice;
-//            widget.quoteModel.unitPriceOfProcessing = machiningPrice;
-//            widget.quoteModel.costOfSamples = proofingPrice;
-//            widget.quoteModel.costOfOther = otherPrice;
-//            widget.quoteModel.totalPrice = totalPrice;
-//            widget.quoteModel.expectedDeliveryDate = DateTime.parse(deliveryDate);
-//            widget.quoteModel.requirementOrderCode = widget.model.code;
-//            widget.quoteModel.remarks = remarks;
-//            widget.quoteModel.attachments = _normalImages;
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => RequirementPoolAllPage()),
-            );
-          },
-        )
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: InputRow(
+          hasBottom: false,
+          label: '备注',
+          field: TextField(
+            autofocus: false,
+            textAlign: TextAlign.right,
+            controller: _remarksController,
+            decoration:
+                InputDecoration(hintText: '填写', border: InputBorder.none),
+          )),
     );
   }
 
+  void _countTotalPrice(String value) {
+    setState(() {
+      fabric = double.parse(
+          _fabricController.text == '' ? '0' : _fabricController.text);
+      excipients = double.parse(
+          _excipientsController.text == '' ? '0' : _excipientsController.text);
+      processing = double.parse(
+          _processingController.text == '' ? '0' : _processingController.text);
+      other = double.parse(
+          _otherController.text == '' ? '0' : _otherController.text);
+      totalPrice = fabric + excipients + processing + other;
+      sample = double.parse(
+          _sampleController.text == '' ? '0' : _sampleController.text);
+    });
+  }
 
   //打开日期选择器
   void _showDatePicker() {
@@ -619,16 +513,61 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
+        initialDate: expectedDeliveryDate,
         firstDate: new DateTime(1990),
         lastDate: new DateTime(2999));
 
     if (_picked != null) {
-      print(_picked);
       setState(() {
-        deliveryDate = DateFormatUtil.formatYMD(_picked);
+        expectedDeliveryDate = _picked;
       });
     }
   }
+}
 
+class InputRow extends StatelessWidget {
+  final String label;
+
+  final TextField field;
+
+  final bool hasBottom;
+
+  const InputRow(
+      {Key key,
+      @required this.label,
+      @required this.field,
+      this.hasBottom = true})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      decoration: BoxDecoration(
+          border: hasBottom
+              ? Border(
+                  bottom: BorderSide(
+                      width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))
+              : Border()),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 100,
+            margin: EdgeInsets.only(right: 20),
+            child: Text(
+              label,
+              style:
+                  TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: field,
+          )
+        ],
+      ),
+    );
+  }
 }

@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:widgets/widgets.dart';
 
-class FactorClient extends StatefulWidget {
-  FactorClient({Key key}) : super(key: key);
+class FactoryClient extends StatefulWidget {
+  FactoryClient({Key key}) : super(key: key);
 
   final List<Widget> modules = <Widget>[
     HomePage(),
@@ -19,10 +19,10 @@ class FactorClient extends StatefulWidget {
     MyHomePage(),
   ];
 
-  _FactorClientState createState() => _FactorClientState();
+  _FactoryClientState createState() => _FactoryClientState();
 }
 
-class _FactorClientState extends State<FactorClient> {
+class _FactoryClientState extends State<FactoryClient> {
   int _currentIndex = 0;
 
   void _handleNavigation(int index) {

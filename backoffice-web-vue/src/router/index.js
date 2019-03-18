@@ -244,11 +244,11 @@ const router = new Router({
             }
           },
           children: [
-            {
+            /*{
               path: 'sales',
               name: '销售订单',
-              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/sales/SalesOrderPage'),
-            },
+              component: () => import(/!* webpackChunkName: 'brand-orders' *!/ 'brand/order/sales/SalesOrderPage'),
+            },*/
             {
               path: 'requirement',
               name: '需求订单',
