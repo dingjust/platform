@@ -16,7 +16,7 @@
   import ProofingSearchResultList from './list/ProofingSearchResultList';
   import ProofingDetailsPage from "./details/ProofingDetailsPage";
 
-  import QuoteDetailsPage from "../quote/QuoteDetailsPage";
+  import QuoteDetailsPage from "../quote/details/QuoteDetailsPage";
 
   export default {
     name: 'ProofingPage',

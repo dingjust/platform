@@ -49,22 +49,22 @@ export default {
     },
     {
       name: '订单管理',
-      url: '/factory/order',
+      url: '/order',
       icon: 'icon-puzzle',
       children: [
         {
           name: '报价单',
-          url: '/factory/order/quote',
+          url: '/order/quote',
           icon: 'iconNone'
         },
         {
           name: '生产订单',
-          url: '/factory/order/purchase',
+          url: '/order/purchase',
           icon: 'iconNone'
         },
         {
           name: '打样单',
-          url: '/factory/order/proofing',
+          url: '/order/proofing',
           icon: 'iconNone'
         }
       ]
