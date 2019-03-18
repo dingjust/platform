@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
@@ -47,16 +48,138 @@ class _RequirementOrderDetailPageState
         color: Colors.grey[100],
         child: ListView(
           children: <Widget>[
+            _buildCompanyInfo(),
             _buildMain(),
-            _buildQuote(),
+            //品牌端显示
+            UserBLoC.instance.currentUser.type == UserType.BRAND
+                ? _buildQuote()
+                : Container(),
             _buildAttachments(),
             _buildRemarks(),
+            _buildAddress(),
             _buildHeader(),
             _buildButtonGroups()
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildCompanyInfo() {
+    /// 工厂端显示
+    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      return GestureDetector(
+        onTap: () {
+          //TODO跳转详细页
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          margin: EdgeInsets.only(bottom: 10),
+          color: Colors.white,
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey[300]))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(widget
+                                          .order.belongTo.profilePicture ??
+                                      'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          height: 70,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                '${widget.order.belongTo.name}',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(36, 38, 41, 1)),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Color.fromRGBO(229, 242, 255, 1),
+                                ),
+                                padding: EdgeInsets.all(2),
+                                child: Text(
+                                  '已认证',
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(22, 141, 255, 1)),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 35,
+                      color: Color.fromRGBO(180, 180, 180, 1),
+                    )
+                  ],
+                ),
+              ),
+              InfoRow(
+                label: '联系人',
+                value: Text(
+                  '${widget.order.belongTo.contactPerson}',
+                  style: TextStyle(
+                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                ),
+              ),
+              InfoRow(
+                  label: '联系手机',
+                  hasBottomBorder: false,
+                  value: Row(
+                    children: <Widget>[
+                      Text(
+                        '${widget.order.belongTo.contactPhone}',
+                        style: TextStyle(
+                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                      ),
+                      Container(
+                        child: IconButton(
+                          onPressed: () {
+                            //TODO调用拨打电话API
+                          },
+                          icon: Icon(
+                            Icons.phone,
+                            color: Color.fromRGBO(86, 194, 117, 1),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '拨打',
+                        style: TextStyle(
+                            color: Color.fromRGBO(86, 194, 117, 1),
+                            fontSize: 16),
+                      ),
+                    ],
+                  )),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildHeader() {
@@ -91,10 +214,12 @@ class _RequirementOrderDetailPageState
                     DateFormatUtil.format(widget.order.creationTime)),
                 flex: 1,
               ),
-              Text(
-                '已报价 ${widget.order.totalQuotesCount}',
-                style: TextStyle(fontSize: 15, color: Colors.red),
-              )
+              UserBLoC.instance.currentUser.type == UserType.BRAND
+                  ? Text(
+                      '已报价 ${widget.order.totalQuotesCount}',
+                      style: TextStyle(fontSize: 15, color: Colors.red),
+                    )
+                  : Container()
             ],
           )
         ],
@@ -305,7 +430,7 @@ class _RequirementOrderDetailPageState
                   },
                   child: Text(
                     '查看全部报价>>',
-                    style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
+                    style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
                   ),
                 )
               ],
@@ -368,48 +493,102 @@ class _RequirementOrderDetailPageState
     );
   }
 
+  Widget _buildAddress() {
+    //工厂端显示
+    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      return Container(
+        color: Colors.white,
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(bottom: 10),
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    '送货地址',
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  )
+                ],
+              ),
+            ),
+            Row(
+              children: <Widget>[Text(widget.order.deliveryAddress ?? '')],
+            )
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   Widget _buildButtonGroups() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Container(
+    //品牌端显示
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+            width: 180,
+            child: FlatButton(
+                onPressed: () {},
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Colors.red,
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                child: Text(
+                  '重新发布需求',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                )),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+            width: 180,
+            child: FlatButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => QuickReactionFactoryPage(
+                              route: '全部工厂',
+                            )),
+                  );
+                },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Color.fromRGBO(255, 149, 22, 1),
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                child: Text(
+                  '邀请工厂报价',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                )),
+          )
+        ],
+      );
+    } else {
+      return Container(
+        width: double.infinity,
+        child: Container(
           padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-          width: 180,
           child: FlatButton(
               onPressed: () {},
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Colors.red,
+              color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               child: Text(
-                '重新发布需求',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                '去报价',
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
               )),
         ),
-        Container(
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-          width: 180,
-          child: FlatButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => QuickReactionFactoryPage(
-                            route: '全部工厂',
-                          )),
-                );
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 149, 22, 1),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              child: Text(
-                '邀请工厂报价',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              )),
-        )
-      ],
-    );
+      );
+    }
   }
 }
 
