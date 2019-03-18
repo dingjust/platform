@@ -1,41 +1,52 @@
 <template>
   <div>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>基本信息</span>
-      </div>
-      <purchase-order-basic-form :slot-data="slotData" :read-only="readOnly"/>
-    </el-card>
-    <div class="pt-2"></div>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>生产工厂</span>
-      </div>
-      <purchase-order-seller-form :slot-data="slotData" :read-only="readOnly"/>
-    </el-card>
-    <div class="pt-2"></div>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>待生产商品</span>
-      </div>
-      <purchase-order-entries-form :slot-data="slotData" :read-only="readOnly"/>
-    </el-card>
-    <div class="pt-2"></div>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>送货地址</span>
-      </div>
-      <purchase-order-delivery-address-form :slot-data="slotData" :read-only="readOnly"/>
-    </el-card>
-    <div class="pt-2"></div>
-    <el-row :gutter="10">
-      <el-col :span="12">
-        <el-button class="btn-block" size="mini" type="primary" @click="onSubmit()">提交</el-button>
-      </el-col>
-      <el-col :span="12">
-        <el-button class="btn-block" size="mini" @click="onCancel">取消</el-button>
-      </el-col>
-    </el-row>
+    <template v-if="viewMode === VIEW_MODE_TABS">
+      <el-card class="box-card">
+        <el-tabs value="basic">
+          <el-tab-pane label="基本信息" name="basic">
+            <purchase-order-basic-form :slot-data="slotData" :read-only="readOnly"/>
+          </el-tab-pane>
+          <el-tab-pane label="生产工厂" name="belongTo">
+            <purchase-order-seller-form :slot-data="slotData" :read-only="readOnly"/>
+          </el-tab-pane>
+          <el-tab-pane label="待生产商品" name="entries">
+            <purchase-order-entries-form :slot-data="slotData" :read-only="readOnly"/>
+          </el-tab-pane>
+          <el-tab-pane label="送货地址" name="deliveryAddress">
+            <purchase-order-delivery-address-form :slot-data="slotData" :read-only="readOnly"/>
+          </el-tab-pane>
+        </el-tabs>
+      </el-card>
+    </template>
+    <template v-else>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>基本信息</span>
+        </div>
+        <purchase-order-basic-form :slot-data="slotData" :read-only="readOnly"/>
+      </el-card>
+      <div class="pt-2"></div>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>生产工厂</span>
+        </div>
+        <purchase-order-seller-form :slot-data="slotData" :read-only="readOnly"/>
+      </el-card>
+      <div class="pt-2"></div>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>待生产商品</span>
+        </div>
+        <purchase-order-entries-form :slot-data="slotData" :read-only="readOnly"/>
+      </el-card>
+      <div class="pt-2"></div>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>送货地址</span>
+        </div>
+        <purchase-order-delivery-address-form :slot-data="slotData" :read-only="readOnly"/>
+      </el-card>
+    </template>
   </div>
 </template>
 
@@ -56,29 +67,7 @@
     },
     mixins: [],
     computed: {},
-    methods: {
-      async onSubmit() {
-        console.log("submitted data: " + JSON.stringify(this.slotData));
-
-        const deliveryAddress = this.slotData.deliveryAddress;
-        // 地址信息未填时，清除deliveryAddress节点
-        if (!deliveryAddress.region || !deliveryAddress.region.isocode) {
-          delete this.slotData.deliveryAddress;
-        }
-
-        const result = await this.$http.post('/b2b/orders/purchase/create', this.slotData);
-        if (result['errors']) {
-          this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
-          return;
-        }
-
-        this.$message.success('生产订单创建成功，订单号：' + result);
-        this.fn.closeSlider();
-      },
-      onCancel() {
-        this.fn.closeSlider();
-      }
-    },
+    methods: {},
     data() {
       return {}
     },

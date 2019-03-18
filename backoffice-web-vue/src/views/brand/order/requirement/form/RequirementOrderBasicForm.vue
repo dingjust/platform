@@ -16,10 +16,8 @@
 </template>
 
 <script>
-  // import {OrderMixin} from '@/mixins';
-
   export default {
-    name: 'RequirementOrderBaseForm',
+    name: 'RequirementOrderBasicForm',
     props: ['slotData', 'readOnly'],
     mixins: [],
     methods: {
