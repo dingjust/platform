@@ -11,7 +11,7 @@ export default {
     },
     {
       name: '仪表盘',
-      url: '/backoffice/dashboard',
+      url: '/dashboard',
       icon: 'icon-speedometer'
     },
     {

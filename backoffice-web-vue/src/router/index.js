@@ -16,9 +16,9 @@ const router = new Router({
       component: Full,
       children: [
         {
-          path: 'backoffice/dashboard',
+          path: 'dashboard',
           name: '仪表盘',
-          component: () => import(/* webpackChunkName: 'Dashboard' */ 'backoffice/Dashboard')
+          component: () => import(/* webpackChunkName: 'Dashboard' */ '@/views/Dashboard')
         },
         {
           path: 'backoffice/product',
@@ -191,11 +191,6 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-reports' */ 'backoffice/report/productprogress/ProductionProgressPage')
             }
           ]
-        },
-        {
-          path: 'brand/dashboard',
-          name: '仪表盘',
-          component: () => import(/* webpackChunkName: 'Dashboard' */ 'brand/Dashboard')
         },
         {
           path: 'brand/product',
