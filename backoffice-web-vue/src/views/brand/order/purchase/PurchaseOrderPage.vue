@@ -13,7 +13,7 @@
   const {mapGetters, mapActions} = createNamespacedHelpers('BrandPurchaseOrdersModule');
 
   import PurchaseOrderToolbar from './toolbar/PurchaseOrderToolbar';
-  import PurchaseOrderSearchResultList from './list/SearchResultList';
+  import PurchaseOrderSearchResultList from './list/PurchaseOrderSearchResultList';
   import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
 
   export default {
@@ -47,7 +47,7 @@
           return;
         }
 
-        this.fn.openSlider('订单明细', PurchaseOrderDetailsPage, result);
+        this.fn.openSlider('明细，订单编号：' + result.code, PurchaseOrderDetailsPage, result);
       }
     },
     data() {
