@@ -12,9 +12,8 @@
 
   const {mapGetters, mapActions} = createNamespacedHelpers('BrandPurchaseOrdersModule');
 
-  import PurchaseOrderToolbar from './toolbar/Toolbar';
+  import PurchaseOrderToolbar from './toolbar/PurchaseOrderToolbar';
   import PurchaseOrderSearchResultList from './list/SearchResultList';
-  import PurchaseOrderForm from './form/PurchaseOrderForm';
   import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
 
   export default {
@@ -38,7 +37,7 @@
       },
       onNew(formData) {
         // console.log('onNew: ' + JSON.stringify(formData));
-        this.fn.openSlider('创建生产订单', PurchaseOrderForm, formData);
+        this.fn.openSlider('创建生产订单', PurchaseOrderDetailsPage, formData);
       },
       async onDetails(row) {
         // console.log('onDetails: ' + JSON.stringify(row));
