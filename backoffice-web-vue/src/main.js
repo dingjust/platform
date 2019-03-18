@@ -3,11 +3,12 @@
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 import ElementUI from "element-ui";
-import router from "./router";
-import store from "./store/index.js";
-import {formatDate, enumTranslate, timestampToTime, postponedDays} from "./common/js/filters";
-import HttpServletPlugin from "./plugins/HttpServletPlugin.js";
-import http from "./common/js/http";
+import router from "@/router";
+import store from "@/store";
+import {formatDate, enumTranslate, timestampToTime, postponedDays} from "@/common/js/filters";
+import HttpServletPlugin from "@/plugins/HttpServletPlugin.js";
+import http from "@/common/js/http";
+import autoHeight from '@/mixins/autoHeight';
 
 import App from "./App";
 
@@ -51,6 +52,7 @@ Vue.prototype.CONFIG = {
 
 Vue.mixin({
   props: ['viewMode'],
+  mixins: [autoHeight],
   data() {
     return {
       defaultDateValueFormat: "yyyy-MM-dd'T'HH:mm:ssZ",
