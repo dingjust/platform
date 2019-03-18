@@ -5,6 +5,9 @@ class OrderApis {
   /// 根据条件获取需求订单列表 POST
   static get requirementOrders => '/{baseSiteId}/b2b/orders/requirement';
 
+  /// 根据条件获取需求订单列表 POST
+  static get requirementOrdersAll => '/{baseSiteId}/b2b/orders/requirement/all';
+
   /// 急速发布需求/发布需求 POST
   static get requirementOrderNew => '/{baseSiteId}/b2b/orders/requirement/new';
 
@@ -32,7 +35,8 @@ class OrderApis {
       };
 
   //创建线下采购订单 POST
-  static get purchaseOfflineOrders => '/{baseSiteId}/b2b/orders/purchase/offline';
+  static get purchaseOfflineOrders =>
+      '/{baseSiteId}/b2b/orders/purchase/offline';
 
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/b2b/orders/quote';

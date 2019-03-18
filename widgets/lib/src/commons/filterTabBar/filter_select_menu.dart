@@ -61,7 +61,6 @@ class _FilterSelectMenuState extends State<FilterSelectMenu> {
                       padding: EdgeInsets.fromLTRB(40, 0, 20, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(
                             '${entry.label}',

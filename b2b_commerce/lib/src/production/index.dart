@@ -191,6 +191,27 @@ class ProductionListView extends StatelessWidget {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 200),
                         child: Center(child: CircularProgressIndicator()),
+//                        child: Container(
+//                          child: Center(
+//                            child: Row(
+//                              mainAxisSize: MainAxisSize.min,
+//                              children: <Widget>[
+//                                Text(
+//                                  '暂无数据',
+//                                  style: TextStyle(
+//                                    fontSize: 20,
+//                                  ),
+//                                ),
+//                                Text(
+//                                  '（下拉刷新试试）',
+//                                  style: TextStyle(
+//                                    fontSize: 14,
+//                                  ),
+//                                ),
+//                              ],
+//                            )
+//                          ),
+//                        ),
                       );
                     }
                     if (snapshot.hasData) {

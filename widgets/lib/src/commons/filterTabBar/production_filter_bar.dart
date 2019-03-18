@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class ProductionFilterBar extends StatefulWidget
     implements PreferredSizeWidget {
@@ -83,8 +84,12 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                     }
                   });
                   entry.checked = !entry.checked;
+                  ProductionBLoC().setStatus(entry.value);
+                  ProductionBLoC().clear();
+                  ProductionBLoC().getData();
                   //stream通知状态更改
                   widget.streamController.add(entry);
+
                 });
               },
               child: Container(

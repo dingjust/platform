@@ -74,14 +74,23 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
                   });
                 },
                 categoryLabel: categoryStr,
-                onCategoryPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductCategorySelectPage(
-                                minCategorySelect: _minCategorySelect,
-                              ))
-                              );
+                onCategoryPressed: () async {
+                  //加载条
+                  showDialog(
+                      context: context,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ));
+                  await ProductRepositoryImpl()
+                      .cascadedCategories()
+                      .then((categorys) {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProductCategorySelectPage(
+                              minCategorySelect: _minCategorySelect,
+                              categorys: categorys,
+                            )));
+                  });
                 },
                 action: IconButton(
                   icon: Icon(Icons.menu),
@@ -92,7 +101,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
             body: Column(
               children: <Widget>[
                 FilterSelectMenu(
-                  color: Color.fromRGBO(255,214,12, 1),
+                  color: Color.fromRGBO(255, 214, 12, 1),
                   height: showFilterMenu ? 150 : 0,
                   entries: filterConditionEntries,
                   streamController:
@@ -107,7 +116,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
           ),
           floatingActionButton: FloatingActionButton(
               onPressed: () {},
-              backgroundColor: Color.fromRGBO(255,214,12, 1),
+              backgroundColor: Color.fromRGBO(255, 214, 12, 1),
               child: Center(
                 child: Container(
                   width: 35,
