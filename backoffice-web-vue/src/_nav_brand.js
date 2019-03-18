@@ -47,24 +47,29 @@ export default {
       url: '/brand/order',
       icon: 'icon-puzzle',
       children: [
-        {
+        /*{
           name: '销售订单',
           url: '/brand/order/sales',
           icon: 'iconNone'
-        },
+        },*/
         {
           name: '需求订单',
           url: '/brand/order/requirement',
           icon: 'iconNone'
         },
         {
-          name: '打样单',
-          url: '/brand/order/proofing',
+          name: '报价单',
+          url: '/brand/order/quote',
           icon: 'iconNone'
         },
         {
           name: '生产订单',
           url: '/brand/order/purchase',
+          icon: 'iconNone'
+        },
+        {
+          name: '打样单',
+          url: '/brand/order/proofing',
           icon: 'iconNone'
         }
       ]
