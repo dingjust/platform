@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -95,8 +96,10 @@ class _RequirementOrderDetailPageState
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(widget
-                                          .order.belongTo.profilePicture ??
-                                      'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
+                                              .order.belongTo.profilePicture !=
+                                          null
+                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.belongTo.profilePicture}'
+                                      : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
                               borderRadius: BorderRadius.circular(10)),
                         ),
                         Container(
@@ -574,7 +577,13 @@ class _RequirementOrderDetailPageState
         child: Container(
           padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
           child: FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => RequirementQuoteOrderFrom(
+                          model: widget.order,
+                          quoteModel: QuoteModel(attachments: []),
+                        )));
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
