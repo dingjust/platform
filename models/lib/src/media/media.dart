@@ -25,6 +25,7 @@ class MediaModel extends ItemModel {
   final String mediaFormat;
 
   /// 多格式图片组
+  @JsonKey(toJson: convertedMediasToJson)
   final List<MediaModel> convertedMedias;
 
   MediaModel(
@@ -41,4 +42,8 @@ class MediaModel extends ItemModel {
 
   static Map<String, dynamic> toJson(MediaModel model) =>
       _$MediaModelToJson(model);
+
+  static List<String> convertedMediasToJson(
+          List<MediaModel> convertedMedias) =>
+      null;
 }
