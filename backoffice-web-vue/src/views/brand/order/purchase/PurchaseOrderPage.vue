@@ -70,7 +70,7 @@
       }
     },
     created() {
-      this.onSearch();
+      this.onSearch('');
     }
   }
 </script>

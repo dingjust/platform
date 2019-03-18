@@ -17,7 +17,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">修改地址</el-button>
-          <el-button type="text" icon="el-icon-edit" @click="showQuote(scope.row.quoteRef)">查看报价单</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onShowQuote(scope.row)">查看报价单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,60 +36,39 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
-
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandPurchaseOrdersModule');
-
-  import autoHeight from '@/mixins/autoHeight';
-
   export default {
     name: 'ProofingSearchResultList',
     props: ["page"],
-    mixins: [autoHeight],
     computed: {},
     methods: {
-      ...mapActions({
-        search: 'search',
-        searchAdvanced: 'searchAdvanced'
-      }),
-      onAdvancedSearch() {
-        this.advancedSearch = true;
-        this._onAdvancedSearch(0)
-      },
-      _onAdvancedSearch(page, size) {
-        const query = this.queryFormData;
-        this.searchAdvanced({query, page, size});
-      },
       onPageSizeChanged(val) {
-        this.reset();
+        this._reset();
 
         if (this.advancedSearch) {
-          this._onAdvancedSearch(0, val);
-        } else {
-          this._onSearch(0, val);
+          this.$emit('onAdvancedSearch', val);
+          return;
         }
+
+        this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
         if (this.advancedSearch) {
-          this._onAdvancedSearch(val - 1);
-        } else {
-          this._onSearch(val - 1);
+          this.$emit('onAdvancedSearch', val - 1);
+          return;
         }
+
+        this.$emit('onSearch', val - 1);
       },
-      reset() {
+      _reset() {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      _onSearch(page, size) {
-        const keyword = this.keyword;
-        this.search({keyword, page, size});
-      },
       onDetails(row) {
         this.$emit('onDetails', row);
       },
-      showQuote(quoteRef) {
-        this.$emit('showQuote', quoteRef);
+      onShowQuote(row) {
+        this.$emit('onShowQuote', row);
       }
     },
     data() {

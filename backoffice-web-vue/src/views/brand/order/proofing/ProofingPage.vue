@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-card>
       <proofing-toolbar @onSearch="onSearch"/>
-      <proofing-search-result-list :page="page" @onDetails="onDetails"/>
+      <proofing-search-result-list :page="page" @onDetails="onDetails" @onShowQuote="onShowQuote"/>
     </el-card>
   </div>
 </template>
@@ -12,10 +12,11 @@
 
   const {mapGetters, mapActions} = createNamespacedHelpers('BrandProofingsModule');
 
-  import ProofingToolbar from './toolbar/Toolbar';
-  import ProofingSearchResultList from './list/SearchResultList';
-  import ProofingForm from './form/ProofingForm';
-  import ProofingDetailForm from './list/ProofingDetailForm';
+  import ProofingToolbar from './toolbar/ProofingToolbar';
+  import ProofingSearchResultList from './list/ProofingSearchResultList';
+  import ProofingDetailsPage from "./details/ProofingDetailsPage";
+
+  import QuoteDetailsPage from "../quote/QuoteDetailsPage";
 
   export default {
     name: 'ProofingPage',
@@ -32,20 +33,32 @@
       ...mapActions({
         search: 'search',
         searchAdvanced: 'searchAdvanced',
-        searchRequirementRef: 'searchRequirementRef',
       }),
-      onSearch(requirementOrderRef) {
-        console.log(requirementOrderRef);
-        this.searchRequirementRef({requirementOrderRef});
+      onSearch(page, size) {
+        const keyword = this.keyword;
+        this.search({keyword, page, size});
       },
-      onDetails(row) {
-        console.log('onDetails: ' + JSON.stringify(row));
-        this.fn.openSlider('查看打样订单明细', ProofingDetailForm, row);
+      async onDetails(row) {
+        const result = await this.$http.get('/b2b/orders/proofing/' + row.code);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.fn.openSlider('打样订单:' + row.code, ProofingDetailsPage, row);
+      },
+      async onShowQuote(row) {
+        const result = await this.$http.get('/b2b/orders/quote/' + row.quoteRef);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.fn.openSlider('报价单:' + row.code, QuoteDetailsPage, result);
       }
     },
     data() {
-      return {
-      }
+      return {}
     },
     created() {
       this.search('');
