@@ -2,17 +2,13 @@ import http from '@/common/js/http';
 
 const state = {
   statusOptions: [
-    {text: '待分配', value: 'WAIT_FOR_ALLOCATION'},
-    {text: '备料中', value: 'WAIT_FOR_PURCHASE'},
-    {text: '待裁剪', value: 'PENDING_CUTTING'},
-    {text: '裁剪中', value: 'CUTTING'},
-    {text: '车缝中', value: 'STITCHING'},
-    {text: '待验货', value: 'QC'},
-    {text: '待发货', value: 'PENDING_DELIVERY'},
-    {text: '已发货', value: 'DELIVERING'},
-    {text: '已完成', value: 'DELIVERY_COMPLETED'}
+    {code: 'PENDING_PAYMENT', name: '待付款'},
+    {code: 'PENDING_DELIVERY', name: '待发货'},
+    {code: 'SHIPPED', name: '已发货'},
+    {code: 'COMPLETED', name: '已完成'},
   ],
   keyword: '',
+  requirementOrderRef:'',
   statuses: [],
   currentPageNumber: 0,
   currentPageSize: 10,
@@ -66,7 +62,7 @@ const state = {
   },
   queryFormData: {
     productionOrderCode: '',
-    requirementOrderCode: '',
+    requirementOrderRef: '',
     skuID: '',
     statuses: [],
     expectedDeliveryDateFrom: null,
@@ -81,12 +77,13 @@ const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
+  requirementOrderRef:(state, requirementOrderRef) => state.requirementOrderRef = requirementOrderRef,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {keyword, statuses, page, size}) {
+  async search({dispatch, commit, state}, {keyword, page, size}) {
     commit('keyword', keyword);
     if (page) {
       commit('currentPageNumber', page);
@@ -97,7 +94,7 @@ const actions = {
     }
 
     const response = await http.post('/b2b/orders/proofing', {
-      skuID: state.keyword
+      keyword: state.keyword
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -125,6 +122,30 @@ const actions = {
       commit('page', response);
     }
   },
+  async searchRequirementRef({dispatch, commit, state}, {requirementOrderRef, page, size}) {
+    console.log(requirementOrderRef);
+    commit('requirementOrderRef', requirementOrderRef);
+
+    if (page) {
+      commit('currentPageNumber', page);
+    }
+
+    if (size) {
+      commit('currentPageSize', size);
+    }
+
+    const response = await http.post('/b2b/orders/proofing', {
+      requirementOrderRef: state.requirementOrderRef
+    }, {
+      page: state.currentPageNumber,
+      size: state.currentPageSize
+    });
+
+    // console.log(JSON.stringify(response));
+    if (!response['errors']) {
+      commit('page', response);
+    }
+  },
   refresh({dispatch, commit, state}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
@@ -135,6 +156,7 @@ const actions = {
 };
 
 const getters = {
+  requirementOrderRef: state => state.requirementOrderRef,
   keyword: state => state.keyword,
   statusOptions: state => state.statusOptions,
   queryFormData: state => state.queryFormData,
