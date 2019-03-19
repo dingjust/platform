@@ -3,31 +3,32 @@ import 'dart:async';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-class ApparelProductBLoC extends BLoCBase {
-  ProductsResponse productsResponse;
-  List<ApparelProductModel> products;
-  ApparelProductModel currentProduct;
+class AddressBLoC extends BLoCBase {
+  AddressResponse addressResponse;
+  List<AddressModel> products;
+  AddressModel currentProduct;
 
-  ApparelProductModel newProduct;
+  AddressModel newProduct;
 
   // 工厂模式
-  factory ApparelProductBLoC() => _getInstance();
+  factory AddressBLoC() => _getInstance();
 
-  static ApparelProductBLoC get instance => _getInstance();
-  static ApparelProductBLoC _instance;
+  static AddressBLoC get instance => _getInstance();
+  static AddressBLoC _instance;
+  bool lock = false;
 
-  ApparelProductBLoC._internal() {
+  AddressBLoC._internal() {
     // 初始化
-    products = List<ApparelProductModel>();
-    currentProduct = ApparelProductModel.empty();
-    productsResponse = ProductsResponse(0, 10, 0, 0, []);
+    products = List<AddressModel>();
+    currentProduct = AddressModel();
+    addressResponse = AddressResponse(0, 10, 0, 0, []);
 
-    newProduct = ApparelProductModel();
+    newProduct = AddressModel();
   }
 
-  static ApparelProductBLoC _getInstance() {
+  static AddressBLoC _getInstance() {
     if (_instance == null) {
-      _instance = ApparelProductBLoC._internal();
+      _instance = AddressBLoC._internal();
     }
     return _instance;
   }
@@ -35,40 +36,47 @@ class ApparelProductBLoC extends BLoCBase {
   //TODO 清空表单数据
   void clearNewProduct() {}
 
-  var _controller = StreamController<List<ApparelProductModel>>.broadcast();
+  var _controller = StreamController<List<AddressModel>>.broadcast();
 
-  var _detailController = StreamController<ApparelProductModel>();
+  var _detailController = StreamController<AddressModel>();
 
-  Stream<List<ApparelProductModel>> get stream => _controller.stream;
+  Stream<List<AddressModel>> get stream => _controller.stream;
 
-  Stream<ApparelProductModel> get detailStream => _detailController.stream;
+  Stream<AddressModel> get detailStream => _detailController.stream;
 
-  filterByStatuses() async {
-    products.clear();
-    productsResponse = await ProductRepositoryImpl().list({},{
-      'approvalStatuses':['approved']
-    });
-    products.addAll(productsResponse.content);
-    _controller.sink.add(products);
+  filterByStatuses(String keyword) async {
+    if(!lock){
+      lock = true;
+      products.clear();
+      addressResponse = await AddressRepositoryImpl().list({
+        'keyword':keyword
+      });
+      products.addAll(addressResponse.content);
+      _controller.sink.add(products);
+      lock = false;
+    }
+
   }
 
-  loadingMoreByStatuses() async {
-    if(productsResponse.number < productsResponse.totalPages-1){
-      productsResponse = await ProductRepositoryImpl().list({},{
-        'page':productsResponse.number+1,
+  loadingMoreByStatuses(String keyword) async {
+    if(addressResponse.number < addressResponse.totalPages-1){
+      addressResponse = await AddressRepositoryImpl().list({
+        'page':addressResponse.number+1,
+        'keyword':keyword,
       });
-      products.addAll(productsResponse.content);
+      products.addAll(addressResponse.content);
     }else{
       _bottomController.sink.add(true);
     }
+
     _loadingController.sink.add(false);
     _controller.sink.add(products);
   }
 
   //下拉刷新
 //  Future refreshData() async {
-//    productsResponse = await ProductRepositoryImpl().list({},{});
-//    _controller.sink.add(productsResponse.content);
+//    addressResponse = await ProductRepositoryImpl().list({},{});
+//    _controller.sink.add(addressResponse.content);
 //  }
 
   //页面控制

@@ -19,6 +19,7 @@ class SampleGarmentsPage extends StatefulWidget {
 }
 
 class SampleGarmentsPageState extends State<SampleGarmentsPage> {
+  SampleBorrowReturnHistoryModel model = SampleBorrowReturnHistoryModel();
   LendBorrowType _type = LendBorrowType.BORROW;
 
   List<SampleBorrowReturnHistoryModel> _sampleProductHistoryList;
@@ -215,7 +216,7 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
 
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductHistoryFormPage())),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductHistoryFormPage(model))),
         ),
       ),
     );
