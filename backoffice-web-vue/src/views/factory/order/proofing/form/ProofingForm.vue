@@ -9,7 +9,7 @@
     <div class="pt-2"></div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>待打样商品</span>
+        <span>待打样产品</span>
       </div>
       <proofing-entries-form :slot-data="slotData" :read-only="readOnly"/>
     </el-card>

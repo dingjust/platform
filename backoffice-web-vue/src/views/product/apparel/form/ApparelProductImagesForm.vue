@@ -42,7 +42,9 @@
       },
       async handleRemove(file) {
         // console.log(JSON.stringify(file));
-        const result = await this.$http.delete('/djwebservices/media/' + file.id);
+        // TODO: 自定义删除方法（删除图片之前，清理product的others属性
+        const url = this.apis().removeMedia(file.id);
+        const result = await this.$http.delete(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

@@ -51,8 +51,7 @@ const state = {
     skuID: '',
     name: '',
     approvalStatuses: [],
-    categories: [],
-    belongTos: []
+    categories: []
   }
 };
 
@@ -72,9 +71,9 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/products/apparel/all', {
+    const response = await http.post('/b2b/products/apparel', {
       keyword: state.keyword
-    }, {
+    },{
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -91,7 +90,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/products/apparel/all', query, {
+    const response = await http.post('/b2b/products/apparel', query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

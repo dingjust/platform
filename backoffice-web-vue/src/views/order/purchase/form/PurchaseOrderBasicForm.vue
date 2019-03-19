@@ -18,7 +18,11 @@
         <el-col :span="8">
           <el-form-item label="加工类型" prop="machiningType">
             <el-radio-group v-model="slotData.machiningType">
-              <el-radio v-for="item in machiningTypes" :label="item.code">{{item.name}}</el-radio>
+              <el-radio v-for="item in machiningTypes"
+                        :label="item.code"
+                        :key="item.code">
+                {{item.name}}
+              </el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>

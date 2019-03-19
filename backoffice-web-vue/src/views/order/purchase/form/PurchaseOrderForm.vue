@@ -35,7 +35,7 @@
       <div class="pt-2"></div>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>待生产商品</span>
+          <span>待生产产品</span>
         </div>
         <purchase-order-entries-form :slot-data="slotData" :read-only="readOnly"/>
       </el-card>

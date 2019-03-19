@@ -5,7 +5,8 @@
         <h6>颜色：</h6>
         <el-checkbox-group v-model="slotData.colors" @change="onColorChanged">
           <el-checkbox v-for="item in colors"
-                       :label="item.code">
+                       :label="item.code"
+                       :key="item.code">
             {{item.name}}
           </el-checkbox>
         </el-checkbox-group>
@@ -14,7 +15,8 @@
         <h6>尺码：</h6>
         <el-checkbox-group v-model="slotData.sizes" @change="onSizeChanged">
           <el-checkbox v-for="item in sizes"
-                       :label="item.code">
+                       :label="item.code"
+                       :key="item.code">
             {{item.name}}
           </el-checkbox>
         </el-checkbox-group>
@@ -26,7 +28,7 @@
 <script>
   export default {
     name: 'ApparelProductVariantsForm',
-    props: ['slotData', 'readOnly', 'isNewlyCreated'],
+    props: ['slotData', 'readOnly'],
     methods: {
       onColorChanged(value) {
         // console.log(JSON.stringify(value));
@@ -37,10 +39,12 @@
         this._updateColorsAndSizes();
       },
       async getAllColors() {
-        this.colors = await this.$http.get('/djwebservices/colors/all');
+        const url = this.apis().getAllColors();
+        this.colors = await this.$http.get(url);
       },
       async getAllSizes() {
-        this.sizes = await this.$http.get('/djwebservices/sizes/all');
+        const url = this.apis().getAllSizes();
+        this.sizes = await this.$http.get(url);
       },
       _updateColorsAndSizes() {
         let variants = [];
