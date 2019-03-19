@@ -2,6 +2,7 @@ import http from '@/common/js/http';
 
 const state = {
   keyword: '',
+  isAdvancedSearch: false,
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -51,8 +52,7 @@ const state = {
     skuID: '',
     name: '',
     approvalStatuses: [],
-    categories: [],
-    belongTos: []
+    categories: []
   }
 };
 
@@ -61,20 +61,21 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {keyword, page, size}) {
+  async search({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/products/apparel/all', {
+    const response = await http.post(url, {
       keyword: state.keyword
-    }, {
+    },{
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -84,14 +85,14 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({dispatch, commit, state}, {query, page, size}) {
+  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/products/apparel/all', query, {
+    const response = await http.post(url, query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -112,6 +113,7 @@ const actions = {
 
 const getters = {
   keyword: state => state.keyword,
+  isAdvancedSearch: state => state.isAdvancedSearch,
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,

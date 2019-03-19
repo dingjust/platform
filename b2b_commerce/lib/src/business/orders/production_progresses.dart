@@ -150,18 +150,19 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           child:Align(
                             alignment: Alignment.centerRight,
                             child:
+                            progress.estimatedDate == null? Container():
                             Text('${DateFormatUtil.formatYMD(
                                 progress.estimatedDate)}',
                                 style: TextStyle(fontWeight: FontWeight.w500)),
                           ),
                           onTap: () {
-                            sequence > _index || phase == currentPhase ? _showDatePicker() : null;
+//                            sequence > _index || phase == currentPhase ? _showDatePicker() : null;
                           }),
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           icon: Icon(Icons.date_range),
-                            onPressed: sequence > _index || phase == currentPhase ? _showDatePicker:null
+//                            onPressed: sequence > _index || phase == currentPhase ? _showDatePicker:null
                         ),
                       )
                     ],
@@ -175,7 +176,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('${DateFormatUtil.formatYMD(progress.finishDate)}', style: TextStyle(fontWeight: FontWeight.w500)),
+                        child:
+                        progress.finishDate == null ? Container() :
+                        Text('${DateFormatUtil.formatYMD(progress.finishDate)}',
+                            style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                           alignment: Alignment.centerRight,
@@ -202,19 +206,22 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           }),
                     ),
                     GestureDetector(
-                        child:Align(
+                        child: Align(
                           alignment: Alignment.centerRight,
                           child: Text('${progress.quantity}',
                               style: TextStyle(fontWeight: FontWeight.w500)),
                         ),
                         onTap: () {
-                          sequence > _index || phase == currentPhase ? _showDialog() : null;
-                        }),
+//                          sequence > _index || phase == currentPhase
+//                              ? _showDialog()
+//                              : null;
+                        }
+                    ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: IconButton(
                         icon: Icon(Icons.keyboard_arrow_right),
-                        onPressed: sequence > _index || phase == currentPhase ? _showDialog : null,
+//                        onPressed: sequence > _index || phase == currentPhase ? _showDialog : null,
                       ),
                     )
                   ],
@@ -232,7 +239,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           child: Text('凭证',
                               style: TextStyle(fontWeight: FontWeight.w500)),
                           onTap: () {
-                            sequence > _index || phase == currentPhase ? _selectPapersImages() : null;
+//                            sequence > _index || phase == currentPhase ? _selectPapersImages() : null;
                           }),
                       flex: 4,
                     ),
@@ -249,7 +256,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   alignment: Alignment.centerLeft,
                   child: Text("备注"),
                 ),
-                Align(alignment: Alignment.centerLeft, child: Text(progress.remarks))
+                Align(alignment: Alignment.centerLeft, child: Text('${progress.remarks==null?'':progress.remarks}'))
               ])),
           Container(
               width: double.infinity,

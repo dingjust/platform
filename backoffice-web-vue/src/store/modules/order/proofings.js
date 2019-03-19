@@ -21,6 +21,7 @@ const state = {
   formData: {
     id: null,
     code: '',
+    quoteRef: '',
     belongTo: {
       uid: '',
       name: ''
@@ -40,6 +41,7 @@ const state = {
     invoiceNeeded: false,
     uniqueCode: '',
     requirementOrderCode: '',
+    unitPrice: 0,
     entries: [],
     remarks: '',
     deliveryAddress: {

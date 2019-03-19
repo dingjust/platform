@@ -4,18 +4,24 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import 'package:services/services.dart';
 
 import 'sample_products.dart';
 
 class SampleProductHistoryFormPage extends StatefulWidget {
+  SampleBorrowReturnHistoryModel model;
+
+  SampleProductHistoryFormPage(this.model);
+
   SampleProductHistoryFormPageState createState() =>
       SampleProductHistoryFormPageState();
 }
 
 class SampleProductHistoryFormPageState
     extends State<SampleProductHistoryFormPage> {
+  SampleProductModel _smapleProduct = SampleProductModel();
   LendBorrowType _type = LendBorrowType.BORROW;
-  List<File> _normalImages = [];
+  List<MediaModel> _pictures = [];
   FocusNode _nameFocusNode = FocusNode();
   final TextEditingController _nameController = TextEditingController();
   FocusNode _skuIDFocusNode = FocusNode();
@@ -29,11 +35,12 @@ class SampleProductHistoryFormPageState
   FocusNode _contactWayFocusNode = FocusNode();
   final TextEditingController _contactWayController = TextEditingController();
 
-  Text _nameText = Text('点击选择', style: TextStyle(color: Colors.grey));
+  Text _nameText =
+      Text('点击选择', style: TextStyle(color: Colors.grey[400], fontSize: 17));
   String _skuIDText = '';
   Text _expectedReturnDateText = Text(
     '点击选择日期',
-    style: TextStyle(color: Colors.grey),
+    style: TextStyle(color: Colors.grey[400], fontSize: 17),
   );
 
   @override
@@ -44,9 +51,54 @@ class SampleProductHistoryFormPageState
         title: Text('新建记录'),
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.done),
-              onPressed: () {
-                Navigator.pop(context);
+              icon: Text(
+                '确定',
+                style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+              ),
+              onPressed: () async{
+                if(_type == LendBorrowType.BORROW){
+                  if(_smapleProduct == null){
+                    showDialog(
+                        context: (context),
+                        builder: (context) => AlertDialog(
+                          content: Text('样衣名称和货号不能为空'),
+                        ));
+                    return;
+                  }else{
+                    widget.model.sampleProduct = _smapleProduct;
+                  }
+                }else{
+                  if (_nameController.text == '' && _skuIDController.text == '') {
+                    showDialog(
+                        context: (context),
+                        builder: (context) => AlertDialog(
+                          content: Text('样衣名称和货号不能为空'),
+                        ));
+                    return;
+                  }else{
+                    widget.model.sampleProduct.name =_nameController.text;
+                    widget.model.sampleProduct.code =_skuIDController.text;
+                  }
+                }
+
+                widget.model.type = _type;
+                widget.model.quantity = int.parse(_quantityController.text == ''
+                    ? 0
+                    : _quantityController.text);
+                widget.model.contactWay = _contactWayController.text == ''
+                    ? null
+                    : _contactWayController.text;
+                widget.model.remake = _remakeController.text == ''
+                    ? null
+                    : _remakeController.text;
+                widget.model.relatedParty = _relatedPartyController.text == ''
+                    ? null
+                    : _relatedPartyController.text;
+
+
+                String code = await ProductRepositoryImpl().createSampleHistory(widget.model);
+
+//                Navigator.pop(context);
               }),
         ],
       ),
@@ -62,14 +114,14 @@ class SampleProductHistoryFormPageState
                 shape: StadiumBorder(
                     side: BorderSide(
                         color: _type == LendBorrowType.BORROW
-                            ? Color.fromRGBO(255,214,12, 1)
+                            ? Color.fromRGBO(255, 214, 12, 1)
                             : Colors.white)),
                 labelPadding: EdgeInsets.symmetric(horizontal: 50, vertical: 4),
                 backgroundColor: Colors.white,
                 label: Text('借出'),
                 labelStyle: TextStyle(
                     color: _type == LendBorrowType.BORROW
-                        ? Color.fromRGBO(255,214,12, 1)
+                        ? Color.fromRGBO(255, 214, 12, 1)
                         : Colors.black),
                 onPressed: () {
                   setState(() {
@@ -81,14 +133,14 @@ class SampleProductHistoryFormPageState
                 shape: StadiumBorder(
                     side: BorderSide(
                         color: _type == LendBorrowType.LEND
-                            ? Color.fromRGBO(255,214,12, 1)
+                            ? Color.fromRGBO(255, 214, 12, 1)
                             : Colors.white)),
                 labelPadding: EdgeInsets.symmetric(horizontal: 50, vertical: 4),
                 backgroundColor: Colors.white,
                 label: Text('借入'),
                 labelStyle: TextStyle(
                     color: _type == LendBorrowType.LEND
-                        ? Color.fromRGBO(255,214,12, 1)
+                        ? Color.fromRGBO(255, 214, 12, 1)
                         : Colors.black),
                 onPressed: () {
                   setState(() {
@@ -116,11 +168,7 @@ class SampleProductHistoryFormPageState
                   ],
                 ),
               ),
-              PhotoPicker(
-                images: _normalImages,
-                maxNum: 10,
-                width: 400,
-              ),
+              EditableAttachments(list: _pictures)
             ],
           ),
           Card(
@@ -133,29 +181,44 @@ class SampleProductHistoryFormPageState
                   _type == LendBorrowType.BORROW
                       ? Column(
                           children: <Widget>[
-                            ListTile(
-                              leading: Text(
-                                '样衣名称',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              title: Container(
-                                padding: EdgeInsets.only(left: 28),
-                                child: GestureDetector(
-                                  child: _nameText,
-                                  onTap: () async {
-                                    SampleProductModel model =
-                                        await Navigator.push(
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 17.5),
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 100,
+                                    child: Text(
+                                      '样衣名称',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      child: GestureDetector(
+                                        child: _nameText,
+                                        onTap: () async {
+                                          _smapleProduct =
+                                              await Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SampleProductsPage(
-                                                        isHistoryCreate:
-                                                            true)));
-                                    _nameText = Text(model.name,
-                                        style: TextStyle(color: Colors.black));
-                                    _skuIDText = model.code;
-                                  },
-                                ),
+                                              builder: (context) =>
+                                                  SampleProductsPage(
+                                                      isHistoryCreate: true),
+                                            ),
+                                          );
+                                          if(_smapleProduct != null){
+                                            _nameText = Text(_smapleProduct.name,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16));
+                                            _skuIDText = _smapleProduct.code;
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                             Padding(
@@ -166,14 +229,22 @@ class SampleProductHistoryFormPageState
                                 color: Colors.grey[400],
                               ),
                             ),
-                            ListTile(
-                              leading: Text(
-                                '货号',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              title: Padding(
-                                padding: const EdgeInsets.only(left: 45),
-                                child: Text(_skuIDText),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 17.5),
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 100,
+                                    child: Text(
+                                      '货号',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(_skuIDText,style: TextStyle(fontSize: 16),),
+                                  )
+                                ],
                               ),
                             ),
                             Padding(
@@ -213,31 +284,40 @@ class SampleProductHistoryFormPageState
                         _type == LendBorrowType.BORROW ? '请输入借出数量' : '请输入借入数量',
                     leadingWidth: 100,
                   ),
-                  ListTile(
-                    leading: Text(
-                      '预计归还时间',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    title: Container(
-//                      padding: EdgeInsets.only(left: 18),
-                      child: GestureDetector(
-                        child: _expectedReturnDateText,
-                        onTap: () {
-                          _selectDate(context).then((value) {
-                            setState(() {
-                              if (value != null) {
-                                _expectedReturnDateText =
-                                    Text(DateFormatUtil.formatYMD(value));
-                              } else {
-                                _expectedReturnDateText = Text(
-                                  '点击选择日期',
-                                  style: TextStyle(color: Colors.grey),
-                                );
-                              }
-                            });
-                          });
-                        },
-                      ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 18),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: 100,
+                          child: Text(
+                            '预计归还时间',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            child: _expectedReturnDateText,
+                            onTap: () {
+                              _selectDate(context).then((value) {
+                                setState(() {
+                                  widget.model.expectedReturnDate = value;
+                                  if (value != null) {
+                                    _expectedReturnDateText =
+                                        Text(DateFormatUtil.formatYMD(value));
+                                  } else {
+                                    _expectedReturnDateText = Text(
+                                      '点击选择日期',
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 16),
+                                    );
+                                  }
+                                });
+                              });
+                            },
+                          ),
+                        )
+                      ],
                     ),
                   ),
                   Padding(
@@ -292,7 +372,7 @@ class SampleProductHistoryFormPageState
   Future<DateTime> _selectDate(BuildContext context) {
     return showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: widget.model.expectedReturnDate ?? DateTime.now(),
       firstDate: DateTime(2015, 8),
       lastDate: DateTime(2101),
     );

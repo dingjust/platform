@@ -57,8 +57,9 @@ class _ProductionPageState extends State<ProductionPage> {
                 FilterConditionEntry(
                     label: '延期预警',
                     value: 'delayWarning',
-                    onRemind: true,
-                    remindNum: 12),
+                    onRemind: false,
+//                    remindNum: 12
+                ),
 //                FilterConditionEntry(
 //                  label: '已完成',
 //                  value: 'complete',
@@ -191,27 +192,6 @@ class ProductionListView extends StatelessWidget {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 200),
                         child: Center(child: CircularProgressIndicator()),
-//                        child: Container(
-//                          child: Center(
-//                            child: Row(
-//                              mainAxisSize: MainAxisSize.min,
-//                              children: <Widget>[
-//                                Text(
-//                                  '暂无数据',
-//                                  style: TextStyle(
-//                                    fontSize: 20,
-//                                  ),
-//                                ),
-//                                Text(
-//                                  '（下拉刷新试试）',
-//                                  style: TextStyle(
-//                                    fontSize: 14,
-//                                  ),
-//                                ),
-//                              ],
-//                            )
-//                          ),
-//                        ),
                       );
                     }
                     if (snapshot.hasData) {
@@ -232,66 +212,66 @@ class ProductionListView extends StatelessWidget {
         ));
   }
 
-  Widget _buildRecommend(ProductionBLoC bloc) {
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: 380,
-            height: 150,
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: NetworkImage(
-                      'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190126151855.jpg'),
-                  fit: BoxFit.cover,
-                )),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                      text: '———',
-                      style: TextStyle(fontSize: 25, color: Colors.grey),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: '推荐工厂',
-                            style:
-                                TextStyle(fontSize: 25, color: Colors.black)),
-                        TextSpan(text: '———')
-                      ]),
-                ),
-              )
-            ],
-          ),
-          StreamBuilder<List<FactoryModel>>(
-              stream: bloc.factoryStream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<FactoryModel>> snapshot) {
-                if (snapshot.data == null) {
-                  bloc.getRecommendFactories();
-                  return Container();
-                }
-                if (snapshot.hasData) {
-                  return Column(
-                    children: snapshot.data.map((item) {
-                      return FactoryItem(
-                        model: item,
-                      );
-                    }).toList(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-              })
-        ],
-      ),
-    );
-  }
+//  Widget _buildRecommend(ProductionBLoC bloc) {
+//    return Container(
+//      color: Colors.white,
+//      margin: EdgeInsets.only(top: 10),
+//      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+//      child: Column(
+//        children: <Widget>[
+//          Container(
+//            width: 380,
+//            height: 150,
+//            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+//            decoration: BoxDecoration(
+//                borderRadius: BorderRadius.circular(10),
+//                image: DecorationImage(
+//                  image: NetworkImage(
+//                      'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190126151855.jpg'),
+//                  fit: BoxFit.cover,
+//                )),
+//          ),
+//          Row(
+//            mainAxisAlignment: MainAxisAlignment.center,
+//            children: <Widget>[
+//              Center(
+//                child: RichText(
+//                  text: TextSpan(
+//                      text: '———',
+//                      style: TextStyle(fontSize: 25, color: Colors.grey),
+//                      children: <TextSpan>[
+//                        TextSpan(
+//                            text: '推荐工厂',
+//                            style:
+//                                TextStyle(fontSize: 25, color: Colors.black)),
+//                        TextSpan(text: '———')
+//                      ]),
+//                ),
+//              )
+//            ],
+//          ),
+//          StreamBuilder<List<FactoryModel>>(
+//              stream: bloc.factoryStream,
+//              builder: (BuildContext context,
+//                  AsyncSnapshot<List<FactoryModel>> snapshot) {
+//                if (snapshot.data == null) {
+//                  bloc.getRecommendFactories();
+//                  return Container();
+//                }
+//                if (snapshot.hasData) {
+//                  return Column(
+//                    children: snapshot.data.map((item) {
+//                      return FactoryItem(
+//                        model: item,
+//                      );
+//                    }).toList(),
+//                  );
+//                } else if (snapshot.hasError) {
+//                  return Text('${snapshot.error}');
+//                }
+//              })
+//        ],
+//      ),
+//    );
+//  }
 }

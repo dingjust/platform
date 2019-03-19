@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <slot name="operations" :item="scope.row"></slot>
         </template>
       </el-table-column>
     </el-table>
@@ -76,9 +76,6 @@
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
-      },
-      onDetails(row) {
-        this.$emit('onDetails', row);
       }
     },
     data() {

@@ -54,9 +54,9 @@ class ApparelProductBLoC extends BLoCBase {
 
   loadingMoreByStatuses() async {
     if(productsResponse.number < productsResponse.totalPages-1){
-      productsResponse = await ProductRepositoryImpl().list({
+      productsResponse = await ProductRepositoryImpl().list({},{
         'page':productsResponse.number+1,
-      },{});
+      });
       products.addAll(productsResponse.content);
     }else{
       _bottomController.sink.add(true);

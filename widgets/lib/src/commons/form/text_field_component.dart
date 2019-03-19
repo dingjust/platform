@@ -73,15 +73,15 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.autofocus)
       widget.controller.value = TextEditingValue(
         // 设置内容
         text: widget.controller.text,
         // 保持光标在最后
         selection: TextSelection.fromPosition(
           TextPosition(
-              affinity: TextAffinity.downstream,
-              offset: widget.controller.text.length),
+              affinity: TextAffinity.upstream,
+              offset: widget.controller.text.length,
+          ),
         ),
       );
     return Column(
@@ -113,6 +113,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   enabled: widget.enabled,
                   onEditingComplete: widget.onEditingComplete,
                   textInputAction: widget.textInputAction,
+                  textAlign: TextAlign.right,
                 ),
               )
             ],

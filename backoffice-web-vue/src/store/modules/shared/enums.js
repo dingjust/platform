@@ -60,7 +60,7 @@ const state = {
     {code: 'FACTORY', name: '工厂打标'},
     {code: 'PLATFORM', name: '平台打标'}
   ],
-  // 商品风格
+  // 产品风格
   productStyles: [
     {code: 'FG0001', name: '潮流'},
     {code: 'FG0002', name: '简约'},
