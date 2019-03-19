@@ -661,22 +661,22 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
             FlatButton(
               child: Text('确认'),
               onPressed: () async {
-                //TODO :调用删除接口
-                try {
-                  Response response = await http$.delete(
-                    Apis.mediaDelete(mediaModel.id),
-                  );
-                  if (response != null && response.statusCode == 200) {
+                //TODO :调用删除接口,暂时隐藏
+                // try {
+                //   Response response = await http$.delete(
+                //     Apis.mediaDelete(mediaModel.id),
+                //   );
+                //   if (response != null && response.statusCode == 200) {
                     setState(() {
                       widget.list.remove(mediaModel);
                     });
                     Navigator.pop(context);
-                  } else {
-                    print('删除失败');
-                  }
-                } catch (e) {
-                  print(e);
-                }
+                //   } else {
+                //     print('删除失败');
+                //   }
+                // } catch (e) {
+                //   print(e);
+                // }
               },
             ),
             FlatButton(

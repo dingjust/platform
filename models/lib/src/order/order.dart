@@ -195,6 +195,9 @@ class AbstractOrderModel extends ItemModel {
   /// 合计金额
   double totalPrice;
 
+  /// 生产单价
+  double unitPrice;
+
   /// 创建时间
   @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
   DateTime creationTime;
@@ -217,6 +220,7 @@ class AbstractOrderModel extends ItemModel {
       this.creationTime,
       this.deliveryAddress,
       this.remarks,
+      this.unitPrice,
       this.salesApplication});
 
   static DateTime _dateTimefromMilliseconds(int date) =>
@@ -914,6 +918,7 @@ class QuoteModel extends AbstractOrderModel {
     DateTime creationTime,
     AddressModel deliveryAddress,
     String remarks,
+    double unitPrice,
     this.state,
     this.requirementOrder,
     this.requirementOrderRef,
@@ -927,13 +932,13 @@ class QuoteModel extends AbstractOrderModel {
     this.costOfOther,
     this.expectedDeliveryDate,
   }) : super(
-          code: code,
-          totalQuantity: totalQuantity,
-          totalPrice: totalPrice,
-          creationTime: creationTime,
-          deliveryAddress: deliveryAddress,
-          remarks: remarks,
-        );
+            code: code,
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice,
+            creationTime: creationTime,
+            deliveryAddress: deliveryAddress,
+            remarks: remarks,
+            unitPrice: unitPrice);
 
   factory QuoteModel.fromJson(Map<String, dynamic> json) =>
       _$QuoteModelFromJson(json);
