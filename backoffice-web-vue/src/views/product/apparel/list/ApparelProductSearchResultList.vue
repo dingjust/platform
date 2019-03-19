@@ -9,7 +9,7 @@
       <el-table-column label="产品货号" prop="skuID" width="120" fixed></el-table-column>
       <el-table-column label="产品名称" prop="name" width="480"></el-table-column>
       <el-table-column label="供货价" prop="price" :formatter="numberFormatter"></el-table-column>
-      <el-table-column label=" 操作" width="120">
+      <el-table-column label="操作" width="120">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
         </template>

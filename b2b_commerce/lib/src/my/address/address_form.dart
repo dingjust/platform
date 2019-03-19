@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import 'region_select.dart';
 
 class AddressFormPage extends StatefulWidget {
-  AddressFormPage({this.address}) : newlyCreated = address == null;
+  AddressFormPage({this.address,this.newlyCreated = false});
 
   final AddressModel address;
   final bool newlyCreated;
@@ -20,12 +21,15 @@ class AddressFormState extends State<AddressFormPage> {
   TextEditingController _fullnameController;
   TextEditingController _cellphoneController;
   TextEditingController _line1Controller;
+  FocusNode _nameFocusNode = FocusNode();
+  FocusNode _cellphoneFocusNode = FocusNode();
+  FocusNode _line1FocusNode = FocusNode();
   String regionCityAndDistrict;
 
   @override
   void initState() {
     super.initState();
-    _defaultAddress = widget.address?.defaultAddress ?? false;
+    if(widget.address.defaultAddress == null) widget.address.defaultAddress = false;
     _fullnameController = TextEditingController(text: widget.address?.fullname);
     _cellphoneController = TextEditingController(text: widget.address?.cellphone);
     _line1Controller = TextEditingController(text: widget.address?.line1);
@@ -44,37 +48,29 @@ class AddressFormState extends State<AddressFormPage> {
       return;
     }
 
-    RegionModel regionModel = result.city.region;
-    CityModel cityModel = result.city;
-    DistrictModel districtModel = result;
+    widget.address.cityDistrict = result;
+    widget.address.city = result.city;
+    widget.address.region = result.city.region;
 
-    regionCityAndDistrict = regionModel.name + cityModel.name + districtModel.name;
+    regionCityAndDistrict = widget.address.region.name + widget.address.city.name + widget.address.cityDistrict.name;
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> widgets = <Widget>[
-      TextFormField(
+      TextFieldComponent(
+        focusNode: _nameFocusNode,
         controller: _fullnameController,
-        decoration: InputDecoration(
-          labelText: '联系人',
-          prefixIcon: Icon(Icons.person),
-        ),
-        validator: (v) {
-          return v.trim().length > 0 ? null : "联系人不能为空";
-        },
+        leadingText: '联系人',
+        hintText: '请输入联系人',
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
       ),
-      TextFormField(
+      TextFieldComponent(
+        focusNode: _cellphoneFocusNode,
         controller: _cellphoneController,
-        decoration: InputDecoration(
-          labelText: '联系号码',
-          prefixIcon: Icon(Icons.phone),
-        ),
-        validator: (v) {
-          print(v);
-          return v.trim().length > 0 ? null : "联系号码不能为空";
-        },
-        keyboardType: TextInputType.phone,
+        leadingText: '联系号码',
+        hintText: '请输入联系号码',
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
       ),
       ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 0),
@@ -91,34 +87,34 @@ class AddressFormState extends State<AddressFormPage> {
         ),
         trailing: Icon(Icons.chevron_right),
       ),
-      TextFormField(
+      TextFieldComponent(
+        focusNode: _line1FocusNode,
         controller: _line1Controller,
-        decoration: InputDecoration(
-          labelText: '详细地址',
-          hintText: '道路、门牌号、小区、楼栋号、单元室等',
-        ),
+        leadingText: '详细地址',
+        hintText: '道路、门牌号、小区、楼栋号、单元室等',
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
       ),
       ListTile(
         title: Text('设为默认地址'),
         contentPadding: EdgeInsets.symmetric(horizontal: 0),
         trailing: Switch(
-          value: _defaultAddress,
-          activeColor: Colors.pink,
+          value: widget.address.defaultAddress,
+          activeColor: Color.fromRGBO(255, 214, 12, 1),
           onChanged: (bool val) {
             setState(() {
-              _defaultAddress = val;
+              widget.address.defaultAddress = val;
             });
           },
         ),
       ),
     ];
 
-    if (widget.address != null) {
+    if (!widget.newlyCreated) {
       widgets.add(
         ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 0),
           title: RaisedButton(
-            child: Text('删除地址'),
+            child: Text('删除地址',style: TextStyle(color: Colors.white),),
             color: Colors.red,
             onPressed: () {},
           ),
@@ -133,28 +129,52 @@ class AddressFormState extends State<AddressFormPage> {
         title: Text("编辑地址"),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
-              Icons.done,
-            ),
-            onPressed: () {
-              print((_addressForm.currentState as FormState).validate());
-              if ((_addressForm.currentState as FormState).validate() != null) {
-                Navigator.pop(context);
+            icon: Text('确定',style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1),),),
+            onPressed: () async{
+              if(_fullnameController.text == '' && _cellphoneController.text == ''){
+                showDialog(
+                    context: (context),
+                    builder: (context) => AlertDialog(
+                      content: Text('联系人和联系电话不可为空'),
+                    ));
+                return;
               }
+              if(widget.address.region == null){
+                showDialog(
+                    context: (context),
+                    builder: (context) => AlertDialog(
+                      content: Text('省市区不可为空'),
+                    ));
+                return;
+              }
+              if(_line1Controller.text == ''){
+                showDialog(
+                    context: (context),
+                    builder: (context) => AlertDialog(
+                      content: Text('详细地址不可为空'),
+                    ));
+                return;
+              }
+              widget.address.fullname = _fullnameController.text;
+              widget.address.cellphone = _cellphoneController.text;
+              widget.address.line1 = _line1Controller.text;
+
+              if(widget.newlyCreated){
+                await AddressRepositoryImpl().create(widget.address).then((a)=>Navigator.pop(context));
+              }else{
+                await AddressRepositoryImpl().update(widget.address).then((a)=>Navigator.pop(context));
+              }
+
+              AddressBLoC.instance.filterByStatuses('');
             },
           )
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-        child: Form(
-          key: _addressForm,
-          autovalidate: true,
-          //使用ScrollView包装一下，否则键盘弹出时会报错空间溢出
-          child: new SingleChildScrollView(
-            child: Column(
-              children: widgets,
-            ),
+        child: new SingleChildScrollView(
+          child: Column(
+            children: widgets,
           ),
         ),
       ),

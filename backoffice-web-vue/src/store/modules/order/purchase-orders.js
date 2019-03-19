@@ -44,6 +44,7 @@ const state = {
     invoiceNeeded: false,
     uniqueCode: '',
     requirementOrderCode: '',
+    unitPrice: 0,
     entries: [],
     remarks: '',
     deliveryAddress: {

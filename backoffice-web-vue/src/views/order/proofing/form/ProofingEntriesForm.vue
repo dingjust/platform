@@ -8,7 +8,7 @@
       <template slot='summary'>
         <order-entries-summary-form :read-only="readOnly"
                                     :variants="variants"
-                                    :unit-price="unitPrice"
+                                    :unit-price="slotData.unitPrice"
                                     @onPriceChanged="onPriceChanged"/>
       </template>
     </apparel-product-stock-level-input>
@@ -45,8 +45,10 @@
         this._updateQuantityOfEntries();
       },
       onPriceChanged(value) {
-        this.unitPrice = value;
         // console.log('value: ' + value);
+
+        this.$set(this.slotData, 'unitPrice', value);
+
         this._updatePriceOfEntries();
       },
       initializeVariantsFormProduct(product) {
@@ -133,7 +135,7 @@
             entries.push({
               entryNumber: entryNumber,
               quantity: size.quantity,
-              basePrice: this.unitPrice,
+              basePrice: this.slotData.unitPrice,
               product: {
                 code: size.productCode
               }
@@ -149,7 +151,6 @@
     data() {
       return {
         variants: [],
-        unitPrice: 0
       }
     },
     created() {

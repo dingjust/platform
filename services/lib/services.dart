@@ -45,6 +45,10 @@ export 'src/product/response/sample_products_response.dart';
 export 'src/product/bloc/sample_product_bloc.dart';
 export 'src/product/response/sample_product_historys_response.dart';
 export 'src/product/bloc/sample_product_history_bloc.dart';
+export 'src/user/response/address_response.dart';
+export 'src/user/bloc/address_bloc.dart';
+export 'src/user/address_repository.dart';
+export 'src/user/address_repository_impl.dart';
 
 abstract class BLoCBase {
   void dispose();
