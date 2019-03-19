@@ -5,9 +5,9 @@
               :height="autoHeight"
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="32" fixed></el-table-column>
-      <el-table-column label="商品编码" prop="code" width="120" fixed></el-table-column>
-      <el-table-column label="商品货号" prop="skuID" width="120" fixed></el-table-column>
-      <el-table-column label="商品名称" prop="name" width="480"></el-table-column>
+      <el-table-column label="产品编码" prop="code" width="120" fixed></el-table-column>
+      <el-table-column label="产品货号" prop="skuID" width="120" fixed></el-table-column>
+      <el-table-column label="产品名称" prop="name" width="480"></el-table-column>
       <el-table-column label="供货价" prop="price" :formatter="numberFormatter"></el-table-column>
       <el-table-column label=" 操作" width="120">
         <template slot-scope="scope">

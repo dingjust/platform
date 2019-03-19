@@ -1,7 +1,7 @@
 <template>
   <el-form :inline="true">
     <el-form-item label="">
-      <el-input placeholder="请输入商品货号/名称查询" v-model="keyword"></el-input>
+      <el-input placeholder="请输入产品货号/名称查询" v-model="keyword"></el-input>
     </el-form-item>
     <el-button-group>
       <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
@@ -10,12 +10,12 @@
     <el-popover placement="bottom" width="800" trigger="click">
       <el-row :gutter="10">
         <el-col :span="8">
-          <el-form-item label="商品货号">
+          <el-form-item label="产品货号">
             <el-input v-model="queryFormData.skuID"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="商品名称">
+          <el-form-item label="产品名称">
             <el-input v-model="queryFormData.name"></el-input>
           </el-form-item>
         </el-col>

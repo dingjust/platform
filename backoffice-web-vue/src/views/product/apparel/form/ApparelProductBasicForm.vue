@@ -3,17 +3,17 @@
     <el-form ref="form" label-position="top" :model="slotData" :disabled="readOnly" :rules="rules">
       <el-row :gutter="10">
         <el-col :span="6">
-          <el-form-item label="商品货号" prop="skuID">
+          <el-form-item label="产品货号" prop="skuID">
             <el-input v-model="slotData.skuID"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="商品名称" prop="name">
+          <el-form-item label="产品名称" prop="name">
             <el-input v-model="slotData.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="商品类目" prop="category">
+          <el-form-item label="产品类目" prop="category">
             <el-select v-model="slotData.category.code" placeholder="请选择" class="w-100">
               <el-option-group
                 v-for="level1 in categories"

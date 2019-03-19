@@ -8,7 +8,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSearch">查询产品</el-button>
       </el-button-group>
     </el-form>
-    <el-dialog title="请选择商品"
+    <el-dialog title="请选择产品"
                :visible.sync="dialogVisible"
                :modal="false"
                :show-close="false">

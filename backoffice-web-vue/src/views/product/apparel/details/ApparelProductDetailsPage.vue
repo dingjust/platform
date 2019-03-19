@@ -42,7 +42,7 @@
           return;
         }
 
-        this.$message.success('商品创建成功，商品编号： ' + result);
+        this.$message.success('产品创建成功，商品编号： ' + result);
         this.$set(this.slotData, 'code', result);
         this.refresh();
         this.fn.closeSlider(true);

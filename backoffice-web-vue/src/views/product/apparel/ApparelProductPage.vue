@@ -57,10 +57,10 @@
           return;
         }
 
-        this.fn.openSlider('商品：' + item.code, ApparelProductDetailsPage, result);
+        this.fn.openSlider('产品：' + item.code, ApparelProductDetailsPage, result);
       },
       onNew(formData) {
-        this.fn.openSlider('创建商品', ApparelProductDetailsPage, formData);
+        this.fn.openSlider('创建产品', ApparelProductDetailsPage, formData);
       },
     },
     data() {
