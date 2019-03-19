@@ -3,9 +3,23 @@
     <el-card>
       <quote-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
       <quote-search-result-list :page="page"
-                                @onDetails="onDetails"
                                 @onSearch="onSearch"
-                                @onAdvancedSearch="onAdvancedSearch"/>
+                                @onAdvancedSearch="onAdvancedSearch">
+        <template slot="operations" slot-scope="props">
+          <el-button type="text" icon="el-icon-edit"
+                     @click="onDetails(props.item)">
+            明细
+          </el-button>
+          <el-button v-if="isFactory()" type="text" icon="el-icon-edit"
+                     @click="onCreatePurchaseOrder(props.item)">
+            生成生产订单
+          </el-button>
+          <el-button v-if="isFactory()" type="text" icon="el-icon-edit"
+                     @click="onCreateProofing(props.item)">
+            生成打样单
+          </el-button>
+        </template>
+      </quote-search-result-list>
     </el-card>
   </div>
 </template>
@@ -18,6 +32,8 @@
   import QuoteToolbar from './toolbar/QuoteToolbar';
   import QuoteSearchResultList from './list/QuoteSearchResultList';
   import QuoteDetailsPage from "./details/QuoteDetailsPage";
+  import PurchaseOrderDetailsPage from "../purchase/details/PurchaseOrderDetailsPage";
+  import ProofingDetailsPage from "../proofing/details/ProofingDetailsPage";
 
   export default {
     name: 'QuotePage',
@@ -59,12 +75,28 @@
 
         this.fn.openSlider('报价单明细，单号：' + item.code, QuoteDetailsPage, result);
       },
+      onCreatePurchaseOrder(item) {
+        let formData = {};
+        Object.assign(formData, this.purchaseOrderFormData);
+        formData.quoteRef = item.code;
+
+        this.fn.openSlider('创建生产订单，报价单号：' + item.code, PurchaseOrderDetailsPage, formData);
+      },
+      onCreateProofing(item) {
+        let formData = {};
+        Object.assign(formData, this.proofingFormData);
+        formData.quoteRef = item.code;
+
+        this.fn.openSlider('创建打样订单，报价单号：' + item.code, ProofingDetailsPage, formData);
+      }
     },
     data() {
       return {
         keyword: this.$store.state.QuotesModule.keyword,
         formData: this.$store.state.QuotesModule.formData,
         queryFormData: this.$store.state.QuotesModule.queryFormData,
+        purchaseOrderFormData: this.$store.state.PurchaseOrdersModule.formData,
+        proofingFormData: this.$store.state.ProofingsModule.formData,
         isAdvancedSearch: this.$store.state.QuotesModule.isAdvancedSearch,
       };
     },

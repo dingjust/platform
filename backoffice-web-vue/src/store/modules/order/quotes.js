@@ -12,13 +12,15 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
+  queryFormData: {},
 };
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
 };
 
 const actions = {
@@ -54,7 +56,8 @@ const getters = {
   keyword: state => state.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  queryFormData: state => state.queryFormData,
 };
 
 export default {

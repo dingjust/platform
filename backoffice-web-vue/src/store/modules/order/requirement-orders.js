@@ -52,6 +52,8 @@ const state = {
     createdDateTo: null,
   },
   quoteFormData: {
+    id: null,
+    code: '',
     requirementOrder: null,
     unitPriceOfFabric: 0,
     unitPriceOfExcipients: 0,
@@ -59,7 +61,8 @@ const state = {
     costOfOther: 0,
     costOfSamples: 0,
     expectedDeliveryDate: null,
-    remarks: null
+    remarks: null,
+    attachments: [],
   }
 };
 
