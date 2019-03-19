@@ -11,7 +11,7 @@ export default {
     },
     {
       name: '仪表盘',
-      url: '/backoffice/dashboard',
+      url: '/dashboard',
       icon: 'icon-speedometer'
     },
     {
@@ -82,29 +82,28 @@ export default {
     },
     {
       name: '订单管理',
-      url: '/backoffice/order',
       icon: 'icon-puzzle',
       children: [
-        /*{
-          name: '销售订单',
-          url: '/backoffice/order/order',
-          icon: 'iconNone'
-        },*/
         {
           name: '需求订单',
-          url: '/backoffice/order/requirement',
+          url: '/order/requirement',
           icon: 'iconNone'
         },
         {
           name: '报价单',
-          url: '/backoffice/order/quote',
+          url: '/order/quote',
           icon: 'iconNone'
         },
         {
           name: '生产订单',
-          url: '/backoffice/order/consignment',
+          url: '/order/purchase',
           icon: 'iconNone'
-        }
+        },
+        {
+          name: '打样订单',
+          url: '/order/proofing',
+          icon: 'iconNone'
+        },
       ]
     },
     {

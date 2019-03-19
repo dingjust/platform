@@ -2,18 +2,16 @@ import http from '@/common/js/http';
 
 const state = {
   statusOptions: [
-    {text: '待分配', value: 'WAIT_FOR_ALLOCATION'},
-    {text: '备料中', value: 'WAIT_FOR_PURCHASE'},
-    {text: '待裁剪', value: 'PENDING_CUTTING'},
-    {text: '裁剪中', value: 'CUTTING'},
-    {text: '车缝中', value: 'STITCHING'},
-    {text: '待验货', value: 'QC'},
-    {text: '待发货', value: 'PENDING_DELIVERY'},
-    {text: '已发货', value: 'DELIVERING'},
-    {text: '已完成', value: 'DELIVERY_COMPLETED'}
+    {text: '待付款', value: 'PENDING_PAYMENT'},
+    {text: '生产中', value: 'IN_PRODUCTION'},
+    {text: '待出库', value: 'WAIT_FOR_OUT_OF_STORE'},
+    {text: '已出库', value: 'OUT_OF_STORE'},
+    {text: '已完成', value: 'COMPLETED'},
+    {text: '已取消', value: 'CANCELLED'}
   ],
   keyword: '',
   statuses: [],
+  isAdvancedSearch: false,
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -26,21 +24,29 @@ const state = {
   formData: {
     id: null,
     code: '',
-    order: {
-      id: '',
-      code: '',
-      entries: []
-    },
-    assignedTo: {
+    belongTo: {
       uid: '',
       name: ''
     },
+    salesApplication: 'BELOW_THE_LINE',
+    companyOfSeller: '',
+    contactPersonOfSeller: '',
+    contactOfSeller: '',
+    expectedDeliveryDate: null,
+    deposit: 0,
+    depositPaid: false,
+    depositPaidDate: null,
+    balance: 0,
+    balancePaid: false,
+    balancePaidDate: null,
+    machiningType: null,
+    invoiceNeeded: false,
+    uniqueCode: '',
+    requirementOrderCode: '',
+    entries: [],
+    remarks: '',
     deliveryAddress: {
       fullname: '',
-      title: {
-        code: '',
-        name: ''
-      },
       region: {
         isocode: '',
         name: ''
@@ -53,18 +59,14 @@ const state = {
         code: '',
         name: ''
       },
-      line1: '',
-      remarks: ''
-    },
-    consignmentEntries: [],
-    namedDeliveryDate: null
+      line1: ''
+    }
   },
   queryFormData: {
     productionOrderCode: '',
     requirementOrderCode: '',
     skuID: '',
     statuses: [],
-    factory: [],
     expectedDeliveryDateFrom: null,
     expectedDeliveryDateTo: null,
     createdDateFrom: null,
@@ -77,20 +79,27 @@ const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
+  statuses: (state, statuses) => state.statuses = statuses,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
 };
 
 const actions = {
   async search({dispatch, commit, state}, {keyword, statuses, page, size}) {
     commit('keyword', keyword);
-    commit('currentPageNumber', page);
+    commit('statuses', statuses);
+    if (page) {
+      commit('currentPageNumber', page);
+    }
+
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/orders/purchase/all', {
-      code: state.keyword
+    const response = await http.post('/b2b/orders/purchase', {
+      skuID: state.keyword,
+      statuses: state.statuses
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -108,7 +117,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/orders/purchase/all', query, {
+    const response = await http.post('/b2b/orders/purchase', query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -120,15 +129,18 @@ const actions = {
   },
   refresh({dispatch, commit, state}) {
     const keyword = state.keyword;
+    const statuses = state.statuses;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {keyword, statuses, page: currentPageNumber, size: currentPageSize});
   }
 };
 
 const getters = {
   keyword: state => state.keyword,
+  statuses: state => state.statuses,
+  isAdvancedSearch: state => state.isAdvancedSearch,
   statusOptions: state => state.statusOptions,
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,

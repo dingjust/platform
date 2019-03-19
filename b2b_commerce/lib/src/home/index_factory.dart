@@ -1,14 +1,10 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
-import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
-import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
+import 'package:services/services.dart';
 
 /// 网站主页
 class HomePage extends StatefulWidget {
@@ -248,9 +244,15 @@ class RequirementPool extends StatelessWidget {
             initialData: 0,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RequirementPoolAllPage()));
+                onTap: () async {
+                  await ProductRepositoryImpl()
+                      .majorCategories()
+                      .then((categories) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RequirementPoolAllPage(
+                              categories: categories,
+                            )));
+                  });
                 },
                 child: Container(
                   height: 50,

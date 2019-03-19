@@ -10,11 +10,6 @@ export default {
       }
     },
     {
-      name: '仪表盘',
-      url: '/brand/dashboard',
-      icon: 'icon-speedometer'
-    },
-    {
       name: '产品管理',
       url: '/brand/product',
       icon: 'icon-puzzle',
@@ -22,7 +17,7 @@ export default {
         {
           name: '产品',
           icon: 'fa fa-check',
-          children:[
+          children: [
             {
               name: '产品',
               url: '/brand/product/apparel',
@@ -44,32 +39,27 @@ export default {
     },
     {
       name: '订单管理',
-      url: '/brand/order',
+      url: '/order',
       icon: 'icon-puzzle',
       children: [
-        /*{
-          name: '销售订单',
-          url: '/brand/order/sales',
-          icon: 'iconNone'
-        },*/
         {
           name: '需求订单',
-          url: '/brand/order/requirement',
+          url: '/order/requirement',
           icon: 'iconNone'
         },
         {
           name: '报价单',
-          url: '/brand/order/quote',
-          icon: 'iconNone'
-        },
-        {
-          name: '生产订单',
-          url: '/brand/order/purchase',
+          url: '/order/quote',
           icon: 'iconNone'
         },
         {
           name: '打样单',
-          url: '/brand/order/proofing',
+          url: '/order/proofing',
+          icon: 'iconNone'
+        },
+        {
+          name: '生产订单',
+          url: '/order/purchase',
           icon: 'iconNone'
         }
       ]
@@ -121,7 +111,7 @@ export default {
           icon: 'iconNone'
         },
         {
-          name:'地址管理',
+          name: '地址管理',
           url: '/brand/system/address',
           icon: 'iconNone'
         }

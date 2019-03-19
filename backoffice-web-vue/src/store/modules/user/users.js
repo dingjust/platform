@@ -1,6 +1,7 @@
 import axios from 'axios';
 import http from '@/common/js/http';
 import router from '@/router';
+import {TENANT_APIS, NON_TENANT_APIS} from '@/common';
 
 const CLIENT_ID = 'asm';
 const CLIENT_SECRET = 'password';
@@ -95,6 +96,14 @@ const getters = {
   },
   token() {
     return 'Bearer ' + sessionStorage.getItem('token');
+  },
+  apis() {
+    // API根据用户角色不同而不同
+    if (getters.currentUser.type === 'TENANT') {
+      return TENANT_APIS;
+    }
+
+    return NON_TENANT_APIS;
   }
 };
 

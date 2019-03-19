@@ -16,9 +16,9 @@ const router = new Router({
       component: Full,
       children: [
         {
-          path: 'backoffice/dashboard',
+          path: 'dashboard',
           name: '仪表盘',
-          component: () => import(/* webpackChunkName: 'Dashboard' */ 'backoffice/Dashboard')
+          component: () => import(/* webpackChunkName: 'Dashboard' */ '@/views/Dashboard')
         },
         {
           path: 'backoffice/product',
@@ -90,8 +90,8 @@ const router = new Router({
           ]
         },
         {
-          path: 'backoffice/order',
-          redirect: '/backoffice/order/order',
+          path: 'order',
+          redirect: '/order/requirement',
           name: '订单管理',
           component: {
             render(c) {
@@ -100,25 +100,25 @@ const router = new Router({
           },
           children: [
             {
-              path: 'order',
-              name: '销售订单',
-              component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/order/OrderPage')
-            },
-            {
-              path: 'consignment',
-              name: '生产订单',
-              component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/consignment/ConsignmentPage')
-            },
-            {
               path: 'requirement',
               name: '需求订单',
-              component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/requirement/RequirementOrderPage')
+              component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/requirement/RequirementOrderPage')
             },
             {
               path: 'quote',
               name: '报价单',
-              component: () => import(/* webpackChunkName: 'tenant-orders' */ 'backoffice/order/quote/QuotePage')
-            }
+              component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/quote/QuotePage')
+            },
+            {
+              path: 'proofing',
+              name: '打样订单',
+              component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/proofing/ProofingPage')
+            },
+            {
+              path: 'purchase',
+              name: '生产订单',
+              component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/purchase/PurchaseOrderPage')
+            },
           ]
         },
         {
@@ -164,11 +164,6 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/carousel/CarouselPage')
             },
             {
-              path: 'hot-products',
-              name: '热销产品配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/product/HotProductsPage')
-            },
-            {
               path: 'industrial-cluster',
               name: '产业集群配置',
               component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/industrial-cluster/IndustrialClusterPage')
@@ -178,21 +173,11 @@ const router = new Router({
               name: '标签配置',
               component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/label/LabelPage')
             },
-            {
-              path: 'partners',
-              name: '优秀合作商配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/partner/PartnersPage')
-            },
-            {
-              path: 'collections',
-              name: '商家轮播图配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/collections/CollectionsPage')
-            }
           ]
         },
         {
           path: 'backoffice/report',
-          redirect: '/backoffice/report/sales-orders',
+          redirect: '/backoffice/report/production-progress',
           name: '报表管理',
           component: {
             render(c) {
@@ -206,11 +191,6 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-reports' */ 'backoffice/report/productprogress/ProductionProgressPage')
             }
           ]
-        },
-        {
-          path: 'brand/dashboard',
-          name: '仪表盘',
-          component: () => import(/* webpackChunkName: 'Dashboard' */ 'brand/Dashboard')
         },
         {
           path: 'brand/product',
@@ -232,43 +212,6 @@ const router = new Router({
               name: '已删除产品',
               component: () => import(/* webpackChunkName: 'brand-products' */ 'brand/product/apparel/ApparelProductDeletedPage'),
             }
-          ]
-        },
-        {
-          path: 'brand/order',
-          redirect: '/brand/order/order',
-          name: '订单管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            /*{
-              path: 'sales',
-              name: '销售订单',
-              component: () => import(/!* webpackChunkName: 'brand-orders' *!/ 'brand/order/sales/SalesOrderPage'),
-            },*/
-            {
-              path: 'requirement',
-              name: '需求订单',
-              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/requirement/RequirementOrderPage'),
-            },
-            {
-              path: 'quote',
-              name: '报价单',
-              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/quote/QuotePage'),
-            },
-            {
-              path: 'purchase',
-              name: '生产订单',
-              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/purchase/PurchaseOrderPage'),
-            },
-            {
-              path: 'proofing',
-              name: '打样单',
-              component: () => import(/* webpackChunkName: 'brand-orders' */ 'brand/order/proofing/ProofingPage'),
-            },
           ]
         },
         {
@@ -336,12 +279,6 @@ const router = new Router({
           ]
         },
         {
-          path: 'factory/dashboard',
-          name: '仪表盘',
-          /*component: () => import(/!* webpackChunkName: 'Dashboard' *!/ 'factory/Dashboard')*/
-          component: () => import(/* webpackChunkName: 'Dashboard' */ 'factory/order/requirement/RequirementOrderPage')
-        },
-        {
           path: 'factory/product',
           redirect: '/factory/product/apparel',
           name: '产品管理',
@@ -371,33 +308,6 @@ const router = new Router({
               name: '库存',
               component: () => import(/* webpackChunkName: 'factory-products' */ 'factory/product/inventory/InventoryPage'),
             }
-          ]
-        },
-        {
-          path: 'factory/order',
-          redirect: '/factory/order/consignment',
-          name: '订单管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: 'quote',
-              name: '报价单',
-              component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/quote/QuotePage'),
-            },
-            {
-              path: 'purchase',
-              name: '生产订单',
-              component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/purchase/PurchaseOrderPage'),
-            },
-            {
-              path: 'proofing',
-              name: '打样单',
-              component: () => import(/* webpackChunkName: 'factory-orders' */ 'factory/order/proofing/ProofingPage'),
-            },
           ]
         },
         {
