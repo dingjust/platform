@@ -89,7 +89,7 @@ export default {
     },
     {
       name: '其他',
-      url: '/factory/other',
+      url: 'miscs',
       icon: 'icon-puzzle',
       children: [
         {
@@ -98,12 +98,12 @@ export default {
           children: [
             {
               name: '样衣',
-              url: '/factory/other/sample/sampleProduct',
+              url: '/miscs/sample/sampleProduct',
               icon: 'iconNone',
             },
             {
               name: '样衣借还记录',
-              url: '/factory/other/sample/sampleCheckoutHist',
+              url: '/miscs/sample/sampleCheckoutHist',
               icon: 'iconNone',
             }
           ]
