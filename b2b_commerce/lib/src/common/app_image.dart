@@ -155,6 +155,34 @@ class MenuItemImage {
     width: _width,
     height: _height,
   );
+
+  static Image partner_factory = Image.asset(
+    'temp/business/partner_manage_factory.png',
+    package: _package,
+    width: _width,
+    height: _height,
+  );
+
+  static Image product_factory = Image.asset(
+    'temp/business/product_manage_factory.png',
+    package: _package,
+    width: _width,
+    height: _height,
+  );
+
+  static Image production_factory = Image.asset(
+    'temp/business/production_order_factory.png',
+    package: _package,
+    width: _width,
+    height: _height,
+  );
+
+  static Image quote_factory = Image.asset(
+    'temp/business/quote_manage_factory.png',
+    package: _package,
+    width: _width,
+    height: _height,
+  );
 }
 
 class B2BImage {
