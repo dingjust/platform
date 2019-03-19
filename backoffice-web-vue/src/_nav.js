@@ -25,13 +25,8 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '产品',
+          name: '服装产品',
           url: '/product/apparel',
-          icon: 'iconNone'
-        },
-        {
-          name: '面辅料',
-          url: '/backoffice/product/fabric',
           icon: 'iconNone'
         },
         {
@@ -61,23 +56,6 @@ export default {
           url: '/backoffice/customer/factory',
           icon: 'iconNone'
         },
-        {
-          name: '待审核',
-          url: '/backoffice/customer/audit',
-          icon: 'fa fa-check',
-          children: [
-            {
-              name: '待审核品牌商',
-              url: '/backoffice/customer/audit/brand',
-              icon: 'iconNone'
-            },
-            {
-              name: '待审核工厂',
-              url: '/backoffice/customer/audit/factory',
-              icon: 'iconNone'
-            }
-          ]
-        }
       ]
     },
     {
@@ -128,18 +106,13 @@ export default {
         }
       ]
     }, {
-      name: '系统配置管理',
+      name: '系统管理',
       url: '/backoffice/system/carousel',
       icon: 'icon-puzzle',
       children: [
         {
           name: '轮播图配置',
           url: '/backoffice/system/carousel',
-          icon: 'iconNone'
-        },
-        {
-          name: '热销产品配置',
-          url: '/backoffice/system/hot-products',
           icon: 'iconNone'
         },
         {
@@ -152,18 +125,9 @@ export default {
           url: '/backoffice/system/label',
           icon: 'iconNone'
         },
-        {
-          name: '优秀合作商配置',
-          url: '/backoffice/system/partners',
-          icon: 'iconNone'
-        },
-        {
-          name: '商家轮播图配置',
-          url: '/backoffice/system/collections',
-          icon: 'iconNone'
-        },
       ]
-    }, {
+    },
+    {
       name: '报表管理',
       url: '/backoffice/report',
       icon: 'icon-puzzle',

@@ -20,7 +20,7 @@ export default {
       icon: 'icon-puzzle',
       children: [
         {
-          name: '产品',
+          name: '服装产品',
           url: '/product/apparel',
           icon: 'iconNone',
         }
@@ -82,26 +82,22 @@ export default {
           name: '角色',
           url: '/brand/account/role',
           icon: 'iconNone'
-        },
-        {
-          name: '我的关注',
-          url: '/brand/account/follower',
-          icon: 'iconNone'
         }
       ]
-    }, {
+    },
+    {
       name: '系统管理',
-      url: '/brand/system/zone',
+      url: '/system/zone',
       icon: 'icon-puzzle',
       children: [
         {
           name: '运费模板',
-          url: '/brand/system/zone',
+          url: '/system/zone',
           icon: 'iconNone'
         },
         {
           name: '地址管理',
-          url: '/brand/system/address',
+          url: '/system/address',
           icon: 'iconNone'
         }
       ]

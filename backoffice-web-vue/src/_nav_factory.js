@@ -20,14 +20,9 @@ export default {
       icon: 'icon-puzzle',
       children: [
         {
-          name: '服装',
+          name: '服装产品',
           url: '/product/apparel',
           icon: 'iconNone',
-        },
-        {
-          name: '面辅料',
-          url: '/factory/product/fabric',
-          icon: 'iconNone'
         }
       ]
     },
@@ -76,6 +71,18 @@ export default {
         {
           name: '角色',
           url: '/factory/account/role',
+          icon: 'iconNone'
+        },
+      ]
+    },
+    {
+      name: '系统管理',
+      url: '/system',
+      icon: 'icon-puzzle',
+      children: [
+        {
+          name: '地址管理',
+          url: '/system/address',
           icon: 'iconNone'
         }
       ]

@@ -50,11 +50,6 @@ const router = new Router({
               path: 'apparel',
               name: '产品',
               component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/ApparelProductPage')
-            },
-            {
-              path: 'fabric',
-              name: '面辅料',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/fabric/FabricProductPage')
             }
           ]
         },
@@ -78,16 +73,6 @@ const router = new Router({
               name: '工厂',
               component: () => import(/* webpackChunkName: 'tenant-customers' */ 'backoffice/customer/factory/FactoryPage')
             },
-            {
-              path: 'audit/brand',
-              name: '待审核品牌商',
-              component: () => import(/* webpackChunkName: 'tenant-customers' */ 'backoffice/account/audit/BrandAuditPage')
-            },
-            {
-              path: 'audit/factory',
-              name: '待审核工厂',
-              component: () => import(/* webpackChunkName: 'tenant-customers' */ 'backoffice/account/audit/FactoryAuditPage')
-            }
           ]
         },
         {
@@ -227,11 +212,6 @@ const router = new Router({
               path: 'role',
               name: '角色',
               component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/role/RolePage'),
-            },
-            {
-              path: 'follower',
-              name: '我的关注',
-              component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/follower/MyFollowersPage'),
             }
           ]
         },
@@ -254,23 +234,6 @@ const router = new Router({
               path: 'address',
               name: '地址管理',
               component: () => import(/* webpackChunkName: 'brand-systems' */ 'brand/system/address/AddressPage'),
-            }
-          ]
-        },
-        {
-          path: '/factory/product',
-          redirect: '/factory/product/fabric',
-          name: '产品管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: 'fabric',
-              name: '面辅料',
-              component: () => import(/* webpackChunkName: 'factory-products' */ 'factory/product/fabric/FabricProductPage'),
             }
           ]
         },
