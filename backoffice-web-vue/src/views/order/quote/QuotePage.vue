@@ -13,7 +13,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandQuotesModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('QuotesModule');
 
   import QuoteToolbar from './toolbar/QuoteToolbar';
   import QuoteSearchResultList from './list/QuoteSearchResultList';
@@ -58,10 +58,10 @@
     },
     data() {
       return {
-        keyword: this.$store.state.BrandQuotesModule.keyword,
-        formData: this.$store.state.BrandQuotesModule.formData,
-        queryFormData: this.$store.state.BrandQuotesModule.queryFormData,
-        isAdvancedSearch: this.$store.state.BrandQuotesModule.isAdvancedSearch,
+        keyword: this.$store.state.QuotesModule.keyword,
+        formData: this.$store.state.QuotesModule.formData,
+        queryFormData: this.$store.state.QuotesModule.queryFormData,
+        isAdvancedSearch: this.$store.state.QuotesModule.isAdvancedSearch,
       };
     },
     created() {

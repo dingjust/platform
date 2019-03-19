@@ -22,9 +22,9 @@ import {
   FabricProductsModule,
   ApparelProductsModule,
   RequirementOrdersModule,
-  SalesOrdersModule,
   PurchaseOrdersModule,
-  QuotesModule
+  QuotesModule,
+  ProofingsModule
 } from './modules';
 
 import {
@@ -34,11 +34,6 @@ import {
   BrandMemberRequestsModule,
   BrandOrgsModule,
   BrandRolesModule,
-  BrandRequirementOrdersModule,
-  BrandSalesOrdersModule,
-  BrandPurchaseOrdersModule,
-  BrandProofingsModule,
-  BrandQuotesModule,
   BrandApparelProductsModule,
   BrandDeletedApparelProductsModule,
   BrandApparelProductStocksModule,
@@ -50,9 +45,6 @@ import {
   FactoryRolesModule,
   FactoryFabricProductsModule,
   FactoryFabricProductStocksModule,
-  FactoryRequirementOrdersModule,
-  FactoryPurchaseOrdersModule,
-  FactoryQuotesModule,
 } from './factory/modules';
 
 // 状态管理
@@ -99,9 +91,9 @@ export default new Vuex.Store({
     FabricProductsModule,
     ApparelProductsModule,
     RequirementOrdersModule,
-    SalesOrdersModule,
-    ProductionOrdersModule: PurchaseOrdersModule,
+    PurchaseOrdersModule,
     QuotesModule,
+    ProofingsModule,
     // brand
     BrandEmployeesModule,
     BrandFollowersModule,
@@ -109,11 +101,6 @@ export default new Vuex.Store({
     BrandMemberRequestsModule,
     BrandOrgsModule,
     BrandRolesModule,
-    BrandRequirementOrdersModule,
-    BrandSalesOrdersModule,
-    BrandPurchaseOrdersModule,
-    BrandProofingsModule,
-    BrandQuotesModule,
     BrandApparelProductsModule,
     BrandDeletedApparelProductsModule,
     BrandApparelProductStocksModule,
@@ -123,9 +110,6 @@ export default new Vuex.Store({
     FactoryRolesModule,
     FactoryFabricProductsModule,
     FactoryFabricProductStocksModule,
-    FactoryRequirementOrdersModule,
-    FactoryProductionOrdersModule: FactoryPurchaseOrdersModule,
-    FactoryQuotesModule,
   },
   state,
   getters,

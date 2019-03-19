@@ -11,7 +11,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapActions} = createNamespacedHelpers('BrandPurchaseOrdersModule');
+  const {mapActions} = createNamespacedHelpers('PurchaseOrdersModule');
 
   import PurchaseOrderFormToolbar from "../toolbar/PurchaseOrderFormToolbar";
   import PurchaseOrderForm from '../form/PurchaseOrderForm';

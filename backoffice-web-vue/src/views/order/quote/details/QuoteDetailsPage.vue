@@ -11,7 +11,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapActions} = createNamespacedHelpers('BrandQuotesModule');
+  const {mapActions} = createNamespacedHelpers('QuotesModule');
 
   import QuoteFormToolbar from "../toolbar/QuoteFormToolbar";
   import QuoteForm from '../form/QuoteForm';

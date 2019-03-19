@@ -35,10 +35,10 @@
     },
     data() {
       return {
-        keyword: this.$store.state.BrandPurchaseOrdersModule.keyword,
-        formData: this.$store.state.BrandPurchaseOrdersModule.formData,
-        queryFormData: this.$store.state.BrandPurchaseOrdersModule.queryFormData,
-        statusOptions: this.$store.state.BrandPurchaseOrdersModule.statusOptions,
+        keyword: this.$store.state.PurchaseOrdersModule.keyword,
+        formData: this.$store.state.PurchaseOrdersModule.formData,
+        queryFormData: this.$store.state.PurchaseOrdersModule.queryFormData,
+        statusOptions: this.$store.state.PurchaseOrdersModule.statusOptions,
       }
     }
   }

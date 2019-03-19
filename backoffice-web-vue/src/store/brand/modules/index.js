@@ -4,11 +4,6 @@ import BrandMembersModule from './user/members';
 import BrandMemberRequestsModule from './user/member-requests';
 import BrandOrgsModule from './user/orgs';
 import BrandRolesModule from './user/roles';
-import BrandRequirementOrdersModule from './order/requirement-orders';
-import BrandSalesOrdersModule from './order/sales-orders';
-import BrandPurchaseOrdersModule from './order/purchase-orders';
-import BrandProofingsModule from './order/proofings';
-import BrandQuotesModule from './order/quotes';
 import BrandApparelProductsModule from './product/apparel-products';
 import BrandDeletedApparelProductsModule from './product/deleted-apparel-products';
 import BrandApparelProductStocksModule from './product/apparel-product-stocks';
@@ -20,11 +15,6 @@ export {
   BrandMemberRequestsModule,
   BrandOrgsModule,
   BrandRolesModule,
-  BrandRequirementOrdersModule,
-  BrandSalesOrdersModule,
-  BrandPurchaseOrdersModule,
-  BrandProofingsModule,
-  BrandQuotesModule,
   BrandApparelProductsModule,
   BrandDeletedApparelProductsModule,
   BrandApparelProductStocksModule,

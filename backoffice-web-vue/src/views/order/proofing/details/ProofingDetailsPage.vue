@@ -11,7 +11,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapActions} = createNamespacedHelpers('BrandProofingsModule');
+  const {mapActions} = createNamespacedHelpers('ProofingsModule');
 
   import ProofingFormToolbar from "../toolbar/ProofingFormToolbar";
   import ProofingForm from '../form/ProofingForm';

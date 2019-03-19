@@ -69,7 +69,7 @@
     },
     data() {
       return {
-        isAdvancedSearch: this.$store.state.BrandQuotesModule.isAdvancedSearch,
+        isAdvancedSearch: this.$store.state.QuotesModule.isAdvancedSearch,
       }
     }
   }

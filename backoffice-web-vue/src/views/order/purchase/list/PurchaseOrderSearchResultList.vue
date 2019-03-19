@@ -81,8 +81,8 @@
     },
     data() {
       return {
-        statuses: this.$store.state.BrandPurchaseOrdersModule.statuses,
-        isAdvancedSearch: this.$store.state.BrandPurchaseOrdersModule.isAdvancedSearch,
+        statuses: this.$store.state.PurchaseOrdersModule.statuses,
+        isAdvancedSearch: this.$store.state.PurchaseOrdersModule.isAdvancedSearch,
       }
     }
   }

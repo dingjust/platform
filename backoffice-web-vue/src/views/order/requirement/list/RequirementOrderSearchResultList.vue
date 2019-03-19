@@ -83,8 +83,8 @@
     },
     data() {
       return {
-        statuses: this.$store.state.BrandRequirementOrdersModule.statuses,
-        isAdvancedSearch: this.$store.state.BrandRequirementOrdersModule.isAdvancedSearch,
+        statuses: this.$store.state.RequirementOrdersModule.statuses,
+        isAdvancedSearch: this.$store.state.RequirementOrdersModule.isAdvancedSearch,
       }
     }
   }

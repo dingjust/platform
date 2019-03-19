@@ -89,6 +89,10 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters} = createNamespacedHelpers('RequirementOrdersModule');
+
   export default {
     name: 'RequirementOrderToolbar',
     components: {},
@@ -115,10 +119,10 @@
     },
     data() {
       return {
-        keyword: this.$store.state.BrandRequirementOrdersModule.keyword,
-        formData: this.$store.state.BrandRequirementOrdersModule.formData,
-        queryFormData: this.$store.state.BrandRequirementOrdersModule.queryFormData,
-        statusOptions: this.$store.state.BrandRequirementOrdersModule.statusOptions,
+        keyword: this.$store.state.RequirementOrdersModule.keyword,
+        formData: this.$store.state.RequirementOrdersModule.formData,
+        queryFormData: this.$store.state.RequirementOrdersModule.queryFormData,
+        statusOptions: this.$store.state.RequirementOrdersModule.statusOptions,
       }
     }
   }

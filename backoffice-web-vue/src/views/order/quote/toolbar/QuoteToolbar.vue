@@ -30,10 +30,10 @@
     },
     data() {
       return {
-        keyword: this.$store.state.BrandQuotesModule.keyword,
-        formData: this.$store.state.BrandQuotesModule.formData,
-        queryFormData: this.$store.state.BrandQuotesModule.queryFormData,
-        statusOptions: this.$store.state.BrandQuotesModule.statusOptions,
+        keyword: this.$store.state.QuotesModule.keyword,
+        formData: this.$store.state.QuotesModule.formData,
+        queryFormData: this.$store.state.QuotesModule.queryFormData,
+        statusOptions: this.$store.state.QuotesModule.statusOptions,
       }
     }
   }

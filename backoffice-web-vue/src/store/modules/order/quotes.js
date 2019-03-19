@@ -29,7 +29,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/orders/quote/all', {
+    const response = await http.post('/b2b/orders/quote', {
       code: state.keyword,
       requirementOrderRef: state.keyword
     }, {

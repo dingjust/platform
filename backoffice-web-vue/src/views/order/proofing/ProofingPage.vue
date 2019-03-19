@@ -10,7 +10,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandProofingsModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('ProofingsModule');
 
   import ProofingToolbar from './toolbar/ProofingToolbar';
   import ProofingSearchResultList from './list/ProofingSearchResultList';

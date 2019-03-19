@@ -30,8 +30,8 @@
     },
     data() {
       return {
-        keyword: this.$store.state.BrandProofingsModule.keyword,
-        formData: this.$store.state.BrandProofingsModule.formData,
+        keyword: this.$store.state.ProofingsModule.keyword,
+        formData: this.$store.state.ProofingsModule.formData,
       }
     }
   }

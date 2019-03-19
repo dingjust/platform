@@ -16,7 +16,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandRequirementOrdersModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
 
   import RequirementOrderToolbar from "./toolbar/RequirementOrderToolbar";
   import RequirementOrderSearchResultList from './list/RequirementOrderSearchResultList';
@@ -71,10 +71,10 @@
     },
     data() {
       return {
-        keyword: this.$store.state.BrandRequirementOrdersModule.keyword,
-        formData: this.$store.state.BrandRequirementOrdersModule.formData,
-        queryFormData: this.$store.state.BrandRequirementOrdersModule.queryFormData,
-        isAdvancedSearch: this.$store.state.BrandRequirementOrdersModule.isAdvancedSearch,
+        keyword: this.$store.state.RequirementOrdersModule.keyword,
+        formData: this.$store.state.RequirementOrdersModule.formData,
+        queryFormData: this.$store.state.RequirementOrdersModule.queryFormData,
+        isAdvancedSearch: this.$store.state.RequirementOrdersModule.isAdvancedSearch,
       };
     },
     created() {
