@@ -72,7 +72,7 @@ let TENANT_APIS = {
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
-let NON_TENANT_APIS = {
+let NONE_TENANT_APIS = {
   getApparelProducts() {
     return '/b2b/products/apparel';
   },
@@ -89,9 +89,9 @@ let NON_TENANT_APIS = {
     return '/b2b/orders/purchase';
   },
 };
-Object.assign(NON_TENANT_APIS, COMMON_APIS);
+Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
 export {
   TENANT_APIS,
-  NON_TENANT_APIS
+  NONE_TENANT_APIS
 }
