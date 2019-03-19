@@ -21,6 +21,9 @@ class PurchaseOrdersPage extends StatefulWidget {
 }
 
 class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
+  String showText;
+  String statusColor;
+
   @override
   Widget build(BuildContext context) {
     return BLoCProvider<PurchaseOrderBLoC>(
@@ -65,6 +68,12 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
           floatingActionButton: ToTopBtn(),
         ));
   }
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
 }
 
 class PurchaseOrderList extends StatelessWidget {
@@ -73,6 +82,7 @@ class PurchaseOrderList extends StatelessWidget {
   final EnumModel status;
 
   ScrollController _scrollController = new ScrollController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +199,14 @@ class PurchaseOrderItem extends StatelessWidget {
 
   final PurchaseOrderModel order;
 
+  static Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
+    PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
+    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
+    PurchaseOrderStatus.OUT_OF_STORE: Colors.yellow,
+    PurchaseOrderStatus.IN_PRODUCTION: Colors.yellow,
+    PurchaseOrderStatus.COMPLETED: Colors.green,
+    PurchaseOrderStatus.CANCELLED: Colors.grey,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +218,8 @@ class PurchaseOrderItem extends StatelessWidget {
           children: <Widget>[
             _buildOrderHeader(context),
             _buildContent(context),
+            order.balancePaid == false|| order.depositPaid == false?
+            _buildPaymentButton(context):
             _buildOrderBottom(context),
           ],
         ),
@@ -208,46 +228,114 @@ class PurchaseOrderItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
       ),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PurchaseOrderDetailPage(order: order),
-          ),
-        );
+      onTap: () async {
+        //根据code查询明
+        PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+
+        if (model != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PurchaseOrderDetailPage(
+                order: model,
+              ))
+          );
+        }
       },
     );
   }
 
   Widget _buildOrderHeader(BuildContext context) {
     return Container(
-        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
         child: Column(
           children: <Widget>[
             Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Expanded(
-                    child: Text(
-                      '生产订单号：${order.code == null ? '' : order.code}',
+                order.balancePaid == false || order.depositPaid == false ?
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      '￥',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        fontSize: 16,
+                          fontSize: 10,
+                          color: Colors.red,
+                        fontWeight: FontWeight.w500,
                       ),
-                    )),
+                    ),
+                    Text(
+                      '${order.balancePaid == false ? order.deposit : order.balance}',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.red,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )
+                  ],
+                ):
+                Container(
+                  child: Text(
+                    '已延期',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.red,
+                      fontWeight: FontWeight.w500,
+                    )
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: order.status == null ? Container() :
+                    Text(
+                      order.status == PurchaseOrderStatus.PENDING_PAYMENT ||
+                          order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ?
+                      '${order.balancePaid == false
+                          ? '（待付尾款）'
+                          : '（待付定金）'}':'${PurchaseOrderStatusLocalizedMap[order.status]}',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.red,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                ),
                 order.status == null ? Container() :
                 Text(
-                  PurchaseOrderStatusLocalizedMap[order.status],
+                  '${PurchaseOrderStatusLocalizedMap[order.status]}',
                   textAlign: TextAlign.end,
                   style: TextStyle(
-                      fontSize: 18, color: Color.fromRGBO(255, 214, 12, 1)),
-                )
+                      fontSize: 18,
+                      color:  _statusColors[order.status],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ),
             Row(
               children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Text(
+                      '${order.belongTo == null ? order.companyOfSeller : order
+                          .belongTo.name}',
+                      style: TextStyle(
+                          fontSize: 16
+                      ),
+                    ),
+                  ),
+                ),
                 Text(
-                  '创建时间：${order.creationTime == null ? '' : DateFormatUtil.formatYMD(order.creationTime)}',
-                  style: TextStyle(fontSize: 14),
+                  '订单创建时间：${order.creationTime == null ? '' : DateFormatUtil
+                      .formatYMD(order.creationTime)}',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(fontSize: 16),
                 )
               ],
             )
@@ -257,7 +345,7 @@ class PurchaseOrderItem extends StatelessWidget {
 
   Widget _buildContent(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.fromLTRB(10,0,10,0),
         child: Row(
           children: <Widget>[
             Container(
@@ -271,7 +359,7 @@ class PurchaseOrderItem extends StatelessWidget {
                       'temp/picture.png',
                       package: "assets",
                     ):
-                    NetworkImage(order.entries[0].product.thumbnail.url),
+                    NetworkImage('${order.product.thumbnail.url}'),
                     fit: BoxFit.cover,
                   )),
             ),
@@ -288,7 +376,7 @@ class PurchaseOrderItem extends StatelessWidget {
                             child: order.entries.isEmpty|| order.entries == null || order.entries.length <= 0 || order.entries[0].product.name == null?
                             Container():
                             Text(
-                              order.entries[0].product.name,
+                              '${order.entries[0].product.name}',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             )),
@@ -326,21 +414,97 @@ class PurchaseOrderItem extends StatelessWidget {
   }
 
   Widget _buildOrderBottom(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            '共 ${order.totalQuantity == null ? ' ' : order
-                .totalQuantity} 件商品   合计： ￥ ${order.totalPrice == null
-                ? ' '
-                : order.totalPrice}',
-            style: TextStyle(fontSize: 16, color: Colors.red),
+    return order.status == PurchaseOrderStatus.OUT_OF_STORE?_buildLogisticsButton(context):Container();
+
+  }
+
+  Widget _buildPaymentButton(BuildContext context){
+    return Container(
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            padding: EdgeInsets.only(right: 30),
+            width: 150,
+            child: FlatButton(
+                color: Color(0xFFFFD600),
+                child: Text(
+                  '去支付',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(20))),
+                onPressed: () {}
+            ),
           ),
         )
-      ],
     );
   }
+
+
+  Widget _buildLogisticsButton(BuildContext context){
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(right: 10),
+            width: 150,
+            child: FlatButton(
+                color: Colors.white,
+                child: Text(
+                  '查看物流',
+                  style: TextStyle(
+                    color: Color(0xFF969696),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    side: BorderSide(
+                        color: Color(0xFF969696),
+                        style: BorderStyle.solid,
+                        width: 2)),
+                clipBehavior: Clip.antiAlias,
+                materialTapTargetSize: MaterialTapTargetSize.padded,
+                onPressed: () {}
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10),
+            width: 150,
+            child: FlatButton(
+                color: Colors.white,
+                child: Text(
+                  '确认收货',
+                  style: TextStyle(
+                    color: Color(0xFFFFD600),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.all(Radius.circular(20)),
+                  side: BorderSide(
+                      color: Color(0xFFFFD600),
+                      style: BorderStyle.solid,
+                      width: 2),
+                ),
+                onPressed: () {}
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }
 
 class ToTopBtn extends StatelessWidget {

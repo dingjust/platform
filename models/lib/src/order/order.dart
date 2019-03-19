@@ -634,6 +634,9 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 @JsonSerializable()
 class PurchaseOrderModel extends OrderModel {
 
+  @JsonKey(toJson: _productToJson)
+  ApparelProductModel product;
+
   @JsonKey(toJson: _brandToJson)
   BrandModel purchaser;
 
@@ -683,6 +686,14 @@ class PurchaseOrderModel extends OrderModel {
 
   //尾款
   double balance;
+
+  //预计支付定金日期
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime depositPaidDate;
+
+  //预计支付尾款日期
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime balancePaidDate;
 
   //卖方
   String companyOfSeller;
@@ -742,6 +753,9 @@ class PurchaseOrderModel extends OrderModel {
 
   static Map<String, dynamic> _brandToJson(BrandModel model) =>
       BrandModel.toJson(model);
+
+  static Map<String, dynamic> _productToJson(ApparelProductModel model) =>
+      ApparelProductModel.toJson(model);
 
   static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
       FactoryModel.toJson(model);

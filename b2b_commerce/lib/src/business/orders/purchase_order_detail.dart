@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
+import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -35,11 +36,6 @@ final List<OrderStatusModel> _statusList = [
     'sort': 5,
   }),
 ];
-
-final List<Widget> _list = new List();
-
-final String defaultPicUrl =
-    "https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg";
 
 class PurchaseOrderDetailPage extends StatefulWidget {
   final PurchaseOrderModel order;
@@ -94,6 +90,14 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           centerTitle: true,
           elevation: 0.5,
           title: Text('生产订单明细'),
+//          leading: IconButton(
+//              icon: Icon(Icons.keyboard_return,size: 20,),
+//              onPressed: () {
+//                Navigator.of(context).push(MaterialPageRoute(
+//                    builder: (context) => PurchaseOrdersPage())
+//                );
+//              }
+//          ),
           actions: <Widget>[
             order.salesApplication == null ? Container() : Container(
               padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -121,9 +125,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             _buildEntries(context),
             _buildProductEntry(context),
             _buildRemarks(context),
-//            order.status != PurchaseOrderStatus.PENDING_PAYMENT ?
-            _buildPurchaseProductionProgresse(context),
-//            : _buildTipsPayment(context)
+            order.status != PurchaseOrderStatus.PENDING_PAYMENT ?
+            _buildPurchaseProductionProgresse(context)
+            : _buildTipsPayment(context),
             order.belongTo == null ?
             Container():
             _buildFactoryInfo(context),
@@ -154,7 +158,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 image: DecorationImage(
-                  image: NetworkImage(order.entries[0].product.thumbnail.url),
+                  image: NetworkImage(order.product.thumbnail.url),
                   fit: BoxFit.cover,
                 )),
           )
@@ -798,7 +802,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //提示付款信息
   Widget _buildTipsPayment(BuildContext context){
-    return Container(
+    return order.balancePaid == false?Container(
       padding: EdgeInsets.only(left: 15),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Container(
@@ -815,7 +819,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
       ),
-    );
+    ):Container();
   }
 
   //Entry表格
@@ -851,7 +855,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       ),
                     ),
                     Text(
-                      '${order.unitPrice}',
+                      '${order.unitPrice == null? '' :order.unitPrice}',
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.red,
@@ -880,7 +884,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     ),
                   ),
                   Text(
-                    '${order.totalPrice}',
+                    '${order.totalPrice == null? '' : order.totalPrice}',
                     style: TextStyle(
                       fontSize: 22,
                       color: Colors.red,
@@ -935,7 +939,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       ),
                     ),
                     Text(
-                      '${order.deposit}',
+                      '${order.deposit == null? '' : order.deposit}',
                       style: TextStyle(
                         fontSize: 22,
                         color: Colors.red,
@@ -1419,7 +1423,7 @@ class PurchaseDocument extends StatelessWidget {
               )
             ],
           ),
-          order.attachments.isEmpty ?
+          order.attachments == null || order.attachments.isEmpty ?
           Container() :
           Attachments(
             list: order.attachments,

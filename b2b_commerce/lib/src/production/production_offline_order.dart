@@ -1,11 +1,14 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
+import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -53,7 +56,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   int _totalQuantity;
   ApparelProductModel productModel = new ApparelProductModel();
   List<ApparelSizeVariantProductModel> variants;
-  List<PurchaseOrderEntryModel> entryList = List();
+  EarnestMoney earnest = new EarnestMoney();
+  bool isSave = false;
+  PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
 
   @override
   void initState() {
@@ -441,7 +446,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             ),
           ).then((value) {
             setState(() {
-              earnestMoney = value;
+              earnest = value;
             });
           });
         });
@@ -618,6 +623,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               width: 150,
               child: Text(
                 remarks,
+                textAlign:TextAlign.end,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     fontSize: 16,
@@ -644,7 +650,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
 
   Widget _buildCommitButton(BuildContext context) {
-    PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
     return Container(
       child: Column(
         children: <Widget>[
@@ -666,25 +671,75 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   onPressed: () async {
 
-                    purchaseOrder.belongTo = factory;
+                    List<PurchaseOrderEntryModel> entries = new List();
+                    //联系人填写
+                    purchaseOrder.companyOfSeller = factory.name;
+                    purchaseOrder.contactPersonOfSeller = factory.contactPerson;
+                    purchaseOrder.contactOfSeller = factory.contactPhone;
+                    //收货地址
                     purchaseOrder.deliveryAddress = addressModel;
+                    //收货日期
                     purchaseOrder.expectedDeliveryDate = deliveryDate;
+                    //加工方式
                     purchaseOrder.machiningType = machiningType;
+                    //是否需要发票
                     purchaseOrder.invoiceNeeded = isInvoice;
+                    //生产总数
                     purchaseOrder.totalQuantity = _totalQuantity;
+                    //备注
                     purchaseOrder.remarks = remarks;
-                    for(int i = 0; i < _items.length; i++){
-//                      entryModel.product = productModel;
-//                      entryModel.quantity
+                    //添加订单行
+                    if(productModel != null && productModel.variants != null && productModel.variants.length > 0){
+                      for(int i = 0; i < productModel.variants.length; i++){
+                        PurchaseOrderEntryModel entryModel = new PurchaseOrderEntryModel();
+                        entryModel.product = productModel.variants[i];
+                        entryModel.product.thumbnail = productModel.thumbnail;
+                        entryModel.product.thumbnails = productModel.thumbnails;
+                        entryModel.product.images = productModel.images;
+                        _items.forEach((color, items) {
+                          items.forEach((item) {
+                            if(productModel.variants[i].color.code == color.code){
+                              entryModel.quantity = int.parse(item.quantityController.text == ''
+                                  ? '0'
+                                  : item.quantityController.text);
+                            }
+                          });
+                        });
+                        entries.add(entryModel);
+                      }
                     }
 
-                    entryModel.price = double.parse(price);
-                    entryList.add(entryModel);
-                    purchaseOrder.entries = entryList;
+                    //单价
+                    if(price != null){
+                      purchaseOrder.unitPrice = double.parse(price);
+                    }
+                    purchaseOrder.entries = entries;
 
-                    String code = await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
+                    if(earnest != null){
+                      //定金
+                      if(earnest.earnestMoney != null){
+                        purchaseOrder.deposit = double.parse(earnest.earnestMoney);
+                      }
+                      purchaseOrder.depositPaid = earnest.isEarnestPayment;
+                      purchaseOrder.depositPaidDate = earnest.estimatePaymentDate;
+                      //尾款
+                      if(earnest.tailMoney != null){
+                        purchaseOrder.balance = double.parse(earnest.tailMoney);
+                      }
+                      purchaseOrder.balancePaid = earnest.isTailPayment;
+                      purchaseOrder.balancePaidDate = earnest.tailPaymentDate;
+                    }
+                    purchaseOrder.salesApplication = SalesApplication.BELOW_THE_LINE;
 
-
+                    try{
+                      await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
+                      setState(() {
+                        isSave = true;
+                      });
+                    }catch(e){
+                      print(e);
+                    }
+                    _showSaveTips(context);
 
                   })
           ),
@@ -783,6 +838,42 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 )
               ],
             ));
+      },
+    );
+  }
+
+  //保存后是否成功提示
+  Future<void> _showSaveTips(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: SingleChildScrollView(
+            child: Text(
+              isSave == true? '创建线下单成功！':'创建线下单失败，请核对输入内容！',
+              style: TextStyle(
+                fontSize: 22,
+              ),
+            )
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                isSave == true?
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PurchaseOrderDetailPage(order: purchaseOrder)
+                  ),
+                ):null;
+              },
+            ),
+          ],
+        );
       },
     );
   }

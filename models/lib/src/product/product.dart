@@ -175,7 +175,7 @@ class ProductModel extends ItemModel {
   @JsonKey(toJson: _staircasePricesToJson)
   List<StaircasePriceModel> staircasePrices;
 
-  @JsonKey(name: 'supercategories')
+  @JsonKey(name: 'supercategories', toJson:_superCategory)
   CategoryModel superCategories;
 
   //库存
@@ -226,6 +226,9 @@ class ProductModel extends ItemModel {
 
   static Map<String, dynamic> companyToJson(CompanyModel model) =>
       CompanyModel.toJson(model);
+
+  static Map<String, dynamic> _superCategory(CategoryModel model) =>
+      CategoryModel.toJson(model);
 }
 
 /// 变式产品

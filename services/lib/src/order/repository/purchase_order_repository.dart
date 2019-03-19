@@ -21,4 +21,21 @@ class PurchaseOrderRepository {
       return null;
     }
   }
+
+    /// 获取订单明细
+    Future<PurchaseOrderModel> getPurchaseOrderDetail(String code) async {
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$.get(OrderApis.purchaseOrderDetail(code));
+      } on DioError catch (e) {
+        print(e);
+      }
+      if (response != null && response.statusCode == 200) {
+        PurchaseOrderModel model =
+        PurchaseOrderModel.fromJson(response.data);
+        return model;
+      } else
+        return null;
+    }
+
 }

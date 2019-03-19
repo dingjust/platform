@@ -10,6 +10,7 @@ import 'package:widgets/widgets.dart';
 class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
   List<String> history_keywords;
 
+
   ProductionSearchDelegate() {
     getHistory();
   }
@@ -59,13 +60,11 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: 结果集
     return Container();
   }
 
   // @override
   void showResults(BuildContext context) {
-    // TODO: implement showResults
     super.showResults(context);
     //记录搜索关键字
     if (query != '' && query.isNotEmpty) {
@@ -84,13 +83,11 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
 
   @override
   void showSuggestions(BuildContext context) {
-    // TODO: implement showSuggestions
     super.showSuggestions(context);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: 输入提示信息
     return Container(
       child: query == ''
           ? _buildHistoryListView(context)
