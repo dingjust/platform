@@ -48,7 +48,7 @@ const router = new Router({
             },
             {
               path: 'apparel',
-              name: '产品',
+              name: '服装产品',
               component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/ApparelProductPage')
             }
           ]
@@ -269,48 +269,27 @@ const router = new Router({
             }
           ]
         },
-{
-  path: 'factory/other',
-  name: '其他',
-  component: {
-  render(c) {
-    return c('router-view');
-  }
-},
-  children: [
-    {
-      path: 'sample/sampleProduct',
-      name: '样衣管理',
-      component: () => import(/* webpackChunkName: 'factory-accounts' */ '../views/miscs/sample/sampleProduct/SampleProductPage'),
-},
-  {
-    path: 'sample/sampleCheckoutHist',
-      name: '样衣借还记录',
-    component: () => import(/* webpackChunkName: 'factory-accounts' */ '../views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
-  }
-]
-},
-{
-  path: '/brand/other',
-  name: '其他',
-  component: {
-  render(c) {
-    return c('router-view');
-  }
-},
-  children: [
-    {
-      path: 'sample/sampleProduct',
-      name: '样衣管理',
-      component: () => import(/* webpackChunkName: 'factory-accounts' */ '../views/miscs/sample/sampleProduct/SampleProductPage'),
-},
-  {
-    path: 'sample/sampleCheckoutHist',
-      name: '样衣借还记录',
-    component: () => import(/* webpackChunkName: 'factory-accounts' */ '../views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
-  }
-]
-},
+        {
+          path: 'miscs',
+          name: '其他',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [
+            {
+              path: 'miscs/sample/sampleProduct',
+              name: '样衣管理',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleProduct/SampleProductPage'),
+            },
+            {
+              path: 'miscs/sample/sampleCheckoutHist',
+              name: '样衣借还记录',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
+            }
+          ]
+        },
       ]
     },
     {
