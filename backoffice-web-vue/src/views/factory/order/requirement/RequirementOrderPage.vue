@@ -16,7 +16,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="供应商商品编号">
+              <el-form-item label="产品货号">
                 <el-input v-model="queryFormData.skuID"></el-input>
               </el-form-item>
             </el-col>

@@ -11,29 +11,13 @@ export default {
     },
     {
       name: '产品管理',
-      url: '/brand/product',
+      url: '/product',
       icon: 'icon-puzzle',
       children: [
         {
           name: '产品',
-          icon: 'fa fa-check',
-          children: [
-            {
-              name: '产品',
-              url: '/brand/product/apparel',
-              icon: 'iconNone',
-            },
-            {
-              name: '产品（已删除）',
-              url: '/brand/product/deleted',
-              icon: 'iconNone',
-            }
-          ]
-        },
-        {
-          name: '库存',
-          url: '/brand/product/inventory',
-          icon: 'iconNone'
+          url: '/product/apparel',
+          icon: 'iconNone',
         }
       ]
     },

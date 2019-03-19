@@ -4,9 +4,6 @@ import BrandMembersModule from './user/members';
 import BrandMemberRequestsModule from './user/member-requests';
 import BrandOrgsModule from './user/orgs';
 import BrandRolesModule from './user/roles';
-import BrandApparelProductsModule from './product/apparel-products';
-import BrandDeletedApparelProductsModule from './product/deleted-apparel-products';
-import BrandApparelProductStocksModule from './product/apparel-product-stocks';
 
 export {
   BrandEmployeesModule,
@@ -15,7 +12,4 @@ export {
   BrandMemberRequestsModule,
   BrandOrgsModule,
   BrandRolesModule,
-  BrandApparelProductsModule,
-  BrandDeletedApparelProductsModule,
-  BrandApparelProductStocksModule,
 }

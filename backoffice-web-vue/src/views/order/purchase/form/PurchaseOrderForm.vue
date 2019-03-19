@@ -9,7 +9,7 @@
           <el-tab-pane label="生产工厂" name="belongTo">
             <purchase-order-seller-form :slot-data="slotData" :read-only="readOnly"/>
           </el-tab-pane>
-          <el-tab-pane label="待生产商品" name="entries">
+          <el-tab-pane label="待生产产品" name="entries">
             <purchase-order-entries-form :slot-data="slotData" :read-only="readOnly"/>
           </el-tab-pane>
           <el-tab-pane label="送货地址" name="deliveryAddress">
@@ -35,7 +35,7 @@
       <div class="pt-2"></div>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>待生产商品</span>
+          <span>待生产产品</span>
         </div>
         <purchase-order-entries-form :slot-data="slotData" :read-only="readOnly"/>
       </el-card>

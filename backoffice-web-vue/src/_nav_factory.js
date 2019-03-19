@@ -11,33 +11,17 @@ export default {
     },
     {
       name: '产品管理',
-      url: '/factory/product',
+      url: '/product',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '产品',
-          icon: 'fa fa-check',
-          children: [
-            {
-              name: '产品',
-              url: '/factory/product/apparel',
-              icon: 'iconNone',
-            },
-            {
-              name: '产品（已删除）',
-              url: '/factory/product/deleted',
-              icon: 'iconNone',
-            }
-          ]
+          name: '服装',
+          url: '/product/apparel',
+          icon: 'iconNone',
         },
         {
           name: '面辅料',
           url: '/factory/product/fabric',
-          icon: 'iconNone'
-        },
-        {
-          name: '库存',
-          url: '/factory/product/inventory',
           icon: 'iconNone'
         }
       ]

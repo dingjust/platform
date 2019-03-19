@@ -3,18 +3,18 @@
     <el-form ref="form" label-position="top" :model="slotData" :disabled="readOnly" :rules="rules">
       <el-row :gutter="10">
         <el-col :span="6">
-          <el-form-item label="商品货号" prop="skuID">
+          <el-form-item label="产品货号" prop="skuID">
             <el-input v-model="slotData.skuID"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="商品名称" prop="name">
+          <el-form-item label="产品名称" prop="name">
             <el-input v-model="slotData.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="商品类目" prop="categories">
-            <el-select v-model="slotData.categories" placeholder="请选择" class="w-100" multiple>
+          <el-form-item label="产品类目" prop="category">
+            <el-select v-model="slotData.category.code" placeholder="请选择" class="w-100">
               <el-option-group
                 v-for="level1 in categories"
                 :key="level1.code"
@@ -26,20 +26,6 @@
                   :value="level2.code">
                 </el-option>
               </el-option-group>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="商家" prop="belongTo">
-            <el-select class="w-100" filterable remote reserve-keyword clearable
-                       placeholder="请输入商家名称查询"
-                       v-model="slotData.belongTo.uid"
-                       :remote-method="onFilterCompanies">
-              <el-option v-for="item in companies"
-                         :key="item.uid"
-                         :label="item.name"
-                         :value="item.uid">
-              </el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -76,7 +62,7 @@
 <script>
   export default {
     name: 'ApparelProductBaseForm',
-    props: ['slotData', 'readOnly', 'isNewlyCreated'],
+    props: ['slotData', 'readOnly'],
     methods: {
       validate(callback) {
         this.$refs.form.validate(callback);
@@ -92,7 +78,8 @@
         }
       },
       async getCategories(query) {
-        const result = await this.$http.get('/b2b/categories/cascaded');
+        const url = this.apis().getMinorCategories();
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -100,28 +87,9 @@
 
         this.categories = result;
       },
-      onFilterCompanies(query) {
-        this.companies = [];
-        if (query && query !== '') {
-          setTimeout(() => {
-            this.getCompanies(query);
-          }, 200);
-        }
-      },
-      async getCompanies(query) {
-        const result = await this.$http.get('/b2b/brands/approved', {
-          keyword: query.trim()
-        });
-
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.companies = result.content;
-      },
       async getStyles() {
-        const result = await this.$http.get('/djwebservices/styles/all');
+        const url = this.apis().getAllStyles();
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -136,7 +104,7 @@
         rules: {
           name: [{required: true, message: '必填', trigger: 'blur'}],
           skuID: [{required: true, message: '必填', trigger: 'blur'}],
-          categories: [{required: true, message: '必填', trigger: 'blur'}],
+          category: [{required: true, message: '必填', trigger: 'blur'}],
           price: [{required: true, message: '必填', trigger: 'blur'}]
         },
         categories: [],
@@ -151,7 +119,6 @@
     },
     created() {
       this.getCategories('');
-      this.getCompanies('');
       this.getStyles();
     }
   };

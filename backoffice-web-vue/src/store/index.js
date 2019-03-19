@@ -34,9 +34,6 @@ import {
   BrandMemberRequestsModule,
   BrandOrgsModule,
   BrandRolesModule,
-  BrandApparelProductsModule,
-  BrandDeletedApparelProductsModule,
-  BrandApparelProductStocksModule,
 } from './brand/modules';
 
 import {
@@ -101,9 +98,6 @@ export default new Vuex.Store({
     BrandMemberRequestsModule,
     BrandOrgsModule,
     BrandRolesModule,
-    BrandApparelProductsModule,
-    BrandDeletedApparelProductsModule,
-    BrandApparelProductStocksModule,
     // factory
     FactoryEmployeesModule,
     FactoryOrgsModule,
