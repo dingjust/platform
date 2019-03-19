@@ -52,10 +52,6 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
-
-  const {mapMutations} = createNamespacedHelpers('ApparelProductsModule');
-
   export default {
     name: 'ApparelProductToolbar',
     components: {},
