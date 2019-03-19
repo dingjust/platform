@@ -50,6 +50,19 @@ const state = {
     expectedDeliveryDateTo: null,
     createdDateFrom: null,
     createdDateTo: null,
+  },
+  quoteFormData: {
+    id: null,
+    code: '',
+    requirementOrder: null,
+    unitPriceOfFabric: 0,
+    unitPriceOfExcipients: 0,
+    unitPriceOfProcessing: 0,
+    costOfOther: 0,
+    costOfSamples: 0,
+    expectedDeliveryDate: null,
+    remarks: null,
+    attachments: [],
   }
 };
 

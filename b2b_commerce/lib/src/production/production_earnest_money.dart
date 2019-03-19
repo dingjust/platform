@@ -14,9 +14,9 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
   String earnestMoney;
   String tailMoney;
   bool isEarnestPayment = false;
-  String estimatePaymentDate;
+  DateTime estimatePaymentDate;
   bool isTailPayment = false;
-  String tailPaymentDate;
+  DateTime tailPaymentDate;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,14 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
                     ),
                   ),
                   onTap: () async {
-                    Navigator.of(context).pop(earnestMoney);
+                    EarnestMoney earnest = new EarnestMoney();
+                    earnest.earnestMoney = earnestMoney;
+                    earnest.isEarnestPayment = isEarnestPayment;
+                    earnest.estimatePaymentDate = estimatePaymentDate;
+                    earnest.tailMoney = tailMoney;
+                    earnest.isTailPayment = isTailPayment;
+                    earnest.tailPaymentDate = tailPaymentDate;
+                    Navigator.of(context).pop(earnest);
                   }
               )
             ]
@@ -170,7 +177,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(estimatePaymentDate,
+                    child: Text(DateFormatUtil.formatYMD(estimatePaymentDate),
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -264,7 +271,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(tailPaymentDate,
+                    child: Text(DateFormatUtil.formatYMD(tailPaymentDate),
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -303,7 +310,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
     if (_picked != null) {
       print(_picked);
       setState(() {
-        estimatePaymentDate = DateFormatUtil.formatYMD(_picked);
+        estimatePaymentDate = _picked;
       });
     }
   }
@@ -319,7 +326,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
     if (_picked != null) {
       print(_picked);
       setState(() {
-        tailPaymentDate = DateFormatUtil.formatYMD(_picked);
+        tailPaymentDate = _picked;
       });
     }
   }

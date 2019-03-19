@@ -14,13 +14,6 @@ class ProductionItem extends StatelessWidget {
     SalesApplication.BELOW_THE_LINE: Color.fromRGBO(22, 141, 255, 1),
   };
 
-  // 订单渠道类型
-  // static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
-  //   RequirementOrderStatus.PENDING_QUOTE: Colors.green,
-  //   RequirementOrderStatus.COMPLETED: Color.fromRGBO(255,214,12, 1),
-  //   RequirementOrderStatus.CANCELLED: Colors.red
-  // };
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -40,7 +33,9 @@ class ProductionItem extends StatelessWidget {
           children: <Widget>[
             _buildHeader(),
             Column(
-              children: _buildEntries(),
+              children: <Widget>[
+                _buildContent(context),
+              ],
             ),
           ],
         ),
@@ -68,13 +63,8 @@ class ProductionItem extends StatelessWidget {
                   style: TextStyle(fontSize: 14),
                 ),
               ),
-              // TODO : 订单类型枚举和对应颜色
-              // Text(
-              //   RequirementOrderStatusLocalizedMap[order.status],
-              //   style: TextStyle(color: _statusColors[order.status])
-              // )
               Text(
-                '${SalesApplicationLocalizedMap[order.salesApplication]}',
+                '${order.salesApplication == null ? '' : SalesApplicationLocalizedMap[order.salesApplication]}',
                 style: TextStyle(
                     color: _typeColors[order.salesApplication],
                     fontSize: 16,
@@ -87,90 +77,86 @@ class ProductionItem extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildEntries() {
-    return order.entries
-        .map((entry) => Container(
-              color: Color.fromRGBO(250, 250, 250, 1),
-              padding: EdgeInsets.all(10),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 80,
+  Widget _buildContent(BuildContext context) {
+    return Container(
+        color: Color.fromRGBO(250, 250, 250, 1),
+        padding: EdgeInsets.all(10),
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: order.entries.isEmpty || order.entries == null || order.entries.length <= 0 || order.entries[0].product.thumbnail == null?
+                    AssetImage(
+                      'temp/picture.png',
+                      package: "assets",
+                    ):
+                    NetworkImage('${order.entries[0].product.thumbnail.url}'),
+                    fit: BoxFit.cover,
+                  )),
+            ),
+            Expanded(
+                child: Container(
+                    padding: EdgeInsets.all(5),
                     height: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        image: DecorationImage(
-                          image: entry.product.thumbnail != null
-                              ? NetworkImage(entry.product.thumbnail.url)
-                              : AssetImage(
-                                  'temp/picture.png',
-                                  package: "assets",
-                                ),
-                          fit: BoxFit.cover,
-                        )),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                entry.product.name,
-                                style: TextStyle(fontSize: 15),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Text(
-                                  '货号：' + entry.product.skuID,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color.fromRGBO(150, 150, 150, 1)),
-                                ),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                '共${order.totalQuantity}件商品',
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: order.entries.isEmpty|| order.entries == null || order.entries.length <= 0 || order.entries[0].product.name == null?
+                            Container():
+                            Text(
+                              '${order.entries[0].product.name}',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            )),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Text(
+                                '货号：${order.entries.isEmpty? '' : order.entries[0].product.skuID}',
                                 style: TextStyle(
-                                  color: Color.fromRGBO(150, 150, 150, 1),
-                                  fontSize: 14,
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 80,
-                    height: 80,
-                    child: ProductionCircleStep(
-                      size: 25,
-                      currentPhase: order.currentPhase,
-                      thickness: 3,
-                      fontColor: Color.fromRGBO(50, 50, 50, 1),
-                      fontSize: 13,
-                    ),
-                  )
-                ],
+                                    fontSize: 12, color: Colors.grey),
+                              ),
+                            )),
+                        order.entries.isEmpty|| order.entries == null || order.entries.length <= 0 || order.entries[0].product.superCategories == null?
+                        Container() :
+                        Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 243, 243, 1),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            "${order.entries[0].product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromRGBO(255, 133, 148, 1)),
+                          ),
+                        )
+                      ],
+                    ))
+            ),
+            Container(
+              width: 80,
+              height: 80,
+              child: ProductionCircleStep(
+                size: 25,
+                currentPhase: order.currentPhase,
+                thickness: 3,
+                fontColor: Color.fromRGBO(50, 50, 50, 1),
+                fontSize: 13,
               ),
-            ))
-        .toList();
+            )
+          ],
+        ));
   }
 }

@@ -12,26 +12,27 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
+  queryFormData: {},
 };
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {keyword, page, size}) {
+  async search({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/orders/quote', {
-      code: state.keyword,
-      requirementOrderRef: state.keyword
+    const response = await http.post(url, {
+      keyword: state.keyword
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -55,7 +56,8 @@ const getters = {
   keyword: state => state.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  queryFormData: state => state.queryFormData,
 };
 
 export default {

@@ -5,9 +5,9 @@
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange">
       <el-table-column v-if="multipleSelection" type="selection" width="55"></el-table-column>
-      <el-table-column label="商品货号" prop="skuID"></el-table-column>
-      <el-table-column label="商品名称" prop="name"></el-table-column>
-      <el-table-column label="商品价格" prop="price"></el-table-column>
+      <el-table-column label="产品货号" prop="skuID"></el-table-column>
+      <el-table-column label="产品名称" prop="name"></el-table-column>
+      <el-table-column label="产品价格" prop="price"></el-table-column>
     </el-table>
     <div class="pt-2"></div>
     <div class="float-right">

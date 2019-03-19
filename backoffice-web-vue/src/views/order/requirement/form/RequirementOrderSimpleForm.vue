@@ -101,7 +101,7 @@
       async _onSubmit() {
         let formData = this.slotData;
 
-        const url = this.apis().createPurchaseOrder();
+        const url = this.apis().createRequirementOrder();
         const result = await this.$http.post(url, formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

@@ -40,16 +40,19 @@
       onSearch(page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
-        this.search({keyword, statuses, page, size});
+        const url = this.apis().getPurchaseOrders();
+        this.search({url, keyword, statuses, page, size});
       },
       onAdvancedSearch(page, size) {
         this.isAdvancedSearch = true;
 
         const query = this.queryFormData;
-        this.searchAdvanced({query, page, size});
+        const url = this.apis().getPurchaseOrders();
+        this.searchAdvanced({url, query, page, size});
       },
       async onDetails(row) {
-        const result = await this.$http.get('/b2b/orders/purchase/' + row.code);
+        const url = this.apis().getPurchaseOrder(row.code);
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;

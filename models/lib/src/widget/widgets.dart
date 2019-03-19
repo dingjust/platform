@@ -1,19 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class FilterConditionEntry<T> {
-  FilterConditionEntry(
-      {@required this.label,
-      this.value,
-      this.onRemind = false,
-      this.remindNum,
-      this.checked = false,
-      this.isDESC = false});
+part 'widgets.g.dart';
+
+class FilterConditionEntry {
+  FilterConditionEntry({this.label,
+    this.value,
+    this.onRemind = false,
+    this.remindNum,
+    this.checked = false,
+    this.isDESC = false});
 
   ///Tab标签
   final String label;
 
   ///Tab筛选值
-  final T value;
+  final dynamic value;
 
   ///选中状态
   bool checked;
@@ -26,4 +27,41 @@ class FilterConditionEntry<T> {
 
   ///数字提醒;
   int remindNum;
+
+}
+
+@JsonSerializable()
+class EarnestMoney {
+  //定金
+  String earnestMoney;
+
+  //尾款
+  String tailMoney;
+
+  //是否已付定金
+  bool isEarnestPayment = false;
+
+  //交付定金日期
+  DateTime estimatePaymentDate;
+
+  //是否已付尾款
+  bool isTailPayment = false;
+
+  //交付尾款日期
+  DateTime tailPaymentDate;
+
+  EarnestMoney({
+    this.earnestMoney,
+    this.tailMoney,
+    this.isEarnestPayment,
+    this.isTailPayment,
+    this.tailPaymentDate,
+    this.estimatePaymentDate
+  });
+
+  factory EarnestMoney.fromJson(Map<String, dynamic> json) =>
+      _$EarnestMoneyFromJson(json);
+
+  static Map<String, dynamic> toJson(EarnestMoney model) =>
+      _$EarnestMoneyToJson(model);
 }

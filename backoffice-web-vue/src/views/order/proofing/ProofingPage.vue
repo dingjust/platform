@@ -39,7 +39,8 @@
         this.search({keyword, page, size});
       },
       async onDetails(row) {
-        const result = await this.$http.get('/b2b/orders/proofing/' + row.code);
+        const url = this.apis().getProofing(row.code);
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -48,7 +49,8 @@
         this.fn.openSlider('打样订单:' + row.code, ProofingDetailsPage, row);
       },
       async onShowQuote(row) {
-        const result = await this.$http.get('/b2b/orders/quote/' + row.quoteRef);
+        const url = this.apis().getQuote(row.quoteRef);
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;

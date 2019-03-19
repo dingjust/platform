@@ -189,9 +189,12 @@ class RequirementPoolBLoC extends BLoCBase {
     }
 
     if (conditions.categories != null) {
+      print(conditions.categories);
       data['majorCategories'] =
           conditions.categories.map((category) => category.code).toList();
     }
+
+    print(data['majorCategories']);
 
     return data;
   }

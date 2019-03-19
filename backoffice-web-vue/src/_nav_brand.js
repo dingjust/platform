@@ -10,30 +10,19 @@ export default {
       }
     },
     {
+      name: '仪表盘',
+      url: '/dashboard',
+      icon: 'icon-speedometer'
+    },
+    {
       name: '产品管理',
-      url: '/brand/product',
+      url: '/product',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '产品',
-          icon: 'fa fa-check',
-          children: [
-            {
-              name: '产品',
-              url: '/brand/product/apparel',
-              icon: 'iconNone',
-            },
-            {
-              name: '产品（已删除）',
-              url: '/brand/product/deleted',
-              icon: 'iconNone',
-            }
-          ]
-        },
-        {
-          name: '库存',
-          url: '/brand/product/inventory',
-          icon: 'iconNone'
+          name: '服装产品',
+          url: '/product/apparel',
+          icon: 'iconNone',
         }
       ]
     },
@@ -93,26 +82,22 @@ export default {
           name: '角色',
           url: '/brand/account/role',
           icon: 'iconNone'
-        },
-        {
-          name: '我的关注',
-          url: '/brand/account/follower',
-          icon: 'iconNone'
         }
       ]
-    }, {
+    },
+    {
       name: '系统管理',
-      url: '/brand/system/zone',
+      url: '/system/zone',
       icon: 'icon-puzzle',
       children: [
         {
           name: '运费模板',
-          url: '/brand/system/zone',
+          url: '/system/zone',
           icon: 'iconNone'
         },
         {
           name: '地址管理',
-          url: '/brand/system/address',
+          url: '/system/address',
           icon: 'iconNone'
         }
       ]

@@ -6,9 +6,12 @@
                                  @onSearch="onSearch"
                                  @onAdvancedSearch="onAdvancedSearch"/>
       <requirement-order-search-result-list :page="page"
-                                            @onDetails="onDetails"
                                             @onSearch="onSearch"
-                                            @onAdvancedSearch="onAdvancedSearch"/>
+                                            @onAdvancedSearch="onAdvancedSearch">
+        <template slot="operations" slot-scope="props">
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
+        </template>
+      </requirement-order-search-result-list>
     </el-card>
   </div>
 </template>
@@ -42,18 +45,18 @@
       onSearch(page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
-        const url = this.apis().getPurchaseOrders();
+        const url = this.apis().getRequirementOrders();
         this.search({url, keyword, statuses, page, size});
       },
       onAdvancedSearch(page, size) {
         this.isAdvancedSearch = true;
 
         const query = this.queryFormData;
-        const url = this.apis().getPurchaseOrders();
+        const url = this.apis().getRequirementOrders();
         this.searchAdvanced({url, query, page, size});
       },
       async onDetails(item) {
-        const url = this.apis().getPurchaseOrder(item.code);
+        const url = this.apis().getRequirementOrder(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

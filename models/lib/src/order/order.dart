@@ -144,7 +144,6 @@ const QuoteStateLocalizedMap = {
 enum MachiningType {
   ///包工包料
   LABOR_AND_MATERIAL,
-
   ///清加工
   LIGHT_PROCESSING,
 }
@@ -467,11 +466,9 @@ class RequirementInfoModel extends ItemModel {
   ///省
   @JsonKey(toJson: _regionToJson)
   RegionModel region;
-
   ///市
   @JsonKey(toJson: _cityToJson)
   CityModel city;
-
   ///区
   @JsonKey(toJson: _cityDistrictToJson)
   DistrictModel cityDistrict;
@@ -636,6 +633,9 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 /// 采购订单
 @JsonSerializable()
 class PurchaseOrderModel extends OrderModel {
+  @JsonKey(toJson: _productToJson)
+  ApparelProductModel product;
+
   @JsonKey(toJson: _brandToJson)
   BrandModel purchaser;
 
@@ -685,6 +685,14 @@ class PurchaseOrderModel extends OrderModel {
 
   //尾款
   double balance;
+
+  //预计支付定金日期
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime depositPaidDate;
+
+  //预计支付尾款日期
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime balancePaidDate;
 
   //卖方
   String companyOfSeller;
@@ -745,6 +753,9 @@ class PurchaseOrderModel extends OrderModel {
 
   static Map<String, dynamic> _brandToJson(BrandModel model) =>
       BrandModel.toJson(model);
+
+  static Map<String, dynamic> _productToJson(ApparelProductModel model) =>
+      ApparelProductModel.toJson(model);
 
   static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
       FactoryModel.toJson(model);

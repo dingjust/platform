@@ -21,6 +21,7 @@ const state = {
   formData: {
     id: null,
     code: '',
+    quoteRef: '',
     belongTo: {
       uid: '',
       name: ''

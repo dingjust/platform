@@ -63,13 +63,15 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
     // TODO: implement initState
     categoriesConditionEntries.addAll(widget.categories
         .map((category) =>
-            FilterConditionEntry(label: category.name, value: category.code))
+            FilterConditionEntry(label: category.name, value: category))
         .toList());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(categoriesConditionEntries);
+
     return BLoCProvider<RequirementPoolBLoC>(
         key: _quickReactionFactoryBLoCProviderKey,
         bloc: RequirementPoolBLoC.instance,
@@ -160,6 +162,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                   color: Color.fromRGBO(255, 214, 12, 1),
                   height: showCategoriesFilterMenu ? 250 : 0,
                   entries: categoriesConditionEntries,
+                  multipeSelect: true,
                   streamController:
                       RequirementPoolBLoC.instance.conditionController,
                   afterPressed: (String str) {
@@ -193,13 +196,29 @@ class OrdersListView extends StatelessWidget {
 
     //监听筛选条件更改
     bloc.conditionStream.listen((condition) {
-      if (condition.checked) {
-        if (condition.value is RequirementOrderDateRange) {
-          currentCodition.dateRange = condition.value;
-        } else if (condition.value is MachiningType) {
-          currentCodition.machiningType = condition.value;
+      if (condition.value is RequirementOrderDateRange && condition.checked) {
+        currentCodition.dateRange = condition.value;
+      }
+
+      if (condition.value is MachiningType && condition.checked) {
+        currentCodition.machiningType = condition.value;
+      }
+
+      if (condition.value is CategoryModel) {
+        if (condition.checked) {
+          if (!currentCodition.categories.contains(condition.value)) {
+            currentCodition.categories.add(condition.value);
+          }
+        } else {
+          currentCodition.categories.remove(condition.value);
         }
       }
+
+      //品类全部
+      if (condition.value == null) {
+        currentCodition.categories.clear();
+      }
+
       // bloc.filterByCondition(currentCodition);
       bloc.clear();
     });
