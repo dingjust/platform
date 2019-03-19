@@ -633,7 +633,6 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 /// 采购订单
 @JsonSerializable()
 class PurchaseOrderModel extends OrderModel {
-
   @JsonKey(toJson: _productToJson)
   ApparelProductModel product;
 
