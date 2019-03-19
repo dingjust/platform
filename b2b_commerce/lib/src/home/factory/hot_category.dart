@@ -175,42 +175,37 @@ class _FactoryHotCategoryPageState extends State<FactoryHotCategoryPage> {
     'products': [
       {
         'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
+        'thumbnail':
+        MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
+        ,
         'price': 33.3,
       },
       {
         'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
+        'thumbnail':
+        MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
+        ,
         'price': 33.3,
       },
       {
         'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
+        'thumbnail':
+        MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
+        ,
         'price': 33.3,
       },
       {
         'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
+        'thumbnail':
+        MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
+        ,
         'price': 33.3,
       },
       {
         'name': '春秋薄款卫衣',
-        'normal': [
-          {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-          {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-        ],
+        'thumbnail':
+         MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
+        ,
         'price': 33.3,
       },
     ]
