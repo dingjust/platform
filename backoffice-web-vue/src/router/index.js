@@ -265,7 +265,7 @@ const router = new Router({
           ]
         },
         {
-          path: 'miscs',
+          path: '/miscs',
           name: '其他',
           component: {
             render(c) {
@@ -274,12 +274,12 @@ const router = new Router({
           },
           children: [
             {
-              path: 'miscs/sample/sampleProduct',
+              path: '/miscs/sample/sampleProduct',
               name: '样衣管理',
               component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleProduct/SampleProductPage'),
             },
             {
-              path: 'miscs/sample/sampleCheckoutHist',
+              path: '/miscs/sample/sampleCheckoutHist',
               name: '样衣借还记录',
               component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
             }

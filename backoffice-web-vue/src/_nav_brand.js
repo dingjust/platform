@@ -104,7 +104,7 @@ export default {
     },
     {
       name: '其他',
-      url: 'miscs',
+      url: '/miscs',
       icon: 'icon-puzzle',
       children: [
         {
