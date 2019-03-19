@@ -358,7 +358,7 @@ class PurchaseOrderItem extends StatelessWidget {
                       'temp/picture.png',
                       package: "assets",
                     ):
-                    NetworkImage('${order.product.thumbnail.url}'),
+                    NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}'),
                     fit: BoxFit.cover,
                   )),
             ),
