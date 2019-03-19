@@ -150,8 +150,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         children: <Widget>[
-          order.entries.isNotEmpty  && order.entries != null && order.entries.length > 0 && order.entries[0].product.thumbnail != null
-              && order.entries[0].product.thumbnail.name != null
+          order.product != null  && order.product.thumbnail != null
+              && order.product.thumbnail.name != null
               ? Container(
             width: 80,
             height: 80,
@@ -183,10 +183,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  order.entries[0].product.name == null ?
+                  order.product.name == null ?
                   Container() :
                   Text(
-                    order.entries[0].product.name,
+                    order.product.name,
                     style: TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -195,10 +195,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)),
-                    child:  order.entries[0].product.skuID == null ?
+                    child:  order.product.skuID == null ?
                     Container() :
                     Text(
-                      '货号：${order.entries[0].product.skuID}',
+                      '货号：${order.product.skuID}',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ),
@@ -207,10 +207,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
-                    child: order.entries[0].product.superCategories == null ?
+                    child: order.product.superCategories == null ?
                     Container() :
                     Text(
-                      "${order.entries[0].product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
+                      "${order.product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

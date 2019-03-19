@@ -332,8 +332,7 @@ class PurchaseOrderItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '订单创建时间：${order.creationTime == null ? '' : DateFormatUtil
-                      .formatYMD(order.creationTime)}',
+                  '${order.salesApplication == null ? '' : SalesApplicationLocalizedMap[order.salesApplication]}',
                   textAlign: TextAlign.end,
                   style: TextStyle(fontSize: 16),
                 )
@@ -354,7 +353,7 @@ class PurchaseOrderItem extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                    image: order.entries.isEmpty || order.entries == null || order.entries.length <= 0 || order.entries[0].product.thumbnail == null?
+                    image:  order.product == null ||  order.product.thumbnail == null?
                     AssetImage(
                       'temp/picture.png',
                       package: "assets",
@@ -373,10 +372,10 @@ class PurchaseOrderItem extends StatelessWidget {
                       children: <Widget>[
                         Align(
                             alignment: Alignment.topLeft,
-                            child: order.entries.isEmpty|| order.entries == null || order.entries.length <= 0 || order.entries[0].product.name == null?
+                            child: order.product == null || order.product.name == null?
                             Container():
                             Text(
-                              '${order.entries[0].product.name}',
+                              '${order.product.name}',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             )),
@@ -388,12 +387,12 @@ class PurchaseOrderItem extends StatelessWidget {
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(5)),
                               child: Text(
-                                '货号：${order.entries.isEmpty? '' : order.entries[0].product.skuID}',
+                                '货号：${order.product == null ? '' : order.product.skuID}',
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.grey),
                               ),
                             )),
-                        order.entries.isEmpty|| order.entries == null || order.entries.length <= 0 || order.entries[0].product.superCategories == null?
+                        order.product == null || order.product.superCategories == null?
                         Container() :
                         Container(
                             padding: EdgeInsets.all(3),
@@ -401,7 +400,7 @@ class PurchaseOrderItem extends StatelessWidget {
                               color: Color.fromRGBO(255, 243, 243, 1),
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
-                            "${order.entries[0].product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
+                            "${order.product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromRGBO(255, 133, 148, 1)),
