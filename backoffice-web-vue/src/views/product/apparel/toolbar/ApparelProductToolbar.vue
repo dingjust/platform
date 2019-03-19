@@ -61,10 +61,16 @@
     components: {},
     computed: {},
     methods: {
+      ...mapMutations({
+        setKeyword: 'keyword',
+        setQueryFormData: 'queryFormData'
+      }),
       onSearch() {
+        this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
+        this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
       onNew() {
@@ -83,7 +89,7 @@
     },
     data() {
       return {
-        keyword: this.$store.state.ApparelProductsModule.keyword,
+        keyword: '',
         formData: this.$store.state.ApparelProductsModule.formData,
         queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
         statusOptions: this.$store.state.ApparelProductsModule.statusOptions,

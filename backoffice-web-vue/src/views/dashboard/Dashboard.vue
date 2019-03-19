@@ -1,9 +1,9 @@
 <template>
   <div class="animated fadeIn content">
-    <template v-if="isTenant">
+    <template v-if="isTenant()">
       <tenant-dashboard-page/>
     </template>
-    <template v-if="isFactory">
+    <template v-if="isFactory()">
       <factory-dashboard-page/>
     </template>
   </div>
