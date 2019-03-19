@@ -39,11 +39,14 @@ const COMMON_APIS = {
   createPurchaseOrder() {
     return '/b2b/orders/purchase/create';
   },
+  createPurchaseOrderOfQuote(quote) {
+    return '/b2b/orders/purchase/create/' + quote;
+  },
   getProofing(code) {
     return '/b2b/orders/proofing/' + code;
   },
-  createProofing() {
-    return '/b2b/orders/proofing/create';
+  createProofing(quote) {
+    return '/b2b/orders/proofing/create/' + quote;
   },
   removeMedia(mediaID) {
     return '/djwebservices/media/' + mediaID

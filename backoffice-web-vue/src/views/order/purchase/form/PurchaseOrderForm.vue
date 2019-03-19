@@ -40,7 +40,7 @@
         <purchase-order-entries-form :slot-data="slotData" :read-only="readOnly"/>
       </el-card>
       <div class="pt-2"></div>
-      <el-card class="box-card">
+      <el-card class="box-card" v-if="!hideOnNew">
         <div slot="header" class="clearfix">
           <span>送货地址</span>
         </div>
@@ -66,7 +66,12 @@
       PurchaseOrderDeliveryAddressForm,
     },
     mixins: [],
-    computed: {},
+    computed: {
+      // 创建时，工厂不维护地址；由品牌维护
+      hideOnNew: function () {
+        return !this.readOnly && this.isFactory();
+      }
+    },
     methods: {},
     data() {
       return {}

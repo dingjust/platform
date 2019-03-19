@@ -25,7 +25,7 @@
         refresh: 'refresh'
       }),
       async onSubmit() {
-        console.log("submitted data: " + JSON.stringify(this.slotData));
+        // console.log("submitted data: " + JSON.stringify(this.slotData));
 
         const deliveryAddress = this.slotData.deliveryAddress;
         // 地址信息未填时，清除deliveryAddress节点
@@ -33,7 +33,12 @@
           delete this.slotData.deliveryAddress;
         }
 
-        const url = this.apis().createPurchaseOrder();
+        let url = this.apis().createPurchaseOrder();
+        const quoteRef = this.slotData.quoteRef;
+        // 根据报价单创建生产订单
+        if (quoteRef) {
+          url = this.apis().createPurchaseOrderOfQuote(quoteRef);
+        }
         const result = await this.$http.post(url, this.slotData);
         if (result['errors']) {
           this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
