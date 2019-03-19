@@ -25,13 +25,11 @@ class ProductionBLoC extends BLoCBase {
 
   static final List<PurchaseOrderModel> _purchaseOrders = [];
 
-  static final List<FactoryModel> _recommendFactories = [];
-
   //维护筛选条件
   List<FilterConditionEntry> _orderType = [
     FilterConditionEntry(label: '全部', value: 'ALL', checked: true),
-    FilterConditionEntry(label: '线上订单', value: 'ORDER_ONLINE'),
-    FilterConditionEntry(label: '线下订单', value: 'ORDER_OFFLINE'),
+    FilterConditionEntry(label: '线上订单', value: 'ONLINE'),
+    FilterConditionEntry(label: '线下订单', value: 'BELOW_THE_LINE'),
   ];
 
   List<FilterConditionEntry> _currentStatus = [
@@ -41,7 +39,6 @@ class ProductionBLoC extends BLoCBase {
   FilterConditionEntry(label: '车缝', value: 'STITCHING'),
   FilterConditionEntry(label: '后整', value: 'AFTER_FINISHING'),
   FilterConditionEntry(label: '验货', value: 'INSPECTION'),
-  FilterConditionEntry(label: '发货', value: 'DELIVERY'),
   ];
 
   DateTime _startDate;
@@ -51,11 +48,12 @@ class ProductionBLoC extends BLoCBase {
 
   List<PurchaseOrderModel> orders() => _purchaseOrders;
 
-  List<FactoryModel> recommendFactories() => _recommendFactories;
-
   List<FilterConditionEntry> get orderType => _orderType;
 
   List<FilterConditionEntry> get currentStatus => _currentStatus;
+
+  List<String> typeList = new List();
+  List<String> phasesList = new List();
 
   String get status => _status;
 
@@ -84,11 +82,7 @@ class ProductionBLoC extends BLoCBase {
 
   var _controller = StreamController<List<PurchaseOrderModel>>.broadcast();
 
-  var _recommendController = StreamController<List<FactoryModel>>.broadcast();
-
   Stream<List<PurchaseOrderModel>> get stream => _controller.stream;
-
-  Stream<List<FactoryModel>> get factoryStream => _recommendController.stream;
 
   var conditionController = StreamController<FilterConditionEntry>.broadcast();
 
@@ -98,954 +92,49 @@ class ProductionBLoC extends BLoCBase {
     //若没有数据则查询
     if (_purchaseOrders.isEmpty) {
           //  分页拿数据，response.data;
+      if(orderType != null && orderType.length>0){
+        typeList.clear();
+        for(int i =0;i<orderType.length;i++){
+          if(orderType[i].checked && orderType[i].value != 'ALL'){
+            typeList.add(orderType[i].value);
+          }
+        }
+      }
+      if(currentStatus != null && currentStatus.length>0){
+        phasesList.clear();
+        for(int i =0;i<currentStatus.length;i++){
+          if(currentStatus[i].checked && currentStatus[i].value != 'ALL'){
+            phasesList.add(currentStatus[i].value);
+          }
+        }
+      }
           //请求参数
           Map data = {
-            'orderType': orderType,
-            'currentStatus': currentStatus,
-            'startDate': startDate,
-            'endDate' : endDate,
-            'status' : status,
+            'salesApplications': typeList,
+            'phases': phasesList,
+            'expectedDeliveryDateFrom': startDate == null ? null : startDate.millisecondsSinceEpoch,
+            'expectedDeliveryDateTo': endDate == null ? null : endDate.millisecondsSinceEpoch,
+            'status': status == null || status == '' ? 'producting' : status,
           };
           Response<Map<String, dynamic>> response;
 
           try {
             response = await http$.post(OrderApis.purchaseOrders,
-                queryParameters:{
-                  'orderType': orderType,
-                  'currentStatus': currentStatus,
-                  'startDate': startDate,
-                  'endDate' : endDate,
-                }
+                data:data
             );
           } on DioError catch (e) {
             print(e);
           }
 
-//          if (response.statusCode == 200) {
-//            PurchaseOrdersResponse ordersResponse =
-//            PurchaseOrdersResponse.fromJson(response.data);
-//           _purchaseOrders.addAll(ordersResponse.content);
-//          }
-//        _controller.sink.add(_purchaseOrders);
+          if (response != null && response.statusCode == 200) {
+            PurchaseOrdersResponse ordersResponse =
+            PurchaseOrdersResponse.fromJson(response.data);
+            _purchaseOrders.clear();
+            _purchaseOrders.addAll(ordersResponse.content);
+          }
 
-      _purchaseOrders
-          .addAll(await Future.delayed(const Duration(seconds: 1), () {
-        return <PurchaseOrderModel>[
-          PurchaseOrderModel.fromJson({
-            'salesApplication': 'ONLINE',
-            'code': 'PO34938475200045',
-            'status': 'IN_PRODUCTION',
-            'totalQuantity': 10,
-            'totalPrice': 300,
-            'creationtime': DateTime.now().millisecondsSinceEpoch,
-            'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
-            'currentPhase': 'CUTTING',
-            'machiningType': 'LABOR_AND_MATERIAL',
-            'invoiceNeeded': true,
-            'attachments': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-            'remarks': '延期了12天',
-            'belongTo': {
-              'name': '京东工厂',
-              'address': '广东省广州市白云区',
-            },
-            'productionProgresses': [
-              {
-                'phase': 'MATERIAL_PREPARATION',
-                'quantity': 70,
-                'sequence': 0,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'CUTTING',
-                'quantity': 70,
-                'sequence': 1,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'STITCHING',
-                'quantity': 70,
-                'sequence': 2,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'AFTER_FINISHING',
-                'quantity': 70,
-                'sequence': 3,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'INSPECTION',
-                'quantity': 70,
-                'sequence': 4,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'DELIVERY',
-                'quantity': 70,
-                'sequence': 5,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-            ],
-            'deliveryAddress': {
-              'fullname': "张三",
-              'cellphone': '13123456789',
-              'region': {'isocode': 'R123', 'name': '广东省'},
-              'city': {'code': 'C123', 'name': '广州市'},
-              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-              'line1': '广州大道',
-              'defaultAddress': true
-            },
-            'entries': [
-              {
-                'basePrice': 33.0,
-                'quantity': 23,
-                'totalPrice': 999.9,
-                'requirementOrderCode': 'RC34938475200045',
-                'product': {
-                  'code': 'NA89852509',
-                  'name': '森马2018冬装男装新款休闲中长款呢大衣',
-                  'skuID': 'NA89852509',
-                  'thumbnail':
-                      'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
-                },
-              }
-            ],
-          }),
-          PurchaseOrderModel.fromJson({
-            'salesApplication': 'BELOW_THE_LINE',
-            'code': 'PO34938475200045',
-            'status': 'IN_PRODUCTION',
-            'totalQuantity': 10,
-            'totalPrice': 300,
-            'creationtime': DateTime.now().millisecondsSinceEpoch,
-            'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
-            'currentPhase': 'MATERIAL_PREPARATION',
-            'machiningType': 'LABOR_AND_MATERIAL',
-            'invoiceNeeded': true,
-            'attachments': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-            'remarks': '延期了12天',
-            'belongTo': {
-              'name': '京东工厂',
-              'address': '广东省广州市白云区',
-            },
-            'productionProgresses': [
-              {
-                'phase': 'MATERIAL_PREPARATION',
-                'quantity': 70,
-                'sequence': 0,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'CUTTING',
-                'quantity': 70,
-                'sequence': 1,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'STITCHING',
-                'quantity': 70,
-                'sequence': 2,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'AFTER_FINISHING',
-                'quantity': 70,
-                'sequence': 3,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'INSPECTION',
-                'quantity': 70,
-                'sequence': 4,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'DELIVERY',
-                'quantity': 70,
-                'sequence': 5,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-            ],
-            'deliveryAddress': {
-              'fullname': "张三",
-              'cellphone': '13123456789',
-              'region': {'isocode': 'R123', 'name': '广东省'},
-              'city': {'code': 'C123', 'name': '广州市'},
-              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-              'line1': '广州大道',
-              'defaultAddress': true
-            },
-            'entries': [
-              {
-                'basePrice': 33.0,
-                'quantity': 23,
-                'totalPrice': 999.9,
-                'requirementOrderCode': 'RC34938475200045',
-                'product': {
-                  'code': 'NA89852509',
-                  'name': '森马2018冬装男装新款休闲中长款呢大衣',
-                  'skuID': 'NA89852509',
-                  'thumbnail':
-                      'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
-                },
-              }
-            ],
-          }),
-          PurchaseOrderModel.fromJson({
-            'salesApplication': 'BELOW_THE_LINE',
-            'code': 'PO34938475200045',
-            'status': 'IN_PRODUCTION',
-            'totalQuantity': 10,
-            'totalPrice': 300,
-            'creationtime': DateTime.now().millisecondsSinceEpoch,
-            'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
-            'currentPhase': 'DELIVERY',
-            'machiningType': 'LABOR_AND_MATERIAL',
-            'invoiceNeeded': true,
-            'attachments': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-            'remarks': '延期了12天',
-            'belongTo': {
-              'name': '京东工厂',
-              'address': '广东省广州市白云区',
-            },
-            'productionProgresses': [
-              {
-                'phase': 'MATERIAL_PREPARATION',
-                'quantity': 70,
-                'sequence': 0,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'CUTTING',
-                'quantity': 70,
-                'sequence': 1,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'STITCHING',
-                'quantity': 70,
-                'sequence': 2,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'AFTER_FINISHING',
-                'quantity': 70,
-                'sequence': 3,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'INSPECTION',
-                'quantity': 70,
-                'sequence': 4,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'DELIVERY',
-                'quantity': 70,
-                'sequence': 5,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-            ],
-            'deliveryAddress': {
-              'fullname': "张三",
-              'cellphone': '13123456789',
-              'region': {'isocode': 'R123', 'name': '广东省'},
-              'city': {'code': 'C123', 'name': '广州市'},
-              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-              'line1': '广州大道',
-              'defaultAddress': true
-            },
-            'entries': [
-              {
-                'basePrice': 33.0,
-                'quantity': 23,
-                'totalPrice': 999.9,
-                'requirementOrderCode': 'RC34938475200045',
-                'product': {
-                  'code': 'NA89852509',
-                  'name': '森马2018冬装男装新款休闲中长款呢大衣',
-                  'skuID': 'NA89852509',
-                  'thumbnail':
-                      'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
-                },
-              }
-            ],
-          }),
-          PurchaseOrderModel.fromJson({
-            'salesApplication': 'ONLINE',
-            'code': 'PO34938475200045',
-            'status': 'IN_PRODUCTION',
-            'totalQuantity': 10,
-            'totalPrice': 300,
-            'creationtime': DateTime.now().millisecondsSinceEpoch,
-            'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
-            'currentPhase': 'INSPECTION',
-            'machiningType': 'LABOR_AND_MATERIAL',
-            'invoiceNeeded': true,
-            'attachments': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-            'remarks': '延期了12天',
-            'belongTo': {
-              'name': '京东工厂',
-              'address': '广东省广州市白云区',
-            },
-            'productionProgresses': [
-              {
-                'phase': 'MATERIAL_PREPARATION',
-                'quantity': 70,
-                'sequence': 0,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'CUTTING',
-                'quantity': 70,
-                'sequence': 1,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'STITCHING',
-                'quantity': 70,
-                'sequence': 2,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'AFTER_FINISHING',
-                'quantity': 70,
-                'sequence': 3,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'INSPECTION',
-                'quantity': 70,
-                'sequence': 4,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-              {
-                'phase': 'DELIVERY',
-                'quantity': 70,
-                'sequence': 5,
-                'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-                'finishDate': DateTime.now().millisecondsSinceEpoch,
-                'remarks': '延期了12天',
-                'medias': [
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                  {
-                    'url':
-                        'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                    'mediaType': 'jpg'
-                  },
-                ],
-              },
-            ],
-            'deliveryAddress': {
-              'fullname': "张三",
-              'cellphone': '13123456789',
-              'region': {'isocode': 'R123', 'name': '广东省'},
-              'city': {'code': 'C123', 'name': '广州市'},
-              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-              'line1': '广州大道',
-              'defaultAddress': true
-            },
-            'entries': [
-              {
-                'basePrice': 33.0,
-                'quantity': 23,
-                'totalPrice': 999.9,
-                'requirementOrderCode': 'RC34938475200045',
-                'product': {
-                  'code': 'NA89852509',
-                  'name': '森马2018冬装男装新款休闲中长款呢大衣',
-                  'skuID': 'NA89852509',
-                  'thumbnail':
-                      'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
-                },
-              }
-            ],
-          }),
-        ];
-      }));
     }
     _controller.sink.add(_purchaseOrders);
-  }
-
-  getRecommendFactories() async {
-    //若没有数据则查询
-    if (_recommendFactories.isEmpty) {
-      //TODO:查询推荐工厂接口
-
-      _recommendFactories.addAll(<FactoryModel>[
-        FactoryModel(
-            historyOrdersCount: 214,
-            name: '广州旭日4',
-            starLevel: 4,
-            describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-            profilePicture:
-                'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-            categories: [
-              CategoryModel(name: '牛仔'),
-              CategoryModel(name: '衬衫'),
-              CategoryModel(name: '夹克'),
-            ]),
-        FactoryModel(
-            historyOrdersCount: 214,
-            name: '广州旭日3',
-            starLevel: 4,
-            describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-            profilePicture:
-                'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-            categories: [
-              CategoryModel(name: '牛仔'),
-              CategoryModel(name: '衬衫'),
-              CategoryModel(name: '夹克'),
-            ]),
-        FactoryModel(
-            historyOrdersCount: 214,
-            name: '广州旭日2',
-            starLevel: 4,
-            describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-            profilePicture:
-                'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-            categories: [
-              CategoryModel(name: '牛仔'),
-              CategoryModel(name: '衬衫'),
-              CategoryModel(name: '夹克'),
-            ]),
-        FactoryModel(
-            historyOrdersCount: 214,
-            name: '广州旭日1',
-            starLevel: 4,
-            describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-            profilePicture:
-                'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-            categories: [
-              CategoryModel(name: '牛仔'),
-              CategoryModel(name: '衬衫'),
-              CategoryModel(name: '夹克'),
-            ]),
-        FactoryModel(
-            historyOrdersCount: 214,
-            name: '广州旭日0',
-            starLevel: 4,
-            describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-            profilePicture:
-                'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-            categories: [
-              CategoryModel(name: '牛仔'),
-              CategoryModel(name: '衬衫'),
-              CategoryModel(name: '夹克'),
-            ]),
-      ]);
-    }
-    _recommendController.sink.add(_recommendFactories);
   }
 
   clear() async {
@@ -1057,240 +146,47 @@ class ProductionBLoC extends BLoCBase {
   //下拉刷新
   Future refreshData() async {
     _purchaseOrders.clear();
-    //TODO :查询采购订单接口
 
-    // TODO :根据_orderType、_currentStatus、_startDate、_endDate筛选条件
+    if(orderType != null && orderType.length>0){
+      for(int i =0;i<orderType.length;i++){
+        if(orderType[i].checked && orderType[i].value != 'ALL'){
+          typeList.add(orderType[i].value);
+        }
+      }
+    }
+    if(currentStatus != null && currentStatus.length>0){
+      for(int i =0;i<currentStatus.length;i++){
+        if(currentStatus[i].checked && currentStatus[i].value != 'ALL'){
+          phasesList.add(currentStatus[i].value);
+        }
+      }
+    }
+    //请求参数
+    Map data = {
+      'salesApplications': typeList,
+      'phases': phasesList,
+      'expectedDeliveryDateFrom': startDate == null ? null : startDate.millisecondsSinceEpoch,
+      'expectedDeliveryDateTo': endDate == null ? null : endDate.millisecondsSinceEpoch,
+      'status' : status == null || status == ''? 'producting' : status,
+    };
+    Response<Map<String, dynamic>> response;
 
-    _purchaseOrders.add(await Future.delayed(const Duration(seconds: 1), () {
-      return PurchaseOrderModel.fromJson({
-        'salesApplication': 'BELOW_THE_LINE',
-        'code': 'PO34938475200045',
-        'status': 'IN_PRODUCTION',
-        'totalQuantity': 10,
-        'totalPrice': 300,
-        'creationtime': DateTime.now().millisecondsSinceEpoch,
-        'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
-        'currentPhase': 'CUTTING',
-        'machiningType': 'LABOR_AND_MATERIAL',
-        'invoiceNeeded': true,
-        'attachments': [
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-        ],
-        'remarks': '延期了12天',
-        'belongTo': {
-          'name': '京东工厂',
-          'address': '广东省广州市白云区',
-        },
-        'productionProgresses': [
-          {
-            'phase': 'MATERIAL_PREPARATION',
-            'quantity': 70,
-            'sequence': 0,
-            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-            'finishDate': DateTime.now().millisecondsSinceEpoch,
-            'remarks': '延期了12天',
-            'medias': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-          },
-          {
-            'phase': 'MATERIAL_PREPARATION',
-            'quantity': 70,
-            'sequence': 1,
-            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-            'finishDate': DateTime.now().millisecondsSinceEpoch,
-            'remarks': '延期了12天',
-            'medias': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-          },
-          {
-            'phase': 'CUTTING',
-            'quantity': 70,
-            'sequence': 2,
-            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-            'finishDate': DateTime.now().millisecondsSinceEpoch,
-            'remarks': '延期了12天',
-            'medias': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-          },
-          {
-            'phase': 'STITCHING',
-            'quantity': 70,
-            'sequence': 3,
-            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-            'finishDate': DateTime.now().millisecondsSinceEpoch,
-            'remarks': '延期了12天',
-            'medias': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-          },
-          {
-            'phase': 'INSPECTION',
-            'quantity': 70,
-            'sequence': 4,
-            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-            'finishDate': DateTime.now().millisecondsSinceEpoch,
-            'remarks': '延期了12天',
-            'medias': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-          },
-          {
-            'phase': 'DELIVERY',
-            'quantity': 70,
-            'sequence': 5,
-            'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-            'finishDate': DateTime.now().millisecondsSinceEpoch,
-            'remarks': '延期了12天',
-            'medias': [
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-              {
-                'url':
-                    'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-                'mediaType': 'jpg'
-              },
-            ],
-          },
-        ],
-        'deliveryAddress': {
-          'fullname': "张三",
-          'cellphone': '13123456789',
-          'region': {'isocode': 'R123', 'name': '广东省'},
-          'city': {'code': 'C123', 'name': '广州市'},
-          'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-          'line1': '广州大道',
-          'defaultAddress': true
-        },
-        'entries': [
-          {
-            'basePrice': 33.0,
-            'quantity': 23,
-            'totalPrice': 999.9,
-            'requirementOrderCode': 'RC34938475200045',
-            'product': {
-              'code': 'NA89852509',
-              'name': '森马2018冬装男装新款休闲中长款呢大衣',
-              'skuID': 'NA89852509',
-              'thumbnail':
-                  'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg'
-            },
-          }
-        ],
-      });
-    }));
-    //TODO：查询推荐工厂接口
-    _recommendFactories.clear();
-    _recommendFactories.add(
-      FactoryModel(
-          historyOrdersCount: 214,
-          name: '广州旭日2',
-          starLevel: 4,
-          describe: '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-          profilePicture:
-              'https://img.alicdn.com/imgextra/i2/50540166/TB2RBoYahOGJuJjSZFhXXav4VXa_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-          categories: [
-            CategoryModel(name: '牛仔'),
-            CategoryModel(name: '衬衫'),
-            CategoryModel(name: '夹克'),
-          ]),
-    );
+    try {
+      response = await http$.post(OrderApis.purchaseOrders,
+          data:data
+      );
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      PurchaseOrdersResponse ordersResponse =
+      PurchaseOrdersResponse.fromJson(response.data);
+      _purchaseOrders.clear();
+      _purchaseOrders.addAll(ordersResponse.content);
+    }
+
     _controller.sink.add(_purchaseOrders);
-    _recommendController.sink.add(_recommendFactories);
   }
 
   //页面控制

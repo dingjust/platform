@@ -115,7 +115,7 @@ class ColorSizeNumTable extends StatelessWidget {
                   width: 20,
                   decoration: BoxDecoration(
                     color: Color(
-                        int.parse('0xff' + entries[0].model.color.colorCode)),
+                        int.parse('0xff' + entries[0].model.color.colorCode.substring(1))),
                     shape: BoxShape.circle,
                   ),
                   child: Text(''),
