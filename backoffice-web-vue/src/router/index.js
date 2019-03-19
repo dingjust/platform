@@ -199,11 +199,6 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/employee/EmployeePage'),
             },
             {
-              path: 'member',
-              name: '会员',
-              component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/member/MemberPage'),
-            },
-            {
               path: 'org',
               name: '组织架构',
               component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/org/OrgPage'),
