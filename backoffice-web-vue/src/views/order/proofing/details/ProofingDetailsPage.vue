@@ -33,13 +33,14 @@
           delete this.slotData.deliveryAddress;
         }
 
-        const result = await this.$http.post('/b2b/orders/proofing/create', this.slotData);
+        const url = this.apis().createProofing();
+        const result = await this.$http.post(url, this.slotData);
         if (result['errors']) {
           this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
           return;
         }
 
-        this.$message.success('生产订单创建成功，订单号：' + result);
+        this.$message.success('打样订单创建成功，订单号：' + result);
 
         this.refresh();
 

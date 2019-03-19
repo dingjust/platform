@@ -26,8 +26,8 @@
       }),
       async onSubmit() {
         // console.log("submitted data: " + JSON.stringify(this.slotData));
-
-        const result = await this.$http.post('/b2b/orders/quote/create', this.slotData);
+        const url = this.apis().createQuote();
+        const result = await this.$http.post(url, this.slotData);
         if (result['errors']) {
           this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
           return;

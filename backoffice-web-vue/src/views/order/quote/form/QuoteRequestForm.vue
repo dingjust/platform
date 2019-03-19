@@ -81,7 +81,8 @@
         this.$refs['form'].validate(callback);
       },
       async getMinorCategories() {
-        const result = await this.$http.get('/b2b/categories/cascaded');
+        const url = this.apis().getMinorCategories();
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -90,7 +91,8 @@
         this.categories = result;
       },
       async getMajorCategories() {
-        const result = await this.$http.get('/b2b/categories/majors');
+        const url = this.apis().getMajorCategories();
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
