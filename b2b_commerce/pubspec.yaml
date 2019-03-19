@@ -119,6 +119,10 @@ flutter:
     - packages/assets/temp/my/my_account.png
     - packages/assets/temp/my/setting.png
     - packages/assets/temp/common/address_under_line.png
+    - packages/assets/temp/business/partner_manage_factory.png
+    - packages/assets/temp/business/product_manage_factory.png
+    - packages/assets/temp/business/production_order_factory.png
+    - packages/assets/temp/business/quote_manage_factory.png
 
   fonts:
     - family: b2bIcons
