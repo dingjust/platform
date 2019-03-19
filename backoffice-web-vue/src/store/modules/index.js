@@ -20,6 +20,8 @@ import RequirementOrdersModule from './order/requirement-orders';
 import PurchaseOrdersModule from './order/purchase-orders';
 import QuotesModule from './order/quotes';
 import ProofingsModule from './order/proofings';
+import SampleProductModule from './miscs/sampleProduct';
+import SampleCheckoutHistModule from './miscs/sampleCheckoutHist';
 
 export {
   EnumsModule,
@@ -43,5 +45,8 @@ export {
   RequirementOrdersModule,
   PurchaseOrdersModule,
   QuotesModule,
-  ProofingsModule
+  ProofingsModule,
+
+  SampleProductModule,
+  SampleCheckoutHistModule
 }

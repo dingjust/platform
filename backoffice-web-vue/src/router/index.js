@@ -341,7 +341,49 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/role/RolePage'),
             }
           ]
-        }
+        },
+{
+  path: 'factory/other',
+  name: '其他',
+  component: {
+  render(c) {
+    return c('router-view');
+  }
+},
+  children: [
+    {
+      path: 'sample/sampleProduct',
+      name: '样衣管理',
+      component: () => import(/* webpackChunkName: 'factory-accounts' */ '../views/miscs/sample/sampleProduct/SampleProductPage'),
+},
+  {
+    path: 'sample/sampleCheckoutHist',
+      name: '样衣借还记录',
+    component: () => import(/* webpackChunkName: 'factory-accounts' */ '../views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
+  }
+]
+},
+{
+  path: '/brand/other',
+  name: '其他',
+  component: {
+  render(c) {
+    return c('router-view');
+  }
+},
+  children: [
+    {
+      path: 'sample/sampleProduct',
+      name: '样衣管理',
+      component: () => import(/* webpackChunkName: 'factory-accounts' */ '../views/miscs/sample/sampleProduct/SampleProductPage'),
+},
+  {
+    path: 'sample/sampleCheckoutHist',
+      name: '样衣借还记录',
+    component: () => import(/* webpackChunkName: 'factory-accounts' */ '../views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
+  }
+]
+},
       ]
     },
     {

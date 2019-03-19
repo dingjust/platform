@@ -24,7 +24,9 @@ import {
   RequirementOrdersModule,
   PurchaseOrdersModule,
   QuotesModule,
-  ProofingsModule
+  ProofingsModule,
+  SampleProductModule,
+  SampleCheckoutHistModule
 } from './modules';
 
 import {
@@ -94,6 +96,8 @@ export default new Vuex.Store({
     PurchaseOrdersModule,
     QuotesModule,
     ProofingsModule,
+    SampleProductModule,
+    SampleCheckoutHistModule,
     // brand
     BrandEmployeesModule,
     BrandFollowersModule,

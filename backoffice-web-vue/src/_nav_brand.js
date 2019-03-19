@@ -116,6 +116,29 @@ export default {
           icon: 'iconNone'
         }
       ]
+    },
+    {
+      name: '其他',
+      url: '/brand/other',
+      icon: 'icon-puzzle',
+      children: [
+        {
+          name: '样衣管理',
+          icon: 'fa fa-check',
+          children: [
+            {
+              name: '样衣',
+              url: '/brand/other/sample/sampleProduct',
+              icon: 'iconNone',
+            },
+            {
+              name: '样衣借还记录',
+              url: '/brand/other/sample/sampleCheckoutHist',
+              icon: 'iconNone',
+            }
+          ]
+        }
+      ]
     }
   ]
 };
