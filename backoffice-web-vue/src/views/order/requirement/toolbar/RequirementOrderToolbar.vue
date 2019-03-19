@@ -5,8 +5,8 @@
     </el-form-item>
     <el-button-group>
       <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-      <el-button type="primary" icon="el-icon-plus" @click="onSimpleNew">急速发布需求</el-button>
-      <el-button type="primary" icon="el-icon-plus" @click="onNew">发布需求</el-button>
+      <el-button v-if="isBrand()" type="primary" icon="el-icon-plus" @click="onSimpleNew">急速发布需求</el-button>
+      <el-button v-if="isBrand()" type="primary" icon="el-icon-plus" @click="onNew">发布需求</el-button>
     </el-button-group>
     <el-popover placement="bottom" width="800" trigger="click">
       <el-row :gutter="10">
@@ -83,7 +83,9 @@
           <el-button type="primary" icon="el-icon-search" @click="onAdvancedSearch">查询</el-button>
         </el-col>
       </el-row>
-      <el-button type="primary" slot="reference">高级查询</el-button>
+      <el-button-group slot="reference">
+        <el-button type="primary">高级查询</el-button>
+      </el-button-group>
     </el-popover>
   </el-form>
 </template>

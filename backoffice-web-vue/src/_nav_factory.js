@@ -10,6 +10,11 @@ export default {
       }
     },
     {
+      name: '仪表盘',
+      url: '/dashboard',
+      icon: 'icon-speedometer'
+    },
+    {
       name: '产品管理',
       url: '/product',
       icon: 'icon-puzzle',

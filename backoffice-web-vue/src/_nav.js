@@ -16,7 +16,7 @@ export default {
     },
     {
       name: '产品管理',
-      url: '/backoffice/product',
+      url: '/product',
       icon: 'icon-puzzle',
       children: [
         {
@@ -26,7 +26,7 @@ export default {
         },
         {
           name: '产品',
-          url: '/backoffice/product/apparel',
+          url: '/product/apparel',
           icon: 'iconNone'
         },
         {

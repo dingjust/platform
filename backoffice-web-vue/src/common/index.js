@@ -22,9 +22,15 @@ const COMMON_APIS = {
     return '/b2b/products/apparel/create';
   },
   getPurchaseOrder(code) {
-    return '/b2b/orders/requirement/' + code;
+    return '/b2b/orders/purchase/' + code;
   },
   createPurchaseOrder() {
+    return '/b2b/orders/requirement/new';
+  },
+  getRequirementOrder(code) {
+    return '/b2b/orders/requirement/' + code;
+  },
+  createRequirementOrder() {
     return '/b2b/orders/requirement/new';
   },
   removeMedia(mediaID) {
@@ -37,7 +43,13 @@ let TENANT_APIS = {
     return '/b2b/products/apparel/all';
   },
   getPurchaseOrders() {
+    return '/b2b/orders/purchase/all';
+  },
+  getRequirementOrders() {
     return '/b2b/orders/requirement/all';
+  },
+  getAllRequirementOrders() {
+    return this.getRequirementOrders();
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
@@ -47,8 +59,14 @@ let NON_TENANT_APIS = {
     return '/b2b/products/apparel';
   },
   getPurchaseOrders() {
+    return '/b2b/orders/purchase';
+  },
+  getRequirementOrders() {
     return '/b2b/orders/requirement';
   },
+  getAllRequirementOrders() {
+    return '/b2b/orders/requirement/all';
+  }
 };
 Object.assign(NON_TENANT_APIS, COMMON_APIS);
 

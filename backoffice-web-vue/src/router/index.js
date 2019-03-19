@@ -12,13 +12,14 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      redirect: '/dashboard',
       name: '首页',
       component: Full,
       children: [
         {
           path: 'dashboard',
           name: '仪表盘',
-          component: () => import(/* webpackChunkName: 'Dashboard' */ '@/views/Dashboard')
+          component: () => import(/* webpackChunkName: 'Dashboard' */ '@/views/dashboard/Dashboard')
         },
         {
           path: 'product',
