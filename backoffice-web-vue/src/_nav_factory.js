@@ -11,60 +11,39 @@ export default {
     },
     {
       name: '仪表盘',
-      url: '/factory/dashboard',
+      url: '/dashboard',
       icon: 'icon-speedometer'
     },
     {
       name: '产品管理',
-      url: '/factory/product',
+      url: '/product',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '产品',
-          icon: 'fa fa-check',
-          children: [
-            {
-              name: '产品',
-              url: '/factory/product/apparel',
-              icon: 'iconNone',
-            },
-            {
-              name: '产品（已删除）',
-              url: '/factory/product/deleted',
-              icon: 'iconNone',
-            }
-          ]
-        },
-        {
-          name: '面辅料',
-          url: '/factory/product/fabric',
-          icon: 'iconNone'
-        },
-        {
-          name: '库存',
-          url: '/factory/product/inventory',
-          icon: 'iconNone'
+          name: '服装产品',
+          url: '/product/apparel',
+          icon: 'iconNone',
         }
       ]
     },
     {
       name: '订单管理',
-      url: '/factory/order',
+      url: '/order',
       icon: 'icon-puzzle',
       children: [
         {
           name: '报价单',
-          url: '/factory/order/quote',
+          url: '/order/quote',
           icon: 'iconNone'
         },
         {
           name: '生产订单',
-          url: '/factory/order/purchase',
+          url: '/order/purchase',
           icon: 'iconNone'
         },
         {
           name: '打样单',
-          url: '/factory/order/proofing',
+          url: '/order/proofing',
           icon: 'iconNone'
         }
       ]
@@ -92,6 +71,18 @@ export default {
         {
           name: '角色',
           url: '/factory/account/role',
+          icon: 'iconNone'
+        },
+      ]
+    },
+    {
+      name: '系统管理',
+      url: '/system',
+      icon: 'icon-puzzle',
+      children: [
+        {
+          name: '地址管理',
+          url: '/system/address',
           icon: 'iconNone'
         }
       ]

@@ -511,7 +511,7 @@ class RequirementInfoModel extends ItemModel {
       RegionModel.toJson(model);
 
   static Map<String, dynamic> _cityToJson(CityModel model) =>
-     CityModel.toJson(model);
+      CityModel.toJson(model);
 
   static Map<String, dynamic> _cityDistrictToJson(DistrictModel model) =>
       DistrictModel.toJson(model);
@@ -707,40 +707,41 @@ class PurchaseOrderModel extends OrderModel {
   //单价
   double unitPrice;
 
-  PurchaseOrderModel({String code,
-    this.status,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-    this.purchaser,
-    this.belongTo,
-    this.entries,
-    this.machiningType,
-    this.currentPhase,
-    this.attachments,
-    this.requirementOrderCode,
-    this.expectedDeliveryDate,
-    this.progresses,
-    this.balance,
-    this.balancePaid,
-    this.invoiceNeeded,
-    this.companyOfSeller,
-    this.contactOfSeller,
-    this.contactPersonOfSeller,
-    this.deposit,
-    this.depositPaid,
-    this.unitPrice,
-    SalesApplication salesApplication})
+  PurchaseOrderModel(
+      {String code,
+      this.status,
+      int totalQuantity,
+      double totalPrice,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      this.purchaser,
+      this.belongTo,
+      this.entries,
+      this.machiningType,
+      this.currentPhase,
+      this.attachments,
+      this.requirementOrderCode,
+      this.expectedDeliveryDate,
+      this.progresses,
+      this.balance,
+      this.balancePaid,
+      this.invoiceNeeded,
+      this.companyOfSeller,
+      this.contactOfSeller,
+      this.contactPersonOfSeller,
+      this.deposit,
+      this.depositPaid,
+      this.unitPrice,
+      SalesApplication salesApplication})
       : super(
-      code: code,
-      totalQuantity: totalQuantity,
-      totalPrice: totalPrice,
-      creationTime: creationTime,
-      deliveryAddress: deliveryAddress,
-      remarks: remarks,
-      salesApplication: salesApplication);
+            code: code,
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice,
+            creationTime: creationTime,
+            deliveryAddress: deliveryAddress,
+            remarks: remarks,
+            salesApplication: salesApplication);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
       _$PurchaseOrderModelFromJson(json);
@@ -761,7 +762,7 @@ class PurchaseOrderModel extends OrderModel {
       FactoryModel.toJson(model);
 
   static List<Map<String, dynamic>> entriesToJson(
-      List<PurchaseOrderEntryModel> entries) =>
+          List<PurchaseOrderEntryModel> entries) =>
       entries.map((entry) => PurchaseOrderEntryModel.toJson(entry)).toList();
 
   static MachiningType _machiningTypeFromJson(String machiningType) {
@@ -776,14 +777,13 @@ class PurchaseOrderModel extends OrderModel {
       models.map((model) => MediaModel.toJson(model)).toList();
 
   static List<Map<String, dynamic>> progressesToJson(
-      List<ProductionProgressModel> entries) =>
+          List<ProductionProgressModel> entries) =>
       entries.map((entry) => ProductionProgressModel.toJson(entry)).toList();
 }
 
 /// 采购订单行
 @JsonSerializable()
 class PurchaseOrderEntryModel extends OrderEntryModel {
-
   @JsonKey(toJson: productToJson)
   ApparelSizeVariantProductModel product;
 
@@ -810,7 +810,8 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
   static Map<String, dynamic> toJson(PurchaseOrderEntryModel model) =>
       _$PurchaseOrderEntryModelToJson(model);
 
-  static Map<String, dynamic> productToJson(ApparelSizeVariantProductModel model) =>
+  static Map<String, dynamic> productToJson(
+          ApparelSizeVariantProductModel model) =>
       ApparelSizeVariantProductModel.toJson(model);
 
   static Map<String, dynamic> orderToJson(PurchaseOrderModel model) =>
@@ -915,6 +916,7 @@ class QuoteModel extends AbstractOrderModel {
   double costOfOther;
 
   /// 附件
+  @JsonKey(toJson: _attachmentsToJson)
   List<MediaModel> attachments;
 
   QuoteModel({
@@ -953,6 +955,10 @@ class QuoteModel extends AbstractOrderModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+
+  static List<Map<String, dynamic>> _attachmentsToJson(
+          List<MediaModel> attachments) =>
+      attachments.map((attachment) => MediaModel.toJson(attachment)).toList();
 }
 
 /// 生产进度

@@ -12,9 +12,9 @@ enum ArticleApprovalStatus {
 }
 
 /// 样衣归还状态
-enum SampleProductReturnState {
+enum ReturnState {
   /// 未还
-  NO_RETURN,
+  NOT_RETURNED,
 
   /// 已还
   RETURNED,
@@ -30,9 +30,9 @@ enum LendBorrowType {
 }
 
 // TODO: i18n处理
-const SampleProductReturnStateLocalizedMap = {
-  SampleProductReturnState.NO_RETURN: "未还",
-  SampleProductReturnState.RETURNED: "已还",
+const ReturnStateLocalizedMap = {
+  ReturnState.NOT_RETURNED: "未还",
+  ReturnState.RETURNED: "已还",
 };
 
 @JsonSerializable()
@@ -598,14 +598,13 @@ class SizeModel extends ItemModel {
 class SampleProductModel extends ItemModel {
   String code;
   String name;
-  String skuID;
+  @JsonKey(toJson: _mediasToJson)
   List<MediaModel> pictures;
   MediaModel thumbnail;
 
   SampleProductModel({
     this.code,
     this.name,
-    this.skuID,
     this.pictures,
     this.thumbnail,
   });
@@ -615,18 +614,22 @@ class SampleProductModel extends ItemModel {
 
   static Map<String, dynamic> toJson(SampleProductModel model) =>
       _$SampleProductModelToJson(model);
+
+  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
 class SampleBorrowReturnHistoryModel extends ItemModel {
   //样衣产品
+  @JsonKey(toJson: _sampleProductToJson)
   SampleProductModel sampleProduct;
 
   //借的类型
   LendBorrowType type;
 
   //归还状态
-  SampleProductReturnState state;
+  ReturnState state;
 
   //数量
   int quantity;
@@ -666,6 +669,8 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
 
   static Map<String, dynamic> toJson(SampleBorrowReturnHistoryModel model) =>
       _$SampleBorrowReturnHistoryModelToJson(model);
+  static Map<String, dynamic> _sampleProductToJson(SampleProductModel model) =>
+      SampleProductModel.toJson(model);
 }
 
 @JsonSerializable()

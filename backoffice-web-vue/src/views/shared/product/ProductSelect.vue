@@ -2,13 +2,13 @@
   <div class="animated fadeIn">
     <el-form :inline="true">
       <el-form-item label="">
-        <el-input placeholder="请输入商品货号/名称" v-model="keyword"></el-input>
+        <el-input placeholder="请输入产品货号/名称" v-model="keyword"></el-input>
       </el-form-item>
       <el-button-group>
-        <el-button type="primary" icon="el-icon-search" @click="onSearch">查询商品</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSearch">查询产品</el-button>
       </el-button-group>
     </el-form>
-    <el-dialog title="请选择商品"
+    <el-dialog title="请选择产品"
                :visible.sync="dialogVisible"
                :modal="false"
                :show-close="false">

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,11 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementPoolAllPage extends StatefulWidget {
+  final List<CategoryModel> categories;
+
   RequirementPoolAllPage({
     Key key,
+    this.categories,
   });
 
   ///当前选中条件
@@ -52,13 +56,22 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   List<FilterConditionEntry> categoriesConditionEntries =
       <FilterConditionEntry>[
     FilterConditionEntry(label: '全部', value: null, checked: true),
-    FilterConditionEntry(
-        label: '包工包料', value: MachiningType.LABOR_AND_MATERIAL),
-    FilterConditionEntry(label: '清加工', value: MachiningType.LIGHT_PROCESSING),
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    categoriesConditionEntries.addAll(widget.categories
+        .map((category) =>
+            FilterConditionEntry(label: category.name, value: category))
+        .toList());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print(categoriesConditionEntries);
+
     return BLoCProvider<RequirementPoolBLoC>(
         key: _quickReactionFactoryBLoCProviderKey,
         bloc: RequirementPoolBLoC.instance,
@@ -147,8 +160,9 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                 ),
                 FilterSelectMenu(
                   color: Color.fromRGBO(255, 214, 12, 1),
-                  height: showCategoriesFilterMenu ? 150 : 0,
+                  height: showCategoriesFilterMenu ? 250 : 0,
                   entries: categoriesConditionEntries,
+                  multipeSelect: true,
                   streamController:
                       RequirementPoolBLoC.instance.conditionController,
                   afterPressed: (String str) {
@@ -182,14 +196,31 @@ class OrdersListView extends StatelessWidget {
 
     //监听筛选条件更改
     bloc.conditionStream.listen((condition) {
-      if (condition.checked) {
-        if (condition.value is RequirementOrderDateRange) {
-          currentCodition.dateRange = condition.value;
-        } else if (condition.value is MachiningType) {
-          currentCodition.machiningType = condition.value;
+      if (condition.value is RequirementOrderDateRange && condition.checked) {
+        currentCodition.dateRange = condition.value;
+      }
+
+      if (condition.value is MachiningType && condition.checked) {
+        currentCodition.machiningType = condition.value;
+      }
+
+      if (condition.value is CategoryModel) {
+        if (condition.checked) {
+          if (!currentCodition.categories.contains(condition.value)) {
+            currentCodition.categories.add(condition.value);
+          }
+        } else {
+          currentCodition.categories.remove(condition.value);
         }
       }
-      bloc.filterByCondition(currentCodition);
+
+      //品类全部
+      if (condition.value == null) {
+        currentCodition.categories.clear();
+      }
+
+      // bloc.filterByCondition(currentCodition);
+      bloc.clear();
     });
 
     _scrollController.addListener(() {
@@ -291,19 +322,19 @@ class RequirementPoolOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         //根据code查询明
-        // RequirementOrderModel model = await RequirementOrderRepository()
-        //     .getRequirementOrderDetail(order.code);
+        RequirementOrderModel model = await RequirementOrderRepository()
+            .getRequirementOrderDetail(order.code);
 
-        // List<QuoteModel> quotes = await RequirementOrderRepository()
-        //     .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
+        List<QuoteModel> quotes = await RequirementOrderRepository()
+            .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
 
-        // if (model != null) {
-        //   Navigator.of(context).push(MaterialPageRoute(
-        //       builder: (context) => RequirementOrderDetailPage(
-        //             order: model,
-        //             quotes: quotes,
-        //           )));
-        // }
+        if (model != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => RequirementOrderDetailPage(
+                    order: model,
+                    quotes: quotes,
+                  )));
+        }
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),

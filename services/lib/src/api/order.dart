@@ -55,4 +55,7 @@ class OrderApis {
   static get quoteReject => (code) {
         return '/{baseSiteId}/b2b/orders/quote/$code/reject';
       };
+
+  ///创建报价
+  static get quoteCreate => '/{baseSiteId}/b2b/orders/quote/create';
 }

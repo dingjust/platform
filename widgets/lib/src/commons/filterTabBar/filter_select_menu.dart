@@ -11,6 +11,7 @@ class FilterSelectMenu extends StatefulWidget {
   final Color unselectedColor;
   final ValueChanged<String> afterPressed;
   String filterBarLabel;
+  final bool multipeSelect;
 
   FilterSelectMenu({
     Key key,
@@ -21,6 +22,7 @@ class FilterSelectMenu extends StatefulWidget {
     this.unselectedColor,
     this.afterPressed,
     this.filterBarLabel,
+    this.multipeSelect = false,
   }) : super(key: key);
 
   _FilterSelectMenuState createState() => _FilterSelectMenuState();
@@ -39,17 +41,33 @@ class _FilterSelectMenuState extends State<FilterSelectMenu> {
               .map((entry) => GestureDetector(
                     onTap: () {
                       setState(() {
-                        if (entry.checked) {
-                          entry.isDESC = !entry.isDESC;
-                          //stream通知状态更改
+                        //多选
+                        if (widget.multipeSelect) {
+                          //全部
+                          if (entry.value == null) {
+                            widget.entries.forEach((entry) {
+                              entry.checked = false;
+                            });
+                            entry.checked = true;
+                          } else {
+                            widget.entries
+                                .firstWhere((entry) => entry.value == null)
+                                .checked = false;
+                            entry.checked = !entry.checked;
+                          }
                           widget.streamController.add(entry);
                         } else {
-                          widget.entries.forEach((entry) {
-                            if (entry.checked) {
-                              entry.checked = !entry.checked;
-                            }
-                          });
-                          entry.checked = !entry.checked;
+                          //单选
+                          if (entry.checked) {
+                            entry.isDESC = !entry.isDESC;
+                          } else {
+                            widget.entries.forEach((entry) {
+                              if (entry.checked) {
+                                entry.checked = !entry.checked;
+                              }
+                            });
+                            entry.checked = !entry.checked;
+                          }
                           //stream通知状态更改
                           widget.streamController.add(entry);
                         }

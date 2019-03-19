@@ -11,12 +11,12 @@ export default {
     },
     {
       name: '仪表盘',
-      url: '/backoffice/dashboard',
+      url: '/dashboard',
       icon: 'icon-speedometer'
     },
     {
       name: '产品管理',
-      url: '/backoffice/product',
+      url: '/product',
       icon: 'icon-puzzle',
       children: [
         {
@@ -25,13 +25,8 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '产品',
-          url: '/backoffice/product/apparel',
-          icon: 'iconNone'
-        },
-        {
-          name: '面辅料',
-          url: '/backoffice/product/fabric',
+          name: '服装产品',
+          url: '/product/apparel',
           icon: 'iconNone'
         },
         {
@@ -61,50 +56,32 @@ export default {
           url: '/backoffice/customer/factory',
           icon: 'iconNone'
         },
-        {
-          name: '待审核',
-          url: '/backoffice/customer/audit',
-          icon: 'fa fa-check',
-          children: [
-            {
-              name: '待审核品牌商',
-              url: '/backoffice/customer/audit/brand',
-              icon: 'iconNone'
-            },
-            {
-              name: '待审核工厂',
-              url: '/backoffice/customer/audit/factory',
-              icon: 'iconNone'
-            }
-          ]
-        }
       ]
     },
     {
       name: '订单管理',
-      url: '/backoffice/order',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '销售订单',
-          url: '/backoffice/order/order',
-          icon: 'iconNone'
-        },
-        {
           name: '需求订单',
-          url: '/backoffice/order/requirement',
+          url: '/order/requirement',
           icon: 'iconNone'
         },
         {
           name: '报价单',
-          url: '/backoffice/order/quote',
+          url: '/order/quote',
           icon: 'iconNone'
         },
         {
           name: '生产订单',
-          url: '/backoffice/order/consignment',
+          url: '/order/purchase',
           icon: 'iconNone'
-        }
+        },
+        {
+          name: '打样订单',
+          url: '/order/proofing',
+          icon: 'iconNone'
+        },
       ]
     },
     {
@@ -129,18 +106,13 @@ export default {
         }
       ]
     }, {
-      name: '系统配置管理',
+      name: '系统管理',
       url: '/backoffice/system/carousel',
       icon: 'icon-puzzle',
       children: [
         {
           name: '轮播图配置',
           url: '/backoffice/system/carousel',
-          icon: 'iconNone'
-        },
-        {
-          name: '热销产品配置',
-          url: '/backoffice/system/hot-products',
           icon: 'iconNone'
         },
         {
@@ -153,18 +125,9 @@ export default {
           url: '/backoffice/system/label',
           icon: 'iconNone'
         },
-        {
-          name: '优秀合作商配置',
-          url: '/backoffice/system/partners',
-          icon: 'iconNone'
-        },
-        {
-          name: '商家轮播图配置',
-          url: '/backoffice/system/collections',
-          icon: 'iconNone'
-        },
       ]
-    }, {
+    },
+    {
       name: '报表管理',
       url: '/backoffice/report',
       icon: 'icon-puzzle',

@@ -17,6 +17,12 @@ const state = {
     {code: 'COMPLETED', name: '已完成'},
     {code: 'CANCELLED', name: '已取消'},
   ],
+  proofingOrderStatuses: [
+    {code: 'PENDING_PAYMENT', name: '待付款'},
+    {code: 'PENDING_DELIVERY', name: '待发货'},
+    {code: 'SHIPPED', name: '已发货'},
+    {code: 'COMPLETED', name: '已完成'},
+  ],
   salesOrderStatuses: [
     {code: 'PENDING_PAYMENT', name: '待付款'},
     {code: 'PENDING_DELIVERY', name: '待发货'},
@@ -46,7 +52,7 @@ const state = {
     {code: 'FACTORY', name: '工厂打标'},
     {code: 'PLATFORM', name: '平台打标'}
   ],
-  // 商品风格
+  // 产品风格
   productStyles: [
     {code: 'FG0001', name: '潮流'},
     {code: 'FG0002', name: '简约'},

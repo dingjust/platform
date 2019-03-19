@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/index.dart';
+import 'package:b2b_commerce/src/business/index_factory.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/index_factory.dart';
@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:widgets/widgets.dart';
 
-class FactorClient extends StatefulWidget {
-  FactorClient({Key key}) : super(key: key);
+class FactoryClient extends StatefulWidget {
+  FactoryClient({Key key}) : super(key: key);
 
   final List<Widget> modules = <Widget>[
     HomePage(),
@@ -19,10 +19,10 @@ class FactorClient extends StatefulWidget {
     MyHomePage(),
   ];
 
-  _FactorClientState createState() => _FactorClientState();
+  _FactoryClientState createState() => _FactoryClientState();
 }
 
-class _FactorClientState extends State<FactorClient> {
+class _FactoryClientState extends State<FactoryClient> {
   int _currentIndex = 0;
 
   void _handleNavigation(int index) {
@@ -95,8 +95,11 @@ class BottomNavigation extends StatelessWidget {
 
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
-      icon: const Icon(B2BIcons.home),
-      title: const Text('首页'),
+      icon: Container(
+        margin: EdgeInsets.only(right: 5),
+        child: const Icon(B2BIcons.home),
+      ),
+      title: const Text('商机'),
     ),
     BottomNavigationBarItem(
       icon: Container(
@@ -104,7 +107,7 @@ class BottomNavigation extends StatelessWidget {
         child: const Icon(B2BIcons.production),
       ),
       title: Container(
-        margin: EdgeInsets.only(right: 40),
+        margin: EdgeInsets.only(right: 30),
         child: const Text('生产'),
       ),
     ),
@@ -114,11 +117,16 @@ class BottomNavigation extends StatelessWidget {
           child: const Icon(B2BIcons.business),
         ),
         title: Container(
-          margin: EdgeInsets.only(left: 40),
-          child: const Text('生意'),
+          margin: EdgeInsets.only(left: 45),
+          child: const Text('统计'),
         )),
     BottomNavigationBarItem(
-      icon: const Icon(B2BIcons.my),
+      icon: Container(
+        margin: EdgeInsets.only(right: 5),
+        child: const Icon(
+          B2BIcons.my,
+        ),
+      ),
       title: const Text('我的'),
     )
   ];

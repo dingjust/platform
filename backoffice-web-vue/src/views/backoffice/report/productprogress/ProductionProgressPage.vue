@@ -129,7 +129,7 @@
         <el-table-column label="生产订单号" prop="productionOrderCode" width="160" fixed></el-table-column>
         <el-table-column label="客户" prop="brand" width="120" fixed></el-table-column>
         <el-table-column label="工厂" prop="factory" width="160" fixed></el-table-column>
-        <el-table-column label="供应商商品编号" prop="productSkuID" width="120"></el-table-column>
+        <el-table-column label="产品货号" prop="productSkuID" width="120"></el-table-column>
         <el-table-column label="生产订单状态" prop="status" width="100">
           <template slot-scope="scope">
             <el-tag
@@ -152,7 +152,7 @@
         </el-table-column>
         <el-table-column label="品类" prop="productCategories"></el-table-column>
         <el-table-column label="品名" prop="productName" width="160"></el-table-column>
-        <el-table-column label="商品明细" prop="items" width="160">
+        <el-table-column label="产品明细" prop="items" width="160">
           <template slot-scope="scope" v-if="scope.row.items">
             <span v-for="item in scope.row.items">{{item.color}}/{{item.size}}/{{item.amount}}<br></span>
           </template>

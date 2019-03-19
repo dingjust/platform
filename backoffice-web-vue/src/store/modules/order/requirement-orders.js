@@ -2,16 +2,13 @@ import http from '@/common/js/http';
 
 const state = {
   statusOptions: [
-    {text: '待处理', value: 'WAIT_FOR_PROCESSING'},
-    {text: '待确认', value: 'PENDING_APPROVAL'},
-    {text: '已确认', value: 'APPROVED'},
-    {text: '待分配', value: 'WAIT_FOR_ALLOCATION'},
-    {text: '待出库', value: 'WAIT_FOR_OUT_OF_STORE'},
-    {text: '已出库', value: 'OUT_OF_STORE'},
-    {text: '已签收', value: 'COMPLETED'}
+    {text: '报价中', value: 'PENDING_QUOTE'},
+    {text: '已完成', value: 'COMPLETED'},
+    {text: '已失效', value: 'CANCELLED'},
   ],
   keyword: '',
   statuses: [],
+  isAdvancedSearch: false,
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -25,7 +22,7 @@ const state = {
     id: null,
     code: '',
     details: {
-      minorCategories: [],
+      pictures: [],
       category: {
         code: '',
         name: ''
@@ -43,20 +40,29 @@ const state = {
       contactPerson: '',
       contactPhone: ''
     },
-    belongTo: {
-      uid: '',
-      name: ''
-    }
+    attachments: []
   },
   queryFormData: {
     code: '',
     skuID: '',
     statuses: [],
-    belongTos: [],
     expectedDeliveryDateFrom: null,
     expectedDeliveryDateTo: null,
     createdDateFrom: null,
     createdDateTo: null,
+  },
+  quoteFormData: {
+    id: null,
+    code: '',
+    requirementOrder: null,
+    unitPriceOfFabric: 0,
+    unitPriceOfExcipients: 0,
+    unitPriceOfProcessing: 0,
+    costOfOther: 0,
+    costOfSamples: 0,
+    expectedDeliveryDate: null,
+    remarks: null,
+    attachments: [],
   }
 };
 
@@ -66,11 +72,12 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   statuses: (state, statuses) => state.statuses = statuses,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {keyword, statuses, page, size}) {
+  async search({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
     commit('keyword', keyword);
     commit('statuses', statuses);
     commit('currentPageNumber', page);
@@ -78,7 +85,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/orders/requirement/all', {
+    const response = await http.post(url, {
       code: state.keyword,
       statuses: state.statuses
     }, {
@@ -91,14 +98,14 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({dispatch, commit, state}, {query, page, size}) {
+  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/orders/requirement/all', query, {
+    const response = await http.post(url, query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -121,6 +128,7 @@ const actions = {
 const getters = {
   keyword: state => state.keyword,
   statuses: state => state.statuses,
+  isAdvancedSearch: state => state.isAdvancedSearch,
   statusOptions: state => state.statusOptions,
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,

@@ -45,4 +45,18 @@ class QuoteOrderRepository {
       return response.statusCode;
     }
   }
+
+  ///创建报价
+  Future<String> quoteCreate(QuoteModel model) async {
+    Response response;
+    try {
+      response = await http$.post(OrderApis.quoteCreate,
+          data: QuoteModel.toJson(model));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    }
+  }
 }
