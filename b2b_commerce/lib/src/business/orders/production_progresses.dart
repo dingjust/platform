@@ -150,6 +150,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           child:Align(
                             alignment: Alignment.centerRight,
                             child:
+                            progress.estimatedDate == null? Container():
                             Text('${DateFormatUtil.formatYMD(
                                 progress.estimatedDate)}',
                                 style: TextStyle(fontWeight: FontWeight.w500)),
@@ -175,7 +176,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('${DateFormatUtil.formatYMD(progress.finishDate)}', style: TextStyle(fontWeight: FontWeight.w500)),
+                        child:
+                        progress.finishDate == null ? Container() :
+                        Text('${DateFormatUtil.formatYMD(progress.finishDate)}',
+                            style: TextStyle(fontWeight: FontWeight.w500)),
                       ),
                       Align(
                           alignment: Alignment.centerRight,

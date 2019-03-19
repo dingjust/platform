@@ -73,6 +73,7 @@ class ProductionCircleStep extends StatelessWidget {
 
     //当前步骤
     body.add(Text(
+      currentPhase==null? '':
       '${ProductionProgressPhaseLocalizedMap[currentPhase]}',
       style: TextStyle(
           color: fontColor, fontSize: fontSize, fontWeight: FontWeight.bold),
