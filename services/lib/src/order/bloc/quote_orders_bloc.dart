@@ -13,6 +13,9 @@ class QuoteOrdersBLoC extends BLoCBase {
   static QuoteOrdersBLoC get instance => _getInstance();
   static QuoteOrdersBLoC _instance;
 
+  //锁
+  bool lock = false;
+
   QuoteOrdersBLoC._internal() {
     // 初始化
   }
@@ -41,29 +44,106 @@ class QuoteOrdersBLoC extends BLoCBase {
   Stream<List<QuoteModel>> get stream => _controller.stream;
 
   filterByStatuses(String status) async {
-    //若没有数据则查询
-    if (_quotesMap[status].data.isEmpty) {
+    if (!lock) {
+      lock = true;
+      //若没有数据则查询
+      if (_quotesMap[status].data.isEmpty) {
+        //  分页拿数据，response.data;
+        //请求参数
+        Map data = {};
+        if (status != 'ALL') {
+          data = {
+            'states': [status]
+          };
+        }
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.quotes,
+              data: data,
+              queryParameters: {
+                'page': _quotesMap[status].currentPage,
+                'size': _quotesMap[status].size
+              });
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          QuoteOrdersResponse ordersResponse =
+              QuoteOrdersResponse.fromJson(response.data);
+          _quotesMap[status].totalPages = ordersResponse.totalPages;
+          _quotesMap[status].totalElements = ordersResponse.totalElements;
+          _quotesMap[status].data.clear();
+          _quotesMap[status].data.addAll(ordersResponse.content);
+        }
+      }
+      _controller.sink.add(_quotesMap[status].data);
+      lock = false;
+    }
+  }
+
+  loadingMoreByStatuses(String status) async {
+    if (!lock) {
+      lock = true;
+      //数据到底
+      if (_quotesMap[status].currentPage + 1 == _quotesMap[status].totalPages) {
+        //通知显示已经到底部
+        _bottomController.sink.add(true);
+      } else {
+        Map data = {};
+        if (status != 'ALL') {
+          data = {
+            'states': [status]
+          };
+        }
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.quotes,
+              data: data,
+              queryParameters: {
+                'page': ++_quotesMap[status].currentPage,
+                'size': _quotesMap[status].size
+              });
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          QuoteOrdersResponse ordersResponse =
+              QuoteOrdersResponse.fromJson(response.data);
+          _quotesMap[status].totalPages = ordersResponse.totalPages;
+          _quotesMap[status].totalElements = ordersResponse.totalElements;
+          _quotesMap[status].data.addAll(ordersResponse.content);
+        }
+      }
+      _loadingController.sink.add(false);
+      _controller.sink.add(_quotesMap[status].data);
+      lock = false;
+    }
+  }
+
+  //下拉刷新
+  Future refreshData(String status) async {
+    if (!lock) {
+      lock = true;
+      //重置信息
+      _quotesMap[status].data.clear();
+      _quotesMap[status].currentPage = 0;
       //  分页拿数据，response.data;
       //请求参数
       Map data = {};
       if (status != 'ALL') {
         data = {
-          'states': [status]
+          'statuses': [status]
         };
       }
-      Response<Map<String, dynamic>> response;
-      try {
-        response = await http$.post(OrderApis.quotes,
-            data: data,
-            queryParameters: {
-              'page': _quotesMap[status].currentPage,
-              'size': _quotesMap[status].size
-            });
-      } on DioError catch (e) {
-        print(e);
-      }
+      Response<Map<String, dynamic>> response = await http$
+          .post(OrderApis.quotes, data: data, queryParameters: {
+        'page': _quotesMap[status].currentPage,
+        'size': _quotesMap[status].size
+      });
 
-      if (response != null && response.statusCode == 200) {
+      if (response.statusCode == 200) {
         QuoteOrdersResponse ordersResponse =
             QuoteOrdersResponse.fromJson(response.data);
         _quotesMap[status].totalPages = ordersResponse.totalPages;
@@ -71,75 +151,9 @@ class QuoteOrdersBLoC extends BLoCBase {
         _quotesMap[status].data.clear();
         _quotesMap[status].data.addAll(ordersResponse.content);
       }
+      _controller.sink.add(_quotesMap[status].data);
+      lock = false;
     }
-    _controller.sink.add(_quotesMap[status].data);
-  }
-
-  loadingMoreByStatuses(String status) async {
-    //数据到底
-    if (_quotesMap[status].currentPage + 1 == _quotesMap[status].totalPages) {
-      //通知显示已经到底部
-      _bottomController.sink.add(true);
-    } else {
-      Map data = {};
-      if (status != 'ALL') {
-        data = {
-          'states': [status]
-        };
-      }
-      Response<Map<String, dynamic>> response;
-      try {
-        response = await http$.post(OrderApis.quotes,
-            data: data,
-            queryParameters: {
-              'page': ++_quotesMap[status].currentPage,
-              'size': _quotesMap[status].size
-            });
-      } on DioError catch (e) {
-        print(e);
-      }
-
-      if (response != null && response.statusCode == 200) {
-        QuoteOrdersResponse ordersResponse =
-            QuoteOrdersResponse.fromJson(response.data);
-        _quotesMap[status].totalPages = ordersResponse.totalPages;
-        _quotesMap[status].totalElements = ordersResponse.totalElements;
-        _quotesMap[status].data.addAll(ordersResponse.content);
-      }
-    }
-    _loadingController.sink.add(false);
-    _controller.sink.add(_quotesMap[status].data);
-  }
-
-  //下拉刷新
-  Future refreshData(String status) async {
-    //重置信息
-    _quotesMap[status].data.clear();
-    _quotesMap[status].currentPage = 0;
-    //  分页拿数据，response.data;
-    //请求参数
-    Map data = {};
-    if (status != 'ALL') {
-      data = {
-        'statuses': [status]
-      };
-    }
-    Response<Map<String, dynamic>> response = await http$.post(OrderApis.quotes,
-        data: data,
-        queryParameters: {
-          'page': _quotesMap[status].currentPage,
-          'size': _quotesMap[status].size
-        });
-
-    if (response.statusCode == 200) {
-      QuoteOrdersResponse ordersResponse =
-          QuoteOrdersResponse.fromJson(response.data);
-      _quotesMap[status].totalPages = ordersResponse.totalPages;
-      _quotesMap[status].totalElements = ordersResponse.totalElements;
-      _quotesMap[status].data.clear();
-      _quotesMap[status].data.addAll(ordersResponse.content);
-    }
-    _controller.sink.add(_quotesMap[status].data);
   }
 
   //页面控制

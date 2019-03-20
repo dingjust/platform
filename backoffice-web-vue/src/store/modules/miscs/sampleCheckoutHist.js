@@ -14,14 +14,14 @@ const state = {
   formData: {
     id: null,
     code: '',
-    name:'',
-    quantity:'',
-    expectedReturningDate:'',
-    relatedParty:'',
-    contact:'',
-    type:'',
-    state:'',
-    remarks:'',
+    name: '',
+    quantity: '',
+    expectedReturningDate: '',
+    relatedParty: '',
+    contact: '',
+    type: '',
+    state: '',
+    remarks: '',
     images: [],
     company: {
       uid: '',
@@ -40,20 +40,19 @@ const mutations = {
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {keyword, page, size}) {
-    if(keyword){
-      commit('keyword', keyword);
-    }
+  async search({dispatch, commit, state}, {url, keyword, page, size}) {
+    commit('keyword', keyword);
 
     if (page) {
       commit('currentPageNumber', page);
     }
-
     if (size) {
       commit('currentPageSize', size);
     }
-    let url = '/b2b/products/sampleCheckoutHist/keyword/'+state.keyword;
+
     const response = await http.get(url, {
+      keyword: state.keyword
+    }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

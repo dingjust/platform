@@ -63,4 +63,9 @@ class OrderApis {
 
   ///创建报价
   static get quoteCreate => '/{baseSiteId}/b2b/orders/quote/create';
+
+  ///创建打样单
+  static get proofingCreate => (code) {
+        return '/{baseSiteId}/b2b/orders/proofing/create/$code';
+      };
 }

@@ -20,23 +20,23 @@ export default {
       icon: 'icon-puzzle',
       children: [
         {
-          name: '分类',
-          url: '/backoffice/product/category',
-          icon: 'iconNone'
-        },
-        {
           name: '服装产品',
           url: '/product/apparel',
           icon: 'iconNone'
         },
         {
+          name: '分类',
+          url: '/product/category',
+          icon: 'iconNone'
+        },
+        {
           name: '颜色',
-          url: '/backoffice/product/color',
+          url: '/product/color',
           icon: 'iconNone'
         },
         {
           name: '尺码',
-          url: '/backoffice/product/size',
+          url: '/product/size',
           icon: 'iconNone'
         }
       ]
@@ -48,12 +48,12 @@ export default {
       children: [
         {
           name: '品牌',
-          url: '/backoffice/customer/brand',
+          url: '/user/brand',
           icon: 'iconNone'
         },
         {
           name: '工厂',
-          url: '/backoffice/customer/factory',
+          url: '/user/factory',
           icon: 'iconNone'
         },
       ]
@@ -86,56 +86,57 @@ export default {
     },
     {
       name: '账户管理',
-      url: '/backoffice/account',
+      url: '/account',
       icon: 'icon-puzzle',
       children: [
         {
           name: '员工',
-          url: '/backoffice/account/employee',
+          url: '/account/employee',
           icon: 'iconNone'
         },
         {
           name: '用户组',
-          url: '/backoffice/account/group',
+          url: '/account/user-group',
           icon: 'iconNone'
         },
         {
           name: '角色',
-          url: '/backoffice/account/role',
+          url: '/account/role',
           icon: 'iconNone'
         }
-      ]
-    }, {
-      name: '系统管理',
-      url: '/backoffice/system/carousel',
-      icon: 'icon-puzzle',
-      children: [
-        {
-          name: '轮播图配置',
-          url: '/backoffice/system/carousel',
-          icon: 'iconNone'
-        },
-        {
-          name: '产业集群配置',
-          url: '/backoffice/system/industrial-cluster',
-          icon: 'iconNone'
-        },
-        {
-          name: '标签配置',
-          url: '/backoffice/system/label',
-          icon: 'iconNone'
-        },
       ]
     },
     {
       name: '报表管理',
-      url: '/backoffice/report',
+      url: '/report',
       icon: 'icon-puzzle',
       children: [
         {
           name: '生产进度报表',
-          url: '/backoffice/report/production-progress',
+          url: '/report/production-progress',
           icon: 'iconNone',
+        },
+      ]
+    },
+    {
+      name: '其他',
+      url: '/miscs',
+      icon: 'icon-puzzle',
+      children: [
+        {
+          name: '轮播图配置',
+          url: '/miscs/carousel',
+          icon: 'iconNone'
+        },
+        {
+          name: '产业集群配置',
+          url: '/miscs/industrial-cluster',
+          icon: 'iconNone'
+        },
+        {
+          name: '标签配置',
+          url: '/miscs/label',
+          icon: 'iconNone'
         },
       ]
     }

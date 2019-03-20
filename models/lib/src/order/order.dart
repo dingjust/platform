@@ -144,6 +144,7 @@ const QuoteStateLocalizedMap = {
 enum MachiningType {
   ///包工包料
   LABOR_AND_MATERIAL,
+
   ///清加工
   LIGHT_PROCESSING,
 }
@@ -194,6 +195,9 @@ class AbstractOrderModel extends ItemModel {
   /// 合计金额
   double totalPrice;
 
+  /// 生产单价
+  double unitPrice;
+
   /// 创建时间
   @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
   DateTime creationTime;
@@ -216,6 +220,7 @@ class AbstractOrderModel extends ItemModel {
       this.creationTime,
       this.deliveryAddress,
       this.remarks,
+      this.unitPrice,
       this.salesApplication});
 
   static DateTime _dateTimefromMilliseconds(int date) =>
@@ -233,6 +238,7 @@ class OrderModel extends AbstractOrderModel {
       String status,
       int totalQuantity,
       double totalPrice,
+      double unitPrice,
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
@@ -245,7 +251,8 @@ class OrderModel extends AbstractOrderModel {
             creationTime: creationTime,
             deliveryAddress: deliveryAddress,
             remarks: remarks,
-            salesApplication: salesApplication);
+            salesApplication: salesApplication,
+            unitPrice: unitPrice);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
       _$OrderModelFromJson(json);
@@ -466,9 +473,11 @@ class RequirementInfoModel extends ItemModel {
   ///省
   @JsonKey(toJson: _regionToJson)
   RegionModel region;
+
   ///市
   @JsonKey(toJson: _cityToJson)
   CityModel city;
+
   ///区
   @JsonKey(toJson: _cityDistrictToJson)
   DistrictModel cityDistrict;
@@ -925,6 +934,7 @@ class QuoteModel extends AbstractOrderModel {
     DateTime creationTime,
     AddressModel deliveryAddress,
     String remarks,
+    double unitPrice,
     this.state,
     this.requirementOrder,
     this.requirementOrderRef,
@@ -938,13 +948,13 @@ class QuoteModel extends AbstractOrderModel {
     this.costOfOther,
     this.expectedDeliveryDate,
   }) : super(
-          code: code,
-          totalQuantity: totalQuantity,
-          totalPrice: totalPrice,
-          creationTime: creationTime,
-          deliveryAddress: deliveryAddress,
-          remarks: remarks,
-        );
+            code: code,
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice,
+            creationTime: creationTime,
+            deliveryAddress: deliveryAddress,
+            remarks: remarks,
+            unitPrice: unitPrice);
 
   factory QuoteModel.fromJson(Map<String, dynamic> json) =>
       _$QuoteModelFromJson(json);
@@ -1053,44 +1063,57 @@ class ProofingModel extends OrderModel {
 
   QuoteModel order;
 
+  @JsonKey(toJson: _entriesToJson)
   List<ProofingEntryModel> entries;
 
-  //打样费用单价
-  double unitPrice;
+  /// 需求订单号
+  String requirementOrderRef;
 
-  ProofingModel({
-    String code,
-    this.status,
-    int totalQuantity,
-    double totalPrice,
-    this.belongTo,
-    this.factory,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-    this.product,
-    this.order,
-    this.unitPrice,
-  }) : super(
-          code: code,
-          totalQuantity: totalQuantity,
-          totalPrice: totalPrice,
-          creationTime: creationTime,
-          deliveryAddress: deliveryAddress,
-          remarks: remarks,
-        );
+  ///  报价单号
+  String quoteRef;
+
+  ProofingModel(
+      {String code,
+      this.status,
+      int totalQuantity,
+      double totalPrice,
+      this.belongTo,
+      this.factory,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      this.product,
+      this.order,
+      double unitPrice,
+      this.requirementOrderRef,
+      this.quoteRef})
+      : super(
+            code: code,
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice,
+            creationTime: creationTime,
+            deliveryAddress: deliveryAddress,
+            remarks: remarks,
+            unitPrice: unitPrice);
 
   factory ProofingModel.fromJson(Map<String, dynamic> json) =>
       _$ProofingModelFromJson(json);
 
   static Map<String, dynamic> toJson(ProofingModel model) =>
       _$ProofingModelToJson(model);
+
+  static List<Map<String, dynamic>> _entriesToJson(
+          List<ProofingEntryModel> entries) =>
+      entries.map((entry) => ProofingEntryModel.toJson(entry)).toList();
 }
 
 /// 打样订单行
 @JsonSerializable()
 class ProofingEntryModel extends OrderEntryModel {
-  ApparelProductModel product;
+  @JsonKey(toJson: _productToJson)
+  ApparelSizeVariantProductModel product;
+
+  @JsonKey(toJson: _orderToJson)
   ProofingModel order;
 
   ProofingEntryModel({
@@ -1112,4 +1135,11 @@ class ProofingEntryModel extends OrderEntryModel {
 
   static Map<String, dynamic> toJson(ProofingEntryModel model) =>
       _$ProofingEntryModelToJson(model);
+
+  static Map<String, dynamic> _productToJson(
+          ApparelSizeVariantProductModel product) =>
+      ApparelSizeVariantProductModel.toJson(product);
+
+  static Map<String, dynamic> _orderToJson(ProofingModel order) =>
+      ProofingModel.toJson(order);
 }

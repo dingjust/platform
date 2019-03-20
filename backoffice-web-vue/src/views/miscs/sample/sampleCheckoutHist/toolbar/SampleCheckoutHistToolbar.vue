@@ -11,20 +11,23 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapMutations} = createNamespacedHelpers('SampleCheckoutHistModule');
 
   export default {
     name: 'SampleCheckoutHistToolbar',
     props: [],
     mixins: [],
-    components: {
-    },
+    components: {},
     computed: {},
     methods: {
+      ...mapMutations({
+        setKeyword: 'keyword'
+      }),
       onSearch() {
-        this.$emit('onSearch', this.keyword,0);
-      },
-      onAdvancedSearch() {
-        this.$emit('onAdvancedSearch', 0);
+        this.setKeyword(this.keyword);
+        this.$emit('onSearch', 0);
       },
       onNew() {
         let formData = {};
@@ -35,7 +38,8 @@
     },
     data() {
       return {
-          keyword:'',
+        keyword: '',
+        formData: this.$store.state.SampleCheckoutHistModule.formData,
       }
     }
   }

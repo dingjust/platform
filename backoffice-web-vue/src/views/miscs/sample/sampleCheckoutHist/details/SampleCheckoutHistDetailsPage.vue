@@ -36,7 +36,11 @@
       SampleCheckoutHistBasicForm,
       SampleCheckoutHistImagesForm,
     },
-    computed: {},
+    computed: {
+      isNewlyCreated: function () {
+        return this.slotData.id === null;
+      }
+    },
     methods: {
       async onSubmit() {
         const result = await this.$http.put('/b2b/products/sampleCheckoutHist/'+this.slotData.id, this.slotData);

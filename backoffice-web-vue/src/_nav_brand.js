@@ -54,50 +54,33 @@ export default {
       ]
     },
     {
-      name: '店铺管理',
-      url: '/brand/account',
+      name: '账户管理',
+      url: '/account',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '店铺',
-          url: '/brand/account/store',
+          name: '认证信息',
+          url: '/account/my',
           icon: 'iconNone'
         },
         {
           name: '员工',
-          url: '/brand/account/employee',
-          icon: 'iconNone'
-        },
-        {
-          name: '会员',
-          url: '/brand/account/member',
+          url: '/account/b2b-customer',
           icon: 'iconNone'
         },
         {
           name: '组织架构',
-          url: '/brand/account/org',
+          url: '/account/b2b-unit',
           icon: 'iconNone'
         },
         {
           name: '角色',
-          url: '/brand/account/role',
-          icon: 'iconNone'
-        }
-      ]
-    },
-    {
-      name: '系统管理',
-      url: '/system/zone',
-      icon: 'icon-puzzle',
-      children: [
-        {
-          name: '运费模板',
-          url: '/system/zone',
+          url: '/account/role',
           icon: 'iconNone'
         },
         {
-          name: '地址管理',
-          url: '/system/address',
+          name: '地址',
+          url: '/account/address',
           icon: 'iconNone'
         }
       ]

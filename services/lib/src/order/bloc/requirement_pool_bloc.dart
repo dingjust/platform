@@ -45,7 +45,6 @@ class RequirementPoolBLoC extends BLoCBase {
       conditionController.stream;
 
   filterByCondition(RequirementFilterCondition conditions) async {
-    print('${conditions.dateRange}');
     if (!lock) {
       lock = true;
       //重置参数

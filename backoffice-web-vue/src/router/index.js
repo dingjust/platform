@@ -34,17 +34,17 @@ const router = new Router({
             {
               path: 'color',
               name: '颜色',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/color/ColorPage')
+              component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/color/ColorPage')
             },
             {
               path: 'size',
               name: '尺码',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/size/SizePage')
+              component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/size/SizePage')
             },
             {
               path: 'category',
               name: '分类',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/category/CategoryPage')
+              component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/category/CategoryPage')
             },
             {
               path: 'apparel',
@@ -54,8 +54,7 @@ const router = new Router({
           ]
         },
         {
-          path: 'backoffice/customer',
-          redirect: '/backoffice/customer/brand',
+          path: 'user',
           name: '商家管理',
           component: {
             render(c) {
@@ -66,12 +65,12 @@ const router = new Router({
             {
               path: 'brand',
               name: '品牌',
-              component: () => import(/* webpackChunkName: 'tenant-customers' */ 'backoffice/customer/brand/BrandPage')
+              component: () => import(/* webpackChunkName: 'tenant-users' */ '@/views/user/company/brand/BrandPage')
             },
             {
               path: 'factory',
               name: '工厂',
-              component: () => import(/* webpackChunkName: 'tenant-customers' */ 'backoffice/customer/factory/FactoryPage')
+              component: () => import(/* webpackChunkName: 'tenant-users' */ '@/views/user/company/factory/FactoryPage')
             },
           ]
         },
@@ -108,62 +107,8 @@ const router = new Router({
           ]
         },
         {
-          path: 'backoffice/account',
-          redirect: '/backoffice/account/audit/brand',
-          name: '账户管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: 'employee',
-              name: '员工',
-              component: () => import(/* webpackChunkName: 'tenant-accounts' */ 'backoffice/account/employee/EmployeePage')
-            },
-            {
-              path: 'group',
-              name: '用户组',
-              component: () => import(/* webpackChunkName: 'tenant-accounts' */ 'backoffice/account/group/GroupPage')
-            },
-            {
-              path: 'role',
-              name: '角色',
-              component: () => import(/* webpackChunkName: 'tenant-accounts' */ 'backoffice/account/role/RolePage')
-            }
-          ]
-        },
-        {
-          path: 'backoffice/system',
-          redirect: '/backoffice/system/carousel',
-          name: '系统配置管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: 'carousel',
-              name: '轮播图配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/carousel/CarouselPage')
-            },
-            {
-              path: 'industrial-cluster',
-              name: '产业集群配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/industrial-cluster/IndustrialClusterPage')
-            },
-            {
-              path: 'label',
-              name: '标签配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/label/LabelPage')
-            },
-          ]
-        },
-        {
-          path: 'backoffice/report',
-          redirect: '/backoffice/report/production-progress',
+          path: 'report',
+          redirect: '/report/production-progress',
           name: '报表管理',
           component: {
             render(c) {
@@ -174,14 +119,13 @@ const router = new Router({
             {
               path: 'production-progress',
               name: '生产进度报表',
-              component: () => import(/* webpackChunkName: 'tenant-reports' */ 'backoffice/report/productprogress/ProductionProgressPage')
+              component: () => import(/* webpackChunkName: 'reports' */ '@/views/report/production-progress/ProductionProgressReportPage')
             }
           ]
         },
         {
-          path: 'brand/account',
-          redirect: '/brand/account/employee',
-          name: '店铺管理',
+          path: 'account',
+          name: '账户管理',
           component: {
             render(c) {
               return c('router-view');
@@ -189,78 +133,39 @@ const router = new Router({
           },
           children: [
             {
-              path: 'store',
-              name: '店铺',
-              component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/store/StorePage'),
+              path: 'my',
+              name: '认证信息',
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
             },
             {
               path: 'employee',
               name: '员工',
-              component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/employee/EmployeePage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/user/employee/EmployeePage')
             },
             {
-              path: 'org',
+              path: 'user-group',
+              name: '用户组',
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/group/user-group/UserGroupPage')
+            },
+            {
+              path: 'b2b-customer',
+              name: '员工',
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
+            },
+            {
+              path: 'b2b-unit',
               name: '组织架构',
-              component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/org/OrgPage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/group/b2b-unit/B2BUnitPage'),
             },
             {
               path: 'role',
               name: '角色',
-              component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/role/RolePage'),
-            }
-          ]
-        },
-        {
-          path: 'brand/system',
-          redirect: '/brand/system/zone',
-          name: '系统管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: 'zone',
-              name: '运费模板',
-              component: () => import(/* webpackChunkName: 'brand-systems' */ 'brand/system/zone/ZoneDeliveryPage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/role/RolePage'),
             },
             {
               path: 'address',
               name: '地址管理',
-              component: () => import(/* webpackChunkName: 'brand-systems' */ 'brand/system/address/AddressPage'),
-            }
-          ]
-        },
-        {
-          path: 'factory/account',
-          redirect: '/factory/account/factory',
-          name: '工厂管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: 'factory',
-              name: '工厂设置',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/factory/FactoryPage'),
-            },
-            {
-              path: 'employee',
-              name: '员工',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/employee/EmployeePage'),
-            },
-            {
-              path: 'org',
-              name: '组织架构',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/org/OrgPage'),
-            },
-            {
-              path: 'role',
-              name: '角色',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/role/RolePage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/address/AddressPage'),
             }
           ]
         },
@@ -273,6 +178,21 @@ const router = new Router({
             }
           },
           children: [
+            {
+              path: 'carousel',
+              name: '轮播图配置',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/carousel/CarouselPage')
+            },
+            {
+              path: 'industrial-cluster',
+              name: '产业集群配置',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/industrial-cluster/IndustrialClusterPage')
+            },
+            {
+              path: 'label',
+              name: '标签配置',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/label/LabelPage')
+            },
             {
               path: '/miscs/sample/sampleProduct',
               name: '样衣管理',
