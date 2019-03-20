@@ -41,6 +41,25 @@ class PurchaseOrderRepository {
       }
     }
 
+    //修改生产进度时间或数量
+    Future<String> productionProgressUpload(String code, String id, ProductionProgressModel form) async {
+      Response<String> response;
+      try{
+        await http$.put(
+          OrderApis.productionProgressUpload(code,id),
+          data: ProductionProgressModel.toJson(form),
+        );
+      }on DioError catch(e){
+        print(e);
+      }
+
+      if (response != null && response.statusCode == 200) {
+        return response.data;
+      } else {
+        return null;
+      }
+    }
+
     /// 获取订单明细
     Future<PurchaseOrderModel> getPurchaseOrderDetail(String code) async {
       Response<Map<String, dynamic>> response;

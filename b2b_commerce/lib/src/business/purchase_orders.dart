@@ -21,6 +21,18 @@ class PurchaseOrdersPage extends StatefulWidget {
 class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
   String showText;
   String statusColor;
+  String userType;
+
+  @override
+  void initState() {
+    final bloc = BLoCProvider.of<UserBLoC>(context);
+    if(bloc.isBrandUser){
+      userType = 'brand';
+    }else{
+      userType = 'factory';
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +79,6 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
         ));
   }
 
-  @override
-  void initState() {
-
-    super.initState();
-  }
 }
 
 class PurchaseOrderList extends StatelessWidget {
@@ -206,8 +213,108 @@ class PurchaseOrderItem extends StatelessWidget {
     PurchaseOrderStatus.CANCELLED: Colors.grey,
   };
 
+  static Map<PurchaseOrderStatus, Widget> _statusButton = {
+    PurchaseOrderStatus.PENDING_PAYMENT: Container(
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            padding: EdgeInsets.only(right: 30),
+            width: 150,
+            child: FlatButton(
+                color: Colors.red,
+                child: Text(
+                  '待付定金',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(20))),
+                onPressed: () {}
+            ),
+          ),
+        )
+    ),
+    PurchaseOrderStatus.IN_PRODUCTION: Container(
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            padding: EdgeInsets.only(right: 30),
+            width: 150,
+            child: FlatButton(
+                color: Color(0xFFFFD600),
+                child: Text(
+                  '验货完成',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(20))),
+                onPressed: () {}
+            ),
+          ),
+        )
+    ),
+    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Container(
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            padding: EdgeInsets.only(right: 30),
+            width: 150,
+            child: FlatButton(
+                color: Color(0xFFFFD600),
+                child: Text(
+                  '确认发货',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(20))),
+                onPressed: () {}
+            ),
+          ),
+        )
+    ),
+    PurchaseOrderStatus.OUT_OF_STORE: Container(
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            padding: EdgeInsets.only(right: 30),
+            width: 150,
+            child: FlatButton(
+                color: Color(0xFFFFD600),
+                child: Text(
+                  '查看物流',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(20))),
+                onPressed: () {}
+            ),
+          ),
+        )
+    ),
+  };
+
   @override
   Widget build(BuildContext context) {
+    final bloc = BLoCProvider.of<UserBLoC>(context);
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -216,9 +323,9 @@ class PurchaseOrderItem extends StatelessWidget {
           children: <Widget>[
             _buildOrderHeader(context),
             _buildContent(context),
-            order.balancePaid == false|| order.depositPaid == false?
-            _buildPaymentButton(context):
-            _buildOrderBottom(context),
+            bloc.isBrandUser ?
+            _buildBrandBotton(context):
+            _buildFactoryButton(context),
           ],
         ),
         decoration: BoxDecoration(
@@ -415,6 +522,14 @@ class PurchaseOrderItem extends StatelessWidget {
 
   }
 
+  Widget _buildBrandBotton(BuildContext context){
+    return Container(
+      child: order.balancePaid == false|| order.depositPaid == false?
+      _buildPaymentButton(context):
+      _buildOrderBottom(context),
+    );
+  }
+
   Widget _buildPaymentButton(BuildContext context){
     return Container(
         child: Align(
@@ -441,7 +556,6 @@ class PurchaseOrderItem extends StatelessWidget {
         )
     );
   }
-
 
   Widget _buildLogisticsButton(BuildContext context){
     return Container(
@@ -501,6 +615,45 @@ class PurchaseOrderItem extends StatelessWidget {
     );
   }
 
+  Widget _buildFactoryButton(BuildContext context){
+    return Container(
+        child:
+        order.status != PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ?
+        _statusButton[order.status] :
+        _buildWaitBalance(context)
+    );
+  }
+
+  Widget _buildWaitBalance(BuildContext context) {
+    return Container(
+      child: order.balancePaid == true ?
+      _statusButton[PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE] :
+      Container(
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+              padding: EdgeInsets.only(right: 20),
+              width: 150,
+              child: FlatButton(
+                  color: Colors.red,
+                  child: Text(
+                    '待付尾款',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(20))),
+                  onPressed: () {}
+              ),
+            ),
+          )
+      ),
+    );
+  }
 
 }
 

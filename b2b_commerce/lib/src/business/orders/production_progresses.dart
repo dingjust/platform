@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 final String defaultPicUrl =
@@ -20,10 +21,21 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   DateTime _blDate;
   String _blNumber;
   TextEditingController dialogText;
-
+  String userType;
   final PurchaseOrderModel order;
 
   _ProductionProgressesPageState({this.order});
+
+  @override
+  void initState() {
+    final bloc = BLoCProvider.of<UserBLoC>(context);
+    if(bloc.isBrandUser){
+      userType = 'brand';
+    }else{
+      userType = 'factory';
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +89,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 //    }
     return Stack(
       children: <Widget>[
-        Padding(padding: const EdgeInsets.only(left: 30.0), child: _buildProgressTimeLine(context,progress,currentPhase,sequence,_index)),
+        Padding(padding: const EdgeInsets.only(left: 30.0),
+            child: _buildProgressTimeLine(context,progress,currentPhase,sequence,_index)),
         Positioned(
           top: 30.0,
           bottom: 0.0,
@@ -143,7 +156,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                             child: Text('预计完成时间',
                                 style: TextStyle(fontWeight: FontWeight.w500)),
                             onTap: () {
-                              sequence > _index || phase == currentPhase ? _showDatePicker() : null;
+                              userType != null && userType == 'factory' && (sequence > _index || phase == currentPhase) ?
+                              _showDatePicker(progress) : null;
                             }),
                       ),
                       GestureDetector(
@@ -156,13 +170,17 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                                 style: TextStyle(fontWeight: FontWeight.w500)),
                           ),
                           onTap: () {
-//                            sequence > _index || phase == currentPhase ? _showDatePicker() : null;
+                            userType != null && userType == 'factory' && (sequence > _index || phase == currentPhase) ?
+                            _showDatePicker(progress) : null;
                           }),
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconButton(
-                          icon: Icon(Icons.date_range),
-//                            onPressed: sequence > _index || phase == currentPhase ? _showDatePicker:null
+                            icon: Icon(Icons.date_range),
+                            onPressed: () {
+                              userType != null && userType == 'factory' && (sequence > _index || phase == currentPhase) ?
+                              _showDatePicker(progress) : null;
+                            }
                         ),
                       )
                     ],
@@ -202,7 +220,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           child: Text('数量',
                               style: TextStyle(fontWeight: FontWeight.w500)),
                           onTap: () {
-                            sequence > _index || phase == currentPhase ? _showDialog(): null;
+                            userType != null && userType == 'factory' && (sequence > _index || phase == currentPhase) ?
+                            _showDialog(progress): null;
                           }),
                     ),
                     GestureDetector(
@@ -212,16 +231,19 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                               style: TextStyle(fontWeight: FontWeight.w500)),
                         ),
                         onTap: () {
-//                          sequence > _index || phase == currentPhase
-//                              ? _showDialog()
-//                              : null;
+                          userType != null && userType == 'factory' && (sequence > _index || phase == currentPhase) ?
+                              _showDialog(progress)
+                              : null;
                         }
                     ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: IconButton(
                         icon: Icon(Icons.keyboard_arrow_right),
-//                        onPressed: sequence > _index || phase == currentPhase ? _showDialog : null,
+                        onPressed: (){
+                          userType != null && userType == 'factory' && (sequence > _index || phase == currentPhase) ?
+                          _showDialog(progress) : null;
+                        }
                       ),
                     )
                   ],
@@ -239,7 +261,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           child: Text('凭证',
                               style: TextStyle(fontWeight: FontWeight.w500)),
                           onTap: () {
-//                            sequence > _index || phase == currentPhase ? _selectPapersImages() : null;
+                            userType != null && userType == 'factory' && (sequence > _index || phase == currentPhase) ?
+                            _selectPapersImages() : null;
                           }),
                       flex: 4,
                     ),
@@ -269,8 +292,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-//                  progress.phase == ProductionProgressPhase.SAMPLE_CONFIRM?
-                  _showTipsDialog('验货');
+                  progress.phase == ProductionProgressPhase.INSPECTION?
+                  _showTipsDialog('验货'):null;
                 },
               )
                   : null)
@@ -321,7 +344,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   //生成日期选择器
-  Future<Null> _selectDate(BuildContext context) async {
+  Future<Null> _selectDate(BuildContext context,ProductionProgressModel model) async {
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -330,7 +353,13 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     );
 
     if(_picked != null){
-      print(_picked);
+      ProductionProgressModel progressModel = new ProductionProgressModel();
+      progressModel.estimatedDate = _picked;
+      try{
+        await PurchaseOrderRepository().productionProgressUpload(widget.order.code,model.id.toString(),progressModel);
+      }catch(e){
+        print(e);
+      }
       setState(() {
         _blDate = _picked;
       });
@@ -369,7 +398,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
 
 //生成Dialog控件
-  Future<void> _neverSatisfied(BuildContext context) async {
+  Future<void> _neverSatisfied(BuildContext context,ProductionProgressModel model) async {
     dialogText = TextEditingController();
     return showDialog<void>(
       context: context,
@@ -390,9 +419,16 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           actions: <Widget>[
             FlatButton(
               child: Text('确定'),
-              onPressed: () {
+              onPressed: () async {
                 if(dialogText.text != null){
                   print(dialogText.text);
+                  ProductionProgressModel progressModel = new ProductionProgressModel();
+                  progressModel.quantity = int.parse(dialogText.text);
+                  try{
+                    await PurchaseOrderRepository().productionProgressUpload(widget.order.code,model.id.toString(),progressModel);
+                }catch(e){
+                print(e);
+                }
                   setState(() {
                     _blNumber = dialogText.text;
                   });
@@ -407,12 +443,12 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
 //打开日期选择器
-  void _showDatePicker() {
-    _selectDate(context);
+  void _showDatePicker(ProductionProgressModel model) {
+    _selectDate(context,model);
   }
 //打开数量输入弹框
-  void _showDialog(){
-    _neverSatisfied(context);
+  void _showDialog(ProductionProgressModel model){
+    _neverSatisfied(context,model);
   }
 //确认是否完成动作
   void _showTipsDialog(String progresses){
