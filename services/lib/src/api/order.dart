@@ -36,7 +36,7 @@ class OrderApis {
 
   //创建线下采购订单 POST
   static get purchaseOfflineOrders =>
-      '/{baseSiteId}/b2b/orders/purchase/offline';
+      '/{baseSiteId}/b2b/orders/purchase/create';
 
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/b2b/orders/quote';
@@ -58,4 +58,9 @@ class OrderApis {
 
   ///创建报价
   static get quoteCreate => '/{baseSiteId}/b2b/orders/quote/create';
+
+  ///创建打样单
+  static get proofingCreate => (code) {
+        return '/{baseSiteId}/b2b/orders/proofing/create/$code';
+      };
 }

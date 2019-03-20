@@ -5,7 +5,7 @@
     </el-form-item>
     <el-button-group>
       <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-      <el-button type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>
+      <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>
     </el-button-group>
     <el-popover placement="bottom" width="800" trigger="click">
       <el-row :gutter="10">
@@ -44,21 +44,33 @@
           <el-button type="primary" icon="el-icon-search" @click="onAdvancedSearch">查询</el-button>
         </el-col>
       </el-row>
-      <el-button type="primary" slot="reference">高级查询</el-button>
+      <el-button-group slot="reference">
+        <el-button type="primary">高级查询</el-button>
+      </el-button-group>
     </el-popover>
   </el-form>
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapMutations} = createNamespacedHelpers('ApparelProductsModule');
+
   export default {
     name: 'ApparelProductToolbar',
     components: {},
     computed: {},
     methods: {
+      ...mapMutations({
+        setKeyword: 'keyword',
+        setQueryFormData: 'queryFormData'
+      }),
       onSearch() {
+        this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
+        this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
       onNew() {
@@ -77,12 +89,15 @@
     },
     data() {
       return {
-        keyword: this.$store.state.ApparelProductsModule.keyword,
+        keyword: '',
         formData: this.$store.state.ApparelProductsModule.formData,
         queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
         statusOptions: this.$store.state.ApparelProductsModule.statusOptions,
         categories: [],
       }
+    },
+    created() {
+      this.getCategories();
     }
   }
 </script>

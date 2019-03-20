@@ -175,7 +175,7 @@ class OfflineOrderQuantityInputItemState
                   Container(
                     width: 20,
                     decoration: BoxDecoration(
-                      color: Color(int.parse('0xff' + row.key.colorCode)),
+                      color: Color(int.parse('0xff' + row.key.colorCode.substring(1))),
                       shape: BoxShape.circle,
                     ),
                     child: Text(''),

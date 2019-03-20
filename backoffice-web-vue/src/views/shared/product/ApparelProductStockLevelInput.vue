@@ -33,7 +33,7 @@
 
 <script>
   export default {
-    name: 'ProductStockLevelInput',
+    name: 'ApparelProductStockLevelInput',
     props: ['readOnly', 'variants'],
     components: {},
     mixins: [],

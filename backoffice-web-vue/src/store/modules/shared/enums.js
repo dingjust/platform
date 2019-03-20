@@ -1,4 +1,12 @@
 const state = {
+  sampleCheckoutTypes: [
+    {code: 'BORROW', name: '借入'},
+    {code: 'LEND', name: '借出'},
+  ],
+  returnStates: [
+    {code: 'NOT_RETURNED', name: '已还'},
+    {code: 'RETURNED', name: '未还'},
+  ],
   requirementOrderStatuses: [
     {code: 'PENDING_QUOTE', name: '报价中'},
     {code: 'COMPLETED', name: '已完成'},

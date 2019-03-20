@@ -21,11 +21,32 @@ const COMMON_APIS = {
   createApparelProduct() {
     return '/b2b/products/apparel/create';
   },
-  getPurchaseOrder(code) {
+  getRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code;
   },
-  createPurchaseOrder() {
+  createRequirementOrder() {
     return '/b2b/orders/requirement/new';
+  },
+  getQuote(code) {
+    return '/b2b/orders/quote/' + code;
+  },
+  createQuote() {
+    return '/b2b/orders/quote/create';
+  },
+  getPurchaseOrder(code) {
+    return '/b2b/orders/purchase/' + code;
+  },
+  createPurchaseOrder() {
+    return '/b2b/orders/purchase/create';
+  },
+  createPurchaseOrderOfQuote(quote) {
+    return '/b2b/orders/purchase/create/' + quote;
+  },
+  getProofing(code) {
+    return '/b2b/orders/proofing/' + code;
+  },
+  createProofing(quote) {
+    return '/b2b/orders/proofing/create/' + quote;
   },
   removeMedia(mediaID) {
     return '/djwebservices/media/' + mediaID
@@ -36,23 +57,41 @@ let TENANT_APIS = {
   getApparelProducts() {
     return '/b2b/products/apparel/all';
   },
-  getPurchaseOrders() {
+  getRequirementOrders() {
     return '/b2b/orders/requirement/all';
-  }
+  },
+  getAllRequirementOrders() {
+    return this.getRequirementOrders();
+  },
+  getQuotes() {
+    return '/b2b/orders/quote/all';
+  },
+  getPurchaseOrders() {
+    return '/b2b/orders/purchase/all';
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
-let NON_TENANT_APIS = {
+let NONE_TENANT_APIS = {
   getApparelProducts() {
     return '/b2b/products/apparel';
   },
-  getPurchaseOrders() {
+  getRequirementOrders() {
     return '/b2b/orders/requirement';
   },
+  getAllRequirementOrders() {
+    return '/b2b/orders/requirement/all';
+  },
+  getQuotes() {
+    return '/b2b/orders/quote';
+  },
+  getPurchaseOrders() {
+    return '/b2b/orders/purchase';
+  },
 };
-Object.assign(NON_TENANT_APIS, COMMON_APIS);
+Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
 export {
   TENANT_APIS,
-  NON_TENANT_APIS
+  NONE_TENANT_APIS
 }

@@ -10,12 +10,17 @@ export default {
       }
     },
     {
+      name: '仪表盘',
+      url: '/dashboard',
+      icon: 'icon-speedometer'
+    },
+    {
       name: '产品管理',
       url: '/product',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '产品',
+          name: '服装产品',
           url: '/product/apparel',
           icon: 'iconNone',
         }
@@ -77,27 +82,46 @@ export default {
           name: '角色',
           url: '/brand/account/role',
           icon: 'iconNone'
-        },
-        {
-          name: '我的关注',
-          url: '/brand/account/follower',
-          icon: 'iconNone'
         }
       ]
-    }, {
+    },
+    {
       name: '系统管理',
-      url: '/brand/system/zone',
+      url: '/system/zone',
       icon: 'icon-puzzle',
       children: [
         {
           name: '运费模板',
-          url: '/brand/system/zone',
+          url: '/system/zone',
           icon: 'iconNone'
         },
         {
           name: '地址管理',
-          url: '/brand/system/address',
+          url: '/system/address',
           icon: 'iconNone'
+        }
+      ]
+    },
+    {
+      name: '其他',
+      url: '/miscs',
+      icon: 'icon-puzzle',
+      children: [
+        {
+          name: '样衣管理',
+          icon: 'fa fa-check',
+          children: [
+            {
+              name: '样衣',
+              url: '/miscs/sample/sampleProduct',
+              icon: 'iconNone',
+            },
+            {
+              name: '样衣借还记录',
+              url: '/miscs/sample/sampleCheckoutHist',
+              icon: 'iconNone',
+            }
+          ]
         }
       ]
     }

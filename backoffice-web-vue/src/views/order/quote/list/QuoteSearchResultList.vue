@@ -1,6 +1,13 @@
 <template>
-  <div>
+  <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
+      <el-table-column type="expand" fixed>
+        <template slot-scope="props">
+          <requirement-order-request-form :read-only="true"
+                                          :slot-data="props.row.requirementOrder">
+          </requirement-order-request-form>
+        </template>
+      </el-table-column>
       <el-table-column label="报价单号" prop="code" width="250" fixed></el-table-column>
       <el-table-column label="状态" prop="state" fixed>
         <template slot-scope="scope">
@@ -19,7 +26,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <slot name="operations" :item="scope.row"></slot>
         </template>
       </el-table-column>
     </el-table>
@@ -35,10 +42,12 @@
 </template>
 
 <script>
+  import RequirementOrderRequestForm from '@/views/order/requirement/form/RequirementOrderRequestForm';
+
   export default {
     name: 'QuoteSearchResultList',
     props: ["page"],
-    computed: {},
+    components: {RequirementOrderRequestForm},
     methods: {
       onPageSizeChanged(val) {
         this._reset();
@@ -62,9 +71,6 @@
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
-      },
-      onDetails(row) {
-        this.$emit('onDetails', row);
       }
     },
     data() {

@@ -115,8 +115,8 @@ class ColorSizeNumTable extends StatelessWidget {
                 Container(
                   width: 20,
                   decoration: BoxDecoration(
-                    color: Color(int.parse(
-                        '${entries[0].model.color.colorCode.replaceAll}')),
+                    color: Color(
+                        int.parse('0xff' + entries[0].model.color.colorCode.substring(1))),
                     shape: BoxShape.circle,
                   ),
                   child: Text(''),
@@ -264,11 +264,12 @@ class EditColorSizeNumTable extends StatelessWidget {
                   )),
                   TableCell(
                       child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                     color: Color.fromRGBO(250, 250, 250, 1),
                     alignment: Alignment.center,
                     child: TextField(
                       controller: entry.controller,
-                      decoration: InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none,hintText: '填写'),
                       keyboardType: TextInputType.number,
                       //只能输入数字
                       inputFormatters: <TextInputFormatter>[

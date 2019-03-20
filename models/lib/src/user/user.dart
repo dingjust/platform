@@ -166,6 +166,7 @@ class RegionModel extends ItemModel {
   factory RegionModel.fromJson(Map<String, dynamic> json) => _$RegionModelFromJson(json);
 
   static Map<String, dynamic> toJson(RegionModel model) => _$RegionModelToJson(model);
+
 }
 
 /// 城市
@@ -173,6 +174,7 @@ class RegionModel extends ItemModel {
 class CityModel extends ItemModel {
   String code;
   String name;
+  @JsonKey(toJson: _regionToJson)
   RegionModel region;
 
   CityModel({
@@ -184,6 +186,9 @@ class CityModel extends ItemModel {
   factory CityModel.fromJson(Map<String, dynamic> json) => _$CityModelFromJson(json);
 
   static Map<String, dynamic> toJson(CityModel model) => _$CityModelToJson(model);
+
+  static Map<String, dynamic> _regionToJson(RegionModel model) =>
+      RegionModel.toJson(model);
 }
 
 /// 地区
@@ -191,6 +196,7 @@ class CityModel extends ItemModel {
 class DistrictModel extends ItemModel {
   String code;
   String name;
+  @JsonKey(toJson: _cityToJson)
   CityModel city;
 
   DistrictModel({@required this.code, @required this.name, this.city});
@@ -198,6 +204,9 @@ class DistrictModel extends ItemModel {
   factory DistrictModel.fromJson(Map<String, dynamic> json) => _$DistrictModelFromJson(json);
 
   static Map<String, dynamic> toJson(DistrictModel model) => _$DistrictModelToJson(model);
+
+  static Map<String, dynamic> _cityToJson(CityModel model) =>
+      CityModel.toJson(model);
 }
 
 ///角色

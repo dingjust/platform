@@ -66,7 +66,11 @@ Vue.mixin({
   },
   methods: {
     apis() {
-      return this.$store.getters.apis;
+      if (this.$store.getters.currentUser.type === 'TENANT') {
+        return TENANT_APIS;
+      }
+
+      return NONE_TENANT_APIS;
     },
     isBrand() {
       return this.$store.getters.currentUser.type === 'BRAND';

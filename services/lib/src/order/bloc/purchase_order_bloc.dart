@@ -14,18 +14,7 @@ class PurchaseOrderBLoC extends BLoCBase {
   static PurchaseOrderBLoC get instance => _getInstance();
   static PurchaseOrderBLoC _instance;
 
-//  Map<String, List<PurchaseOrderModel>> _ordersMap;
-
   PurchaseOrderBLoC._internal() {
-    //假数据
-//    _ordersMap = {
-//      'ALL': [],
-//      'PENDING_PAYMENT': [],
-//      'IN_PRODUCTION': [],
-//      'WAIT_FOR_OUT_OF_STORE': [],
-//      'OUT_OF_STORE': [],
-//      'COMPLETED': []
-//    };
   }
 
   static PurchaseOrderBLoC _getInstance() {
@@ -88,15 +77,15 @@ class PurchaseOrderBLoC extends BLoCBase {
         print(e);
       }
 
-      if (response.statusCode == 200) {
-        PurchaseOrdersResponse ordersResponse =
-        PurchaseOrdersResponse.fromJson(response.data);
-        _ordersMap[status].totalPages = ordersResponse.totalPages;
-        _ordersMap[status].totalElements = ordersResponse.totalElements;
-        _ordersMap[status].data.clear();
-        _ordersMap[status].data.addAll(ordersResponse.content);
-      }
+    if (response != null && response.statusCode == 200) {
+      PurchaseOrdersResponse ordersResponse =
+      PurchaseOrdersResponse.fromJson(response.data);
+      _ordersMap[status].totalPages = ordersResponse.totalPages;
+      _ordersMap[status].totalElements = ordersResponse.totalElements;
+      _ordersMap[status].data.clear();
+      _ordersMap[status].data.addAll(ordersResponse.content);
     }
+  }
     _controller.sink.add(_ordersMap[status].data);
 
   }
@@ -166,7 +155,7 @@ class PurchaseOrderBLoC extends BLoCBase {
       };
     }
     Response<Map<String, dynamic>> response = await http$
-        .post(OrderApis.purchaseOrders, data: data, queryParameters: {
+        .    post(OrderApis.purchaseOrders, data: data, queryParameters: {
       'page': _ordersMap[status].currentPage,
       'size': _ordersMap[status].size
     });
@@ -176,14 +165,12 @@ class PurchaseOrderBLoC extends BLoCBase {
       PurchaseOrdersResponse.fromJson(response.data);
       _ordersMap[status].totalPages = ordersResponse.totalPages;
       _ordersMap[status].totalElements = ordersResponse.totalElements;
-      _ordersMap[status].data.clear();
       _ordersMap[status].data.addAll(ordersResponse.content);
     }
     _controller.sink.add(_ordersMap[status].data);
   }
 
   //页面控制
-
   var _loadingController = StreamController<bool>.broadcast();
 
   var _bottomController = StreamController<bool>.broadcast();

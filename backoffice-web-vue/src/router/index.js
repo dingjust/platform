@@ -12,13 +12,14 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      redirect: '/dashboard',
       name: '首页',
       component: Full,
       children: [
         {
           path: 'dashboard',
           name: '仪表盘',
-          component: () => import(/* webpackChunkName: 'Dashboard' */ '@/views/Dashboard')
+          component: () => import(/* webpackChunkName: 'Dashboard' */ '@/views/dashboard/Dashboard')
         },
         {
           path: 'product',
@@ -47,13 +48,8 @@ const router = new Router({
             },
             {
               path: 'apparel',
-              name: '产品',
+              name: '服装产品',
               component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/ApparelProductPage')
-            },
-            {
-              path: 'fabric',
-              name: '面辅料',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/fabric/FabricProductPage')
             }
           ]
         },
@@ -77,16 +73,6 @@ const router = new Router({
               name: '工厂',
               component: () => import(/* webpackChunkName: 'tenant-customers' */ 'backoffice/customer/factory/FactoryPage')
             },
-            {
-              path: 'audit/brand',
-              name: '待审核品牌商',
-              component: () => import(/* webpackChunkName: 'tenant-customers' */ 'backoffice/account/audit/BrandAuditPage')
-            },
-            {
-              path: 'audit/factory',
-              name: '待审核工厂',
-              component: () => import(/* webpackChunkName: 'tenant-customers' */ 'backoffice/account/audit/FactoryAuditPage')
-            }
           ]
         },
         {
@@ -213,11 +199,6 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/employee/EmployeePage'),
             },
             {
-              path: 'member',
-              name: '会员',
-              component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/member/MemberPage'),
-            },
-            {
               path: 'org',
               name: '组织架构',
               component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/org/OrgPage'),
@@ -226,11 +207,6 @@ const router = new Router({
               path: 'role',
               name: '角色',
               component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/role/RolePage'),
-            },
-            {
-              path: 'follower',
-              name: '我的关注',
-              component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/follower/MyFollowersPage'),
             }
           ]
         },
@@ -253,23 +229,6 @@ const router = new Router({
               path: 'address',
               name: '地址管理',
               component: () => import(/* webpackChunkName: 'brand-systems' */ 'brand/system/address/AddressPage'),
-            }
-          ]
-        },
-        {
-          path: '/factory/product',
-          redirect: '/factory/product/fabric',
-          name: '产品管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: 'fabric',
-              name: '面辅料',
-              component: () => import(/* webpackChunkName: 'factory-products' */ 'factory/product/fabric/FabricProductPage'),
             }
           ]
         },
@@ -304,7 +263,28 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/role/RolePage'),
             }
           ]
-        }
+        },
+        {
+          path: '/miscs',
+          name: '其他',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [
+            {
+              path: '/miscs/sample/sampleProduct',
+              name: '样衣管理',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleProduct/SampleProductPage'),
+            },
+            {
+              path: '/miscs/sample/sampleCheckoutHist',
+              name: '样衣借还记录',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
+            }
+          ]
+        },
       ]
     },
     {

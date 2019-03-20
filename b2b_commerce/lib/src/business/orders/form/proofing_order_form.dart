@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
-import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -19,19 +18,24 @@ class ProofingOrderForm extends StatefulWidget {
 
 class _ProofingOrderFormState extends State<ProofingOrderForm> {
   TextEditingController _remarksController = TextEditingController();
-  TextEditingController _sampleController = TextEditingController();
+  TextEditingController _unitPriceController = TextEditingController();
+
+  GlobalKey _scaffoldKey = GlobalKey();
 
   double totalPrice = 0.0;
   double sample = 0.0;
+  int totalQuantity = 0;
 
   ApparelProductModel product;
+
+  List<EditApparelSizeVariantProductEntry> productEntries;
 
   @override
   void initState() {
     // TODO: implement initState
     if (widget.quoteModel != null) {
       _remarksController.text = widget.quoteModel.remarks;
-      _sampleController.text = widget.quoteModel.costOfSamples.toString();
+      _unitPriceController.text = widget.quoteModel.costOfSamples.toString();
     }
     super.initState();
   }
@@ -39,6 +43,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           brightness: Brightness.light,
           centerTitle: true,
@@ -67,73 +72,74 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               width: 300,
               child: Center(
                 child: Text(
-                  '提交报价',
+                  '提交订单',
                   style: TextStyle(
                     fontSize: 20,
                     color: Color.fromRGBO(36, 38, 41, 1),
                   ),
                 ),
               )),
-          onPressed: () async {
-            // QuoteModel model;
-            // if (widget.update) {
-            //   model = widget.quoteModel;
-            // } else {
-            //   //新建
-            //   model = QuoteModel();
-            // }
-            // //拼装数据
-            // model.costOfSamples = sample;
-            // model.remarks = _remarksController.text;
+          onPressed: submitOrder,
+          // () async {
+          // QuoteModel model;
+          // if (widget.update) {
+          //   model = widget.quoteModel;
+          // } else {
+          //   //新建
+          //   model = QuoteModel();
+          // }
+          // //拼装数据
+          // model.costOfSamples = sample;
+          // model.remarks = _remarksController.text;
 
-            // String response = await QuoteOrderRepository().quoteCreate(model);
+          // String response = await QuoteOrderRepository().quoteCreate(model);
 
-            // if (response == '') {
-            //   showDialog<void>(
-            //     context: context,
-            //     barrierDismissible: true, // user must tap button!
-            //     builder: (context) {
-            //       return AlertDialog(
-            //         title: Text('报价失败'),
-            //         actions: <Widget>[
-            //           FlatButton(
-            //             child: Text('确定'),
-            //             onPressed: () {
-            //               Navigator.of(context).pop();
-            //             },
-            //           ),
-            //         ],
-            //       );
-            //     },
-            //   );
-            // } else {
-            //   showDialog<void>(
-            //     context: context,
-            //     barrierDismissible: true, // user must tap button!
-            //     builder: (context) {
-            //       return AlertDialog(
-            //         title: Text('报价成功'),
-            //         actions: <Widget>[
-            //           FlatButton(
-            //             child: Text('确定'),
-            //             onPressed: () async {
-            //               Navigator.of(context).pop();
-            //               //查询明细
-            //               QuoteModel detailModel = await QuoteOrderRepository()
-            //                   .getquoteDetail(response);
-            //               if (detailModel != null) {
-            //                 Navigator.of(context).push(MaterialPageRoute(
-            //                     builder: (context) =>
-            //                         QuoteOrderDetailPage(item: detailModel)));
-            //               }
-            //             },
-            //           ),
-            //         ],
-            //       );
-            //     },
-            //   );
-            // }
-          },
+          // if (response == '') {
+          //   showDialog<void>(
+          //     context: context,
+          //     barrierDismissible: true, // user must tap button!
+          //     builder: (context) {
+          //       return AlertDialog(
+          //         title: Text('报价失败'),
+          //         actions: <Widget>[
+          //           FlatButton(
+          //             child: Text('确定'),
+          //             onPressed: () {
+          //               Navigator.of(context).pop();
+          //             },
+          //           ),
+          //         ],
+          //       );
+          //     },
+          //   );
+          // } else {
+          //   showDialog<void>(
+          //     context: context,
+          //     barrierDismissible: true, // user must tap button!
+          //     builder: (context) {
+          //       return AlertDialog(
+          //         title: Text('报价成功'),
+          //         actions: <Widget>[
+          //           FlatButton(
+          //             child: Text('确定'),
+          //             onPressed: () async {
+          //               Navigator.of(context).pop();
+          //               //查询明细
+          //               QuoteModel detailModel = await QuoteOrderRepository()
+          //                   .getquoteDetail(response);
+          //               if (detailModel != null) {
+          //                 Navigator.of(context).push(MaterialPageRoute(
+          //                     builder: (context) =>
+          //                         QuoteOrderDetailPage(item: detailModel)));
+          //               }
+          //             },
+          //           ),
+          //         ],
+          //       );
+          //     },
+          //   );
+          // }
+          // },
           backgroundColor: Colors.amberAccent,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -233,7 +239,13 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   autofocus: false,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.right,
-                  controller: _sampleController,
+                  controller: _unitPriceController,
+                  onChanged: (value) {
+                    _countTotalPrice(value);
+                    // setState(() {
+                    //   totalPrice = double.parse(value) * productEntries.length;
+                    // });
+                  },
                   //只能输入数字
                   inputFormatters: <TextInputFormatter>[
                     WhitelistingTextInputFormatter.digitsOnly,
@@ -327,22 +339,25 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
     setState(() {
       product = selectProduct;
+      productEntries = product.variants
+          .map((variant) => EditApparelSizeVariantProductEntry(
+              controller: TextEditingController(), model: variant))
+          .toList();
     });
   }
 
   Widget _buildSampleNum() {
     if (product != null) {
-      List<EditApparelSizeVariantProductEntry> data = product.variants
-          .map((variant) => EditApparelSizeVariantProductEntry(
-              controller: TextEditingController(), model: variant))
-          .toList();
-
       return GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ProductSizeColorNum(
-                    data: data,
-                  )));
+        onTap: () async {
+          List<EditApparelSizeVariantProductEntry> returnEntries =
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ProductSizeColorNum(
+                        data: productEntries,
+                      )));
+          if (returnEntries != null) {
+            productEntries = returnEntries;
+          }
         },
         child: Container(
           padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -374,19 +389,74 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   }
 
   void _countTotalPrice(String value) {
-    // setState(() {
-    //   fabric = double.parse(
-    //       _fabricController.text == '' ? '0' : _fabricController.text);
-    //   excipients = double.parse(
-    //       _excipientsController.text == '' ? '0' : _excipientsController.text);
-    //   processing = double.parse(
-    //       _processingController.text == '' ? '0' : _processingController.text);
-    //   other = double.parse(
-    //       _otherController.text == '' ? '0' : _otherController.text);
-    //   totalPrice = fabric + excipients + processing + other;
-    //   sample = double.parse(
-    //       _sampleController.text == '' ? '0' : _sampleController.text);
-    // });
+    int sum = 0;
+    productEntries.forEach((entry) {
+      sum = sum + int.parse(entry.controller.text);
+    });
+    setState(() {
+      totalQuantity = sum;
+      totalPrice = sum * double.parse(value);
+    });
+  }
+
+  void submitOrder() {
+    if (productEntries == null || product == null) {
+      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
+        SnackBar(
+          content: Text('请选择商品和数量'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else if (totalQuantity == 0) {
+      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
+        SnackBar(
+          content: Text('请填写打样费'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return AlertDialog(
+            title: Text('确定提交？'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('确定'),
+                onPressed: () async {
+                  //拼装数据
+                  ProofingModel model = ProofingModel();
+                  model.entries = productEntries
+                      .map((entry) => ProofingEntryModel(
+                            quantity: int.parse(entry.controller.text),
+                            product: entry.model,
+                          ))
+                      .toList();
+                  model.unitPrice = double.parse(_unitPriceController.text);
+                  model.totalPrice = totalPrice;
+                  model.totalQuantity = totalQuantity;
+                  model.remarks = _remarksController.text;
+                  String response = await ProofingOrderRepository()
+                      .proofingCreate(widget.quoteModel.code, model);
+                  //TODOS:跳转到打样订单详情
+                  if (response != null && response != '') {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
 

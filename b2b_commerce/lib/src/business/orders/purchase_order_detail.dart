@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
+import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -35,11 +36,6 @@ final List<OrderStatusModel> _statusList = [
     'sort': 5,
   }),
 ];
-
-final List<Widget> _list = new List();
-
-final String defaultPicUrl =
-    "https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg";
 
 class PurchaseOrderDetailPage extends StatefulWidget {
   final PurchaseOrderModel order;
@@ -94,6 +90,14 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           centerTitle: true,
           elevation: 0.5,
           title: Text('生产订单明细'),
+//          leading: IconButton(
+//              icon: Icon(Icons.keyboard_return,size: 20,),
+//              onPressed: () {
+//                Navigator.of(context).push(MaterialPageRoute(
+//                    builder: (context) => PurchaseOrdersPage())
+//                );
+//              }
+//          ),
           actions: <Widget>[
             order.salesApplication == null ? Container() : Container(
               padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -121,9 +125,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             _buildEntries(context),
             _buildProductEntry(context),
             _buildRemarks(context),
-//            order.status != PurchaseOrderStatus.PENDING_PAYMENT ?
-            _buildPurchaseProductionProgresse(context),
-//            : _buildTipsPayment(context)
+            order.status != PurchaseOrderStatus.PENDING_PAYMENT ?
+            _buildPurchaseProductionProgresse(context)
+            : _buildTipsPayment(context),
             order.belongTo == null ?
             Container():
             _buildFactoryInfo(context),
@@ -146,15 +150,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         children: <Widget>[
-          order.entries.isNotEmpty  && order.entries != null && order.entries.length > 0 && order.entries[0].product.thumbnail != null
-              && order.entries[0].product.thumbnail.name != null
+          order.product != null  && order.product.thumbnail != null
+              && order.product.thumbnail.name != null
               ? Container(
             width: 80,
             height: 80,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 image: DecorationImage(
-                  image: NetworkImage(order.entries[0].product.thumbnail.url),
+                  image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}'),
                   fit: BoxFit.cover,
                 )),
           )
@@ -179,10 +183,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  order.entries[0].product.name == null ?
+                  order.product.name == null ?
                   Container() :
                   Text(
-                    order.entries[0].product.name,
+                    order.product.name,
                     style: TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -191,10 +195,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)),
-                    child:  order.entries[0].product.skuID == null ?
+                    child:  order.product.skuID == null ?
                     Container() :
                     Text(
-                      '货号：${order.entries[0].product.skuID}',
+                      '货号：${order.product.skuID}',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ),
@@ -203,10 +207,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
-                    child: order.entries[0].product.superCategories == null ?
+                    child: order.product.superCategories == null ?
                     Container() :
                     Text(
-                      "${order.entries[0].product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
+                      "${order.product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -798,7 +802,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //提示付款信息
   Widget _buildTipsPayment(BuildContext context){
-    return Container(
+    return order.balancePaid == false?Container(
       padding: EdgeInsets.only(left: 15),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Container(
@@ -815,7 +819,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
       ),
-    );
+    ):Container();
   }
 
   //Entry表格
@@ -851,7 +855,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       ),
                     ),
                     Text(
-                      '${order.unitPrice}',
+                      '${order.unitPrice == null? '' :order.unitPrice}',
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.red,
@@ -880,7 +884,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     ),
                   ),
                   Text(
-                    '${order.totalPrice}',
+                    '${order.totalPrice == null? '' : order.totalPrice}',
                     style: TextStyle(
                       fontSize: 22,
                       color: Colors.red,
@@ -935,7 +939,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       ),
                     ),
                     Text(
-                      '${order.deposit}',
+                      '${order.deposit == null? '' : order.deposit}',
                       style: TextStyle(
                         fontSize: 22,
                         color: Colors.red,
@@ -1419,7 +1423,7 @@ class PurchaseDocument extends StatelessWidget {
               )
             ],
           ),
-          order.attachments.isEmpty ?
+          order.attachments == null || order.attachments.isEmpty ?
           Container() :
           Attachments(
             list: order.attachments,

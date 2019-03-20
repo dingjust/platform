@@ -238,6 +238,7 @@ class OrderModel extends AbstractOrderModel {
       String status,
       int totalQuantity,
       double totalPrice,
+      double unitPrice,
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
@@ -250,7 +251,8 @@ class OrderModel extends AbstractOrderModel {
             creationTime: creationTime,
             deliveryAddress: deliveryAddress,
             remarks: remarks,
-            salesApplication: salesApplication);
+            salesApplication: salesApplication,
+            unitPrice: unitPrice);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
       _$OrderModelFromJson(json);
@@ -640,6 +642,9 @@ class RequirementOrderEntryModel extends OrderEntryModel {
 /// 采购订单
 @JsonSerializable()
 class PurchaseOrderModel extends OrderModel {
+  @JsonKey(toJson: _productToJson)
+  ApparelProductModel product;
+
   @JsonKey(toJson: _brandToJson)
   BrandModel purchaser;
 
@@ -689,6 +694,14 @@ class PurchaseOrderModel extends OrderModel {
 
   //尾款
   double balance;
+
+  //预计支付定金日期
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime depositPaidDate;
+
+  //预计支付尾款日期
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime balancePaidDate;
 
   //卖方
   String companyOfSeller;
@@ -749,6 +762,9 @@ class PurchaseOrderModel extends OrderModel {
 
   static Map<String, dynamic> _brandToJson(BrandModel model) =>
       BrandModel.toJson(model);
+
+  static Map<String, dynamic> _productToJson(ApparelProductModel model) =>
+      ApparelProductModel.toJson(model);
 
   static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
       FactoryModel.toJson(model);
@@ -1047,44 +1063,57 @@ class ProofingModel extends OrderModel {
 
   QuoteModel order;
 
+  @JsonKey(toJson: _entriesToJson)
   List<ProofingEntryModel> entries;
 
-  //打样费用单价
-  double unitPrice;
+  /// 需求订单号
+  String requirementOrderRef;
 
-  ProofingModel({
-    String code,
-    this.status,
-    int totalQuantity,
-    double totalPrice,
-    this.belongTo,
-    this.factory,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-    this.product,
-    this.order,
-    this.unitPrice,
-  }) : super(
-          code: code,
-          totalQuantity: totalQuantity,
-          totalPrice: totalPrice,
-          creationTime: creationTime,
-          deliveryAddress: deliveryAddress,
-          remarks: remarks,
-        );
+  ///  报价单号
+  String quoteRef;
+
+  ProofingModel(
+      {String code,
+      this.status,
+      int totalQuantity,
+      double totalPrice,
+      this.belongTo,
+      this.factory,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      this.product,
+      this.order,
+      double unitPrice,
+      this.requirementOrderRef,
+      this.quoteRef})
+      : super(
+            code: code,
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice,
+            creationTime: creationTime,
+            deliveryAddress: deliveryAddress,
+            remarks: remarks,
+            unitPrice: unitPrice);
 
   factory ProofingModel.fromJson(Map<String, dynamic> json) =>
       _$ProofingModelFromJson(json);
 
   static Map<String, dynamic> toJson(ProofingModel model) =>
       _$ProofingModelToJson(model);
+
+  static List<Map<String, dynamic>> _entriesToJson(
+          List<ProofingEntryModel> entries) =>
+      entries.map((entry) => ProofingEntryModel.toJson(entry)).toList();
 }
 
 /// 打样订单行
 @JsonSerializable()
 class ProofingEntryModel extends OrderEntryModel {
-  ApparelProductModel product;
+  @JsonKey(toJson: _productToJson)
+  ApparelSizeVariantProductModel product;
+
+  @JsonKey(toJson: _orderToJson)
   ProofingModel order;
 
   ProofingEntryModel({
@@ -1106,4 +1135,11 @@ class ProofingEntryModel extends OrderEntryModel {
 
   static Map<String, dynamic> toJson(ProofingEntryModel model) =>
       _$ProofingEntryModelToJson(model);
+
+  static Map<String, dynamic> _productToJson(
+          ApparelSizeVariantProductModel product) =>
+      ApparelSizeVariantProductModel.toJson(product);
+
+  static Map<String, dynamic> _orderToJson(ProofingModel order) =>
+      ProofingModel.toJson(order);
 }
