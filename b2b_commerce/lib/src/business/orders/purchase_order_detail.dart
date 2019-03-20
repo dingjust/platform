@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
-import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 final List<OrderStatusModel> _statusList = [
@@ -519,10 +517,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
                     child: RaisedButton(
                       elevation: 0,
-                      color: Colors.white,
+                      color:  Color(0xFFFFD600),
                       child: Text(
                         '查看全部',
-                        style: TextStyle(color: Color(0xFFFFD600)),
+                        style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -547,10 +545,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
                     child: RaisedButton(
                       elevation: 0,
-                      color: Colors.white,
+                      color:  Color(0xFFFFD600),
                       child: Text(
                         '查看全部',
-                        style: TextStyle(color: Color(0xFFFFD600)),
+                        style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -802,13 +800,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //提示付款信息
   Widget _buildTipsPayment(BuildContext context){
+    final bloc = BLoCProvider.of<UserBLoC>(context);
     return order.balancePaid == false?Container(
       padding: EdgeInsets.only(left: 15),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Container(
         padding: EdgeInsets.fromLTRB(0,20,0,20),
         child: Text(
-          '生产状态尚未开始，请先付订金',
+          bloc.isBrandUser ?
+          '生产状态尚未开始，请先付订金' : '生产状态尚未开始，待客户付定金',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -1383,7 +1383,6 @@ class PurchaseVoucherPic extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }
 

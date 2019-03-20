@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import 'sample_products.dart';
 

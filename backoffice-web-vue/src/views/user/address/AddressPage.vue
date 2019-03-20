@@ -34,7 +34,7 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getAddresss();
+        const url = this.apis().getAddresses();
         this.search({url, keyword, page, size});
       },
       async onDetails(item) {

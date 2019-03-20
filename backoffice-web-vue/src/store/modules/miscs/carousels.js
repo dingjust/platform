@@ -13,50 +13,34 @@ const state = {
   },
   formData: {
     id: null,
-    code: '',
+    uid: '',
     name: '',
-    quantity: '',
-    expectedReturningDate: '',
-    relatedParty: '',
-    contact: '',
-    type: '',
-    state: '',
-    remarks: '',
-    images: [],
-    company: {
-      uid: '',
-      name: ''
-    }
-  },
+    description: ''
+  }
 };
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
-  sampleCheckoutType: (state, sampleCheckoutType) => state.sampleCheckoutType = sampleCheckoutType,
-  returnState: (state, returnState) => state.returnState = returnState,
   keyword: (state, keyword) => state.keyword = keyword,
   page: (state, page) => state.page = page
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search({dispatch, commit, state}, {keyword, page, size}) {
     commit('keyword', keyword);
-
-    if (page) {
-      commit('currentPageNumber', page);
-    }
+    commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get(url, {
-      keyword: state.keyword
-    }, {
+    const response = await http.get('/djbackoffice/role', {
+      text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
+    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
@@ -65,14 +49,13 @@ const actions = {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
+
     dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 
 const getters = {
   keyword: state => state.keyword,
-  sampleCheckoutType: state => state.sampleCheckoutType,
-  returnState: state => state.returnState,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page

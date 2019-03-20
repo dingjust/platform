@@ -6,6 +6,7 @@ Vue.use(Vuex);
 import {
   EnumsModule,
   UsersModule,
+  CarouselsModule,
   UserGroupsModule,
   B2BUnitsModule,
   RolesModule,
@@ -55,8 +56,8 @@ const actions = {
 export default new Vuex.Store({
   modules: {
     EnumsModule,
-    // tenant
     UsersModule,
+    CarouselsModule,
     UserGroupsModule,
     B2BUnitsModule,
     RolesModule,

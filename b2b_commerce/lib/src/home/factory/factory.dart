@@ -51,7 +51,7 @@ class FactoryItem extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     image: DecorationImage(
-                      image: NetworkImage(model.profilePicture),
+//                      image: NetworkImage(model.profilePicture),
                       fit: BoxFit.cover,
                     )),
                 child: Column(

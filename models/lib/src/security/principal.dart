@@ -6,7 +6,8 @@ part 'principal.g.dart';
 
 @JsonSerializable()
 class PrincipalModel extends ItemModel {
-  String profilePicture;
+  @JsonKey(toJson: mediaToJson)
+  MediaModel profilePicture;
   String uid;
   String name;
   String phone;
@@ -16,6 +17,8 @@ class PrincipalModel extends ItemModel {
   factory PrincipalModel.fromJson(Map<String, dynamic> json) => _$PrincipalModelFromJson(json);
 
   static Map<String, dynamic> toJson(PrincipalModel model) => _$PrincipalModelToJson(model);
+
+  static Map<String, dynamic> mediaToJson(MediaModel model) => MediaModel.toJson(model);
 }
 
 /// Principal Group
@@ -24,7 +27,7 @@ class PrincipalGroupModel extends PrincipalModel {
   List<PrincipalModel> members;
 
   PrincipalGroupModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     this.members,

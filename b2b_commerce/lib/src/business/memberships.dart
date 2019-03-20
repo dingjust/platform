@@ -107,9 +107,9 @@ class MembershipItem extends StatelessWidget {
             );
           },
           leading: CircleAvatar(
-            backgroundImage: NetworkImage(
-              item.customer.profilePicture,
-            ),
+//            backgroundImage: NetworkImage(
+//              item.customer.profilePicture,
+//            ),
             radius: 30.0,
           ),
           title: Column(

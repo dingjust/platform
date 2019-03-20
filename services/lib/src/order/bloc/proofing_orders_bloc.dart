@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/order/PageEntry.dart';
+import 'package:services/src/order/response/order_response.dart';
 
 class ProofingOrdersBLoC extends BLoCBase {
   // 工厂模式
@@ -21,249 +24,137 @@ class ProofingOrdersBLoC extends BLoCBase {
     return _instance;
   }
 
-  static final Map<String, List<ProofingModel>> _quotesMap = {
-    'ALL': List<ProofingModel>(),
-    'PENDING_PAYMENT': List<ProofingModel>(),
-    'PENDING_DELIVERY': List<ProofingModel>(),
-    'SHIPPED': List<ProofingModel>(),
-    'COMPLETED': List<ProofingModel>()
+  static final Map<String, PageEntry> _quotesMap = {
+    'ALL': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'PENDING_PAYMENT':
+        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'PENDING_DELIVERY':
+        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'SHIPPED': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'COMPLETED':
+        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>())
   };
 
-  List<ProofingModel> quotes(String status) => _quotesMap[status];
+  List<ProofingModel> quotes(String status) => _quotesMap[status].data;
 
   var _controller = StreamController<List<ProofingModel>>.broadcast();
 
   Stream<List<ProofingModel>> get stream => _controller.stream;
 
+  //锁
+  bool lock = false;
+
   filterByStatuses(String status) async {
-    //若没有数据则查询
-    if (_quotesMap[status].isEmpty) {
-      // TODO: 分页拿数据，response.data;
-      _quotesMap[status]
-          .addAll(await Future.delayed(const Duration(seconds: 1), () {
-        return <ProofingModel>[
-          ProofingModel(
-            code: '1232323232',
-            remarks: '请尽快支付打样费用，以免延期，谢谢！',
-            factory: FactoryModel.fromJson(mockFactory),
-            status: ProofingStatus.PENDING_PAYMENT,
-            totalPrice: 54,
-            totalQuantity: 554,
-            order: QuoteModel(
-              requirementOrderRef: '39492523423',
-            ),
-            deliveryAddress: AddressModel.fromJson({
-              'fullname': "张三",
-              'cellphone': '13123456789',
-              'region': {'isocode': 'R123', 'name': '广东省'},
-              'city': {'code': 'C123', 'name': '广州市'},
-              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-              'line1': '广州大道',
-              'defaultAddress': true
-            }),
-            creationTime: DateTime.parse('2019-01-03'),
-            product: ApparelProductModel(
-              name: '山本风少女长裙复古气质秋冬流行新款',
-              skuID: 'NA89852631',
-//              thumbnail:
-//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              category: CategoryModel(name: '女装-T恤'),
-            ),
-          ),
-          ProofingModel(
-            code: '1232323232',
-            remarks: '请尽快支付打样费用，以免延期，谢谢！',
-            factory: FactoryModel.fromJson(mockFactory),
-            status: ProofingStatus.COMPLETED,
-            totalPrice: 54,
-            totalQuantity: 554,
-            order: QuoteModel(
-              requirementOrderRef: '39492523423',
-            ),
-            deliveryAddress: AddressModel.fromJson({
-              'fullname': "张三",
-              'cellphone': '13123456789',
-              'region': {'isocode': 'R123', 'name': '广东省'},
-              'city': {'code': 'C123', 'name': '广州市'},
-              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-              'line1': '广州大道',
-              'defaultAddress': true
-            }),
-            creationTime: DateTime.parse('2019-01-03'),
-            product: ApparelProductModel(
-              name: '山本风少女长裙复古气质秋冬流行新款',
-              skuID: 'NA89852631',
-//              thumbnail:
-//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              category: CategoryModel(name: '女装-T恤'),
-            ),
-          ),
-          ProofingModel(
-            code: '1232323232',
-            remarks: '请尽快支付打样费用，以免延期，谢谢！',
-            factory: FactoryModel.fromJson(mockFactory),
-            status: ProofingStatus.SHIPPED,
-            totalPrice: 54,
-            totalQuantity: 554,
-            deliveryAddress: AddressModel.fromJson({
-              'fullname': "张三",
-              'cellphone': '13123456789',
-              'region': {'isocode': 'R123', 'name': '广东省'},
-              'city': {'code': 'C123', 'name': '广州市'},
-              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-              'line1': '广州大道',
-              'defaultAddress': true
-            }),
-            order: QuoteModel(
-              requirementOrderRef: '39492523423',
-            ),
-            creationTime: DateTime.parse('2019-01-03'),
-            product: ApparelProductModel(
-              name: '山本风少女长裙复古气质秋冬流行新款',
-              skuID: 'NA89852631',
-//              thumbnail:
-//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              category: CategoryModel(name: '女装-T恤'),
-            ),
-          ),
-          ProofingModel(
-            code: '1232323232',
-            remarks: '请尽快支付打样费用，以免延期，谢谢！',
-            factory: FactoryModel.fromJson(mockFactory),
-            status: ProofingStatus.PENDING_PAYMENT,
-            totalPrice: 54,
-            totalQuantity: 554,
-            order: QuoteModel(
-              requirementOrderRef: '39492523423',
-            ),
-            deliveryAddress: AddressModel.fromJson({
-              'fullname': "张三",
-              'cellphone': '13123456789',
-              'region': {'isocode': 'R123', 'name': '广东省'},
-              'city': {'code': 'C123', 'name': '广州市'},
-              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-              'line1': '广州大道',
-              'defaultAddress': true
-            }),
-            creationTime: DateTime.parse('2019-01-03'),
-            product: ApparelProductModel(
-              name: '山本风少女长裙复古气质秋冬流行新款',
-              skuID: 'NA89852631',
-//              thumbnail:
-//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              category: CategoryModel(name: '女装-T恤'),
-            ),
-          ),
-          ProofingModel(
-            code: '1232323232',
-            remarks: '请尽快支付打样费用，以免延期，谢谢！',
-            factory: FactoryModel.fromJson(mockFactory),
-            status: ProofingStatus.PENDING_DELIVERY,
-            totalPrice: 54,
-            totalQuantity: 554,
-            order: QuoteModel(
-              requirementOrderRef: '39492523423',
-            ),
-            deliveryAddress: AddressModel.fromJson({
-              'fullname': "张三",
-              'cellphone': '13123456789',
-              'region': {'isocode': 'R123', 'name': '广东省'},
-              'city': {'code': 'C123', 'name': '广州市'},
-              'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-              'line1': '广州大道',
-              'defaultAddress': true
-            }),
-            creationTime: DateTime.parse('2019-01-03'),
-            product: ApparelProductModel(
-              name: '山本风少女长裙复古气质秋冬流行新款',
-              skuID: 'NA89852631',
-//              thumbnail:
-//                  'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-              category: CategoryModel(name: '女装-T恤'),
-            ),
-          ),
-        ];
-      }));
+    if (!lock) {
+      lock = true;
+      //若没有数据则查询
+      if (_quotesMap[status].data.isEmpty) {
+        //  分页拿数据，response.data;
+        //请求参数
+        Map data = {};
+        if (status != 'ALL') {
+          data = {
+            'statuses': [status]
+          };
+        }
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.proofing,
+              data: data,
+              queryParameters: {
+                'page': _quotesMap[status].currentPage,
+                'size': _quotesMap[status].size
+              });
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          ProofingOrdersResponse ordersResponse =
+              ProofingOrdersResponse.fromJson(response.data);
+          _quotesMap[status].totalPages = ordersResponse.totalPages;
+          _quotesMap[status].totalElements = ordersResponse.totalElements;
+          _quotesMap[status].data.clear();
+          _quotesMap[status].data.addAll(ordersResponse.content);
+        }
+      }
+      _controller.sink.add(_quotesMap[status].data);
+      lock = false;
     }
-    _controller.sink.add(_quotesMap[status]);
   }
 
   loadingMoreByStatuses(String status) async {
-    //模拟数据到底
-    if (_quotesMap[status].length < 12) {
-      _quotesMap[status]
-          .add(await Future.delayed(const Duration(seconds: 1), () {
-        return ProofingModel(
-          code: '1232323232',
-          remarks: '请尽快支付打样费用，以免延期，谢谢！',
-          factory: FactoryModel.fromJson(mockFactory),
-          status: ProofingStatus.PENDING_PAYMENT,
-          totalPrice: 54,
-          totalQuantity: 554,
-          order: QuoteModel(
-            requirementOrderRef: '39492523423',
-          ),
-          deliveryAddress: AddressModel.fromJson({
-            'fullname': "张三",
-            'cellphone': '13123456789',
-            'region': {'isocode': 'R123', 'name': '广东省'},
-            'city': {'code': 'C123', 'name': '广州市'},
-            'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-            'line1': '广州大道',
-            'defaultAddress': true
-          }),
-          creationTime: DateTime.parse('2019-01-03'),
-          product: ApparelProductModel(
-            name: '山本风少女长裙复古气质秋冬流行新款',
-            skuID: 'NA89852631',
-//            thumbnail:
-//                'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-            category: CategoryModel(name: '女装-T恤'),
-          ),
-        );
-      }));
-    } else {
-      //通知显示已经到底部
-      _bottomController.sink.add(true);
+    if (!lock) {
+      lock = true;
+      //数据到底
+      if (_quotesMap[status].currentPage + 1 == _quotesMap[status].totalPages) {
+        //通知显示已经到底部
+        _bottomController.sink.add(true);
+      } else {
+        Map data = {};
+        if (status != 'ALL') {
+          data = {
+            'statuses': [status]
+          };
+        }
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.proofing,
+              data: data,
+              queryParameters: {
+                'page': ++_quotesMap[status].currentPage,
+                'size': _quotesMap[status].size
+              });
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          ProofingOrdersResponse ordersResponse =
+              ProofingOrdersResponse.fromJson(response.data);
+          _quotesMap[status].totalPages = ordersResponse.totalPages;
+          _quotesMap[status].totalElements = ordersResponse.totalElements;
+          _quotesMap[status].data.addAll(ordersResponse.content);
+        }
+      }
+//    _loadingController.sink.add(false);
+      _controller.sink.add(_quotesMap[status].data);
+      lock = false;
     }
-    _loadingController.sink.add(false);
-    _controller.sink.add(_quotesMap[status]);
   }
 
   //下拉刷新
   Future refreshData(String status) async {
-    _quotesMap[status].clear();
-    _quotesMap[status].add(await Future.delayed(const Duration(seconds: 1), () {
-      return ProofingModel(
-        code: '1232323232',
-        remarks: '请尽快支付打样费用，以免延期，谢谢！',
-        factory: FactoryModel.fromJson(mockFactory),
-        status: ProofingStatus.PENDING_PAYMENT,
-        totalPrice: 54,
-        totalQuantity: 554,
-        order: QuoteModel(
-          requirementOrderRef: '39492523423',
-        ),
-        deliveryAddress: AddressModel.fromJson({
-          'fullname': "张三",
-          'cellphone': '13123456789',
-          'region': {'isocode': 'R123', 'name': '广东省'},
-          'city': {'code': 'C123', 'name': '广州市'},
-          'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-          'line1': '广州大道',
-          'defaultAddress': true
-        }),
-        creationTime: DateTime.parse('2019-01-03'),
-        product: ApparelProductModel(
-          name: '山本风少女长裙复古气质秋冬流行新款',
-          skuID: 'NA89852631',
-//          thumbnail:
-//              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-          category: CategoryModel(name: '女装-T恤'),
-        ),
-      );
-    }));
-    _controller.sink.add(_quotesMap[status]);
+    if (!lock) {
+      lock = true;
+      //重置信息
+      _quotesMap[status].data.clear();
+      _quotesMap[status].currentPage = 0;
+      //  分页拿数据，response.data;
+      //请求参数
+      Map data = {};
+      if (status != 'ALL') {
+        data = {
+          'statuses': [status]
+        };
+      }
+      Response<Map<String, dynamic>> response = await http$
+          .post(OrderApis.proofing, data: data, queryParameters: {
+        'page': _quotesMap[status].currentPage,
+        'size': _quotesMap[status].size
+      });
+
+      if (response.statusCode == 200) {
+        ProofingOrdersResponse ordersResponse =
+            ProofingOrdersResponse.fromJson(response.data);
+        _quotesMap[status].totalPages = ordersResponse.totalPages;
+        _quotesMap[status].totalElements = ordersResponse.totalElements;
+        _quotesMap[status].data.clear();
+        _quotesMap[status].data.addAll(ordersResponse.content);
+      }
+      _controller.sink.add(_quotesMap[status].data);
+      lock = false;
+    }
   }
 
   //页面控制
@@ -305,204 +196,3 @@ class ProofingOrdersBLoC extends BLoCBase {
     _controller.close();
   }
 }
-
-//mock数据待删除
-Map<String, dynamic> mockFactory = {
-  'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-  'uid': 'BB123456',
-  'name': '草帽工厂',
-  'starLevel': 5,
-  'describe': '20年经验专业生产牛仔服装，价低质优，本月剩余小量空闲产能，欢迎报价',
-  'historyOrdersCount': 35,
-  'responseQuotedTime': 50,
-  'email': 'monkey.D.luffy@163.com',
-  'phone': '020-12345678',
-  'cooperationModes': ['FOB'],
-  'developmentCapacity': true,
-  'monthlyCapacityRanges': 'MCR003',
-  'latheQuantity': 5,
-  'contactPerson': 'luffy',
-  'contactPhone': '13123456789',
-  'address': '广东广州',
-  'contactAddress': {
-    'fullname': "张三",
-    'cellphone': '13123456789',
-    'region': {'isocode': 'R123', 'name': '广东省'},
-    'city': {'code': 'C123', 'name': '广州市'},
-    'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-    'line1': '广州大道南',
-  },
-  'categories': [
-    {
-      'code': '1001',
-      'name': '卫衣',
-    },
-    {
-      'code': '1002',
-      'name': '毛衣',
-    },
-  ],
-  'scaleRange': 'SR005',
-  'registrationDate': DateTime.now().toString(),
-  'taxNumber': '41553315446687844',
-  'bankOfDeposit': '中国工商银行',
-  'certificate': [
-    {
-      'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'mediaType': 'jpg',
-    },
-    {
-      'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'mediaType': 'jpg',
-    },
-    {
-      'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'mediaType': 'jpg',
-    },
-  ],
-  'cooperativeBrands': [
-    {
-      'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-      'uid': 'BB123456',
-      'name': '草帽工厂',
-      'starLevel': 5,
-      'email': 'monkey.D.luffy@163.com',
-      'phone': '020-12345678',
-      'cooperationModes': ['FOB'],
-      'developmentCapacity': true,
-      'monthlyCapacityRanges': 'MCR003',
-      'latheQuantity': 5,
-      'contactPerson': 'luffy',
-      'contactPhone': '13123456789',
-    },
-    {
-      'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-      'uid': 'BB123456',
-      'name': '草帽工厂',
-      'starLevel': 5,
-      'email': 'monkey.D.luffy@163.com',
-      'phone': '020-12345678',
-      'cooperationModes': ['FOB'],
-      'developmentCapacity': true,
-      'monthlyCapacityRanges': 'MCR003',
-      'latheQuantity': 5,
-      'contactPerson': 'luffy',
-      'contactPhone': '13123456789',
-    },
-    {
-      'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-      'uid': 'BB123456',
-      'name': '草帽工厂',
-      'starLevel': 5,
-      'email': 'monkey.D.luffy@163.com',
-      'phone': '020-12345678',
-      'cooperationModes': ['FOB'],
-      'developmentCapacity': true,
-      'monthlyCapacityRanges': 'MCR003',
-      'latheQuantity': 5,
-      'contactPerson': 'luffy',
-      'contactPhone': '13123456789',
-    },
-    {
-      'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-      'uid': 'BB123456',
-      'name': '草帽工厂',
-      'starLevel': 5,
-      'email': 'monkey.D.luffy@163.com',
-      'phone': '020-12345678',
-      'cooperationModes': ['FOB'],
-      'developmentCapacity': true,
-      'monthlyCapacityRanges': 'MCR003',
-      'latheQuantity': 5,
-      'contactPerson': 'luffy',
-      'contactPhone': '13123456789',
-    },
-    {
-      'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-      'uid': 'BB123456',
-      'name': '草帽工厂',
-      'starLevel': 5,
-      'email': 'monkey.D.luffy@163.com',
-      'phone': '020-12345678',
-      'cooperationModes': ['FOB'],
-      'developmentCapacity': true,
-      'monthlyCapacityRanges': 'MCR003',
-      'latheQuantity': 5,
-      'contactPerson': 'luffy',
-      'contactPhone': '13123456789',
-    },
-    {
-      'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-      'uid': 'BB123456',
-      'name': '草帽工厂',
-      'starLevel': 5,
-      'email': 'monkey.D.luffy@163.com',
-      'phone': '020-12345678',
-      'cooperationModes': ['FOB'],
-      'developmentCapacity': true,
-      'monthlyCapacityRanges': 'MCR003',
-      'latheQuantity': 5,
-      'contactPerson': 'luffy',
-      'contactPhone': '13123456789',
-    },
-    {
-      'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-      'uid': 'BB123456',
-      'name': '草帽工厂',
-      'starLevel': 5,
-      'email': 'monkey.D.luffy@163.com',
-      'phone': '020-12345678',
-      'cooperationModes': ['FOB'],
-      'developmentCapacity': true,
-      'monthlyCapacityRanges': 'MCR003',
-      'latheQuantity': 5,
-      'contactPerson': 'luffy',
-      'contactPhone': '13123456789',
-    },
-  ],
-  'products': [
-    {
-      'name': '春秋薄款卫衣',
-      'normal': [
-        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-      ],
-      'price': 33.3,
-    },
-    {
-      'name': '春秋薄款卫衣',
-      'normal': [
-        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-      ],
-      'price': 33.3,
-    },
-    {
-      'name': '春秋薄款卫衣',
-      'normal': [
-        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-      ],
-      'price': 33.3,
-    },
-    {
-      'name': '春秋薄款卫衣',
-      'normal': [
-        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-      ],
-      'price': 33.3,
-    },
-    {
-      'name': '春秋薄款卫衣',
-      'normal': [
-        {'url': 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'},
-        {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-      ],
-      'price': 33.3,
-    },
-  ]
-};

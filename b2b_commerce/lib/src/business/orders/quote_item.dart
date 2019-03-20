@@ -1,4 +1,7 @@
+import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
+import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -326,10 +329,17 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
           children: <Widget>[
             _buildHeader(),
             _buildEntries(),
-            widget.model.state == QuoteState.SELLER_SUBMITTED &&
-                    UserBLoC.instance.currentUser.type == UserType.BRAND
-                ? _buildSummary()
-                : Container(),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 80,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: _buildSummary(),
+                )
+              ],
+            )
           ],
         ),
         decoration: BoxDecoration(
@@ -402,8 +412,8 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget
-                            .model.requirementOrder.details.pictures[0].url}'),
+                        image: NetworkImage(
+                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.requirementOrder.details.pictures[0].url}'),
                         fit: BoxFit.cover,
                       )),
                 )
@@ -472,33 +482,97 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
   }
 
   Widget _buildSummary() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
+    List<Widget> buttons;
+
+    //品牌端显示
+    if (widget.model.state == QuoteState.SELLER_SUBMITTED &&
+        UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      buttons = <Widget>[
+        FlatButton(
+            onPressed: onReject,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            color: Colors.red,
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+            child: Text(
+              '拒绝报价',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            )),
+        FlatButton(
+            onPressed: onApprove,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            color: Color.fromRGBO(255, 214, 12, 1),
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+            child: Text(
+              '确认报价',
+              style:
+                  TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+            )),
+      ];
+    } //工厂端显示
+    else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      if (widget.model.state == QuoteState.SELLER_SUBMITTED) {
+        buttons = [
+          Container(),
           FlatButton(
-              onPressed: onReject,
+              onPressed: onQuoteAgain,
               shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
                   borderRadius: BorderRadius.circular(20)),
-              color: Colors.red,
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
-                '拒绝报价',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                '修改报价',
+                style: TextStyle(
+                    color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+              )),
+        ];
+      } else if (widget.model.state == QuoteState.BUYER_APPROVED) {
+        buttons = <Widget>[
+          FlatButton(
+              onPressed: onCreateProofings,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 245, 193, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '打样订单',
+                style: TextStyle(
+                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
               )),
           FlatButton(
-              onPressed: onApprove,
+              onPressed: onCreateProduction,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
-                '确认报价',
+                '生产订单',
                 style: TextStyle(
                     color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
               )),
-        ],
-      ),
+        ];
+      } else {
+        buttons = [
+          Container(),
+          FlatButton(
+              onPressed: onQuoteAgain,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 70, 70, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '重新报价',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              )),
+        ];
+      }
+    }
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, children: buttons),
     );
   }
 
@@ -584,5 +658,42 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
         );
       },
     );
+  }
+
+  void onQuoteAgain() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RequirementQuoteOrderFrom(
+              model: widget.model.requirementOrder,
+              quoteModel: widget.model,
+            )));
+  }
+
+  void onUpdateQuote() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RequirementQuoteOrderFrom(
+              model: widget.model.requirementOrder,
+              quoteModel: widget.model,
+              update: true,
+            )));
+  }
+
+  void onCreateProofings() async {
+    //查询明细
+    QuoteModel detailModel =
+        await QuoteOrderRepository().getquoteDetail(widget.model.code);
+
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProofingOrderForm(
+              quoteModel: detailModel,
+            )));
+  }
+
+  void onCreateProduction() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductionOnlineOrderFrom(
+                  quoteModel: widget.model,
+                )));
   }
 }

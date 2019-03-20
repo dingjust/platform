@@ -38,7 +38,7 @@
         this.search({url, keyword, page, size});
       },
       async onDetails(item) {
-        const url = this.apis().getIndustrialCluster(item.uid);
+        const url = this.apis().getIndustrialCluster(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

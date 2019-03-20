@@ -175,8 +175,11 @@ class ProductModel extends ItemModel {
   @JsonKey(toJson: _staircasePricesToJson)
   List<StaircasePriceModel> staircasePrices;
 
-  @JsonKey(name: 'supercategories', toJson:_superCategory)
+  @JsonKey(name: 'supercategories', toJson: _superCategory)
   CategoryModel superCategories;
+
+  @JsonKey(name: 'category', toJson: _superCategory)
+  CategoryModel category;
 
   //库存
   @JsonKey(toJson: stockLevelToJson)
@@ -196,6 +199,7 @@ class ProductModel extends ItemModel {
     this.staircasePrices,
     this.privacy,
     this.superCategories,
+    this.category,
     this.ratingIfPrivacy,
     this.stockLevel,
     this.salesVolume,
@@ -247,6 +251,7 @@ class VariantProductModel extends ProductModel {
     bool privacy,
     MemberRating ratingIfPrivacy,
     CategoryModel superCategories,
+    CategoryModel category,
     this.baseProduct,
     this.skuID,
     double minPrice,
@@ -255,20 +260,20 @@ class VariantProductModel extends ProductModel {
     List<MediaModel> thumbnails,
     List<MediaModel> images,
   }) : super(
-          code: code,
-          name: name,
-          price: price,
-          thumbnail: thumbnail,
-          staircasePrices: staircasePrices,
-          privacy: privacy,
-          ratingIfPrivacy: ratingIfPrivacy,
-          superCategories: superCategories,
-          minPrice: minPrice,
-          maxPrice: maxPrice,
-          belongTo: belongTo,
-          thumbnails: thumbnails,
-          images: images,
-        );
+            code: code,
+            name: name,
+            price: price,
+            thumbnail: thumbnail,
+            staircasePrices: staircasePrices,
+            privacy: privacy,
+            ratingIfPrivacy: ratingIfPrivacy,
+            superCategories: superCategories,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            belongTo: belongTo,
+            thumbnails: thumbnails,
+            images: images,
+            category: category);
 
   factory VariantProductModel.fromJson(Map<String, dynamic> json) =>
       _$VariantProductModelFromJson(json);
@@ -375,6 +380,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     CategoryModel superCategories,
+    CategoryModel category,
     MemberRating ratingIfPrivacy,
     String baseProduct,
     this.color,
@@ -384,22 +390,22 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     List<MediaModel> thumbnails,
     List<MediaModel> images,
   }) : super(
-          code: code,
-          name: name,
-          price: price,
-          thumbnail: thumbnail,
-          variants: variants,
-          staircasePrices: staircasePrices,
-          privacy: privacy,
-          ratingIfPrivacy: ratingIfPrivacy,
-          baseProduct: baseProduct,
-          superCategories: superCategories,
-          minPrice: minPrice,
-          maxPrice: maxPrice,
-          belongTo: belongTo,
-          thumbnails: thumbnails,
-          images: images,
-        );
+            code: code,
+            name: name,
+            price: price,
+            thumbnail: thumbnail,
+            variants: variants,
+            staircasePrices: staircasePrices,
+            privacy: privacy,
+            ratingIfPrivacy: ratingIfPrivacy,
+            baseProduct: baseProduct,
+            superCategories: superCategories,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            belongTo: belongTo,
+            thumbnails: thumbnails,
+            images: images,
+            category: category);
 
   factory ApparelStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
       _$ApparelStyleVariantProductModelFromJson(json);
@@ -415,7 +421,6 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
 class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
   @JsonKey(toJson: _sizeToJson)
   SizeModel size;
-
   ApparelSizeVariantProductModel({
     String code,
     String name,
@@ -425,6 +430,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     List<StaircasePriceModel> staircasePrices,
     bool privacy,
     CategoryModel superCategories,
+    CategoryModel category,
     MemberRating ratingIfPrivacy,
     String baseProduct,
     ColorModel color,
@@ -435,23 +441,23 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     List<MediaModel> thumbnails,
     List<MediaModel> images,
   }) : super(
-          code: code,
-          name: name,
-          price: price,
-          thumbnail: thumbnail,
-          variants: variants,
-          staircasePrices: staircasePrices,
-          privacy: privacy,
-          ratingIfPrivacy: ratingIfPrivacy,
-          baseProduct: baseProduct,
-          color: color,
-          superCategories: superCategories,
-          minPrice: minPrice,
-          maxPrice: maxPrice,
-          belongTo: belongTo,
-          thumbnails: thumbnails,
-          images: images,
-        );
+            code: code,
+            name: name,
+            price: price,
+            thumbnail: thumbnail,
+            variants: variants,
+            staircasePrices: staircasePrices,
+            privacy: privacy,
+            ratingIfPrivacy: ratingIfPrivacy,
+            baseProduct: baseProduct,
+            color: color,
+            superCategories: superCategories,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            belongTo: belongTo,
+            thumbnails: thumbnails,
+            images: images,
+            category: category);
 
   factory ApparelSizeVariantProductModel.fromJson(Map<String, dynamic> json) =>
       _$ApparelSizeVariantProductModelFromJson(json);

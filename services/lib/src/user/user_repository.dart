@@ -4,4 +4,6 @@ abstract class UserRepository {
   Future<List<UserModel>> list();
 
   Future<BrandModel> getBrand(String uid);
+
+  Future<FactoryModel> getFactory(String uid);
 }
