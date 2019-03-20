@@ -1,6 +1,5 @@
-import 'package:b2b_commerce/src/business/orders/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_filter.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
+import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -62,35 +61,6 @@ class _MySettingsPageState extends State<MySettingsPage> {
                   MaterialPageRoute(
                       builder: (context) => RequirementOrderFilterPage(map)));
               print(map);
-            },
-          ),
-          ListTile(
-            trailing: const Icon(Icons.chevron_right),
-            title: const Text('创建打样订单'),
-            leading: const Icon(Icons.shopping_basket),
-            onTap: () {
-              ProofingModel proofing = ProofingModel(
-                  belongTo: BrandModel(
-//                      profilePicture:
-//                          'http://down.52pk.com/uploads/190218/5039_164753_4095.jpg',
-                      name: '森马集团有限公司'));
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProofingOrderFormPage(proofing)),
-              );
-            },
-          ),
-          ListTile(
-            trailing: const Icon(Icons.chevron_right),
-            title: const Text('工厂所有需求页面'),
-            leading: const Icon(Icons.local_convenience_store),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => RequirementPoolAllPage()),
-              );
             },
           ),
 //          InkWell(

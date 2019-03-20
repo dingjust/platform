@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +9,9 @@ import 'package:widgets/widgets.dart';
 class RequirementQuoteOrderFrom extends StatefulWidget {
   RequirementOrderModel model;
   QuoteModel quoteModel;
-
-  RequirementQuoteOrderFrom({@required this.model, this.quoteModel});
+  bool update;
+  RequirementQuoteOrderFrom(
+      {@required this.model, this.quoteModel, this.update = false});
 
   _RequirementQuoteOrderFromState createState() =>
       _RequirementQuoteOrderFromState();
@@ -33,6 +33,27 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
   double sample = 0.0;
   List<MediaModel> attachments = [];
   DateTime expectedDeliveryDate = DateTime.now();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (widget.quoteModel != null) {
+      _fabricController.text = widget.quoteModel.unitPriceOfFabric.toString();
+      _excipientsController.text =
+          widget.quoteModel.unitPriceOfExcipients.toString();
+      _processingController.text =
+          widget.quoteModel.unitPriceOfProcessing.toString();
+      _otherController.text = widget.quoteModel.costOfOther.toString();
+      _remarksController.text = widget.quoteModel.remarks;
+      _sampleController.text = widget.quoteModel.costOfSamples.toString();
+      expectedDeliveryDate = widget.quoteModel.expectedDeliveryDate;
+
+      if (widget.update) {
+        attachments = widget.quoteModel.attachments;
+      }
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,17 +97,23 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
                 ),
               )),
           onPressed: () async {
+            QuoteModel model;
+            if (widget.update) {
+              model = widget.quoteModel;
+            } else {
+              //新建
+              model = QuoteModel();
+            }
             //拼装数据
-            QuoteModel model = QuoteModel(
-                unitPriceOfFabric: fabric,
-                unitPriceOfExcipients: excipients,
-                unitPriceOfProcessing: processing,
-                costOfOther: other,
-                costOfSamples: sample,
-                requirementOrderRef: widget.model.code,
-                remarks: _remarksController.text,
-                expectedDeliveryDate: expectedDeliveryDate,
-                attachments: attachments);
+            model.unitPriceOfFabric = fabric;
+            model.unitPriceOfExcipients = excipients;
+            model.unitPriceOfProcessing = processing;
+            model.costOfOther = other;
+            model.costOfSamples = sample;
+            model.requirementOrderRef = widget.model.code;
+            model.remarks = _remarksController.text;
+            model.expectedDeliveryDate = expectedDeliveryDate;
+            model.attachments = attachments;
 
             String response = await QuoteOrderRepository().quoteCreate(model);
 

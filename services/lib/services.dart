@@ -18,6 +18,7 @@ export 'src/order/bloc/sales_order_bloc.dart';
 export 'src/order/repository/purchase_order_repository.dart';
 export 'src/order/repository/quote_order_respository.dart';
 export 'src/order/repository/requirement_order_repository.dart';
+export 'src/order/repository/proofing_order_respository.dart';
 export 'src/product/bloc/apparel_product_bloc.dart';
 export 'src/product/product_repository_impl.dart';
 export 'src/product/response/product_response.dart';

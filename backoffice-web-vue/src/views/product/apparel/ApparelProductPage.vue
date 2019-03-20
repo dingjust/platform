@@ -15,7 +15,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('ApparelProductsModule');
+  const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('ApparelProductsModule');
 
   import ApparelProductToolbar from "./toolbar/ApparelProductToolbar";
   import ApparelProductSearchResultList from './list/ApparelProductSearchResultList';
@@ -29,7 +29,9 @@
     },
     computed: {
       ...mapGetters({
-        page: 'page'
+        page: 'page',
+        keyword: 'keyword',
+        queryFormData: 'queryFormData'
       })
     },
     methods: {
@@ -37,13 +39,16 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
+      ...mapMutations({
+        setAdvancedSearch: 'isAdvancedSearch'
+      }),
       onSearch(page, size) {
         const keyword = this.keyword;
         const url = this.apis().getApparelProducts();
         this.search({url, keyword, page, size});
       },
       onAdvancedSearch(page, size) {
-        this.isAdvancedSearch = true;
+        this.setAdvancedSearch(true);
 
         const query = this.queryFormData;
         const url = this.apis().getApparelProducts();
@@ -64,12 +69,7 @@
       },
     },
     data() {
-      return {
-        keyword: this.$store.state.ApparelProductsModule.keyword,
-        formData: this.$store.state.ApparelProductsModule.formData,
-        queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
-        isAdvancedSearch: this.$store.state.ApparelProductsModule.isAdvancedSearch,
-      };
+      return {};
     },
     created() {
       this.onSearch();

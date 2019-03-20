@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -47,6 +48,8 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
       ),
       body: ListView(
         children: <Widget>[
+          _buildRefuseMessage(),
+          _buildCompanyInfo(),
           _buildFactory(),
           Card(
             elevation: 0,
@@ -65,6 +68,22 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         ],
       ),
     );
+  }
+
+  Widget _buildRefuseMessage() {
+    //拒绝状态
+    if (widget.item.state == QuoteState.BUYER_REJECTED) {
+      return Container(
+        padding: EdgeInsets.all(10),
+        color: Color.fromRGBO(255, 245, 169, 1),
+        child: Text(
+          '拒绝理由：该订单已经被确定工厂。',
+          style: TextStyle(color: Color.fromRGBO(255, 70, 70, 1)),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildOrderState() {
@@ -104,75 +123,199 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     );
   }
 
-  _buildFactory() {
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 15),
-      child: Container(
-        padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              '报价工厂',
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Text(
-                      pageItem.belongTo.name,
-                      style: TextStyle(fontSize: 18),
+  Widget _buildCompanyInfo() {
+    /// 工厂端显示
+    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      return GestureDetector(
+        onTap: () {
+          //TODO跳转详细页
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          margin: EdgeInsets.only(bottom: 10),
+          color: Colors.white,
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey[300]))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(widget
+                                              .item.belongTo.profilePicture !=
+                                          null
+                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.item.belongTo.profilePicture}'
+                                      : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          height: 70,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                '${widget.item.belongTo.name}',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(36, 38, 41, 1)),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Color.fromRGBO(229, 242, 255, 1),
+                                ),
+                                padding: EdgeInsets.all(2),
+                                child: Text(
+                                  '已认证',
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(22, 141, 255, 1)),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
                     ),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 35,
+                      color: Color.fromRGBO(180, 180, 180, 1),
+                    )
+                  ],
+                ),
+              ),
+              InfoRow(
+                label: '联系人',
+                value: Text(
+                  '${widget.item.belongTo.contactPerson}',
+                  style: TextStyle(
+                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                ),
+              ),
+              InfoRow(
+                  label: '联系手机',
+                  hasBottomBorder: false,
+                  value: Row(
+                    children: <Widget>[
+                      Text(
+                        '${widget.item.belongTo.contactPhone}',
+                        style: TextStyle(
+                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                      ),
+                      Container(
+                        child: IconButton(
+                          onPressed: () {
+                            //TODO调用拨打电话API
+                          },
+                          icon: Icon(
+                            Icons.phone,
+                            color: Color.fromRGBO(86, 194, 117, 1),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '拨打',
+                        style: TextStyle(
+                            color: Color.fromRGBO(86, 194, 117, 1),
+                            fontSize: 16),
+                      ),
+                    ],
+                  )),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  _buildFactory() {
+    //品牌端显示
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      return Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 15),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '报价工厂',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Text(
+                        pageItem.belongTo.name,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                    Stars(
+                      starLevel: pageItem.belongTo.starLevel ?? 1,
+                      highlightOnly: false,
+                    )
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    '${pageItem.belongTo.contactAddress?.city?.name} ${pageItem.belongTo.contactAddress?.cityDistrict?.name}',
+                    style: TextStyle(color: Colors.grey),
                   ),
-                  Stars(
-                    starLevel: pageItem.belongTo.starLevel ?? 1,
-                    highlightOnly: false,
+                  Icon(
+                    Icons.chevron_right,
+                    size: 22,
+                    color: Colors.grey,
                   )
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Text(
-                  '${pageItem.belongTo.contactAddress?.city?.name} ${pageItem.belongTo.contactAddress?.cityDistrict?.name}',
-                  style: TextStyle(color: Colors.grey),
-                ),
-                Icon(
-                  Icons.chevron_right,
-                  size: 22,
-                  color: Colors.grey,
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Text('历史接单'),
-                Text(
-                  pageItem.belongTo.historyOrdersCount.toString(),
-                  style: TextStyle(color: Colors.red),
-                ),
-                Text('单，报价成功率'),
-                Text(
-                  (pageItem.belongTo.orderedSuccessRate ?? 0 * 100)
-                          .round()
-                          .toString() +
-                      '%',
-                  style: TextStyle(color: Colors.red),
-                )
-              ],
-            ),
-          ],
+              Row(
+                children: <Widget>[
+                  Text('历史接单'),
+                  Text(
+                    pageItem.belongTo.historyOrdersCount.toString(),
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  Text('单，报价成功率'),
+                  Text(
+                    (pageItem.belongTo.orderedSuccessRate ?? 0 * 100)
+                            .round()
+                            .toString() +
+                        '%',
+                    style: TextStyle(color: Colors.red),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildProduct() {
@@ -445,110 +588,117 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   }
 
   Widget _buildActionChip(BuildContext pageContext) {
-    return Offstage(
-      offstage: pageItem.state != QuoteState.SELLER_SUBMITTED &&
-              UserBLoC.instance.currentUser.type == UserType.BRAND
-          ? true
-          : false,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ActionChip(
-                backgroundColor: Colors.red,
-                labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
-                labelStyle: TextStyle(fontSize: 16),
-                label: Text('拒绝报价'),
-                onPressed: () {
-                  showDialog<void>(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('请输入拒绝原因'),
-                        content: TextField(
-                          controller: rejectController,
-                          autofocus: true,
-                          decoration: InputDecoration(
-                            labelText: '请输入数量',
+    //品牌端显示
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      return Offstage(
+        offstage: pageItem.state != QuoteState.SELLER_SUBMITTED &&
+                UserBLoC.instance.currentUser.type == UserType.BRAND
+            ? true
+            : false,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: ActionChip(
+                  backgroundColor: Colors.red,
+                  labelPadding:
+                      EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                  labelStyle: TextStyle(fontSize: 16),
+                  label: Text('拒绝报价'),
+                  onPressed: () {
+                    showDialog<void>(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('请输入拒绝原因'),
+                          content: TextField(
+                            controller: rejectController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              labelText: '请输入数量',
+                            ),
                           ),
-                        ),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('取消'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          FlatButton(
-                            child: Text('确定'),
-                            onPressed: () async {
-                              int statusCode = await QuoteOrderRepository()
-                                  .quoteReject(
-                                      pageItem.code, rejectController.text);
-                              Navigator.of(context).pop();
-                              if (statusCode == 200) {
-                                alertMessage('拒绝成功!');
-                                //触发刷新
-                                refreshData();
-                              } else {
-                                alertMessage('拒绝失败');
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('取消'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('确定'),
+                              onPressed: () async {
+                                int statusCode = await QuoteOrderRepository()
+                                    .quoteReject(
+                                        pageItem.code, rejectController.text);
+                                Navigator.of(context).pop();
+                                if (statusCode == 200) {
+                                  alertMessage('拒绝成功!');
+                                  //触发刷新
+                                  refreshData();
+                                } else {
+                                  alertMessage('拒绝失败');
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-            Expanded(
-              child: ActionChip(
-                backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-                labelPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 22),
-                labelStyle: TextStyle(fontSize: 16),
-                label: Text('确认报价'),
-                onPressed: () async {
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: false, // user must tap button!
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('是否确认?'),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('否'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          FlatButton(
-                            child: Text('是'),
-                            onPressed: () async {
-                              int statusCode = await QuoteOrderRepository()
-                                  .quoteApprove(pageItem.code);
-                              Navigator.of(context).pop();
-                              if (statusCode == 200) {
-                                alertMessage('确认成功!');
-                                //触发刷新
-                                refreshData();
-                              } else {
-                                alertMessage('确认失败');
-                              }
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-            )
-          ],
+              Expanded(
+                child: ActionChip(
+                  backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+                  labelPadding:
+                      EdgeInsets.symmetric(vertical: 4, horizontal: 22),
+                  labelStyle: TextStyle(fontSize: 16),
+                  label: Text('确认报价'),
+                  onPressed: () async {
+                    showDialog<void>(
+                      context: context,
+                      barrierDismissible: false, // user must tap button!
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('是否确认?'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('否'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('是'),
+                              onPressed: () async {
+                                int statusCode = await QuoteOrderRepository()
+                                    .quoteApprove(pageItem.code);
+                                Navigator.of(context).pop();
+                                if (statusCode == 200) {
+                                  alertMessage('确认成功!');
+                                  //触发刷新
+                                  refreshData();
+                                } else {
+                                  alertMessage('确认失败');
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Container();
+    }
   }
 
   void refreshData() async {

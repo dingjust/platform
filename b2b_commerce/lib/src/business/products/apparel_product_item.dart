@@ -8,10 +8,12 @@ import 'package:widgets/widgets.dart';
 import '../orders/requirement_order_from.dart';
 
 class ApparelProductItem extends StatefulWidget {
-  ApparelProductItem(this.item, {this.isRequirement = false});
+  ApparelProductItem(this.item,
+      {this.isRequirement = false, this.isSelectItem = false});
 
   final ApparelProductModel item;
   final bool isRequirement;
+  final bool isSelectItem;
 
   ApparelProductItemState createState() => ApparelProductItemState();
 }
@@ -37,8 +39,9 @@ class ApparelProductItemState extends State<ApparelProductItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        if(widget.isRequirement) Navigator.pop(context,widget.item);
+      onTap: () {
+        if (widget.isRequirement) Navigator.pop(context, widget.item);
+        // if(widget.isSelectItem) 
       },
       child: Card(
         margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
@@ -68,7 +71,8 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
                   image: widget.item.thumbnail != null
-                      ? NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.item.thumbnail.url}')
+                      ? NetworkImage(
+                          '${GlobalConfigs.IMAGE_BASIC_URL}${widget.item.thumbnail.url}')
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",
@@ -218,44 +222,48 @@ class ApparelProductItemState extends State<ApparelProductItem> {
   }
 
   Widget _buildButtons(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          ActionChip(
-            shape: StadiumBorder(side: BorderSide(color: Colors.grey)),
-            labelPadding: EdgeInsets.symmetric(horizontal: 15),
-            backgroundColor: Colors.white,
-            label: Text('删除'),
-            labelStyle: TextStyle(color: Colors.grey),
-            onPressed: () async{
-              await ProductRepositoryImpl().delete(widget.item.code);
-              ApparelProductBLoC.instance.filterByStatuses();
-            },
-          ),
-          ActionChip(
-            shape: StadiumBorder(side: BorderSide(color: Color.fromRGBO(255,214,12, 1))),
-            labelPadding: EdgeInsets.symmetric(horizontal: 15),
-            backgroundColor: Colors.white,
-            label: Text('编辑'),
-            labelStyle: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
-            onPressed: () {
-              ProductRepositoryImpl().detail(widget.item.code).then((product){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BLoCProvider(
-                      bloc: ApparelProductBLoC.instance,
-                      child: ApparelProductFormPage(
-                        item: product,
-                      ),
+    if (!widget.isSelectItem) {
+      return Container(
+        padding: EdgeInsets.only(bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            ActionChip(
+              shape: StadiumBorder(side: BorderSide(color: Colors.grey)),
+              labelPadding: EdgeInsets.symmetric(horizontal: 15),
+              backgroundColor: Colors.white,
+              label: Text('删除'),
+              labelStyle: TextStyle(color: Colors.grey),
+              onPressed: () async {
+                await ProductRepositoryImpl().delete(widget.item.code);
+                ApparelProductBLoC.instance.filterByStatuses();
+              },
+            ),
+            ActionChip(
+              shape: StadiumBorder(
+                  side: BorderSide(color: Color.fromRGBO(255, 214, 12, 1))),
+              labelPadding: EdgeInsets.symmetric(horizontal: 15),
+              backgroundColor: Colors.white,
+              label: Text('编辑'),
+              labelStyle: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+              onPressed: () {
+                ProductRepositoryImpl()
+                    .detail(widget.item.code)
+                    .then((product) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BLoCProvider(
+                            bloc: ApparelProductBLoC.instance,
+                            child: ApparelProductFormPage(
+                              item: product,
+                            ),
+                          ),
                     ),
-                  ),
-                );
-              });
-            },
-          ),
+                  );
+                });
+              },
+            ),
 //          ActionChip(
 //            shape: StadiumBorder(side: BorderSide(color: Color.fromRGBO(255,214,12, 1))),
 //            labelPadding: EdgeInsets.symmetric(horizontal: 15),
@@ -264,18 +272,26 @@ class ApparelProductItemState extends State<ApparelProductItem> {
 //            labelStyle: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
 //            onPressed: () {},
 //          ),
-          ActionChip(
-            labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-            backgroundColor: Color.fromRGBO(255,214,12, 1),
-            label: Text('生产'),
-            labelStyle: TextStyle(color: Colors.black),
-            onPressed: () {
-              // TODO: 带到商品，跳到需求页面
-              Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderFrom(product: widget.item,)));
-            },
-          ),
-        ],
-      ),
-    );
+            ActionChip(
+              labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
+              backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+              label: Text('生产'),
+              labelStyle: TextStyle(color: Colors.black),
+              onPressed: () {
+                // TODO: 带到商品，跳到需求页面
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RequirementOrderFrom(
+                              product: widget.item,
+                            )));
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }

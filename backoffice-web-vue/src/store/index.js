@@ -6,9 +6,13 @@ Vue.use(Vuex);
 import {
   EnumsModule,
   UsersModule,
+  CarouselsModule,
   UserGroupsModule,
+  B2BUnitsModule,
   RolesModule,
   EmployeesModule,
+  B2BCustomersModule,
+  AddressesModule,
   FactoriesModule,
   BrandsModule,
   IndustrialClustersModule,
@@ -20,22 +24,10 @@ import {
   RequirementOrdersModule,
   PurchaseOrdersModule,
   QuotesModule,
-  ProofingsModule
+  ProofingsModule,
+  SampleProductModule,
+  SampleCheckoutHistModule
 } from './modules';
-
-import {
-  BrandEmployeesModule,
-  BrandMembersModule,
-  BrandMemberRequestsModule,
-  BrandOrgsModule,
-  BrandRolesModule,
-} from './brand/modules';
-
-import {
-  FactoryEmployeesModule,
-  FactoryOrgsModule,
-  FactoryRolesModule,
-} from './factory/modules';
 
 // 状态管理
 const state = {
@@ -63,11 +55,14 @@ const actions = {
 export default new Vuex.Store({
   modules: {
     EnumsModule,
-    // tenant
     UsersModule,
+    CarouselsModule,
     UserGroupsModule,
+    B2BUnitsModule,
     RolesModule,
     EmployeesModule,
+    CompanyAddressesModule: AddressesModule,
+    B2BCustomersModule,
     FactoriesModule,
     BrandsModule,
     IndustrialClustersModule,
@@ -80,16 +75,8 @@ export default new Vuex.Store({
     PurchaseOrdersModule,
     QuotesModule,
     ProofingsModule,
-    // brand
-    BrandEmployeesModule,
-    BrandMembersModule,
-    BrandMemberRequestsModule,
-    BrandOrgsModule,
-    BrandRolesModule,
-    // factory
-    FactoryEmployeesModule,
-    FactoryOrgsModule,
-    FactoryRolesModule,
+    SampleProductModule,
+    SampleCheckoutHistModule,
   },
   state,
   getters,

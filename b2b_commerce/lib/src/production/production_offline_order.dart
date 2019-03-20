@@ -1,14 +1,12 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
-import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';

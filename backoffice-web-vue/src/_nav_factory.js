@@ -49,41 +49,57 @@ export default {
       ]
     },
     {
-      name: '工厂管理',
-      url: '/factory/account',
+      name: '账户管理',
+      url: '/account',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '工厂设置',
-          url: '/factory/account/factory',
+          name: '认证信息',
+          url: '/account/my',
           icon: 'iconNone'
         },
         {
           name: '员工',
-          url: '/factory/account/employee',
+          url: '/account/b2b-customer',
           icon: 'iconNone'
         },
         {
           name: '组织架构',
-          url: '/factory/account/org',
+          url: '/account/b2b-unit',
           icon: 'iconNone'
         },
         {
           name: '角色',
-          url: '/factory/account/role',
+          url: '/account/role',
           icon: 'iconNone'
         },
+        {
+          name: '地址管理',
+          url: '/account/address',
+          icon: 'iconNone'
+        }
       ]
     },
     {
-      name: '系统管理',
-      url: '/system',
+      name: '其他',
+      url: '/miscs',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '地址管理',
-          url: '/system/address',
-          icon: 'iconNone'
+          name: '样衣管理',
+          icon: 'fa fa-check',
+          children: [
+            {
+              name: '样衣',
+              url: '/miscs/sample/sampleProduct',
+              icon: 'iconNone',
+            },
+            {
+              name: '样衣借还记录',
+              url: '/miscs/sample/sampleCheckoutHist',
+              icon: 'iconNone',
+            }
+          ]
         }
       ]
     }

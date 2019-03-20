@@ -1,9 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/user/address_repository.dart';
 import 'package:services/src/user/response/address_response.dart';
-import 'user_repository.dart';
-import 'package:dio/dio.dart';
 
 class AddressRepositoryImpl implements AddressRepository {
   const AddressRepositoryImpl();
