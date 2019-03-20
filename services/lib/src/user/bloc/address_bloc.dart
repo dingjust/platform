@@ -20,10 +20,10 @@ class AddressBLoC extends BLoCBase {
   AddressBLoC._internal() {
     // 初始化
     products = List<AddressModel>();
-    currentProduct = AddressModel();
+//    currentProduct = AddressModel();
     addressResponse = AddressResponse(0, 10, 0, 0, []);
 
-    newProduct = AddressModel();
+//    newProduct = AddressModel();
   }
 
   static AddressBLoC _getInstance() {

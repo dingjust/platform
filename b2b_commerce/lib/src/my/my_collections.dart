@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 
 /// 我的收藏
 class MyCollectionsPage extends StatelessWidget {

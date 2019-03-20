@@ -9,36 +9,6 @@ class MyAddressesPage extends StatelessWidget {
   AddressModel model = AddressModel();
   ScrollController _scrollController = new ScrollController();
 
-  final List<AddressModel> addresses = <AddressModel>[
-    AddressModel(
-      fullname: '华安',
-      cellphone: '13660339514',
-      region: RegionModel(name: '广东省'),
-      city: CityModel(code: 'CN-01-01', name: '广州市'),
-      cityDistrict: DistrictModel(code: 'CN-01-01', name: '海珠区'),
-      line1: '云顶同创汇A01',
-      defaultAddress: true,
-    ),
-    AddressModel(
-      fullname: '秋香',
-      cellphone: '15902090000',
-      region: RegionModel(name: '广东省'),
-      city: CityModel(code: 'CN-01-01', name: '广州市'),
-      cityDistrict: DistrictModel(code: 'CN-01-01', name: '黄埔区'),
-      line1: '云顶同创汇C01',
-      defaultAddress: false,
-    ),
-    AddressModel(
-      fullname: '梁非凡',
-      cellphone: '15902090000',
-      region: RegionModel(name: '湖南省'),
-      city: CityModel(code: 'CN-01-01', name: '株洲市'),
-      cityDistrict: DistrictModel(code: 'CN-01-01', name: '株洲区'),
-      line1: '云顶同创汇F01',
-      defaultAddress: false,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     var bloc = AddressBLoC.instance;
