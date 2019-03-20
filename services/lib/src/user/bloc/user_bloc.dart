@@ -42,6 +42,7 @@ class UserBLoC extends BLoCBase {
 
   var _controller = StreamController<UserModel>.broadcast();
 
+
   Stream<UserModel> get stream => _controller.stream;
 
   StreamController _loginResultController =

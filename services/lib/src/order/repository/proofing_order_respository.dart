@@ -5,7 +5,7 @@ import 'package:services/src/net/http_manager.dart';
 
 class ProofingOrderRepository {
   ///创建打样单
-  Future<String> proofingCreate(String quoteCode,ProofingModel model) async {
+  Future<String> proofingCreate(String quoteCode, ProofingModel model) async {
     Response response;
     try {
       response = await http$.post(OrderApis.proofingCreate(quoteCode),
@@ -15,6 +15,8 @@ class ProofingOrderRepository {
     }
     if (response != null && response.statusCode == 200) {
       return response.data;
+    } else {
+      return null;
     }
   }
 }

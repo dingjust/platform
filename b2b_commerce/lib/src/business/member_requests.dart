@@ -99,9 +99,9 @@ class MemberRequestItem extends StatelessWidget {
             // TODO: toggle the checkbox
           },
           leading: CircleAvatar(
-            backgroundImage: NetworkImage(
-              item.customer.profilePicture,
-            ),
+//            backgroundImage: NetworkImage(
+//              item.customer.profilePicture,
+//            ),
             radius: 30.0,
           ),
           title: Column(

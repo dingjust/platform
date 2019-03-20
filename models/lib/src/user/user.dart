@@ -25,10 +25,10 @@ class UserModel extends PrincipalModel {
   /// 公司名称
   String companyName;
 
-  Image get avatar => profilePicture ?? Image.network(profilePicture);
+  Image get avatar => profilePicture ?? Image.network(profilePicture.url);
 
   UserModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     this.loginDisabled,
@@ -59,7 +59,7 @@ class CustomerModel extends UserModel {
   String mobileNumber;
 
   CustomerModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     bool loginDisabled,
@@ -85,7 +85,7 @@ class B2BCustomerModel extends CustomerModel {
   B2BUnitModel defaultB2BUnit;
 
   B2BCustomerModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     bool loginDisabled,

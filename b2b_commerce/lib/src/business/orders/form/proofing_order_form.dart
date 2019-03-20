@@ -32,11 +32,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    if (widget.quoteModel != null) {
-      _remarksController.text = widget.quoteModel.remarks;
-      _unitPriceController.text = widget.quoteModel.costOfSamples.toString();
-    }
     super.initState();
   }
 
@@ -80,66 +75,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 ),
               )),
           onPressed: submitOrder,
-          // () async {
-          // QuoteModel model;
-          // if (widget.update) {
-          //   model = widget.quoteModel;
-          // } else {
-          //   //新建
-          //   model = QuoteModel();
-          // }
-          // //拼装数据
-          // model.costOfSamples = sample;
-          // model.remarks = _remarksController.text;
-
-          // String response = await QuoteOrderRepository().quoteCreate(model);
-
-          // if (response == '') {
-          //   showDialog<void>(
-          //     context: context,
-          //     barrierDismissible: true, // user must tap button!
-          //     builder: (context) {
-          //       return AlertDialog(
-          //         title: Text('报价失败'),
-          //         actions: <Widget>[
-          //           FlatButton(
-          //             child: Text('确定'),
-          //             onPressed: () {
-          //               Navigator.of(context).pop();
-          //             },
-          //           ),
-          //         ],
-          //       );
-          //     },
-          //   );
-          // } else {
-          //   showDialog<void>(
-          //     context: context,
-          //     barrierDismissible: true, // user must tap button!
-          //     builder: (context) {
-          //       return AlertDialog(
-          //         title: Text('报价成功'),
-          //         actions: <Widget>[
-          //           FlatButton(
-          //             child: Text('确定'),
-          //             onPressed: () async {
-          //               Navigator.of(context).pop();
-          //               //查询明细
-          //               QuoteModel detailModel = await QuoteOrderRepository()
-          //                   .getquoteDetail(response);
-          //               if (detailModel != null) {
-          //                 Navigator.of(context).push(MaterialPageRoute(
-          //                     builder: (context) =>
-          //                         QuoteOrderDetailPage(item: detailModel)));
-          //               }
-          //             },
-          //           ),
-          //         ],
-          //       );
-          //     },
-          //   );
-          // }
-          // },
           backgroundColor: Colors.amberAccent,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -172,10 +107,13 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(widget.quoteModel.belongTo
-                                              .profilePicture !=
+                                  image: NetworkImage(widget
+                                              .quoteModel
+                                              .requirementOrder
+                                              .belongTo
+                                              ?.profilePicture !=
                                           null
-                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.belongTo.profilePicture}'
+                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo}'
                                       : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
                               borderRadius: BorderRadius.circular(10)),
                         ),
@@ -187,7 +125,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                '${widget.quoteModel.belongTo.name}',
+                                '${widget.quoteModel.requirementOrder.belongTo?.name}',
                                 style: TextStyle(
                                     color: Color.fromRGBO(36, 38, 41, 1)),
                               ),
