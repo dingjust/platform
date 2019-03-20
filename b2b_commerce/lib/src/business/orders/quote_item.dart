@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
+import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -540,7 +541,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                     color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
               )),
           FlatButton(
-              onPressed: onApprove,
+              onPressed: onCreateProduction,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
@@ -676,10 +677,23 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
             )));
   }
 
-  void onCreateProofings() {
+  void onCreateProofings() async {
+    //查询明细
+    QuoteModel detailModel =
+        await QuoteOrderRepository().getquoteDetail(widget.model.code);
+
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ProofingOrderForm(
-              quoteModel: widget.model,
+              quoteModel: detailModel,
             )));
+  }
+
+  void onCreateProduction() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductionOnlineOrderFrom(
+                  quoteModel: widget.model,
+                )));
   }
 }

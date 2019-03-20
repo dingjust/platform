@@ -32,11 +32,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    if (widget.quoteModel != null) {
-      _remarksController.text = widget.quoteModel.remarks;
-      _unitPriceController.text = widget.quoteModel.costOfSamples.toString();
-    }
     super.initState();
   }
 
@@ -112,10 +107,13 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(widget.quoteModel.belongTo
-                                              .profilePicture !=
+                                  image: NetworkImage(widget
+                                              .quoteModel
+                                              .requirementOrder
+                                              .belongTo
+                                              ?.profilePicture !=
                                           null
-                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.belongTo.profilePicture}'
+                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo}'
                                       : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
                               borderRadius: BorderRadius.circular(10)),
                         ),
@@ -127,7 +125,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                '${widget.quoteModel.belongTo.name}',
+                                '${widget.quoteModel.requirementOrder.belongTo?.name}',
                                 style: TextStyle(
                                     color: Color.fromRGBO(36, 38, 41, 1)),
                               ),
