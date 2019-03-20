@@ -38,6 +38,11 @@ class OrderApis {
   static get purchaseOfflineOrders =>
       '/{baseSiteId}/b2b/orders/purchase/create';
 
+  //创建线上生产订单
+  static get purchaseOnlineOrders =>(quote) {
+    return '/{baseSiteId}/b2b/orders/purchase/create/$quote';
+  };
+
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/b2b/orders/quote';
 
