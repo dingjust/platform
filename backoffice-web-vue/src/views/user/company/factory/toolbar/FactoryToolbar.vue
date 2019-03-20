@@ -5,7 +5,7 @@
     </el-form-item>
     <el-button-group>
       <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-      <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
+      <el-button v-if="!hideCreationButton || true"  type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
     </el-button-group>
   </el-form>
 </template>
@@ -17,6 +17,7 @@
 
   export default {
     name: 'FactoryToolbar',
+    props: ['hideCreationButton'],
     components: {},
     computed: {},
     methods: {
