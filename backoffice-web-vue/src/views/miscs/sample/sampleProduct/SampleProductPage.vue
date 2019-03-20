@@ -35,7 +35,7 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getSampleCheckoutHists();
+        const url = this.apis().getSampleProducts();
         this.search({url, keyword, page, size});
       },
       onNew(formData) {
