@@ -16,6 +16,7 @@
   import SampleCheckoutHistSearchResultList from './list/SampleCheckoutHistSearchResultList';
   import SampleCheckoutHistDetailsPage from "./details/SampleCheckoutHistDetailsPage";
   import SampleCheckoutHistForm from './form/SampleCheckoutHistForm';
+
   export default {
     name: 'SampleCheckoutHistPage',
     components: {
@@ -24,32 +25,39 @@
     },
     computed: {
       ...mapGetters({
+        keyword: 'keyword',
         page: 'page'
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced',
       }),
-      onSearch(keyword,page, size) {
-        this.search({keyword, page, size});
+      onSearch(page, size) {
+        const keyword = this.keyword;
+        const url = this.apis().getSampleCheckoutHists();
+        this.search({url, keyword, page, size});
+      },
+      async onDetails(row) {
+        const url = this.apis().getSampleCheckoutHist(item.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.fn.openSlider('明细:' + row.code, SampleCheckoutHistDetailsPage, row);
       },
       onNew(formData) {
-        this.fn.openSlider('创建样衣', SampleCheckoutHistForm, formData);
-      },
-      onDetails(row) {
-        this.fn.openSlider('样衣明细:' + row.code, SampleCheckoutHistDetailsPage, row);
+        this.fn.openSlider('新建', SampleCheckoutHistForm, formData);
       },
     },
     data() {
       return {
-        keyword: this.$store.state.SampleCheckoutHistModule.keyword,
-        formData: this.$store.state.SampleCheckoutHistModule.formData,
       }
     },
     created() {
-      this.search('');
+      this.onSearch();
     }
   }
 </script>
