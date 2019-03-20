@@ -180,9 +180,9 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-accounts' */ 'backoffice/account/group/GroupPage')
             },
             {
-              path: 'b2bcustomer',
+              path: 'b2b-customer',
               name: '员工',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/employee/EmployeePage'),
+              component: () => import(/* webpackChunkName: 'factory-accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
             },
             {
               path: 'org',

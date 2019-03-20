@@ -27,13 +27,11 @@ import {
 } from './modules';
 
 import {
-  BrandEmployeesModule,
   BrandOrgsModule,
   BrandRolesModule,
 } from './brand/modules';
 
 import {
-  FactoryEmployeesModule,
   FactoryOrgsModule,
   FactoryRolesModule,
 } from './factory/modules';
@@ -85,11 +83,9 @@ export default new Vuex.Store({
     SampleProductModule,
     SampleCheckoutHistModule,
     // brand
-    BrandEmployeesModule,
     BrandOrgsModule,
     BrandRolesModule,
     // factory
-    FactoryEmployeesModule,
     FactoryOrgsModule,
     FactoryRolesModule,
   },

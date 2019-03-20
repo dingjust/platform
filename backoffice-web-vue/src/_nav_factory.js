@@ -50,32 +50,32 @@ export default {
     },
     {
       name: '账户管理',
-      url: '/factory/account',
+      url: '/account',
       icon: 'icon-puzzle',
       children: [
         {
           name: '认证信息',
-          url: '/factory/account/factory',
+          url: '/account/my',
           icon: 'iconNone'
         },
         {
           name: '员工',
-          url: '/factory/account/employee',
+          url: '/account/b2b-customer',
           icon: 'iconNone'
         },
         {
           name: '组织架构',
-          url: '/factory/account/org',
+          url: '/account/org',
           icon: 'iconNone'
         },
         {
           name: '角色',
-          url: '/factory/account/role',
+          url: '/account/role',
           icon: 'iconNone'
         },
         {
           name: '地址管理',
-          url: '/system/address',
+          url: '/account/address',
           icon: 'iconNone'
         }
       ]

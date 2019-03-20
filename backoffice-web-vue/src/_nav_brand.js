@@ -55,32 +55,32 @@ export default {
     },
     {
       name: '账户管理',
-      url: '/brand/account',
+      url: '/account',
       icon: 'icon-puzzle',
       children: [
         {
           name: '认证信息',
-          url: '/brand/account/store',
+          url: '/account/my',
           icon: 'iconNone'
         },
         {
           name: '员工',
-          url: '/brand/account/employee',
+          url: '/account/b2b-customer',
           icon: 'iconNone'
         },
         {
           name: '组织架构',
-          url: '/brand/account/org',
+          url: '/account/org',
           icon: 'iconNone'
         },
         {
           name: '角色',
-          url: '/brand/account/role',
+          url: '/account/role',
           icon: 'iconNone'
         },
         {
-          name: '地址管理',
-          url: '/system/address',
+          name: '地址',
+          url: '/account/address',
           icon: 'iconNone'
         }
       ]
