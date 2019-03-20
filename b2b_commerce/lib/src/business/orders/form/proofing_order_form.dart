@@ -80,66 +80,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 ),
               )),
           onPressed: submitOrder,
-          // () async {
-          // QuoteModel model;
-          // if (widget.update) {
-          //   model = widget.quoteModel;
-          // } else {
-          //   //新建
-          //   model = QuoteModel();
-          // }
-          // //拼装数据
-          // model.costOfSamples = sample;
-          // model.remarks = _remarksController.text;
-
-          // String response = await QuoteOrderRepository().quoteCreate(model);
-
-          // if (response == '') {
-          //   showDialog<void>(
-          //     context: context,
-          //     barrierDismissible: true, // user must tap button!
-          //     builder: (context) {
-          //       return AlertDialog(
-          //         title: Text('报价失败'),
-          //         actions: <Widget>[
-          //           FlatButton(
-          //             child: Text('确定'),
-          //             onPressed: () {
-          //               Navigator.of(context).pop();
-          //             },
-          //           ),
-          //         ],
-          //       );
-          //     },
-          //   );
-          // } else {
-          //   showDialog<void>(
-          //     context: context,
-          //     barrierDismissible: true, // user must tap button!
-          //     builder: (context) {
-          //       return AlertDialog(
-          //         title: Text('报价成功'),
-          //         actions: <Widget>[
-          //           FlatButton(
-          //             child: Text('确定'),
-          //             onPressed: () async {
-          //               Navigator.of(context).pop();
-          //               //查询明细
-          //               QuoteModel detailModel = await QuoteOrderRepository()
-          //                   .getquoteDetail(response);
-          //               if (detailModel != null) {
-          //                 Navigator.of(context).push(MaterialPageRoute(
-          //                     builder: (context) =>
-          //                         QuoteOrderDetailPage(item: detailModel)));
-          //               }
-          //             },
-          //           ),
-          //         ],
-          //       );
-          //     },
-          //   );
-          // }
-          // },
           backgroundColor: Colors.amberAccent,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
