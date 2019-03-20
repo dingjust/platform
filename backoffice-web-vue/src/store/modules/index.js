@@ -3,6 +3,7 @@ import UsersModule from './user/users';
 import UserGroupsModule from './user/user-groups';
 import RolesModule from './user/roles';
 import EmployeesModule from './user/employees';
+import B2BCustomersModule from './user/b2b-customers';
 import FactoriesModule from './user/factories';
 import BrandsModule from './user/brands';
 import IndustrialClustersModule from './user/industrial-clusters';
@@ -25,6 +26,7 @@ export {
   UserGroupsModule,
   RolesModule,
   EmployeesModule,
+  B2BCustomersModule,
   FactoriesModule,
   BrandsModule,
   IndustrialClustersModule,

@@ -95,7 +95,7 @@
 
 <script>
   export default {
-    name: 'BrandBasicForm',
+    name: 'FactoryBasicForm',
     props: ['slotData', 'readOnly'],
     methods: {
       async getCategories() {

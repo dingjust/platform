@@ -151,8 +151,7 @@ const router = new Router({
           ]
         },
         {
-          path: 'factory/account',
-          redirect: '/factory/account/factory',
+          path: 'account',
           name: '账户管理',
           component: {
             render(c) {
@@ -173,7 +172,7 @@ const router = new Router({
             {
               path: 'employee',
               name: '员工',
-              component: () => import(/* webpackChunkName: 'tenant-accounts' */ 'backoffice/account/employee/EmployeePage')
+              component: () => import(/* webpackChunkName: 'tenant-accounts' */ '@/views/user/user/employee/EmployeePage')
             },
             {
               path: 'group',

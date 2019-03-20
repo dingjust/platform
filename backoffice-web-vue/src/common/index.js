@@ -1,4 +1,13 @@
 const COMMON_APIS = {
+  createEmployee() {
+    return '/b2b/employees';
+  },
+  getEmployees() {
+    return '/b2b/employees';
+  },
+  getEmployee(uid) {
+    return '/b2b/employees/' + uid;
+  },
   createBrand() {
     return '/b2b/brands';
   },
@@ -16,6 +25,15 @@ const COMMON_APIS = {
   },
   getFactory(uid) {
     return '/b2b/factories/' + uid;
+  },
+  createB2BCustomer() {
+    return '/b2b/b2bcustomer';
+  },
+  getB2BCustomers() {
+    return '/b2b/b2bcustomer';
+  },
+  getB2BCustomer(uid) {
+    return '/b2b/b2bcustomer/' + uid;
   },
   // 小类，级联（二级）
   getMinorCategories() {

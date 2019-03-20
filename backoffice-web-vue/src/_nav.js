@@ -86,12 +86,12 @@ export default {
     },
     {
       name: '账户管理',
-      url: '/backoffice/account',
+      url: '/account',
       icon: 'icon-puzzle',
       children: [
         {
           name: '员工',
-          url: '/backoffice/account/employee',
+          url: '/account/employee',
           icon: 'iconNone'
         },
         {
