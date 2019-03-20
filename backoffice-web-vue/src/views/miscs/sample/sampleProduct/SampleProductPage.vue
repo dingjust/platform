@@ -16,6 +16,7 @@
   import SampleProductSearchResultList from './list/SampleProductSearchResultList';
   import SampleProductDetailsPage from "./details/SampleProductDetailsPage";
   import SampleProductForm from './form/SampleProductForm';
+
   export default {
     name: 'SampleProductPage',
     components: {
@@ -24,32 +25,31 @@
     },
     computed: {
       ...mapGetters({
+        keyword: 'keyword',
         page: 'page'
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced',
       }),
-      onSearch(keyword,page, size) {
-        this.search({keyword, page, size});
+      onSearch(page, size) {
+        const keyword = this.keyword;
+        const url = this.apis().getSampleCheckoutHists();
+        this.search({url, keyword, page, size});
       },
       onNew(formData) {
-        this.fn.openSlider('创建样衣', SampleProductForm, formData);
+        this.fn.openSlider('新建', SampleProductForm, formData);
       },
-      onDetails(row) {
-        this.fn.openSlider('样衣明细:'+row.code, SampleProductDetailsPage, row);
+      onDetails(formData) {
+        this.fn.openSlider('明细:' + formData.code, SampleProductDetailsPage, formData);
       },
     },
     data() {
-      return {
-        keyword: this.$store.state.SampleProductModule.keyword,
-        formData: this.$store.state.SampleProductModule.formData,
-      }
+      return {}
     },
     created() {
-      this.search('');
+      this.onSearch();
     }
   }
 </script>

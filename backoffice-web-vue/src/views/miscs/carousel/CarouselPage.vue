@@ -38,17 +38,17 @@
         this.search({url, keyword, page, size});
       },
       async onDetails(item) {
-        const url = this.apis().getCarousel(item.uid);
+        const url = this.apis().getCarousel(item.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider('员工：' + item.name, CarouselDetailsPage, result);
+        this.fn.openSlider('明细：' + item.name, CarouselDetailsPage, result);
       },
       onNew(formData) {
-        this.fn.openSlider('创建员工', CarouselDetailsPage, formData);
+        this.fn.openSlider('新建', CarouselDetailsPage, formData);
       },
     },
     data() {

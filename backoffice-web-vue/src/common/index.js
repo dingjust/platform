@@ -1,4 +1,49 @@
 const COMMON_APIS = {
+  createSampleProduct() {
+    return '/b2b/products/sample';
+  },
+  getSampleProducts() {
+    return '/b2b/products/sample';
+  },
+  getSampleProduct(id) {
+    return '/b2b/products/sample/' + id;
+  },
+  createSampleCheckoutHist() {
+    return '/b2b/products/sampleCheckoutHist';
+  },
+  getSampleCheckoutHists() {
+    return '/b2b/products/sampleCheckoutHist';
+  },
+  getSampleCheckoutHist(id) {
+    return '/b2b/products/sampleCheckoutHist/' + id;
+  },
+  createCarousel() {
+    return '/b2b/carousels';
+  },
+  getCarousels() {
+    return '/b2b/carousels';
+  },
+  getCarousel(id) {
+    return '/b2b/carousel/' + id;
+  },
+  createIndustrialCluster() {
+    return '/b2b/industrialClusters';
+  },
+  getIndustrialClusters() {
+    return '/b2b/industrialClusters';
+  },
+  getIndustrialCluster(code) {
+    return '/b2b/industrialClusters/' + code;
+  },
+  createLabel() {
+    return '/b2b/labels';
+  },
+  getLabels() {
+    return '/b2b/labels';
+  },
+  getLabel(id) {
+    return '/b2b/labels/' + id;
+  },
   createEmployee() {
     return '/b2b/employees';
   },
@@ -13,6 +58,12 @@ const COMMON_APIS = {
   },
   getBrands() {
     return '/b2b/brands';
+  },
+  getBrandSuppliers() {
+    return '/b2b/brands/suppliers';
+  },
+  getFactorySuppliers() {
+    return '/b2b/factories/suppliers';
   },
   getBrand(uid) {
     return '/b2b/brands/' + uid;
