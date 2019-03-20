@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -79,14 +78,15 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
         children: <Widget>[
-          widget.model.product.thumbnail != null
+          widget.model.entries[0].product.thumbnail != null
               ? Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: NetworkImage(widget.model.product.thumbnail.url),
+                        image: NetworkImage(
+                            widget.model.entries[0].product.thumbnail.url),
                         fit: BoxFit.cover,
                       )),
                 )
@@ -112,7 +112,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    widget.model.product.name,
+                    widget.model.entries[0].product.name,
                     style: TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -122,7 +122,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      '货号：${widget.model.product.skuID}',
+                      '货号：${widget.model.entries[0].product.skuID}',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ),
@@ -132,7 +132,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.product.category.name}   ${widget.model.product.category.name}   ${widget.model.totalQuantity}件",
+                      "${widget.model.entries[0].product.name}   ${widget.model.entries[0].product.category.name}   ${widget.model.totalQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -246,17 +246,14 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             title: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('${widget.model.deliveryAddress.fullname}'),
+                  child: Text('${widget.model.deliveryAddress?.fullname}'),
                 ),
                 Expanded(
-                    child: Text('${widget.model.deliveryAddress.cellphone}'))
+                    child: Text('${widget.model.deliveryAddress?.cellphone}'))
               ],
             ),
             subtitle: Text(
-                widget.model.deliveryAddress.region.name +
-                    widget.model.deliveryAddress.city.name +
-                    widget.model.deliveryAddress.cityDistrict.name +
-                    widget.model.deliveryAddress.line1,
+                '${widget.model.deliveryAddress?.region?.name}${widget.model.deliveryAddress?.city?.name}${widget.model.deliveryAddress?.cityDistrict?.name}${widget.model.deliveryAddress?.line1}',
                 style: TextStyle(
                   color: Colors.black,
                 )),
@@ -296,7 +293,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 Container(
                   width: 140,
                   child: Text(
-                    widget.model.factory.name,
+                    widget.model.belongTo.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 16),
@@ -309,7 +306,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Stars(
-                            starLevel: widget.model.factory.starLevel,
+                            starLevel: widget.model.belongTo.starLevel ?? 1,
                             color: Color.fromRGBO(255, 183, 0, 1),
                             highlightOnly: false,
                           ),
@@ -325,7 +322,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                   child: Row(
                     children: <Widget>[
                       Text(
-                        widget.model.factory.address,
+                        '${widget.model.belongTo.address}',
                         style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                       Icon(
@@ -379,7 +376,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             style: TextStyle(color: Colors.black),
           ),
           Text(
-            '需求订单号：${widget.model.order.code}',
+            '需求订单号：${widget.model.requirementOrderRef}',
             style: TextStyle(color: Colors.black),
           )
         ],

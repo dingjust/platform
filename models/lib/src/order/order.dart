@@ -1056,10 +1056,7 @@ class ProofingModel extends OrderModel {
   ///发布者
   CompanyModel belongTo;
 
-  ///生产工厂
-  FactoryModel factory;
-
-  ApparelProductModel product;
+  // ApparelProductModel product;
 
   QuoteModel order;
 
@@ -1078,11 +1075,9 @@ class ProofingModel extends OrderModel {
       int totalQuantity,
       double totalPrice,
       this.belongTo,
-      this.factory,
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
-      this.product,
       this.order,
       double unitPrice,
       this.requirementOrderRef,
