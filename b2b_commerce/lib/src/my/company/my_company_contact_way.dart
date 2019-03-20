@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:models/models.dart';
 
 class MyCompanyContactWayPage extends StatelessWidget {
-  BrandModel company;
+  dynamic company;
   MyCompanyContactWayPage(this.company);
 
   @override
@@ -123,7 +123,7 @@ class MyCompanyContactWayPage extends StatelessWidget {
                   height: 0,
                 ),
                 ListTile(
-                  enabled: company.contactPhone != null,
+                  enabled: company.email != null,
                   leading: Text(
                     '邮箱地址',
                     style: TextStyle(
@@ -147,7 +147,7 @@ class MyCompanyContactWayPage extends StatelessWidget {
                   height: 0,
                 ),
                 ListTile(
-//                    enabled: company.contactPhone != null,
+                    enabled: company.qq != null,
                   leading: Text(
                     'QQ号',
                     style: TextStyle(
@@ -171,7 +171,7 @@ class MyCompanyContactWayPage extends StatelessWidget {
                   height: 0,
                 ),
                 ListTile(
-//                    enabled: company.contactPhone != null,
+                    enabled: company.wechat != null,
                   leading: Text(
                     '微信号',
                     style: TextStyle(

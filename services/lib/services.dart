@@ -50,7 +50,6 @@ export 'src/user/response/address_response.dart';
 export 'src/user/bloc/address_bloc.dart';
 export 'src/user/address_repository.dart';
 export 'src/user/address_repository_impl.dart';
-export 'src/user/bloc/company_bloc.dart';
 
 abstract class BLoCBase {
   void dispose();

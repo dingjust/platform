@@ -55,6 +55,12 @@ class CompanyModel extends UserGroupModel {
   //合作品牌
   String cooperativeBrand;
 
+  //QQ
+  String qq;
+
+  //微信
+  String wechat;
+
   CompanyModel({
     MediaModel profilePicture,
     String uid,
@@ -71,6 +77,8 @@ class CompanyModel extends UserGroupModel {
     this.contactPhone,
     this.contactPerson,
     this.cooperativeBrand,
+    this.qq,
+    this.wechat,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -105,6 +113,8 @@ class OrgUnitModel extends CompanyModel {
     String contactPerson,
     String contactPhone,
     String cooperativeBrand,
+    String qq,
+    String wechat,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -122,6 +132,8 @@ class OrgUnitModel extends CompanyModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
+          qq:qq,
+          wechat:wechat,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -154,6 +166,8 @@ class B2BUnitModel extends OrgUnitModel {
     String contactPerson,
     String contactPhone,
     String cooperativeBrand,
+    String qq,
+    String wechat,
     this.active,
     this.email,
     this.phone,
@@ -174,6 +188,8 @@ class B2BUnitModel extends OrgUnitModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
+          qq:qq,
+          wechat:wechat,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -228,6 +244,8 @@ class BrandModel extends B2BUnitModel {
     String contactPerson,
     String contactPhone,
     String cooperativeBrand,
+    String qq,
+    String wechat,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -255,6 +273,8 @@ class BrandModel extends B2BUnitModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
+          qq:qq,
+          wechat:wechat,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -279,7 +299,7 @@ class FactoryModel extends B2BUnitModel {
   List<CategoryModel> categories;
 
   //擅长品类
-  List<String> adeptAtCategories;
+  List<CategoryModel> adeptAtCategories;
 
   //合作方式
   List<String> cooperationModes;
@@ -323,6 +343,8 @@ class FactoryModel extends B2BUnitModel {
     String contactPerson,
     String contactPhone,
     String cooperativeBrand,
+    String qq,
+    String wechat,
     this.historyOrdersCount,
     this.orderedSuccessRate,
     this.monthlyCapacityRanges,
@@ -355,6 +377,8 @@ class FactoryModel extends B2BUnitModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
+          qq:qq,
+          wechat:wechat,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>

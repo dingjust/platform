@@ -6,12 +6,12 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 /// 认证信息
-class MyBrandPage extends StatefulWidget {
-  _MyBrandPageState createState() => _MyBrandPageState();
+class MyFactoryPage extends StatefulWidget {
+  _MyFactoryPageState createState() => _MyFactoryPageState();
 }
 
-class _MyBrandPageState extends State<MyBrandPage> {
-  BrandModel company;
+class _MyFactoryPageState extends State<MyFactoryPage> {
+  FactoryModel company;
   UserRepository _userRepository = UserRepositoryImpl();
   UserType type = UserType.ANONYMOUS;
 
@@ -49,11 +49,10 @@ class _MyBrandPageState extends State<MyBrandPage> {
       ),
       body: FutureBuilder<dynamic>(
         future:
-            _userRepository.getBrand(UserBLoC.instance.currentUser.companyCode),
+            _userRepository.getFactory(UserBLoC.instance.currentUser.companyCode),
         // initialData: null,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.data == null) {
-            CompanyBLoC.instance.detail();
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 200),
               child: Center(child: CircularProgressIndicator()),
@@ -61,7 +60,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
           }
           if (snapshot.hasData) {
             company = snapshot.data;
-            return Container(child: _buildBrand(context));
+            return Container(child: _buildFactory(context));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
@@ -70,29 +69,32 @@ class _MyBrandPageState extends State<MyBrandPage> {
     );
   }
 
-  Widget _buildBrand(BuildContext context) {
+  Widget _buildFactory(BuildContext context) {
     return ListView(
       children: <Widget>[
         Card(
           elevation: 0,
           margin: EdgeInsets.only(top: 10),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: 15,),
             child: Column(
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 214, 12, 1),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text('编辑'),
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text('编辑'),
+                      )
+                    ],
+                  ),
                 ),
                 Row(
                   children: <Widget>[
@@ -115,7 +117,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     Expanded(
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                            EdgeInsets.only(left: 10),
                         height: 80,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,13 +134,17 @@ class _MyBrandPageState extends State<MyBrandPage> {
                             Stars(
                               starLevel: 5,
                             ),
-                            Container(
-                              child: Text(
-                                "已认证",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: Color.fromRGBO(255, 214, 12, 1)),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "已认证",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Color.fromRGBO(255, 214, 12, 1)),
+                                ),
+                                Text('广东广州白云'),
+                              ],
                             ),
                           ],
                         ),
@@ -153,33 +159,14 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      '品牌名称',
+                      '月均产能',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
                       ),
                     ),
                     Text(
-                      company.brand,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      '合作品牌',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      company.cooperativeBrand,
+                      company.monthlyCapacityRanges == null ? '' : MonthlyCapacityRangesLocalizedMap[company.monthlyCapacityRanges],
                       style: TextStyle(fontSize: 16),
                     ),
                   ],
@@ -210,6 +197,23 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
+                      '生产大类',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      formatCategorySelectText(company.categories),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
                       '优势类目',
                       style: TextStyle(
                         color: Colors.grey,
@@ -236,7 +240,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                       ),
                     ),
                     Text(
-                      formatEnumSelectsText(company.styles, StyleEnum, 4),
+                      '',
                       style: TextStyle(fontSize: 16),
                     ),
                   ],
@@ -244,25 +248,25 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 SizedBox(
                   height: 20,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      '年龄段',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      formatAgeRangesText(company.ageRanges),
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+//                Row(
+//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                  children: <Widget>[
+//                    Text(
+//                      '年龄段',
+//                      style: TextStyle(
+//                        color: Colors.grey,
+//                        fontSize: 16,
+//                      ),
+//                    ),
+//                    Text(
+//                      '',
+//                      style: TextStyle(fontSize: 16),
+//                    ),
+//                  ],
+//                ),
+//                SizedBox(
+//                  height: 20,
+//                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -274,7 +278,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                       ),
                     ),
                     Text(
-                      formatPriceRangesText(company.priceRange1s),
+                      '',
                       style: TextStyle(fontSize: 16),
                     ),
                   ],
@@ -293,7 +297,26 @@ class _MyBrandPageState extends State<MyBrandPage> {
                       ),
                     ),
                     Text(
-                      formatPriceRangesText(company.priceRange2s),
+                     '',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '合作品牌商',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      company.cooperativeBrand,
                       style: TextStyle(fontSize: 16),
                     ),
                   ],

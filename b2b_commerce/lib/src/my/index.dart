@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -18,6 +19,10 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
+    String companyRoute = '';
+    if(bloc.currentUser.type == UserType.BRAND) companyRoute = AppRoutes.ROUTE_MY_BRAND;
+    if(bloc.currentUser.type == UserType.FACTORY) companyRoute = AppRoutes.ROUTE_MY_FACTORY;
+
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
@@ -30,7 +35,7 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
         MenuItem(B2BImage.certicate_info(width: 26, height: 19), '公司介绍',
-            AppRoutes.ROUTE_MY_COMPANY),
+            companyRoute),
       ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.address_manage(width: 24, height: 29), '地址管理',
