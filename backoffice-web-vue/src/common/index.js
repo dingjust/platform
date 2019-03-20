@@ -1,4 +1,22 @@
 const COMMON_APIS = {
+  createBrand() {
+    return '/b2b/brands';
+  },
+  getBrands() {
+    return '/b2b/brands';
+  },
+  getBrand(uid) {
+    return '/b2b/brands/' + uid;
+  },
+  createFactory() {
+    return '/b2b/factories';
+  },
+  getFactories() {
+    return '/b2b/factories';
+  },
+  getFactory(uid) {
+    return '/b2b/factories/' + uid;
+  },
   // 小类，级联（二级）
   getMinorCategories() {
     return '/b2b/categories/cascaded';

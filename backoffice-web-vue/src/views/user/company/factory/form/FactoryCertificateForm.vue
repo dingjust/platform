@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <div class="animated fadeIn">
     <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="readOnly">
       <el-row :gutter="10">
         <el-col :span="8">
@@ -22,7 +22,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-row :gutter="10" v-if="isNewlyCreated">
+    <el-row :gutter="10" v-if="!readOnly">
       <el-col :span="20">
         <el-upload ref="uploadForm"
                    name="files"
@@ -40,60 +40,70 @@
         </el-upload>
       </el-col>
     </el-row>
-  </el-card>
+  </div>
 </template>
 
 <script>
   export default {
     name: 'FactoryCertificateForm',
-    props: ['slotData', 'isNewlyCreated', 'readOnly'],
+    props: ['slotData', 'readOnly'],
     methods: {
-      onSubmit() {
-        console.log(this.slotData);
-        this.$refs.uploadForm.submit();
-      },
       validate(callback) {
-        return this.$refs['form'].validate(callback);
+        this.$refs.form.validate(callback);
       },
-      getValue() {
-        let certificateData = {};
-        certificateData.uid = this.slotData.uid;
-        certificateData.registrationDate = this.slotData.registrationDate;
-        certificateData.taxNumber = this.slotData.taxNumber;
-        certificateData.bankOfDeposit = this.slotData.bankOfDeposit;
-        return certificateData;
-      },
-      onUploadSuccess(response, file, files) {
-        if (response === '') {
-          this.$message.success('上传成功');
-          this.$refs.uploadForm.clearFiles();
-          this.fn.closeSlider();
+      onFilterCategories(query) {
+        this.categories = [];
+        if (query && query !== '') {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.getCategories(query);
+          }, 200);
         }
       },
-      onUploadError(error, file, files) {
-        let msg = '';
-        if (file.size >= (1024 * 1024 * 5)) {
-          msg = '，上传的文件不能超过5MB'
+      async getCategories(query) {
+        const url = this.apis().getMinorCategories();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
         }
-        this.$message.error('上传失败' + msg);
+
+        this.categories = result;
       },
-      onUploading(event, file, files) {
-        this.$message('正在上传，请稍等');
-      }
-    },
-    computed: {
-      data: function () {
-        return {
-          code: this.slotData.uid
-        };
+      async getStyles() {
+        const url = this.apis().getAllStyles();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.styles = result;
       }
     },
     data() {
       return {
-        rules: {},
-        uploadUrl: '/djfactory/factory/media/upload',
-        files: []
+        loading: false,
+        rules: {
+          name: [{required: true, message: '必填', trigger: 'blur'}],
+          skuID: [{required: true, message: '必填', trigger: 'blur'}],
+          category: [{required: true, message: '必填', trigger: 'blur'}],
+          price: [{required: true, message: '必填', trigger: 'blur'}]
+        },
+        categories: [],
+        companies: [],
+        styles: [],
+        categoryProps: {
+          label: 'name',
+          value: 'code',
+          children: 'children'
+        }
       };
+    },
+    created() {
+      this.getCategories('');
+      this.getStyles();
     }
   };
 </script>

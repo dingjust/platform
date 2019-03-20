@@ -54,23 +54,18 @@ export default {
       ]
     },
     {
-      name: '店铺管理',
+      name: '账户管理',
       url: '/brand/account',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '店铺',
+          name: '认证信息',
           url: '/brand/account/store',
           icon: 'iconNone'
         },
         {
           name: '员工',
           url: '/brand/account/employee',
-          icon: 'iconNone'
-        },
-        {
-          name: '会员',
-          url: '/brand/account/member',
           icon: 'iconNone'
         },
         {
@@ -81,18 +76,6 @@ export default {
         {
           name: '角色',
           url: '/brand/account/role',
-          icon: 'iconNone'
-        }
-      ]
-    },
-    {
-      name: '系统管理',
-      url: '/system/zone',
-      icon: 'icon-puzzle',
-      children: [
-        {
-          name: '运费模板',
-          url: '/system/zone',
           icon: 'iconNone'
         },
         {

@@ -20,13 +20,13 @@ export default {
       icon: 'icon-puzzle',
       children: [
         {
-          name: '分类',
-          url: '/backoffice/product/category',
+          name: '服装产品',
+          url: '/product/apparel',
           icon: 'iconNone'
         },
         {
-          name: '服装产品',
-          url: '/product/apparel',
+          name: '分类',
+          url: '/backoffice/product/category',
           icon: 'iconNone'
         },
         {
@@ -48,12 +48,12 @@ export default {
       children: [
         {
           name: '品牌',
-          url: '/backoffice/customer/brand',
+          url: '/user/brand',
           icon: 'iconNone'
         },
         {
           name: '工厂',
-          url: '/backoffice/customer/factory',
+          url: '/user/factory',
           icon: 'iconNone'
         },
       ]

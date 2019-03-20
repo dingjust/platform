@@ -45,14 +45,14 @@ const mutations = {
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {keyword, page, size}) {
+  async search({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get('/b2b/brands/approved', {
+    const response = await http.get(url, {
       keyword: state.keyword
     }, {
       page: state.currentPageNumber,

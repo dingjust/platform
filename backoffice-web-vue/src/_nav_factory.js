@@ -49,12 +49,12 @@ export default {
       ]
     },
     {
-      name: '工厂管理',
+      name: '账户管理',
       url: '/factory/account',
       icon: 'icon-puzzle',
       children: [
         {
-          name: '工厂设置',
+          name: '认证信息',
           url: '/factory/account/factory',
           icon: 'iconNone'
         },
@@ -73,13 +73,6 @@ export default {
           url: '/factory/account/role',
           icon: 'iconNone'
         },
-      ]
-    },
-    {
-      name: '系统管理',
-      url: '/system',
-      icon: 'icon-puzzle',
-      children: [
         {
           name: '地址管理',
           url: '/system/address',
