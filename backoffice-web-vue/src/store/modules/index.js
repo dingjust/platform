@@ -2,6 +2,7 @@ import EnumsModule from './shared/enums';
 import UsersModule from './user/users';
 import UserGroupsModule from './user/user-groups';
 import B2BUnitsModule from './user/b2b-units';
+import AddressesModule from './user/addresses';
 import RolesModule from './user/roles';
 import EmployeesModule from './user/employees';
 import B2BCustomersModule from './user/b2b-customers';
@@ -27,6 +28,7 @@ export {
   UserGroupsModule,
   B2BUnitsModule,
   RolesModule,
+  AddressesModule,
   EmployeesModule,
   B2BCustomersModule,
   FactoriesModule,

@@ -192,7 +192,7 @@ const router = new Router({
             {
               path: 'address',
               name: '地址管理',
-              component: () => import(/* webpackChunkName: 'accounts' */ 'brand/system/address/AddressPage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/address/AddressPage'),
             }
           ]
         },
