@@ -15,4 +15,9 @@ class UserRepositoryImpl implements UserRepository {
     Response response = await http$.get(Apis.brand(uid));
     return BrandModel.fromJson(response.data);
   }
+
+  Future<FactoryModel> getFactory(String uid) async {
+    Response response = await http$.get(Apis.factory(uid));
+    return FactoryModel.fromJson(response.data);
+  }
 }

@@ -19,12 +19,12 @@ class Apis {
 
   /// 获取品牌明细 GET
   static get brand => (uid) {
-        return '/{baseSiteId}/b2b/brand/$uid';
+        return '/{baseSiteId}/b2b/brands/$uid';
       };
 
   /// 获取工厂明细 GET
   static get factory => (uid) {
-        return '/{baseSiteId}/b2b/factory/$uid';
+        return '/{baseSiteId}/b2b/factories/$uid';
       };
 
   /// 图片上传

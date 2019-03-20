@@ -7,7 +7,7 @@ part 'user_group.g.dart';
 @JsonSerializable()
 class UserGroupModel extends PrincipalGroupModel {
   UserGroupModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     List<PrincipalModel> members,
@@ -56,7 +56,7 @@ class CompanyModel extends UserGroupModel {
   String cooperativeBrand;
 
   CompanyModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     List<PrincipalModel> members,
@@ -90,7 +90,7 @@ class OrgUnitModel extends CompanyModel {
   String path;
 
   OrgUnitModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     List<PrincipalModel> members,
@@ -138,7 +138,7 @@ class B2BUnitModel extends OrgUnitModel {
   String phone;
 
   B2BUnitModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     List<PrincipalModel> members,
@@ -198,7 +198,7 @@ class BrandModel extends B2BUnitModel {
   List<CategoryModel> categories;
 
   //擅长品类
-  List<String> adeptAtCategories;
+  List<CategoryModel> adeptAtCategories;
 
   //年龄段
   List<AgeRanges> ageRanges;
@@ -210,7 +210,7 @@ class BrandModel extends B2BUnitModel {
   List<PriceRanges> priceRange2s;
 
   BrandModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     List<PrincipalModel> members,
@@ -306,7 +306,7 @@ class FactoryModel extends B2BUnitModel {
   IndustrialClusterModel industrialCluster;
 
   FactoryModel({
-    String profilePicture,
+    MediaModel profilePicture,
     String uid,
     String name,
     List<PrincipalModel> members,

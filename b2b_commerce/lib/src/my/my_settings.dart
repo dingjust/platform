@@ -71,8 +71,8 @@ class _MySettingsPageState extends State<MySettingsPage> {
             onTap: () {
               ProofingModel proofing = ProofingModel(
                   belongTo: BrandModel(
-                      profilePicture:
-                          'http://down.52pk.com/uploads/190218/5039_164753_4095.jpg',
+//                      profilePicture:
+//                          'http://down.52pk.com/uploads/190218/5039_164753_4095.jpg',
                       name: '森马集团有限公司'));
               Navigator.push(
                 context,

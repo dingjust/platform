@@ -102,7 +102,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
           ),
         );
       },
-      backgroundColor: Color.fromRGBO(255,214,12, 1),
+      backgroundColor: Color.fromRGBO(255, 214, 12, 1),
     );
   }
 
@@ -115,12 +115,12 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
         children: <Widget>[
           Container(
             color: Colors.grey,
-            child: Image.network(
-              widget.supplierModel.factory.profilePicture,
-              width: 110,
-              height: 110,
-              fit: BoxFit.fill,
-            ),
+//            child: Image.network(
+//              widget.supplierModel.factory.profilePicture,
+//              width: 110,
+//              height: 110,
+//              fit: BoxFit.fill,
+//            ),
           ),
           Expanded(
               child: Container(
@@ -648,13 +648,30 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                         child: Column(
                           children: <Widget>[
                             Container(
-                              child: Image.network(
-                                widget.supplierModel.factory.products[index]
-                                    .thumbnail.url,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.fill,
-                              ),
+                              child: widget.supplierModel.factory
+                                          .products[index].thumbnail !=
+                                      null
+                                  ? Image.network(
+                                      widget.supplierModel.factory
+                                          .products[index].thumbnail.url,
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.fill,
+                                    )
+                                  : Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color:
+                                              Color.fromRGBO(243, 243, 243, 1)),
+                                      child: Icon(
+                                        B2BIcons.noPicture,
+                                        color: Color.fromRGBO(200, 200, 200, 1),
+                                        size: 25,
+                                      ),
+                                    ),
                             ),
                             Container(
                               child: Text(
@@ -1157,7 +1174,9 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                     children: <Widget>[
                       Text(
                         "${widget.supplierModel.quoteOrder.totalQuantity}件",
-                        style: TextStyle(fontSize: 16, color: Color.fromRGBO(255,214,12, 1)),
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromRGBO(255, 214, 12, 1)),
                       )
                     ],
                   ),

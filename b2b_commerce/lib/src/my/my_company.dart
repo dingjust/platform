@@ -1,114 +1,19 @@
-import 'package:b2b_commerce/src/my/company/my_company_form.dart';
+import 'package:b2b_commerce/src/my/company/my_company_contact_way.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-BrandModel brandModel = BrandModel.fromJson({
-  'profilePicture': 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1551440775165&di=888256c517822e8d6e57b641cfb83114&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20170507%2F3de55040afb04926a0cfbcbbf5af49a6_th.jpeg',
-  'uid': 'BB123456',
-  'name': '森马',
-  'starLevel': 5,
-  'email': 'monkey.D.luffy@163.com',
-  'phone': '020-12345678',
-  'contactPerson': 'luffy',
-  'contactPhone': '13123456789',
-  'address':'广东省广州市海珠区广州大道南',
-  'contactAddress': {
-    'fullname': "张三",
-    'cellphone': '13123456789',
-    'region': {'isocode': 'R123', 'name': '广东省'},
-    'city': {'code': 'C123', 'name': '广州市'},
-    'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-    'line1': '广州大道南',
-  },
-  'brand': '草帽海贼团',
-  'cooperativeBrand': '红心海贼团',
-  'scaleRange': 'SR005',
-  'ageRanges': ['AR001','AR002'],
-  'priceRange1s': ['PR001','PR002'],
-  'priceRange2s': ['PR003','PR003'],
-  'styles': [
-    'FG0001','FG0003',
-  ],
-  'adeptAtCategories': ['毛衣'],
-  'registrationDate': DateTime.now().toString(),
-  'taxNumber': '41553315446687844',
-  'bankOfDeposit': '中国工商银行',
-  'certificate': [
-    {
-      'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'mediaType': 'jpg',
-    },
-    {
-      'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'mediaType': 'jpg',
-    },
-    {
-      'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'mediaType': 'jpg',
-    },
-  ],
-});
-
-FactoryModel factoryModel = FactoryModel.fromJson({
-  'profilePicture': 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1551440775165&di=888256c517822e8d6e57b641cfb83114&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20170507%2F3de55040afb04926a0cfbcbbf5af49a6_th.jpeg',
-  'uid': 'BB123456',
-  'name': '森马',
-  'starLevel': 5,
-  'email': 'monkey.D.luffy@163.com',
-  'phone': '020-12345678',
-  'cooperationModes': ['FOB'],
-  'developmentCapacity': true,
-  'monthlyCapacityRanges': 'MCR003',
-  'latheQuantity': 5,
-  'contactPerson': 'luffy',
-  'contactPhone': '13123456789',
-  'contactAddress': {
-    'fullname': "张三",
-    'cellphone': '13123456789',
-    'region': {'isocode': 'R123', 'name': '广东省'},
-    'city': {'code': 'C123', 'name': '广州市'},
-    'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-    'line1': '广州大道南',
-  },
-  'adeptAtCategories': ['毛衣'],
-  'cooperativeBrand': '红心海贼团',
-  'scaleRange': 'SR005',
-  'registrationDate': DateTime.now().toString(),
-  'taxNumber': '41553315446687844',
-  'bankOfDeposit': '中国工商银行',
-  'certificate': [
-    {
-      'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'mediaType': 'jpg',
-    },
-    {
-      'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'mediaType': 'jpg',
-    },
-    {
-      'url':
-          'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-      'mediaType': 'jpg',
-    },
-  ],
-});
 
 /// 认证信息
-class MyCompanyPage extends StatefulWidget {
-  _MyCompanyPageState createState() => _MyCompanyPageState();
+class MyBrandPage extends StatefulWidget {
+  _MyBrandPageState createState() => _MyBrandPageState();
 }
 
-class _MyCompanyPageState extends State<MyCompanyPage> {
+class _MyBrandPageState extends State<MyBrandPage> {
+  BrandModel company;
   UserRepository _userRepository = UserRepositoryImpl();
+  UserType type = UserType.ANONYMOUS;
 
   @override
   void initState() {
@@ -118,689 +23,337 @@ class _MyCompanyPageState extends State<MyCompanyPage> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BLoCProvider.of<UserBLoC>(context);
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('认证信息'),
-          elevation: 0.5,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.edit),
-              tooltip: '编辑',
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('公司介绍'),
+        elevation: 0.5,
+        actions: <Widget>[
+          Container(
+            width: 80,
+            child: IconButton(
+              icon: Text(
+                '联系方式',
+                style: TextStyle(),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyCompanyFormPage()),
+                  MaterialPageRoute(
+                      builder: (context) => MyCompanyContactWayPage(company)),
                 );
               },
             ),
-          ],
-        ),
-        body: Container(
-          child:
-//              bloc.isBrandUser ? _buildBrand(context) : _buildFactory(context),
-            _buildBrand(context)
-        ));
+          ),
+        ],
+      ),
+      body: FutureBuilder<dynamic>(
+        future:
+            _userRepository.getBrand(UserBLoC.instance.currentUser.companyCode),
+        // initialData: null,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.data == null) {
+            CompanyBLoC.instance.detail();
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 200),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+          if (snapshot.hasData) {
+            company = snapshot.data;
+            return Container(child: _buildBrand(context));
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+        },
+      ),
+    );
   }
 
   Widget _buildBrand(BuildContext context) {
-   /* return FutureBuilder(
-      future: _userRepository.getBrand('PR00009001'),
-      builder: (BuildContext context,AsyncSnapshot<BrandModel> snapshot){
-        return ListView(
-          children: <Widget>[
-            _buildBrandTop(context,snapshot.data),
-            _buildBrandInfo(context,snapshot.data),
-            _buildBrandAuthentication(context,snapshot.data),
-          ],
-          padding: const EdgeInsets.all(10.0),
-        );
-      },
-    );*/
-
     return ListView(
       children: <Widget>[
-        _buildBrandTop(context,brandModel),
-        _buildBrandInfo(context,brandModel),
-        _buildBrandAuthentication(context,brandModel),
-      ],
-      padding: const EdgeInsets.all(10.0),
-    );
-  }
-
-  Widget _buildFactory(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        _buildFactoryTop(context),
-        _buildFactoryInfo(context),
-        _buildFactoryAuthentication(context),
-      ],
-      padding: const EdgeInsets.all(10.0),
-    );
-  }
-
-  //品牌头部展示，头像及公司名
-  Widget _buildBrandTop(BuildContext context,BrandModel brandModel) {
-//    String picUrl = brandModel != null ? 'http://192.168.1.103:9001' : '';
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-//                picUrl + brandModel?.profilePicture,
-                  brandModel?.profilePicture
-              ),
-              radius: 50.0,
-            ),
-            Container(
-              color: Colors.white,
-              child: Text(
-                brandModel?.name ?? '',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-            )
-          ],
-        ),
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-    );
-  }
-
-  //品牌端信息
-  Widget _buildBrandInfo(BuildContext context,BrandModel brandModel) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            leading: Text('联系人'),
-            trailing: Text(brandModel?.contactPhone ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('联系电话'),
-            trailing: Text(brandModel?.contactPhone ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('经营地址'),
-//            trailing: Text(brandModel.contactAddress.region.name +
-//                brandModel.contactAddress.city.name +
-//                brandModel.contactAddress.cityDistrict.name +
-//                brandModel.contactAddress.line1),
-          trailing: Text(brandModel?.address ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('座机号码'),
-            trailing: Text(brandModel?.phone ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('邮箱地址'),
-            trailing: Text(brandModel?.email ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('品牌名称'),
-            trailing: Text(brandModel?.brand ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('合作品牌'),
-            trailing: Text(brandModel?.cooperativeBrand ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('产业规模'),
-            trailing: Text(ScaleRangesLocalizedMap[brandModel?.scaleRange] ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text('风格')),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    children: brandModel?.styles?.map((code){
-                      return  Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: Text(enumMap(StyleEnum, code)),
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      );
-                    })?.toList() ?? <Widget>[],
-//                        _buildItemsByStringList(context, brandModel?.styles ?? []),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text('擅长品类')),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    children:
-                    _buildItemsByStringList(context, brandModel?.adeptAtCategories ?? []),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text('年龄段')),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    children:brandModel?.ageRanges?.map((code){
-                      return Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: Text(AgeRangesLocalizedMap[code] ?? ''),
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      );
-                    })?.toList() ?? <Widget>[],
-//                        _buildItemsByStringList(context, brandModel?.ageRanges ?? []),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text('价格段（春夏）')),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    children: brandModel?.priceRange1s?.map((code){
-                      return Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: Text(PriceRangesLocalizedMap[code] ?? ''),
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      );
-                    })?.toList(),
-//                    _buildItemsByStringList(context, brandModel?.priceRange1s ?? []),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text('价格段（秋冬）')),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    children: brandModel?.priceRange2s?.map((code){
-                      return Container(
-                        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: Text(PriceRangesLocalizedMap[code] ?? ''),
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      );
-                    })?.toList(),
-//                    _buildItemsByStringList(context, brandModel?.priceRange2s ?? []),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text('品牌等级')),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    children:
-                        _buildItemsStarIcon(context, brandModel?.starLevel ?? 0),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-    );
-  }
-
-  //品牌端认证信息
-  Widget _buildBrandAuthentication(BuildContext context,BrandModel brandModel) {
-//    String picUrl = brandModel != null ? 'http://192.168.1.103:9001' : '';
-    return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            leading: Text(
-              "认证信息",
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-            ),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text("注册时间"),
-            trailing:
-                Text('${DateFormatUtil.formatYMD(brandModel?.registrationDate ?? DateTime.now())}'),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text("税号"),
-            trailing: Text(brandModel?.taxNumber ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text("开户行"),
-            trailing: Text(brandModel?.bankOfDeposit ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
+        Card(
+          elevation: 0,
+          margin: EdgeInsets.only(top: 10),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               children: <Widget>[
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text(
-                      '认证证件',
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text('编辑'),
                     )
                   ],
                 ),
-                Attachments(
-                  list:
-                  brandModel?.certificate ?? [],
-//                  brandModel?.certificate?.map((media){
-//                    return MediaModel(picUrl+media.url,description: media.description,mediaType: media.mediaType);
-//                  })?.toList(),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-    );
-  }
-
-//工厂头像及名称
-  Widget _buildFactoryTop(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                factoryModel.profilePicture,
-              ),
-              radius: 50.0,
-            ),
-            Container(
-              color: Colors.white,
-              child: Text(
-                factoryModel.name,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-            )
-          ],
-        ),
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-    );
-  }
-
-  //工厂端信息
-  Widget _buildFactoryInfo(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            leading: Text('联系人'),
-            trailing: Text(factoryModel.contactPerson),
-          ),
-          Divider(
-            height: 5,
-          ),
-          GestureDetector(
-              child: ListTile(
-                  leading: Text('联系电话'),
-                  trailing: Text(factoryModel.contactPhone)),
-              onTap: () {
-                _selectActionButton('${factoryModel.contactPhone}');
-              }),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('经营地址'),
-//            trailing: Text(factoryModel.contactAddress.region.name +
-//                factoryModel.contactAddress.city.name +
-//                factoryModel.contactAddress.cityDistrict.name +
-//                factoryModel.contactAddress.line1),
-            trailing: Text(factoryModel.address ?? ''),
-          ),
-          Divider(
-            height: 5,
-          ),
-          GestureDetector(
-              child: ListTile(
-                leading: Text('座机号码'),
-                trailing: Text(factoryModel.phone),
-              ),
-              onTap: () {
-                _selectActionButton('${factoryModel.phone}');
-              }),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('邮箱地址'),
-            trailing: Text(factoryModel.email),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('合作品牌'),
-//            trailing: Text(factoryModel.cooperativeBrands[0].name),
-            trailing: Text(factoryModel.cooperativeBrand),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('产业规模'),
-            trailing: Text(ScaleRangesLocalizedMap[factoryModel.scaleRange]),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('月均产能'),
-            trailing: Text(MonthlyCapacityRangesLocalizedMap[
-                factoryModel.monthlyCapacityRanges]),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text('优势品类')),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    children: _buildItemsByStringList(
-                        context, factoryModel.adeptAtCategories),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text('合作方式')),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    children: _buildItemsByStringList(
-                        context, factoryModel.cooperationModes),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text('开发能力'),
-            trailing:
-                Text(factoryModel.developmentCapacity == true ? '是' : '否'),
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-    );
-  }
-
-  //工厂端认证信息
-  Widget _buildFactoryAuthentication(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            leading: Text(
-              "认证信息",
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-            ),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text("注册时间"),
-            trailing:
-                Text('${DateFormatUtil.formatYMD(factoryModel.registrationDate)}'),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text("车位数量"),
-            trailing: Text(factoryModel.latheQuantity.toString()),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text("税号"),
-            trailing: Text(factoryModel.taxNumber),
-          ),
-          Divider(
-            height: 5,
-          ),
-          ListTile(
-            leading: Text("开户行"),
-            trailing: Text(factoryModel.bankOfDeposit),
-          ),
-          Divider(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              children: <Widget>[
                 Row(
                   children: <Widget>[
-                    Text(
-                      '认证证件',
-                    )
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: company.profilePicture != null
+                                ? NetworkImage(
+                                    '${GlobalConfigs.IMAGE_BASIC_URL}${company.profilePicture.url}')
+                                : AssetImage(
+                                    'temp/picture.png',
+                                    package: "assets",
+                                  ),
+                            fit: BoxFit.cover,
+                          )),
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              company.name,
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+//                        company.starLevel == null ? Container() : Stars(starLevel:company.starLevel),
+                            Stars(
+                              starLevel: 5,
+                            ),
+                            Container(
+                              child: Text(
+                                "已认证",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Color.fromRGBO(255, 214, 12, 1)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                Attachments(
-                  list: factoryModel.certificate,
-                )
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '品牌名称',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      company.brand,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '合作品牌',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      company.cooperativeBrand,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '产值规模',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      ScaleRangesLocalizedMap[company.scaleRange],
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '优势类目',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      formatCategorySelectText(company.adeptAtCategories),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '风格',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      formatEnumSelectsText(company.styles, StyleEnum, 4),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '年龄段',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      formatAgeRangesText(company.ageRanges),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '春夏款价格端',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      formatPriceRangesText(company.priceRange1s),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '秋冬款价格端',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      formatPriceRangesText(company.priceRange2s),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
               ],
             ),
           ),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-    );
-  }
-
-  List<Widget> _buildItemsByEntityList(
-      BuildContext context, List<dynamic> _list) {
-    List<Widget> _widget = new List();
-    if (_list.isNotEmpty) {
-      for (int i = 0; i < _list.length; i++) {
-        _widget.add(Container(
-          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-          child: Text(_list[i].name),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(5),
-          ),
-        ));
-      }
-    }
-    return _widget;
-  }
-
-  List<Widget> _buildItemsByStringList(
-      BuildContext context, List<String> _list) {
-    List<Widget> _widget = new List();
-    if (_list != null && _list.isNotEmpty) {
-      for (int i = 0; i < _list.length; i++) {
-        _widget.add(Container(
-          margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-          child: Text(_list[i]),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(5),
-          ),
-        ));
-      }
-    }
-    return _widget;
-  }
-
-  List<Widget> _buildItemsStarIcon(BuildContext context, int starLevel) {
-    List<Widget> _widget = new List();
-    for (int i = 0; i < starLevel; i++) {
-      _widget.add(Container(
-        margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-        child: Icon(
-          Icons.star,
-          color: Colors.yellow,
         ),
-      ));
-    }
-    return _widget;
+        Card(
+          elevation: 0,
+          margin: EdgeInsets.only(top: 10),
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+            title: Text('公司认证信息'),
+            trailing: Icon(Icons.chevron_right),
+            onTap: (){
+
+            },
+          ),
+        ),
+        Card(
+          elevation: 0,
+          margin: EdgeInsets.only(top: 10),
+          child: ListTile(
+            title: Text('注册时间'),
+            trailing: Text(DateFormatUtil.formatYMD(company.registrationDate) ?? ''),
+          ),
+        )
+      ],
+    );
   }
 
-  void _selectActionButton(String tel) async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return new Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('拨打电话'),
-              onTap: () async {
-                var url = 'tel:' + tel;
-                await launch(url);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.message),
-              title: Text('发送短信'),
-              onTap: () async {
-                var url = 'sms:' + tel;
-                await launch(url);
-              },
-            ),
-          ],
-        );
-      },
-    );
+  String formatCategorySelectText(List<CategoryModel> categorys) {
+    String text = '';
+    if (categorys != null && categorys.isNotEmpty) {
+      categorys.forEach((category) {
+        text += category.name;
+      });
+    }
+    return text;
+  }
+  String formatAgeRangesText(List<AgeRanges> ageRanges) {
+    String text = '';
+    if (ageRanges != null && ageRanges.isNotEmpty) {
+      ageRanges.forEach((ageRange) {
+        text += '  '+AgeRangesLocalizedMap[ageRange];
+      });
+    }
+    return text;
+  }
+  String formatPriceRangesText(List<PriceRanges> priceRanges) {
+    String text = '';
+    if (priceRanges != null && priceRanges.isNotEmpty) {
+      priceRanges.forEach((priceRange) {
+        text += '  ￥'+PriceRangesLocalizedMap[priceRange];
+      });
+    }
+    return text;
   }
 }

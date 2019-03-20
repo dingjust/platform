@@ -115,8 +115,8 @@ class ProofingOrderFormPageState extends State<ProofingOrderFormPage> {
               Container(
                 padding: EdgeInsets.all(8),
                 child: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(widget.item.belongTo.profilePicture),
+//                  backgroundImage:
+//                      NetworkImage(widget.item.belongTo.profilePicture),
                   radius: 40.0,
                 ),
               ),

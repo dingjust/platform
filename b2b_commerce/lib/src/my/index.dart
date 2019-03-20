@@ -29,7 +29,7 @@ class MyHomePage extends StatelessWidget {
             height: 0,
           ),
         ),
-        MenuItem(B2BImage.certicate_info(width: 26, height: 19), '认证信息',
+        MenuItem(B2BImage.certicate_info(width: 26, height: 19), '公司介绍',
             AppRoutes.ROUTE_MY_COMPANY),
       ]),
       Menu('', <Widget>[
