@@ -86,6 +86,18 @@ export default {
       ]
     },
     {
+      name: '供应商管理',
+      url: '/supplier',
+      icon: 'icon-puzzle',
+      children: [
+        {
+          name: '供应商',
+          url: '/supplier',
+          icon: 'iconNone',
+        }
+      ]
+    },
+    {
       name: '其他',
       url: '/miscs',
       icon: 'icon-puzzle',

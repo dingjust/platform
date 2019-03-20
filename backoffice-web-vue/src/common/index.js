@@ -1,4 +1,10 @@
 const COMMON_APIS = {
+  getBrandSuppliers() {
+    return '/b2b/factories/getSuppliers';
+  },
+  getFactoriesSuppliers() {
+    return '/b2b/brands/getSuppliers';
+  },
   createEmployee() {
     return '/b2b/employees';
   },

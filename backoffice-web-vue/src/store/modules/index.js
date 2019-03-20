@@ -21,6 +21,7 @@ import QuotesModule from './order/quotes';
 import ProofingsModule from './order/proofings';
 import SampleProductModule from './miscs/sampleProduct';
 import SampleCheckoutHistModule from './miscs/sampleCheckoutHist';
+import SuppliersModule from './supplier/suppliers';
 
 export {
   EnumsModule,
@@ -46,5 +47,6 @@ export {
   ProofingsModule,
 
   SampleProductModule,
-  SampleCheckoutHistModule
+  SampleCheckoutHistModule,
+  SuppliersModule
 }

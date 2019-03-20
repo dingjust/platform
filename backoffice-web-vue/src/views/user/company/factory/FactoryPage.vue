@@ -2,7 +2,11 @@
   <div class="animated fadeIn content">
     <el-card>
       <factory-toolbar @onNew="onNew" @onSearch="onSearch"/>
-      <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
+      <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch">
+        <template slot="operations" slot-scope="props">
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
+        </template>
+      </factory-list>
     </el-card>
   </div>
 </template>
