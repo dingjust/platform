@@ -26,17 +26,17 @@ export default {
         },
         {
           name: '分类',
-          url: '/backoffice/product/category',
+          url: '/product/category',
           icon: 'iconNone'
         },
         {
           name: '颜色',
-          url: '/backoffice/product/color',
+          url: '/product/color',
           icon: 'iconNone'
         },
         {
           name: '尺码',
-          url: '/backoffice/product/size',
+          url: '/product/size',
           icon: 'iconNone'
         }
       ]
@@ -105,37 +105,38 @@ export default {
           icon: 'iconNone'
         }
       ]
-    }, {
-      name: '系统管理',
-      url: '/backoffice/system/carousel',
-      icon: 'icon-puzzle',
-      children: [
-        {
-          name: '轮播图配置',
-          url: '/backoffice/system/carousel',
-          icon: 'iconNone'
-        },
-        {
-          name: '产业集群配置',
-          url: '/backoffice/system/industrial-cluster',
-          icon: 'iconNone'
-        },
-        {
-          name: '标签配置',
-          url: '/backoffice/system/label',
-          icon: 'iconNone'
-        },
-      ]
     },
     {
       name: '报表管理',
-      url: '/backoffice/report',
+      url: '/report',
       icon: 'icon-puzzle',
       children: [
         {
           name: '生产进度报表',
-          url: '/backoffice/report/production-progress',
+          url: '/report/production-progress',
           icon: 'iconNone',
+        },
+      ]
+    },
+    {
+      name: '其他',
+      url: '/miscs',
+      icon: 'icon-puzzle',
+      children: [
+        {
+          name: '轮播图配置',
+          url: '/miscs/carousel',
+          icon: 'iconNone'
+        },
+        {
+          name: '产业集群配置',
+          url: '/miscs/industrial-cluster',
+          icon: 'iconNone'
+        },
+        {
+          name: '标签配置',
+          url: '/miscs/label',
+          icon: 'iconNone'
         },
       ]
     }

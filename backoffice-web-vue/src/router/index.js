@@ -34,17 +34,17 @@ const router = new Router({
             {
               path: 'color',
               name: '颜色',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/color/ColorPage')
+              component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/color/ColorPage')
             },
             {
               path: 'size',
               name: '尺码',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/size/SizePage')
+              component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/size/SizePage')
             },
             {
               path: 'category',
               name: '分类',
-              component: () => import(/* webpackChunkName: 'tenant-products' */ 'backoffice/product/category/CategoryPage')
+              component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/category/CategoryPage')
             },
             {
               path: 'apparel',
@@ -107,35 +107,8 @@ const router = new Router({
           ]
         },
         {
-          path: 'backoffice/system',
-          redirect: '/backoffice/system/carousel',
-          name: '系统管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: 'carousel',
-              name: '轮播图配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/carousel/CarouselPage')
-            },
-            {
-              path: 'industrial-cluster',
-              name: '产业集群配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/industrial-cluster/IndustrialClusterPage')
-            },
-            {
-              path: 'label',
-              name: '标签配置',
-              component: () => import(/* webpackChunkName: 'tenant-systems' */ 'backoffice/system/label/LabelPage')
-            },
-          ]
-        },
-        {
-          path: 'backoffice/report',
-          redirect: '/backoffice/report/production-progress',
+          path: 'report',
+          redirect: '/report/production-progress',
           name: '报表管理',
           component: {
             render(c) {
@@ -146,7 +119,7 @@ const router = new Router({
             {
               path: 'production-progress',
               name: '生产进度报表',
-              component: () => import(/* webpackChunkName: 'tenant-reports' */ 'backoffice/report/productprogress/ProductionProgressPage')
+              component: () => import(/* webpackChunkName: 'reports' */ '@/views/report/production-progress/ProductionProgressReportPage')
             }
           ]
         },
@@ -205,6 +178,21 @@ const router = new Router({
             }
           },
           children: [
+            {
+              path: 'carousel',
+              name: '轮播图配置',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/carousel/CarouselPage')
+            },
+            {
+              path: 'industrial-cluster',
+              name: '产业集群配置',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/industrial-cluster/IndustrialClusterPage')
+            },
+            {
+              path: 'label',
+              name: '标签配置',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/label/LabelPage')
+            },
             {
               path: '/miscs/sample/sampleProduct',
               name: '样衣管理',
