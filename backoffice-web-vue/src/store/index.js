@@ -7,6 +7,7 @@ import {
   EnumsModule,
   UsersModule,
   UserGroupsModule,
+  B2BUnitsModule,
   RolesModule,
   EmployeesModule,
   B2BCustomersModule,
@@ -25,14 +26,6 @@ import {
   SampleProductModule,
   SampleCheckoutHistModule
 } from './modules';
-
-import {
-  BrandOrgsModule,
-} from './brand/modules';
-
-import {
-  FactoryOrgsModule,
-} from './factory/modules';
 
 // 状态管理
 const state = {
@@ -63,6 +56,7 @@ export default new Vuex.Store({
     // tenant
     UsersModule,
     UserGroupsModule,
+    B2BUnitsModule,
     RolesModule,
     EmployeesModule,
     B2BCustomersModule,
@@ -80,10 +74,6 @@ export default new Vuex.Store({
     ProofingsModule,
     SampleProductModule,
     SampleCheckoutHistModule,
-    // brand
-    BrandOrgsModule,
-    // factory
-    FactoryOrgsModule,
   },
   state,
   getters,

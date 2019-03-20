@@ -160,44 +160,39 @@ const router = new Router({
           },
           children: [
             {
-              path: 'brand',
+              path: 'my',
               name: '认证信息',
-              component: () => import(/* webpackChunkName: 'brand-accounts' */ 'brand/account/store/StorePage'),
-            },
-            {
-              path: 'factory',
-              name: '认证信息',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/factory/FactoryPage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
             },
             {
               path: 'employee',
               name: '员工',
-              component: () => import(/* webpackChunkName: 'tenant-accounts' */ '@/views/user/user/employee/EmployeePage')
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/user/employee/EmployeePage')
             },
             {
               path: 'user-group',
               name: '用户组',
-              component: () => import(/* webpackChunkName: 'tenant-accounts' */ 'backoffice/account/group/GroupPage')
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/group/user-group/UserGroupPage')
             },
             {
               path: 'b2b-customer',
               name: '员工',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
             },
             {
               path: 'b2b-unit',
               name: '组织架构',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/org/OrgPage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/group/b2b-unit/B2BUnitPage'),
             },
             {
               path: 'role',
               name: '角色',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ '@/views/user/role/RolePage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/role/RolePage'),
             },
             {
               path: 'address',
               name: '地址管理',
-              component: () => import(/* webpackChunkName: 'brand-systems' */ 'brand/system/address/AddressPage'),
+              component: () => import(/* webpackChunkName: 'accounts' */ 'brand/system/address/AddressPage'),
             }
           ]
         },

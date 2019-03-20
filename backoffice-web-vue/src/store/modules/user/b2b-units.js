@@ -12,12 +12,8 @@ const state = {
     content: [] // 当前页数据
   },
   formData: {
-    uid: '',
     name: '',
-    comment: '',
-    active: true,
-    path: '',
-    parent: ''
+    description: ''
   }
 };
 
@@ -36,7 +32,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get('/djfactory/org', {
+    const response = await http.get('/djbackoffice/group', {
       text: state.keyword,
       page: state.currentPageNumber,
       size: state.currentPageSize

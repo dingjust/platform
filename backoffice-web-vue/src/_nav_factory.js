@@ -65,7 +65,7 @@ export default {
         },
         {
           name: '组织架构',
-          url: '/account/org',
+          url: '/account/b2b-unit',
           icon: 'iconNone'
         },
         {

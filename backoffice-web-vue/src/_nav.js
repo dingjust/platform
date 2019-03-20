@@ -96,12 +96,12 @@ export default {
         },
         {
           name: '用户组',
-          url: '/backoffice/account/group',
+          url: '/account/user-group',
           icon: 'iconNone'
         },
         {
           name: '角色',
-          url: '/backoffice/account/role',
+          url: '/account/role',
           icon: 'iconNone'
         }
       ]
