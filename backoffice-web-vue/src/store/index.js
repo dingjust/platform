@@ -28,12 +28,10 @@ import {
 
 import {
   BrandOrgsModule,
-  BrandRolesModule,
 } from './brand/modules';
 
 import {
   FactoryOrgsModule,
-  FactoryRolesModule,
 } from './factory/modules';
 
 // 状态管理
@@ -84,10 +82,8 @@ export default new Vuex.Store({
     SampleCheckoutHistModule,
     // brand
     BrandOrgsModule,
-    BrandRolesModule,
     // factory
     FactoryOrgsModule,
-    FactoryRolesModule,
   },
   state,
   getters,

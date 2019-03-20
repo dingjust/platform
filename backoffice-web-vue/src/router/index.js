@@ -175,7 +175,7 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'tenant-accounts' */ '@/views/user/user/employee/EmployeePage')
             },
             {
-              path: 'group',
+              path: 'user-group',
               name: '用户组',
               component: () => import(/* webpackChunkName: 'tenant-accounts' */ 'backoffice/account/group/GroupPage')
             },
@@ -185,14 +185,14 @@ const router = new Router({
               component: () => import(/* webpackChunkName: 'factory-accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
             },
             {
-              path: 'org',
+              path: 'b2b-unit',
               name: '组织架构',
               component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/org/OrgPage'),
             },
             {
               path: 'role',
               name: '角色',
-              component: () => import(/* webpackChunkName: 'factory-accounts' */ 'factory/account/role/RolePage'),
+              component: () => import(/* webpackChunkName: 'factory-accounts' */ '@/views/user/role/RolePage'),
             },
             {
               path: 'address',

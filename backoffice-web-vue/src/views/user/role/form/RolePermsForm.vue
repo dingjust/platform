@@ -12,7 +12,7 @@
            accordion
            show-checkbox
            default-expand-all
-           :data="results"
+           :data="perms"
            :props="defaultProps"
            :default-checked-keys="defaultCheckedKeys">
         <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -23,8 +23,18 @@
 
 <script>
   export default {
-    name: 'RolePermsForm',
-    props: ['slotData', 'isNewlyCreated', 'readOnly'],
+    name: 'RoleBasicForm',
+    props: ['slotData', 'readOnly'],
+    methods: {
+      async onSearch() {
+        const result = await this.$http.get('/djbackoffice/role/perms');
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.perms = result;
+      },
+    },
     computed: {
       defaultCheckedKeys: function () {
         let result = [];
@@ -34,29 +44,9 @@
         return result;
       }
     },
-    watch: {
-      '$store.state.sideSliderState': function (value) {
-        if (!value) {
-          this.onSearch();
-        }
-      }
-    },
-    methods: {
-      async onSearch() {
-        const result = await this.$http.get('/djbrand/role/perms');
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-        this.results = result;
-      },
-      getValue() {
-        return this.$refs['tree'].getCheckedKeys();
-      }
-    },
     data() {
       return {
-        results: [],
+        perms: [],
         defaultProps: {
           children: 'children',
           label: 'name'
