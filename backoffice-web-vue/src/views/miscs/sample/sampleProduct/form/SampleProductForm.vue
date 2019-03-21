@@ -36,7 +36,8 @@
     computed: {},
     methods: {
       async onSubmit() {
-        const result = await this.$http.post('/b2b/products/sample/create', this.slotData);
+        const url = this.apis().createSampleProduct();
+        const result = await this.$http.post(url, this.slotData);
         if (result['errors']) {
           this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
           return;

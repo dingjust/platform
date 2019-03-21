@@ -43,8 +43,8 @@
     },
     methods: {
       async onSubmit() {
-        const url = this.apis().createSampleProduct();
-        const result = await this.$http.post(url, this.slotData);
+        const url = this.apis().updateSampleProduct(this.slotData.code);
+        const result = await this.$http.put(url, this.slotData);
         if (result['errors']) {
           this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
           return;

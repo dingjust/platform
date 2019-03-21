@@ -19,10 +19,12 @@
   import BrandToolbar from './toolbar/BrandToolbar';
   import BrandList from './list/BrandList';
   import BrandDetailsPage from './details/BrandDetailsPage';
+  import AddressForm from "../../../shared/user/address/AddressForm";
 
   export default {
     name: 'BrandPage',
     components: {
+      AddressForm,
       BrandToolbar,
       BrandList
     },
@@ -56,7 +58,8 @@
       },
     },
     data() {
-      return {};
+      return {
+      };
     },
     created() {
       this.onSearch();

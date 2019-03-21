@@ -5,8 +5,8 @@
         <span>基本信息</span>
       </div>
       <factory-basic-form ref="basicForm"
-                        :slot-data="slotData"
-                        :read-only="readOnly">
+                          :slot-data="slotData"
+                          :read-only="readOnly">
       </factory-basic-form>
     </el-card>
     <div class="pt-2"></div>
@@ -15,8 +15,8 @@
         <span>认证信息</span>
       </div>
       <factory-certificate-form ref="certificateForm"
-                              :slot-data="slotData"
-                              :read-only="readOnly">
+                                :slot-data="slotData"
+                                :read-only="readOnly">
       </factory-certificate-form>
     </el-card>
   </div>

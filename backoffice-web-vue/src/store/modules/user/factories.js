@@ -13,7 +13,23 @@ const state = {
   },
   formData: {
     id: null,
-    address: '',
+    uid: '',
+    name: '',
+    contactAddress: {
+      region: {
+        isocode: '',
+        name: ''
+      },
+      city: {
+        code: '',
+        name: ''
+      },
+      cityDistrict: {
+        code: '',
+        name: ''
+      },
+      line1: ''
+    },
     adeptAtCategories: [],
     contactPerson: '',
     contactPhone: '',
@@ -21,13 +37,15 @@ const state = {
     scaleRange: '',
     monthlyCapacityRange: '',
     cooperationModes: [],
-    name: '',
+    developmentCapacity: false,
     registrationDate: null,
-    uid: '',
     taxNumber: '',
     bankOfDeposit: '',
     phone: '',
-    cooperativeBrand: ''
+    cooperativeBrand: '',
+    businessRegistrationNo: '',
+    legalRepresentative: '',
+    certificateOfLegal: ''
   }
 };
 
@@ -46,7 +64,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get(url, {
+    const response = await http.post(url, {
       keyword: state.keyword
     }, {
       page: state.currentPageNumber,

@@ -11,6 +11,9 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapMutations} = createNamespacedHelpers('SampleProductModule');
 
   export default {
     name: 'SampleProductToolbar',
@@ -20,8 +23,12 @@
     },
     computed: {},
     methods: {
+      ...mapMutations({
+        setKeyword: 'keyword'
+      }),
       onSearch() {
-        this.$emit('onSearch',this.keyword, 0);
+        this.setKeyword(this.keyword);
+        this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
         this.$emit('onAdvancedSearch', 0);
@@ -33,7 +40,7 @@
     },
     data() {
       return {
-        keyword: this.$store.state.SampleProductModule.keyword,
+        keyword: '',
         formData: this.$store.state.SampleProductModule.formData,
       }
     }

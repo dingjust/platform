@@ -8,18 +8,20 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
+          <el-form-item label="经营地址" prop="contactAddress">
+            <el-input v-model="address" :disabled="true">
+              <el-button slot="append" icon="el-icon-search" @click="onAddressInput"></el-button>
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
           <el-form-item label="联系人" prop="contactPerson">
             <el-input v-model="slotData.contactPerson"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="手机号" prop="contactPhone">
+          <el-form-item label="联系电话" prop="contactPhone">
             <el-input v-model="slotData.contactPhone"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="经营地址" prop="address">
-            <el-input v-model="slotData.address"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -90,14 +92,66 @@
         </el-col>
       </el-row>
     </el-form>
+    <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
+               :show-close="false" append-to-body width="50%">
+      <address-form ref="addressForm" :slot-data="addressFormData"/>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="onAddressInputCanceled">取 消</el-button>
+        <el-button type="primary" @click="onAddressInputConfirmed">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import AddressForm from "@/views/shared/user/address/AddressForm";
+
   export default {
     name: 'FactoryBasicForm',
     props: ['slotData', 'readOnly'],
+    components: {AddressForm},
+    computed: {
+      address: function () {
+        if (!this.addressFormData) {
+          return '';
+        }
+        const region = this.addressFormData.region;
+        const city = this.addressFormData.city;
+        const cityDistrict = this.addressFormData.cityDistrict;
+        const line1 = this.addressFormData.line1;
+
+        // 省份和城市相同的情况
+        if (region.name === city.name) {
+          return region.name + cityDistrict.name + line1;
+        }
+
+        return region.name + city.name + cityDistrict.name + line1;
+      }
+    },
     methods: {
+      validate() {
+        this.$refs['form'].validate(valid => {
+          if (!valid) {
+            this.$message.error('验证失败');
+            return false;
+          }
+
+          return true;
+        });
+      },
+      onAddressInput() {
+        this._copyContactAddress();
+        this.addressDialogVisible = true;
+      },
+      onAddressInputCanceled() {
+        this.addressDialogVisible = false;
+      },
+      onAddressInputConfirmed() {
+        if (this.$refs['addressForm'].validate()) {
+          this.$set(this.slotData, 'contactAddress', this.addressFormData);
+          this.addressDialogVisible = false;
+        }
+      },
       async getCategories() {
         const url = this.apis().getMajorCategories();
         const result = await this.$http.get(url);
@@ -107,24 +161,34 @@
         }
 
         this.adeptAtCategories = result;
+      },
+      _copyContactAddress() {
+        if (this.slotData.contactAddress) {
+          this.addressFormData = Object.assign({}, this.slotData.contactAddress);
+        } else {
+          this.addressFormData = this.$store.state.FactoriesModule.addressFormData;
+        }
       }
     },
     data() {
       return {
         adeptAtCategories: [],
+        addressFormData: this.$store.state.FactoriesModule.addressFormData,
+        addressDialogVisible: false,
         rules: {
           name: [{required: true, message: '必填', trigger: 'blur'}],
-          address: [{required: true, message: '必填', trigger: 'blur'}],
+          contactPerson: [{required: true, message: '必填', trigger: 'blur'}],
+          contactPhone: [
+            {required: false, message: '手机号码不正确', trigger: 'blur', pattern: 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/}
+          ],
+          contactAddress: [{required: true, message: '必填', trigger: 'blur'}],
           email: [
             {
               message: '邮箱格式不正确',
               trigger: 'blur',
               pattern: /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
             }
-          ],
-          contactPhone: [
-            {required: false, message: '手机号码不正确', trigger: 'blur', pattern: 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/}
-          ],
+          ]
         },
         cooperationModes: this.$store.state.EnumsModule.cooperationModes,
         scaleRanges: this.$store.state.EnumsModule.scaleRanges,
@@ -133,6 +197,7 @@
     },
     created() {
       this.getCategories();
+      this._copyContactAddress();
     }
   };
 </script>
