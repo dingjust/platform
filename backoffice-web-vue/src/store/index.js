@@ -26,7 +26,8 @@ import {
   QuotesModule,
   ProofingsModule,
   SampleProductModule,
-  SampleCheckoutHistModule
+  SampleCheckoutHistModule,
+  SuppliersModule
 } from './modules';
 
 // 状态管理
@@ -77,6 +78,7 @@ export default new Vuex.Store({
     ProofingsModule,
     SampleProductModule,
     SampleCheckoutHistModule,
+    SuppliersModule,
   },
   state,
   getters,

@@ -365,12 +365,16 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 onPressed: () async {
                   //拼装数据
                   ProofingModel model = ProofingModel();
-                  model.entries = productEntries
-                      .map((entry) => ProofingEntryModel(
-                            quantity: int.parse(entry.controller.text),
-                            product: entry.model,
-                          ))
-                      .toList();
+                  model.entries = productEntries.map((entry) {
+                    ApparelSizeVariantProductModel variantProduct = entry.model;
+                    variantProduct.thumbnail = product.thumbnail;
+                    variantProduct.thumbnails = product.thumbnails;
+                    variantProduct.images = product.images;
+                    return ProofingEntryModel(
+                      quantity: int.parse(entry.controller.text),
+                      product: variantProduct,
+                    );
+                  }).toList();
                   model.unitPrice = double.parse(_unitPriceController.text);
                   model.totalPrice = totalPrice;
                   model.totalQuantity = totalQuantity;

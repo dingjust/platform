@@ -40,7 +40,7 @@ class QuoteOrdersResponse {
   static Map<String, dynamic> toJson(QuoteOrdersResponse model) =>
       _$QuoteOrdersResponseToJson(model);
 }
-/// 需求订单列表响应
+/// 采购订单列表响应
 @JsonSerializable()
 class PurchaseOrdersResponse {
   final int number;
@@ -57,4 +57,23 @@ class PurchaseOrdersResponse {
 
   static Map<String, dynamic> toJson(PurchaseOrdersResponse model) =>
       _$PurchaseOrdersResponseToJson(model);
+}
+
+/// 打样订单列表响应
+@JsonSerializable()
+class ProofingOrdersResponse {
+  final int number;
+  final int size;
+  final int totalPages;
+  final int totalElements;
+  final List<ProofingModel> content;
+
+  ProofingOrdersResponse(this.number, this.size, this.totalPages, this.totalElements,
+      this.content);
+
+  factory ProofingOrdersResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProofingOrdersResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(ProofingOrdersResponse model) =>
+      _$ProofingOrdersResponseToJson(model);
 }

@@ -39,9 +39,9 @@ class OrderApis {
       '/{baseSiteId}/b2b/orders/purchase/create';
 
   //创建线上生产订单
-  static get purchaseOnlineOrders =>(quote) {
-    return '/{baseSiteId}/b2b/orders/purchase/create/$quote';
-  };
+  static get purchaseOnlineOrders => (quote) {
+        return '/{baseSiteId}/b2b/orders/purchase/create/$quote';
+      };
 
   //修改生产进度时间或数量
   static get productionProgressUpload =>(code,id) {
@@ -73,4 +73,7 @@ class OrderApis {
   static get proofingCreate => (code) {
         return '/{baseSiteId}/b2b/orders/proofing/create/$code';
       };
+
+  /// 根据条件获取打样单列表 POST
+  static get proofing => '/{baseSiteId}/b2b/orders/proofing';
 }

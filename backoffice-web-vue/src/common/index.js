@@ -71,6 +71,12 @@ const COMMON_APIS = {
   getLabel(id) {
     return '/b2b/labels/' + id;
   },
+  getBrandSuppliers() {
+    return '/b2b/factories/getSuppliers';
+  },
+  getFactoriesSuppliers() {
+    return '/b2b/brands/getSuppliers';
+  },
   createEmployee() {
     return '/b2b/employees';
   },
@@ -85,12 +91,6 @@ const COMMON_APIS = {
   },
   getBrands() {
     return '/b2b/brands';
-  },
-  getBrandSuppliers() {
-    return '/b2b/brands/suppliers';
-  },
-  getFactorySuppliers() {
-    return '/b2b/factories/suppliers';
   },
   getBrand(uid) {
     return '/b2b/brands/' + uid;
