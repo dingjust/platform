@@ -3,7 +3,7 @@ const COMMON_APIS = {
     return '/djwebservices/styles/all';
   },
   createColor() {
-    return '/djwebservices/colors';
+    return '/djwebservices/colors/create';
   },
   getColors() {
     return '/djwebservices/colors';
@@ -15,7 +15,7 @@ const COMMON_APIS = {
     return '/djwebservices/colors/all';
   },
   createSize() {
-    return '/djwebservices/sizes';
+    return '/djwebservices/sizes/create';
   },
   getSizes() {
     return '/djwebservices/sizes';
@@ -27,7 +27,10 @@ const COMMON_APIS = {
     return '/djwebservices/sizes/all';
   },
   createSampleProduct() {
-    return '/b2b/products/sample';
+    return '/b2b/products/sample/create';
+  },
+  updateSampleProduct(code) {
+    return '/b2b/products/sample/update/'+code;
   },
   getSampleProducts() {
     return '/b2b/products/sample';
@@ -36,7 +39,7 @@ const COMMON_APIS = {
     return '/b2b/products/sample/' + id;
   },
   createSampleCheckoutHist() {
-    return '/b2b/products/sampleCheckoutHist';
+    return '/b2b/products/sampleCheckoutHist/create';
   },
   getSampleCheckoutHists() {
     return '/b2b/products/sampleCheckoutHist';
@@ -87,7 +90,7 @@ const COMMON_APIS = {
     return '/b2b/employees/' + uid;
   },
   createBrand() {
-    return '/b2b/brands';
+    return '/b2b/brands/new';
   },
   getBrands() {
     return '/b2b/brands';
@@ -95,8 +98,11 @@ const COMMON_APIS = {
   getBrand(uid) {
     return '/b2b/brands/' + uid;
   },
+  removeCertificateForCompany(uid, mediaID) {
+    return '/b2b/brands/' + uid + '/certificate/' + mediaID;
+  },
   createFactory() {
-    return '/b2b/factories';
+    return '/b2b/factories/new';
   },
   getFactories() {
     return '/b2b/factories';
@@ -105,13 +111,13 @@ const COMMON_APIS = {
     return '/b2b/factories/' + uid;
   },
   createB2BCustomer() {
-    return '/b2b/b2bcustomer';
+    return '/b2b/b2bCustomers';
   },
   getB2BCustomers() {
-    return '/b2b/b2bcustomer';
+    return '/b2b/b2bCustomers';
   },
   getB2BCustomer(uid) {
-    return '/b2b/b2bcustomer/' + uid;
+    return '/b2b/b2bCustomers/' + uid;
   },
   createRole() {
     return '/b2b/roles';

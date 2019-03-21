@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductionItem extends StatelessWidget {
@@ -17,14 +18,16 @@ class ProductionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                ProductionProgressesPage(order: order),
-          ),
-        );
+      onTap: () async {
+        PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+
+        if (model != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ProductionProgressesPage(
+                order: model,
+              ))
+          );
+        }
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),

@@ -121,7 +121,6 @@ class PurchaseOrderList extends StatelessWidget {
 
     return Container(
         decoration: BoxDecoration(color: Colors.grey[100]),
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
             onRefresh: () async {
               return await bloc.refreshData(status.code);
@@ -223,7 +222,7 @@ class PurchaseOrderItem extends StatelessWidget {
             child: FlatButton(
                 color: Colors.red,
                 child: Text(
-                  '待付定金',
+                  '修改订单',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -263,28 +262,29 @@ class PurchaseOrderItem extends StatelessWidget {
         )
     ),
     PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Container(
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: Container(
-            padding: EdgeInsets.only(right: 30),
-            width: 150,
-            child: FlatButton(
-                color: Color(0xFFFFD600),
-                child: Text(
-                  '确认发货',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(20))),
-                onPressed: () {}
-            ),
-          ),
-        )
+//        child:
+//        Align(
+//          alignment: Alignment.bottomRight,
+//          child: Container(
+//            padding: EdgeInsets.only(right: 30),
+//            width: 150,
+//            child: FlatButton(
+//                color: Color(0xFFFFD600),
+//                child: Text(
+//                  '确认发货',
+//                  style: TextStyle(
+//                    color: Colors.white,
+//                    fontWeight: FontWeight.w500,
+//                    fontSize: 18,
+//                  ),
+//                ),
+//                shape: RoundedRectangleBorder(
+//                    borderRadius:
+//                    BorderRadius.all(Radius.circular(20))),
+//                onPressed: () {}
+//            ),
+//          ),
+//        )
     ),
     PurchaseOrderStatus.OUT_OF_STORE: Container(
         child: Align(
@@ -470,7 +470,7 @@ class PurchaseOrderItem extends StatelessWidget {
             Expanded(
                 child: Container(
                     padding: EdgeInsets.all(5),
-                    height: 80,
+                    height: 100,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -497,7 +497,7 @@ class PurchaseOrderItem extends StatelessWidget {
                                     fontSize: 12, color: Colors.grey),
                               ),
                             )),
-                        order.product == null || order.product.superCategories == null?
+                        order.product == null || order.product.category == null?
                         Container() :
                         Container(
                             padding: EdgeInsets.all(3),
@@ -505,7 +505,7 @@ class PurchaseOrderItem extends StatelessWidget {
                               color: Color.fromRGBO(255, 243, 243, 1),
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
-                            "${order.product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
+                            "${order.product.category.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromRGBO(255, 133, 148, 1)),
@@ -647,11 +647,129 @@ class PurchaseOrderItem extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius:
                       BorderRadius.all(Radius.circular(20))),
-                  onPressed: () {}
+                  onPressed: () {
+                    _showDialog(context);
+                  }
               ),
             ),
           )
       ),
+    );
+  }
+
+  //修改金额按钮方法
+  Future<void> _neverUpdatePrice(BuildContext context) async {
+    TextEditingController dialogText = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  '订单总额：￥100000',
+                ),
+                Text(
+                  '已付定金：￥100000',
+                ),
+                Text(
+                  '应付尾款：￥9999',
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  color: Colors.black12,
+                  child: TextField(
+                    controller:dialogText,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: '请输入尾款',
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(right: 30),
+                  width: 230,
+                  child: FlatButton(
+                      color: Color(0xFFFFD600),
+                      child: Text(
+                        '确定',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(20))),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }
+                  ),
+                ),
+                FlatButton(
+                  child: Text(
+                      '无须付款直接跳过>>',
+                    style: TextStyle(
+                      color: Colors.grey
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _showTips(context);
+                  },
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  //打开修改金额弹框
+  void _showDialog(BuildContext context){
+    _neverUpdatePrice(context);
+  }
+
+  void _showTips(BuildContext context){
+    _neverComplete(context);
+  }
+
+  //确认修改按钮
+  Future<void> _neverComplete(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text('是否无须付款直接跳过？'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

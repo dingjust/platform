@@ -751,7 +751,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                         entryModel.product.images = productModel.images;
                         _items.forEach((color, items) {
                           items.forEach((item) {
-                            if(productModel.variants[i].color.code == color.code){
+                            if(productModel.variants[i].color.code == color.code && productModel.variants[i].size.code == item.size.code){
                               entryModel.quantity = int.parse(item.quantityController.text == ''
                                   ? '0'
                                   : item.quantityController.text);

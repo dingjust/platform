@@ -41,7 +41,8 @@
         this.slotData.attachments.push(response);
       },
       async handleRemove(file) {
-        const result = await this.$http.delete('/djwebservices/media/' + file.id);
+        const url = this.apis().removeMedia(file.id);
+        const result = await this.$http.delete(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

@@ -50,7 +50,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get(url, {
+    const response = await http.post(url, {
       keyword: state.keyword
     }, {
       page: state.currentPageNumber,
@@ -61,11 +61,11 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state}) {
+  refresh({dispatch, commit, state},{url}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
-    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {url,keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 

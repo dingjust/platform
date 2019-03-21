@@ -4,7 +4,7 @@
       <el-row :gutter="10">
         <el-col :span="12">
           <el-form-item label="编码" prop="code">
-            <el-input :disabled="!isNewlyCreated" v-model="slotData.code"></el-input>
+            <el-input :disabled="readOnly" v-model="slotData.code"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">

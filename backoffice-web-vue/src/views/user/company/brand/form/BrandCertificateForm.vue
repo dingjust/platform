@@ -3,10 +3,27 @@
     <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="readOnly">
       <el-row :gutter="10">
         <el-col :span="8">
+          <el-form-item label="工商注册号或统一社会信用代码" prop="businessRegistrationNo">
+            <el-input v-model="slotData.businessRegistrationNo"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="法定代表人" prop="legalRepresentative">
+            <el-input v-model="slotData.legalRepresentative"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="法定代表人证件号码" prop="certificateOfLegal">
+            <el-input v-model="slotData.certificateOfLegal"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="8">
           <el-form-item label="注册时间" prop="registrationDate">
             <el-date-picker class="w-100" type="month" placeholder="选择日期"
-                            v-model="slotData.registrationDate"
-                            :value-format="defaultDateValueFormat">
+                            value-format="timestamp"
+                            v-model="slotData.registrationDate">
             </el-date-picker>
           </el-form-item>
         </el-col>
