@@ -97,12 +97,12 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(bottom: 10),
-              child: Text('需求订单号：' + pageItem.requirementOrderRef),
+              child: Text('需求订单号：${pageItem.requirementOrder.code}'),
             ),
             Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('报价单号：' + pageItem.code),
+                  child: Text('报价单号：${pageItem.code}'),
                 ),
                 Text(
                   QuoteStateLocalizedMap[pageItem.state],
@@ -418,10 +418,10 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text('面料单价'),
+                    child: Text('生产单价'),
                   ),
                   Text(
-                    '￥ ${pageItem.unitPriceOfFabric}',
+                    '￥ ${pageItem.unitPrice}',
                     style: TextStyle(
                       color: Colors.red,
                     ),
@@ -432,85 +432,88 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             Divider(
               color: Colors.grey,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
+            Container(
+              padding: EdgeInsets.only(left: 20),
+              child: Column(
                 children: <Widget>[
-                  Expanded(
-                    child: Text('辅料单价'),
-                  ),
-                  Text(
-                    '￥ ${pageItem.unitPriceOfExcipients}',
-                    style: TextStyle(
-                      color: Colors.red,
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text('面料单价'),
+                        ),
+                        Text(
+                          '￥ ${pageItem.unitPriceOfFabric}',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text('辅料单价'),
+                        ),
+                        Text(
+                          '￥ ${pageItem.unitPriceOfExcipients}',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text('加工单价'),
+                        ),
+                        Text(
+                          '￥ ${pageItem.unitPriceOfProcessing}',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text('其他'),
+                        ),
+                        Text(
+                          '￥ ${pageItem.costOfOther}',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.grey,
                   ),
                 ],
               ),
-            ),
-            Divider(
-              color: Colors.grey,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text('加工单价'),
-                  ),
-                  Text(
-                    '￥ ${pageItem.unitPriceOfProcessing}',
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              color: Colors.grey,
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text('其他'),
-                  ),
-                  Text(
-                    '￥ ${pageItem.costOfOther}',
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              color: Colors.grey,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                    '费用合计'
-                        '￥' +
-                        (pageItem.unitPriceOfFabric +
-                                pageItem.unitPriceOfExcipients +
-                                pageItem.unitPriceOfProcessing +
-                                pageItem.costOfOther)
-                            .toString(),
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              color: Colors.grey,
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),

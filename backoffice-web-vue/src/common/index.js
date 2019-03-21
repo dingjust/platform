@@ -3,7 +3,7 @@ const COMMON_APIS = {
     return '/djwebservices/styles/all';
   },
   createColor() {
-    return '/djwebservices/colors';
+    return '/djwebservices/colors/create';
   },
   getColors() {
     return '/djwebservices/colors';
@@ -15,7 +15,7 @@ const COMMON_APIS = {
     return '/djwebservices/colors/all';
   },
   createSize() {
-    return '/djwebservices/sizes';
+    return '/djwebservices/sizes/create';
   },
   getSizes() {
     return '/djwebservices/sizes';
@@ -54,7 +54,7 @@ const COMMON_APIS = {
     return '/b2b/carousel/' + id;
   },
   createIndustrialCluster() {
-    return '/b2b/industrialClusters';
+    return '/b2b/industrialClusters/create';
   },
   getIndustrialClusters() {
     return '/b2b/industrialClusters';
@@ -63,13 +63,13 @@ const COMMON_APIS = {
     return '/b2b/industrialClusters/' + code;
   },
   createLabel() {
-    return '/b2b/labels';
+    return '/djwebservices/labels/create';
   },
   getLabels() {
-    return '/b2b/labels';
+    return '/djwebservices/labels';
   },
   getLabel(id) {
-    return '/b2b/labels/' + id;
+    return '/djwebservices/labels/' + id;
   },
   getBrandSuppliers() {
     return '/b2b/factories/getSuppliers';

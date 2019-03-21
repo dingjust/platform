@@ -132,8 +132,8 @@ class OrgUnitModel extends CompanyModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
-          qq:qq,
-          wechat:wechat,
+          qq: qq,
+          wechat: wechat,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -188,8 +188,8 @@ class B2BUnitModel extends OrgUnitModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
-          qq:qq,
-          wechat:wechat,
+          qq: qq,
+          wechat: wechat,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -273,8 +273,8 @@ class BrandModel extends B2BUnitModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
-          qq:qq,
-          wechat:wechat,
+          qq: qq,
+          wechat: wechat,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -296,9 +296,11 @@ class FactoryModel extends B2BUnitModel {
   ScaleRanges scaleRange;
 
   //品类
+  @JsonKey(toJson: _categoriesToJson)
   List<CategoryModel> categories;
 
   //擅长品类
+  @JsonKey(toJson: _categoriesToJson)
   List<CategoryModel> adeptAtCategories;
 
   //合作方式
@@ -317,12 +319,14 @@ class FactoryModel extends B2BUnitModel {
   int responseQuotedTime;
 
   //现货商品
+  @JsonKey(toJson: _productToJson)
   List<ProductModel> products;
 
   double locationX;
 
   double locationY;
 
+  @JsonKey(toJson: _industrialClusterToJson)
   IndustrialClusterModel industrialCluster;
 
   FactoryModel({
@@ -377,8 +381,8 @@ class FactoryModel extends B2BUnitModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
-          qq:qq,
-          wechat:wechat,
+          qq: qq,
+          wechat: wechat,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>
@@ -386,6 +390,18 @@ class FactoryModel extends B2BUnitModel {
 
   static Map<String, dynamic> toJson(FactoryModel model) =>
       _$FactoryModelToJson(model);
+
+  static List<Map<String, dynamic>> _categoriesToJson(
+          List<CategoryModel> categories) =>
+      categories.map((category) => CategoryModel.toJson(category)).toList();
+
+  static List<Map<String, dynamic>> _productToJson(
+          List<ProductModel> products) =>
+      products.map((product) => ProductModel.toJson(product)).toList();
+
+  static Map<String, dynamic> _industrialClusterToJson(
+          IndustrialClusterModel model) =>
+      IndustrialClusterModel.toJson(model);
 }
 
 @JsonSerializable()

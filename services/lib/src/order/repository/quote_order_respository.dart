@@ -59,4 +59,20 @@ class QuoteOrderRepository {
       return response.data;
     }
   }
+
+  ///更新报价
+  Future<String> quoteUpdate(QuoteModel model) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.quoteUpdate(model.code),
+          data: QuoteModel.toJson(model));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
 }

@@ -42,9 +42,9 @@
           return;
         }
 
-        this.$message.success('品牌创建成功');
+        this.$message.success('保存成功');
         this.$set(this.slotData, 'code', result);
-        this.refresh();
+        this.refresh(this.apis().getIndustrialClusters());
         this.fn.closeSlider(true);
       }
     },
