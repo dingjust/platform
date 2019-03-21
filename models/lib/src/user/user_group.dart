@@ -3,6 +3,12 @@ import 'package:models/models.dart';
 
 part 'user_group.g.dart';
 
+enum CompanyType {
+  BRAND,
+  FACTORY,
+  INDIVIDUAL_HOUSEHOLD,
+}
+
 /// 用户组
 @JsonSerializable()
 class UserGroupModel extends PrincipalGroupModel {
@@ -43,6 +49,15 @@ class CompanyModel extends UserGroupModel {
   //开户银行
   String bankOfDeposit;
 
+  //工商注册号/统一社会信用代码
+  String businessRegistrationNo;
+
+  //法定代表人
+  String legalRepresentative;
+
+  //法定代表人证件号码
+  String certificateOfLegal;
+
   //认证证件
   List<MediaModel> certificate;
 
@@ -60,6 +75,9 @@ class CompanyModel extends UserGroupModel {
 
   //微信
   String wechat;
+
+  //企业类型
+  CompanyType type;
 
   CompanyModel({
     MediaModel profilePicture,
@@ -79,6 +97,10 @@ class CompanyModel extends UserGroupModel {
     this.cooperativeBrand,
     this.qq,
     this.wechat,
+    this.businessRegistrationNo,
+    this.certificateOfLegal,
+    this.legalRepresentative,
+    this.type,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -115,6 +137,10 @@ class OrgUnitModel extends CompanyModel {
     String cooperativeBrand,
     String qq,
     String wechat,
+    String businessRegistrationNo,
+    String legalRepresentative,
+    String certificateOfLegal,
+    CompanyType type,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -132,8 +158,12 @@ class OrgUnitModel extends CompanyModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
-          qq:qq,
-          wechat:wechat,
+          qq: qq,
+          wechat: wechat,
+          businessRegistrationNo: businessRegistrationNo,
+          certificateOfLegal: certificateOfLegal,
+          legalRepresentative: legalRepresentative,
+          type: type,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -168,6 +198,10 @@ class B2BUnitModel extends OrgUnitModel {
     String cooperativeBrand,
     String qq,
     String wechat,
+    String businessRegistrationNo,
+    String legalRepresentative,
+    String certificateOfLegal,
+    CompanyType type,
     this.active,
     this.email,
     this.phone,
@@ -188,8 +222,12 @@ class B2BUnitModel extends OrgUnitModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
-          qq:qq,
-          wechat:wechat,
+          qq: qq,
+          wechat: wechat,
+          businessRegistrationNo: businessRegistrationNo,
+          certificateOfLegal: certificateOfLegal,
+          legalRepresentative: legalRepresentative,
+          type: type,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -246,6 +284,10 @@ class BrandModel extends B2BUnitModel {
     String cooperativeBrand,
     String qq,
     String wechat,
+    String businessRegistrationNo,
+    String legalRepresentative,
+    String certificateOfLegal,
+    CompanyType type,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -273,8 +315,12 @@ class BrandModel extends B2BUnitModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
-          qq:qq,
-          wechat:wechat,
+          qq: qq,
+          wechat: wechat,
+          businessRegistrationNo: businessRegistrationNo,
+          certificateOfLegal: certificateOfLegal,
+          legalRepresentative: legalRepresentative,
+          type: type,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -345,6 +391,10 @@ class FactoryModel extends B2BUnitModel {
     String cooperativeBrand,
     String qq,
     String wechat,
+    String businessRegistrationNo,
+    String legalRepresentative,
+    String certificateOfLegal,
+    CompanyType type,
     this.historyOrdersCount,
     this.orderedSuccessRate,
     this.monthlyCapacityRanges,
@@ -377,8 +427,12 @@ class FactoryModel extends B2BUnitModel {
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
-          qq:qq,
-          wechat:wechat,
+          qq: qq,
+          wechat: wechat,
+          businessRegistrationNo: businessRegistrationNo,
+          certificateOfLegal: certificateOfLegal,
+          legalRepresentative: legalRepresentative,
+          type: type,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>

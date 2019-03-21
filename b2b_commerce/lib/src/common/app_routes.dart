@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/factory/hot_category.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
+import 'package:b2b_commerce/src/my/my_brand_certificate.dart';
 import 'package:b2b_commerce/src/my/my_bill.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
@@ -67,6 +68,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
   static const ROUTE_MY_FACTORY = '/my/my_factory';
+  static const ROUTE_MY_BRAND_CERTIFICATE = '/my/my_brand_certificate';
   static const ROUTE_MY_ADDRESSES = '/my/my_addresses';
   static const ROUTE_MY_CART = '/my/my_cart';
   static const ROUTE_MY_INVOICES = '/my/my_invoices';
@@ -102,6 +104,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_ACCOUNT: (context) => MyAccountPage(),
     ROUTE_MY_BRAND: (context) => MyBrandPage(),
     ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
+    ROUTE_MY_BRAND_CERTIFICATE:(context) => MyBrandCertificatePage(),
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
     ROUTE_MY_CART: (context) => MyCartPage(),
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),

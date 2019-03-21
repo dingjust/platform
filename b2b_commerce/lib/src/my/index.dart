@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
+import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -20,9 +21,10 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
     String companyRoute = '';
-    if(bloc.currentUser.type == UserType.BRAND) companyRoute = AppRoutes.ROUTE_MY_BRAND;
-    if(bloc.currentUser.type == UserType.FACTORY) companyRoute = AppRoutes.ROUTE_MY_FACTORY;
-
+    if (bloc.currentUser.type == UserType.BRAND)
+      companyRoute = AppRoutes.ROUTE_MY_BRAND;
+    if (bloc.currentUser.type == UserType.FACTORY)
+      companyRoute = AppRoutes.ROUTE_MY_FACTORY;
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
@@ -36,6 +38,56 @@ class MyHomePage extends StatelessWidget {
         ),
         MenuItem(B2BImage.certicate_info(width: 26, height: 19), '公司介绍',
             companyRoute),
+        Container(
+          padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
+          child: Divider(
+            height: 0,
+          ),
+        ),
+        InkWell(
+          child: Container(
+            padding: EdgeInsets.all(15),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 32),
+                  child: B2BImage.certicate_info(width: 26, height: 19),
+                ),
+                Expanded(
+                    child: Text(
+                  '我要认证',
+                  style: TextStyle(fontSize: 17),
+                )),
+                Text(
+                  '未认证',
+                  style: TextStyle(
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+          ),
+          onTap: () {
+            //品牌认证
+            if (bloc.currentUser.type == UserType.BRAND)
+              Navigator.pushNamed(
+                  context, AppRoutes.ROUTE_MY_BRAND_CERTIFICATE);
+            //工厂认证
+            if (bloc.currentUser.type == UserType.FACTORY) {
+              UserRepositoryImpl().getFactory(UserBLoC.instance.currentUser.companyCode).then((factory){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyCompanyCertificatePage(factory)));
+              });
+
+            }
+          },
+        )
       ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.address_manage(width: 24, height: 29), '地址管理',
