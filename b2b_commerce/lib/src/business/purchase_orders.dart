@@ -618,8 +618,8 @@ class PurchaseOrderItem extends StatelessWidget {
   Widget _buildFactoryButton(BuildContext context){
     return Container(
         child:
-//        order.status != PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ?
-//        _statusButton[order.status] :
+        order.status != PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ?
+        _statusButton[order.status] :
         _buildWaitBalance(context)
     );
   }
