@@ -206,10 +206,14 @@ class ProofingOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        //查询明细
+        ProofingModel detailModel =
+            await ProofingOrderRepository().proofingDetail(model.code);
+
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ProofingOrderDetailPage(
-                  model: model,
+                  model: detailModel,
                 )));
       },
       child: Container(
@@ -276,7 +280,7 @@ class ProofingOrderItem extends StatelessWidget {
                 Container(
                   width: 200,
                   child: Text(
-                    '${model.belongTo?.name}',
+                    '${model.supplier.name}',
                     style: TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -294,6 +298,12 @@ class ProofingOrderItem extends StatelessWidget {
   }
 
   Widget _buildEntries() {
+    //计算总数
+    int sum = 0;
+    model.entries.forEach((entry) {
+      sum = sum + entry.quantity;
+    });
+
     return Container(
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
@@ -354,7 +364,7 @@ class ProofingOrderItem extends StatelessWidget {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${model.entries[0].product.category.name}   ${model.totalQuantity}件",
+                      "${model.entries[0].product.category.name}   ${sum}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,45 +23,48 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
   TextEditingController _otherController = TextEditingController();
   TextEditingController _remarksController = TextEditingController();
   TextEditingController _sampleController = TextEditingController();
-
-  double fabric = 0.0;
-  double excipients = 0.0;
-  double processing = 0.0;
-  double other = 0.0;
-  double totalPrice = 0.0;
-  double sample = 0.0;
+  TextEditingController _unitPriceController = TextEditingController();
   List<MediaModel> attachments = [];
   DateTime expectedDeliveryDate = DateTime.now();
+
+  GlobalKey _scaffoldKey = GlobalKey();
 
   @override
   void initState() {
     // TODO: implement initState
-    if (widget.quoteModel != null) {
-      _fabricController.text = widget.quoteModel.unitPriceOfFabric.toString();
-      _excipientsController.text =
-          widget.quoteModel.unitPriceOfExcipients.toString();
-      _processingController.text =
-          widget.quoteModel.unitPriceOfProcessing.toString();
-      _otherController.text = widget.quoteModel.costOfOther.toString();
-      _remarksController.text = widget.quoteModel.remarks;
-      _sampleController.text = widget.quoteModel.costOfSamples.toString();
-      expectedDeliveryDate = widget.quoteModel.expectedDeliveryDate;
 
-      if (widget.update) {
-        attachments = widget.quoteModel.attachments;
-      }
+    if (widget.update && widget.quoteModel != null) {
+      _fabricController.text =
+          widget.quoteModel.unitPriceOfFabric?.toString() ?? '';
+      _excipientsController.text =
+          widget.quoteModel.unitPriceOfExcipients?.toString() ?? '';
+      _processingController.text =
+          widget.quoteModel.unitPriceOfProcessing?.toString() ?? '';
+      _otherController.text = widget.quoteModel.costOfOther?.toString() ?? '';
+      _remarksController.text = widget.quoteModel.remarks;
+      _sampleController.text =
+          widget.quoteModel.costOfSamples?.toString() ?? '';
+      _unitPriceController.text = widget.quoteModel.unitPrice?.toString() ?? '';
+    } else {
+      expectedDeliveryDate = widget.model.details.expectedDeliveryDate;
     }
+
+    if (widget.update) {
+      attachments = widget.quoteModel.attachments;
+    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           brightness: Brightness.light,
           centerTitle: true,
           elevation: 0.5,
-          title: Text('填写报价'),
+          title: Text(widget.update ? '修改报价' : '填写报价'),
         ),
         body: Container(
             color: Color.fromRGBO(245, 245, 245, 1),
@@ -89,80 +91,14 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
               width: 300,
               child: Center(
                 child: Text(
-                  '提交报价',
+                  widget.update ? '修改报价' : '提交报价',
                   style: TextStyle(
                     fontSize: 20,
                     color: Color.fromRGBO(36, 38, 41, 1),
                   ),
                 ),
               )),
-          onPressed: () async {
-            QuoteModel model;
-            if (widget.update) {
-              model = widget.quoteModel;
-            } else {
-              //新建
-              model = QuoteModel();
-            }
-            //拼装数据
-            model.unitPriceOfFabric = fabric;
-            model.unitPriceOfExcipients = excipients;
-            model.unitPriceOfProcessing = processing;
-            model.costOfOther = other;
-            model.costOfSamples = sample;
-            model.requirementOrderRef = widget.model.code;
-            model.remarks = _remarksController.text;
-            model.expectedDeliveryDate = expectedDeliveryDate;
-            model.attachments = attachments;
-
-            String response = await QuoteOrderRepository().quoteCreate(model);
-
-            if (response == '') {
-              showDialog<void>(
-                context: context,
-                barrierDismissible: true, // user must tap button!
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text('报价失败'),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('确定'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            } else {
-              showDialog<void>(
-                context: context,
-                barrierDismissible: true, // user must tap button!
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text('报价成功'),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('确定'),
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          //查询明细
-                          QuoteModel detailModel = await QuoteOrderRepository()
-                              .getquoteDetail(response);
-                          if (detailModel != null) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    QuoteOrderDetailPage(item: detailModel)));
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
-          },
+          onPressed: onSubmit,
           backgroundColor: Colors.amberAccent,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -209,7 +145,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
   Widget _buildEntries() {
     Widget _pictureWidget;
 
-    if (widget.model.details.pictures == null) {
+    if (widget.model.details?.pictures == null) {
       _pictureWidget = Container(
         width: 80,
         height: 80,
@@ -329,57 +265,12 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
             ),
           ),
           InputRow(
-              label: '面料单价',
+              label: '生产单价',
               field: TextField(
                 autofocus: false,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.right,
-                controller: _fabricController,
-                onChanged: _countTotalPrice,
-                //只能输入数字
-                decoration: InputDecoration(
-                  hintText: '填写',
-                  border: InputBorder.none,
-                ),
-              )),
-          InputRow(
-              label: '辅料单价',
-              field: TextField(
-                autofocus: false,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.right,
-                controller: _excipientsController,
-                onChanged: _countTotalPrice,
-                //只能输入数字
-                inputFormatters: <TextInputFormatter>[
-                  WhitelistingTextInputFormatter.digitsOnly,
-                ],
-                decoration:
-                    InputDecoration(hintText: '填写', border: InputBorder.none),
-              )),
-          InputRow(
-              label: '加工单价',
-              field: TextField(
-                autofocus: false,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.right,
-                onChanged: _countTotalPrice,
-                controller: _processingController,
-                //只能输入数字
-                inputFormatters: <TextInputFormatter>[
-                  WhitelistingTextInputFormatter.digitsOnly,
-                ],
-                decoration:
-                    InputDecoration(hintText: '填写', border: InputBorder.none),
-              )),
-          InputRow(
-              label: '其他单价',
-              field: TextField(
-                autofocus: false,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.right,
-                onChanged: _countTotalPrice,
-                controller: _otherController,
+                controller: _unitPriceController,
                 //只能输入数字
                 inputFormatters: <TextInputFormatter>[
                   WhitelistingTextInputFormatter.digitsOnly,
@@ -388,26 +279,70 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
                     InputDecoration(hintText: '填写', border: InputBorder.none),
               )),
           Container(
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    '生产单价：',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                  Text(
-                    '￥${totalPrice ?? 0}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.red),
-                  ),
-                ],
-              )),
+            padding: EdgeInsets.only(left: 20),
+            child: Column(
+              children: <Widget>[
+                InputRow(
+                    label: '面料单价',
+                    field: TextField(
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.right,
+                      controller: _fabricController,
+
+                      //只能输入数字
+                      decoration: InputDecoration(
+                        hintText: '填写',
+                        border: InputBorder.none,
+                      ),
+                    )),
+                InputRow(
+                    label: '辅料单价',
+                    field: TextField(
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.right,
+                      controller: _excipientsController,
+
+                      //只能输入数字
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
+                      decoration: InputDecoration(
+                          hintText: '填写', border: InputBorder.none),
+                    )),
+                InputRow(
+                    label: '加工单价',
+                    field: TextField(
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.right,
+                      controller: _processingController,
+                      //只能输入数字
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
+                      decoration: InputDecoration(
+                          hintText: '填写', border: InputBorder.none),
+                    )),
+                InputRow(
+                    label: '其他单价',
+                    hasBottom: false,
+                    field: TextField(
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.right,
+                      controller: _otherController,
+                      //只能输入数字
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
+                      decoration: InputDecoration(
+                          hintText: '填写', border: InputBorder.none),
+                    )),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -515,21 +450,21 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
     );
   }
 
-  void _countTotalPrice(String value) {
-    setState(() {
-      fabric = double.parse(
-          _fabricController.text == '' ? '0' : _fabricController.text);
-      excipients = double.parse(
-          _excipientsController.text == '' ? '0' : _excipientsController.text);
-      processing = double.parse(
-          _processingController.text == '' ? '0' : _processingController.text);
-      other = double.parse(
-          _otherController.text == '' ? '0' : _otherController.text);
-      totalPrice = fabric + excipients + processing + other;
-      sample = double.parse(
-          _sampleController.text == '' ? '0' : _sampleController.text);
-    });
-  }
+  // void _countTotalPrice(String value) {
+  //   setState(() {
+  //     fabric = double.parse(
+  //         _fabricController.text == '' ? '0' : _fabricController.text);
+  //     excipients = double.parse(
+  //         _excipientsController.text == '' ? '0' : _excipientsController.text);
+  //     processing = double.parse(
+  //         _processingController.text == '' ? '0' : _processingController.text);
+  //     other = double.parse(
+  //         _otherController.text == '' ? '0' : _otherController.text);
+  //     unitPrice = fabric + excipients + processing + other;
+  //     sample = double.parse(
+  //         _sampleController.text == '' ? '0' : _sampleController.text);
+  //   });
+  // }
 
   //打开日期选择器
   void _showDatePicker() {
@@ -548,6 +483,114 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
       setState(() {
         expectedDeliveryDate = _picked;
       });
+    }
+  }
+
+  void onSubmit() {
+    if (_unitPriceController.text.isEmpty) {
+      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
+        SnackBar(
+          content: Text('请选择生产单价'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return AlertDialog(
+            title: Text('确定报价？'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('确定'),
+                onPressed: () async {
+                  await onSure();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  void onSure() async {
+    QuoteModel model;
+    if (widget.update) {
+      model = widget.quoteModel;
+    } else {
+      //新建
+      model = QuoteModel();
+    }
+    //拼装数据
+    model.unitPriceOfFabric = _fabricController.text.isEmpty
+        ? 0
+        : double.parse(_fabricController.text);
+    model.unitPriceOfExcipients = _processingController.text.isEmpty
+        ? 0
+        : double.parse(_excipientsController.text);
+    model.unitPriceOfProcessing = _processingController.text.isEmpty
+        ? 0
+        : double.parse(_processingController.text);
+    model.costOfOther =
+        _otherController.text.isEmpty ? 0 : double.parse(_otherController.text);
+    model.costOfSamples = _sampleController.text.isEmpty
+        ? 0
+        : double.parse(_sampleController.text);
+    model.requirementOrder = RequirementOrderModel(code: widget.model.code);
+    model.remarks = _remarksController.text;
+    model.expectedDeliveryDate = expectedDeliveryDate;
+    model.attachments = attachments;
+    model.unitPrice = double.parse(_unitPriceController.text);
+
+    print(QuoteModel.toJson(model));
+
+    String response;
+    if (widget.update) {
+      model.code = widget.quoteModel.code;
+      response = await QuoteOrderRepository().quoteUpdate(model);
+    } else {
+      response = await QuoteOrderRepository().quoteCreate(model);
+    }
+
+    Navigator.of(context).pop();
+
+    if (response == '') {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return AlertDialog(
+            title: Text(widget.update ? '修改成功' : '报价失败'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('确定'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      if (!widget.update) {
+        //查询明细
+        QuoteModel detailModel =
+            await QuoteOrderRepository().getquoteDetail(response);
+        widget.quoteModel = detailModel;
+        Navigator.of(context).pop(detailModel);
+      } else {
+        //成功回调传递
+        Navigator.of(context).pop(true);
+      }
     }
   }
 }

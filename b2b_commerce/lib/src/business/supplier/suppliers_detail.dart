@@ -1181,7 +1181,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                     ],
                   ),
                   Text(
-                    '需求订单号：${widget.supplierModel.quoteOrder.requirementOrderRef}',
+                    '需求订单号：${widget.supplierModel.quoteOrder.requirementOrder.code}',
                     style: TextStyle(fontSize: 13, color: Colors.grey),
                   )
                 ],
