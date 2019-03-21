@@ -97,7 +97,7 @@ class _ProductionGenerateUniqueCodePageState
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('生产唯一码'),
+          title: Text('生成唯一码'),
           elevation: 0.5,
           brightness: Brightness.light,
           centerTitle: true,
@@ -374,7 +374,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  '工厂：' + order.belongTo.name,
+                  '工厂：${order.belongTo == null ? order.companyOfSeller : order.belongTo.name}',
                   style: TextStyle(fontSize: 15),
                 ),
               ),
@@ -405,13 +405,13 @@ class GenerateUniqueCodeItem extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: 90,
-                    height: 90,
+                    width: 110,
+                    height: 110,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         image: DecorationImage(
-                          image: entry.product.thumbnail != null
-                              ? NetworkImage(entry.product.thumbnail.url)
+                          image: order.product != null && order.product.thumbnail != null
+                              ? NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}')
                               : AssetImage(
                                   'temp/picture.png',
                                   package: "assets",
@@ -424,7 +424,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                     child: Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      height: 90,
+                      height: 110,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -433,7 +433,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                entry.product.name,
+                                '${entry.product.name == null? '' : entry.product.name}',
                                 style: TextStyle(fontSize: 15),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -444,7 +444,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                                     color: Colors.grey[200],
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Text(
-                                  '货号：' + entry.product.skuID,
+                                  '货号：${entry.product.skuID == null? '' : entry.product.skuID}' ,
                                   style: TextStyle(
                                       fontSize: 12,
                                       color: Color.fromRGBO(150, 150, 150, 1)),
@@ -455,7 +455,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                           Row(
                             children: <Widget>[
                               Text(
-                                '生产订单号：${order.code}',
+                                '生产订单号：${order.code == null ? '' : order.code}',
                                 style: TextStyle(
                                   color: Color.fromRGBO(150, 150, 150, 1),
                                   fontSize: 14,
@@ -466,7 +466,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                           Row(
                             children: <Widget>[
                               Text(
-                                '报价时间：${DateFormatUtil.format(order.creationTime)}',
+                                '报价时间：${order.creationTime == null ? '' : DateFormatUtil.formatYMD(order.creationTime)}',
                                 style: TextStyle(
                                   color: Color.fromRGBO(150, 150, 150, 1),
                                   fontSize: 14,

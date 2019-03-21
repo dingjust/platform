@@ -24,15 +24,7 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      onSubmit() {
-        if (this.$refs['form'].validate()) {
-          this._onSubmit();
-        }
-      },
-      onCancel() {
-        this.fn.closeSlider();
-      },
-      async _onSubmit() {
+      async onSubmit() {
         let formData = this.slotData;
 
         const url = this.apis().createBrand();
@@ -46,7 +38,10 @@
         this.$set(this.slotData, 'code', result);
         this.refresh();
         this.fn.closeSlider(true);
-      }
+      },
+      onCancel() {
+        this.fn.closeSlider();
+      },
     },
     computed: {
       isNewlyCreated: function () {

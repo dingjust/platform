@@ -34,10 +34,10 @@
     },
     props: ['slotData', 'readOnly'],
     methods: {
-      validate(callback) {
-        // TODO: validation
-        return true;
-        // return this.$refs['basicForm'].validate(callback);
+      validate() {
+        if (this.$refs['basicForm'].validate()) {
+          this.$emit('onSubmit');
+        }
       }
     },
     computed: {},

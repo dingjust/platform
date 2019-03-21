@@ -3,6 +3,23 @@
     <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="readOnly">
       <el-row :gutter="10">
         <el-col :span="8">
+          <el-form-item label="工商注册号或统一社会信用代码" prop="businessRegistrationNo">
+            <el-input v-model="slotData.businessRegistrationNo"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="法定代表人" prop="legalRepresentative">
+            <el-input v-model="slotData.legalRepresentative"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="法定代表人证件号码" prop="certificateOfLegal">
+            <el-input v-model="slotData.certificateOfLegal"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="8">
           <el-form-item label="注册时间" prop="registrationDate">
             <el-date-picker class="w-100" type="month" placeholder="选择日期"
                             v-model="slotData.registrationDate"
@@ -22,22 +39,25 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-row :gutter="10" v-if="!readOnly">
-      <el-col :span="20">
-        <el-upload ref="uploadForm"
-                   name="files"
-                   list-type="picture"
-                   :multiple="true"
-                   :data="data"
-                   :action="uploadUrl"
-                   :file-list="files"
-                   :on-success="onUploadSuccess"
-                   :on-error="onUploadError"
-                   :on-progress="onUploading"
-                   :auto-upload="false">
-          <el-button size="small" type="primary">点击上传认证证件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5MB</div>
+    <el-row :gutter="10">
+      <el-col :span="24">
+        <el-upload
+          name="file"
+          :disabled="readOnly"
+          :action="mediaUploadUrl"
+          list-type="picture-card"
+          :data="uploadFormData"
+          :before-upload="onBeforeUpload"
+          :on-success="onSuccess"
+          :headers="headers"
+          :file-list="slotData.images"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove">
+          <i class="el-icon-plus"></i>
         </el-upload>
+        <el-dialog :visible.sync="dialogVisible" :modal="false">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
       </el-col>
     </el-row>
   </div>
@@ -47,63 +67,57 @@
   export default {
     name: 'FactoryCertificateForm',
     props: ['slotData', 'readOnly'],
-    methods: {
-      validate(callback) {
-        this.$refs.form.validate(callback);
+    computed: {
+      uploadFormData: function () {
+        return {
+          fileFormat: 'DefaultFileFormat',
+        };
       },
-      onFilterCategories(query) {
-        this.categories = [];
-        if (query && query !== '') {
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.getCategories(query);
-          }, 200);
+      headers: function () {
+        return {
+          Authorization: this.$store.getters.token
         }
-      },
-      async getCategories(query) {
-        const url = this.apis().getMinorCategories();
-        const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.categories = result;
-      },
-      async getStyles() {
-        const url = this.apis().getAllStyles();
-        const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.styles = result;
       }
+    },
+    methods: {
+      onBeforeUpload(file) {
+        if (file.size > 1024 * 1024 * 10) {
+          this.$message.error('上传的文件不允许超过10M');
+          return false;
+        }
+
+        return true;
+      },
+      onSuccess(response) {
+        this.slotData.attachments.push(response);
+      },
+      async handleRemove(file) {
+        // console.log(JSON.stringify(file));
+        const url = this.apis().removeMedia(file.id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        const images = this.slotData.images || [];
+        const index = images.indexOf(file);
+        images.splice(index, 1);
+
+        this.$message.success("删除成功");
+      },
+      handlePreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
     },
     data() {
       return {
-        loading: false,
-        rules: {
-          name: [{required: true, message: '必填', trigger: 'blur'}],
-          skuID: [{required: true, message: '必填', trigger: 'blur'}],
-          category: [{required: true, message: '必填', trigger: 'blur'}],
-          price: [{required: true, message: '必填', trigger: 'blur'}]
-        },
-        categories: [],
-        companies: [],
-        styles: [],
-        categoryProps: {
-          label: 'name',
-          value: 'code',
-          children: 'children'
-        }
+        rules: {},
+        dialogImageUrl: '',
+        dialogVisible: false,
+        styles: this.$store.state.EnumsModule.productStyles,
       };
-    },
-    created() {
-      this.getCategories('');
-      this.getStyles();
     }
   };
 </script>
