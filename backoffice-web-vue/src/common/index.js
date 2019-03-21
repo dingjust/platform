@@ -27,7 +27,10 @@ const COMMON_APIS = {
     return '/djwebservices/sizes/all';
   },
   createSampleProduct() {
-    return '/b2b/products/sample';
+    return '/b2b/products/sample/create';
+  },
+  updateSampleProduct(code) {
+    return '/b2b/products/sample/update/'+code;
   },
   getSampleProducts() {
     return '/b2b/products/sample';
@@ -36,7 +39,7 @@ const COMMON_APIS = {
     return '/b2b/products/sample/' + id;
   },
   createSampleCheckoutHist() {
-    return '/b2b/products/sampleCheckoutHist';
+    return '/b2b/products/sampleCheckoutHist/create';
   },
   getSampleCheckoutHists() {
     return '/b2b/products/sampleCheckoutHist';
