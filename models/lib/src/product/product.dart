@@ -159,11 +159,12 @@ class ProductModel extends ItemModel {
   double price;
   double minPrice;
   double maxPrice;
-  @JsonKey(toJson: _mediaToJson)
+  String skuID;
+  @JsonKey(fromJson: _mediaFromJson, toJson: _mediaToJson)
   MediaModel thumbnail;
-  @JsonKey(toJson: _mediasToJson)
+  @JsonKey(fromJson: _mediasFromJson, toJson: _mediasToJson)
   List<MediaModel> thumbnails;
-  @JsonKey(toJson: _mediasToJson)
+  @JsonKey(fromJson: _mediasFromJson, toJson: _mediasToJson)
   List<MediaModel> images;
   int salesVolume;
   ArticleApprovalStatus approvalStatus;
@@ -207,6 +208,7 @@ class ProductModel extends ItemModel {
     this.images,
     this.belongTo,
     this.thumbnails,
+    this.skuID
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
@@ -233,6 +235,12 @@ class ProductModel extends ItemModel {
 
   static Map<String, dynamic> _superCategory(CategoryModel model) =>
       CategoryModel.toJson(model);
+
+  static MediaModel _mediaFromJson(Map<String, dynamic> json) =>
+      MediaModel.fromJson(json);
+
+  static List<MediaModel> _mediasFromJson(List<dynamic> jsons) =>
+      jsons.map((json) => MediaModel.fromJson(json)).toList();
 }
 
 /// 变式产品

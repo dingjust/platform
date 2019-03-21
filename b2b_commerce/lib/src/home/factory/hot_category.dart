@@ -10,7 +10,9 @@ class FactoryHotCategoryPage extends StatefulWidget {
 class _FactoryHotCategoryPageState extends State<FactoryHotCategoryPage> {
   //TODO:调用接口查询推荐工厂
   Map<String, dynamic> mockFactory = {
-    'profilePicture': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+    'profilePicture': {
+      'url': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'
+    },
     'uid': 'BB123456',
     'name': '森马',
     'starLevel': 5,
@@ -175,37 +177,42 @@ class _FactoryHotCategoryPageState extends State<FactoryHotCategoryPage> {
     'products': [
       {
         'name': '春秋薄款卫衣',
-        'thumbnail':
-        MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
-        ,
+        'thumbnail': {
+          'url':
+              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
+        },
         'price': 33.3,
       },
       {
         'name': '春秋薄款卫衣',
-        'thumbnail':
-        MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
-        ,
+        'thumbnail': {
+          'url':
+              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
+        },
         'price': 33.3,
       },
       {
         'name': '春秋薄款卫衣',
-        'thumbnail':
-        MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
-        ,
+        'thumbnail': {
+          'url':
+              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
+        },
         'price': 33.3,
       },
       {
         'name': '春秋薄款卫衣',
-        'thumbnail':
-        MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
-        ,
+        'thumbnail': {
+          'url':
+              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
+        },
         'price': 33.3,
       },
       {
         'name': '春秋薄款卫衣',
-        'thumbnail':
-         MediaModel(url: 'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg')
-        ,
+        'thumbnail': {
+          'url':
+              'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
+        },
         'price': 33.3,
       },
     ]

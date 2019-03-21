@@ -308,7 +308,7 @@ class ProofingOrderItem extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          model.entries[0].product.thumbnail != null
+          model.product.thumbnail != null
               ? Container(
                   width: 80,
                   height: 80,
@@ -316,7 +316,7 @@ class ProofingOrderItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
                         image: NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${model.entries[0].product.thumbnail.url}'),
+                            '${GlobalConfigs.IMAGE_BASIC_URL}${model.product.thumbnail.url}'),
                         fit: BoxFit.cover,
                       )),
                 )
@@ -342,18 +342,18 @@ class ProofingOrderItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    model.entries[0].product.name,
+                    model.product.name,
                     style: TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  model.entries[0].product.skuID != null
+                  model.product.skuID!= null
                       ? Container(
                           padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                           decoration: BoxDecoration(
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
-                            '货号：${model.entries[0].product.skuID}',
+                            '货号：${model.product.skuID}',
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         )
@@ -364,7 +364,7 @@ class ProofingOrderItem extends StatelessWidget {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${model.entries[0].product.category.name}   ${sum}件",
+                      "${model.product.category.name}   ${sum}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

@@ -4,14 +4,14 @@ import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+
 import 'factory/industrial_cluster_factory.dart';
 
 /// 首页Banner
 class HomeBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
-      url:
-          'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548494182390&di=a7928c3e9b9adb28e71cd84991a28470&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01c16a59016013a80121455009859b.jpg%401280w_1l_2o_100sh.jpg',
+      url: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/head.jpg',
     ),
     MediaModel(
       url:

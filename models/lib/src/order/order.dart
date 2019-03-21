@@ -1077,6 +1077,10 @@ class ProofingModel extends OrderModel {
   ///  报价单号
   String quoteRef;
 
+  /// 商品信息
+  @JsonKey(toJson: _productToJson, fromJson: _productFromJson)
+  ProductModel product;
+
   ProofingModel(
       {String code,
       this.status,
@@ -1109,6 +1113,12 @@ class ProofingModel extends OrderModel {
   static List<Map<String, dynamic>> _entriesToJson(
           List<ProofingEntryModel> entries) =>
       entries.map((entry) => ProofingEntryModel.toJson(entry)).toList();
+
+  static Map<String, dynamic> _productToJson(ProductModel product) =>
+      ProductModel.toJson(product);
+
+  static ProductModel _productFromJson(Map<String, dynamic> json) =>
+      ProductModel.fromJson(json);
 }
 
 /// 打样订单行
