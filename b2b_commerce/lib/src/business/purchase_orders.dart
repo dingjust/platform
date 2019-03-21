@@ -637,7 +637,7 @@ class PurchaseOrderItem extends StatelessWidget {
               child: FlatButton(
                   color: Colors.red,
                   child: Text(
-                    '待付尾款',
+                    '修改金额',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
