@@ -42,9 +42,9 @@
           return;
         }
 
-        this.$message.success('品牌创建成功');
+        this.$message.success('尺码创建成功');
         this.$set(this.slotData, 'code', result);
-        this.refresh();
+        this.refresh(this.apis().getSizes());
         this.fn.closeSlider(true);
       }
     },

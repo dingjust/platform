@@ -3,7 +3,7 @@ const COMMON_APIS = {
     return '/djwebservices/styles/all';
   },
   createColor() {
-    return '/djwebservices/colors';
+    return '/djwebservices/colors/create';
   },
   getColors() {
     return '/djwebservices/colors';
@@ -15,7 +15,7 @@ const COMMON_APIS = {
     return '/djwebservices/colors/all';
   },
   createSize() {
-    return '/djwebservices/sizes';
+    return '/djwebservices/sizes/create';
   },
   getSizes() {
     return '/djwebservices/sizes';
