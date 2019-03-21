@@ -11,6 +11,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class ProductionOfflineOrder extends StatefulWidget {
 
@@ -37,7 +38,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   MachiningType machiningType;
   bool isInvoice;
   String remarks;
-  FactoryModel factory = new FactoryModel();
+  CompanyModel company = new CompanyModel();
   String price;
   DateTime deliveryDate;
   String orderStatus;
@@ -57,9 +58,16 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   EarnestMoney earnest = new EarnestMoney();
   bool isSave = false;
   PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
+  String userType;
 
   @override
   void initState() {
+    final bloc = BLoCProvider.of<UserBLoC>(context);
+    if(bloc.isBrandUser){
+      userType = 'brand';
+    }else{
+      userType = 'factory';
+    }
     _product = widget.product;
     super.initState();
   }
@@ -85,10 +93,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   }
 
   Widget _buildCenter(BuildContext context) {
+
     return Container(
       color: Colors.white,
       child: Column(
         children: <Widget>[
+          userType == 'factory' ?
+          _buildBrand(context) :
           _buildFactory(context),
           Divider(
             height: 0,
@@ -310,12 +321,12 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: factory == null || factory.name == null
+            trailing: company == null || company.name == null
                 ? Icon(Icons.keyboard_arrow_right)
                 : Container(
               width: 150,
               child: Text(
-                factory.name,
+                company.name,
                 textAlign: TextAlign.end,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -331,11 +342,55 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderFactroyInput(model: factory,)),
+                builder: (context) => OfflineOrderFactroyInput(model: company,type: '工厂',)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
-              factory = value;
+              company = value;
+            });
+          });
+        }
+    );
+  }
+
+  //采购商家
+  Widget _buildBrand(BuildContext context){
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+              leading: Text(
+                '采购商家',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              trailing: company == null || company.name == null
+                  ? Icon(Icons.keyboard_arrow_right)
+                  : Container(
+                width: 150,
+                child: Text(
+                  company.name,
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey
+                  ),
+                ),
+              )
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OfflineOrderFactroyInput(model: company, type: '品牌',)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              company = value;
             });
           });
         }
@@ -671,9 +726,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
                     List<PurchaseOrderEntryModel> entries = new List();
                     //联系人填写
-                    purchaseOrder.companyOfSeller = factory.name;
-                    purchaseOrder.contactPersonOfSeller = factory.contactPerson;
-                    purchaseOrder.contactOfSeller = factory.contactPhone;
+                    purchaseOrder.companyOfSeller = company.name;
+                    purchaseOrder.contactPersonOfSeller = company.contactPerson;
+                    purchaseOrder.contactOfSeller = company.contactPhone;
                     //收货地址
                     purchaseOrder.deliveryAddress = addressModel;
                     //收货日期
