@@ -43,6 +43,11 @@ class OrderApis {
         return '/{baseSiteId}/b2b/orders/purchase/create/$quote';
       };
 
+  //修改生产进度时间或数量
+  static get productionProgressUpload =>(code,id) {
+    return '/{baseSiteId}/b2b/orders/purchase/$code/progress/$id';
+  };
+
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/b2b/orders/quote';
 

@@ -53,6 +53,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   List<ApparelSizeVariantProductEntry> mockData = new List();
   DateTime _blDate;
   bool isShowButton = false;
+  String userType;
 
   final PurchaseOrderModel order;
   _PurchaseDetailPageState({this.order});
@@ -75,6 +76,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     if(order.status == PurchaseOrderStatus.PENDING_PAYMENT ||
         (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE && order.balancePaid == false)){
       isShowButton = true;
+    }
+
+    final bloc = BLoCProvider.of<UserBLoC>(context);
+    if(bloc.isBrandUser){
+      userType = 'brand';
+    }else{
+      userType = 'factory';
     }
 
     super.initState();
@@ -126,11 +134,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             order.status != PurchaseOrderStatus.PENDING_PAYMENT ?
             _buildPurchaseProductionProgresse(context)
             : _buildTipsPayment(context),
-            order.belongTo == null ?
-            Container():
-            _buildFactoryInfo(context),
-            _buildDocutment(context),
             _buildDeliveryAddress(context),
+            userType != null && userType == 'brand' ?
+            _buildFactoryInfo(context) :
+            _buildBrandInfo(context),
+            _buildDocutment(context),
             _buildBottom(context),
             isShowButton == true?
             _buildCommitButton(context)
@@ -223,85 +231,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     );
   }
 
-//  //包装订单行
-//  Widget _buildEntryUi(BuildContext context) {
-//    return Container(
-//      padding: EdgeInsets.all(10),
-//      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-//      child: Column(
-//        children: _buildOrderEntry(context),
-//      ),
-//      decoration: BoxDecoration(
-//        color: Colors.white,
-//        borderRadius: BorderRadius.circular(5),
-//      ),
-//    );
-//  }
-//
-////构建订单行UI
-//  List<Widget> _buildOrderEntry(BuildContext context) {
-//    return order.entries.map((entry) {
-//      return Container(
-//        padding: EdgeInsets.all(10),
-//        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-//        child: Row(
-//          children: <Widget>[
-//            Image.network(
-//              entry.product.thumbnail,
-//              width: 110,
-//              height: 110,
-//              fit: BoxFit.fill,
-//            ),
-//            Expanded(
-//                child: Container(
-//                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-//                  height: 80,
-//                  child: Column(
-//                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                    crossAxisAlignment: CrossAxisAlignment.start,
-//                    children: <Widget>[
-//                      Text(
-//                        entry.product.name,
-//                        style: TextStyle(fontSize: 15),
-//                        overflow: TextOverflow.ellipsis,
-//                      ),
-//                      Container(
-//                        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-//                        decoration: BoxDecoration(
-//                            color: Colors.grey[200],
-//                            borderRadius: BorderRadius.circular(10)),
-//                        child: Text(
-//                          '货号：${entry.product.skuID}',
-//                          style: TextStyle(fontSize: 12, color: Colors.grey),
-//                        ),
-//                      ),
-//                      Container(
-//                        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-//                        decoration: BoxDecoration(
-//                            color: Color.fromRGBO(255, 243, 243, 1),
-//                            borderRadius: BorderRadius.circular(10)),
-//                        child: Text(
-//                          "${order.entries[0].product.superCategories.name}  ${order.totalQuantity}件",
-//                          style: TextStyle(
-//                              fontSize: 15,
-//                              color: Color.fromRGBO(255, 133, 148, 1)),
-//                        ),
-//                      )
-//                    ],
-//                  ),
-//                ),
-//            )
-//          ],
-//        ),
-//        decoration: BoxDecoration(
-//          color: Colors.white,
-//          borderRadius: BorderRadius.circular(5),
-//        ),
-//      );
-//    }).toList();
-//  }
-
-//构建底部UI
   Widget _buildBottom(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 15),
@@ -343,7 +272,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return Container(
 //      padding: EdgeInsets.all(10),
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
+      child:order.belongTo == null ?
+      Container(): Column(
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(15),
@@ -422,6 +352,28 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
+      ),
+    );
+  }
+
+  Widget _buildBrandInfo(BuildContext context){
+    return Container(
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(8),
+            child: CircleAvatar(
+              backgroundImage:
+              NetworkImage('${order.purchaser.profilePicture}'),
+              radius: 40.0,
+            ),
+          ),
+          Text(
+            '${order.purchaser.name}',
+            textScaleFactor: 1.3,
+          ),
+        ],
       ),
     );
   }
@@ -1209,47 +1161,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 ),
               ],
       ),
-    );
-  }
-
-  void _selectPapersImages() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return new Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.camera),
-              title: Text('相机'),
-              onTap: () async {
-                var image =
-                    await ImagePicker.pickImage(source: ImageSource.camera);
-                if (image != null) {
-                  setState(() {
-//                    widget.images.add(image);
-                    Navigator.pop(context);
-                  });
-                }
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.photo_album),
-              title: Text('相册'),
-              onTap: () async {
-                var image =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
-                if (image != null) {
-                  setState(() {
-//                    widget.images.add(image);
-                    Navigator.pop(context);
-                  });
-                }
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
