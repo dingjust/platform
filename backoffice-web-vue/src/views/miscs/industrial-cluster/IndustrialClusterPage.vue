@@ -45,10 +45,10 @@
           return;
         }
 
-        this.fn.openSlider('员工：' + item.name, IndustrialClusterDetailsPage, result);
+        this.fn.openSlider('产业集群配置：' + item.code, IndustrialClusterDetailsPage, result);
       },
       onNew(formData) {
-        this.fn.openSlider('创建员工', IndustrialClusterDetailsPage, formData);
+        this.fn.openSlider('创建产业集群配置', IndustrialClusterDetailsPage, formData);
       },
     },
     data() {

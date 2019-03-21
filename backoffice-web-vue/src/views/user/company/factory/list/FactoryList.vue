@@ -7,7 +7,7 @@
       <el-table-column label="联系人" prop="contactPerson"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <slot name="operations" :item="scope.row"></slot>
         </template>
       </el-table-column>
     </el-table>
