@@ -1,10 +1,12 @@
 <template>
   <div class="animated fadeIn">
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="UID" prop="uid"></el-table-column>
+      <el-table-column label="code" prop="code"></el-table-column>
       <el-table-column label="名称" prop="name"></el-table-column>
-      <el-table-column label="联系电话" prop="contactPhone"></el-table-column>
-      <el-table-column label="联系人" prop="contactPerson"></el-table-column>
+      <el-table-column label="是否启用" prop="active">
+
+      </el-table-column>
+      <el-table-column label="序列值" prop="sequence"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>

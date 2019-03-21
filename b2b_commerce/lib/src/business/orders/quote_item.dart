@@ -368,8 +368,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                           text: '￥',
                           style: TextStyle(fontSize: 14, color: Colors.red)),
                       TextSpan(
-                          text:
-                              '${widget.model.unitPriceOfFabric + widget.model.unitPriceOfExcipients + widget.model.unitPriceOfProcessing + widget.model.costOfSamples + widget.model.costOfOther}',
+                          text: '${widget.model.unitPrice}',
                           style: TextStyle(color: Colors.red)),
                     ]),
               ),
@@ -404,7 +403,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          widget.model.requirementOrder.details.pictures != null &&
+          widget.model.requirementOrder.details?.pictures != null &&
                   widget.model.requirementOrder.details.pictures.isNotEmpty
               ? Container(
                   width: 80,
@@ -438,7 +437,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  widget.model.requirementOrder.details.productName != null
+                  widget.model.requirementOrder.details?.productName != null
                       ? Text(
                           widget.model.requirementOrder.details.productName,
                           style: TextStyle(fontSize: 15),
@@ -448,7 +447,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                           '暂无产品',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
-                  widget.model.requirementOrder.details.productSkuID != null
+                  widget.model.requirementOrder.details?.productSkuID != null
                       ? Container(
                           padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                           decoration: BoxDecoration(
@@ -516,7 +515,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
         buttons = [
           Container(),
           FlatButton(
-              onPressed: onQuoteAgain,
+              onPressed: onUpdateQuote,
               shape: RoundedRectangleBorder(
                   side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
                   borderRadius: BorderRadius.circular(20)),
@@ -668,13 +667,18 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
             )));
   }
 
-  void onUpdateQuote() {
-    Navigator.of(context).push(MaterialPageRoute(
+  void onUpdateQuote() async {
+    //等待操作回调
+    bool isSuccessfule = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RequirementQuoteOrderFrom(
               model: widget.model.requirementOrder,
               quoteModel: widget.model,
               update: true,
             )));
+    //成功调用列表页传递的更新函数刷新页面
+    if (isSuccessfule) {
+      widget.onRefresh();
+    }
   }
 
   void onCreateProofings() async {

@@ -36,15 +36,16 @@
         let formData = this.slotData;
 
         const url = this.apis().createLabel();
+        console.log(url);
         const result = await this.$http.post(url, formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success('品牌创建成功');
+        this.$message.success('保存成功');
         this.$set(this.slotData, 'code', result);
-        this.refresh();
+        this.refresh(this.apis().getLabels());
         this.fn.closeSlider(true);
       }
     },
