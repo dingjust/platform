@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
+import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
@@ -577,12 +578,19 @@ class _RequirementOrderDetailPageState
         child: Container(
           padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
           child: FlatButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RequirementQuoteOrderFrom(
-                          model: widget.order,
-                          quoteModel: QuoteModel(attachments: []),
-                        )));
+              onPressed: () async {
+                QuoteModel newQuote =
+                    await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RequirementQuoteOrderFrom(
+                              model: widget.order,
+                              quoteModel: QuoteModel(attachments: []),
+                            )));
+
+                if (newQuote != null) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          QuoteOrderDetailPage(item: newQuote)));
+                }
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),

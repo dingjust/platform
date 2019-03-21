@@ -126,36 +126,10 @@ class RequirementOrderBLoC extends BLoCBase {
 
   //下拉刷新
   refreshData(String status) async {
-    if (!lock) {
-      lock = true;
-      //重置信息
-      _ordersMap[status].data.clear();
-      _ordersMap[status].currentPage = 0;
-      //  分页拿数据，response.data;
-      //请求参数
-      Map data = {};
-      if (status != 'ALL') {
-        data = {
-          'statuses': [status]
-        };
-      }
-      Response<Map<String, dynamic>> response = await http$
-          .post(OrderApis.requirementOrders, data: data, queryParameters: {
-        'page': _ordersMap[status].currentPage,
-        'size': _ordersMap[status].size
-      });
-
-      if (response.statusCode == 200) {
-        RequirementOrdersResponse ordersResponse =
-            RequirementOrdersResponse.fromJson(response.data);
-        _ordersMap[status].totalPages = ordersResponse.totalPages;
-        _ordersMap[status].totalElements = ordersResponse.totalElements;
-        _ordersMap[status].data.clear();
-        _ordersMap[status].data.addAll(ordersResponse.content);
-      }
-      _controller.sink.add(_ordersMap[status].data);
-      lock = false;
-    }
+    //重置信息
+    _ordersMap[status].data.clear();
+    _ordersMap[status].currentPage = 0;
+    await filterByStatuses(status);
   }
 
   //页面控制

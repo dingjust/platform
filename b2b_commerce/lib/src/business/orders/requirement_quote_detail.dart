@@ -92,7 +92,7 @@ class QuotesListView extends StatelessWidget {
       color: Colors.grey[100],
       child: RefreshIndicator(
         onRefresh: () async {
-          return await bloc.refreshData(order.code);
+          bloc.refreshData(order.code);
         },
         child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -176,7 +176,6 @@ class QuotesListView extends StatelessWidget {
     );
   }
 }
-
 
 class _ToTopBtn extends StatelessWidget {
   @override

@@ -892,10 +892,8 @@ class QuoteModel extends AbstractOrderModel {
   /// 报价状态
   QuoteState state;
 
-  /// 需求订单号
-  String requirementOrderRef;
-
   /// 需求订单
+  @JsonKey(toJson: _requirementOrderToJson)
   RequirementOrderModel requirementOrder;
 
   /// 生产订单号
@@ -906,6 +904,7 @@ class QuoteModel extends AbstractOrderModel {
   DateTime expectedDeliveryDate;
 
   /// 报价工厂
+  @JsonKey(toJson: _factoryToJson)
   FactoryModel belongTo;
 
   /// 面料单价
@@ -937,7 +936,6 @@ class QuoteModel extends AbstractOrderModel {
     double unitPrice,
     this.state,
     this.requirementOrder,
-    this.requirementOrderRef,
     this.purchaseOrderCode,
     this.belongTo,
     this.attachments,
@@ -968,6 +966,13 @@ class QuoteModel extends AbstractOrderModel {
   static List<Map<String, dynamic>> _attachmentsToJson(
           List<MediaModel> attachments) =>
       attachments.map((attachment) => MediaModel.toJson(attachment)).toList();
+
+  static Map<String, dynamic> _requirementOrderToJson(
+          RequirementOrderModel model) =>
+      RequirementOrderModel.toJson(model);
+
+  static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
+      FactoryModel.toJson(model);
 }
 
 /// 生产进度
@@ -1056,6 +1061,9 @@ class ProofingModel extends OrderModel {
   ///发布者
   CompanyModel belongTo;
 
+  ///合作商信息
+  CompanyModel supplier;
+
   // ApparelProductModel product;
 
   QuoteModel order;
@@ -1075,6 +1083,7 @@ class ProofingModel extends OrderModel {
       int totalQuantity,
       double totalPrice,
       this.belongTo,
+      this.supplier,
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,

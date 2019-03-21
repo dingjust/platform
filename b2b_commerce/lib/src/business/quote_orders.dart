@@ -126,6 +126,7 @@ class QuoteOrdersList extends StatelessWidget {
         child: RefreshIndicator(
           onRefresh: () async {
             return await bloc.refreshData(status.code);
+
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
