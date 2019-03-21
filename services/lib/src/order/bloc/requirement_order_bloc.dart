@@ -42,75 +42,86 @@ class RequirementOrderBLoC extends BLoCBase {
 
   Stream<List<RequirementOrderModel>> get stream => _controller.stream;
 
-  filterByStatuses(String status) async {
-    //若没有数据则查询
-    if (_ordersMap[status].data.length == 0) {
-      //  分页拿数据，response.data;
-      //请求参数
-      Map data = {};
-      if (status != 'ALL') {
-        data = {
-          'statuses': [status]
-        };
-      }
-      Response<Map<String, dynamic>> response;
-      try {
-        response = await http$.post(OrderApis.requirementOrders,
-            data: data,
-            queryParameters: {
-              'page': _ordersMap[status].currentPage,
-              'size': _ordersMap[status].size
-            });
-      } on DioError catch (e) {
-        print(e);
-      }
+  //锁
+  bool lock = false;
 
-      if (response != null && response.statusCode == 200) {
-        RequirementOrdersResponse ordersResponse =
-            RequirementOrdersResponse.fromJson(response.data);
-        _ordersMap[status].totalPages = ordersResponse.totalPages;
-        _ordersMap[status].totalElements = ordersResponse.totalElements;
-        _ordersMap[status].data.clear();
-        _ordersMap[status].data.addAll(ordersResponse.content);
+  filterByStatuses(String status) async {
+    if (!lock) {
+      lock = true;
+      //若没有数据则查询
+      if (_ordersMap[status].data.isEmpty) {
+        //  分页拿数据，response.data;
+        //请求参数
+        Map data = {};
+        if (status != 'ALL') {
+          data = {
+            'statuses': [status]
+          };
+        }
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.requirementOrders,
+              data: data,
+              queryParameters: {
+                'page': _ordersMap[status].currentPage,
+                'size': _ordersMap[status].size
+              });
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          RequirementOrdersResponse ordersResponse =
+              RequirementOrdersResponse.fromJson(response.data);
+          _ordersMap[status].totalPages = ordersResponse.totalPages;
+          _ordersMap[status].totalElements = ordersResponse.totalElements;
+          _ordersMap[status].data.clear();
+          _ordersMap[status].data.addAll(ordersResponse.content);
+        }
       }
+      _controller.sink.add(_ordersMap[status].data);
+      lock = false;
     }
-    _controller.sink.add(_ordersMap[status].data);
   }
 
   loadingMoreByStatuses(String status) async {
-    //数据到底
-    if (_ordersMap[status].currentPage + 1 == _ordersMap[status].totalPages) {
-      //通知显示已经到底部
-      _bottomController.sink.add(true);
-    } else {
-      Map data = {};
-      if (status != 'ALL') {
-        data = {
-          'statuses': [status]
-        };
-      }
-      Response<Map<String, dynamic>> response;
-      try {
-        response = await http$.post(OrderApis.requirementOrders,
-            data: data,
-            queryParameters: {
-              'page': ++_ordersMap[status].currentPage,
-              'size': _ordersMap[status].size
-            });
-      } on DioError catch (e) {
-        print(e);
-      }
+    if (!lock) {
+      lock = true;
+      //数据到底
+      if (_ordersMap[status].currentPage + 1 == _ordersMap[status].totalPages) {
+        //通知显示已经到底部
+        _bottomController.sink.add(true);
+      } else {
+        Map data = {};
+        if (status != 'ALL') {
+          data = {
+            'statuses': [status]
+          };
+        }
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.requirementOrders,
+              data: data,
+              queryParameters: {
+                'page': ++_ordersMap[status].currentPage,
+                'size': _ordersMap[status].size
+              });
+        } on DioError catch (e) {
+          print(e);
+        }
 
-      if (response != null && response.statusCode == 200) {
-        RequirementOrdersResponse ordersResponse =
-            RequirementOrdersResponse.fromJson(response.data);
-        _ordersMap[status].totalPages = ordersResponse.totalPages;
-        _ordersMap[status].totalElements = ordersResponse.totalElements;
-        _ordersMap[status].data.addAll(ordersResponse.content);
+        if (response != null && response.statusCode == 200) {
+          RequirementOrdersResponse ordersResponse =
+              RequirementOrdersResponse.fromJson(response.data);
+          _ordersMap[status].totalPages = ordersResponse.totalPages;
+          _ordersMap[status].totalElements = ordersResponse.totalElements;
+          _ordersMap[status].data.addAll(ordersResponse.content);
+        }
       }
-    }
 //    _loadingController.sink.add(false);
-    _controller.sink.add(_ordersMap[status].data);
+      _controller.sink.add(_ordersMap[status].data);
+      lock = false;
+    }
   }
 
   //下拉刷新
@@ -118,29 +129,7 @@ class RequirementOrderBLoC extends BLoCBase {
     //重置信息
     _ordersMap[status].data.clear();
     _ordersMap[status].currentPage = 0;
-    //  分页拿数据，response.data;
-    //请求参数
-    Map data = {};
-    if (status != 'ALL') {
-      data = {
-        'statuses': [status]
-      };
-    }
-    Response<Map<String, dynamic>> response = await http$
-        .    post(OrderApis.requirementOrders, data: data, queryParameters: {
-      'page': _ordersMap[status].currentPage,
-      'size': _ordersMap[status].size
-    });
-
-    if (response.statusCode == 200) {
-      RequirementOrdersResponse ordersResponse =
-          RequirementOrdersResponse.fromJson(response.data);
-      _ordersMap[status].totalPages = ordersResponse.totalPages;
-      _ordersMap[status].totalElements = ordersResponse.totalElements;
-      _ordersMap[status].data.clear();
-      _ordersMap[status].data.addAll(ordersResponse.content);
-    }
-    _controller.sink.add(_ordersMap[status].data);
+    await filterByStatuses(status);
   }
 
   //页面控制

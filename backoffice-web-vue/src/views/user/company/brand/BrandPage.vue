@@ -2,7 +2,11 @@
   <div class="animated fadeIn content">
     <el-card>
       <brand-toolbar @onNew="onNew" @onSearch="onSearch"/>
-      <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
+      <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch">
+        <template slot="operations" slot-scope="props">
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
+        </template>
+      </brand-list>
     </el-card>
   </div>
 </template>
@@ -15,10 +19,12 @@
   import BrandToolbar from './toolbar/BrandToolbar';
   import BrandList from './list/BrandList';
   import BrandDetailsPage from './details/BrandDetailsPage';
+  import AddressForm from "../../../shared/user/address/AddressForm";
 
   export default {
     name: 'BrandPage',
     components: {
+      AddressForm,
       BrandToolbar,
       BrandList
     },
@@ -52,7 +58,8 @@
       },
     },
     data() {
-      return {};
+      return {
+      };
     },
     created() {
       this.onSearch();

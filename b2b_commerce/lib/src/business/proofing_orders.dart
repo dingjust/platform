@@ -206,10 +206,14 @@ class ProofingOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        //查询明细
+        ProofingModel detailModel =
+            await ProofingOrderRepository().proofingDetail(model.code);
+
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ProofingOrderDetailPage(
-                  model: model,
+                  model: detailModel,
                 )));
       },
       child: Container(
@@ -219,9 +223,17 @@ class ProofingOrderItem extends StatelessWidget {
           children: <Widget>[
             _buildHeader(),
             _buildEntries(),
-            model.status == ProofingStatus.PENDING_PAYMENT
-                ? _buildSummary()
-                : Container()
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 80,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: _buildSummary(),
+                )
+              ],
+            )
           ],
         ),
         decoration: BoxDecoration(
@@ -264,12 +276,17 @@ class ProofingOrderItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  '工厂：${model.factory.name}',
-                  style: TextStyle(fontSize: 15),
+                //TODO 公司信息字段后续待修改
+                Container(
+                  width: 200,
+                  child: Text(
+                    '${model.supplier.name}',
+                    style: TextStyle(fontSize: 15),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Text(
-                  '订单创建时间：${DateFormatUtil.format(model.creationTime)}',
+                  '${DateFormatUtil.format(model.creationTime)}',
                   style: TextStyle(fontSize: 15),
                 ),
               ],
@@ -281,6 +298,12 @@ class ProofingOrderItem extends StatelessWidget {
   }
 
   Widget _buildEntries() {
+    //计算总数
+    int sum = 0;
+    model.entries.forEach((entry) {
+      sum = sum + entry.quantity;
+    });
+
     return Container(
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
@@ -292,7 +315,8 @@ class ProofingOrderItem extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: NetworkImage(model.product.thumbnail.url),
+                        image: NetworkImage(
+                            '${GlobalConfigs.IMAGE_BASIC_URL}${model.product.thumbnail.url}'),
                         fit: BoxFit.cover,
                       )),
                 )
@@ -317,17 +341,12 @@ class ProofingOrderItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  model.product.name != null
-                      ? Text(
-                          model.product.name,
-                          style: TextStyle(fontSize: 15),
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      : Text(
-                          '暂无产品',
-                          style: TextStyle(fontSize: 15, color: Colors.red),
-                        ),
-                  model.product.skuID != null
+                  Text(
+                    model.product.name,
+                    style: TextStyle(fontSize: 15),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  model.product.skuID!= null
                       ? Container(
                           padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                           decoration: BoxDecoration(
@@ -345,7 +364,7 @@ class ProofingOrderItem extends StatelessWidget {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${model.product.category.name}   ${model.totalQuantity}件",
+                      "${model.product.category.name}   ${sum}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -361,15 +380,16 @@ class ProofingOrderItem extends StatelessWidget {
   }
 
   Widget _buildSummary() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
+    List<Widget> buttons;
+    //品牌端显示
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      if (model.status == ProofingStatus.PENDING_PAYMENT) {
+        buttons = <Widget>[
           FlatButton(
               onPressed: () {},
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Colors.red,
+              color: Color.fromRGBO(255, 70, 70, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '取消订单',
@@ -379,14 +399,96 @@ class ProofingOrderItem extends StatelessWidget {
               onPressed: () {},
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 149, 22, 1),
+              color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
-                '  去支付  ',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                '去支付',
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
               )),
-        ],
-      ),
+        ];
+      } else if (model.status == ProofingStatus.SHIPPED) {
+        buttons = <Widget>[
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(150, 150, 150, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '查看物流',
+                style: TextStyle(
+                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 16),
+              )),
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 245, 193, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '确认收货',
+                style: TextStyle(
+                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+              )),
+        ];
+      } else {
+        return Container();
+      }
+    } //工厂端显示
+    else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      if (model.status == ProofingStatus.PENDING_PAYMENT) {
+        buttons = [
+          Container(),
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
+                  borderRadius: BorderRadius.circular(20)),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '修改订单',
+                style: TextStyle(
+                    color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+              )),
+        ];
+      } else if (model.status == ProofingStatus.PENDING_DELIVERY) {
+        buttons = <Widget>[
+          Container(),
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 245, 193, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '确认发货',
+                style: TextStyle(
+                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+              )),
+        ];
+      } else if (model.status == ProofingStatus.SHIPPED) {
+        buttons = [
+          Container(),
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(150, 150, 150, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '查看物流',
+                style: TextStyle(
+                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 16),
+              )),
+        ];
+      }
+    }
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, children: buttons),
     );
   }
 }

@@ -19,4 +19,22 @@ class ProofingOrderRepository {
       return null;
     }
   }
+
+  ///获取打样单明细
+  Future<ProofingModel> proofingDetail(String code) async {
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.get(
+        OrderApis.proofingDetail(code),
+      );
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      ProofingModel model = ProofingModel.fromJson(response.data);
+      return model;
+    } else {
+      return null;
+    }
+  }
 }

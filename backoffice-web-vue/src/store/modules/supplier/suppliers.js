@@ -13,11 +13,27 @@ const state = {
   },
   formData: {
     id: null,
-    code: '',
+    uid: '',
     name: '',
-    description: '',
-    sequence: 0,
-    active: true
+    registrationDate: null,
+    scaleRange: '',
+    address: '',
+    styles: [],
+    brand: '',
+    ageRanges: [],
+    priceRange1s: [],
+    priceRange2s: [],
+    adeptAtCategories: [],
+    contactPhone: '',
+    contactPerson: '',
+    accountUid: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+    taxNumber: '',
+    bankOfDeposit: '',
+    phone: '',
+    cooperativeBrand: ''
   }
 };
 
@@ -29,31 +45,30 @@ const mutations = {
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url,keyword, page, size}) {
+  async search({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post(url, {
-      keyword: state.keyword},
-      {
+    const response = await http.get(url, {
+      keyword: state.keyword
+    }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
-    console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state},{url}) {
+  refresh({dispatch, commit, state}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {url,keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 

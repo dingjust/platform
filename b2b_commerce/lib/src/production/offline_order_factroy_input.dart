@@ -4,8 +4,9 @@ import 'package:widgets/widgets.dart';
 
 
 class OfflineOrderFactroyInput extends StatefulWidget{
-  FactoryModel model;
-  OfflineOrderFactroyInput({this.model});
+  CompanyModel model;
+  String type;
+  OfflineOrderFactroyInput({this.model,this.type});
   _OfflineOrderFactroyInputState createState() => _OfflineOrderFactroyInputState();
 }
 
@@ -16,7 +17,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
   final TextEditingController _factoryController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  FactoryModel factory = new FactoryModel();
+  CompanyModel company = new CompanyModel();
 
   @override
   void initState() {
@@ -25,7 +26,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
       _nameController.text = widget.model.contactPerson;
       _phoneController.text = widget.model.contactPhone;
 
-      factory = widget.model;
+      company = widget.model;
     }
     super.initState();
   }
@@ -34,7 +35,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text('工厂信息'),
+            title: Text('${widget.type}信息'),
             elevation: 0.5,
             brightness: Brightness.light,
             centerTitle: true,
@@ -52,7 +53,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
                   ),
                   onTap: () async {
                     //带值返回上一页
-                    Navigator.of(context).pop(factory);
+                    Navigator.of(context).pop(company);
                   }
               )
             ]
@@ -78,11 +79,11 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
               focusNode: _factoryFocusNode,
               controller: _factoryController,
               autofocus: true,
-              leadingText: '工厂名称',
-              hintText: widget.model == null || widget.model.name == null ? '请输入工厂名称': widget.model.name,
+              leadingText: '${widget.type}名称',
+              hintText: widget.model == null || widget.model.name == null ? '请输入${widget.type}名称': widget.model.name,
               onChanged: (value) {
                 setState(() {
-                  factory.name = value;
+                  company.name = value;
                 });
               },
             ),
@@ -97,7 +98,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
               hintText: widget.model == null || widget.model.contactPerson == null ?'请输入联系人名':widget.model.contactPerson,
               onChanged: (value) {
                 setState(() {
-                  factory.contactPerson = value;
+                  company.contactPerson = value;
                 });
               },
             ),
@@ -113,7 +114,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
               inputType: TextInputType.phone,
               onChanged: (value) {
                 setState(() {
-                  factory.contactPhone = value;
+                  company.contactPhone = value;
                 });
               },
             ),

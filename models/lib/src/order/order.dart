@@ -892,10 +892,8 @@ class QuoteModel extends AbstractOrderModel {
   /// 报价状态
   QuoteState state;
 
-  /// 需求订单号
-  String requirementOrderRef;
-
   /// 需求订单
+  @JsonKey(toJson: _requirementOrderToJson)
   RequirementOrderModel requirementOrder;
 
   /// 生产订单号
@@ -906,6 +904,7 @@ class QuoteModel extends AbstractOrderModel {
   DateTime expectedDeliveryDate;
 
   /// 报价工厂
+  @JsonKey(toJson: _factoryToJson)
   FactoryModel belongTo;
 
   /// 面料单价
@@ -937,7 +936,6 @@ class QuoteModel extends AbstractOrderModel {
     double unitPrice,
     this.state,
     this.requirementOrder,
-    this.requirementOrderRef,
     this.purchaseOrderCode,
     this.belongTo,
     this.attachments,
@@ -968,6 +966,13 @@ class QuoteModel extends AbstractOrderModel {
   static List<Map<String, dynamic>> _attachmentsToJson(
           List<MediaModel> attachments) =>
       attachments.map((attachment) => MediaModel.toJson(attachment)).toList();
+
+  static Map<String, dynamic> _requirementOrderToJson(
+          RequirementOrderModel model) =>
+      RequirementOrderModel.toJson(model);
+
+  static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
+      FactoryModel.toJson(model);
 }
 
 /// 生产进度
@@ -1056,10 +1061,10 @@ class ProofingModel extends OrderModel {
   ///发布者
   CompanyModel belongTo;
 
-  ///生产工厂
-  FactoryModel factory;
+  ///合作商信息
+  CompanyModel supplier;
 
-  ApparelProductModel product;
+  // ApparelProductModel product;
 
   QuoteModel order;
 
@@ -1072,17 +1077,20 @@ class ProofingModel extends OrderModel {
   ///  报价单号
   String quoteRef;
 
+  /// 商品信息
+  @JsonKey(toJson: _productToJson, fromJson: _productFromJson)
+  ProductModel product;
+
   ProofingModel(
       {String code,
       this.status,
       int totalQuantity,
       double totalPrice,
       this.belongTo,
-      this.factory,
+      this.supplier,
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
-      this.product,
       this.order,
       double unitPrice,
       this.requirementOrderRef,
@@ -1105,6 +1113,12 @@ class ProofingModel extends OrderModel {
   static List<Map<String, dynamic>> _entriesToJson(
           List<ProofingEntryModel> entries) =>
       entries.map((entry) => ProofingEntryModel.toJson(entry)).toList();
+
+  static Map<String, dynamic> _productToJson(ProductModel product) =>
+      ProductModel.toJson(product);
+
+  static ProductModel _productFromJson(Map<String, dynamic> json) =>
+      ProductModel.fromJson(json);
 }
 
 /// 打样订单行

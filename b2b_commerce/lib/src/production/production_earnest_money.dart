@@ -199,7 +199,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
         child: Container(
           child: ListTile(
             leading: Text(
-              '定金金额',
+              '尾款金额',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,

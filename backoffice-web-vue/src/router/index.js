@@ -205,6 +205,22 @@ const router = new Router({
             }
           ]
         },
+        {
+          path: '/supplier',
+          name: '供应商管理',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [
+            {
+              path: '/supplier',
+              name: '供应商',
+              component: () => import(/* webpackChunkName: 'supplier' */ '@/views/user/company/supplier/SupplierPage')
+            }
+          ]
+        },
       ]
     },
     {
