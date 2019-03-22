@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
+import 'package:b2b_commerce/src/business/quote_orders.dart';
 import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
 import 'package:core/core.dart';

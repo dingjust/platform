@@ -23,9 +23,6 @@ import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
 import '../home/account/login.dart';
 import '../my/account/register.dart';
-import '../my/account/register_brand.dart';
-import '../my/account/register_customer.dart';
-import '../my/account/register_factory.dart';
 import '../my/my_account.dart';
 import '../my/my_addresses.dart';
 import '../my/my_cart.dart';
@@ -104,7 +101,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_ACCOUNT: (context) => MyAccountPage(),
     ROUTE_MY_BRAND: (context) => MyBrandPage(),
     ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
-    ROUTE_MY_BRAND_CERTIFICATE:(context) => MyBrandCertificatePage(),
+    ROUTE_MY_BRAND_CERTIFICATE: (context) => MyBrandCertificatePage(),
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
     ROUTE_MY_CART: (context) => MyCartPage(),
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
@@ -112,9 +109,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),
     ROUTE_MY_SETTINGS: (context) => MySettingsPage(),
     ROUTE_MY_REGISTER: (context) => RegisterPage(),
-    ROUTE_MY_REGISTER_BRAND: (context) => RegisterBrandPage(),
-    ROUTE_MY_REGISTER_FACTORY: (context) => RegisterFactoryPage(),
-    ROUTE_MY_REGISTER_CUSTOMER: (context) => RegisterCustomerPage(),
     ROUTE_REQUIREMENT_QUOTE_DETAIL: (context) => RequirementQuoteDetailPage(),
     ROUTE_DELIVERY: (context) => DeliveryPage(),
     ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),

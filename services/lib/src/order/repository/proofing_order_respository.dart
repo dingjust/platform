@@ -37,4 +37,21 @@ class ProofingOrderRepository {
       return null;
     }
   }
+
+  ///取消订单
+  Future<String> proofingCancelling(String code) async {
+    Response response;
+    try {
+      response = await http$.put(
+        OrderApis.proofingCancelling(code),
+      );
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return 'successful';
+    } else {
+      return null;
+    }
+  }
 }

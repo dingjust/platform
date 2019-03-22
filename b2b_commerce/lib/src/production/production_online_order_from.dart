@@ -779,16 +779,16 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
       String response = await PurchaseOrderRepository()
           .onlinePurchaseOrder(widget.quoteModel.code, purchaseOrder);
       if (response != null && response != '') {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
         //根据code查询明
         PurchaseOrderModel model =
             await PurchaseOrderRepository().getPurchaseOrderDetail(response);
         if (model != null) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => PurchaseOrderDetailPage(
-                    order: model,
-                  )));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => PurchaseOrderDetailPage(
+                        order: model,
+                      )),
+              ModalRoute.withName('/'));
         }
       }
     } catch (e) {

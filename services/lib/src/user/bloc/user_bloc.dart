@@ -42,7 +42,6 @@ class UserBLoC extends BLoCBase {
 
   var _controller = StreamController<UserModel>.broadcast();
 
-
   Stream<UserModel> get stream => _controller.stream;
 
   StreamController _loginResultController =
@@ -103,6 +102,8 @@ class UserBLoC extends BLoCBase {
     _user = UserModel.empty();
     //  清理本地记录
     LocalStorage.remove(GlobalConfigs.REFRESH_TOKEN_KEY);
+    // 清除授权
+    http$.removeAuthorization();
     _controller.sink.add(_user);
   }
 

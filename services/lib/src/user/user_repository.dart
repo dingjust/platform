@@ -6,4 +6,6 @@ abstract class UserRepository {
   Future<BrandModel> getBrand(String uid);
 
   Future<FactoryModel> getFactory(String uid);
+
+  Future<String> register({String type, CompanyRegisterDTO form});
 }
