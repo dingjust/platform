@@ -1,10 +1,10 @@
 <template>
   <div class="animated fadeIn">
-    <employee-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <employee-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
     <div class="pt-2"></div>
-    <employee-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
+    <employee-form ref="form" :slot-data="slotData" :read-only="isNewlyCreated"/>
     <div class="pt-2"></div>
-    <employee-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <employee-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
   </div>
 </template>
 
@@ -34,17 +34,23 @@
       },
       async _onSubmit() {
         let formData = this.slotData;
+        let url = this.apis().createEmployee();
+        let result = {};
+        if(formData.id&&formData.id!=null){
+          url = this.apis().updateEmployee();
+          result = await this.$http.put(url, formData);
 
-        const url = this.apis().createEmployee();
-        const result = await this.$http.post(url, formData);
+        }else {
+          result = await this.$http.post(url, formData);
+        }
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success('品牌创建成功');
+        this.$message.success('保存成功');
         this.$set(this.slotData, 'code', result);
-        this.refresh();
+        this.refresh(this.apis().getEmployees());
         this.fn.closeSlider(true);
       }
     },

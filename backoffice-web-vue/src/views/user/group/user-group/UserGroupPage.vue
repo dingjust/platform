@@ -45,10 +45,10 @@
           return;
         }
 
-        this.fn.openSlider('员工：' + item.name, UserGroupDetailsPage, result);
+        this.fn.openSlider('用户组：' + item.name, UserGroupDetailsPage, result);
       },
       onNew(formData) {
-        this.fn.openSlider('创建员工', UserGroupDetailsPage, formData);
+        this.fn.openSlider('创建用户组', UserGroupDetailsPage, formData);
       },
     },
     data() {

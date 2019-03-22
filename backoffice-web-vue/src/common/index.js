@@ -81,7 +81,10 @@ const COMMON_APIS = {
     return '/b2b/brands/getSuppliers';
   },
   createEmployee() {
-    return '/b2b/employees';
+    return '/b2b/employees/create';
+  },
+  updateEmployee(uid) {
+    return '/b2b/employees/update/'+uid;
   },
   getEmployees() {
     return '/b2b/employees';
@@ -120,16 +123,22 @@ const COMMON_APIS = {
     return '/b2b/b2bCustomers/' + uid;
   },
   createRole() {
-    return '/b2b/roles';
+    return '/b2b/roles/create';
   },
   getRoles() {
+    return '/b2b/roles';
+  },
+  getAllRoles() {
     return '/b2b/roles';
   },
   getRole(uid) {
     return '/b2b/roles/' + uid;
   },
   createUserGroup() {
-    return '/b2b/userGroups';
+    return '/b2b/userGroups/create';
+  },
+  updateUserGroup() {
+    return '/b2b/userGroups/update';
   },
   getUserGroups() {
     return '/b2b/userGroups';
