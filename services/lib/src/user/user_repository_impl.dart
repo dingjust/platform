@@ -20,4 +20,20 @@ class UserRepositoryImpl implements UserRepository {
     Response response = await http$.get(Apis.factory(uid));
     return FactoryModel.fromJson(response.data);
   }
+
+  ///注册
+  Future<String> register({String type, CompanyRegisterDTO form}) async {
+    Response response;
+    try {
+      response = await http$.post(UserApis.register(type),
+          data: CompanyRegisterDTO.toJson(form));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return 'successful';
+    } else {
+      return null;
+    }
+  }
 }

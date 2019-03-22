@@ -431,8 +431,6 @@ class FactoryModel extends B2BUnitModel {
           cooperativeBrand: cooperativeBrand,
           qq: qq,
           wechat: wechat,
-          qq: qq,
-          wechat: wechat,
           businessRegistrationNo: businessRegistrationNo,
           certificateOfLegal: certificateOfLegal,
           legalRepresentative: legalRepresentative,
