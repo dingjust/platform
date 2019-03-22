@@ -257,6 +257,7 @@ class EditableAttachments extends StatefulWidget {
   EditableAttachments(
       {Key key,
       @required this.list,
+      this.editable = true,
       this.width = 320,
       this.height = 80,
       this.imageWidth = 60,
@@ -267,6 +268,8 @@ class EditableAttachments extends StatefulWidget {
       : super(key: key);
 
   final List<MediaModel> list;
+  //是否可编辑
+  final bool editable;
 
   final double width;
   final double height;
@@ -436,7 +439,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                     context, '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}');
               },
               onLongPress: () {
-                _deleteFile(model);
+                if(widget.editable) _deleteFile(model);
               },
             );
         }

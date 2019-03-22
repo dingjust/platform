@@ -15,6 +15,8 @@ class TextFieldComponent extends StatefulWidget {
   EdgeInsets padding;
   bool enabled;
   TextInputAction textInputAction;
+  TextAlign textAlign;
+  Color leadingColor;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -24,7 +26,7 @@ class TextFieldComponent extends StatefulWidget {
     this.helperText,
     this.leadingWidth = 75,
     this.controller,
-    @required this.focusNode,
+    this.focusNode,
     this.inputType,
     this.trailing,
     this.onChanged,
@@ -33,6 +35,8 @@ class TextFieldComponent extends StatefulWidget {
     this.padding,
     this.enabled,
     this.textInputAction,
+    this.textAlign = TextAlign.right,
+    this.leadingColor = Colors.black,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
@@ -43,17 +47,19 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   void initState() {
-    widget.focusNode.addListener(() {
-      if (widget.focusNode.hasFocus) {
-        setState(() {
-          _dividerColor = Color.fromRGBO(255,214,12, 1);
-        });
-      } else {
-        setState(() {
-          _dividerColor = Colors.grey[400];
-        });
-      }
-    });
+    if(widget.focusNode != null){
+      widget.focusNode.addListener(() {
+        if (widget.focusNode.hasFocus) {
+          setState(() {
+            _dividerColor = Color.fromRGBO(255,214,12, 1);
+          });
+        } else {
+          setState(() {
+            _dividerColor = Colors.grey[400];
+          });
+        }
+      });
+    }
 
     if (widget.leadingText == null || widget.leadingText == '') {
       widget.leadingWidth = 0.0;
@@ -95,7 +101,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                 offstage: widget.leadingText == null,
                 child: Container(
                   width: widget.leadingWidth,
-                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16),),
+                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16,color: widget.leadingColor),),
                 ),
               ),
               Expanded(
@@ -113,31 +119,34 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   enabled: widget.enabled,
                   onEditingComplete: widget.onEditingComplete,
                   textInputAction: widget.textInputAction,
-                  textAlign: TextAlign.right,
+                  textAlign: widget.textAlign,
                 ),
               )
             ],
           ),
         ),
-        Padding(
-          padding: widget.padding != null
-              ? EdgeInsets.symmetric(horizontal: widget.padding.horizontal)
-              : EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Divider(
-                height: 0,
-                color: _dividerColor,
-              ),
-              Offstage(
-                offstage: widget.helperText == null,
-                child: Text(
-                  widget.helperText ?? '',
-                  style: TextStyle(color: Colors.red),
+        Offstage(
+          offstage: widget.focusNode == null,
+          child: Padding(
+            padding: widget.padding != null
+                ? EdgeInsets.symmetric(horizontal: widget.padding.horizontal)
+                : EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Divider(
+                  height: 0,
+                  color: _dividerColor,
                 ),
-              ),
-            ],
+                Offstage(
+                  offstage: widget.helperText == null,
+                  child: Text(
+                    widget.helperText ?? '',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
