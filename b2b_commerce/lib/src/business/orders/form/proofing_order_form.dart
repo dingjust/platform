@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
+import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -367,24 +368,37 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   ProofingModel model = ProofingModel();
                   model.entries = productEntries.map((entry) {
                     ApparelSizeVariantProductModel variantProduct = entry.model;
-                    variantProduct.thumbnail = product.thumbnail;
-                    variantProduct.thumbnails = product.thumbnails;
-                    variantProduct.images = product.images;
+                    variantProduct
+                      ..thumbnail = product.thumbnail
+                      ..thumbnails = product.thumbnails
+                      ..images = product.images;
                     return ProofingEntryModel(
                       quantity: int.parse(entry.controller.text),
                       product: variantProduct,
                     );
                   }).toList();
-                  model.unitPrice = double.parse(_unitPriceController.text);
-                  model.totalPrice = totalPrice;
-                  model.totalQuantity = totalQuantity;
-                  model.remarks = _remarksController.text;
+                  model
+                    ..unitPrice = double.parse(_unitPriceController.text)
+                    ..totalPrice = totalPrice
+                    ..totalQuantity = totalQuantity
+                    ..remarks = _remarksController.text;
                   String response = await ProofingOrderRepository()
                       .proofingCreate(widget.quoteModel.code, model);
                   //TODOS:跳转到打样订单详情
+
                   if (response != null && response != '') {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    //查询明细
+                    ProofingModel detailModel = await ProofingOrderRepository()
+                        .proofingDetail(response);
+
+                    if (detailModel != null) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => ProofingOrderDetailPage(
+                                    model: detailModel,
+                                  )),
+                          ModalRoute.withName('/'));
+                    }
                   }
                 },
               ),
