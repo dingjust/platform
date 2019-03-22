@@ -12,7 +12,8 @@ For help on editing package code, view the [documentation](https://flutter.io/de
 
 ### 一次性生成
 ``
-flutter packages pub run build_runner build
+flutter packages pub run build_runner build --delete-conflicting-outputs
+
 ``
 ### 持续生成
 ``
