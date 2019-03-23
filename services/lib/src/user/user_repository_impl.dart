@@ -21,6 +21,14 @@ class UserRepositoryImpl implements UserRepository {
     return FactoryModel.fromJson(response.data);
   }
 
+  @override
+  Future<String> applyCertification(CompanyModel form) async{
+    Response response = await http$.put(Apis.applyCertification,data: CompanyModel.toJson(form));
+    return response.data;
+  }
+
+
+
   ///注册
   Future<String> register({String type, CompanyRegisterDTO form}) async {
     Response response;

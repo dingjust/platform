@@ -4,11 +4,11 @@ import 'package:models/models.dart';
 
 part 'product.g.dart';
 
-///产品状态
+///审核状态
 enum ArticleApprovalStatus {
-  CHECK,
-  APPROVED,
-  UNAPPROVED,
+  check,
+  approved,
+  unapproved,
 }
 
 /// 样衣归还状态

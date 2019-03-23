@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/business/products/form/prices_field.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -53,7 +55,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 //        builder: (BuildContext context,
 //            AsyncSnapshot<ApparelProductModel> snapshot) {
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         Navigator.pop(context);
         return Future.value(false);
       },
@@ -68,21 +70,35 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 '确定',
                 style: TextStyle(color: Color(0xffFF9516)),
               ),
-              onPressed: () async{
-                if(widget.item.name == null){
-                  showDialog(context: context,builder: (context)=>AlertDialog(content: Text('请输入商品名称'),));
+              onPressed: () async {
+                if (widget.item.name == null) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            content: Text('请输入商品名称'),
+                          ));
                   return;
-                }else if(widget.item.skuID == null){
-                  showDialog(context: context,builder: (context)=>AlertDialog(content: Text('请输入商品货号'),));
+                } else if (widget.item.skuID == null) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            content: Text('请输入商品货号'),
+                          ));
                   return;
-                }else if(widget.item.category == null){
-                  showDialog(context: context,builder: (context)=>AlertDialog(content: Text('请输入商品类别'),));
+                } else if (widget.item.category == null) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            content: Text('请输入商品类别'),
+                          ));
                   return;
                 }
-                if(widget.item.attributes == null) widget.item.attributes = ApparelProductAttributesModel();
-                if(widget.isCreate){
-                  String code = await ProductRepositoryImpl().create(widget.item);
-                  if(code != null){
+                if (widget.item.attributes == null)
+                  widget.item.attributes = ApparelProductAttributesModel();
+                if (widget.isCreate) {
+                  String code =
+                      await ProductRepositoryImpl().create(widget.item);
+                  if (code != null) {
                     widget.item.name = null;
                     widget.item.skuID = null;
                     widget.item.attributes = null;
@@ -93,7 +109,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     widget.item.gramWeight = null;
                     widget.item.images = null;
                   }
-                }else{
+                } else {
                   await ProductRepositoryImpl().update(widget.item);
                 }
 
@@ -115,7 +131,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 controller: _nameController,
                 leadingText: '商品名称',
                 hintText: '请输入商品名称',
-                onChanged: (value){
+                onChanged: (value) {
                   widget.item.name = value;
                 },
               ),
@@ -124,7 +140,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 controller: _skuIDController,
                 leadingText: '商品货号',
                 hintText: '请输入商品货号',
-                onChanged: (value){
+                onChanged: (value) {
                   widget.item.skuID = value;
                 },
               ),
@@ -135,19 +151,26 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 controller: _brandController,
                 leadingText: '品牌',
                 hintText: '请输入品牌',
-                onChanged: (value){
+                onChanged: (value) {
                   widget.item.brand = value;
                 },
               ),
-              TextFieldComponent(
-                focusNode: _priceFocusNode,
-                controller: _priceController,
-                inputType: TextInputType.number,
-                leadingText: '供货价',
-                hintText: '请输入供货价',
-                onChanged: (value){
-                  widget.item.price = double.parse(value);
-                },
+              Offstage(
+                offstage: UserBLoC.instance.currentUser.type != UserType.BRAND,
+                child: TextFieldComponent(
+                  focusNode: _priceFocusNode,
+                  controller: _priceController,
+                  inputType: TextInputType.number,
+                  leadingText: '供货价',
+                  hintText: '请输入供货价',
+                  onChanged: (value) {
+                    widget.item.price = double.parse(value);
+                  },
+                ),
+              ),
+              Offstage(
+                offstage: UserBLoC.instance.currentUser.type != UserType.FACTORY,
+                child: PricesField(widget.item),
               ),
               TextFieldComponent(
                 focusNode: _gramWeightFocusNode,
@@ -155,7 +178,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 inputType: TextInputType.number,
                 leadingText: '重量',
                 hintText: '请输入重量',
-                onChanged: (value){
+                onChanged: (value) {
                   widget.item.gramWeight = double.parse(value);
                 },
               ),

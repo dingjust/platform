@@ -3,15 +3,15 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class MyBrandBaseFormPage extends StatefulWidget {
-  BrandModel brand;
-  MyBrandBaseFormPage(this.brand);
+class MyFactoryBaseFormPage extends StatefulWidget {
+  FactoryModel factory;
+  MyFactoryBaseFormPage(this.factory);
 
   @override
-  State createState() => MyBrandBaseFormPageState();
+  State createState() => MyFactoryBaseFormPageState();
 }
 
-class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
+class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _brandController = TextEditingController();
   TextEditingController _cooperativeBrandController = TextEditingController();
@@ -56,19 +56,13 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
             SizedBox(height: 3,),
             Container(
               color: Colors.white,
-              child: TextFieldComponent(
-                leadingText: '品牌名称',
-                controller: _brandController,
-                leadingColor: Colors.grey,
-              ),
-            ),
-            SizedBox(height: 3,),
-            Container(
-              color: Colors.white,
-              child: TextFieldComponent(
-                leadingText: '合作品牌',
-                controller: _cooperativeBrandController,
-                leadingColor: Colors.grey,
+              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+              child: Row(
+                children: <Widget>[
+                  Expanded(child: Text('月均产能',style: TextStyle(color: Colors.grey,fontSize: 16,),)),
+                  Text(widget.factory.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.factory.scaleRange]),
+                  Icon(Icons.chevron_right),
+                ],
               ),
             ),
             SizedBox(height: 3,),
@@ -78,7 +72,19 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(child: Text('产值规模',style: TextStyle(color: Colors.grey,fontSize: 16,),)),
-                  Text(widget.brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.brand.scaleRange]),
+                  Text(widget.factory.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.factory.scaleRange]),
+                  Icon(Icons.chevron_right),
+                ],
+              ),
+            ),
+            SizedBox(height: 3,),
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+              child: Row(
+                children: <Widget>[
+                  Expanded(child: Text('生产大类',style: TextStyle(color: Colors.grey,fontSize: 16,),)),
+                  Text(formatCategorySelectText(widget.factory.categories),),
                   Icon(Icons.chevron_right),
                 ],
               ),
@@ -90,57 +96,30 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(child: Text('优势类目',style: TextStyle(color: Colors.grey,fontSize: 16,),)),
-                  Text(formatCategorySelectText(widget.brand.adeptAtCategories),),
+                  Text(formatCategorySelectText(widget.factory.adeptAtCategories),),
                   Icon(Icons.chevron_right),
                 ],
               ),
             ),
             SizedBox(height: 3,),
+//            Container(
+////              color: Colors.white,
+////              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+////              child: Row(
+////                children: <Widget>[
+////                  Expanded(child: Text('风格',style: TextStyle(color: Colors.grey,fontSize: 16,),)),
+////                  Text(formatEnumSelectsText(widget.factory.styles, StyleEnum, 4),),
+////                  Icon(Icons.chevron_right),
+////                ],
+////              ),
+////            ),
+////            SizedBox(height: 3,),
             Container(
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-              child: Row(
-                children: <Widget>[
-                  Expanded(child: Text('风格',style: TextStyle(color: Colors.grey,fontSize: 16,),)),
-                  Text(formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),),
-                  Icon(Icons.chevron_right),
-                ],
-              ),
-            ),
-            SizedBox(height: 3,),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-              child: Row(
-                children: <Widget>[
-                  Expanded(child: Text('年龄段',style: TextStyle(color: Colors.grey,fontSize: 16,),)),
-                  Text( formatAgeRangesText(widget.brand.ageRanges),),
-                  Icon(Icons.chevron_right),
-                ],
-              ),
-            ),
-            SizedBox(height: 3,),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-              child: Row(
-                children: <Widget>[
-                  Expanded(child: Text('春夏款价格端',style: TextStyle(color: Colors.grey,fontSize: 16,),)),
-                  Text(formatPriceRangesText(widget.brand.priceRange1s),),
-                  Icon(Icons.chevron_right),
-                ],
-              ),
-            ),
-            SizedBox(height: 3,),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-              child: Row(
-                children: <Widget>[
-                  Expanded(child: Text('秋冬款价格端',style: TextStyle(color: Colors.grey,fontSize: 16,),)),
-                  Text(formatPriceRangesText(widget.brand.priceRange2s),),
-                  Icon(Icons.chevron_right),
-                ],
+              child: TextFieldComponent(
+                leadingText: '合作品牌商',
+                controller: _cooperativeBrandController,
+                leadingColor: Colors.grey,
               ),
             ),
           ],

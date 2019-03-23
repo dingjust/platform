@@ -7,5 +7,8 @@ abstract class UserRepository {
 
   Future<FactoryModel> getFactory(String uid);
 
+  //公司认证
+  Future<String> applyCertification(CompanyModel form);
+
   Future<String> register({String type, CompanyRegisterDTO form});
 }

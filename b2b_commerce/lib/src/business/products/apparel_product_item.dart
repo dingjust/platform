@@ -26,9 +26,9 @@ class ApparelProductItemState extends State<ApparelProductItem> {
   void initState() {
     _isRecommend = widget.item.isRecommend;
 
-    if (widget.item.approvalStatus == ArticleApprovalStatus.APPROVED) {
+    if (widget.item.approvalStatus == ArticleApprovalStatus.approved) {
       _approvalStatusText = '下架';
-    } else if (widget.item.approvalStatus == ArticleApprovalStatus.UNAPPROVED) {
+    } else if (widget.item.approvalStatus == ArticleApprovalStatus.unapproved) {
       _approvalStatusText = '上架';
     }
 

@@ -64,6 +64,7 @@ class AddressFormState extends State<AddressFormPage> {
         leadingText: '联系人',
         hintText: '请输入联系人',
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+        dividerPadding: EdgeInsets.symmetric(),
       ),
       TextFieldComponent(
         focusNode: _cellphoneFocusNode,
@@ -71,6 +72,7 @@ class AddressFormState extends State<AddressFormPage> {
         leadingText: '联系号码',
         hintText: '请输入联系号码',
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+        dividerPadding: EdgeInsets.symmetric(),
       ),
       ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 0),
@@ -93,6 +95,7 @@ class AddressFormState extends State<AddressFormPage> {
         leadingText: '详细地址',
         hintText: '道路、门牌号、小区、楼栋号、单元室等',
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+        dividerPadding: EdgeInsets.symmetric(),
       ),
       ListTile(
         title: Text('设为默认地址'),

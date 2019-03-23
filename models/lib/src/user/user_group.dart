@@ -59,7 +59,7 @@ class CompanyModel extends UserGroupModel {
   String certificateOfLegal;
 
   //认证证件
-  List<MediaModel> certificate;
+  List<MediaModel> certificates;
 
   //联系人
   String contactPerson;
@@ -79,6 +79,9 @@ class CompanyModel extends UserGroupModel {
   //企业类型
   CompanyType type;
 
+  //认证状态
+  ArticleApprovalStatus approvalStatus;
+
   CompanyModel({
     MediaModel profilePicture,
     String uid,
@@ -91,7 +94,7 @@ class CompanyModel extends UserGroupModel {
     this.registrationDate,
     this.taxNumber,
     this.bankOfDeposit,
-    this.certificate,
+    this.certificates,
     this.contactPhone,
     this.contactPerson,
     this.cooperativeBrand,
@@ -101,6 +104,7 @@ class CompanyModel extends UserGroupModel {
     this.certificateOfLegal,
     this.legalRepresentative,
     this.type,
+    this.approvalStatus,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -131,7 +135,7 @@ class OrgUnitModel extends CompanyModel {
     DateTime registrationDate,
     String taxNumber,
     String bankOfDeposit,
-    List<MediaModel> certificate,
+    List<MediaModel> certificates,
     String contactPerson,
     String contactPhone,
     String cooperativeBrand,
@@ -141,6 +145,7 @@ class OrgUnitModel extends CompanyModel {
     String legalRepresentative,
     String certificateOfLegal,
     CompanyType type,
+    ArticleApprovalStatus approvalStatus,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -154,7 +159,7 @@ class OrgUnitModel extends CompanyModel {
           registrationDate: registrationDate,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
-          certificate: certificate,
+          certificates: certificates,
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
@@ -164,6 +169,7 @@ class OrgUnitModel extends CompanyModel {
           certificateOfLegal: certificateOfLegal,
           legalRepresentative: legalRepresentative,
           type: type,
+          approvalStatus: approvalStatus,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -192,7 +198,7 @@ class B2BUnitModel extends OrgUnitModel {
     DateTime registrationDate,
     String taxNumber,
     String bankOfDeposit,
-    List<MediaModel> certificate,
+    List<MediaModel> certificates,
     String contactPerson,
     String contactPhone,
     String cooperativeBrand,
@@ -202,6 +208,7 @@ class B2BUnitModel extends OrgUnitModel {
     String legalRepresentative,
     String certificateOfLegal,
     CompanyType type,
+    ArticleApprovalStatus approvalStatus,
     this.active,
     this.email,
     this.phone,
@@ -218,7 +225,7 @@ class B2BUnitModel extends OrgUnitModel {
           registrationDate: registrationDate,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
-          certificate: certificate,
+          certificates: certificates,
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
@@ -228,6 +235,7 @@ class B2BUnitModel extends OrgUnitModel {
           certificateOfLegal: certificateOfLegal,
           legalRepresentative: legalRepresentative,
           type: type,
+          approvalStatus: approvalStatus,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -278,7 +286,7 @@ class BrandModel extends B2BUnitModel {
     DateTime registrationDate,
     String taxNumber,
     String bankOfDeposit,
-    List<MediaModel> certificate,
+    List<MediaModel> certificates,
     String contactPerson,
     String contactPhone,
     String cooperativeBrand,
@@ -288,6 +296,7 @@ class BrandModel extends B2BUnitModel {
     String legalRepresentative,
     String certificateOfLegal,
     CompanyType type,
+    ArticleApprovalStatus approvalStatus,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -311,7 +320,7 @@ class BrandModel extends B2BUnitModel {
           registrationDate: registrationDate,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
-          certificate: certificate,
+          certificates: certificates,
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
@@ -321,6 +330,7 @@ class BrandModel extends B2BUnitModel {
           certificateOfLegal: certificateOfLegal,
           legalRepresentative: legalRepresentative,
           type: type,
+          approvalStatus: approvalStatus,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -341,10 +351,10 @@ class FactoryModel extends B2BUnitModel {
   //规模范围
   ScaleRanges scaleRange;
 
-  //品类
+  //生产大类
   List<CategoryModel> categories;
 
-  //擅长品类
+  //优势类目
   List<CategoryModel> adeptAtCategories;
 
   //合作方式
@@ -370,8 +380,11 @@ class FactoryModel extends B2BUnitModel {
 
   double locationY;
 
+  //产业集群
   @JsonKey(toJson: _industrialClusterToJson)
   IndustrialClusterModel industrialCluster;
+
+  //图文详情
 
   FactoryModel({
     MediaModel profilePicture,
@@ -387,7 +400,7 @@ class FactoryModel extends B2BUnitModel {
     DateTime registrationDate,
     String taxNumber,
     String bankOfDeposit,
-    List<MediaModel> certificate,
+    List<MediaModel> certificates,
     String contactPerson,
     String contactPhone,
     String cooperativeBrand,
@@ -397,6 +410,7 @@ class FactoryModel extends B2BUnitModel {
     String legalRepresentative,
     String certificateOfLegal,
     CompanyType type,
+    ArticleApprovalStatus approvalStatus,
     this.historyOrdersCount,
     this.orderedSuccessRate,
     this.monthlyCapacityRanges,
@@ -425,7 +439,7 @@ class FactoryModel extends B2BUnitModel {
           registrationDate: registrationDate,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
-          certificate: certificate,
+          certificates: certificates,
           contactPerson: contactPerson,
           contactPhone: contactPhone,
           cooperativeBrand: cooperativeBrand,
@@ -435,6 +449,7 @@ class FactoryModel extends B2BUnitModel {
           certificateOfLegal: certificateOfLegal,
           legalRepresentative: legalRepresentative,
           type: type,
+          approvalStatus: approvalStatus,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>
@@ -493,6 +508,24 @@ class IndustrialClusterModel extends ItemModel {
 
   static Map<String, dynamic> toJson(IndustrialClusterModel model) =>
       _$IndustrialClusterModelToJson(model);
+}
+
+//工厂图文详情
+@JsonSerializable()
+class CompanyProfileModel extends ItemModel {
+  List<MediaModel> medias;
+  String description;
+
+  CompanyProfileModel({
+    this.medias,
+    this.description,
+  });
+
+  factory CompanyProfileModel.fromJson(Map<String, dynamic> json) =>
+      _$CompanyProfileModelFromJson(json);
+
+  static Map<String, dynamic> toJson(CompanyProfileModel model) =>
+      _$CompanyProfileModelToJson(model);
 }
 
 //合作方式枚举

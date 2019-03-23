@@ -13,14 +13,9 @@ class PricesField extends StatefulWidget {
 }
 
 class _PricesFieldState extends State<PricesField> {
-//  List<Object> prices = [];
-  TextEditingController _priceController = TextEditingController();
-  FocusNode _priceFocusNode = FocusNode();
 
   @override
   void initState() {
-    _priceController.text = widget.item?.price?.toString();
-
     super.initState();
   }
 
@@ -29,36 +24,14 @@ class _PricesFieldState extends State<PricesField> {
     // TODO: implement build
     return Column(
       children: <Widget>[
-//        InkWell(
-//          onTap: () async {
-//            List<Object> result = await Navigator.push(
-//              context,
-//              MaterialPageRoute(
-//                builder: (context) => ApparelProductPricesInputPage(
-//                  prices: prices,
-//                ),
-//              ),
-//            );
-//
-//            if (result != null && result.length > 0) {
-//              showDialog(
-//                context: context,
-//                builder: (context) => AlertDialog(
-//                  title: Text(result.toString()),
-//                ),
-//              );
-//            }
-//          },
-//          child: ListTile(
-//            title: Text('价格'),
-//            trailing: Icon(Icons.chevron_right),
-//          ),
-//        ),
-        TextFieldComponent(
-          focusNode: _priceFocusNode,
-          controller: _priceController,
-          leadingText: '供货价',
-          hintText: '请输入供货价',
+        InkWell(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>ApparelProductPricesInputPage(widget.item)));
+          },
+          child: ShowSelectTile(
+            leadingText: '价格',
+            tralingText: '￥${widget.item.minPrice ?? ''} ~ ￥${widget.item.maxPrice ?? ''}',
+          ),
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -68,19 +41,3 @@ class _PricesFieldState extends State<PricesField> {
     );
   }
 }
-
-/*class ApparelProductPrices{
-  double price;
-  double suggestedPrice;
-  double price1;
-  double price2;
-  double price3;
-
-  ApparelProductPrices({
-    this.price,
-    this.suggestedPrice,
-    this.price1,
-    this.price2,
-    this.price3,
-  });
-}*/
