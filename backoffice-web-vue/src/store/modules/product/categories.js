@@ -8,6 +8,7 @@ const state = {
     name: '',
     group: '',
     description: '',
+    thumbnail:{},
     parent: {
       code: '',
       name: ''

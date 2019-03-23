@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import 'package:services/services.dart';
 
 import 'factory/industrial_cluster_factory.dart';
 
@@ -122,9 +123,11 @@ class HomeTabSection extends StatelessWidget {
         ),
       ),
       AdvanceIconButton(
-        onPressed: () {
+        onPressed: () async{
+          List<LabelModel> labels = await UserRepositoryImpl().labels();
+
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => IndustrialClusterPage()));
+              MaterialPageRoute(builder: (context) => IndustrialClusterPage(labels)));
         },
         title: '产业集群',
         icon: Icon(

@@ -17,7 +17,10 @@ abstract class UserApis {
   //创建地址
   static get addressCreate => '/{baseSiteId}/b2b/company/addresses';
   //更新地址
-  static get addressUpdate => '/{baseSiteId}/b2b/company/addresses';
+  static get addressUpdate  => (id) => '/{baseSiteId}/b2b/company/addresses/$id';
   //删除地址
   static get addressDelete => (id) => '/{baseSiteId}/b2b/company/addresses/$id';
+
+  //产业集群
+  static get getIndustrialClusterFromLabels => '/{baseSiteId}/b2b/industrialClusters/labels';
 }

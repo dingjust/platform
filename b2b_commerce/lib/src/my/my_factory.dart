@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
+import 'package:b2b_commerce/src/my/company/form/my_company_profile_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_way.dart';
@@ -467,13 +468,18 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      borderRadius: BorderRadius.circular(5),
+                  GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text('编辑'),
                     ),
-                    child: Text('编辑'),
+                    onTap: (){
+//                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MyCompanyProfileFormPage(company)));
+                    },
                   )
                 ],
               ),
