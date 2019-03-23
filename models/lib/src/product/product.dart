@@ -4,7 +4,7 @@ import 'package:models/models.dart';
 
 part 'product.g.dart';
 
-///产品状态
+///审核状态
 enum ArticleApprovalStatus {
   CHECK,
   APPROVED,

@@ -13,6 +13,7 @@ class TextFieldComponent extends StatefulWidget {
   VoidCallback onEditingComplete;
   final bool autofocus;
   EdgeInsets padding;
+  EdgeInsets dividerPadding;
   bool enabled;
   TextInputAction textInputAction;
   TextAlign textAlign;
@@ -33,6 +34,7 @@ class TextFieldComponent extends StatefulWidget {
     this.onEditingComplete,
     this.autofocus = false,
     this.padding,
+    this.dividerPadding,
     this.enabled,
     this.textInputAction,
     this.textAlign = TextAlign.right,
@@ -121,6 +123,10 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   textInputAction: widget.textInputAction,
                   textAlign: widget.textAlign,
                 ),
+              ),
+              Offstage(
+                offstage: widget.trailing == null,
+                child: widget.trailing,
               )
             ],
           ),
@@ -128,9 +134,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         Offstage(
           offstage: widget.focusNode == null,
           child: Padding(
-            padding: widget.padding != null
-                ? EdgeInsets.symmetric(horizontal: widget.padding.horizontal)
-                : EdgeInsets.symmetric(horizontal: 15),
+            padding: widget.dividerPadding ?? widget.dividerPadding ?? EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

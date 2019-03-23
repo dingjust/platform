@@ -79,59 +79,97 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
             margin: EdgeInsets.only(top: 10),
             child: Column(
               children: <Widget>[
+                TextFieldComponent(
+                  enabled: isEditing,
+                  focusNode: _contactPersonFocusNode,
+                  leadingText: '联系人',
+                  controller: _contactPersonController,
+                  leadingColor: Colors.grey,
+                  dividerPadding: EdgeInsets.all(0),
+                ),
                 InkWell(
                   child: TextFieldComponent(
                     enabled: isEditing,
-                    focusNode: _contactPersonFocusNode,
-                    leadingText: '联系人',
-                    controller: _contactPersonController,
+                    focusNode: _contactPhoneFocusNode,
+                    leadingText: '联系电话',
+                    controller: _contactPhoneController,
                     leadingColor: Colors.grey,
+                    dividerPadding: EdgeInsets.all(0),
+                    trailing: isEditing ? null : Icon(Icons.phone,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
                   ),
                   onTap: (){
-                    print('aaa');
+                    if(!isEditing) _selectActionButton(_contactPhoneController.text,context);
                   },
                 ),
-                TextFieldComponent(
-                  enabled: isEditing,
-                  focusNode: _contactPhoneFocusNode,
-                  leadingText: '联系电话',
-                  controller: _contactPhoneController,
-                  leadingColor: Colors.grey,
+                InkWell(
+                  child: TextFieldComponent(
+                    enabled: isEditing,
+                    focusNode: _addressFocusNode,
+                    leadingText: '经营地址',
+                    controller: _addressController,
+                    leadingColor: Colors.grey,
+                    dividerPadding: EdgeInsets.all(0),
+                    trailing: isEditing ? null : Icon(Icons.content_copy,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
+                  ),
+                  onTap: (){
+                    if(!isEditing) copyToClipboard(_addressController.text, context);
+                  },
                 ),
-                TextFieldComponent(
-                  enabled: isEditing,
-                  focusNode: _addressFocusNode,
-                  leadingText: '经营地址',
-                  controller: _addressController,
-                  leadingColor: Colors.grey,
+                InkWell(
+                  child: TextFieldComponent(
+                    enabled: isEditing,
+                    focusNode: _phoneFocusNode,
+                    leadingText: '座机号码',
+                    controller: _phoneController,
+                    leadingColor: Colors.grey,
+                    dividerPadding: EdgeInsets.all(0),
+                    trailing: isEditing ? null : Icon(Icons.phone,size: 14,color:Color.fromRGBO(255, 214, 12, 1),),
+                  ),
+                  onTap: (){
+                    if(!isEditing) _selectActionButton(_phoneController.text,context);
+                  }
                 ),
-                TextFieldComponent(
-                  enabled: isEditing,
-                  focusNode: _phoneFocusNode,
-                  leadingText: '座机号码',
-                  controller: _phoneController,
-                  leadingColor: Colors.grey,
+                InkWell(
+                  child: TextFieldComponent(
+                    enabled: isEditing,
+                    focusNode: _emailFocusNode,
+                    leadingText: '邮箱地址',
+                    controller: _emailController,
+                    leadingColor: Colors.grey,
+                    dividerPadding: EdgeInsets.all(0),
+                    trailing: isEditing ? null : Icon(Icons.content_copy,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
+                  ),
+                  onTap: (){
+                    if(!isEditing) copyToClipboard(_emailController.text, context);
+                  },
                 ),
-                TextFieldComponent(
-                  enabled: isEditing,
-                  focusNode: _emailFocusNode,
-                  leadingText: '邮箱地址',
-                  controller: _emailController,
-                  leadingColor: Colors.grey,
+                InkWell(
+                  child: TextFieldComponent(
+                    enabled: isEditing,
+                    focusNode: _qqFocusNode,
+                    leadingText: 'QQ号',
+                    controller: _qqController,
+                    leadingColor: Colors.grey,
+                    dividerPadding: EdgeInsets.all(0),
+                    trailing: isEditing ? null : Icon(Icons.content_copy,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
+                  ),
+                  onTap: (){
+                    if(!isEditing) copyToClipboard(_qqController.text, context);
+                  },
                 ),
-                TextFieldComponent(
-                  enabled: isEditing,
-                  focusNode: _qqFocusNode,
-                  leadingText: 'QQ号',
-                  controller: _qqController,
-                  leadingColor: Colors.grey,
-                ),
-                TextFieldComponent(
-                  enabled: isEditing,
-                  focusNode: _wechatFocusNode,
-                  leadingText: '微信号',
-                  controller: _wechatController,
-                  leadingColor: Colors.grey,
+                InkWell(
+                  child: TextFieldComponent(
+                    enabled: isEditing,
+                    focusNode: _wechatFocusNode,
+                    leadingText: '微信号',
+                    controller: _wechatController,
+                    leadingColor: Colors.grey,
+                    dividerPadding: EdgeInsets.all(0),
+                    trailing: isEditing ? null : Icon(Icons.content_copy,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
+                  ),
+                  onTap: (){
+                    if(!isEditing) copyToClipboard(_wechatController.text, context);
+                  },
                 ),
               ],
             ),

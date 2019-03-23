@@ -20,4 +20,12 @@ class UserRepositoryImpl implements UserRepository {
     Response response = await http$.get(Apis.factory(uid));
     return FactoryModel.fromJson(response.data);
   }
+
+  @override
+  Future<String> applyCertification(CompanyModel form) async{
+    Response response = await http$.put(Apis.applyCertification,data: CompanyModel.toJson(form));
+    return response.data;
+  }
+
+
 }

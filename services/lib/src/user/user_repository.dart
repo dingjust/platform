@@ -6,4 +6,7 @@ abstract class UserRepository {
   Future<BrandModel> getBrand(String uid);
 
   Future<FactoryModel> getFactory(String uid);
+
+  //公司认证
+  Future<String> applyCertification(CompanyModel form);
 }

@@ -1,20 +1,27 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 import 'package:models/models.dart';
 
-class MyCompanyCertificatePage extends StatefulWidget{
+class MyCompanyCertificatePage extends StatefulWidget {
   CompanyModel company;
-  bool enabled;
-  MyCompanyCertificatePage(this.company,{this.enabled = false});
-  MyCompanyCertificatePageState createState() => MyCompanyCertificatePageState();
+  bool onlyRead;
+
+  MyCompanyCertificatePage(this.company, {this.onlyRead = false,});
+
+  MyCompanyCertificatePageState createState() =>
+      MyCompanyCertificatePageState();
 }
 
-class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage>{
+class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage> {
   TextEditingController _nameController = TextEditingController();
   FocusNode _nameFocusNode = FocusNode();
-  TextEditingController _businessRegistrationNoController = TextEditingController();
+  TextEditingController _businessRegistrationNoController =
+      TextEditingController();
   FocusNode _businessRegistrationNoFocusNode = FocusNode();
-  TextEditingController _legalRepresentativeController = TextEditingController();
+  TextEditingController _legalRepresentativeController =
+      TextEditingController();
   FocusNode _legalRepresentativeFocusNode = FocusNode();
   TextEditingController _certificateOfLegalController = TextEditingController();
   FocusNode _certificateOfLegalFocusNode = FocusNode();
@@ -23,7 +30,8 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage>{
   @override
   void initState() {
     _nameController.text = widget.company.name;
-    _businessRegistrationNoController.text = widget.company.businessRegistrationNo;
+    _businessRegistrationNoController.text =
+        widget.company.businessRegistrationNo;
     _legalRepresentativeController.text = widget.company.legalRepresentative;
     _certificateOfLegalController.text = widget.company.certificateOfLegal;
 
@@ -45,18 +53,22 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage>{
             elevation: 0,
             margin: EdgeInsets.only(top: 10),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('企业名称',style: TextStyle(color: Colors.grey,fontSize: 16),),
+                  Text(
+                    '企业名称',
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
                   TextFieldComponent(
                     focusNode: _nameFocusNode,
                     controller: _nameController,
-                    padding: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                    padding: EdgeInsets.symmetric(),
+                    dividerPadding: EdgeInsets.only(),
                     textAlign: TextAlign.left,
-                    enabled: widget.enabled,
+                    enabled: !widget.onlyRead,
                   )
                 ],
               ),
@@ -66,18 +78,22 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage>{
             elevation: 0,
             margin: EdgeInsets.only(top: 10),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('工商注册号或统一社会信用代码',style: TextStyle(color: Colors.grey,fontSize: 16),),
+                  Text(
+                    '工商注册号或统一社会信用代码',
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
                   TextFieldComponent(
                     focusNode: _businessRegistrationNoFocusNode,
                     controller: _businessRegistrationNoController,
-                    padding: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                    padding: EdgeInsets.symmetric(),
+                    dividerPadding: EdgeInsets.only(),
                     textAlign: TextAlign.left,
-                    enabled: widget.enabled,
+                    enabled: !widget.onlyRead,
                   )
                 ],
               ),
@@ -87,18 +103,22 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage>{
             elevation: 0,
             margin: EdgeInsets.only(top: 10),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('法定代表人',style: TextStyle(color: Colors.grey,fontSize: 16),),
+                  Text(
+                    '法定代表人',
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
                   TextFieldComponent(
                     focusNode: _legalRepresentativeFocusNode,
                     controller: _legalRepresentativeController,
-                    padding: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                    padding: EdgeInsets.symmetric(),
+                    dividerPadding: EdgeInsets.only(),
                     textAlign: TextAlign.left,
-                    enabled: widget.enabled,
+                    enabled: !widget.onlyRead,
                   )
                 ],
               ),
@@ -108,18 +128,22 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage>{
             elevation: 0,
             margin: EdgeInsets.only(top: 10),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('法定代表人证件',style: TextStyle(color: Colors.grey,fontSize: 16),),
+                  Text(
+                    '法定代表人证件',
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
                   TextFieldComponent(
                     focusNode: _certificateOfLegalFocusNode,
                     controller: _certificateOfLegalController,
-                    padding: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                    padding: EdgeInsets.symmetric(),
+                    dividerPadding: EdgeInsets.only(),
                     textAlign: TextAlign.left,
-                    enabled: widget.enabled,
+                    enabled: !widget.onlyRead,
                   )
                 ],
               ),
@@ -129,18 +153,55 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage>{
             elevation: 0,
             margin: EdgeInsets.only(top: 10),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('认证证件',style: TextStyle(color: Colors.grey,fontSize: 16),),
-                  EditableAttachments(list: medias,maxNum: medias.length,editable: false,),
+                  Text(
+                    '认证证件',
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
+                  EditableAttachments(
+                    list: widget.company.certificates,
+                    maxNum: widget.company.certificates.length,
+                    editable: !widget.onlyRead,
+                  ),
                 ],
               ),
             ),
           ),
-
+          Offstage(
+            offstage: widget.onlyRead,
+            child: Container(
+              padding: EdgeInsets.only(top: 20),
+              width: MediaQuery.of(context).size.width - 16,
+              child: ActionChip(
+                labelPadding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width / 3.5,
+                    vertical: 8),
+                backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+                label: Text(
+                  '提交认证',
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                onPressed: () async {
+                  if(UserBLoC.instance.currentUser.type == UserType.BRAND) widget.company.type = CompanyType.BRAND;
+                  if(UserBLoC.instance.currentUser.type == UserType.FACTORY) widget.company.type = CompanyType.FACTORY;
+                  widget.company.name = _nameController.text;
+                  widget.company.businessRegistrationNo =
+                      _businessRegistrationNoController.text;
+                  widget.company.certificateOfLegal =
+                      _certificateOfLegalController.text;
+                  widget.company.legalRepresentative =
+                      _legalRepresentativeController.text;
+                  UserRepositoryImpl().applyCertification(widget.company).then((a){
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
