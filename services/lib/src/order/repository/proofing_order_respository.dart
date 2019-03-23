@@ -54,4 +54,20 @@ class ProofingOrderRepository {
       return null;
     }
   }
+
+  ///更新订单
+  Future<String> proofingUpdate(ProofingModel model) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.proofingUpdate(model.code),
+          data: ProofingModel.toJson(model));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
 }

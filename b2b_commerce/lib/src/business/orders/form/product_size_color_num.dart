@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductSizeColorNum extends StatefulWidget {
-  final List<EditApparelSizeVariantProductEntry> data;
+  final List<EditApparelSizeVariantProductEntry> editData;
 
-  const ProductSizeColorNum({Key key, this.data}) : super(key: key);
+  final List<ApparelSizeVariantProductEntry> data;
+
+  final bool update;
+
+  const ProductSizeColorNum(
+      {Key key, this.data, this.update = false, this.editData})
+      : super(key: key);
 
   @override
   _ProductSizeColorNumState createState() => _ProductSizeColorNumState();
@@ -13,7 +19,6 @@ class ProductSizeColorNum extends StatefulWidget {
 class _ProductSizeColorNumState extends State<ProductSizeColorNum> {
   @override
   Widget build(BuildContext context) {
-
     // Naviga
 
     return Scaffold(
@@ -39,9 +44,13 @@ class _ProductSizeColorNumState extends State<ProductSizeColorNum> {
             Container(
               color: Colors.white,
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: EditColorSizeNumTable(
-                data: widget.data,
-              ),
+              child: widget.update
+                  ? ColorSizeNumTable(
+                      data: widget.data,
+                    )
+                  : EditColorSizeNumTable(
+                      data: widget.editData,
+                    ),
             ),
           ],
         ),
