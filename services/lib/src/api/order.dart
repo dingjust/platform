@@ -91,4 +91,9 @@ class OrderApis {
   static get proofingCancelling => (code) {
         return '/{baseSiteId}/b2b/orders/proofing/$code/cancelling';
       };
+
+  /// 更新打样单
+  static get proofingUpdate => (code) {
+        return '/{baseSiteId}/b2b/orders/proofing/$code/balance';
+      };
 }

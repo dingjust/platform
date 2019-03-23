@@ -1,25 +1,18 @@
 <template>
   <div class="animated fadeIn">
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>基本信息</span>
-      </div>
-      <address-basic-form ref="basicForm"
-                           :slot-data="slotData"
-                           :read-only="readOnly">
-      </address-basic-form>
+      <address-form :slot-data="slotData" :read-only="readOnly"/>
     </el-card>
-    <div class="pt-2"></div>
   </div>
 </template>
 
 <script>
-  import AddressBasicForm from './AddressBasicForm';
+  import {AddressForm} from "@/views/shared/";
 
   export default {
     name: 'AddressFrom',
     components: {
-      AddressBasicForm,
+      AddressForm,
     },
     props: ['slotData', 'readOnly'],
     methods: {

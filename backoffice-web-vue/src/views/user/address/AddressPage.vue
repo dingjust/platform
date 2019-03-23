@@ -1,8 +1,9 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <address-toolbar @onNew="onNew" @onSearch="onSearch"/>
-      <address-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
+      <address-toolbar @onNew="onNew"/>
+      <hr/>
+      <address-list :results="results" @onSetDefault="onSetDefault" @onRemove="onRemove"/>
     </el-card>
   </div>
 </template>
@@ -24,31 +25,46 @@
     },
     computed: {
       ...mapGetters({
-        page: 'page',
-        keyword: 'keyword',
+        results: 'results',
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
+        refresh: 'refresh'
       }),
-      onSearch(page, size) {
-        const keyword = this.keyword;
+      onSearch() {
         const url = this.apis().getAddresses();
-        this.search({url, keyword, page, size});
+        this.search({url});
       },
-      async onDetails(item) {
-        const url = this.apis().getAddress(item.uid);
-        const result = await this.$http.get(url);
+      onNew(formData) {
+        this.fn.openSlider('新建地址', AddressDetailsPage, formData);
+      },
+      async onSetDefault(item) {
+        const formData = Object.assign({}, item);
+        formData['defaultAddress'] = true;
+
+        const url = this.apis().updateAddress(item.id);
+        const result = await this.$http.put(url, formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider('员工：' + item.name, AddressDetailsPage, result);
+        this.$message.success('设置成功');
+
+        this.refresh();
       },
-      onNew(formData) {
-        this.fn.openSlider('创建员工', AddressDetailsPage, formData);
+      async onRemove(item) {
+        const url = this.apis().removeAddress(item.id);
+        const result = await this.$http.delete(url, item);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('地址删除成功');
+        this.refresh();
       },
     },
     data() {

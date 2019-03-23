@@ -30,7 +30,7 @@ const COMMON_APIS = {
     return '/b2b/products/sample/create';
   },
   updateSampleProduct(code) {
-    return '/b2b/products/sample/update/'+code;
+    return '/b2b/products/sample/update/' + code;
   },
   getSampleProducts() {
     return '/b2b/products/sample';
@@ -159,13 +159,19 @@ const COMMON_APIS = {
     return '/b2b/b2bUnits/' + uid;
   },
   createAddress() {
-    return '/b2b/addresses';
+    return '/b2b/company/addresses';
+  },
+  updateAddress(id) {
+    return '/b2b/company/addresses/' + id;
+  },
+  removeAddress(id) {
+    return '/b2b/company/addresses/' + id;
   },
   getAddresses() {
-    return '/b2b/addresses';
+    return '/b2b/company/addresses';
   },
-  getAddress(uid) {
-    return '/b2b/addresses/' + uid;
+  getAddress(id) {
+    return '/b2b/company/addresses/' + id;
   },
   getCategories() {
     return '/b2b/categories/categories';

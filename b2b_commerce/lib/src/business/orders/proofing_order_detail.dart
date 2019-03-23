@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -506,17 +507,17 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
   }
 
   Widget _buildButtonGroup() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
+    List<Widget> buttons;
+    //品牌端显示
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      if (widget.model.status == ProofingStatus.PENDING_PAYMENT) {
+        buttons = <Widget>[
           FlatButton(
-              onPressed: () {},
+              onPressed: onCancelling,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Colors.red,
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+              color: Color.fromRGBO(255, 70, 70, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '取消订单',
                 style: TextStyle(color: Colors.white, fontSize: 16),
@@ -525,14 +526,158 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               onPressed: () {},
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 149, 22, 1),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '  去支付  ',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
               )),
-        ],
-      ),
+        ];
+      } else if (widget.model.status == ProofingStatus.SHIPPED) {
+        buttons = <Widget>[
+          // FlatButton(
+          //     onPressed: () {},
+          //     shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(20)),
+          //     color: Color.fromRGBO(150, 150, 150, 1),
+          //     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+          //     child: Text(
+          //       '查看物流',
+          //       style: TextStyle(
+          //           color: Color.fromRGBO(150, 150, 150, 1), fontSize: 16),
+          //     )),
+          Container(),
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 245, 193, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '确认收货',
+                style: TextStyle(
+                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+              )),
+        ];
+      } else {
+        return Container();
+      }
+    } //工厂端显示
+    else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      if (widget.model.status == ProofingStatus.PENDING_PAYMENT) {
+        buttons = [
+          Container(),
+          FlatButton(
+              onPressed: onUpdate,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
+                  borderRadius: BorderRadius.circular(20)),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '修改订单',
+                style: TextStyle(
+                    color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+              )),
+        ];
+      } else if (widget.model.status == ProofingStatus.PENDING_DELIVERY) {
+        buttons = <Widget>[
+          Container(),
+          FlatButton(
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 245, 193, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '确认发货',
+                style: TextStyle(
+                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+              )),
+        ];
+      }
+      // else if (model.status == ProofingStatus.SHIPPED) {
+      //   buttons = [
+      //     Container(),
+      //     FlatButton(
+      //         onPressed: () {},
+      //         shape: RoundedRectangleBorder(
+      //             borderRadius: BorderRadius.circular(20)),
+      //         color: Color.fromRGBO(150, 150, 150, 1),
+      //         padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+      //         child: Text(
+      //           '查看物流',
+      //           style: TextStyle(
+      //               color: Color.fromRGBO(150, 150, 150, 1), fontSize: 16),
+      //         )),
+      //   ];
+      // }
+      else {
+        return Container();
+      }
+    }
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround, children: buttons),
     );
+  }
+
+  void onCancelling() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('确认取消？'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () async {
+                String response = await ProofingOrderRepository()
+                    .proofingCancelling(widget.model.code);
+                if (response != null) {
+                  Navigator.of(context).pop();
+                } else {
+                  Navigator.of(context).pop();
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[Text('取消失败')],
+                          ),
+                        ),
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onUpdate() async {
+    //查询明细
+    ProofingModel detailModel =
+        await ProofingOrderRepository().proofingDetail(widget.model.code);
+
+    QuoteModel quoteModel =
+        await QuoteOrderRepository().getquoteDetail(detailModel.quoteRef);
+
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProofingOrderForm(
+              quoteModel: quoteModel,
+              model: detailModel,
+              update: true,
+            )));
   }
 }

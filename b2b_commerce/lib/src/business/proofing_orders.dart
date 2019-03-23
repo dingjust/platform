@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/proofing_search.dart';
 import 'package:core/core.dart';
@@ -325,7 +326,7 @@ class ProofingOrderItem extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          model.product.thumbnail != null
+          model.product?.thumbnail != null
               ? Container(
                   width: 80,
                   height: 80,
@@ -485,7 +486,7 @@ class ProofingOrderItem extends StatelessWidget {
                     color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
               )),
         ];
-      } 
+      }
       // else if (model.status == ProofingStatus.SHIPPED) {
       //   buttons = [
       //     Container(),
@@ -501,7 +502,7 @@ class ProofingOrderItem extends StatelessWidget {
       //               color: Color.fromRGBO(150, 150, 150, 1), fontSize: 16),
       //         )),
       //   ];
-      // } 
+      // }
       else {
         return Container();
       }
@@ -556,8 +557,20 @@ class ProofingOrderItem extends StatelessWidget {
     );
   }
 
-  void onUpdate(){
-        
+  void onUpdate() async {
+    //查询明细
+    ProofingModel detailModel =
+        await ProofingOrderRepository().proofingDetail(model.code);
+
+    QuoteModel quoteModel =
+        await QuoteOrderRepository().getquoteDetail(detailModel.quoteRef);
+
+    Navigator.of(pageContext).push(MaterialPageRoute(
+        builder: (context) => ProofingOrderForm(
+              quoteModel: quoteModel,
+              model: detailModel,
+              update: true,
+            )));
   }
 }
 
