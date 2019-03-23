@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
@@ -34,7 +35,8 @@ class HttpManager {
         baseUrl: GlobalConfigs.BASE_URL,
         connectTimeout: 5000,
         receiveTimeout: 10000,
-        headers: {'Authorization': authorization});
+        headers: authorization != null ? {'Authorization': authorization} : {});
+
     _instance = Dio(options);
 
     (_instance.httpClientAdapter as DefaultHttpClientAdapter)
@@ -167,6 +169,11 @@ class HttpManager {
 
   void updateAuthorization(token) {
     authorization = "Bearer $token";
+    _updateInstance();
+  }
+
+  void removeAuthorization() {
+    authorization = null;
     _updateInstance();
   }
 }

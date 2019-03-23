@@ -202,25 +202,13 @@ const router = new Router({
               path: '/miscs/sample/sampleCheckoutHist',
               name: '样衣借还记录',
               component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
-            }
-          ]
-        },
-        {
-          path: '/supplier',
-          name: '供应商管理',
-          component: {
-            render(c) {
-              return c('router-view');
-            }
-          },
-          children: [
-            {
-              path: '/supplier',
+            },{
+              path: '/miscs/supplier',
               name: '供应商',
-              component: () => import(/* webpackChunkName: 'supplier' */ '@/views/user/company/supplier/SupplierPage')
+              component: () => import(/* webpackChunkName: 'supplier' */ '@/views/miscs/supplier/SupplierPage')
             }
           ]
-        },
+        }
       ]
     },
     {

@@ -37,4 +37,37 @@ class ProofingOrderRepository {
       return null;
     }
   }
+
+  ///取消订单
+  Future<String> proofingCancelling(String code) async {
+    Response response;
+    try {
+      response = await http$.put(
+        OrderApis.proofingCancelling(code),
+      );
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return 'successful';
+    } else {
+      return null;
+    }
+  }
+
+  ///更新订单
+  Future<String> proofingUpdate(ProofingModel model) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.proofingUpdate(model.code),
+          data: ProofingModel.toJson(model));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
 }

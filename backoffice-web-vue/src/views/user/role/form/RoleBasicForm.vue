@@ -13,13 +13,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
-        <el-form-item label="手机号码" prop="phoneNumber">
-          <el-input placeholder="请输入手机号码" v-model.number="slotData.mobileNumber">
-            <template slot="prepend">+86</template>
-          </el-input>
-        </el-form-item>
-      </el-row>
     </el-form>
   </div>
 </template>

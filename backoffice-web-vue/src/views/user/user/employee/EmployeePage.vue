@@ -35,6 +35,7 @@
       onSearch(page, size) {
         const keyword = this.keyword;
         const url = this.apis().getEmployees();
+        console.log(url);
         this.search({url, keyword, page, size});
       },
       async onDetails(item) {

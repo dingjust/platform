@@ -18,6 +18,9 @@ const state = {
     registrationDate: null,
     scaleRange: '',
     contactAddress: {
+      id: null,
+      fullname: '',
+      cellphone: '',
       region: {
         isocode: '',
         name: ''
@@ -53,6 +56,9 @@ const state = {
     certificateOfLegal: ''
   },
   addressFormData: {
+    id: null,
+    fullname: '',
+    cellphone: '',
     region: {
       isocode: '',
       name: ''

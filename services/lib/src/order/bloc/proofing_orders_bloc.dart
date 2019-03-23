@@ -32,6 +32,8 @@ class ProofingOrdersBLoC extends BLoCBase {
         PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
     'SHIPPED': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
     'COMPLETED':
+        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'CANCELLED':
         PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>())
   };
 

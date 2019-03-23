@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
+import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,8 @@ import 'package:widgets/widgets.dart';
 class ProofingOrderForm extends StatefulWidget {
   QuoteModel quoteModel;
   bool update;
-  ProofingOrderForm({@required this.quoteModel, this.update = false});
+  ProofingModel model;
+  ProofingOrderForm({this.quoteModel, this.update = false, this.model});
 
   _ProofingOrderFormState createState() => _ProofingOrderFormState();
 }
@@ -32,6 +34,28 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   @override
   void initState() {
+    if (widget.update) {
+      product = ApparelProductModel();
+      product
+        ..thumbnail = widget.model.product.thumbnail
+        ..thumbnails = widget.model.product.thumbnails
+        ..images = widget.model.product.images
+        ..name = widget.model.product.name
+        ..code = widget.model.product.code
+        ..skuID = widget.model.product.skuID
+        ..price = widget.model.product.price
+        ..category = widget.model.product.category;
+
+      _remarksController.text = widget.model.remarks;
+      _unitPriceController.text = widget.model.unitPrice.toString();
+
+      int sum = 0;
+      widget.model.entries.forEach((entry) {
+        sum = sum + entry.quantity;
+      });
+      totalQuantity = sum;
+      totalPrice = sum * widget.model.unitPrice;
+    }
     super.initState();
   }
 
@@ -67,14 +91,14 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               width: 300,
               child: Center(
                 child: Text(
-                  '提交订单',
+                  widget.update ? '修改订单' : '提交订单',
                   style: TextStyle(
                     fontSize: 20,
                     color: Color.fromRGBO(36, 38, 41, 1),
                   ),
                 ),
               )),
-          onPressed: submitOrder,
+          onPressed: widget.update ? onUpdate : onCreate,
           backgroundColor: Colors.amberAccent,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -258,10 +282,12 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                     isRequirement: false,
                     isSelectItem: true,
                   ),
-                  FlatButton(
-                    onPressed: _onProductSelect,
-                    child: Text('重新选择'),
-                  )
+                  widget.update
+                      ? Container()
+                      : FlatButton(
+                          onPressed: _onProductSelect,
+                          child: Text('重新选择'),
+                        )
                 ],
               ),
       ),
@@ -288,13 +314,24 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     if (product != null) {
       return GestureDetector(
         onTap: () async {
-          List<EditApparelSizeVariantProductEntry> returnEntries =
-              await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProductSizeColorNum(
-                        data: productEntries,
-                      )));
-          if (returnEntries != null) {
-            productEntries = returnEntries;
+          if (widget.update) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProductSizeColorNum(
+                      update: true,
+                      data: widget.model.entries
+                          .map((entry) => ApparelSizeVariantProductEntry(
+                              model: entry.product, quantity: entry.quantity))
+                          .toList(),
+                    )));
+          } else {
+            List<EditApparelSizeVariantProductEntry> returnEntries =
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ProductSizeColorNum(
+                          editData: productEntries,
+                        )));
+            if (returnEntries != null) {
+              productEntries = returnEntries;
+            }
           }
         },
         child: Container(
@@ -328,16 +365,21 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   void _countTotalPrice(String value) {
     int sum = 0;
-    productEntries.forEach((entry) {
-      sum = sum + int.parse(entry.controller.text);
-    });
+    if (widget.update) {
+      sum = totalQuantity;
+    } else {
+      productEntries.forEach((entry) {
+        sum = sum + int.parse(entry.controller.text);
+      });
+    }
+
     setState(() {
       totalQuantity = sum;
       totalPrice = sum * double.parse(value);
     });
   }
 
-  void submitOrder() {
+  void onCreate() {
     if (productEntries == null || product == null) {
       (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
         SnackBar(
@@ -367,24 +409,37 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   ProofingModel model = ProofingModel();
                   model.entries = productEntries.map((entry) {
                     ApparelSizeVariantProductModel variantProduct = entry.model;
-                    variantProduct.thumbnail = product.thumbnail;
-                    variantProduct.thumbnails = product.thumbnails;
-                    variantProduct.images = product.images;
+                    variantProduct
+                      ..thumbnail = product.thumbnail
+                      ..thumbnails = product.thumbnails
+                      ..images = product.images;
                     return ProofingEntryModel(
                       quantity: int.parse(entry.controller.text),
                       product: variantProduct,
                     );
                   }).toList();
-                  model.unitPrice = double.parse(_unitPriceController.text);
-                  model.totalPrice = totalPrice;
-                  model.totalQuantity = totalQuantity;
-                  model.remarks = _remarksController.text;
+                  model
+                    ..unitPrice = double.parse(_unitPriceController.text)
+                    ..totalPrice = totalPrice
+                    ..totalQuantity = totalQuantity
+                    ..remarks = _remarksController.text;
                   String response = await ProofingOrderRepository()
                       .proofingCreate(widget.quoteModel.code, model);
                   //TODOS:跳转到打样订单详情
+
                   if (response != null && response != '') {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    //查询明细
+                    ProofingModel detailModel = await ProofingOrderRepository()
+                        .proofingDetail(response);
+
+                    if (detailModel != null) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => ProofingOrderDetailPage(
+                                    model: detailModel,
+                                  )),
+                          ModalRoute.withName('/'));
+                    }
                   }
                 },
               ),
@@ -399,6 +454,54 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         },
       );
     }
+  }
+
+  void onUpdate() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('确定修改？'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () async {
+                //拼装数据
+                ProofingModel model = ProofingModel();
+                model
+                  ..code = widget.model.code
+                  ..unitPrice = double.parse(_unitPriceController.text)
+                  ..totalPrice = totalPrice
+                  ..remarks = _remarksController.text;
+                String response =
+                    await ProofingOrderRepository().proofingUpdate(model);
+                //TODOS:跳转到打样订单详情
+                if (response != null && response != '') {
+                  //查询明细
+                  ProofingModel detailModel = await ProofingOrderRepository()
+                      .proofingDetail(widget.model.code);
+                  if (detailModel != null) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => ProofingOrderDetailPage(
+                                  model: detailModel,
+                                )),
+                        ModalRoute.withName('/'));
+                  }
+                }
+              },
+            ),
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

@@ -44,9 +44,9 @@ class OrderApis {
       };
 
   //修改生产进度时间或数量
-  static get productionProgressUpload =>(code,id) {
-    return '/{baseSiteId}/b2b/orders/purchase/$code/progress/$id';
-  };
+  static get productionProgressUpload => (code, id) {
+        return '/{baseSiteId}/b2b/orders/purchase/$code/progress/$id';
+      };
 
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/b2b/orders/quote';
@@ -85,5 +85,15 @@ class OrderApis {
   /// 根据条件获取打样单明细
   static get proofingDetail => (code) {
         return '/{baseSiteId}/b2b/orders/proofing/$code';
+      };
+
+  /// 取消打样单
+  static get proofingCancelling => (code) {
+        return '/{baseSiteId}/b2b/orders/proofing/$code/cancelling';
+      };
+
+  /// 更新打样单
+  static get proofingUpdate => (code) {
+        return '/{baseSiteId}/b2b/orders/proofing/$code/balance';
       };
 }

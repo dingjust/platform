@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/my/account/register_info.dart';
 import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:flutter/material.dart';
 
@@ -8,8 +9,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  GlobalKey _formKey = new GlobalKey<FormState>();
-
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _captchaController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -19,6 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String _verifyStr = '获取验证码';
   int _seconds = 0;
   Timer _timer;
+  bool validate = false;
 
   void _handleUserTypeChanged(String value) {
     setState(() {
@@ -61,115 +61,127 @@ class _RegisterPageState extends State<RegisterPage> {
           style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
         ),
       ),
-      body: Form(
-        key: _formKey,
-        autovalidate: true,
-        child: ListView(
-          padding: const EdgeInsets.all(10.0),
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(bottom: 50),
-              padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
-              child: Column(
-                children: <Widget>[
-                  InputRow(
-                    label: '手机号',
-                    field: TextFormField(
-                      autofocus: false,
-                      controller: _phoneController,
-                      decoration: InputDecoration(
-                          hintText: '请输入', border: InputBorder.none),
-                    ),
-                  ),
-                  InputRow(
-                    label: '验证码',
-                    field: TextFormField(
-                      autofocus: false,
-                      controller: _captchaController,
-                      decoration: InputDecoration(
-                          hintText: '请输入', border: InputBorder.none),
-                    ),
-                    surfix: FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)),
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      onPressed: (_seconds == 0)
-                          ? () {
-                              setState(() {
-                                _startTimer();
-                              });
-                            }
-                          : null,
-                      child: Text(
-                        '$_verifyStr',
-                        style: TextStyle(
-                            color: (_seconds == 0)
-                                ? Colors.white
-                                : Colors.black45),
-                      ),
-                    ),
-                  ),
-                  InputRow(
-                      label: '设置密码',
-                      field: TextFormField(
-                        autofocus: false,
-                        obscureText: true,
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                            hintText: '请输入', border: InputBorder.none),
-                      )),
-                ],
-              ),
-            ),
-            RaisedButton(
-              onPressed: formValidate()
-                  ? () {
-                      //TODO:注册接口
-                    }
-                  : null,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                '下一步',
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Checkbox(
-                    onChanged: (v) {
-                      setState(() {
-                        _isAgree = v;
-                      });
+      body: ListView(
+        padding: const EdgeInsets.all(10.0),
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(bottom: 50),
+            padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
+            child: Column(
+              children: <Widget>[
+                InputRow(
+                  label: '手机号',
+                  field: TextField(
+                    autofocus: false,
+                    onChanged: (value) {
+                      formValidate();
                     },
-                    value: _isAgree,
+                    controller: _phoneController,
+                    decoration: InputDecoration(
+                        hintText: '请输入', border: InputBorder.none),
                   ),
-                  Text(
-                    '已经阅读或同意《衣加衣协议》',
-                    style: TextStyle(
-                        color: _isAgree
-                            ? Color.fromRGBO(255, 214, 12, 1)
-                            : Colors.black54),
+                ),
+                InputRow(
+                  label: '验证码',
+                  field: TextField(
+                    autofocus: false,
+                    onChanged: (value) {
+                      formValidate();
+                    },
+                    controller: _captchaController,
+                    decoration: InputDecoration(
+                        hintText: '请输入', border: InputBorder.none),
                   ),
-                ],
-              ),
+                  surfix: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    onPressed: (_seconds == 0)
+                        ? () {
+                            setState(() {
+                              _startTimer();
+                            });
+                          }
+                        : null,
+                    child: Text(
+                      '$_verifyStr',
+                      style: TextStyle(
+                          color:
+                              (_seconds == 0) ? Colors.white : Colors.black45),
+                    ),
+                  ),
+                ),
+                InputRow(
+                    label: '设置密码',
+                    field: TextField(
+                      autofocus: false,
+                      obscureText: true,
+                      onChanged: (value) {
+                        formValidate();
+                      },
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                          hintText: '请输入', border: InputBorder.none),
+                    )),
+              ],
             ),
-          ],
-        ),
+          ),
+          RaisedButton(
+            onPressed: validate ? onNext : null,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            color: Color.fromRGBO(255, 214, 12, 1),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              '下一步',
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Checkbox(
+                  onChanged: (v) {
+                    setState(() {
+                      _isAgree = v;
+                      formValidate();
+                    });
+                  },
+                  value: _isAgree,
+                ),
+                Text(
+                  '已经阅读或同意《衣加衣协议》',
+                  style: TextStyle(
+                      color: _isAgree
+                          ? Color.fromRGBO(255, 214, 12, 1)
+                          : Colors.black54),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  bool formValidate() {
-    return _phoneController.text.trim().length > 0 &&
-        _captchaController.text.trim().length > 0 &&
-        _passwordController.text.trim().length > 0 &&
-        _isAgree;
+  void formValidate() {
+    setState(() {
+      validate = _phoneController.text.trim().length > 0 &&
+          _captchaController.text.trim().length > 0 &&
+          _passwordController.text.trim().length > 0 &&
+          _isAgree;
+    });
+  }
+
+  void onNext() {
+    //TODOS验证验证码
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RegisterInfoPage(
+              phone: _phoneController.text,
+              password: _passwordController.text,
+            )));
   }
 }
 

@@ -30,7 +30,7 @@ const COMMON_APIS = {
     return '/b2b/products/sample/create';
   },
   updateSampleProduct(code) {
-    return '/b2b/products/sample/update/'+code;
+    return '/b2b/products/sample/update/' + code;
   },
   getSampleProducts() {
     return '/b2b/products/sample';
@@ -81,7 +81,10 @@ const COMMON_APIS = {
     return '/b2b/brands/getSuppliers';
   },
   createEmployee() {
-    return '/b2b/employees';
+    return '/b2b/employees/create';
+  },
+  updateEmployee(uid) {
+    return '/b2b/employees/update/'+uid;
   },
   getEmployees() {
     return '/b2b/employees';
@@ -111,7 +114,10 @@ const COMMON_APIS = {
     return '/b2b/factories/' + uid;
   },
   createB2BCustomer() {
-    return '/b2b/b2bCustomers';
+    return '/b2b/b2bCustomers/create';
+  },
+  updateB2BCustomer(uid) {
+    return '/b2b/b2bCustomers/update/'+uid;
   },
   getB2BCustomers() {
     return '/b2b/b2bCustomers';
@@ -120,16 +126,22 @@ const COMMON_APIS = {
     return '/b2b/b2bCustomers/' + uid;
   },
   createRole() {
-    return '/b2b/roles';
+    return '/b2b/roles/create';
   },
   getRoles() {
+    return '/b2b/roles';
+  },
+  getAllRoles() {
     return '/b2b/roles';
   },
   getRole(uid) {
     return '/b2b/roles/' + uid;
   },
   createUserGroup() {
-    return '/b2b/userGroups';
+    return '/b2b/userGroups/create';
+  },
+  updateUserGroup() {
+    return '/b2b/userGroups/update';
   },
   getUserGroups() {
     return '/b2b/userGroups';
@@ -147,13 +159,25 @@ const COMMON_APIS = {
     return '/b2b/b2bUnits/' + uid;
   },
   createAddress() {
-    return '/b2b/addresses';
+    return '/b2b/company/addresses';
+  },
+  updateAddress(id) {
+    return '/b2b/company/addresses/' + id;
+  },
+  removeAddress(id) {
+    return '/b2b/company/addresses/' + id;
   },
   getAddresses() {
-    return '/b2b/addresses';
+    return '/b2b/company/addresses';
   },
-  getAddress(uid) {
-    return '/b2b/addresses/' + uid;
+  getAddress(id) {
+    return '/b2b/company/addresses/' + id;
+  },
+  getCategories() {
+    return '/b2b/categories/categories';
+  },
+  createCategories() {
+    return '/b2b/categories';
   },
   // 小类，级联（二级）
   getMinorCategories() {

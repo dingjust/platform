@@ -42,10 +42,11 @@
           return;
         }
 
-        this.$message.success('品牌创建成功');
-        this.$set(this.slotData, 'code', result);
+        this.$message.success('地址创建成功');
+
         this.refresh();
-        this.fn.closeSlider(true);
+
+        this.fn.closeSlider();
       }
     },
     computed: {

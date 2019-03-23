@@ -47,9 +47,19 @@
       </el-col>
     </el-row>
     <el-row :gutter="10">
-      <el-col :span="12">
+      <el-col :span="8">
         <el-form-item label="详细地址" prop="line1">
-          <el-input placeholder="请输入内容" v-model="slotData.line1"></el-input>
+          <el-input v-model="slotData.line1"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
+        <el-form-item label="联系人" prop="fullname">
+          <el-input v-model="slotData.fullname"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
+        <el-form-item label="联系电话" prop="cellphone">
+          <el-input v-model="slotData.cellphone"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -64,12 +74,14 @@
     computed: {},
     methods: {
       validate() {
+        const fullname = this.slotData.fullname.trim();
+        const cellphone = this.slotData.cellphone.trim();
         const region = this.slotData.region;
         const city = this.slotData.city;
         const cityDistrict = this.slotData.cityDistrict;
         const line1 = this.slotData.line1.trim();
-        if (!region.isocode || !city.code || !cityDistrict.code || !line1) {
-          this.$message.error('省/市/区/详细地址 必填');
+        if (!fullname || !cellphone || !region.isocode || !city.code || !cityDistrict.code || !line1) {
+          this.$message.error('联系人/联系电话/省/市/区/详细地址 必填');
           return false;
         }
 
@@ -141,6 +153,8 @@
         cities: [],
         cityDistricts: [],
         rules: {
+          fullname: [{required: true, message: '必填', trigger: 'blur'}],
+          cellphone: [{required: true, message: '必填', trigger: 'blur'}],
           region: [{required: true, message: '必填', trigger: 'blur'}],
           city: [{required: true, message: '必填', trigger: 'blur'}],
           cityDistrict: [{required: true, message: '必填', trigger: 'blur'}],
