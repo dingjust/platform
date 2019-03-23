@@ -13,27 +13,22 @@ const state = {
   },
   formData: {
     id: null,
-    uid: '',
-    name: '',
-    registrationDate: null,
-    scaleRange: '',
-    address: '',
-    styles: [],
-    brand: '',
-    ageRanges: [],
-    priceRange1s: [],
-    priceRange2s: [],
-    adeptAtCategories: [],
-    contactPhone: '',
-    contactPerson: '',
-    accountUid: '',
-    password: '',
-    confirmPassword: '',
-    email: '',
-    taxNumber: '',
-    bankOfDeposit: '',
-    phone: '',
-    cooperativeBrand: ''
+    fullname: '',
+    cellphone: '',
+    region: {
+      isocode: '',
+      name: ''
+    },
+    city: {
+      code: '',
+      name: ''
+    },
+    cityDistrict: {
+      code: '',
+      name: ''
+    },
+    line1: '',
+    defaultAddress: false
   }
 };
 

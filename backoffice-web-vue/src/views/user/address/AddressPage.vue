@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-card>
       <address-toolbar @onNew="onNew" @onSearch="onSearch"/>
-      <address-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
+      <address-list :page="page" @onSetDefault="onSetDefault" @onSearch="onSearch"/>
     </el-card>
   </div>
 </template>
@@ -31,24 +31,25 @@
     methods: {
       ...mapActions({
         search: 'search',
+        refresh: 'refresh'
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
         const url = this.apis().getAddresses();
         this.search({url, keyword, page, size});
       },
-      async onDetails(item) {
-        const url = this.apis().getAddress(item.uid);
-        const result = await this.$http.get(url);
+      async onSetDefault(item) {
+        const url = this.apis().updateAddress(item.id);
+        const result = await this.$http.put(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.fn.openSlider('员工：' + item.name, AddressDetailsPage, result);
+        this.refresh();
       },
       onNew(formData) {
-        this.fn.openSlider('创建员工', AddressDetailsPage, formData);
+        this.fn.openSlider('新建地址', AddressDetailsPage, formData);
       },
     },
     data() {

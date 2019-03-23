@@ -48,7 +48,9 @@ const state = {
     entries: [],
     remarks: '',
     deliveryAddress: {
+      id: null,
       fullname: '',
+      cellphone: '',
       region: {
         isocode: '',
         name: ''
