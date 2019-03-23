@@ -23,7 +23,7 @@ import QuotesModule from './order/quotes';
 import ProofingsModule from './order/proofings';
 import SampleProductModule from './miscs/sampleProduct';
 import SampleCheckoutHistModule from './miscs/sampleCheckoutHist';
-import SuppliersModule from './supplier/suppliers';
+import SuppliersModule from './miscs/suppliers';
 
 export {
   EnumsModule,

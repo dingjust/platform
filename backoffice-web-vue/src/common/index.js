@@ -114,7 +114,10 @@ const COMMON_APIS = {
     return '/b2b/factories/' + uid;
   },
   createB2BCustomer() {
-    return '/b2b/b2bCustomers';
+    return '/b2b/b2bCustomers/create';
+  },
+  updateB2BCustomer(uid) {
+    return '/b2b/b2bCustomers/update/'+uid;
   },
   getB2BCustomers() {
     return '/b2b/b2bCustomers';
@@ -163,6 +166,12 @@ const COMMON_APIS = {
   },
   getAddress(uid) {
     return '/b2b/addresses/' + uid;
+  },
+  getCategories() {
+    return '/b2b/categories/categories';
+  },
+  createCategories() {
+    return '/b2b/categories';
   },
   // 小类，级联（二级）
   getMinorCategories() {
