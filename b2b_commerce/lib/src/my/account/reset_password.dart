@@ -19,6 +19,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   String _verifyStr = '获取验证码';
   int _seconds = 0;
   Timer _timer;
+  bool validate = false;
 
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -70,21 +71,26 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   Widget _buildInputArea() {
-    TextFormField _phoneField = TextFormField(
+    TextField _phoneField = TextField(
       autofocus: false,
       keyboardType: TextInputType.phone,
       controller: _phoneController,
-      //只能输入数字
+      onChanged: (value) {
+        formValidate();
+      }, //只能输入数字
       inputFormatters: <TextInputFormatter>[
         WhitelistingTextInputFormatter.digitsOnly,
       ],
       decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
     );
 
-    TextFormField _passwordField = TextFormField(
+    TextField _passwordField = TextField(
       autofocus: false,
       controller: _passwordController,
       obscureText: true,
+      onChanged: (value) {
+        formValidate();
+      },
       decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
       // 校验用户名
     );
@@ -101,9 +107,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       },
     );
 
-    TextFormField _smsCaptchaField = TextFormField(
+    TextField _smsCaptchaField = TextField(
       autofocus: false,
       controller: _smsCaptchaController,
+      onChanged: (value) {
+        formValidate();
+      },
       decoration: InputDecoration(
         hintText: '请输入',
         border: InputBorder.none,
@@ -111,9 +120,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       // 校验用户名
     );
 
-    //监听密码输入变动、刷新表单校验
-    _passwordController.addListener(() {
-      setState(() {});
+    _againPasswordController.addListener(() {
+      formValidate();
     });
 
     return Container(
@@ -149,10 +157,31 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             label: '新密码',
             field: _passwordField,
           ),
-          InputRow(
-            label: '再次输入',
-            field: _againPasswordField,
-          )
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  margin: EdgeInsets.only(right: 20),
+                  child: Text(
+                    '再次输入',
+                    style: TextStyle(
+                        color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: _againPasswordField,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -197,22 +226,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: RaisedButton(
-              onPressed: formValidate()
-                  ? () {
-                      //加载条
-                      showDialog(
-                          context: context,
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ));
-                      // bloc
-                      //     .login(
-                      //         username: _phoneController.text,
-                      //         password: _passwordController.text,
-                      //         remember: _isRemember)
-                      //     .then((result) {});
-                    }
-                  : null,
+              onPressed: validate ? onSubmit : null,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)),
               color: Color.fromRGBO(255, 214, 12, 1),
@@ -228,11 +242,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
-  bool formValidate() {
-    return _phoneController.text.trim().length > 0 &&
-        _smsCaptchaController.text.trim().length > 0 &&
-        _passwordController.text == _againPasswordController.text;
+  void formValidate() {
+    setState(() {
+      validate = _phoneController.text.trim().length > 0 &&
+          _smsCaptchaController.text.trim().length > 0 &&
+          _passwordController.text.trim().length > 0 &&
+          _againPasswordController.text.trim().length > 0 &&
+          _passwordController.text == _againPasswordController.text;
+
+      print(validate);
+    });
   }
+
+  void onSubmit() async {}
 }
 
 class PrefixText extends StatelessWidget {
@@ -256,7 +278,7 @@ class PrefixText extends StatelessWidget {
 class InputRow extends StatelessWidget {
   final String label;
 
-  final TextFormField field;
+  final TextField field;
 
   final Widget surfix;
 

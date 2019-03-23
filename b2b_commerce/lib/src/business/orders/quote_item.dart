@@ -484,33 +484,34 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
     List<Widget> buttons;
 
     //品牌端显示
-    if (widget.model.state == QuoteState.SELLER_SUBMITTED &&
-        UserBLoC.instance.currentUser.type == UserType.BRAND) {
-      buttons = <Widget>[
-        FlatButton(
-            onPressed: onReject,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.red,
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            child: Text(
-              '拒绝报价',
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            )),
-        FlatButton(
-            onPressed: onApprove,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Color.fromRGBO(255, 214, 12, 1),
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            child: Text(
-              '确认报价',
-              style:
-                  TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-            )),
-      ];
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      if (widget.model.state == QuoteState.SELLER_SUBMITTED) {
+        buttons = <Widget>[
+          FlatButton(
+              onPressed: onReject,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Colors.red,
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '拒绝报价',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              )),
+          FlatButton(
+              onPressed: onApprove,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '确认报价',
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+              )),
+        ];
+      }
     } //工厂端显示
-    else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+    else {
       if (widget.model.state == QuoteState.SELLER_SUBMITTED) {
         buttons = [
           Container(),
@@ -571,7 +572,8 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, children: buttons),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: buttons ?? []),
     );
   }
 

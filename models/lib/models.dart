@@ -15,6 +15,7 @@ export 'src/order/invoice.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
 export 'src/my/bill.dart';
+export 'src/user/dto.dart';
 
 
 part 'models.g.dart';

@@ -125,13 +125,17 @@ enum ProofingStatus {
 
   /// 已完成
   COMPLETED,
+
+  ///已取消
+  CANCELLED
 }
 // TODO: i18n处理
 const ProofingStatusLocalizedMap = {
   ProofingStatus.PENDING_PAYMENT: "待付款",
   ProofingStatus.PENDING_DELIVERY: "待发货",
   ProofingStatus.SHIPPED: "已发货",
-  ProofingStatus.COMPLETED: "已完成"
+  ProofingStatus.COMPLETED: "已完成",
+  ProofingStatus.CANCELLED: "已取消"
 };
 
 // TODO: i18n处理
