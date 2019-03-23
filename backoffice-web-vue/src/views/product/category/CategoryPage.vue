@@ -71,7 +71,6 @@
           code: data.code,
           name: data.name
         };
-
         this.fn.openSlider('添加分类', CategoryDetailsPage, this.formData);
       },
       onDetail(data) {

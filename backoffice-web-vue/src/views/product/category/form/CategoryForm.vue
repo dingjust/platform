@@ -97,12 +97,14 @@
         this.fn.closeSlider(false);
       },
       async _onSubmit() {
+        console.log(this.slotData);
         let formData = {
           name: this.slotData.name,
           description: this.slotData.description,
           parent: this.slotData.parent,
           code: this.slotData.code,
-          group: this.slotData.group
+          group: this.slotData.group,
+          thumbnail:this.slotData.thumbnail
         };
         const url = this.apis().createCategories();
         const result = await this.$http.post(url, formData);
@@ -112,7 +114,6 @@
         }
 
         this.$message.success('保存成功');
-        this.$refs['CategoryIconForm'].onSubmit();
         const searchUrl = this.apis().getCategories();
         this.refresh({searchUrl});
         this.fn.closeSlider(true);
