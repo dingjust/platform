@@ -4,7 +4,7 @@
       <div slot="header" class="clearfix">
         <span>产品分类</span>
       </div>
-      <el-form ref="form" label-position="top" :model="slotData" :rules="rules">
+      <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="!readOnly">
         <el-row :gutter="10">
           <el-col :span="8">
             <el-form-item label="编码" prop="code">
@@ -45,14 +45,14 @@
       </div>
       <category-icon-form ref="CategoryIconForm"
                           :slot-data="slotData"
-                          :read-only="readOnly">
+                          :read-only="!readOnly">
 
       </category-icon-form>
     </el-card>
     <div class="pt-2"></div>
     <el-row :gutter="10">
       <el-col :span="12">
-        <el-button class="btn-block" size="mini" type="primary" @click="onSubmit">
+        <el-button class="btn-block" size="mini" type="primary" @click="onSubmit" :disabled="!readOnly">
           提交
         </el-button>
       </el-col>

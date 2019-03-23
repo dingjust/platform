@@ -29,21 +29,6 @@
       </el-tree>
     </el-card>
 
-    <!--<el-dialog title="更新图标" width="90%"-->
-               <!--:visible.sync="iconFormDialogVisible" :close-on-click-modal="false" :modal="false">-->
-      <!--<category-icon-form ref="iconForm"-->
-                          <!--:slot-data="rowData">-->
-      <!--</category-icon-form>-->
-      <!--<div>-->
-        <!--<template>-->
-          <!--<img :src="rowData.thumbnail"/>-->
-        <!--</template>-->
-      <!--</div>-->
-      <!--<div slot="footer" class="dialog-footer">-->
-        <!--<el-button type="primary" @click="onSubmitIconForm(rowData)">确 定</el-button>-->
-        <!--<el-button @click="iconFormDialogVisible = false">取 消</el-button>-->
-      <!--</div>-->
-    <!--</el-dialog>-->
   </div>
 </template>
 
@@ -52,9 +37,7 @@
 
   const {mapGetters, mapActions} = createNamespacedHelpers('CategoriesModule');
 
-  import CategoryForm from "@/views/product/category/form/CategoryForm";
   import CategoryDetailsPage from "@/views/product/category/details/CategoryDetailsPage";
-  // import CategoryIconForm from "@/views/product/category/form/CategoryIconForm";
 
 
   export default {
@@ -89,23 +72,11 @@
           name: data.name
         };
 
-        this.fn.openSlider('添加分类', CategoryForm, this.formData);
+        this.fn.openSlider('添加分类', CategoryDetailsPage, this.formData);
       },
-      // onUpdateIcon(data) {
-      //   // console.log(data);
-      //   this.rowData = data;
-      //   this.iconFormDialogVisible = true;
-      // },
       onDetail(data) {
-        // console.log(data);
         this.fn.openSlider('详情', CategoryDetailsPage, data);
       },
-      onSubmitIconForm(rowData) {
-        // console.log(rowData);
-        this.$refs['iconForm'].onSubmit();
-        this.iconFormDialogVisible = false;
-        this.fn.closeSlider();
-      }
     },
     watch: {
       filterText(val) {

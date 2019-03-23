@@ -14,7 +14,7 @@
                    :on-error="onUploadError"
                    :on-progress="onUploading"
                    :auto-upload="false">
-          <el-button size="small" type="primary">点击上传图标</el-button>
+          <el-button size="small" type="primary" :disabled = "readOnly">点击上传图标</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5MB</div>
         </el-upload>
       </el-col>
@@ -24,7 +24,7 @@
 <script>
   export default {
     name: 'CategoryIconForm',
-    props: ['slotData'],
+    props: ['slotData','readOnly'],
     methods: {
       getValue() {
         return this.slotData;
