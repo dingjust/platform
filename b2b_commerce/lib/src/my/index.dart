@@ -76,8 +76,6 @@ class MyHomePage extends StatelessWidget {
             //品牌认证
             if (bloc.currentUser.type == UserType.BRAND){
               UserRepositoryImpl().getBrand(UserBLoC.instance.currentUser.companyCode).then((brand){
-                brand.type = CompanyType.INDIVIDUAL_HOUSEHOLD;
-                brand.approvalStatus = ArticleApprovalStatus.UNAPPROVED;
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -87,8 +85,6 @@ class MyHomePage extends StatelessWidget {
             //工厂认证
             if (bloc.currentUser.type == UserType.FACTORY) {
               UserRepositoryImpl().getFactory(UserBLoC.instance.currentUser.companyCode).then((factory){
-                factory.approvalStatus = ArticleApprovalStatus.UNAPPROVED;
-                factory.type = CompanyType.FACTORY;
                 Navigator.push(
                     context,
                     MaterialPageRoute(
