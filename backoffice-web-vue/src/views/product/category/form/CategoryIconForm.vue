@@ -1,68 +1,81 @@
 <template>
   <div class="animated fadeIn">
     <el-row :gutter="10">
-      <el-col :span="20">
-        <el-upload ref="uploadForm"
-                   name="files"
-                   list-type="picture"
-                   :limit=1
-                   :data="data"
-                   :multiple="false"
-                   :action="uploadUrl"
-                   :file-list="files"
-                   :on-success="onUploadSuccess"
-                   :on-error="onUploadError"
-                   :on-progress="onUploading"
-                   :auto-upload="false">
-          <el-button size="small" type="primary">点击上传图标</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5MB</div>
-        </el-upload>
+      <el-col :span="24">
+        <el-upload
+          name="file"
+          :disabled="readOnly"
+          :action="mediaUploadUrl"
+          list-type="picture-card"
+          :data="uploadFormData"
+          :before-upload="onBeforeUpload"
+          :on-success="onSuccess"
+          :headers="headers"
+          :file-list="fileList"
+          :limit = "1"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove">
+          <i class="el-icon-plus"></i>
+        </el-upload>>
+        <el-dialog :visible.sync="dialogVisible" :modal="false">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
       </el-col>
     </el-row>
   </div>
 </template>
+
 <script>
   export default {
     name: 'CategoryIconForm',
-    props: ['slotData'],
+    props: ['slotData', 'readOnly'],
     methods: {
-      getValue() {
-        return this.slotData;
-      },
-      onSubmit() {
-        console.log(this.slotData);
-        this.$refs.uploadForm.submit();
-      },
-      onUploadSuccess(response, file, files) {
-        if (response === '') {
-          this.$message.success('上传成功');
-          this.$refs.uploadForm.clearFiles();
-          this.fn.closeSlider();
+      onBeforeUpload(file) {
+        if (file.size > 1024 * 1024 * 10) {
+          this.$message.error('上传的文件不允许超过10M');
+          return false;
         }
+
+        return true;
       },
-      onUploadError(error, file, files) {
-        let msg = '';
-        if (file.size >= (1024 * 1024 * 5)) {
-          msg = '，上传的文件不能超过5MB'
+      onSuccess(response) {
+        this.slotData.thumbnail = response;
+      },
+      async handleRemove(file) {
+        // console.log(JSON.stringify(file));
+        // TODO: 自定义删除方法（删除图片之前，清理product的others属性
+        const url = this.apis().removeMedia(this.slotData.thumbnail.id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
         }
-        this.$message.error('上传失败' + msg);
+        this.slotData.thumbnail = {};
+        this.$message.success("删除成功");
       },
-      onUploading(event, file, files) {
-        this.$message('正在上传，请稍等');
+      handlePreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
       }
     },
     computed: {
-      data: function () {
+      uploadFormData: function () {
         return {
-          code: this.slotData.code
+          fileFormat: 'DefaultFileFormat',
+        };
+      },
+      headers: function () {
+        return {
+          Authorization: this.$store.getters.token
         }
       }
     },
     data() {
       return {
-        uploadUrl: '/djbackoffice/product/category/uploadIcon',
-        files: []
+        fileList:[],
+        dialogImageUrl: '',
+        dialogVisible: false
       }
-    }
+    },
   };
 </script>
