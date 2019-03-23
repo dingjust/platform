@@ -195,7 +195,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             new Divider(height: 0),
             ContactWayField(model),
             new Divider(height: 0),
-            DeliveryAddressField(model),
 //            _isShowMore ? Container() : new Divider(height: 0),
             _buildHideBody(context),
 //            _buildHideTips(context),

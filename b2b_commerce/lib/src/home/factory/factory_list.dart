@@ -6,16 +6,16 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class QuickReactionFactoryPage extends StatefulWidget {
+class FactoryPage extends StatefulWidget {
   String route;
-  QuickReactionFactoryPage({this.route});
+  FactoryPage({this.route});
 
-  _QuickReactionFactoryPageState createState() =>
-      _QuickReactionFactoryPageState();
+  _FactoryPageState createState() =>
+      _FactoryPageState();
 }
 
-class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
-  GlobalKey _quickReactionFactoryBLoCProviderKey = GlobalKey();
+class _FactoryPageState extends State<FactoryPage> {
+  GlobalKey _FactoryBLoCProviderKey = GlobalKey();
 
   bool showFilterMenu = false;
 
@@ -39,9 +39,9 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
       categoryStr = _minCategorySelect[0].name;
     }
 
-    return BLoCProvider<QuickReactionFactoryBLoC>(
-        key: _quickReactionFactoryBLoCProviderKey,
-        bloc: QuickReactionFactoryBLoC.instance,
+    return BLoCProvider<FactoryBLoC>(
+        key: _FactoryBLoCProviderKey,
+        bloc: FactoryBLoC.instance,
         child: Scaffold(
           appBar: AppBar(
             brightness: Brightness.light,
@@ -105,7 +105,7 @@ class _QuickReactionFactoryPageState extends State<QuickReactionFactoryPage> {
                   height: showFilterMenu ? 150 : 0,
                   entries: filterConditionEntries,
                   streamController:
-                      QuickReactionFactoryBLoC.instance.conditionController,
+                      FactoryBLoC.instance.conditionController,
                   afterPressed: _setLabel,
                 ),
                 Expanded(
@@ -147,7 +147,7 @@ class FactoriesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<QuickReactionFactoryBLoC>(context);
+    var bloc = BLoCProvider.of<FactoryBLoC>(context);
 
     //监听筛选条件更改
     bloc.conditionStream.listen((condition) {

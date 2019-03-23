@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/home/factory/factory.dart';
-import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/home/product/product.dart';
 import 'package:flutter/material.dart';
