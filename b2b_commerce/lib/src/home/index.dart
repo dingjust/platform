@@ -1,10 +1,11 @@
+import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 /// 网站主页
@@ -115,14 +116,46 @@ class _HomePageState extends State<HomePage> {
     return [
       GridItem(
           title: '当季快反',
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_FACTORY);
+          onPressed: () async {
+            //加载条
+            showDialog(
+                context: context,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ));
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categorys) {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CategorySelectPage(
+                        minCategorySelect: [],
+                        categorys: categorys,
+                        categoryActionType: CategoryActionType.TO_FACTORIES,
+                      )));
+            });
           },
           pic: B2BImage.fast_factory(width: 60, height: 80)),
       GridItem(
           title: '看款下单',
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_PRODUCT);
+          onPressed: () async {
+            //加载条
+            showDialog(
+                context: context,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ));
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categorys) {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CategorySelectPage(
+                        minCategorySelect: [],
+                        categorys: categorys,
+                        categoryActionType: CategoryActionType.TO_PRODUCTS,
+                      )));
+            });
           },
           pic: B2BImage.order(width: 60, height: 80)),
       // GridItem(

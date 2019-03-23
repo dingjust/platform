@@ -86,7 +86,7 @@ class _FactoryPageState extends State<FactoryPage> {
                       .then((categorys) {
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProductCategorySelectPage(
+                        builder: (context) => CategorySelectPage(
                               minCategorySelect: _minCategorySelect,
                               categorys: categorys,
                             )));

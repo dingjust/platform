@@ -56,7 +56,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                 .then((categorys) {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProductCategorySelectPage(
+                  builder: (context) => CategorySelectPage(
                         minCategorySelect: fastRequirementForm.categories,
                         fastRequirementForm: fastRequirementForm,
                         categorys: categorys,

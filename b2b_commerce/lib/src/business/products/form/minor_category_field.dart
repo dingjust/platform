@@ -40,7 +40,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
              dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductCategorySelectPage(minCategorySelect: _minCategorySelect,categorys:_categorys)
+                builder: (context) => CategorySelectPage(minCategorySelect: _minCategorySelect,categorys:_categorys)
               ),
             );
 
