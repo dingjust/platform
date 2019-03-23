@@ -16,6 +16,9 @@ const state = {
     uid: '',
     name: '',
     contactAddress: {
+      id: null,
+      fullname: '',
+      cellphone: '',
       region: {
         isocode: '',
         name: ''
