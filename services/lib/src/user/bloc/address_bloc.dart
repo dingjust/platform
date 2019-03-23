@@ -4,8 +4,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 class AddressBLoC extends BLoCBase {
-  AddressResponse addressResponse;
-  List<AddressModel> products;
+  List<AddressModel> addresses;
   AddressModel currentProduct;
 
   AddressModel newProduct;
@@ -19,9 +18,8 @@ class AddressBLoC extends BLoCBase {
 
   AddressBLoC._internal() {
     // 初始化
-    products = List<AddressModel>();
+    addresses = List<AddressModel>();
 //    currentProduct = AddressModel();
-    addressResponse = AddressResponse(0, 10, 0, 0, []);
 
 //    newProduct = AddressModel();
   }
@@ -44,33 +42,26 @@ class AddressBLoC extends BLoCBase {
 
   Stream<AddressModel> get detailStream => _detailController.stream;
 
-  filterByStatuses(String keyword) async {
+  filterByStatuses() async {
     if(!lock){
       lock = true;
-      products.clear();
-      addressResponse = await AddressRepositoryImpl().list({
-        'keyword':keyword
-      });
-      products.addAll(addressResponse.content);
-      _controller.sink.add(products);
+      addresses.clear();
+      addresses = await AddressRepositoryImpl().list();
+      _controller.sink.add(addresses);
       lock = false;
     }
-
   }
 
-  loadingMoreByStatuses(String keyword) async {
-    if(addressResponse.number < addressResponse.totalPages-1){
-      addressResponse = await AddressRepositoryImpl().list({
-        'page':addressResponse.number+1,
-        'keyword':keyword,
-      });
-      products.addAll(addressResponse.content);
-    }else{
-      _bottomController.sink.add(true);
-    }
-
-    _loadingController.sink.add(false);
-    _controller.sink.add(products);
+  loadingMoreByStatuses() async {
+//    if(addressResponse.number < addressResponse.totalPages-1){
+//      addressResponse = await AddressRepositoryImpl().list();
+//      addresses.addAll(addressResponse.content);
+//    }else{
+//      _bottomController.sink.add(true);
+//    }
+//
+//    _loadingController.sink.add(false);
+//    _controller.sink.add(addresses);
   }
 
   //下拉刷新

@@ -16,7 +16,7 @@ class MyAddressesPage extends StatelessWidget {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses('');
+        bloc.loadingMoreByStatuses();
       }
     });
 
@@ -72,7 +72,7 @@ class AddressList extends StatelessWidget {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses('');
+        bloc.loadingMoreByStatuses();
       }
     });
 
@@ -98,7 +98,7 @@ class AddressList extends StatelessWidget {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.filterByStatuses('');
+            return await bloc.filterByStatuses();
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -109,7 +109,7 @@ class AddressList extends StatelessWidget {
                 // initialData: null,
                 builder: (BuildContext context, AsyncSnapshot<List<AddressModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByStatuses('');
+                    bloc.filterByStatuses();
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
                       child: Center(child: CircularProgressIndicator()),

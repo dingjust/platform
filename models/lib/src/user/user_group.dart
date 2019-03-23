@@ -82,6 +82,9 @@ class CompanyModel extends UserGroupModel {
   //认证状态
   ArticleApprovalStatus approvalStatus;
 
+  //图文详情列表
+  List<CompanyProfileModel> companyProfiles;
+
   CompanyModel({
     MediaModel profilePicture,
     String uid,
@@ -105,6 +108,7 @@ class CompanyModel extends UserGroupModel {
     this.legalRepresentative,
     this.type,
     this.approvalStatus,
+    this.companyProfiles,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -146,6 +150,7 @@ class OrgUnitModel extends CompanyModel {
     String certificateOfLegal,
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
+    List<CompanyProfileModel> companyProfiles,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -170,6 +175,7 @@ class OrgUnitModel extends CompanyModel {
           legalRepresentative: legalRepresentative,
           type: type,
           approvalStatus: approvalStatus,
+          companyProfiles: companyProfiles,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -209,6 +215,7 @@ class B2BUnitModel extends OrgUnitModel {
     String certificateOfLegal,
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
+    List<CompanyProfileModel> companyProfiles,
     this.active,
     this.email,
     this.phone,
@@ -236,6 +243,7 @@ class B2BUnitModel extends OrgUnitModel {
           legalRepresentative: legalRepresentative,
           type: type,
           approvalStatus: approvalStatus,
+          companyProfiles: companyProfiles,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -297,6 +305,7 @@ class BrandModel extends B2BUnitModel {
     String certificateOfLegal,
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
+    List<CompanyProfileModel> companyProfiles,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -331,6 +340,7 @@ class BrandModel extends B2BUnitModel {
           legalRepresentative: legalRepresentative,
           type: type,
           approvalStatus: approvalStatus,
+          companyProfiles: companyProfiles,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -384,8 +394,6 @@ class FactoryModel extends B2BUnitModel {
   @JsonKey(toJson: _industrialClusterToJson)
   IndustrialClusterModel industrialCluster;
 
-  //图文详情
-
   FactoryModel({
     MediaModel profilePicture,
     String uid,
@@ -411,6 +419,7 @@ class FactoryModel extends B2BUnitModel {
     String certificateOfLegal,
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
+    List<CompanyProfileModel> companyProfiles,
     this.historyOrdersCount,
     this.orderedSuccessRate,
     this.monthlyCapacityRanges,
@@ -450,6 +459,7 @@ class FactoryModel extends B2BUnitModel {
           legalRepresentative: legalRepresentative,
           type: type,
           approvalStatus: approvalStatus,
+          companyProfiles: companyProfiles,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>

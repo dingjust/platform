@@ -8,9 +8,9 @@ class AddressRepositoryImpl implements AddressRepository {
   const AddressRepositoryImpl();
 
   @override
-  Future<AddressResponse> list(Map<String, dynamic> params) async{
-    Response response = await http$.get(UserApis.addresses,data: params);
-    return AddressResponse.fromJson(response.data);
+  Future<List<AddressModel>> list() async{
+    Response response = await http$.get(UserApis.addresses);
+    return response.data.map<AddressModel>((address)=>AddressModel.fromJson(address)).toList();
   }
 
   @override
@@ -27,7 +27,7 @@ class AddressRepositoryImpl implements AddressRepository {
 
   @override
   Future<String> update(AddressModel form) async{
-    Response response = await http$.put(UserApis.addressUpdate,data: AddressModel.toJson(form));
+    Response response = await http$.put(UserApis.addressUpdate(form.id),data: AddressModel.toJson(form));
     return response.data;
   }
 

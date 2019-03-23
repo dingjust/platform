@@ -119,7 +119,12 @@ class AddressFormState extends State<AddressFormPage> {
           title: RaisedButton(
             child: Text('删除地址',style: TextStyle(color: Colors.white),),
             color: Colors.red,
-            onPressed: () {},
+            onPressed: () async{
+              AddressRepositoryImpl().delete(widget.address.id.toString()).then((a){
+                Navigator.pop(context);
+              });
+              AddressBLoC.instance.filterByStatuses();
+            },
           ),
         ),
       );
@@ -168,7 +173,7 @@ class AddressFormState extends State<AddressFormPage> {
                 await AddressRepositoryImpl().update(widget.address).then((a)=>Navigator.pop(context));
               }
 
-              AddressBLoC.instance.filterByStatuses('');
+              AddressBLoC.instance.filterByStatuses();
             },
           )
         ],

@@ -11,4 +11,7 @@ abstract class UserRepository {
   Future<String> applyCertification(CompanyModel form);
 
   Future<String> register({String type, CompanyRegisterDTO form});
+
+  //产业集群类别
+  Future<List<LabelModel>> labels();
 }
