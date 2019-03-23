@@ -1,9 +1,49 @@
+<style type="scss">
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 8px;
+  }
+</style>
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <category-toolbar @onNew="onNew" @onSearch="onSearch"/>
-      <category-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
+      <el-input placeholder="输入关键字进行过滤" v-model="filterText"> </el-input>
+      <div class="pt-2"></div>
+      <el-tree ref="tree" node-key="id" :default-expand-all="true" :data="items" :props="defaultProps"
+               :expand-on-click-node="false"
+               :filter-node-method="onFilter">
+        <span class="custom-tree-node" slot-scope="{ node, data }">
+          <span>{{ node.label }}</span>
+          <span>
+            <el-button type="text" size="mini" @click="() => onDetail(data)">
+              详细
+            </el-button>
+            <el-button type="text" size="mini" @click="() => onAppend(data)">
+              添加子分类
+            </el-button>
+          </span>
+        </span>
+      </el-tree>
     </el-card>
+
+    <!--<el-dialog title="更新图标" width="90%"-->
+               <!--:visible.sync="iconFormDialogVisible" :close-on-click-modal="false" :modal="false">-->
+      <!--<category-icon-form ref="iconForm"-->
+                          <!--:slot-data="rowData">-->
+      <!--</category-icon-form>-->
+      <!--<div>-->
+        <!--<template>-->
+          <!--<img :src="rowData.thumbnail"/>-->
+        <!--</template>-->
+      <!--</div>-->
+      <!--<div slot="footer" class="dialog-footer">-->
+        <!--<el-button type="primary" @click="onSubmitIconForm(rowData)">确 定</el-button>-->
+        <!--<el-button @click="iconFormDialogVisible = false">取 消</el-button>-->
+      <!--</div>-->
+    <!--</el-dialog>-->
   </div>
 </template>
 
@@ -12,47 +52,77 @@
 
   const {mapGetters, mapActions} = createNamespacedHelpers('CategoriesModule');
 
-  import CategoryToolbar from './toolbar/CategoryToolbar';
-  import CategoryList from './list/CategoryList';
-  import CategoryDetailsPage from './details/CategoryDetailsPage';
+  import CategoryForm from "@/views/product/category/form/CategoryForm";
+  import CategoryDetailsPage from "@/views/product/category/details/CategoryDetailsPage";
+  // import CategoryIconForm from "@/views/product/category/form/CategoryIconForm";
+
 
   export default {
-    name: 'CategoryPage',
-    components: {
-      CategoryToolbar,
-      CategoryList
-    },
+    components: {},
     computed: {
       ...mapGetters({
-        page: 'page',
-        keyword: 'keyword',
+        items: 'items'
       })
     },
     methods: {
       ...mapActions({
-        search: 'search',
+        search: 'search'
       }),
-      onSearch(page, size) {
-        const keyword = this.keyword;
-        const url = this.apis().getCategorys();
-        this.search({url, keyword, page, size});
-      },
-      async onDetails(item) {
-        const url = this.apis().getCategory(item.uid);
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
+      onFilter(value, data) {
+        if (!value) {
+          return true;
         }
 
-        this.fn.openSlider('员工：' + item.name, CategoryDetailsPage, result);
+        return data.name.indexOf(value) !== -1;
       },
-      onNew(formData) {
-        this.fn.openSlider('创建员工', CategoryDetailsPage, formData);
+      onSearch() {
+        const url = this.apis().getCategories();
+        this.search({url});
+      },
+      onAppend(data) {
+        if (!data.children) {
+          this.$set(data, 'children', []);
+        }
+
+        this.formData['parent'] = {
+          code: data.code,
+          name: data.name
+        };
+
+        this.fn.openSlider('添加分类', CategoryForm, this.formData);
+      },
+      // onUpdateIcon(data) {
+      //   // console.log(data);
+      //   this.rowData = data;
+      //   this.iconFormDialogVisible = true;
+      // },
+      onDetail(data) {
+        // console.log(data);
+        this.fn.openSlider('详情', CategoryDetailsPage, data);
+      },
+      onSubmitIconForm(rowData) {
+        // console.log(rowData);
+        this.$refs['iconForm'].onSubmit();
+        this.iconFormDialogVisible = false;
+        this.fn.closeSlider();
+      }
+    },
+    watch: {
+      filterText(val) {
+        this.$refs['tree'].filter(val);
       },
     },
     data() {
-      return {};
+      return {
+        filterText: '',
+        defaultProps: {
+          children: 'children',
+          label: 'name'
+        },
+        iconFormDialogVisible: false,
+        formData: this.$store.state.CategoriesModule.formData,
+        rowData: []
+      };
     },
     created() {
       this.onSearch();

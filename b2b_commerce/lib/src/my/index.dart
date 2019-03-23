@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
+import 'package:b2b_commerce/src/my/my_company_certificate_select.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -58,12 +59,12 @@ class MyHomePage extends StatelessWidget {
                   '我要认证',
                   style: TextStyle(fontSize: 17),
                 )),
-                Text(
-                  '未认证',
-                  style: TextStyle(
-                    color: Color.fromRGBO(255, 214, 12, 1),
-                  ),
-                ),
+//                Text(
+//                  '未认证',
+//                  style: TextStyle(
+//                    color: Color.fromRGBO(255, 214, 12, 1),
+//                  ),
+//                ),
                 Icon(
                   Icons.chevron_right,
                   color: Colors.grey,
@@ -73,18 +74,22 @@ class MyHomePage extends StatelessWidget {
           ),
           onTap: () {
             //品牌认证
-            if (bloc.currentUser.type == UserType.BRAND)
-              Navigator.pushNamed(
-                  context, AppRoutes.ROUTE_MY_BRAND_CERTIFICATE);
+            if (bloc.currentUser.type == UserType.BRAND){
+              UserRepositoryImpl().getBrand(UserBLoC.instance.currentUser.companyCode).then((brand){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyCompanyCertificateSelectPage(brand)));
+              });
+            }
             //工厂认证
             if (bloc.currentUser.type == UserType.FACTORY) {
               UserRepositoryImpl().getFactory(UserBLoC.instance.currentUser.companyCode).then((factory){
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyCompanyCertificatePage(factory)));
+                        builder: (context) => MyCompanyCertificateSelectPage(factory)));
               });
-
             }
           },
         )

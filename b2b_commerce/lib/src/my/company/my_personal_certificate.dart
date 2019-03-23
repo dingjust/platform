@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 import 'package:models/models.dart';
 
 class MyPersonalCertificatePage extends StatefulWidget{
   CompanyModel company;
-  bool enabled;
-  MyPersonalCertificatePage(this.company,{this.enabled = false});
+  bool onlyRead;
+  MyPersonalCertificatePage(this.company,{this.onlyRead = false,});
   MyPersonalCertificatePageState createState() => MyPersonalCertificatePageState();
 }
 
@@ -16,12 +17,11 @@ class MyPersonalCertificatePageState extends State<MyPersonalCertificatePage>{
   FocusNode _certificateOfLegalFocusNode = FocusNode();
   TextEditingController _contactPhoneController = TextEditingController();
   FocusNode _contactPhoneFocusNode = FocusNode();
-  List<MediaModel> medias = [];
 
   @override
   void initState() {
     _nameController.text = widget.company.name;
-    _certificateOfLegalController.text = widget.company.businessRegistrationNo;
+    _certificateOfLegalController.text = widget.company.certificateOfLegal;
     _contactPhoneController.text = widget.company.contactPhone;
 
     // TODO: implement initState
@@ -32,7 +32,7 @@ class MyPersonalCertificatePageState extends State<MyPersonalCertificatePage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('认证资料'),
+        title: Text('个人认证'),
         centerTitle: true,
         elevation: 0.5,
       ),
@@ -52,8 +52,9 @@ class MyPersonalCertificatePageState extends State<MyPersonalCertificatePage>{
                     focusNode: _nameFocusNode,
                     controller: _nameController,
                     padding: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                    dividerPadding: EdgeInsets.only(),
                     textAlign: TextAlign.left,
-                    enabled: widget.enabled,
+                    enabled: !widget.onlyRead,
                   )
                 ],
               ),
@@ -73,8 +74,9 @@ class MyPersonalCertificatePageState extends State<MyPersonalCertificatePage>{
                     focusNode: _certificateOfLegalFocusNode,
                     controller: _certificateOfLegalController,
                     padding: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                    dividerPadding: EdgeInsets.only(),
                     textAlign: TextAlign.left,
-                    enabled: widget.enabled,
+                    enabled: !widget.onlyRead,
                   )
                 ],
               ),
@@ -94,8 +96,9 @@ class MyPersonalCertificatePageState extends State<MyPersonalCertificatePage>{
                     focusNode: _contactPhoneFocusNode,
                     controller: _contactPhoneController,
                     padding: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                    dividerPadding: EdgeInsets.only(),
                     textAlign: TextAlign.left,
-                    enabled: widget.enabled,
+                    enabled: !widget.onlyRead,
                   )
                 ],
               ),
@@ -111,12 +114,38 @@ class MyPersonalCertificatePageState extends State<MyPersonalCertificatePage>{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text('认证证件',style: TextStyle(color: Colors.grey,fontSize: 16),),
-                  EditableAttachments(list: medias,maxNum: medias.length,editable: false,),
+                  EditableAttachments(list: widget.company.certificates,maxNum: widget.company.certificates.length,editable: false,),
                 ],
               ),
             ),
           ),
-
+          Offstage(
+            offstage: widget.onlyRead,
+            child: Container(
+              padding: EdgeInsets.only(top: 20),
+              width: MediaQuery.of(context).size.width - 16,
+              child: ActionChip(
+                labelPadding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width / 3.5,
+                    vertical: 8),
+                backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+                label: Text(
+                  '提交认证',
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                onPressed: () async {
+                  widget.company.type = CompanyType.INDIVIDUAL_HOUSEHOLD;
+                  widget.company.name = _nameController.text;
+                  widget.company.certificateOfLegal = _certificateOfLegalController.text;
+                  widget.company.contactPhone = _contactPhoneController.text;
+                  await UserRepositoryImpl().applyCertification(widget.company);
+                  UserRepositoryImpl().applyCertification(widget.company).then((a){
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -1,280 +1,96 @@
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
-class ApparelProductPricesInputPage extends StatefulWidget {
-  List prices;
 
-  ApparelProductPricesInputPage({this.prices});
+class ApparelProductPricesInputPage extends StatefulWidget{
+  ApparelProductModel item;
 
-  ApparelProductPricesInputPageState createState() =>
-      ApparelProductPricesInputPageState();
+  ApparelProductPricesInputPage(this.item);
+  _ApparelProductPricesInputPageState createState() => _ApparelProductPricesInputPageState();
 }
 
-class ApparelProductPricesInputPageState
-    extends State<ApparelProductPricesInputPage> {
-  TextEditingController _priceController = TextEditingController();
-  TextEditingController _suggestedPriceController = TextEditingController();
-  TextEditingController _price1Controller = TextEditingController();
-  TextEditingController _price2Controller = TextEditingController();
-  TextEditingController _price3Controller = TextEditingController();
-  FocusNode _priceFocusNode = FocusNode();
-  FocusNode _suggestedFocusNode = FocusNode();
-  FocusNode _price1FocusNode = FocusNode();
-  FocusNode _price2FocusNode = FocusNode();
-  FocusNode _price3FocusNode = FocusNode();
+class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInputPage>{
+  FocusNode _minPriceFocusNode = FocusNode();
+  FocusNode _maxPriceFocusNode = FocusNode();
+  final TextEditingController _minPriceController = TextEditingController();
+  final TextEditingController _maxPriceController = TextEditingController();
+  Map<String,Object> map;
 
-  List<Widget> _staircasePriceInputs = <Widget>[];
+  void initState(){
+    _minPriceController.text = '${widget.item.minPrice ?? ''}';
+    _maxPriceController.text = '${widget.item.maxPrice ?? ''}';
 
-  @override
-  void initState() {
-    _priceController.text = widget.prices[0]['price']?.toString();
-    _suggestedPriceController.text =
-        widget.prices[0]['suggestedPrice']?.toString();
-    _price1Controller.text = widget.prices[0]['price1']?.toString();
-    _price2Controller.text = widget.prices[0]['price2']?.toString();
-    _price3Controller.text = widget.prices[0]['price3']?.toString();
-
-    if (widget.prices != null && widget.prices[1] != null) {
-      widget.prices[1].forEach((staircasePrice) {
-        _staircasePriceInputs
-            .add(StaircasePricesInput(staircasePrice: staircasePrice));
-      });
-    }
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.5,
-        centerTitle: true,
-        title: Text('商品价格'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.done,
-            ),
-            onPressed: () {
-              if (_priceController.text.length <= 0) {
-                showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          title: Text('供货价不能为空'),
-                        ));
-              } else {
-                List<Object> results = <Object>[];
-                Map<String, double> map = Map();
-                map['price'] = double.parse(_priceController.text);
-                map['suggestedPrice'] =
-                    _suggestedPriceController.text.length > 0
-                        ? double.parse(_suggestedPriceController.text)
-                        : 0;
-                map['price1'] = _price1Controller.text.length > 0
-                    ? double.parse(_price1Controller.text)
-                    : 0;
-                map['price2'] = _price2Controller.text.length > 0
-                    ? double.parse(_price2Controller.text)
-                    : 0;
-                map['price3'] = _price3Controller.text.length > 0
-                    ? double.parse(_price3Controller.text)
-                    : 0;
-
-                results.add(map);
-                results.add(_staircasePriceInputs);
-
-                Navigator.pop(context, results);
-              }
-            },
-          )
-        ],
-      ),
-      body: Container(
-//        color: Colors.grey[200],
-        child: ListView(
-          children: <Widget>[
-            TextFieldComponent(
-              leadingText: '供货价',
-              hintText: '请输入供货价，必填',
-              inputType: TextInputType.number,
-              leadingWidth: 80,
-              controller: _priceController,
-              focusNode: _priceFocusNode,
-            ),
-            TextFieldComponent(
-              leadingText: '建议零售价',
-              hintText: '请输入建议零售价',
-              inputType: TextInputType.number,
-              leadingWidth: 80,
-              controller: _suggestedPriceController,
-              focusNode: _suggestedFocusNode,
-            ),
-            Container(
-//                padding: const EdgeInsets.only(top: 10),
-              child: Card(
-                  elevation: 0,
-                  margin: EdgeInsets.symmetric(horizontal: 0),
+        appBar: AppBar(
+            title: Text('填写价格区间'),
+            elevation: 0.5,
+            brightness: Brightness.light,
+            centerTitle: true,
+            actions: <Widget>[
+              GestureDetector(
                   child: Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          '会员价',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        TextFieldComponent(
-                          leadingText: '会员价（A）',
-                          hintText: '请输入会员价（A）',
-                          inputType: TextInputType.number,
-                          leadingWidth: 80,
-                          controller: _price1Controller,
-                          focusNode: _price1FocusNode,
-                        ),
-                        TextFieldComponent(
-                          leadingText: '会员价（B）',
-                          hintText: '请输入会员价（B）',
-                          inputType: TextInputType.number,
-                          leadingWidth: 80,
-                          controller: _price2Controller,
-                          focusNode: _price2FocusNode,
-                        ),
-                        TextFieldComponent(
-                          leadingText: '会员价（C）',
-                          hintText: '请输入会员价（C）',
-                          inputType: TextInputType.number,
-                          leadingWidth: 80,
-                          controller: _price3Controller,
-                          focusNode: _price3FocusNode,
-                        ),
-                      ],
+                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: Center(
+                      child: Text(
+                        '确定',
+                        style: TextStyle(
+                            color: Color.fromRGBO(255, 149, 22, 1)),
+                      ),
                     ),
-                  )),
-            ),
-            Container(
-//                padding: const EdgeInsets.all(8.0),
-              child: Card(
-                margin: EdgeInsets.all(0),
-                child: Container(
-                  padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-                  child: Column(
-                    children: _staircasePriceList(),
                   ),
-                ),
-              ),
-            ),
-          ],
+                  onTap: () async {
+                    widget.item.minPrice = _minPriceController.text == '' ? null : double.parse(_minPriceController.text);
+                    widget.item.maxPrice = _maxPriceController.text == '' ? null : double.parse(_maxPriceController.text);
+                    Navigator.pop(context);
+                  }
+              )
+            ]
         ),
-      ),
+        body: Container(
+            color: Colors.white,
+            child: ListView(
+              children: <Widget>[
+                _buildFactoryInfo(context),
+              ],
+            ))
     );
   }
 
-  List<Widget> _staircasePriceList() {
-    List<Widget> list = <Widget>[
-      Text(
-        '阶梯价',
-        style: TextStyle(fontSize: 14),
-      ),
-    ];
-
-    //阶梯价行数据
-
-    if (_staircasePriceInputs.length <= 0) {
-      _staircasePriceInputs.add(StaircasePricesInput());
-    }
-
-    list.addAll(_staircasePriceInputs);
-
-    list.add(Container(
-      width: 500,
-      child: RaisedButton.icon(
-        label: Text(''),
-        icon: Icon(Icons.add),
-        onPressed: () {
-          setState(() {
-            _staircasePriceInputs.add(StaircasePricesInput());
-          });
-        },
-      ),
-    ));
-
-    return list;
-  }
-}
-
-class StaircasePricesInput extends StatefulWidget {
-  StaircasePriceModel staircasePrice;
-
-  StaircasePricesInput({
-    this.staircasePrice,
-  });
-
-  StaircasePricesInputState createState() => StaircasePricesInputState();
-}
-
-class StaircasePricesInputState extends State<StaircasePricesInput> {
-  TextEditingController priceController;
-  TextEditingController minQuantityController;
-
-  @override
-  void initState() {
-    minQuantityController = TextEditingController(
-        text: widget.staircasePrice?.minQuantity?.toString());
-    priceController =
-        TextEditingController(text: widget.staircasePrice?.price?.toString());
-
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+  Widget _buildFactoryInfo(BuildContext context){
+    return Container(
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                  child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: minQuantityController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '起订量',
-                    ),
-                  ),
-                  Divider(
-                    height: 0,
-                    color: Colors.grey[400],
-                  ),
-                ],
-              )),
-              Text('以上，价格：'),
-              Expanded(
-                  child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: priceController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '价格',
-                    ),
-                  ),
-                  Divider(
-                    height: 0,
-                    color: Colors.grey[400],
-                  ),
-                ],
-              )),
-            ],
+          Container(
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(10),
+            child: TextFieldComponent(
+              focusNode: _minPriceFocusNode,
+              controller: _minPriceController,
+              autofocus: true,
+              leadingText: '价格下限',
+              hintText: '请输入价格下限',
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(10),
+            child: TextFieldComponent(
+              focusNode: _maxPriceFocusNode,
+              controller: _maxPriceController,
+              leadingText: '价格上限',
+              hintText: '请输入价格上限',
+              inputType: TextInputType.phone,
+            ),
           ),
         ],
       ),
     );
   }
+
 }

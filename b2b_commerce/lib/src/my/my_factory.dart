@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
+import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_way.dart';
 import 'package:core/core.dart';
@@ -62,6 +63,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           }
           if (snapshot.hasData) {
             company = snapshot.data;
+            print('${company.approvalStatus}=============');
             return Container(child: _buildFactory(context));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
@@ -78,9 +80,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
         children: <Widget>[
           _buildBaseInfo(),
           FutureBuilder<dynamic>(
-            future: ProductRepositoryImpl().list({}, {
-              'size':3
-            }),
+            future: ProductRepositoryImpl().list({}, {'size': 3}),
             // initialData: null,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.data == null) {
@@ -90,7 +90,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 );
               }
               if (snapshot.hasData) {
-                return  _buildCashProducts(context,snapshot.data.content);
+                return _buildCashProducts(context, snapshot.data.content);
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
@@ -101,14 +101,16 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
             elevation: 0,
             margin: EdgeInsets.only(top: 10),
             child: ListTile(
-              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               title: Text('公司认证信息'),
               trailing: Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyCompanyCertificatePage(company)));
+                        builder: (context) =>
+                            MyCompanyCertificatePage(company,onlyRead: true,)));
               },
             ),
           ),
@@ -117,8 +119,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
             margin: EdgeInsets.only(top: 10),
             child: ListTile(
               title: Text('注册时间'),
-              trailing:
-                  Text(DateFormatUtil.formatYMD(company.registrationDate) ?? ''),
+              trailing: Text(
+                  DateFormatUtil.formatYMD(company.registrationDate) ?? ''),
             ),
           ),
         ],
@@ -142,13 +144,23 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      borderRadius: BorderRadius.circular(5),
+                  GestureDetector(
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text('编辑'),
                     ),
-                    child: Text('编辑'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyFactoryBaseFormPage(company)));
+                    },
                   )
                 ],
               ),
@@ -213,16 +225,20 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               child: Row(
                 children: <Widget>[
                   Text('历史接单'),
-                  Text('${company.historyOrdersCount}',style: TextStyle(color: Colors.red),),
+                  Text(
+                    '${company.historyOrdersCount}',
+                    style: TextStyle(color: Colors.red),
+                  ),
                   Text('单，响应报价时间：'),
-                  Text('${company.responseQuotedTime}',style: TextStyle(color: Colors.red),),
+                  Text(
+                    '${company.responseQuotedTime}',
+                    style: TextStyle(color: Colors.red),
+                  ),
                   Text('小时（平均）'),
                 ],
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -242,9 +258,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -261,9 +275,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -280,9 +292,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -299,66 +309,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '风格',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  '',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '春夏款价格端',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  '',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '秋冬款价格端',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  '',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -375,16 +326,14 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 
-  Card _buildCashProducts(BuildContext context,List<ProductModel> products) {
+  Card _buildCashProducts(BuildContext context, List<ProductModel> products) {
     return Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 10),
@@ -432,7 +381,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                           child: Column(
                             children: <Widget>[
                               Container(
-                                child: products != null && products.length > 0 && products[index].thumbnail != null
+                                child: products != null &&
+                                        products.length > 0 &&
+                                        products[index].thumbnail != null
                                     ? Image.network(
                                         '${GlobalConfigs.IMAGE_BASIC_URL}${products[index].thumbnail.url}',
                                         width: 100,
@@ -456,10 +407,11 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                                       ),
                               ),
                               Container(
-                                padding:EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.only(top: 10),
                                 child: Text(
-                                  products != null && products.length > 0 ?
-                                  products[index].name ?? '' : '',
+                                  products != null && products.length > 0
+                                      ? products[index].name ?? ''
+                                      : '',
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
@@ -487,8 +439,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               borderRadius: BorderRadius.circular(5),
             ),
           ),
-          onTap: () async{
-            ProductsResponse productsResponse = await ProductRepositoryImpl().list({}, {});
+          onTap: () async {
+            ProductsResponse productsResponse =
+                await ProductRepositoryImpl().list({}, {});
 
             Navigator.push(
               context,
@@ -506,11 +459,11 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       elevation: 0,
       margin: EdgeInsets.only(top: 10),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal:10),
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 5,right: 5),
+              padding: const EdgeInsets.only(top: 5, right: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[

@@ -1,10 +1,10 @@
 <template>
   <div class="animated fadeIn">
-    <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="readOnly">
+    <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="!readOnly">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="UID" prop="uid">
-            <el-input :disabled="!isNewlyCreated" v-model="slotData.uid"></el-input>
+            <el-input :disabled="!readOnly" v-model="slotData.uid"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -30,7 +30,11 @@
     props: ['slotData', 'readOnly'],
     methods: {},
     data() {
-      return {};
+
+      return {rules: {
+          uid: [{required: true, message: '必填', trigger: 'blur'}],
+          name: [{required: true, message: '必填', trigger: 'blur'}],
+        }};
     },
     created() {
     }

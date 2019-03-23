@@ -25,7 +25,7 @@ import ProofingsModule from './order/proofings';
 // miscs
 import SampleProductModule from './miscs/sampleProduct';
 import SampleCheckoutHistModule from './miscs/sampleCheckoutHist';
-import SuppliersModule from './supplier/suppliers';
+import SuppliersModule from './miscs/suppliers';
 import IndustrialClustersModule from './miscs/industrial-clusters';
 import LabelsModule from './miscs/labels';
 import CarouselsModule from './miscs/carousels';

@@ -20,16 +20,16 @@ const mutations = {
 };
 
 const actions = {
-  async search({dispatch, commit, state}) {
-    const response = await http.get('/b2b/categories/categories');
+  async search({dispatch, commit, state},{url}) {
+    const response = await http.get(url);
 
     // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('items', response);
     }
   },
-  refresh({dispatch, commit, state}) {
-    dispatch('search');
+  refresh({dispatch, commit, state},{url}) {
+    dispatch('search',{url});
   }
 };
 

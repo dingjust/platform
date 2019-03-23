@@ -41,4 +41,7 @@ class Apis {
   static get publishNewRequirement => (){
     return '/{baseSiteId}/b2b/orders/requirement/new';
   };
+
+  //公司认证
+  static get applyCertification => '/{baseSiteId}/b2b/companies/certification';
 }

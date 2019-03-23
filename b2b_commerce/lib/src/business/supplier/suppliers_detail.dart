@@ -916,7 +916,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                   ],
                 ),
                 Attachments(
-                  list: widget.supplierModel.factory.certificate,
+                  list: widget.supplierModel.factory.certificates,
                 )
               ],
             ),
