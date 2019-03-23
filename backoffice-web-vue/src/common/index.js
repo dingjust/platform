@@ -161,6 +161,9 @@ const COMMON_APIS = {
   updateAddress(id) {
     return '/b2b/company/addresses/' + id;
   },
+  removeAddress(id) {
+    return '/b2b/company/addresses/' + id;
+  },
   getAddresses() {
     return '/b2b/company/addresses';
   },
