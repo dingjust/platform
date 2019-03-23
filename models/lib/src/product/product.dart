@@ -6,9 +6,9 @@ part 'product.g.dart';
 
 ///审核状态
 enum ArticleApprovalStatus {
-  CHECK,
-  APPROVED,
-  UNAPPROVED,
+  check,
+  approved,
+  unapproved,
 }
 
 /// 样衣归还状态

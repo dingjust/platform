@@ -39,21 +39,21 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
           color: Color.fromRGBO(255, 214, 12, 1),
         ),
       );
-    if (widget.company.approvalStatus == ArticleApprovalStatus.CHECK)
+    if (widget.company.approvalStatus == ArticleApprovalStatus.check)
       _statusText = Text(
         '认证中',
         style: TextStyle(
           color: Color.fromRGBO(255, 214, 12, 1),
         ),
       );
-    if (widget.company.approvalStatus == ArticleApprovalStatus.APPROVED)
+    if (widget.company.approvalStatus == ArticleApprovalStatus.approved)
       _statusText = Text(
         '认证通过',
         style: TextStyle(
           color: Color.fromRGBO(255, 214, 12, 1),
         ),
       );
-    if (widget.company.approvalStatus == ArticleApprovalStatus.UNAPPROVED)
+    if (widget.company.approvalStatus == ArticleApprovalStatus.unapproved)
       _statusText = Text(
         '认证失败',
         style: TextStyle(
