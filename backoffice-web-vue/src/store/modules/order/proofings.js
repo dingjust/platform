@@ -96,7 +96,7 @@ const actions = {
     }
 
     const response = await http.post('/b2b/orders/proofing', {
-      code: state.keyword
+      code: state.keyword,
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize

@@ -10,6 +10,10 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapMutations} = createNamespacedHelpers('ProofingsModule');
+
   import ProofingAdvancedSearchForm from '../form/ProofingAdvancedSearchForm';
 
   export default {
@@ -21,7 +25,11 @@
     },
     computed: {},
     methods: {
+      ...mapMutations({
+        setKeyword: 'keyword'
+      }),
       onSearch() {
+        this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
