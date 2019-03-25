@@ -4,7 +4,7 @@ import 'package:services/services.dart';
 
 class PurchaseOrderRepository {
   /// 创建线下采购订单
-  Future<bool> offlinePurchaseOrder(PurchaseOrderModel form) async {
+  Future<String> offlinePurchaseOrder(PurchaseOrderModel form) async {
     Response response;
     try {
       response = await http$.post(OrderApis.purchaseOfflineOrders,
@@ -15,9 +15,9 @@ class PurchaseOrderRepository {
     }
 
     if (response != null && response.statusCode == 200) {
-      return true;
+      return response.toString();
     } else {
-      return false;
+      return null;
     }
   }
 
@@ -44,6 +44,21 @@ class PurchaseOrderRepository {
     Response<Map<String, dynamic>> response;
     try {
       response = await http$.get(OrderApis.purchaseOrderDetail(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      PurchaseOrderModel model = PurchaseOrderModel.fromJson(response.data);
+      return model;
+    } else
+      return null;
+  }
+
+  //根据唯一码获取订单明细
+  Future<PurchaseOrderModel> getDetailsForUniqueCode(String code) async {
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.get(OrderApis.getDetailsForUniqueCode(code));
     } on DioError catch (e) {
       print(e);
     }
@@ -115,7 +130,7 @@ class PurchaseOrderRepository {
   }
 
   ///取消订单
-  Future<String> purchaseOrderCancelling(String code , PurchaseOrderModel form) async {
+  Future<bool> purchaseOrderCancelling(String code , PurchaseOrderModel form) async {
     Response<String> response;
     try{
       response =  await http$.put(
@@ -127,9 +142,9 @@ class PurchaseOrderRepository {
     }
 
     if (response != null && response.statusCode == 200) {
-      return response.data;
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 

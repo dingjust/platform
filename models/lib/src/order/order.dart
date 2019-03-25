@@ -725,6 +725,9 @@ class PurchaseOrderModel extends OrderModel {
   //唯一码
   String uniqueCode;
 
+  //是否延期
+  bool delayed;
+
   PurchaseOrderModel({
     String code,
     this.status,
@@ -756,6 +759,7 @@ class PurchaseOrderModel extends OrderModel {
     this.balancePaidDate,
     this.depositPaidDate,
     this.uniqueCode,
+    this.delayed,
       SalesApplication salesApplication})
       : super(
             code: code,
@@ -1023,6 +1027,8 @@ class ProductionProgressModel extends ItemModel {
 
   bool updateOnly;
 
+  int delayedDays;
+
   ProductionProgressModel({
     this.phase,
     this.quantity,
@@ -1032,6 +1038,7 @@ class ProductionProgressModel extends ItemModel {
     this.finishDate,
     this.order,
     this.updateOnly,
+    this.delayedDays,
     this.remarks});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>

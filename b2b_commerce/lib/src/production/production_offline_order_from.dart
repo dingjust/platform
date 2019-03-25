@@ -843,7 +843,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         isSubmit = true;
       }
       if(isSubmit){
-        result = await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
+        String code = await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
+        if(code != null){
+          result = true;
+        }
         _showMessage(context,result,'添加线下单');
       }
 
@@ -945,16 +948,16 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   //非空提示
   bool _showValidateMsg(BuildContext context,String message){
-    _requestMessage(context, '${message}');
+    _validateMessage(context, '${message}');
     return false;
   }
 
   //保存后是否成功提示
   void _showMessage(BuildContext context,bool result,String message){
-    _requestMessage(context,result == true? '${message}成功' : '${message}失败');
+    _requestMessage(context,result == true? '${message}成功' : '${message}失败',result);
   }
 
-  Future<void> _requestMessage(BuildContext context,String message) async {
+  Future<void> _validateMessage(BuildContext context,String message) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -964,6 +967,40 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           children: <Widget>[
             SimpleDialogOption(
               child: Text('${message}'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _requestMessage(BuildContext context,String message,bool result) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: SingleChildScrollView(
+              child: Text(
+                '${message}',
+                style: TextStyle(
+                  fontSize: 22,
+                ),
+              )
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                purchaseOrder.attachments=[];
+                Navigator.of(context).pop();
+                result == true ?
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) =>
+                        PurchaseOrderDetailPage(order: purchaseOrder)
+                    ), ModalRoute.withName('/')) : null;
+              },
             ),
           ],
         );

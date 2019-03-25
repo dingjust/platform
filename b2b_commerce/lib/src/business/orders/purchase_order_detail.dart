@@ -580,12 +580,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         ? Color(0xFFFFD600)
                         : Colors.black54,
                     fontSize: 18)),
-            trailing:
-            productionProgress.phase == null? Container():
-            Text(
-              '',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
+            trailing:Text(
+              '${productionProgress.delayedDays > 0 ? '已延期${productionProgress.delayedDays}天' : '' }',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
             ),
           ),
           Container(
@@ -849,6 +846,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   )
               ),
             ),
+            order.salesApplication != SalesApplication.BELOW_THE_LINE ?
             Container(
               child: ListTile(
                 trailing: Container(
@@ -870,7 +868,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   ),
                 ),
               ),
-            ),
+            ):Container(),
             Divider(
               height: 1,
             ),
@@ -1063,7 +1061,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     shape: RoundedRectangleBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(20))),
-                    onPressed: () {})
+                    onPressed: () {
+                        bool result = false;
+
+                    })
                     :Container()
             ),
           ),

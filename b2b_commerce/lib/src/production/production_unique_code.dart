@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class ProductionUniqueCodePage extends StatefulWidget {
   final ApparelProductModel product;
@@ -17,9 +18,10 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
   TextEditingController _textEditingController = TextEditingController();
 
   PurchaseOrderModel uniqueCodeEntry;
+  String userType;
+
   @override
   Widget build(BuildContext context) {
-    List<PurchaseOrderModel> _purchaseOrders = new List();
     return Scaffold(
         appBar: AppBar(
           title: Text('导入唯一码'),
@@ -61,25 +63,10 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                               };
                               Response<Map<String, dynamic>> response;
 
-                              try {
-                                //todo  改接口
-                                response = await http$.post(OrderApis.purchaseOrders,
-                                    data:data
-                                );
-                              } on DioError catch (e) {
-                                print(e);
-                              }
+                              PurchaseOrderModel _purchaseOrder = await PurchaseOrderRepository().getDetailsForUniqueCode(unique);
 
-                              if (response != null && response.statusCode == 200) {
-                                PurchaseOrdersResponse ordersResponse =
-                                PurchaseOrdersResponse.fromJson(response.data);
-                                _purchaseOrders.clear();
-                                _purchaseOrders.addAll(ordersResponse.content);
-                              }else{
-                                _showMessage(context,false,'获取数据');
-                              }
                               setState(() {
-                                uniqueCodeEntry = _purchaseOrders[0];
+                                uniqueCodeEntry = _purchaseOrder;
                               });
                             },
                             child: Text(
@@ -116,9 +103,10 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 18),
                               ),
+                              uniqueCodeEntry != null ?
                               UniqueCodeItem(
                                 order: uniqueCodeEntry,
-                              )
+                              ) : Container()
                             ],
                           ),
                         ),
@@ -204,7 +192,7 @@ class UniqueCodeItem extends StatelessWidget {
       child: Container(
         child: Column(
           children: <Widget>[
-            _buildHeader(),
+            _buildHeader(context),
             Column(
               children: _buildEntries(),
             ),
@@ -218,7 +206,15 @@ class UniqueCodeItem extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
+    String userType;
+      final bloc = BLoCProvider.of<UserBLoC>(context);
+      if(bloc.isBrandUser){
+        userType = 'brand';
+      }else{
+        userType = 'factory';
+      }
+
     return Container(
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
@@ -230,7 +226,8 @@ class UniqueCodeItem extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  '工厂：' + order.belongTo.name,
+                  userType != null && userType == 'brand'?
+                  '工厂：${order.belongTo.name}':'品牌：${order.purchaser.name}',
                   style: TextStyle(fontSize: 15),
                 ),
               ),
@@ -261,7 +258,7 @@ class UniqueCodeItem extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         image: DecorationImage(
-                          image: entry.product.thumbnail != null
+                          image: order.product.thumbnail != null
                               ? NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}')
                               : AssetImage(
                                   'temp/picture.png',

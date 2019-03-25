@@ -286,19 +286,19 @@ class PurchaseOrderItem extends StatelessWidget {
                   ],
                 ):
                 Container(
-                  child: Text(
-                    '已延期',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.red,
-                      fontWeight: FontWeight.w500,
-                    )
-                  ),
+                    child:order.delayed ?
+                    Text(
+                        '已延期',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w500,
+                        )
+                    ) : Container()
                 ),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(left: 10),
                     child: _buildHeaderText(context),
                   )
                 ),
@@ -599,6 +599,8 @@ class PurchaseOrderItem extends StatelessWidget {
       else {
         return Container();
       }
+    }else{
+      return Container();
     }
   }
 

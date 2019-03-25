@@ -34,6 +34,11 @@ class OrderApis {
         return '/{baseSiteId}/b2b/orders/purchase/$code';
       };
 
+  //根据唯一码获取订单明细
+  static get getDetailsForUniqueCode => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/unique/$code';
+  };
+
   //创建线下采购订单 POST
   static get purchaseOfflineOrders =>
       '/{baseSiteId}/b2b/orders/purchase/create';
