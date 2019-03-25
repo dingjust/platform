@@ -1,10 +1,10 @@
 import 'package:b2b_commerce/src/business/search/apparel_product_search.dart';
-import 'package:b2b_commerce/src/common/screen_conditions.dart';
+import 'package:b2b_commerce/src/common/find_factory_by_map.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import 'factory/industrial_cluster_factory.dart';
 
@@ -109,10 +109,14 @@ class HomeTabSection extends StatelessWidget {
     List<AdvanceIconButton> iconList = <AdvanceIconButton>[
       AdvanceIconButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(
-                    route: '地图找厂',
-                  )));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FindFactoryByMap()),
+          );
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => ScreenConditions(
+          //           route: '地图找厂',
+          //         )));
         },
         title: '地图找厂',
         isHot: true,
@@ -141,7 +145,7 @@ class HomeTabSection extends StatelessWidget {
       AdvanceIconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(
+              builder: (context) => FactoryPage(
                     route: '品牌工厂',
                   )));
         },
