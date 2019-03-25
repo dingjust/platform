@@ -125,7 +125,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             _buildEntries(context),
             _buildProductHide(context),
             _buildProductInfo(context),
-            _buildRemarks(context),
             order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
                 order.depositPaid == false ?
             _buildTipsPayment(context)
@@ -135,6 +134,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             _buildFactoryInfo(context) :
             _buildBrandInfo(context),
             _buildDocutment(context),
+            _buildRemarks(context),
             _buildBottom(context),
             _buildCommitButton(context),
           ],
@@ -464,16 +464,16 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 _buildProductionProgress(
                     context, order.progresses[_index + 1], false),
                 Container(
-                    width: double.infinity,
+                  width: 200,
                     padding: EdgeInsets.fromLTRB(50, 0, 10, 0),
-                    child: RaisedButton(
-                      elevation: 0,
-                      color:  Color(0xFFFFD600),
+                    child: OutlineButton(
                       child: Text(
                         '查看全部',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
+                      borderSide: BorderSide(color:Colors.black),
                       shape: RoundedRectangleBorder(
+
                           borderRadius:
                           BorderRadius.all(Radius.circular(20))),
                       onPressed: () {
@@ -502,7 +502,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       color:  Color(0xFFFFD600),
                       child: Text(
                         '查看全部',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       shape: RoundedRectangleBorder(
                           borderRadius:
@@ -984,8 +984,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
+            _buildBrandButton(context),
             _buildOfflineButton(context),
-            _buildBrandButton(context)
           ],
         );
       }else{
@@ -996,8 +996,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
+            _buildFactoryButton(context),
             _buildOfflineButton(context),
-            _buildFactoryButton(context)
           ],
         );
       }else{
@@ -1018,7 +1018,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             child: Text(
               '唯一码',
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontWeight: FontWeight.w500,
                 fontSize: 18,
               ),
@@ -1288,7 +1288,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     child: Text(
                       '确认收货',
                       style: TextStyle(
-                        color: Color(0xFFFFD600),
+                        color: Colors.black,
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
                       ),
@@ -1349,7 +1349,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     child: Text(
                       '确认收货',
                       style: TextStyle(
-                        color: Color(0xFFFFD600),
+                        color: Colors.black,
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
                       ),
@@ -1416,7 +1416,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             child: Text(
               '验货完成',
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontWeight: FontWeight.w500,
                 fontSize: 18,
               ),
@@ -1445,7 +1445,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               child: Text(
                 '确认发货',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
                 ),
@@ -1495,7 +1495,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             child: Text(
               '查看物流',
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontWeight: FontWeight.w500,
                 fontSize: 18,
               ),

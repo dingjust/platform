@@ -81,6 +81,10 @@ class ProductionItem extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
+    int sum = 0;
+    order.entries.forEach((entry) {
+      sum = sum + entry.quantity;
+    });
     return Container(
         color: Color.fromRGBO(250, 250, 250, 1),
         padding: EdgeInsets.all(10),
@@ -104,7 +108,7 @@ class ProductionItem extends StatelessWidget {
             Expanded(
                 child: Container(
                     padding: EdgeInsets.all(5),
-                    height: 80,
+                    height: 90,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +135,7 @@ class ProductionItem extends StatelessWidget {
                                     fontSize: 12, color: Colors.grey),
                               ),
                             )),
-                         order.product == null ||  order.product.superCategories == null?
+                         order.product == null ||  order.product.category == null?
                         Container() :
                         Container(
                           padding: EdgeInsets.all(3),
@@ -139,7 +143,7 @@ class ProductionItem extends StatelessWidget {
                               color: Color.fromRGBO(255, 243, 243, 1),
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
-                            "${order.product.superCategories.name} ${order.totalQuantity==null?'':order.totalQuantity}件",
+                            "${order.product.category.name} ${sum}件",
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromRGBO(255, 133, 148, 1)),
