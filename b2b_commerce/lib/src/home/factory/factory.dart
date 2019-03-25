@@ -41,96 +41,114 @@ class FactoryItem extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 15),
         child: Container(
           padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-          // margin: EdgeInsets.symmetric(horizontal: 15),
-          child: Row(
+          child: Column(
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      '${model.name}',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  _buildButton()
+                ],
+              ),
               Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    image: DecorationImage(
-                     image: NetworkImage(model.profilePicture.url),
-                      fit: BoxFit.cover,
-                    )),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: Row(
                   children: <Widget>[
                     Container(
-                      height: 20,
+                      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      width: 80,
+                      height: 80,
                       decoration: BoxDecoration(
-                        color: Colors.black38,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(5),
-                            bottomRight: Radius.circular(5)),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${model.name}',
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          borderRadius: BorderRadius.circular(5),
+                          image: DecorationImage(
+                            image: NetworkImage(model.profilePicture.url),
+                            fit: BoxFit.cover,
+                          )),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              '${PopulationScaleLocalizedMap[model.populationScale]}',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(180, 180, 180, 1)),
+                            ),
+                            Container(
+                                child: Row(
+                              children: <Widget>[
+                                Tag(
+                                  color: Colors.grey,
+                                  label: '快反工厂',
+                                ),
+                                Tag(
+                                  color: Colors.grey,
+                                  label: '免费打样',
+                                ),
+                                Tag(
+                                  label: '  已认证  ',
+                                  color: Colors.grey,
+                                  backgroundColor:
+                                      Color.fromRGBO(254, 252, 235, 1),
+                                )
+                              ],
+                            )),
+                            Container(
+                              padding: EdgeInsets.only(bottom: 5),
+                              // color: Colors.green,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.only(right: 20),
+                                    child: Stars(
+                                      size: 14,
+                                      color: Color.fromRGBO(255, 183, 0, 1),
+                                      highlightOnly: false,
+                                      starLevel: model.starLevel,
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                        text: '已接',
+                                        style: TextStyle(color: Colors.grey),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text:
+                                                  '${model.historyOrdersCount}',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold)),
+                                          TextSpan(text: '单')
+                                        ]),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     )
                   ],
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: 80,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.only(bottom: 5),
-                        // color: Colors.green,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Stars(
-                              size: 14,
-                              color: Color.fromRGBO(255, 183, 0, 1),
-                              highlightOnly: false,
-                              starLevel: model.starLevel,
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 10),
-                              child: _buildCategoryTags(),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Text(
-                          model.describe,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          RichText(
-                            text: TextSpan(
-                                text: '历史接单',
-                                style: TextStyle(color: Colors.grey),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '${model.historyOrdersCount}',
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(text: '单')
-                                ]),
-                          ),
-                          _buildButton()
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    child: _buildCategoryTags(),
+                  )
+                ],
               )
             ],
           ),
@@ -145,14 +163,26 @@ class FactoryItem extends StatelessWidget {
 
   Widget _buildCategoryTags() {
     //取前3条
-    var tags = <CategoryTag>[];
-    if(model.categories.length > 3){
-      for (int i = 0; i < model.categories.length && i < 3; i++) {
-        tags.add(CategoryTag(label: model.categories[i].name));
+    var tags = <Container>[];
+    if (model.categories.length > 6) {
+      for (int i = 0; i < model.categories.length && i < 6; i++) {
+        tags.add(Container(
+          margin: EdgeInsets.only(right: 10),
+          child: Text(
+            '${model.categories[i].name}',
+            style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+          ),
+        ));
       }
-    }else{
+    } else {
       for (int i = 0; i < model.categories.length; i++) {
-        tags.add(CategoryTag(label: model.categories[i].name));
+        tags.add(Container(
+          margin: EdgeInsets.only(right: 10),
+          child: Text(
+            '${model.categories[i].name}',
+            style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+          ),
+        ));
       }
     }
 
@@ -181,12 +211,13 @@ class FactoryItem extends StatelessWidget {
         return Container(
           height: 23,
           width: 80,
+          margin: EdgeInsets.only(left: 20),
           child: FlatButton(
             onPressed: () {},
-            color: Color.fromRGBO(255,214,12, 1),
+            color: Color.fromRGBO(255, 214, 12, 1),
             child: Text(
               '邀请报价',
-              style: TextStyle(color: Colors.white, fontSize: 12),
+              style: TextStyle(color: Colors.black, fontSize: 12),
             ),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -199,8 +230,8 @@ class FactoryItem extends StatelessWidget {
   }
 }
 
-class CategoryTag extends StatelessWidget {
-  const CategoryTag(
+class Tag extends StatelessWidget {
+  const Tag(
       {Key key,
       this.width = 32,
       this.height = 20,
@@ -218,7 +249,7 @@ class CategoryTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(2, 1, 2, 1),
+      padding: EdgeInsets.fromLTRB(0, 1, 4, 1),
       height: height,
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: Center(

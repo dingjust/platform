@@ -8,6 +8,10 @@ import 'package:widgets/widgets.dart';
 
 class FactoryPage extends StatefulWidget {
   String route;
+
+  /// 邀请工厂报价的需求订单号
+  String requirementCode;
+
   FactoryPage({this.route});
 
   _FactoryPageState createState() => _FactoryPageState();
@@ -36,7 +40,7 @@ class _FactoryPageState extends State<FactoryPage> {
             centerTitle: true,
             elevation: 0.5,
             title: Text(
-              widget.route ?? '快反工厂',
+              widget.route ?? '全部工厂',
               style: TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
@@ -73,19 +77,6 @@ class _FactoryPageState extends State<FactoryPage> {
                 ),
               ),
               body: FactoriesListView()),
-          floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-              child: Center(
-                child: Container(
-                  width: 35,
-                  child: Text(
-                    '全部邀请',
-                    style: TextStyle(color: Colors.white, fontSize: 15),
-                    overflow: TextOverflow.clip,
-                  ),
-                ),
-              )),
         ));
   }
 
@@ -156,6 +147,7 @@ class FactoriesListView extends StatelessWidget {
                       children: snapshot.data.map((item) {
                         return FactoryItem(
                           model: item,
+                          showButton: true,
                         );
                       }).toList(),
                     );
