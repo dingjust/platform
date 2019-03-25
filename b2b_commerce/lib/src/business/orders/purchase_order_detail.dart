@@ -2,7 +2,6 @@ import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';

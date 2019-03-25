@@ -50,25 +50,6 @@ class _FactoryClientState extends State<FactoryClient> {
                 currentIndex: _currentIndex,
                 onChanged: _handleNavigation,
               ),
-//              floatingActionButton: FloatingActionButton(
-//                elevation: 0,
-//                tooltip: '发布需求',
-//                child: Icon(
-//                  Icons.add,
-//                  color: Colors.black,
-//                  size: 45,
-//                ),
-//                onPressed: () {
-//                  Navigator.push(
-//                    context,
-//                    MaterialPageRoute(
-//                      builder: (context) => RequirementOrderFrom(),
-//                    ),
-//                  );
-//                },
-//              ),
-//              floatingActionButtonLocation:
-//                  FloatingActionButtonLocation.centerDocked,
             ),
       ),
       routes: AppRoutes.allRoutes,
@@ -95,37 +76,20 @@ class BottomNavigation extends StatelessWidget {
 
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
-      icon: Container(
-//        margin: EdgeInsets.only(right: 5),
-        child: const Icon(B2BIcons.home),
-      ),
+      icon: const Icon(B2BIcons.home),
       title: const Text('商机'),
     ),
     BottomNavigationBarItem(
-      icon: Container(
-//        margin: EdgeInsets.only(right: 35),
-        child: const Icon(B2BIcons.production),
-      ),
-      title: Container(
-//        margin: EdgeInsets.only(right: 30),
-        child: const Text('生产'),
-      ),
+      icon: const Icon(B2BIcons.production),
+      title: const Text('生产'),
     ),
     BottomNavigationBarItem(
-        icon: Container(
-//          margin: EdgeInsets.only(left: 35),
-          child: const Icon(B2BIcons.business),
-        ),
-        title: Container(
-//          margin: EdgeInsets.only(left: 45),
-          child: const Text('工作'),
-        )),
+      icon: const Icon(B2BIcons.business),
+      title: const Text('统计'),
+    ),
     BottomNavigationBarItem(
-      icon: Container(
-//        margin: EdgeInsets.only(right: 5),
-        child: const Icon(
-          B2BIcons.my,
-        ),
+      icon: const Icon(
+        B2BIcons.my,
       ),
       title: const Text('我的'),
     )

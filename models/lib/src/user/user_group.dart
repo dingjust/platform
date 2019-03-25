@@ -361,6 +361,9 @@ class FactoryModel extends B2BUnitModel {
   //规模范围
   ScaleRanges scaleRange;
 
+  /// 人数规模
+  PopulationScale populationScale;
+
   //生产大类
   List<CategoryModel> categories;
 
@@ -394,47 +397,48 @@ class FactoryModel extends B2BUnitModel {
   @JsonKey(toJson: _industrialClusterToJson)
   IndustrialClusterModel industrialCluster;
 
-  FactoryModel({
-    MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    String path,
-    bool active,
-    int starLevel,
-    AddressModel contactAddress,
-    String address,
-    String describe,
-    DateTime registrationDate,
-    String taxNumber,
-    String bankOfDeposit,
-    List<MediaModel> certificates,
-    String contactPerson,
-    String contactPhone,
-    String cooperativeBrand,
-    String qq,
-    String wechat,
-    String businessRegistrationNo,
-    String legalRepresentative,
-    String certificateOfLegal,
-    CompanyType type,
-    ArticleApprovalStatus approvalStatus,
-    List<CompanyProfileModel> companyProfiles,
-    this.historyOrdersCount,
-    this.orderedSuccessRate,
-    this.monthlyCapacityRanges,
-    this.categories,
-    this.scaleRange,
-    this.developmentCapacity,
-    this.latheQuantity,
-    this.cooperationModes,
-    this.responseQuotedTime,
-    this.products,
-    this.adeptAtCategories,
-    this.locationX,
-    this.locationY,
-    this.industrialCluster,
-  }) : super(
+  FactoryModel(
+      {MediaModel profilePicture,
+      String uid,
+      String name,
+      List<PrincipalModel> members,
+      String path,
+      bool active,
+      int starLevel,
+      AddressModel contactAddress,
+      String address,
+      String describe,
+      DateTime registrationDate,
+      String taxNumber,
+      String bankOfDeposit,
+      List<MediaModel> certificates,
+      String contactPerson,
+      String contactPhone,
+      String cooperativeBrand,
+      String qq,
+      String wechat,
+      String businessRegistrationNo,
+      String legalRepresentative,
+      String certificateOfLegal,
+      CompanyType type,
+      ArticleApprovalStatus approvalStatus,
+      List<CompanyProfileModel> companyProfiles,
+      this.historyOrdersCount,
+      this.orderedSuccessRate,
+      this.monthlyCapacityRanges,
+      this.categories,
+      this.scaleRange,
+      this.developmentCapacity,
+      this.latheQuantity,
+      this.cooperationModes,
+      this.responseQuotedTime,
+      this.products,
+      this.adeptAtCategories,
+      this.locationX,
+      this.locationY,
+      this.industrialCluster,
+      this.populationScale})
+      : super(
           profilePicture: profilePicture,
           uid: uid,
           name: name,
@@ -606,6 +610,27 @@ const ScaleRangesLocalizedMap = {
   ScaleRanges.SR003: "500万-1000万",
   ScaleRanges.SR004: "1000万-5000万",
   ScaleRanges.SR005: "5000万以上",
+};
+
+enum PopulationScale {
+  /// 50人以下
+  PS001,
+
+  /// 51~100人
+  PS002,
+
+  /// 101到200人
+  PS003,
+
+  /// 200人以下<
+  PS004
+}
+
+const PopulationScaleLocalizedMap = {
+  PopulationScale.PS001: "50人以下",
+  PopulationScale.PS002: "51~100人",
+  PopulationScale.PS003: "101到200人",
+  PopulationScale.PS004: "200人以下",
 };
 
 //年龄段

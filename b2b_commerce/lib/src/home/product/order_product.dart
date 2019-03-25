@@ -5,17 +5,17 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class OrderByProductPage extends StatefulWidget {
-  _OrderByProductPageState createState() => _OrderByProductPageState();
+class ProductsPage extends StatefulWidget {
+  _ProductsPageState createState() => _ProductsPageState();
 }
 
-class _OrderByProductPageState extends State<OrderByProductPage> {
-  GlobalKey _orderByProductPageKey = GlobalKey();
+class _ProductsPageState extends State<ProductsPage> {
+  GlobalKey _ProductsPageKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return BLoCProvider<OrderByProductBLoc>(
-      key: _orderByProductPageKey,
+      key: _ProductsPageKey,
       bloc: OrderByProductBLoc.instance,
       child: Scaffold(
         appBar: AppBar(

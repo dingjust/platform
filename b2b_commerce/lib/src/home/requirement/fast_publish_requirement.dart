@@ -56,7 +56,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                 .then((categorys) {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProductCategorySelectPage(
+                  builder: (context) => CategorySelectPage(
                         minCategorySelect: fastRequirementForm.categories,
                         fastRequirementForm: fastRequirementForm,
                         categorys: categorys,
@@ -101,13 +101,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        '点击',
-                        style: TextStyle(
-                            color: Color.fromRGBO(255, 214, 12, 1),
-                            fontSize: 18),
-                      ),
-                      Text(
-                        '   填写三步，剩下的工作交给蕉衣   ',
+                        '   点击填写三步，剩下的工作交给蕉衣   ',
                         style: TextStyle(
                           color: Color.fromRGBO(180, 180, 180, 1),
                           fontSize: 15,
@@ -115,7 +109,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                       ),
                       Icon(
                         B2BIcons.arrow_right,
-                        color: Color.fromRGBO(255, 214, 12, 1),
+                        color: Color.fromRGBO(180, 180, 180, 1),
                         size: 12,
                       )
                     ],
