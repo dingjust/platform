@@ -15,6 +15,7 @@ export 'src/order/bloc/requirement_order_bloc.dart';
 export 'src/order/bloc/requirement_pool_bloc.dart';
 export 'src/order/bloc/requirement_quote_detail_bloc.dart';
 export 'src/order/bloc/sales_order_bloc.dart';
+export 'src/order/response/order_response.dart';
 export 'src/order/repository/purchase_order_repository.dart';
 export 'src/order/repository/quote_order_respository.dart';
 export 'src/order/repository/requirement_order_repository.dart';

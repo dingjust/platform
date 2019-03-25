@@ -1,6 +1,8 @@
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class ProductionUniqueCodePage extends StatefulWidget {
   final ApparelProductModel product;
@@ -14,218 +16,10 @@ class ProductionUniqueCodePage extends StatefulWidget {
 class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
   TextEditingController _textEditingController = TextEditingController();
 
-  // mock数据，待删除
-  PurchaseOrderModel mockData = PurchaseOrderModel.fromJson({
-    'code': 'PO34938475200045',
-    'status': 'IN_PRODUCTION',
-    'totalQuantity': 10,
-    'totalPrice': 300,
-    'creationtime': DateTime.now().millisecondsSinceEpoch,
-    'expectedDeliveryDate': DateTime.now().millisecondsSinceEpoch,
-    'currentPhase': 'CUTTING',
-    'machiningType': 'LABOR_AND_MATERIAL',
-    'invoiceNeeded': true,
-    'attachments': [
-      {
-        'url':
-            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-        'mediaType': 'jpg'
-      },
-      {
-        'url':
-            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-        'mediaType': 'jpg'
-      },
-      {
-        'url':
-            'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-        'mediaType': 'jpg'
-      },
-    ],
-    'remarks': '延期了12天',
-    'belongTo': {
-      'name': '京东工厂',
-      'address': '广东省广州市白云区',
-    },
-    'productionProgresses': [
-      {
-        'phase': 'MATERIAL_PREPARATION',
-        'quantity': 70,
-        'sequence': 0,
-        'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-        'finishDate': DateTime.now().millisecondsSinceEpoch,
-        'remarks': '延期了12天',
-        'medias': [
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-        ],
-      },
-      {
-        'phase': 'CUTTING',
-        'quantity': 70,
-        'sequence': 2,
-        'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-        'finishDate': DateTime.now().millisecondsSinceEpoch,
-        'remarks': '延期了12天',
-        'medias': [
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-        ],
-      },
-      {
-        'phase': 'STITCHING',
-        'quantity': 70,
-        'sequence': 3,
-        'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-        'finishDate': DateTime.now().millisecondsSinceEpoch,
-        'remarks': '延期了12天',
-        'medias': [
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-        ],
-      },
-      {
-        'phase': 'AFTER_FINISHING',
-        'quantity': 70,
-        'sequence': 1,
-        'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-        'finishDate': DateTime.now().millisecondsSinceEpoch,
-        'remarks': '延期了12天',
-        'medias': [
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-        ],
-      },
-      {
-        'phase': 'INSPECTION',
-        'quantity': 70,
-        'sequence': 4,
-        'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-        'finishDate': DateTime.now().millisecondsSinceEpoch,
-        'remarks': '延期了12天',
-        'medias': [
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-        ],
-      },
-      {
-        'phase': 'DELIVERY',
-        'quantity': 70,
-        'sequence': 5,
-        'estimatedDate': DateTime.now().millisecondsSinceEpoch,
-        'finishDate': DateTime.now().millisecondsSinceEpoch,
-        'remarks': '延期了12天',
-        'medias': [
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg'
-          },
-        ],
-      },
-    ],
-    'deliveryAddress': {
-      'fullname': "张三",
-      'cellphone': '13123456789',
-      'region': {'isocode': 'R123', 'name': '广东省'},
-      'city': {'code': 'C123', 'name': '广州市'},
-      'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-      'line1': '广州大道',
-      'defaultAddress': true
-    },
-    'entries': [
-      {
-        'basePrice': 33.0,
-        'quantity': 23,
-        'totalPrice': 999.9,
-        'requirementOrderCode': 'RC34938475200045',
-        'code': 'NA89852509',
-        'name': '山本风法少女长裙复古气质秋冬款',
-        'skuID': 'NA89852509',
-        'thumbnail':
-        'http://dingyue.nosdn.127.net/ZsKn=CkHLVpuKgUT6wW5uRECVu0=RSGVwrKTeNjszUCdk1538637061484compressflag.jpg'
-      }
-    ],
-  });
-
   PurchaseOrderModel uniqueCodeEntry;
   @override
   Widget build(BuildContext context) {
+    List<PurchaseOrderModel> _purchaseOrders = new List();
     return Scaffold(
         appBar: AppBar(
           title: Text('导入唯一码'),
@@ -236,8 +30,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
         body: Container(
           color: Color.fromRGBO(245, 245, 245, 1),
           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: ListView(
             children: <Widget>[
               Column(
                 children: <Widget>[
@@ -260,9 +53,33 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                           controller: _textEditingController,
                           decoration: InputDecoration(
                               suffix: GestureDetector(
-                            onTap: () {
+                            onTap: () async{
+                              String unique = _textEditingController.text;
+                              //请求参数
+                              Map data = {
+                                'salesApplications': unique,
+                              };
+                              Response<Map<String, dynamic>> response;
+
+                              try {
+                                //todo  改接口
+                                response = await http$.post(OrderApis.purchaseOrders,
+                                    data:data
+                                );
+                              } on DioError catch (e) {
+                                print(e);
+                              }
+
+                              if (response != null && response.statusCode == 200) {
+                                PurchaseOrdersResponse ordersResponse =
+                                PurchaseOrdersResponse.fromJson(response.data);
+                                _purchaseOrders.clear();
+                                _purchaseOrders.addAll(ordersResponse.content);
+                              }else{
+                                _showMessage(context,false,'获取数据');
+                              }
                               setState(() {
-                                uniqueCodeEntry = mockData;
+                                uniqueCodeEntry = _purchaseOrders[0];
                               });
                             },
                             child: Text(
@@ -275,7 +92,16 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                     ),
                   ),
                   uniqueCodeEntry == null
-                      ? Container()
+                      ? Container(
+                    child: Center(
+                      child: Text(
+                        '请输入正确且有效的唯一码匹配！',
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  )
                       : Container(
                           margin: EdgeInsets.only(top: 10),
                           padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
@@ -298,9 +124,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                         ),
                 ],
               ),
-              uniqueCodeEntry == null
-                  ? Container()
-                  : Container(
+                  Container(
                       width: double.infinity,
                       height: 50,
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 40),
@@ -314,16 +138,50 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                             fontSize: 18,
                           ),
                         ),
+                        disabledColor : Color(0xffBC8F8F),
+                        disabledTextColor: Colors.black26,
                         shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(30))),
-                        onPressed: () {},
+                        onPressed: uniqueCodeEntry == null ? null : () async {
+                          bool result = false;
+                          try{
+                            result = await PurchaseOrderRepository().linkUniqueCode(uniqueCodeEntry.uniqueCode);
+                          }catch(e){
+                            print(e);
+                          }
+                          _showMessage(context,result,'绑定唯一码');
+                        },
                       ),
                     ),
             ],
           ),
         ));
   }
+
+
+  void _showMessage(BuildContext context,bool result,String message){
+    _requestMessage(context,result == true? '${message}成功' : '${message}失败');
+  }
+
+  Future<void> _requestMessage(BuildContext context,String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('提示'),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('${message}'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 }
 
 class UniqueCodeItem extends StatelessWidget {
@@ -331,12 +189,6 @@ class UniqueCodeItem extends StatelessWidget {
 
   final PurchaseOrderModel order;
 
-  // 订单渠道类型
-  // static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
-  //   RequirementOrderStatus.PENDING_QUOTE: Colors.green,
-  //   RequirementOrderStatus.COMPLETED: Color.fromRGBO(255,214,12, 1),
-  //   RequirementOrderStatus.CANCELLED: Colors.red
-  // };
 
   @override
   Widget build(BuildContext context) {
@@ -382,13 +234,8 @@ class UniqueCodeItem extends StatelessWidget {
                   style: TextStyle(fontSize: 15),
                 ),
               ),
-              // TODO : 订单类型枚举和对应颜色
-              // Text(
-              //   RequirementOrderStatusLocalizedMap[order.status],
-              //   style: TextStyle(color: _statusColors[order.status])
-              // )
               Text(
-                '生产中',
+                '${PurchaseOrderStatusLocalizedMap[order.status]}',
                 style: TextStyle(
                     color: Color.fromRGBO(86, 194, 117, 1),
                     fontSize: 16,
@@ -409,13 +256,13 @@ class UniqueCodeItem extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: 90,
-                    height: 90,
+                    width: 100,
+                    height: 100,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         image: DecorationImage(
                           image: entry.product.thumbnail != null
-                              ? NetworkImage(entry.product.thumbnail.url)
+                              ? NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}')
                               : AssetImage(
                                   'temp/picture.png',
                                   package: "assets",
@@ -428,7 +275,7 @@ class UniqueCodeItem extends StatelessWidget {
                     child: Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      height: 90,
+                      height: 100,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -487,4 +334,5 @@ class UniqueCodeItem extends StatelessWidget {
             ))
         .toList();
   }
+
 }

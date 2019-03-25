@@ -118,7 +118,7 @@ class BottomNavigation extends StatelessWidget {
         ),
         title: Container(
           margin: EdgeInsets.only(left: 45),
-          child: const Text('统计'),
+          child: const Text('工作'),
         )),
     BottomNavigationBarItem(
       icon: Container(
