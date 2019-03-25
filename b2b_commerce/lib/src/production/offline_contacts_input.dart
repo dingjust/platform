@@ -35,8 +35,8 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
       _nameController.text = addressModel.fullname;
       _phoneController.text = addressModel.cellphone;
 
-      addressModel = widget.model;
     }
+    addressModel = widget.model;
     super.initState();
   }
 
