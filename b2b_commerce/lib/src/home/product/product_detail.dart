@@ -1,8 +1,8 @@
 import 'package:b2b_commerce/src/business/products/apparel_product_size_stock_item.dart';
 import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:b2b_commerce/src/home/product/product_color_size_select.dart';
-import 'package:b2b_commerce/src/home/product/product_num_select.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
@@ -41,15 +41,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       Map<ColorSelectEntry, List<SizeStockItem>>();
 
   //TODO 根据code查询款式详情
-  final product = ProductModel(
+  final product = ApparelProductModel(
       name: '冬季女棉服',
 //      thumbnail:
 //          'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
       minPrice: 99.00,
       maxPrice: 500.00,
       belongTo: FactoryModel.fromJson({
-        'profilePicture':
-            'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
+        'profilePicture': {
+          'profilePicture':
+              'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'
+        },
         'uid': 'BB123456',
         'name': '森马',
         'starLevel': 5,
@@ -334,7 +336,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           children: <Widget>[
             ProductCarousel(items, 300),
             _buildHeaderSection(),
-            _buildColorSizeSection(),
             _buildBasicInfoSection(),
             _buildOrderButton(),
           ],
@@ -400,72 +401,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  Widget _buildColorSizeSection() {
-    String sizeColorString = '选择颜色尺寸';
-
-    //判断颜色是否有选择
-    if (!colorEntries.every((entry) {
-      return !entry.selected;
-    })) {
-      sizeColorString = "";
-      colorEntries.where((entry) => entry.selected).forEach((entry) {
-        sizeColorString = sizeColorString + " " + entry.colorModel.name;
-      });
-
-      //加上尺码字符
-      sizeColorString = sizeColorString + ' / ';
-
-      sizeEntries.where((entry) => entry.selected).forEach((entry) {
-        sizeColorString = sizeColorString + " " + entry.sizeModel.name;
-      });
-    }
-
-    return Container(
-      height: 70,
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-      margin: EdgeInsets.only(bottom: 10),
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          BasicInfoRow(
-            label: '规格',
-            value: '${sizeColorString}',
-            action: Icon(
-              B2BIcons.right,
-              size: 12,
-              color: Color.fromRGBO(150, 150, 150, 1),
-            ),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProductColorSizeSelectPage(
-                        colorEntries: colorEntries,
-                        sizeEntries: sizeEntries,
-                      )));
-            },
-          ),
-          BasicInfoRow(
-            label: '数量',
-            value: '选择现款数量',
-            action: Icon(
-              B2BIcons.right,
-              size: 12,
-              color: Color.fromRGBO(150, 150, 150, 1),
-            ),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProductNumSelectPage(
-                        apparelProductStockInputItems:
-                            apparelProductStockInputItems,
-                      )));
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildBasicInfoSection() {
     return Container(
       height: 100,
@@ -503,6 +438,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           BasicInfoRow(
             label: '参数',
             value: '面料、含量、风格...',
+            onTap: onAttribute,
           ),
         ],
       ),
@@ -516,14 +452,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           FlatButton(
-              onPressed: () {},
+              onPressed: onOrder,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
-              color: Color.fromRGBO(255, 149, 22, 1),
+              color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 150),
               child: Text(
                 '下单',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 20),
               )),
         ],
       ),
@@ -532,6 +469,87 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   ///构建
   initColorSizeSelectData() {}
+
+  void onOrder() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('填写需求信息'),
+          content: Container(
+            height: 180,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('需求数量'),
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 0.5,
+                              color: Color.fromRGBO(200, 200, 200, 1)))),
+                  child: TextField(
+                    autofocus: true,
+                    keyboardType: TextInputType.number,
+                    // controller: _unitPriceController,
+                    onChanged: (value) {},
+                    //只能输入数字
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly,
+                    ],
+                    decoration: InputDecoration(
+                        hintText: '填写', border: InputBorder.none),
+                  ),
+                ),
+                Text('备注'),
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 0.5,
+                              color: Color.fromRGBO(200, 200, 200, 1)))),
+                  child: TextField(
+                    autofocus: true,
+                    // controller: _unitPriceController,
+                    onChanged: (value) {},
+                    decoration: InputDecoration(
+                        hintText: '请填写颜色、尺码、特殊工艺以及其他要求',
+                        border: InputBorder.none),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () async {},
+            ),
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onAttribute() {
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AttributeTable(
+            attributes:
+                ApparelProductAttributesModel(fabricComposition: 'asdadasd'),
+          );
+        });
+  }
 }
 
 class BasicInfoRow extends StatelessWidget {

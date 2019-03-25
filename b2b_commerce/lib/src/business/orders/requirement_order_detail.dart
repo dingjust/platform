@@ -378,7 +378,7 @@ class _RequirementOrderDetailPageState
                           overflow: TextOverflow.ellipsis,
                         )
                       : Text(
-                          '暂无产品',
+                          ' ',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
                   widget.order.details.productSkuID != null

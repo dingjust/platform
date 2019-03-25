@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:b2b_commerce/src/home/search/quick_reaction_factory_search.dart';
 import 'package:flutter/material.dart';
@@ -10,35 +10,23 @@ class FactoryPage extends StatefulWidget {
   String route;
   FactoryPage({this.route});
 
-  _FactoryPageState createState() =>
-      _FactoryPageState();
+  _FactoryPageState createState() => _FactoryPageState();
 }
 
 class _FactoryPageState extends State<FactoryPage> {
   GlobalKey _FactoryBLoCProviderKey = GlobalKey();
 
-  bool showFilterMenu = false;
-
-  List<CategoryModel> _minCategorySelect = [];
-
-  String filterBarLabel = '综合排序';
-
   List<FilterConditionEntry> filterConditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(label: '综合', value: 'comprehensive', checked: true),
     FilterConditionEntry(label: '星级', value: 'starLevel'),
     FilterConditionEntry(label: '接单数', value: 'orderNum'),
-    FilterConditionEntry(label: '响应时间', value: 'time'),
   ];
+
+  FilterConditionEntry currentCondition =
+      FilterConditionEntry(label: '综合', value: 'comprehensive', checked: true);
 
   @override
   Widget build(BuildContext context) {
-    String categoryStr = '全部类目...';
-    if (_minCategorySelect.length > 1) {
-      categoryStr = '${_minCategorySelect[0].name}...';
-    } else if (_minCategorySelect.length == 1) {
-      categoryStr = _minCategorySelect[0].name;
-    }
-
     return BLoCProvider<FactoryBLoC>(
         key: _FactoryBLoCProviderKey,
         bloc: FactoryBLoC.instance,
@@ -64,56 +52,27 @@ class _FactoryPageState extends State<FactoryPage> {
             ],
           ),
           body: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              bottom: FilterBar(
-                label: filterBarLabel,
-                onPressed: () {
-                  setState(() {
-                    showFilterMenu = !showFilterMenu;
-                  });
-                },
-                categoryLabel: categoryStr,
-                onCategoryPressed: () async {
-                  //加载条
-                  showDialog(
-                      context: context,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ));
-                  await ProductRepositoryImpl()
-                      .cascadedCategories()
-                      .then((categorys) {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CategorySelectPage(
-                              minCategorySelect: _minCategorySelect,
-                              categorys: categorys,
-                            )));
-                  });
-                },
-                action: IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: () {},
+              appBar: AppBar(
+                elevation: 0,
+                bottom: FilterBar(
+                  onChanged: (condition) => changeCondition(condition),
+                  filterConditionEntries: filterConditionEntries,
+                  action: IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () async {
+                      await ProductRepositoryImpl()
+                          .majorCategories()
+                          .then((categories) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CondtionPage(
+                                  categories: categories,
+                                )));
+                      });
+                    },
+                  ),
                 ),
               ),
-            ),
-            body: Column(
-              children: <Widget>[
-                FilterSelectMenu(
-                  color: Color.fromRGBO(255, 214, 12, 1),
-                  height: showFilterMenu ? 150 : 0,
-                  entries: filterConditionEntries,
-                  streamController:
-                      FactoryBLoC.instance.conditionController,
-                  afterPressed: _setLabel,
-                ),
-                Expanded(
-                  child: FactoriesListView(),
-                )
-              ],
-            ),
-          ),
+              body: FactoriesListView()),
           floatingActionButton: FloatingActionButton(
               onPressed: () {},
               backgroundColor: Color.fromRGBO(255, 214, 12, 1),
@@ -130,10 +89,9 @@ class _FactoryPageState extends State<FactoryPage> {
         ));
   }
 
-  void _setLabel(String newValue) {
+  void changeCondition(FilterConditionEntry condition) {
     setState(() {
-      showFilterMenu = !showFilterMenu;
-      filterBarLabel = newValue;
+      currentCondition = condition;
     });
   }
 }

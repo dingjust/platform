@@ -167,7 +167,7 @@ class _PublishRequirementSuccessDialogState
                           overflow: TextOverflow.ellipsis,
                         )
                       : Text(
-                          '暂无产品',
+                          ' ',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
                   widget.model.details.productSkuID != null
