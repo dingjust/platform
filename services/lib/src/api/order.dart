@@ -48,6 +48,41 @@ class OrderApis {
         return '/{baseSiteId}/b2b/orders/purchase/$code/progress/$id';
       };
 
+  //修改生产订单尾款金额
+  static get purchaseOrderBalanceUpdate => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/$code/balance';
+  };
+
+  //修改生产订单定金和单价
+  static get purchaseOrderDepositUpdate => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/$code/deposit';
+  };
+
+  //取消生产订单
+  static get purchaseOrderCancelling => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/$code/cancelling';
+  };
+
+  //确认发货
+  static get purchaseOrderDelivering => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/$code/delivering';
+  };
+
+  //确认收货
+  static get purchaseOrderShipped => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/$code/shipped';
+  };
+
+  //生成唯一码
+  static get generateUniqueCode => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/$code/unique';
+  };
+
+  //关联唯一码
+  static get linkUniqueCode => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/link/$code';
+  };
+
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/b2b/orders/quote';
 

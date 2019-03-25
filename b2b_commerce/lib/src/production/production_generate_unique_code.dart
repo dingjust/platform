@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class ProductionGenerateUniqueCodePage extends StatefulWidget {
   final PurchaseOrderModel model;
@@ -25,42 +27,6 @@ class _ProductionGenerateUniqueCodePageState
 
   List<String> added = [];
   String currentText = "";
-  List<String> suggestions = [
-    "工厂",
-    "Apple",
-    "Armidillo",
-    "Actual",
-    "Actuary",
-    "America",
-    "Argentina",
-    "Australia",
-    "Antarctica",
-    "Blueberry",
-    "Cheese",
-    "Danish",
-    "Eclair",
-    "Fudge",
-    "Granola",
-    "Hazelnut",
-    "Ice Cream",
-    "Jely",
-    "Kiwi Fruit",
-    "Lamb",
-    "Macadamia",
-    "Nachos",
-    "Oatmeal",
-    "Palm Oil",
-    "Quail",
-    "Rabbit",
-    "Salad",
-    "T-Bone Steak",
-    "Urid Dal",
-    "Vanilla",
-    "Waffles",
-    "Yam",
-    "Zest"
-  ];
-
   bool showTextField = true;
 
   GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
@@ -73,24 +39,11 @@ class _ProductionGenerateUniqueCodePageState
     });
   }
 
-  _ProductionGenerateUniqueCodePageState() {
-    textField = SimpleAutoCompleteTextField(
-      key: key,
-      suggestions: suggestions,
-      decoration: InputDecoration(
-        border: InputBorder.none,
-      ),
-      textChanged: (text) {
-        print(text);
-      },
-      textSubmitted: (text) {
-        print(text);
-        setState(() {
-          currentText = text;
-          showTextField = false;
-        });
-      },
-    );
+  @override
+  void initState(){
+    widget.model.uniqueCode != null && widget.model.uniqueCode != null ?
+    uniqueCode = widget.model.uniqueCode : uniqueCode = '';
+    super.initState();
   }
 
   @override
@@ -150,35 +103,35 @@ class _ProductionGenerateUniqueCodePageState
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                   ),
                 ),
-                Container(
-                  width: 180,
-                  child: FlatButton(
-                    color: Colors.white,
-                    onPressed: () {
-                      _onlineInvite();
-                    },
-                    child: Text(
-                      '线上邀请',
-                      style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 0.5, color: Color.fromRGBO(255,214,12, 1)),
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                  ),
-                ),
-                Text(
-                  '线上已注册工厂用户',
-                  style: TextStyle(
-                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 12),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: Text(
-                    '把唯一码发给工厂，工厂可以使用唯一码导入您创建的生产订单，通过线上反馈生产进度。',
-                    style: TextStyle(
-                        color: Color.fromRGBO(100, 100, 100, 1), fontSize: 12),
-                  ),
-                )
+//                Container(
+//                  width: 180,
+//                  child: FlatButton(
+//                    color: Colors.white,
+//                    onPressed: () {
+//                      _onlineInvite();
+//                    },
+//                    child: Text(
+//                      '线上邀请',
+//                      style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
+//                    ),
+//                    shape: RoundedRectangleBorder(
+//                        side: BorderSide(width: 0.5, color: Color.fromRGBO(255,214,12, 1)),
+//                        borderRadius: BorderRadius.all(Radius.circular(20))),
+//                  ),
+//                ),
+//                Text(
+//                  '线上已注册工厂用户',
+//                  style: TextStyle(
+//                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 12),
+//                ),
+//                Container(
+//                  margin: EdgeInsets.only(top: 20),
+//                  child: Text(
+//                    '把唯一码发给工厂，工厂可以使用唯一码导入您创建的生产订单，通过线上反馈生产进度。',
+//                    style: TextStyle(
+//                        color: Color.fromRGBO(100, 100, 100, 1), fontSize: 12),
+//                  ),
+//                )
               ],
             ),
           )
@@ -193,19 +146,25 @@ class _ProductionGenerateUniqueCodePageState
       children: <Widget>[
         FlatButton(
           color: Color.fromRGBO(255, 45, 45, 1),
-          onPressed: () {
-            setState(() {
-              uniqueCode = 'DJKJKL${Random().nextInt(100000)}';
-            });
+          onPressed: uniqueCode != null && uniqueCode != '' ? null : () async {
+            String unique = await PurchaseOrderRepository().generateUniqueCode(widget.model.code);
+            if(unique != null){
+              setState(() {
+                uniqueCode = unique;
+              });
+            }
           },
           child: Text(
-            uniqueCode != null ? '重新生成' : '生成',
+            '生成',
             style: TextStyle(color: Colors.white),
           ),
+          disabledColor : Color(0xffBC8F8F),
+          disabledTextColor: Colors.black26,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20))
+          ),
         ),
-        uniqueCode != null
+        uniqueCode != null && uniqueCode != ''
             ? Expanded(
                 flex: 1,
                 child: Center(
@@ -219,7 +178,11 @@ class _ProductionGenerateUniqueCodePageState
             : Container(),
         FlatButton(
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            if(uniqueCode != null && uniqueCode != ''){
+              copyToClipboard(uniqueCode);
+            }
+          },
           child: Text(
             '复制',
             style: TextStyle(color: Color.fromRGBO(22, 141, 255, 1)),
@@ -327,6 +290,36 @@ class _ProductionGenerateUniqueCodePageState
       },
     );
   }
+
+  //复制
+  void copyToClipboard(final String text) {
+    if (text == null) return;
+    Clipboard.setData(
+        ClipboardData(text: text)
+    );
+    _neverCopyContent(context);
+  }
+
+  Future<void> _neverCopyContent(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('消息'),
+          content: Text('复制成功'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class GenerateUniqueCodeItem extends StatelessWidget {
@@ -337,14 +330,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => PurchaseOrderDetailPage(order: order),
-        //   ),
-        // );
-      },
+      onTap: () {},
       child: Container(
         child: Column(
           children: <Widget>[
@@ -378,13 +364,8 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                   style: TextStyle(fontSize: 15),
                 ),
               ),
-              // TODO : 订单类型枚举和对应颜色
-              // Text(
-              //   RequirementOrderStatusLocalizedMap[order.status],
-              //   style: TextStyle(color: _statusColors[order.status])
-              // )
               Text(
-                '生产中',
+                '${PurchaseOrderStatusLocalizedMap[order.status]}',
                 style: TextStyle(
                     color: Color.fromRGBO(86, 194, 117, 1),
                     fontSize: 16,

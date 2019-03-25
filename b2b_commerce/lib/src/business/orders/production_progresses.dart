@@ -5,9 +5,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-final String defaultPicUrl =
-    "https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg";
-
 class ProductionProgressesPage extends StatefulWidget{
   final PurchaseOrderModel order;
 
@@ -44,10 +41,24 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         centerTitle: true,
         elevation: 0.5,
         title: Text('生产进度明细'),
+        actions: <Widget>[
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: Center(
+              child: Text(
+                '${ProductionProgressPhaseLocalizedMap[order.currentPhase]}',
+                style: TextStyle(
+                  color: Color(0xFFFFD600),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+//        padding: EdgeInsets.all(10),
+//        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: _buildProgresses(context),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -251,24 +262,20 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               )),
           Align(
               alignment: Alignment.center,
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          '凭证',
-                        )
-                      ],
-                    ),
-                    userType == 'factory' ?
+              child: GestureDetector(
+                child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                    margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                    child: userType != null && userType == 'factory' && (sequence > _index || phase == currentPhase) ?
                     EditableAttachments(list: progress.medias)
-                        : Attachments(list: progress.medias)
-                  ],
+                        : Attachments(height:70,imageWidth:70,list: progress.medias)
                 ),
+                onTap: () async {
+                  progress.updateOnly = true;
+                  await PurchaseOrderRepository().productionProgressUpload(
+                      widget.order.code, progress.id.toString(), progress);
+                },
               )
           ),
           Container(
@@ -277,15 +284,14 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               child: phase == currentPhase && progress.finishDate == null
                   ? RaisedButton(
                 color: Color(0xFFFFD600),
-                child: Text(progress.phase == ProductionProgressPhase.INSPECTION ?'验货完成' : '完成',
+                child: Text('${ProductionProgressPhaseLocalizedMap[progress.phase]}完成',
                   style: TextStyle(color: Colors.white),
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius:
                     BorderRadius.all(Radius.circular(20))),
                 onPressed: () {
-                  progress.phase == ProductionProgressPhase.INSPECTION?
-                  _showTipsDialog(progress):null;
+                  _showTipsDialog(progress);
                 },
               )
                   : null)
@@ -307,6 +313,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     if(_picked != null){
       model.estimatedDate = _picked;
       try{
+        model.updateOnly = true;
         await PurchaseOrderRepository().productionProgressUpload(widget.order.code,model.id.toString(),model);
       }catch(e){
         print(e);
@@ -323,7 +330,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     dialogText = TextEditingController();
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
           title: Text('提示'),
@@ -338,13 +345,16 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             FlatButton(
               child: Text('确定'),
               onPressed: () async {
+                bool result;
                 try {
-                  await PurchaseOrderRepository().productionProgressUpload(
+                  model.updateOnly = false;
+                  result = await PurchaseOrderRepository().productionProgressUpload(
                   widget.order.code, model.id.toString(), model);
                 } catch (e) {
                 print(e);
                 }
                 Navigator.of(context).pop();
+                _showMessage(context,result);
               },
             ),
           ],
@@ -359,7 +369,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     dialogText = TextEditingController();
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
           title: Text('请输入数量'),
@@ -383,13 +393,15 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             FlatButton(
               child: Text('确定'),
               onPressed: () async {
+                bool result = false;
                 if(dialogText.text != null){
                   print(dialogText.text);
                   if(dialogText != null && dialogText.text != '') {
                     model.quantity = int.parse(dialogText.text);
                   }
                   try {
-                    await PurchaseOrderRepository().productionProgressUpload(
+                    model.updateOnly = true;
+                   result =  await PurchaseOrderRepository().productionProgressUpload(
                         widget.order.code, model.id.toString(), model);
                   } catch (e) {
                     print(e);
@@ -399,6 +411,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   });
                 }
                 Navigator.of(context).pop();
+                _showMessage(context,result);
               },
             ),
           ],
@@ -416,65 +429,36 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     _neverSatisfied(context,model);
   }
 
-  Future<void> _neverRemarksSatisfied(BuildContext context,ProductionProgressModel model) async {
-    dialogText = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入备注'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextField(
-                  controller:dialogText,
-                  keyboardType: TextInputType.text,
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () async {
-                if(dialogText.text != null){
-                  print(dialogText.text);
-                  if(dialogText != null && dialogText.text != '') {
-                    model.remarks = dialogText.text;
-                  }
-                  try {
-                    await PurchaseOrderRepository().productionProgressUpload(
-                        widget.order.code, model.id.toString(), model);
-                  } catch (e) {
-                    print(e);
-                  }
-                  setState(() {
-                    _blNumber = dialogText.text;
-                  });
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
 //确认是否完成动作
   void _showTipsDialog(ProductionProgressModel model){
     _neverComplete(context,model);
   }
 
-  void _showRemarksDialog(ProductionProgressModel model){
-    _neverRemarksSatisfied(context,model);
+  void _showMessage(BuildContext context,bool result){
+    if(result){
+      _requestMessage(context,'修改成功');
+    }else{
+      _requestMessage(context,'修改失败');
+    }
+    ProductionBLoC.instance.refreshData();
+    initState();
+  }
+
+  Future<void> _requestMessage(BuildContext context,String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('提示'),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('${message}'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
 }

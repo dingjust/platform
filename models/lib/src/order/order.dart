@@ -719,32 +719,43 @@ class PurchaseOrderModel extends OrderModel {
   //单价
   double unitPrice;
 
-  PurchaseOrderModel(
-      {String code,
-      this.status,
-      int totalQuantity,
-      double totalPrice,
-      DateTime creationTime,
-      AddressModel deliveryAddress,
-      String remarks,
-      this.purchaser,
-      this.belongTo,
-      this.entries,
-      this.machiningType,
-      this.currentPhase,
-      this.attachments,
-      this.requirementOrderCode,
-      this.expectedDeliveryDate,
-      this.progresses,
-      this.balance,
-      this.balancePaid,
-      this.invoiceNeeded,
-      this.companyOfSeller,
-      this.contactOfSeller,
-      this.contactPersonOfSeller,
-      this.deposit,
-      this.depositPaid,
-      this.unitPrice,
+  //是否跳过付尾款环节
+  bool skipPayBalance;
+
+  //唯一码
+  String uniqueCode;
+
+  PurchaseOrderModel({
+    String code,
+    this.status,
+    int totalQuantity,
+    double totalPrice,
+    DateTime creationTime,
+    AddressModel deliveryAddress,
+    String remarks,
+    this.purchaser,
+    this.belongTo,
+    this.entries,
+    this.machiningType,
+    this.currentPhase,
+    this.attachments,
+    this.requirementOrderCode,
+    this.expectedDeliveryDate,
+    this.progresses,
+    this.balance,
+    this.balancePaid,
+    this.invoiceNeeded,
+    this.companyOfSeller,
+    this.contactOfSeller,
+    this.contactPersonOfSeller,
+    this.deposit,
+    this.depositPaid,
+    this.unitPrice,
+    this.skipPayBalance,
+    this.product,
+    this.balancePaidDate,
+    this.depositPaidDate,
+    this.uniqueCode,
       SalesApplication salesApplication})
       : super(
             code: code,
@@ -1010,15 +1021,18 @@ class ProductionProgressModel extends ItemModel {
   @JsonKey(toJson: _purchaseOrderToJson)
   PurchaseOrderModel order;
 
-  ProductionProgressModel(
-      {this.phase,
-      this.quantity,
-      this.medias,
-      this.sequence,
-      this.estimatedDate,
-      this.finishDate,
-      this.order,
-      this.remarks});
+  bool updateOnly;
+
+  ProductionProgressModel({
+    this.phase,
+    this.quantity,
+    this.medias,
+    this.sequence,
+    this.estimatedDate,
+    this.finishDate,
+    this.order,
+    this.updateOnly,
+    this.remarks});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>
       _$ProductionProgressModelFromJson(json);
