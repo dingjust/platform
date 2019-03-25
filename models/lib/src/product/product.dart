@@ -41,7 +41,12 @@ class CategoryModel extends ItemModel {
   String name;
   @JsonKey(toJson: _categoryToJson)
   CategoryModel parent;
+
+  @JsonKey(toJson: _categorysToJson)
   List<CategoryModel> children;
+
+  @JsonKey(toJson: _mediaToJson)
+  MediaModel thumbnail;
 
   CategoryModel({
     this.code,
@@ -58,6 +63,12 @@ class CategoryModel extends ItemModel {
 
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
       CategoryModel.toJson(model);
+
+  static Map<String, dynamic> _mediaToJson(MediaModel model) =>
+      MediaModel.toJson(model);
+
+  static List<Map<String, dynamic>> _categorysToJson(List<CategoryModel> models) =>
+      models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
 @JsonSerializable()

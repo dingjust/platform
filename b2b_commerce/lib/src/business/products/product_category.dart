@@ -11,6 +11,7 @@ class CategorySelectPage extends StatefulWidget {
   List<CategoryModel> minCategorySelect;
   List<CategoryModel> categorys;
   bool hasNextPage;
+  bool multiple;
 
   ///分类选择动作类型
   final CategoryActionType categoryActionType;
@@ -20,6 +21,7 @@ class CategorySelectPage extends StatefulWidget {
     this.fastRequirementForm,
     this.categorys,
     this.hasNextPage = false,
+    this.multiple = false,
     this.categoryActionType = CategoryActionType.none,
   });
 
@@ -72,7 +74,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
         categorySelect = CategorySelect(
           categorys: widget.categorys,
           categorySelect: widget.minCategorySelect,
-          multiple: false,
+          multiple: widget.multiple,
           hasButton: false,
         );
     }

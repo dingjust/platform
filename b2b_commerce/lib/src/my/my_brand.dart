@@ -171,11 +171,11 @@ class _MyBrandPageState extends State<MyBrandPage> {
                           ),
 //                        company.starLevel == null ? Container() : Stars(starLevel:company.starLevel),
                           Stars(
-                            starLevel: 5,
+                            starLevel: company.starLevel ?? 0,
                           ),
                           Container(
                             child: Text(
-                              "已认证",
+                              company.approvalStatus == ArticleApprovalStatus.approved ? "已认证" : '未认证',
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Color.fromRGBO(255, 214, 12, 1)),
@@ -350,29 +350,67 @@ class _MyBrandPageState extends State<MyBrandPage> {
 
   String formatCategorySelectText(List<CategoryModel> categorys) {
     String text = '';
-    if (categorys != null && categorys.isNotEmpty) {
-      categorys.forEach((category) {
-        text += category.name;
-      });
+
+    if (categorys != null) {
+      text = '';
+      for (int i = 0; i < categorys.length; i++) {
+        if (i > 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == categorys.length - 1) {
+          text += categorys[i].name;
+        } else {
+          text += categorys[i].name + '、';
+        }
+      }
     }
+
     return text;
   }
+
   String formatAgeRangesText(List<AgeRanges> ageRanges) {
     String text = '';
-    if (ageRanges != null && ageRanges.isNotEmpty) {
-      ageRanges.forEach((ageRange) {
-        text += '  '+AgeRangesLocalizedMap[ageRange];
-      });
+
+    if (ageRanges != null) {
+      text = '';
+      for (int i = 0; i < ageRanges.length; i++) {
+        if (i > 2) {
+          text += '...';
+          break;
+        }
+
+        if (i == ageRanges.length - 1) {
+          text += AgeRangesLocalizedMap[ageRanges[i]];
+        } else {
+          text += AgeRangesLocalizedMap[ageRanges[i]] + '、';
+        }
+      }
     }
+
     return text;
   }
+
   String formatPriceRangesText(List<PriceRanges> priceRanges) {
     String text = '';
-    if (priceRanges != null && priceRanges.isNotEmpty) {
-      priceRanges.forEach((priceRange) {
-        text += '  ￥'+PriceRangesLocalizedMap[priceRange];
-      });
+
+    if (priceRanges != null) {
+      text = '';
+      for (int i = 0; i < priceRanges.length; i++) {
+        if (i > 2) {
+          text += '...';
+          break;
+        }
+
+        if (i == priceRanges.length - 1) {
+          text += PriceRangesLocalizedMap[priceRanges[i]];
+        } else {
+          text += PriceRangesLocalizedMap[priceRanges[i]] + '、';
+        }
+      }
     }
+
     return text;
   }
 }

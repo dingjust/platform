@@ -53,7 +53,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 leadingColor: Colors.grey,
               ),
             ),
-            SizedBox(height: 3,),
+            SizedBox(height:2),
             Container(
               color: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),

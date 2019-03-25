@@ -23,25 +23,27 @@ class CompanyProfileItemState extends State<CompanyProfileItem> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-          child: Text(
-            '上传图片',
-            style: TextStyle(
-              fontSize: 17,
-              color: Colors.grey,
-            ),
-          ),
-        ),
+//        Padding(
+//          padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+//          child: Text(
+//            '上传图片',
+//            style: TextStyle(
+//              fontSize: 17,
+//              color: Colors.grey,
+//            ),
+//          ),
+//        ),
         EditableAttachments(list: widget.companyProfile.medias,),
         TextFieldComponent(
           focusNode: __descriptionFocusNode,
           controller: _descriptionController,
           leadingText: '说明',
           leadingColor: Colors.grey,
+          textAlign: TextAlign.start,
         )
       ],
     );

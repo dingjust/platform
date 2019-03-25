@@ -22,10 +22,20 @@ class Apis {
         return '/{baseSiteId}/b2b/brands/$uid';
       };
 
+  /// 获取品牌明细 GET
+  static get brandUpdate => (uid) {
+    return '/{baseSiteId}/b2b/brands/$uid';
+  };
+
   /// 获取工厂明细 GET
   static get factory => (uid) {
         return '/{baseSiteId}/b2b/factories/$uid';
       };
+
+  /// 获取工厂明细 GET
+  static get factoryUpdate => (uid) {
+    return '/{baseSiteId}/b2b/factories/$uid';
+  };
 
   /// 图片上传
   static get upload => () {
