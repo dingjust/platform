@@ -566,9 +566,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: addressModel == null || addressModel.line1 == null
+            trailing: addressModel == null || addressModel.region == null
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(addressModel.line1,
+                : Text(addressModel.region.name + addressModel.city.name +
+                addressModel.cityDistrict.name,
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
