@@ -123,11 +123,13 @@ class HomeTabSection extends StatelessWidget {
         ),
       ),
       AdvanceIconButton(
-        onPressed: () async{
+        onPressed: () async {
           List<LabelModel> labels = await UserRepositoryImpl().labels();
 
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => IndustrialClusterPage(labels)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IndustrialClusterPage(labels)));
         },
         title: '产业集群',
         icon: Icon(
@@ -147,20 +149,6 @@ class HomeTabSection extends StatelessWidget {
         icon: Icon(
           B2BIcons.factory_brand,
           color: Color.fromRGBO(255, 189, 82, 1.0),
-          size: 30,
-        ),
-      ),
-      AdvanceIconButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(
-                    route: '免费打样',
-                  )));
-        },
-        title: '免费打样',
-        icon: Icon(
-          B2BIcons.free_proofing,
-          color: Color.fromRGBO(255, 123, 118, 1.0),
           size: 30,
         ),
       ),
