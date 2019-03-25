@@ -1,10 +1,10 @@
 <template>
   <div class="animated fadeIn">
-    <carousel-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <carousel-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
     <div class="pt-2"></div>
-    <carousel-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
+    <carousel-form ref="form" :slot-data="slotData" :read-only="isNewlyCreated"/>
     <div class="pt-2"></div>
-    <carousel-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <carousel-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
   </div>
 </template>
 
@@ -42,9 +42,10 @@
           return;
         }
 
-        this.$message.success('品牌创建成功');
+        this.$message.success('保存成功');
         this.$set(this.slotData, 'code', result);
-        this.refresh();
+        const searchUrl = this.apis().getCarousels();
+        this.refresh(searchUrl);
         this.fn.closeSlider(true);
       }
     },

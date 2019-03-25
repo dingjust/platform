@@ -48,13 +48,16 @@ const COMMON_APIS = {
     return '/b2b/products/sampleCheckoutHist/' + id;
   },
   createCarousel() {
-    return '/b2b/carousels';
+    return '/djwebservices/carousels/create';
+  },
+  updateCarousel(id) {
+    return '/djwebservices/carousels/update/'+id;
   },
   getCarousels() {
-    return '/b2b/carousels';
+    return '/djwebservices/carousels';
   },
   getCarousel(id) {
-    return '/b2b/carousel/' + id;
+    return '/djwebservices/carousels/' + id;
   },
   createIndustrialCluster() {
     return '/b2b/industrialClusters/create';

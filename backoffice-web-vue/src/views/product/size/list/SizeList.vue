@@ -4,7 +4,9 @@
       <el-table-column label="code" prop="code"></el-table-column>
       <el-table-column label="名称" prop="name"></el-table-column>
       <el-table-column label="是否启用" prop="active">
-
+        <template slot-scope="scope">
+          {{scope.row.active==true?"是":"否"}}
+        </template>
       </el-table-column>
       <el-table-column label="序列值" prop="sequence"></el-table-column>
       <el-table-column label="操作">

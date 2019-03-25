@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
+import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
+import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 
@@ -159,7 +161,14 @@ class _HomePageState extends State<HomePage> {
               color: Color.fromRGBO(255, 214, 12, 1),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductionOfflineOrder(),
+                  ),
+                );
+              },
               child: Text(
                 '创建线下订单',
                 style: TextStyle(
@@ -193,19 +202,24 @@ class _HomePageState extends State<HomePage> {
                     bottom: BorderSide(
                         width: 0.8, color: Color.fromRGBO(200, 200, 200, 1)))),
           ),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            decoration: BoxDecoration(
-                color: Color.fromRGBO(240, 240, 240, 1),
-                borderRadius: BorderRadius.circular(20)),
-            child: TextField(
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '请输入品牌发来的唯一码',
-                  hintStyle: TextStyle(fontSize: 15)),
-            ),
+          GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductionUniqueCodePage(),
+                  ),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(240, 240, 240, 1),
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text('请输入品牌发来的唯一码',),
+              )
           ),
           Container(
               width: double.infinity,

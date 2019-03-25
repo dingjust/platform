@@ -26,6 +26,7 @@
     },
     computed: {
       ...mapGetters({
+        keyword:'keyword',
         page: 'page'
       })
     },
