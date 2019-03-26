@@ -72,7 +72,10 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                             },
                             child: Text(
                               '检索',
-                              style: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                fontSize: 18,
+                              ),
                             ),
                           )),
                         )
@@ -116,13 +119,13 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                   Container(
                       width: double.infinity,
                       height: 50,
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 40),
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 40),
                       child: FlatButton(
-                        color: Color(0xFFFF9516),
+                        color: Color(0xFFFFD600),
                         child: Text(
                           '确定导入',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.w500,
                             fontSize: 18,
                           ),
@@ -214,8 +217,11 @@ class UniqueCodeItem extends StatelessWidget {
           children: <Widget>[
             _buildHeader(context),
             Column(
-              children: _buildEntries(),
+              children: <Widget>[
+                _buildEntries(),
+              ],
             ),
+            _buildBottom()
           ],
         ),
         decoration: BoxDecoration(
@@ -254,7 +260,7 @@ class UniqueCodeItem extends StatelessWidget {
               Text(
                 '${PurchaseOrderStatusLocalizedMap[order.status]}',
                 style: TextStyle(
-                    color: Color.fromRGBO(86, 194, 117, 1),
+                    color: Color(0xFFFFD600),
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               )
@@ -265,91 +271,90 @@ class UniqueCodeItem extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildEntries() {
-    return order.entries
-        .map((entry) => Container(
-              color: Color.fromRGBO(250, 250, 250, 1),
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 100,
+  Widget _buildEntries() {
+     int sum = 0;
+    order.entries.forEach((entry) {
+      sum = sum + entry.quantity;
+    });
+    return Container(
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image:  order.product == null ||  order.product.thumbnail == null?
+                    AssetImage(
+                      'temp/picture.png',
+                      package: "assets",
+                    ):
+                    NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}'),
+                    fit: BoxFit.cover,
+                  )),
+            ),
+            Expanded(
+                child: Container(
+                    padding: EdgeInsets.all(5),
                     height: 100,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        image: DecorationImage(
-                          image: order.product.thumbnail != null
-                              ? NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}')
-                              : AssetImage(
-                                  'temp/picture.png',
-                                  package: "assets",
-                                ),
-                          fit: BoxFit.cover,
-                        )),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      height: 100,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                entry.product.name,
-                                style: TextStyle(fontSize: 15),
-                                overflow: TextOverflow.ellipsis,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: order.product == null || order.product.name == null?
+                            Container():
+                            Text(
+                              '${order.product.name}',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            )),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Text(
+                                '货号：${order.product == null ? '' : order.product.skuID}',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey),
                               ),
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Text(
-                                  '货号：' + entry.product.skuID,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color.fromRGBO(150, 150, 150, 1)),
-                                ),
-                              )
-                            ],
+                            )),
+                        order.product == null || order.product.category == null?
+                        Container() :
+                        Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 243, 243, 1),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            "${order.product.category.name}  ${sum}件",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromRGBO(255, 133, 148, 1)),
                           ),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                '生产订单号：${order.code}',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(150, 150, 150, 1),
-                                  fontSize: 14,
-                                ),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                '报价时间：${DateFormatUtil.format(order.creationTime)}',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(150, 150, 150, 1),
-                                  fontSize: 14,
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ))
-        .toList();
+                        )
+                      ],
+                    )))
+          ],
+        ));
+  }
+
+  Widget _buildBottom() {
+    return Container(
+      padding: EdgeInsets.only(top: 5),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          '生产单号：${order.code}',
+          style: TextStyle(fontSize: 15),
+        ),
+      )
+    );
   }
 
 }
