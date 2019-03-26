@@ -631,6 +631,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => PicturePickPreviewWidget(
                         medias: productionProgress.medias,
+                        isUpload: true,
                       ))
                   ).then((value){
                     if(value != null){

@@ -194,6 +194,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => PicturePickPreviewWidget(
                         medias: progress.medias,
+                        isUpload: true,
                       ))
                   ).then((value){
                     if(value != null){
