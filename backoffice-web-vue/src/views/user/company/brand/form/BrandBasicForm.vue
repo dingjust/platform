@@ -86,11 +86,22 @@
       <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item label="优势品类" prop="adeptAtCategories">
-            <el-checkbox-group v-model="slotData.adeptAtCategories">
-              <el-checkbox v-for="item in adeptAtCategories" :label="item.code" :key="item.code">
-                {{item.name}}
-              </el-checkbox>
-            </el-checkbox-group>
+            <el-select class="w-100"
+                       placeholder="请选择"
+                       v-model="slotData.adeptAtCategories"
+                       value-key="code" multiple>
+              <el-option-group
+                v-for="group in adeptAtCategories"
+                :key="group.code"
+                :label="group.name">
+                <el-option
+                  v-for="item in group.children"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item">
+                </el-option>
+              </el-option-group>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -158,7 +169,7 @@
         }
       },
       async getCategories() {
-        const url = this.apis().getMajorCategories();
+        const url = this.apis().getMinorCategories();
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);

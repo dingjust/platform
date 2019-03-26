@@ -232,7 +232,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                               style: TextStyle(fontWeight: FontWeight.w500)),
                           onTap: () {
                             userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                            _showDialog(progress): null;
+                            _showDialog(progress,'数量'): null;
                           }),
                     ),
                     GestureDetector(
@@ -243,7 +243,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                         ),
                         onTap: () {
                           userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                              _showDialog(progress)
+                              _showDialog(progress,'数量')
                               : null;
                         }
                     ),
@@ -253,7 +253,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                         icon: Icon(Icons.keyboard_arrow_right),
                         onPressed: (){
                           userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                          _showDialog(progress) : null;
+                          _showDialog(progress,'数量') : null;
                         }
                       ),
                     )
@@ -278,6 +278,39 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 },
               )
           ),
+          GestureDetector(
+            child: Container(
+                padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text("备注"),
+                        ),
+                      ),
+                      Container(
+                        width: 300,
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: progress.remarks == null?
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Icon(Icons.keyboard_arrow_right),
+                            ):
+                            Text(
+                              '${progress.remarks}',
+                              textAlign: TextAlign.start,
+                            )
+                        ),
+                      )
+                    ])
+            ),
+            onTap: () async {
+              userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+              _showDialog(progress,'备注') : null;
+            },
+          ),
           Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
@@ -285,7 +318,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   ? RaisedButton(
                 color: Color(0xFFFFD600),
                 child: Text('${ProductionProgressPhaseLocalizedMap[progress.phase]}完成',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black),
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius:
@@ -365,14 +398,14 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
 
 //生成Dialog控件
-  Future<void> _neverSatisfied(BuildContext context,ProductionProgressModel model) async {
+  Future<void> _neverSatisfied(BuildContext context,ProductionProgressModel model,String type) async {
     dialogText = TextEditingController();
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('请输入数量'),
+          title: Text('请输入${type}'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -424,8 +457,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     _selectDate(context,model);
   }
 //打开数量输入弹框
-  void _showDialog(ProductionProgressModel model){
-    _neverSatisfied(context,model);
+  void _showDialog(ProductionProgressModel model,String type){
+    _neverSatisfied(context,model,type);
   }
 
 //确认是否完成动作

@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,7 +14,7 @@ class MyCompanyContactWayPage extends StatefulWidget {
   State createState() => MyCompanyContactWayPageState();
 }
 
-class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
+class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
   bool isEditing = false;
   String btnText = '编辑';
   TextEditingController _contactPersonController = TextEditingController();
@@ -39,6 +41,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
     _emailController.text = widget.company.email;
     _qqController.text = widget.company.qq;
     _wechatController.text = widget.company.wechat;
+    if(widget.company.contactAddress == null) widget.company.contactAddress = AddressModel();
 
     // TODO: implement initState
     super.initState();
@@ -58,11 +61,10 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
                 label: Text(btnText),
                 onPressed: () {
                   setState(() {
-                    isEditing = !isEditing;
-                    if(isEditing){
+                    if (!isEditing) {
+                      isEditing = !isEditing;
                       btnText = '确定';
-                    }else{
-
+                    } else {
                       //TODO:提交表单
                       btnText = '编辑';
                     }
@@ -79,56 +81,85 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
             margin: EdgeInsets.only(top: 10),
             child: Column(
               children: <Widget>[
-                TextFieldComponent(
-                  enabled: isEditing,
-                  focusNode: _contactPersonFocusNode,
-                  leadingText: '联系人',
-                  controller: _contactPersonController,
-                  leadingColor: Colors.grey,
-                  dividerPadding: EdgeInsets.all(0),
-                ),
-                InkWell(
-                  child: TextFieldComponent(
-                    enabled: isEditing,
-                    focusNode: _contactPhoneFocusNode,
-                    leadingText: '联系电话',
-                    controller: _contactPhoneController,
-                    leadingColor: Colors.grey,
-                    dividerPadding: EdgeInsets.all(0),
-                    trailing: isEditing ? null : Icon(Icons.phone,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
-                  ),
+//                TextFieldComponent(
+//                  enabled: isEditing,
+//                  focusNode: _contactPersonFocusNode,
+//                  leadingText: '联系人',
+//                  controller: _contactPersonController,
+//                  leadingColor: Colors.grey,
+//                  dividerPadding: EdgeInsets.all(0),
+//                ),
+//                InkWell(
+//                  child: TextFieldComponent(
+//                    enabled: isEditing,
+//                    focusNode: _contactPhoneFocusNode,
+//                    leadingText: '联系电话',
+//                    controller: _contactPhoneController,
+//                    leadingColor: Colors.grey,
+//                    dividerPadding: EdgeInsets.all(0),
+//                    trailing: isEditing
+//                        ? null
+//                        : Icon(
+//                            Icons.phone,
+//                            size: 14,
+//                            color: Color.fromRGBO(255, 214, 12, 1),
+//                          ),
+//                  ),
+//                  onTap: () {
+//                    if (!isEditing)
+//                      _selectActionButton(
+//                          _contactPhoneController.text, context);
+//                  },
+//                ),
+                ListTile(
+                  title: Text('经营地址',style: TextStyle(color: Colors.grey,fontSize: 16),),
+                  trailing: Icon(Icons.chevron_right),
                   onTap: (){
-                    if(!isEditing) _selectActionButton(_contactPhoneController.text,context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OfflineContactsInput(model: widget.company.contactAddress,)));
                   },
                 ),
+                Divider(height: 0,color: Colors.grey,),
+//                InkWell(
+//                  child: TextFieldComponent(
+//                    enabled: isEditing,
+//                    focusNode: _addressFocusNode,
+//                    leadingText: '经营地址',
+//                    controller: _addressController,
+//                    leadingColor: Colors.grey,
+//                    dividerPadding: EdgeInsets.all(0),
+//                    trailing: isEditing
+//                        ? null
+//                        : Icon(
+//                            Icons.content_copy,
+//                            size: 14,
+//                            color: Color.fromRGBO(255, 214, 12, 1),
+//                          ),
+//                  ),
+//                  onTap: () {
+//                    if (!isEditing)
+//                      copyToClipboard(_addressController.text, context);
+//                  },
+//                ),
                 InkWell(
-                  child: TextFieldComponent(
-                    enabled: isEditing,
-                    focusNode: _addressFocusNode,
-                    leadingText: '经营地址',
-                    controller: _addressController,
-                    leadingColor: Colors.grey,
-                    dividerPadding: EdgeInsets.all(0),
-                    trailing: isEditing ? null : Icon(Icons.content_copy,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
-                  ),
-                  onTap: (){
-                    if(!isEditing) copyToClipboard(_addressController.text, context);
-                  },
-                ),
-                InkWell(
-                  child: TextFieldComponent(
-                    enabled: isEditing,
-                    focusNode: _phoneFocusNode,
-                    leadingText: '座机号码',
-                    controller: _phoneController,
-                    leadingColor: Colors.grey,
-                    dividerPadding: EdgeInsets.all(0),
-                    trailing: isEditing ? null : Icon(Icons.phone,size: 14,color:Color.fromRGBO(255, 214, 12, 1),),
-                  ),
-                  onTap: (){
-                    if(!isEditing) _selectActionButton(_phoneController.text,context);
-                  }
-                ),
+                    child: TextFieldComponent(
+                      enabled: isEditing,
+                      focusNode: _phoneFocusNode,
+                      leadingText: '座机号码',
+                      controller: _phoneController,
+                      leadingColor: Colors.grey,
+                      dividerPadding: EdgeInsets.all(0),
+                      trailing: isEditing
+                          ? null
+                          : Icon(
+                              Icons.phone,
+                              size: 14,
+                              color: Color.fromRGBO(255, 214, 12, 1),
+                            ),
+                    ),
+                    onTap: () {
+                      if (!isEditing)
+                        _selectActionButton(_phoneController.text, context);
+                    }),
                 InkWell(
                   child: TextFieldComponent(
                     enabled: isEditing,
@@ -137,10 +168,17 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
                     controller: _emailController,
                     leadingColor: Colors.grey,
                     dividerPadding: EdgeInsets.all(0),
-                    trailing: isEditing ? null : Icon(Icons.content_copy,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
+                    trailing: isEditing
+                        ? null
+                        : Icon(
+                            Icons.content_copy,
+                            size: 14,
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                          ),
                   ),
-                  onTap: (){
-                    if(!isEditing) copyToClipboard(_emailController.text, context);
+                  onTap: () {
+                    if (!isEditing)
+                      copyToClipboard(_emailController.text, context);
                   },
                 ),
                 InkWell(
@@ -151,10 +189,17 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
                     controller: _qqController,
                     leadingColor: Colors.grey,
                     dividerPadding: EdgeInsets.all(0),
-                    trailing: isEditing ? null : Icon(Icons.content_copy,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
+                    trailing: isEditing
+                        ? null
+                        : Icon(
+                            Icons.content_copy,
+                            size: 14,
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                          ),
                   ),
-                  onTap: (){
-                    if(!isEditing) copyToClipboard(_qqController.text, context);
+                  onTap: () {
+                    if (!isEditing)
+                      copyToClipboard(_qqController.text, context);
                   },
                 ),
                 InkWell(
@@ -165,10 +210,17 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
                     controller: _wechatController,
                     leadingColor: Colors.grey,
                     dividerPadding: EdgeInsets.all(0),
-                    trailing: isEditing ? null : Icon(Icons.content_copy,size: 14,color: Color.fromRGBO(255, 214, 12, 1),),
+                    trailing: isEditing
+                        ? null
+                        : Icon(
+                            Icons.content_copy,
+                            size: 14,
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                          ),
                   ),
-                  onTap: (){
-                    if(!isEditing) copyToClipboard(_wechatController.text, context);
+                  onTap: () {
+                    if (!isEditing)
+                      copyToClipboard(_wechatController.text, context);
                   },
                 ),
               ],
@@ -180,7 +232,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
   }
 
   //拨打电话或发短信
-  void _selectActionButton(String tel,BuildContext context) async {
+  void _selectActionButton(String tel, BuildContext context) async {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -195,25 +247,25 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage>{
                 await launch(url);
               },
             ),
-            tel.indexOf('-')>-1?Container():ListTile(
-              leading: Icon(Icons.message),
-              title: Text('发送短信'),
-              onTap: () async {
-                var url = 'sms:' + tel;
-                await launch(url);
-              },
-            ),
+            tel.indexOf('-') > -1
+                ? Container()
+                : ListTile(
+                    leading: Icon(Icons.message),
+                    title: Text('发送短信'),
+                    onTap: () async {
+                      var url = 'sms:' + tel;
+                      await launch(url);
+                    },
+                  ),
           ],
         );
       },
     );
   }
 
-  copyToClipboard(final String text,BuildContext context) {
+  copyToClipboard(final String text, BuildContext context) {
     if (text == null) return;
-    Clipboard.setData(
-        ClipboardData(text: text)
-    );
+    Clipboard.setData(ClipboardData(text: text));
     _neverCopyContent(context);
   }
 

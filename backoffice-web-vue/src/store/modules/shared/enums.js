@@ -248,6 +248,12 @@ const state = {
     {code: 'ODM', name: 'ODM'},
     {code: 'OEM', name: 'OEM'}
   ],
+  populationScales: [
+    {code: 'N01', name: '50人以下'},
+    {code: 'N02', name: '51到100人'},
+    {code: 'N03', name: '101到200人'},
+    {code: 'N04', name: '200人以上'}
+  ]
 };
 
 const mutations = {};

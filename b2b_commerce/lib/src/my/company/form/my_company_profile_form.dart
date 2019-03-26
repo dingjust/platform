@@ -14,12 +14,22 @@ class MyCompanyProfileFormPage extends StatefulWidget {
 }
 
 class MyCompanyProfileFormPageState extends State<MyCompanyProfileFormPage> {
-  CompanyProfileModel _oneCompanyProfileModel = CompanyProfileModel();
-  CompanyProfileModel _twoCompanyProfileModel = CompanyProfileModel();
-  CompanyProfileModel _threeCompanyProfileModel = CompanyProfileModel();
+  List<CompanyProfileModel> _companyProfiles = List(3);
 
   @override
   void initState() {
+    for (int i = 0; i < widget.company.companyProfiles.length; i++) {
+      _companyProfiles[i] = widget.company.companyProfiles[i];
+    }
+    _companyProfiles.fillRange(
+        widget.company.companyProfiles.length,
+        3,
+        CompanyProfileModel(
+          medias: [],
+          description: '',
+        ));
+    print(_companyProfiles);
+
     // TODO: implement initState
     super.initState();
   }
@@ -40,16 +50,18 @@ class MyCompanyProfileFormPageState extends State<MyCompanyProfileFormPage> {
               ),
             ),
             onPressed: () {
+
             },
           ),
         ],
       ),
       body: ListView(
-        children: <Widget>[
-          CompanyProfileItem(_oneCompanyProfileModel),
-          CompanyProfileItem(_twoCompanyProfileModel),
-          CompanyProfileItem(_threeCompanyProfileModel),
-        ],
+        children: _companyProfiles.map((companyProfile) {
+          return Container(
+            padding: EdgeInsets.only(bottom: 30),
+            child: CompanyProfileItem(companyProfile),
+          );
+        }).toList(),
       ),
     );
   }

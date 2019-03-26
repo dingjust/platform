@@ -59,6 +59,7 @@ class CompanyModel extends UserGroupModel {
   String certificateOfLegal;
 
   //认证证件
+  @JsonKey(toJson: _mediasToJson)
   List<MediaModel> certificates;
 
   //联系人
@@ -83,6 +84,7 @@ class CompanyModel extends UserGroupModel {
   ArticleApprovalStatus approvalStatus;
 
   //图文详情列表
+  @JsonKey(toJson: _companyProfilesToJson)
   List<CompanyProfileModel> companyProfiles;
 
   CompanyModel({
@@ -121,6 +123,12 @@ class CompanyModel extends UserGroupModel {
 
   static Map<String, dynamic> toJson(CompanyModel model) =>
       _$CompanyModelToJson(model);
+
+  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
+
+  static List<Map<String, dynamic>> _companyProfilesToJson(List<CompanyProfileModel> models) =>
+      models.map((model) => CompanyProfileModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -264,10 +272,12 @@ class BrandModel extends B2BUnitModel {
   //风格
   List<String> styles;
 
-  //品类
+  //生产大类
+  @JsonKey(toJson: _categorysToJson)
   List<CategoryModel> categories;
 
-  //擅长品类
+  //优势类目
+  @JsonKey(toJson: _categorysToJson)
   List<CategoryModel> adeptAtCategories;
 
   //年龄段
@@ -348,6 +358,9 @@ class BrandModel extends B2BUnitModel {
 
   static Map<String, dynamic> toJson(BrandModel model) =>
       _$BrandModelToJson(model);
+
+  static List<Map<String, dynamic>> _categorysToJson(List<CategoryModel> models) =>
+      models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -365,9 +378,11 @@ class FactoryModel extends B2BUnitModel {
   PopulationScale populationScale;
 
   //生产大类
+  @JsonKey(toJson: _categoriesToJson)
   List<CategoryModel> categories;
 
   //优势类目
+  @JsonKey(toJson: _categoriesToJson)
   List<CategoryModel> adeptAtCategories;
 
   //合作方式
@@ -542,6 +557,38 @@ class CompanyProfileModel extends ItemModel {
       _$CompanyProfileModelToJson(model);
 }
 
+//供应商
+@JsonSerializable()
+class SupplierModel extends ItemModel {
+  //工厂信息
+  FactoryModel factory;
+
+  //合作次数
+  int orderCount;
+
+  //报价次数
+  int quoteCount;
+
+  //报价单信息（取最新一条）
+  QuoteModel quoteOrder;
+
+  //采购订单信息（取最新一条）
+  PurchaseOrderModel purchaseOrder;
+
+  SupplierModel(
+      {this.factory,
+        this.orderCount,
+        this.quoteOrder,
+        this.purchaseOrder,
+        this.quoteCount});
+
+  factory SupplierModel.fromJson(Map<String, dynamic> json) =>
+      _$SupplierModelFromJson(json);
+
+  static Map<String, dynamic> toJson(SupplierModel model) =>
+      _$SupplierModelToJson(model);
+}
+
 //合作方式枚举
 enum CooperationModes {
   ///  纯加工
@@ -672,34 +719,4 @@ const PriceRangesLocalizedMap = {
   PriceRanges.PR006: '500以上',
 };
 
-//供应商
-@JsonSerializable()
-class SupplierModel extends ItemModel {
-  //工厂信息
-  FactoryModel factory;
 
-  //合作次数
-  int orderCount;
-
-  //报价次数
-  int quoteCount;
-
-  //报价单信息（取最新一条）
-  QuoteModel quoteOrder;
-
-  //采购订单信息（取最新一条）
-  PurchaseOrderModel purchaseOrder;
-
-  SupplierModel(
-      {this.factory,
-      this.orderCount,
-      this.quoteOrder,
-      this.purchaseOrder,
-      this.quoteCount});
-
-  factory SupplierModel.fromJson(Map<String, dynamic> json) =>
-      _$SupplierModelFromJson(json);
-
-  static Map<String, dynamic> toJson(SupplierModel model) =>
-      _$SupplierModelToJson(model);
-}

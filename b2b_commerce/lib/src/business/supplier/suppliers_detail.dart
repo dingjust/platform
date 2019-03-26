@@ -707,7 +707,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ExistingProduct([]),
+              builder: (context) => ExistingProductsPage([]),
             ),
           );
         });

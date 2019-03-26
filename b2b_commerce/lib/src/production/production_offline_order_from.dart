@@ -2,6 +2,8 @@ import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:b2b_commerce/src/my/my_addresses.dart';
+import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
@@ -139,11 +141,12 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Divider(
             height: 0,
           ),
+          userType == 'brand' ?
+          _buildAddressPick(context):
           _buildAddress(context),
           Divider(
             height: 0,
           ),
-          _buildDetailAddress(context),
           Divider(
             height: 0,
           ),
@@ -504,8 +507,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         });
   }
 
-  //送货地址
-  Widget _buildAddress(BuildContext context) {
+  //送货地址（品牌）
+  Widget _buildAddressPick(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
@@ -535,47 +538,38 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         ),
         onTap: () {
           address = '';
-          setState(() {
-            address = address;
-          });
-          AddressPicker(cacel:(){
-            Navigator.pop(context);
-          }).showAddressPicker(
+          Navigator.push(
             context,
-            selectProvince: (province) {
-              address += province['name'];
-              addressModel.region = RegionModel.fromJson(province);
-            },
-            selectCity: (city) {
-              address += city['name'];
-              addressModel.city = CityModel.fromJson(city);
-            },
-            selectArea: (area) {
-              address += area['name'];
-              addressModel.cityDistrict = DistrictModel.fromJson(area);
-              setState(() {
-                address = address;
-              });
-            },
-          );
+            MaterialPageRoute(
+                builder: (context) => MyAddressesPage(isJumpSourec: true)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              addressModel = value;
+              address = addressModel.region.name + addressModel.city.name +
+                  addressModel.cityDistrict.name;
+            });
+          });
         });
   }
 
-  //详细地址
-  Widget _buildDetailAddress(BuildContext context) {
+
+  //送货地址（工厂）
+  Widget _buildAddress(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
             leading: Text(
-              '详细地址',
+              '送货地址',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: addressModel.line1 == null || addressModel.line1 == ''
+            trailing: addressModel == null || addressModel.region == null
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(addressModel.line1,
+                : Text(addressModel.region.name + addressModel.city.name +
+                addressModel.cityDistrict.name,
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -588,11 +582,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(fieldText: '详细地址',inputType: TextInputType.text)),
+                builder: (context) => OfflineContactsInput(model: addressModel,)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
-              addressModel.line1 = value;
+              addressModel = value;
             });
           });
         });
@@ -703,6 +697,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   Widget _buildCommitButton(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: Column(
         children: <Widget>[
           Container(
@@ -726,9 +721,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   })
           ),
         ],
-      ),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(242, 242, 242, 1),
       ),
     );
   }
@@ -847,7 +839,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         if(code != null){
           result = true;
         }
-        _showMessage(context,result,'添加线下单');
+        _showMessage(context,result,'添加线下单',code);
       }
 
     }catch(e){
@@ -953,8 +945,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   }
 
   //保存后是否成功提示
-  void _showMessage(BuildContext context,bool result,String message){
-    _requestMessage(context,result == true? '${message}成功' : '${message}失败',result);
+  void _showMessage(BuildContext context,bool result,String message,String code){
+    _requestMessage(context,result == true? '${message}成功' : '${message}失败',result,code);
   }
 
   Future<void> _validateMessage(BuildContext context,String message) async {
@@ -974,10 +966,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     );
   }
 
-  Future<void> _requestMessage(BuildContext context,String message,bool result) async {
+  Future<void> _requestMessage(BuildContext context,String message,bool result,String code) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: true, // user must tap button!
+      barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
           title: Text('提示'),
@@ -992,13 +984,15 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           actions: <Widget>[
             FlatButton(
               child: Text('确定'),
-              onPressed: () {
-                purchaseOrder.attachments=[];
+              onPressed: () async {
+                PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
+                ProductionBLoC.instance.refreshData();
+
                 Navigator.of(context).pop();
                 result == true ?
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) =>
-                        PurchaseOrderDetailPage(order: purchaseOrder)
+                        PurchaseOrderDetailPage(order: model)
                     ), ModalRoute.withName('/')) : null;
               },
             ),
