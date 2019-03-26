@@ -216,6 +216,9 @@ const COMMON_APIS = {
   getPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code;
   },
+  updateDeliveryAddressOfPurchaseOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/deliveryAddress';
+  },
   createPurchaseOrder() {
     return '/b2b/orders/purchase/create';
   },
@@ -227,6 +230,9 @@ const COMMON_APIS = {
   },
   getProofing(code) {
     return '/b2b/orders/proofing/' + code;
+  },
+  updateDeliveryAddressOfProofing(code) {
+    return '/b2b/orders/proofing/' + code + '/deliveryAddress';
   },
   createProofing(quote) {
     return '/b2b/orders/proofing/create/' + quote;

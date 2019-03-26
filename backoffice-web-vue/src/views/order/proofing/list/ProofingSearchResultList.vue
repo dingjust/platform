@@ -16,6 +16,7 @@
       <el-table-column label="报价订单号" prop="quoteRef"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
           <el-button v-if="canUpdateAddress(scope.row)" type="text" icon="el-icon-edit"
                      @click="onUpdateAddress(scope.row)">
             修改地址
@@ -52,12 +53,19 @@
 <script>
   import AddressForm from "@/views/shared/user/address/AddressForm";
 
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapActions} = createNamespacedHelpers('PurchaseOrdersModule');
+
   export default {
     name: 'ProofingSearchResultList',
     props: ["page"],
     components: {AddressForm},
     computed: {},
     methods: {
+      ...mapActions({
+        refresh: 'refresh'
+      }),
       onPageSizeChanged(val) {
         this._reset();
 
@@ -88,8 +96,13 @@
         this.$emit('onShowQuote', row);
       },
       onUpdateAddress(row) {
-        this.addressFormData = Object.assign({}, row.deliveryAddress);
+        if (row.deliveryAddress != null) {
+          this.addressFormData = Object.assign({}, row.deliveryAddress);
+        }
+
         this.addressDialogVisible = true;
+
+        this.currentRow = row;
       },
       canUpdateAddress(row) {
         return this.isBrand() && row.status === 'PENDING_PAYMENT';
@@ -99,15 +112,29 @@
       },
       onAddressInputConfirmed() {
         if (this.$refs['addressForm'].validate()) {
-          // TODO: UPDATE ADDRESS
+          const row = this.currentRow;
+          this._updateDeliveryAddress(row);
+
           this.addressDialogVisible = false;
         }
       },
+      async _updateDeliveryAddress(row) {
+        const url = this.apis().updateDeliveryAddressOfProofing(row.code);
+        const result = await this.$http.post(url, this.addressFormData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.error('地址更新成功');
+        this.refresh();
+      }
     },
     data() {
       return {
         addressDialogVisible: false,
         addressFormData: this.$store.state.ProofingsModule.addressFormData,
+        currentRow: null
       }
     },
     created() {
