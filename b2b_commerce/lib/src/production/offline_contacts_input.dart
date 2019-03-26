@@ -22,6 +22,7 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
 
   @override
   void initState() {
+    addressModel = widget.model;
     if(addressModel != null){
       if(addressModel.region != null && addressModel.region.name != null && addressModel.region.name != ''
       && addressModel.city != null && addressModel.city.name != null && addressModel.city.name != ''
@@ -36,7 +37,6 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
       _phoneController.text = addressModel.cellphone;
 
     }
-    addressModel = widget.model;
     super.initState();
   }
 
