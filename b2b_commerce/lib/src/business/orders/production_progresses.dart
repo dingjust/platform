@@ -110,7 +110,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color: sequence <= _index ? Color(0xFFFFD600) : Colors.black45,
+            color: sequence < _index ? Color(0xFFFFD600) : Colors.black45,
           ),
         ),
         Positioned(
@@ -125,7 +125,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               width: 16.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: sequence <= _index ? Color(0xFFFFD600) : Colors.black
+                  color: sequence < _index ? Color(0xFFFFD600) : Colors.black
               ),
             ),
           ),
@@ -137,185 +137,82 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 //TimeLineUI右边的Card部分
   Widget _buildProgressTimeLine(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index) {
     phase = ProductionProgressPhaseLocalizedMap[progress.phase];
-//    int _index = 0;
-//    if (phase == currentPhase) {
-//      _index = progress.sequence;
-//    }
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.0),
-      width: double.infinity,
+//      width: double.infinity,
       child: Column(
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          ListTile(
-            title: Text(ProductionProgressPhaseLocalizedMap[progress.phase],
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: sequence <= _index ? Color(0xFFFFD600) : Colors.black54,
-                    fontSize: 18)),
-            trailing: Text(
-              '${progress.delayedDays >0 ? '已延期${progress.delayedDays}天': '' }',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text('${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index ? '（当前进行中）':''}' ,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: sequence < _index ? Color(0xFFFFD600) : Colors.black54,
+                          fontSize: 18)
+                  ),
+                ),
+                Text(
+                  '${progress.delayedDays >0 ? '已延期${progress.delayedDays}天': '' }',
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
+                ),
+              ],
             ),
           ),
-          Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: GestureDetector(
-                            child: Text('预计完成时间',
-                                style: TextStyle(fontWeight: FontWeight.w500)),
-                            onTap: () {
-                              userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                              _showDatePicker(progress) : null;
-                            }),
-                      ),
-                      GestureDetector(
-                          child:Align(
-                            alignment: Alignment.centerRight,
-                            child:
-                            progress.estimatedDate == null? Container():
-                            Text('${DateFormatUtil.formatYMD(
-                                progress.estimatedDate)}',
-                                style: TextStyle(fontWeight: FontWeight.w500)),
-                          ),
-                          onTap: () {
-                            userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                            _showDatePicker(progress) : null;
-                          }),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                            icon: Icon(Icons.date_range),
-                            onPressed: () {
-                              userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                              _showDatePicker(progress) : null;
-                            }
-                        ),
-                      )
-                    ],
-                  ),
-                  sequence > _index || phase == currentPhase ?
-                  Container() :
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text('实际完成时间', style: TextStyle(fontWeight: FontWeight.w500)),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child:
-                        progress.finishDate == null ? Container() :
-                        Text('${DateFormatUtil.formatYMD(progress.finishDate)}',
-                            style: TextStyle(fontWeight: FontWeight.w500)),
-                      ),
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: SizedBox(
-                            width: 48,
-                          ))
-                    ],
-                  ),
-                ],
-              )),
-          Align(
-              alignment: Alignment.center,
-              child: Container(
-                height: 35,
-                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child: Row(
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Expanded(
-                      child: GestureDetector(
-                          child: Text('数量',
-                              style: TextStyle(fontWeight: FontWeight.w500)),
-                          onTap: () {
-                            userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                            _showDialog(progress,'数量'): null;
-                          }),
-                    ),
-                    GestureDetector(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text('${progress.quantity}',
-                              style: TextStyle(fontWeight: FontWeight.w500)),
-                        ),
-                        onTap: () {
-                          userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                              _showDialog(progress,'数量')
-                              : null;
-                        }
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        icon: Icon(Icons.keyboard_arrow_right),
-                        onPressed: (){
-                          userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                          _showDialog(progress,'数量') : null;
-                        }
-                      ),
-                    )
+                    sequence > _index || phase == currentPhase ?
+                    _buildEstimatedDate(context,progress,currentPhase,sequence,_index):
+                    _buildFinishDate(context,progress,currentPhase,sequence,_index),
+                    _buildQuantity(context,progress,currentPhase,sequence,_index),
                   ],
                 ),
-              )),
-          Align(
-              alignment: Alignment.center,
-              child: GestureDetector(
+              ),
+              GestureDetector(
                 child: Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                    margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                    child: userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-                    EditableAttachments(list: progress.medias)
-                        : Attachments(height:70,imageWidth:70,list: progress.medias)
+                  margin: EdgeInsets.only(right: 15),
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image:  progress.medias == null || progress.medias.isEmpty?
+                        AssetImage(
+                          'temp/picture.png',
+                          package: "assets",
+                        ):
+                        NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${progress.medias[0].url}'),
+                        fit: BoxFit.fill,
+                      )),
                 ),
-                onTap: () async {
-                  progress.updateOnly = true;
-                  await PurchaseOrderRepository().productionProgressUpload(
-                      order.code, progress.id.toString(), progress);
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PicturePickPreviewWidget(
+                        medias: progress.medias,
+                      ))
+                  ).then((value){
+                    if(value != null){
+                      progress.medias = value;
+                      progress.updateOnly = true;
+                      uploadPicture(progress);
+                    }
+                  });
                 },
-              )
+              ),
+            ],
           ),
-          GestureDetector(
-            child: Container(
-                padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
-                child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text("备注"),
-                        ),
-                      ),
-                      Container(
-                        width: 300,
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: Align(
-                            alignment: Alignment.centerRight,
-                            child: progress.remarks == null?
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Icon(Icons.keyboard_arrow_right),
-                            ):
-                            Text(
-                              '${progress.remarks}',
-                              textAlign: TextAlign.start,
-                              softWrap: true,
-                            )
-                        ),
-                      )
-                    ])
-            ),
-            onTap: () async {
-              userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-              _showRemarksDialog(progress,'备注') : null;
-            },
-          ),
+
+          _buildRemarks(context,progress,currentPhase,sequence,_index),
           Container(
               width: double.infinity,
+              margin: EdgeInsets.only(top: 10),
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
               child: phase == currentPhase && progress.finishDate == null && userType != null && userType == 'factory'
                   ? RaisedButton(
@@ -336,6 +233,151 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     );
   }
 
+  Widget _buildEstimatedDate(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index){
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: GestureDetector(
+                child: Text('预计完成时间',
+                    style: TextStyle(fontWeight: FontWeight.w500)),
+                onTap: () {
+                  userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                  _showDatePicker(progress) : null;
+                }),
+          ),
+          GestureDetector(
+              child:Align(
+                alignment: Alignment.centerRight,
+                child:
+                progress.estimatedDate == null? Container():
+                Text('${DateFormatUtil.formatYMD(
+                    progress.estimatedDate)}',
+                    style: TextStyle(fontWeight: FontWeight.w500)),
+              ),
+              onTap: () {
+                userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                _showDatePicker(progress) : null;
+              }),
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+                icon: Icon(Icons.date_range),
+                onPressed: () {
+                  userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                  _showDatePicker(progress) : null;
+                }
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFinishDate(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index){
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text('实际完成时间', style: TextStyle(fontWeight: FontWeight.w500)),
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 15),
+            child:
+            progress.finishDate == null ? Container() :
+            Text('${DateFormatUtil.formatYMD(progress.finishDate)}',
+                style: TextStyle(fontWeight: FontWeight.w500)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuantity(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index){
+    return Container(
+      child: Container(
+            height: 35,
+            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: GestureDetector(
+                      child: Text('数量',
+                          style: TextStyle(fontWeight: FontWeight.w500)),
+                      onTap: () {
+                        userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                        _showDialog(progress,'数量'): null;
+                      }),
+                ),
+                GestureDetector(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text('${progress.quantity}',
+                          style: TextStyle(fontWeight: FontWeight.w500)),
+                    ),
+                    onTap: () {
+                      userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                      _showDialog(progress,'数量')
+                          : null;
+                    }
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                      icon: Icon(Icons.keyboard_arrow_right),
+                      onPressed: (){
+                        userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                        _showDialog(progress,'数量') : null;
+                      }
+                  ),
+                )
+              ],
+            ),
+          ),
+    );
+  }
+
+  Widget _buildRemarks(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index){
+    return Container(
+      child: GestureDetector(
+        child: Container(
+            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            child: Row(
+                children: <Widget>[
+                   Text('备注', style: TextStyle(fontWeight: FontWeight.w500)),
+
+                  Container(
+                    padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
+                    child: Align(
+                        alignment: Alignment.centerRight,
+                        child: progress.remarks == null?
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            '填写',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ):
+                        Text(
+                          '${progress.remarks}',
+                          textAlign: TextAlign.start,
+                          softWrap: true,
+                        )
+                    ),
+                  )
+                ])
+        ),
+        onTap: () async {
+          userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+          _showRemarksDialog(progress,'备注') : null;
+        },
+      )
+    );
+  }
 
   //生成日期选择器
   Future<Null> _selectDate(BuildContext context,ProductionProgressModel model) async {
@@ -468,7 +510,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               children: <Widget>[
                 TextField(
                   controller:dialogText,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                 ),
               ],
             ),
@@ -513,6 +555,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 //打开数量输入弹框
   void _showDialog(ProductionProgressModel model,String type){
     _neverSatisfied(context,model,type);
+  }
+
+  void uploadPicture(ProductionProgressModel model) async{
+    await PurchaseOrderRepository().productionProgressUpload(order.code,model.id.toString(),model);
   }
 
   //备注输入框

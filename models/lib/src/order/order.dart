@@ -730,6 +730,9 @@ class PurchaseOrderModel extends OrderModel {
   //是否延期
   bool delayed;
 
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime modifiedtime;
+
   PurchaseOrderModel(
       {String code,
       this.status,
@@ -761,7 +764,7 @@ class PurchaseOrderModel extends OrderModel {
       this.balancePaidDate,
       this.depositPaidDate,
       this.uniqueCode,
-      this.delayed,
+      this.delayed, this.modifiedtime,
       SalesApplication salesApplication})
       : super(
             code: code,
