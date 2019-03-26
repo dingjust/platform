@@ -465,7 +465,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.requirementOrder.details.majorCategory?.name}   ${widget.model.requirementOrder.details.category?.name}   ${widget.model.totalQuantity ?? 0}件",
+                      "${widget.model.requirementOrder.details.majorCategoryName()}   ${widget.model.requirementOrder.details.category?.name}   ${widget.model.totalQuantity ?? 0}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

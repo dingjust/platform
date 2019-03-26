@@ -539,6 +539,8 @@ class RequirementInfoModel extends ItemModel {
       return _$enumDecodeNullable(_$MachiningTypeEnumMap, machiningType);
     }
   }
+
+  String majorCategoryName() => majorCategory != null ? majorCategory.name : '';
 }
 
 /// 需求订单
@@ -728,38 +730,38 @@ class PurchaseOrderModel extends OrderModel {
   //是否延期
   bool delayed;
 
-  PurchaseOrderModel({
-    String code,
-    this.status,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-    this.purchaser,
-    this.belongTo,
-    this.entries,
-    this.machiningType,
-    this.currentPhase,
-    this.attachments,
-    this.requirementOrderCode,
-    this.expectedDeliveryDate,
-    this.progresses,
-    this.balance,
-    this.balancePaid,
-    this.invoiceNeeded,
-    this.companyOfSeller,
-    this.contactOfSeller,
-    this.contactPersonOfSeller,
-    this.deposit,
-    this.depositPaid,
-    this.unitPrice,
-    this.skipPayBalance,
-    this.product,
-    this.balancePaidDate,
-    this.depositPaidDate,
-    this.uniqueCode,
-    this.delayed,
+  PurchaseOrderModel(
+      {String code,
+      this.status,
+      int totalQuantity,
+      double totalPrice,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      this.purchaser,
+      this.belongTo,
+      this.entries,
+      this.machiningType,
+      this.currentPhase,
+      this.attachments,
+      this.requirementOrderCode,
+      this.expectedDeliveryDate,
+      this.progresses,
+      this.balance,
+      this.balancePaid,
+      this.invoiceNeeded,
+      this.companyOfSeller,
+      this.contactOfSeller,
+      this.contactPersonOfSeller,
+      this.deposit,
+      this.depositPaid,
+      this.unitPrice,
+      this.skipPayBalance,
+      this.product,
+      this.balancePaidDate,
+      this.depositPaidDate,
+      this.uniqueCode,
+      this.delayed,
       SalesApplication salesApplication})
       : super(
             code: code,
@@ -1029,17 +1031,17 @@ class ProductionProgressModel extends ItemModel {
 
   int delayedDays;
 
-  ProductionProgressModel({
-    this.phase,
-    this.quantity,
-    this.medias,
-    this.sequence,
-    this.estimatedDate,
-    this.finishDate,
-    this.order,
-    this.updateOnly,
-    this.delayedDays,
-    this.remarks});
+  ProductionProgressModel(
+      {this.phase,
+      this.quantity,
+      this.medias,
+      this.sequence,
+      this.estimatedDate,
+      this.finishDate,
+      this.order,
+      this.updateOnly,
+      this.delayedDays,
+      this.remarks});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>
       _$ProductionProgressModelFromJson(json);

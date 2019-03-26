@@ -354,7 +354,7 @@ class RequirementOrderItem extends StatelessWidget {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${order.details.majorCategory?.name}   ${order.details.category?.name}   ${order.details.expectedMachiningQuantity}件",
+                      "${order.details.majorCategoryName()}   ${order.details.category?.name}   ${order.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

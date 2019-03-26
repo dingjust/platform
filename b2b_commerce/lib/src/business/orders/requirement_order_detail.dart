@@ -400,7 +400,7 @@ class _RequirementOrderDetailPageState
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.order.details.majorCategory?.name}   ${widget.order.details.category?.name}   ${widget.order.details.expectedMachiningQuantity}件",
+                      "${widget.order.details.majorCategoryName()}   ${widget.order.details.category?.name}   ${widget.order.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -413,6 +413,12 @@ class _RequirementOrderDetailPageState
         ],
       ),
     );
+  }
+
+  String _majorCategory() {
+    return widget.order.details.majorCategory != null
+        ? widget.order.details.majorCategory.name
+        : '';
   }
 
   Widget _buildQuote() {

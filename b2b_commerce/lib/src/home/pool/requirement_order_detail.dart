@@ -302,7 +302,7 @@ class _RequirementOrderDetailForFactoryState
                       ),
                       Container(
                         child: Text(
-                          '${widget.model.details.majorCategory.name} ${widget.model.details.category.name} ${widget.model.totalQuantity}',
+                          '${widget.model.details.majorCategoryName()} ${widget.model.details.category.name} ${widget.model.totalQuantity}',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
