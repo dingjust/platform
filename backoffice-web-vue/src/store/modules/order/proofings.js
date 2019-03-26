@@ -85,7 +85,7 @@ const mutations = {
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {keyword, page, size}) {
+  async search({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     if (page) {
       commit('currentPageNumber', page);
@@ -95,7 +95,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/orders/proofing', {
+    const response = await http.post(url, {
       code: state.keyword,
     }, {
       page: state.currentPageNumber,
@@ -114,7 +114,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post('/b2b/orders/proofing', query, {
+    const response = await http.post(url, query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
