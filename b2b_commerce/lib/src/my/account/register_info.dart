@@ -197,64 +197,55 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
   }
 
   void onSubmit() async {
-    // AddressModel contactAddress = AddressModel();
-    // contactAddress
-    //   ..cityDistrict = districtModel
-    //   ..city = districtModel.city
-    //   ..region = districtModel.city.region
-    //   ..line1 = _line1Controller.text;
+    AddressModel contactAddress = AddressModel();
+    contactAddress
+      ..cityDistrict = districtModel
+      ..city = districtModel.city
+      ..region = districtModel.city.region
+      ..line1 = _line1Controller.text;
 
-    // CompanyRegisterDTO form = CompanyRegisterDTO();
-    // form
-    //   ..name = _nameController.text
-    //   ..contactPerson = _contactPersonController.text
-    //   ..contactPhone = _contactPhoneController.text
-    //   ..mobileNumber = widget.phone
-    //   ..password = widget.password
-    //   ..contactAddress = contactAddress;
+    CompanyRegisterDTO form = CompanyRegisterDTO();
+    form
+      ..name = _nameController.text
+      ..contactPerson = _contactPersonController.text
+      ..contactPhone = _contactPhoneController.text
+      ..mobileNumber = widget.phone
+      ..password = widget.password
+      ..contactAddress = contactAddress;
 
-    // print(CompanyRegisterDTO.toJson(form));
+    print(CompanyRegisterDTO.toJson(form));
 
-    // String response =
-    //     await UserRepositoryImpl().register(type: userType, form: form);
+    String response =
+        await UserRepositoryImpl().register(type: userType, form: form);
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (BuildContext context) => B2BLoginPage()),
-      (Route<dynamic> route) => false,
-    );
-    (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
-      SnackBar(
-        content: Text('请选择商品和数量'),
-        duration: Duration(seconds: 1),
-      ),
-    );
-
-    // if (response != null) {
-      // showDialog<void>(
-      //   context: context,
-      //   barrierDismissible: true, // user must tap button!
-      //   builder: (context) {
-      //     return AlertDialog(
-      //       title: Text('注册成功'),
-      //       actions: <Widget>[
-      //         FlatButton(
-      //           child: Text('确定'),
-      //           onPressed: () {
-      //             // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>))
-      //             Navigator.pushAndRemoveUntil(
-      //               context,
-      //               MaterialPageRoute(
-      //                   builder: (BuildContext context) => B2BLoginPage()),
-      //               (Route<dynamic> route) => false,
-      //             );
-      //           },
-      //         ),
-      //       ],
-      //     );
-      //   },
-      // );
-    // }
+    if (response != null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => B2BLoginPage(
+                  isLoginSuccess: true,
+                )),
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return AlertDialog(
+            title: Text('注册失败'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('确定'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   void _selectRegionCityAndDistrict() async {

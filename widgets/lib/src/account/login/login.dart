@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:services/services.dart' show UserBLoC;
@@ -12,17 +13,20 @@ class LoginPage extends StatefulWidget {
     @required this.logo,
     this.registerPage,
     this.forgetPasswordPage,
+    this.isLoginSuccess = false,
   }) : super(key: key);
 
   final Image logo;
   final Widget registerPage;
   final Widget forgetPasswordPage;
+  final bool isLoginSuccess;
 
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey _formKey = GlobalKey<FormState>();
+  final GlobalKey _scaffoldKey = GlobalKey();
 
   String _verifyStr = '获取验证码';
   int _seconds = 0;
@@ -38,14 +42,23 @@ class _LoginPageState extends State<LoginPage> {
   bool _isPasswordLogin = true;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => showSnackBar(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => checkLocalUserName());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+          key: _scaffoldKey,
           body: Form(
-        key: _formKey,
-        autovalidate: true,
-        child: _buildBody(context),
-      )),
+            key: _formKey,
+            autovalidate: true,
+            child: _buildBody(context),
+          )),
     );
   }
 
@@ -341,5 +354,28 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  void showSnackBar(BuildContext context) {
+    if (widget.isLoginSuccess) {
+      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
+        SnackBar(
+          content: Text('注册成功'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    }
+  }
+
+  ///记录账户
+  void checkLocalUserName() async {
+    // 检测本地登陆过的账户
+    String oldUserName = await LocalStorage.get(GlobalConfigs.USER_KEY);
+
+    if (oldUserName != null && oldUserName.isNotEmpty) {
+      setState(() {
+        _phoneController.text = oldUserName;
+      });
+    }
   }
 }

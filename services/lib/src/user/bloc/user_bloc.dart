@@ -90,6 +90,7 @@ class UserBLoC extends BLoCBase {
       if (remember) {
         LocalStorage.save(
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
+        LocalStorage.save(GlobalConfigs.USER_KEY, username);
       }
       _controller.sink.add(_user);
       return true;

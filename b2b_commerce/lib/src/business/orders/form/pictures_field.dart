@@ -4,23 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-class PicturesField extends StatefulWidget{
-  ApparelProductModel product;
-  PicturesField(this.product);
+class PicturesField extends StatefulWidget {
+  RequirementOrderModel model;
+
+  PicturesField({this.model});
 
   PicturesFieldState createState() => PicturesFieldState();
 }
 
-class PicturesFieldState extends State<PicturesField>{
+class PicturesFieldState extends State<PicturesField> {
   @override
   void initState() {
     // TODO: implement initState
+    if (widget.model.details.pictures == null) {
+      widget.model.details.pictures = [];
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<MediaModel> _medias = widget.product?.thumbnails ?? [];
     return Column(
       children: <Widget>[
         Container(
@@ -40,8 +43,8 @@ class PicturesFieldState extends State<PicturesField>{
         ),
 //        PhotoPicker(images: widget.normalImages, width: 350),
         EditableAttachments(
-          list: _medias,
-          maxNum: widget.product == null ? 5 : _medias.length,
+          list: widget.model.details.pictures,
+          maxNum: 5,
         )
       ],
     );
