@@ -12,20 +12,22 @@ class ExistingProductItem extends StatelessWidget{
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
+        color: Colors.white,
           child: Center(
             child: Column(
               children: <Widget>[
                 Container(
+                  width: 180,
+                  height: 200,
+                  padding: EdgeInsets.all(20),
                   child: product.thumbnail != null ?
                   Image.network(
                     '${GlobalConfigs.IMAGE_BASIC_URL}${product.thumbnail.url}',
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.scaleDown,
                   )
                       : Container(
-                    width: 100,
-                    height: 100,
+                    width: 180,
+                    height: 200,
                     decoration: BoxDecoration(
                         borderRadius:
                         BorderRadius.circular(5),
@@ -40,6 +42,7 @@ class ExistingProductItem extends StatelessWidget{
                   ),
                 ),
                 Container(
+                  height: 20,
                   padding:EdgeInsets.only(top: 10),
                   child: Text(
                     product.name ?? '',
@@ -49,6 +52,8 @@ class ExistingProductItem extends StatelessWidget{
                   ),
                 ),
                 Container(
+                  height: 20,
+                  padding:EdgeInsets.only(top: 10),
                   child: Text(
                     '￥${product.minPrice ?? ''}'' ～ ￥${product.maxPrice ?? ''}',
                     style: TextStyle(
