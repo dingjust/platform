@@ -90,6 +90,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     super.initState();
   }
 
+  static Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
+    PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
+    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
+    PurchaseOrderStatus.OUT_OF_STORE: Colors.yellow,
+    PurchaseOrderStatus.IN_PRODUCTION: Colors.yellow,
+    PurchaseOrderStatus.COMPLETED: Colors.green,
+    PurchaseOrderStatus.CANCELLED: Colors.grey,
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,8 +112,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
               child: Center(
                 child: Text(
-                  '${SalesApplicationLocalizedMap[order.salesApplication]}',
-                  style: TextStyle(color: Color(0xFFFFD600)),
+                  '${SalesApplicationLocalizedMap[order.salesApplication]}'
                 ),
               ),
             ),
@@ -113,15 +121,29 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         body: Container(
             child: ListView(
           children: <Widget>[
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.only(left: 10),
-              child: StatusStep(
-                list: _statusList,
-                currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
-                isScroll: false,
+//            Container(
+//              color: Colors.white,
+//              padding: EdgeInsets.only(left: 10),
+//              child: StatusStep(
+//                list: _statusList,
+//                currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
+//                isScroll: false,
+//              ),
+//            ),
+          Container(
+            color: Colors.white,
+            padding: EdgeInsets.fromLTRB(0, 5, 10, 0),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '${PurchaseOrderStatusLocalizedMap[order.status]}',
+                style: TextStyle(
+                  color: _statusColors[order.status],
+                  fontSize: 18
+                ),
               ),
             ),
+          ),
             _buildEntries(context),
             _buildProductHide(context),
             _buildProductInfo(context),
@@ -153,7 +175,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     Container(
       color: Colors.white,
       padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         children: <Widget>[
           order.product != null  && order.product.thumbnail != null
@@ -490,8 +511,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             )
           : Column(
               children: <Widget>[
-                _buildProductionProgress(
-                    context, order.progresses[_index - 1], false),
+//                _buildProductionProgress(
+//                    context, order.progresses[_index - 1], false),
                 _buildProductionProgress(
                     context, order.progresses[_index], true),
                 Container(
@@ -590,9 +611,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           fontSize: 18)
                   ),
                 ),
-                Text(
-                  '${productionProgress.delayedDays >0 ? '已延期${productionProgress.delayedDays}天': '' }',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
+                Container(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Text(
+                    '${productionProgress.delayedDays >0 ? '已延期${productionProgress.delayedDays}天': '' }',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
+                  ),
                 ),
               ],
             ),
@@ -772,7 +796,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             alignment: Alignment.centerRight,
                             child: progress.remarks == null?
                             Align(
-                              alignment: Alignment.centerRight,
+                              alignment: Alignment.centerLeft,
                               child: Text(
                                 '填写',
                                 style: TextStyle(
@@ -783,7 +807,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             Container(
                               child: Text(
                                 '${progress.remarks}',
-                                textAlign: TextAlign.start,
                                 softWrap: true,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines:2,
@@ -831,7 +854,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildProductHide(BuildContext context){
     return GestureDetector(
         child: Container(
-          margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+          margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
           child: Align(
               alignment: Alignment.centerRight,
               child: Row(
@@ -845,7 +868,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     ),
                   ),
                   Icon(
-                    isHide?Icons.keyboard_arrow_up:Icons.keyboard_arrow_down,
+                    isHide?Icons.keyboard_arrow_down:Icons.keyboard_arrow_up,
                     color: Colors.grey,
                     size: 28,
                   ),
@@ -1487,31 +1510,31 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       );
     }
     //流程是生产中时，显示验货完成按钮
-    else if (order.status == PurchaseOrderStatus.IN_PRODUCTION) {
-      return Container(
-        width: 300,
-        margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        height: 40,
-        child: FlatButton(
-            color: Color(0xFFFFD600),
-            child: Text(
-              '验货完成',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              ),
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.all(Radius.circular(20))),
-            onPressed: () {
-              _showBalanceDialog(context, order);
-            }
-        ),
-      );
-    }
+//    else if (order.status == PurchaseOrderStatus.IN_PRODUCTION) {
+//      return Container(
+//        width: 300,
+//        margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+//        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+//        height: 40,
+//        child: FlatButton(
+//            color: Color(0xFFFFD600),
+//            child: Text(
+//              '验货完成',
+//              style: TextStyle(
+//                color: Colors.black,
+//                fontWeight: FontWeight.w500,
+//                fontSize: 18,
+//              ),
+//            ),
+//            shape: RoundedRectangleBorder(
+//                borderRadius:
+//                BorderRadius.all(Radius.circular(20))),
+//            onPressed: () {
+//              _showBalanceDialog(context, order);
+//            }
+//        ),
+//      );
+//    }
     //当流程是待出库状态下
     else if (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
       //尾款已付时，出现确认发货
@@ -1639,13 +1662,24 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text(
+                  '取消',
+                style: TextStyle(
+                  color: Colors.grey
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text(
+                  '确定',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16
+                ),
+              ),
               onPressed: () async {
                 bool result = false;
                 if(dialogText.text != null){
@@ -1664,7 +1698,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   });
                 }
                 Navigator.of(context).pop();
-                _showMessage(context,result,'保存');
               },
             ),
           ],
@@ -1709,13 +1742,23 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text(
+                  '取消',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text(
+                  '确定',
+                style: TextStyle(
+                  color: Colors.black
+                ),
+              ),
               onPressed: () async {
                 bool result = false;
                 if(dialogText.text != null){
@@ -1953,13 +1996,23 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           content: Text('是否无需付款直接跳过？'),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text(
+                  '取消',
+                style: TextStyle(
+                  color: Colors.grey
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text(
+                '确定',
+                style: TextStyle(
+                    color: Colors. black
+                ),
+              ),
               onPressed: () async {
                 bool result = false;
                 model.balance = 0;

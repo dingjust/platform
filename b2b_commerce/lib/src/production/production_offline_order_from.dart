@@ -710,7 +710,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   child: Text(
                     '确认',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
                     ),

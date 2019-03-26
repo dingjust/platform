@@ -47,7 +47,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
                       child: Text(
                         '确定',
                         style: TextStyle(
-                            color: Color.fromRGBO(255, 214, 12, 1)),
+                            color: Colors.black),
                       ),
                     ),
                   ),
