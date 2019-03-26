@@ -71,6 +71,9 @@ const COMMON_APIS = {
   createLabel() {
     return '/djwebservices/labels/create';
   },
+  getAllLabels() {
+    return '/djwebservices/labels/all';
+  },
   getLabels() {
     return '/djwebservices/labels';
   },
@@ -98,6 +101,9 @@ const COMMON_APIS = {
   createBrand() {
     return '/b2b/brands/new';
   },
+  updateBrand(uid) {
+    return '/b2b/brands/'+uid;
+  },
   getBrands() {
     return '/b2b/brands';
   },
@@ -109,6 +115,9 @@ const COMMON_APIS = {
   },
   createFactory() {
     return '/b2b/factories/new';
+  },
+  updateFactory(uid) {
+    return '/b2b/factories/'+uid;
   },
   getFactories() {
     return '/b2b/factories';

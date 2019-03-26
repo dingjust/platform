@@ -48,7 +48,8 @@ const state = {
     cooperativeBrand: '',
     businessRegistrationNo: '',
     legalRepresentative: '',
-    certificateOfLegal: ''
+    certificateOfLegal: '',
+    labels:[],
   }
 };
 
