@@ -20,6 +20,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   String userType;
   PurchaseOrderModel order;
   String phase;
+  String remarks;
 
   _ProductionProgressesPageState({this.order});
 
@@ -291,8 +292,9 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       ),
                       Container(
                         width: 300,
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.centerRight,
                             child: progress.remarks == null?
                             Align(
                               alignment: Alignment.centerRight,
@@ -301,6 +303,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                             Text(
                               '${progress.remarks}',
                               textAlign: TextAlign.start,
+                              softWrap: true,
                             )
                         ),
                       )
@@ -308,7 +311,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             ),
             onTap: () async {
               userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-              _showDialog(progress,'备注') : null;
+              _showRemarksDialog(progress,'备注') : null;
             },
           ),
           Container(
@@ -452,6 +455,57 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     );
   }
 
+  Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type) async {
+    dialogText = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('请输入${type}'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller:dialogText,
+                  keyboardType: TextInputType.number,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () async {
+                bool result = false;
+                if(dialogText.text != null){
+                  model.remarks = dialogText.text;
+                  try {
+                    model.updateOnly = true;
+                    result =  await PurchaseOrderRepository().productionProgressUpload(
+                        order.code, model.id.toString(), model);
+                  } catch (e) {
+                    print(e);
+                  }
+                  setState(() {
+                    _blNumber = dialogText.text;
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 //打开日期选择器
   void _showDatePicker(ProductionProgressModel model) {
     _selectDate(context,model);
@@ -459,6 +513,11 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 //打开数量输入弹框
   void _showDialog(ProductionProgressModel model,String type){
     _neverSatisfied(context,model,type);
+  }
+
+  //备注输入框
+  void _showRemarksDialog(ProductionProgressModel model,String type){
+    _neverRemarks(context,model,type);
   }
 
 //确认是否完成动作
