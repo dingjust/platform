@@ -174,7 +174,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                 ],
               ),
               child: Container(
-                padding: EdgeInsets.fromLTRB(5, 5, 15, 5),
+                padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                 child: Center(
                   child: Image.network(
                     '${GlobalConfigs.IMAGE_BASIC_URL}${widget.medias[index].url}',
