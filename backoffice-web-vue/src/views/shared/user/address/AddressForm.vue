@@ -88,7 +88,8 @@
         return true;
       },
       async getRegions() {
-        const result = await this.$http.get('/djwebservices/addresses/CN/regions');
+        const url = this.apis().getRegions();
+        const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;

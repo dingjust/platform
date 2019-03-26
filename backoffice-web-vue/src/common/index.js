@@ -1,4 +1,7 @@
 const COMMON_APIS = {
+  getRegions() {
+    return '/djwebservices/addresses/CN/regions';
+  },
   getAllStyles() {
     return '/djwebservices/styles/all';
   },
@@ -67,6 +70,9 @@ const COMMON_APIS = {
   },
   createLabel() {
     return '/djwebservices/labels/create';
+  },
+  getAllLabels() {
+    return '/djwebservices/labels/all';
   },
   getLabels() {
     return '/djwebservices/labels';
