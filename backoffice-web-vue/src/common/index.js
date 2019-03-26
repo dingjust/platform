@@ -1,4 +1,7 @@
 const COMMON_APIS = {
+  getRegions() {
+    return '/djwebservices/addresses/CN/regions';
+  },
   getAllStyles() {
     return '/djwebservices/styles/all';
   },
@@ -255,6 +258,9 @@ let TENANT_APIS = {
   getPurchaseOrders() {
     return '/b2b/orders/purchase/all';
   },
+  getProofings() {
+    return '/b2b/orders/proofing/all';
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
@@ -274,10 +280,13 @@ let NONE_TENANT_APIS = {
   getPurchaseOrders() {
     return '/b2b/orders/purchase';
   },
+  getProofings() {
+    return '/b2b/orders/proofing';
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
 export {
   TENANT_APIS,
-  NONE_TENANT_APIS
+  NONE_TENANT_APIS,
 }

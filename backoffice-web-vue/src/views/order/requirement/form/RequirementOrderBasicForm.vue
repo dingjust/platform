@@ -10,6 +10,11 @@
             <el-input v-model="slotData.code" disabled placeholder="系统自动生成"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="6">
+          <el-form-item label="订单备注" prop="remarks">
+            <el-input v-model="slotData.remarks"></el-input>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
   </div>

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:b2b_commerce/src/my/account/register_info.dart';
 import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RegisterPage extends StatefulWidget {
   _RegisterPageState createState() => _RegisterPageState();
@@ -13,12 +14,19 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _captchaController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+
   bool _isAgree = true;
   String _userType = "brand";
   String _verifyStr = '获取验证码';
   int _seconds = 0;
   Timer _timer;
   bool validate = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   void _handleUserTypeChanged(String value) {
     setState(() {
@@ -76,6 +84,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     onChanged: (value) {
                       formValidate();
                     },
+                    keyboardType: TextInputType.phone,
+                    //只能输入数字
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly,
+                    ],
                     controller: _phoneController,
                     decoration: InputDecoration(
                         hintText: '请输入', border: InputBorder.none),
@@ -88,6 +101,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     onChanged: (value) {
                       formValidate();
                     },
+                    keyboardType: TextInputType.phone,
+                    //只能输入数字
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly,
+                    ],
                     controller: _captchaController,
                     decoration: InputDecoration(
                         hintText: '请输入', border: InputBorder.none),

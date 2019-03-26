@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +139,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                           }catch(e){
                             print(e);
                           }
-                          _showMessage(context,result,'绑定唯一码');
+                          _showMessage(context,result,'绑定唯一码',uniqueCodeEntry.code);
                         },
                       ),
                     ),
@@ -148,20 +149,39 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
   }
 
 
-  void _showMessage(BuildContext context,bool result,String message){
-    _requestMessage(context,result == true? '${message}成功' : '${message}失败');
+  void _showMessage(BuildContext context,bool result,String message,String code){
+    _requestMessage(context,result == true? '${message}成功' : '${message}失败',result,code);
   }
 
-  Future<void> _requestMessage(BuildContext context,String message) async {
+  Future<void> _requestMessage(BuildContext context,String message,bool result,String code) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: true, // user must tap button!
+      barrierDismissible: false, // user must tap button!
       builder: (context) {
-        return SimpleDialog(
-          title: const Text('提示'),
-          children: <Widget>[
-            SimpleDialogOption(
-              child: Text('${message}'),
+        return AlertDialog(
+          title: Text('提示'),
+          content: SingleChildScrollView(
+              child: Text(
+                '${message}',
+                style: TextStyle(
+                  fontSize: 22,
+                ),
+              )
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () async {
+                PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
+                ProductionBLoC.instance.refreshData();
+
+                Navigator.of(context).pop();
+                result == true ?
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) =>
+                        PurchaseOrderDetailPage(order: model)
+                    ), ModalRoute.withName('/')) : null;
+              },
             ),
           ],
         );

@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -56,7 +57,7 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      '已填选结果: ',
+                      '已填选结果: ${widget.fastRequirementForm.categories[0].name}  ${DateFormatUtil.formatYMD(widget.fastRequirementForm.deliveryDate)}',
                       style: TextStyle(
                           color: Color.fromRGBO(100, 100, 100, 1),
                           fontSize: 18),
@@ -156,17 +157,16 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
                     // 组合成Model
                     RequirementOrderModel requirementOrder =
                         RequirementOrderModel(
-                            details: RequirementInfoModel(
-                                category:
-                                    widget.fastRequirementForm.categories[0],
-                                contactPerson: widget
-                                    .fastRequirementForm.contactPerson.text,
-                                contactPhone:
-                                    widget.fastRequirementForm.phone.text,
-                                expectedDeliveryDate:
-                                    widget.fastRequirementForm.deliveryDate),
-                            totalQuantity: int.parse(widget
-                                .fastRequirementForm.requirementNum.text));
+                      details: RequirementInfoModel(
+                          category: widget.fastRequirementForm.categories[0],
+                          contactPerson:
+                              widget.fastRequirementForm.contactPerson.text,
+                          contactPhone: widget.fastRequirementForm.phone.text,
+                          expectedDeliveryDate:
+                              widget.fastRequirementForm.deliveryDate,
+                          expectedMachiningQuantity: int.parse(
+                              widget.fastRequirementForm.requirementNum.text)),
+                    );
 
                     String code = await RequirementOrderRepository()
                         .publishNewRequirement(requirementOrder);

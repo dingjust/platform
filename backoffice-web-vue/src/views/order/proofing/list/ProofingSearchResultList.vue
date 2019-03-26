@@ -16,8 +16,14 @@
       <el-table-column label="报价订单号" prop="quoteRef"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">修改地址</el-button>
-          <el-button type="text" icon="el-icon-edit" @click="onShowQuote(scope.row)">查看报价单</el-button>
+          <el-button v-if="canUpdateAddress(scope.row)" type="text" icon="el-icon-edit"
+                     @click="onUpdateAddress(scope.row)">
+            修改地址
+          </el-button>
+          <el-button type="text" icon="el-icon-edit"
+                     @click="onShowQuote(scope.row)">
+            查看报价单
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -32,13 +38,24 @@
                      :total="page.totalElements">
       </el-pagination>
     </div>
+    <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
+               :show-close="false" append-to-body width="50%">
+      <address-form ref="addressForm" :slot-data="addressFormData"/>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="onAddressInputCanceled">取 消</el-button>
+        <el-button type="primary" @click="onAddressInputConfirmed">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import AddressForm from "@/views/shared/user/address/AddressForm";
+
   export default {
     name: 'ProofingSearchResultList',
     props: ["page"],
+    components: {AddressForm},
     computed: {},
     methods: {
       onPageSizeChanged(val) {
@@ -69,10 +86,29 @@
       },
       onShowQuote(row) {
         this.$emit('onShowQuote', row);
-      }
+      },
+      onUpdateAddress(row) {
+        this.addressFormData = Object.assign({}, row.deliveryAddress);
+        this.addressDialogVisible = true;
+      },
+      canUpdateAddress(row) {
+        return this.isBrand() && row.status === 'PENDING_PAYMENT';
+      },
+      onAddressInputCanceled() {
+        this.addressDialogVisible = false;
+      },
+      onAddressInputConfirmed() {
+        if (this.$refs['addressForm'].validate()) {
+          // TODO: UPDATE ADDRESS
+          this.addressDialogVisible = false;
+        }
+      },
     },
     data() {
-      return {}
+      return {
+        addressDialogVisible: false,
+        addressFormData: this.$store.state.ProofingsModule.addressFormData,
+      }
     },
     created() {
     }

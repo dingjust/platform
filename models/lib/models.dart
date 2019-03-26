@@ -1,6 +1,7 @@
 library models;
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:models/models.dart';
 
 export 'src/media/media.dart';
 export 'src/order/order.dart';
@@ -281,6 +282,44 @@ const ProvinceEnum = <EnumModel>[
   EnumModel('P32','香港'),
   EnumModel('P33','澳门'),
 ];
+
+//产值规模
+const ScaleRangesEnum = <EnumModel>[
+  EnumModel('SR001','0-100万'),
+  EnumModel('SR002','100万-500万'),
+  EnumModel('SR003','500万-1000万'),
+  EnumModel('SR004','1000万-5000万'),
+  EnumModel('SR005','5000万以上'),
+];
+
+//年龄段
+const AgeRangesEnum = <EnumModel>[
+  EnumModel('AR001','0-6'),
+  EnumModel('AR002','7-12'),
+  EnumModel('AR003','13-17'),
+  EnumModel('AR004','18-23'),
+  EnumModel('AR005','24-30'),
+  EnumModel('AR006','31-40'),
+  EnumModel('AR007','41以上'),
+];
+
+//价格段
+const PriceRangesEnum = <EnumModel>[
+  EnumModel('PR001', '0-60'),
+  EnumModel('PR002', '61-120'),
+  EnumModel('PR003', '121-200'),
+  EnumModel('PR004', '201-300'),
+  EnumModel('PR005', '301-500'),
+  EnumModel('PR006', '500以上'),
+];
+
+const MonthlyCapacityRangesEnum = <EnumModel>[
+  EnumModel('MCR001', '0-5000件'),
+  EnumModel('MCR002', '5000-10000件'),
+  EnumModel('MCR003', '5000-10000件'),
+  EnumModel('MCR004', '30000件以上'),
+];
+
 
 /// 分页数据
 @JsonSerializable()

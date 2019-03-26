@@ -11,7 +11,7 @@
           :before-upload="onBeforeUpload"
           :on-success="onSuccess"
           :headers="headers"
-          :file-list="slotData.details.pictures"
+          :file-list="slotData.pictures"
           :on-preview="handlePreview"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
@@ -24,13 +24,27 @@
     <el-form ref="form"
              label-position="top"
              :model="slotData"
-             :disabled="readOnly">
+             :disabled="readOnly"
+             :rules="rules">
       <el-row :gutter="10">
+        <el-col :span="6">
+          <el-form-item label="生产大类" prop="majorCategory">
+            <el-select v-model="slotData.majorCategory" class="w-100"
+                       value-key="code">
+              <el-option v-for="item in majorCategories"
+                         :key="item.code"
+                         :label="item.name"
+                         :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
         <el-col :span="6">
           <el-form-item label="产品类别" prop="category">
             <el-select class="w-100"
                        placeholder="请选择"
-                       v-model="slotData.details.category.code">
+                       v-model="slotData.category"
+                       value-key="code">
               <el-option-group
                 v-for="group in categories"
                 :key="group.code"
@@ -39,27 +53,17 @@
                   v-for="item in group.children"
                   :key="item.code"
                   :label="item.name"
-                  :value="item.code">
+                  :value="item">
                 </el-option>
               </el-option-group>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="产品大类" prop="majorCategory">
-            <el-select v-model="slotData.details.majorCategory.code" class="w-100">
-              <el-option v-for="item in majorCategories"
-                         :key="item.code"
-                         :label="item.name"
-                         :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
           <el-form-item label="预计加工总数量" prop="expectedMachiningQuantity">
             <el-input-number class="w-100"
-                             v-model="slotData.details.expectedMachiningQuantity">
+                             v-model="slotData.expectedMachiningQuantity"
+                             :min="1">
             </el-input-number>
           </el-form-item>
         </el-col>
@@ -67,7 +71,7 @@
           <el-form-item label="预计交货时间" prop="expectedDeliveryDate">
             <el-date-picker class="w-100"
                             type="date"
-                            v-model="slotData.details.expectedDeliveryDate"
+                            v-model="slotData.expectedDeliveryDate"
                             placeholder="选择日期"
                             value-format="timestamp">
             </el-date-picker>
@@ -78,13 +82,13 @@
         <el-col :span="6">
           <el-form-item label="期望价格" prop="maxExpectedPrice">
             <el-input-number class="w-100"
-                             v-model="slotData.details.maxExpectedPrice">
+                             v-model="slotData.maxExpectedPrice">
             </el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="加工类型" prop="machiningType">
-            <el-select class="w-100" v-model="slotData.details.machiningType">
+            <el-select class="w-100" v-model="slotData.machiningType">
               <el-option v-for="item in machiningTypes"
                          :key="item.code"
                          :label="item.name"
@@ -95,19 +99,32 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="联系人" prop="contactPerson">
-            <el-input v-model="slotData.details.contactPerson"></el-input>
+            <el-input v-model="slotData.contactPerson"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="联系电话" prop="contactPhone">
-            <el-input v-model="slotData.details.contactPhone"></el-input>
+            <el-input v-model="slotData.contactPhone"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
+          <el-form-item label="生产区域" prop="productiveOrientations">
+            <el-select class="w-100" v-model="slotData.productiveOrientations"
+                       value-key="isocode" multiple>
+              <el-option
+                v-for="item in regions"
+                :key="item.isocode"
+                :label="item.name"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
           <el-form-item label="是否提供样衣" prop="samplesNeeded">
-            <el-radio-group v-model="slotData.details.samplesNeeded">
+            <el-radio-group v-model="slotData.samplesNeeded">
               <el-radio :label="true">是</el-radio>
               <el-radio :label="false">否</el-radio>
             </el-radio-group>
@@ -115,7 +132,15 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="是否需要发票" prop="invoiceNeeded">
-            <el-radio-group v-model="slotData.details.invoiceNeeded">
+            <el-radio-group v-model="slotData.invoiceNeeded">
+              <el-radio :label="true">是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="是否需要打样" prop="proofingNeeded">
+            <el-radio-group v-model="slotData.proofingNeeded">
               <el-radio :label="true">是</el-radio>
               <el-radio :label="false">否</el-radio>
             </el-radio-group>
@@ -132,7 +157,7 @@
     props: ['slotData', 'readOnly'],
     methods: {
       validate(callback) {
-        this.$refs['form'].validate(callback);
+        return this.$refs['form'].validate(callback);
       },
       async getMinorCategories() {
         const url = this.apis().getMinorCategories();
@@ -154,6 +179,16 @@
 
         this.majorCategories = result;
       },
+      async getRegions() {
+        const url = this.apis().getRegions();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.regions = result;
+      },
       onBeforeUpload(file) {
         if (file.type !== 'image/jpeg'
           && file.type !== 'image/png'
@@ -169,7 +204,7 @@
         return true;
       },
       onSuccess(response) {
-        this.slotData.details.pictures.push(response);
+        this.slotData.pictures.push(response);
       },
       async handleRemove(file) {
         // console.log(JSON.stringify(file));
@@ -179,7 +214,7 @@
           return;
         }
 
-        const pictures = this.slotData.details.pictures || [];
+        const pictures = this.slotData.pictures || [];
         const index = pictures.indexOf(file);
         pictures.splice(index, 1);
 
@@ -206,14 +241,23 @@
       return {
         categories: [],
         majorCategories: [],
+        regions: [],
         machiningTypes: this.$store.state.EnumsModule.machiningTypes,
         dialogImageUrl: '',
-        dialogVisible: false
+        dialogVisible: false,
+        rules: {
+          category: [{required: true, message: '必填', trigger: 'blur'}],
+          expectedMachiningQuantity: [{required: true, message: '必填', trigger: 'blur'}],
+          expectedDeliveryDate: [{required: true, message: '必填', trigger: 'blur'}],
+          contactPhone: [{required: true, message: '必填', trigger: 'blur'}],
+          contactPerson: [{required: true, message: '必填', trigger: 'blur'}],
+        },
       }
     },
     created() {
       this.getMinorCategories();
       this.getMajorCategories();
+      this.getRegions();
     }
   }
 </script>

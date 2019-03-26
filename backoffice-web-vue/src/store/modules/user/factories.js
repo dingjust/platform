@@ -15,6 +15,7 @@ const state = {
     id: null,
     uid: '',
     name: '',
+    profilePicture: null,
     contactAddress: {
       id: null,
       fullname: '',
@@ -33,6 +34,7 @@ const state = {
       },
       line1: ''
     },
+    categories: [],
     adeptAtCategories: [],
     contactPerson: '',
     contactPhone: '',
@@ -40,6 +42,7 @@ const state = {
     scaleRange: '',
     monthlyCapacityRange: '',
     cooperationModes: [],
+    populationScale: '',
     developmentCapacity: false,
     registrationDate: null,
     taxNumber: '',
@@ -49,7 +52,16 @@ const state = {
     businessRegistrationNo: '',
     legalRepresentative: '',
     certificateOfLegal: '',
-    labels:[],
+    labels: []
+  },
+  queryFormData: {
+    labels: [],
+    populationScales: [],
+    regions: [],
+    starLevel: null,
+    machiningTypes: [],
+    categories: [],
+    adeptAtCategories: []
   }
 };
 

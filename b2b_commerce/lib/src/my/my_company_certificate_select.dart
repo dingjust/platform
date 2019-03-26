@@ -14,14 +14,22 @@ class MyCompanyCertificateSelectPage extends StatefulWidget {
 }
 
 class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSelectPage> {
-  //是否是个人认证
+  //选的是否是个人认证
   bool _isPersonal = false;
+  //选的是否是企业认证
   bool _isCompany = false;
   Text _statusText;
+  //是否只读
   bool _onlyRead = true;
 
   @override
   void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     if(widget.company.approvalStatus == null) _onlyRead = false;
     if(widget.company.type == null){
       _isPersonal = true;
@@ -61,12 +69,6 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
         ),
       );
 
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('我要认证'),
@@ -83,13 +85,18 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
             _isCompany
                 ? InkWell(
                     onTap: () async {
-                      print(_onlyRead);
-                      Navigator.push(
+                      CompanyModel result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => MyCompanyCertificatePage(
                                     widget.company,onlyRead: _onlyRead,
                                   )));
+
+                      if(result != null){
+                        setState(() {
+                          widget.company = result;
+                        });
+                      }
                     },
                     child: Container(
                       color: Colors.white,
@@ -108,7 +115,7 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
                                   padding: EdgeInsets.only(right: 15),
                                   child: _statusText)),
                           Offstage(
-                              offstage: widget.company.type != CompanyType.FACTORY && widget.company.approvalStatus != null,
+                              offstage: widget.company.type != CompanyType.FACTORY,
                               child: Container(
                                   padding: EdgeInsets.only(right: 15),
                                   child: _statusText)),
@@ -210,7 +217,7 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
               ),
             ),
             Offstage(
-              offstage: !_onlyRead,
+              offstage: !_onlyRead || widget.company.approvalStatus == ArticleApprovalStatus.check,
               child: Container(
                 padding: EdgeInsets.only(top: 20),
                 width: MediaQuery.of(context).size.width - 16,

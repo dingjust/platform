@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/main.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ class PublishRequirementSuccessDialog extends StatefulWidget {
 class _PublishRequirementSuccessDialogState
     extends State<PublishRequirementSuccessDialog> {
   bool _isSelected = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,7 +167,7 @@ class _PublishRequirementSuccessDialogState
                           overflow: TextOverflow.ellipsis,
                         )
                       : Text(
-                          '暂无产品',
+                          ' ',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
                   widget.model.details.productSkuID != null
@@ -189,7 +189,7 @@ class _PublishRequirementSuccessDialogState
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.details.majorCategory?.name}   ${widget.model.details.category?.name}   ${widget.model.totalQuantity}件",
+                      "${widget.model.details.majorCategoryName()}   ${widget.model.details.category?.name}   ${widget.model.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -280,10 +280,7 @@ class _PublishRequirementSuccessDialogState
               height: 45,
               child: FlatButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => MyApp()));
+                  Navigator.of(context).popUntil(ModalRoute.withName('/'));
                 },
                 color: Color.fromRGBO(255, 245, 193, 1),
                 shape: RoundedRectangleBorder(

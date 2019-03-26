@@ -539,6 +539,8 @@ class RequirementInfoModel extends ItemModel {
       return _$enumDecodeNullable(_$MachiningTypeEnumMap, machiningType);
     }
   }
+
+  String majorCategoryName() => majorCategory != null ? majorCategory.name : '';
 }
 
 /// 需求订单
@@ -561,30 +563,27 @@ class RequirementOrderModel extends OrderModel {
   List<QuoteModel> latestQuotes;
 
   ///附件
+  @JsonKey(toJson: _mediasToJson)
   List<MediaModel> attachments;
-
-  ///订单行
-  @JsonKey(toJson: entriesToJson)
-  List<RequirementOrderEntryModel> entries;
 
   ///延期天数
   int delayDays;
 
-  RequirementOrderModel({
-    this.status,
-    this.belongTo,
-    this.details,
-    this.totalQuotesCount,
-    this.latestQuotes,
-    this.entries,
-    this.delayDays,
-    String code,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-  }) : super(
+  RequirementOrderModel(
+      {this.status,
+      this.belongTo,
+      this.details,
+      this.totalQuotesCount,
+      this.latestQuotes,
+      this.delayDays,
+      String code,
+      int totalQuantity,
+      double totalPrice,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      this.attachments})
+      : super(
           code: code,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
@@ -602,45 +601,9 @@ class RequirementOrderModel extends OrderModel {
   static Map<String, dynamic> infoToJson(RequirementInfoModel detail) =>
       RequirementInfoModel.toJson(detail);
 
-  static List<Map<String, dynamic>> entriesToJson(
-          List<RequirementOrderEntryModel> entries) =>
-      entries.map((entry) => RequirementOrderEntryModel.toJson(entry)).toList();
-}
-
-/// 需求订单行
-@JsonSerializable()
-class RequirementOrderEntryModel extends OrderEntryModel {
-  @JsonKey(toJson: productToJson)
-  ApparelProductModel product;
-
-  @JsonKey(toJson: orderToJson)
-  RequirementOrderModel order;
-
-  RequirementOrderEntryModel({
-    int entryNumber,
-    this.product,
-    this.order,
-    double price,
-    int quantity,
-    double totalPrice,
-  }) : super(
-          entryNumber: entryNumber,
-          price: price,
-          quantity: quantity,
-          totalPrice: totalPrice,
-        );
-
-  factory RequirementOrderEntryModel.fromJson(Map<String, dynamic> json) =>
-      _$RequirementOrderEntryModelFromJson(json);
-
-  static Map<String, dynamic> toJson(RequirementOrderEntryModel model) =>
-      _$RequirementOrderEntryModelToJson(model);
-
-  static Map<String, String> orderToJson(RequirementOrderModel model) =>
-      {'code': model.code ?? ''};
-
-  static Map<String, String> productToJson(ApparelProductModel model) =>
-      ApparelProductModel.toJson(model);
+  static List<Map<String, dynamic>> _mediasToJson(
+          List<MediaModel> attachments) =>
+      attachments.map((media) => MediaModel.toJson(media)).toList();
 }
 
 /// 采购订单
@@ -728,38 +691,38 @@ class PurchaseOrderModel extends OrderModel {
   //是否延期
   bool delayed;
 
-  PurchaseOrderModel({
-    String code,
-    this.status,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-    this.purchaser,
-    this.belongTo,
-    this.entries,
-    this.machiningType,
-    this.currentPhase,
-    this.attachments,
-    this.requirementOrderCode,
-    this.expectedDeliveryDate,
-    this.progresses,
-    this.balance,
-    this.balancePaid,
-    this.invoiceNeeded,
-    this.companyOfSeller,
-    this.contactOfSeller,
-    this.contactPersonOfSeller,
-    this.deposit,
-    this.depositPaid,
-    this.unitPrice,
-    this.skipPayBalance,
-    this.product,
-    this.balancePaidDate,
-    this.depositPaidDate,
-    this.uniqueCode,
-    this.delayed,
+  PurchaseOrderModel(
+      {String code,
+      this.status,
+      int totalQuantity,
+      double totalPrice,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      this.purchaser,
+      this.belongTo,
+      this.entries,
+      this.machiningType,
+      this.currentPhase,
+      this.attachments,
+      this.requirementOrderCode,
+      this.expectedDeliveryDate,
+      this.progresses,
+      this.balance,
+      this.balancePaid,
+      this.invoiceNeeded,
+      this.companyOfSeller,
+      this.contactOfSeller,
+      this.contactPersonOfSeller,
+      this.deposit,
+      this.depositPaid,
+      this.unitPrice,
+      this.skipPayBalance,
+      this.product,
+      this.balancePaidDate,
+      this.depositPaidDate,
+      this.uniqueCode,
+      this.delayed,
       SalesApplication salesApplication})
       : super(
             code: code,
@@ -1029,17 +992,17 @@ class ProductionProgressModel extends ItemModel {
 
   int delayedDays;
 
-  ProductionProgressModel({
-    this.phase,
-    this.quantity,
-    this.medias,
-    this.sequence,
-    this.estimatedDate,
-    this.finishDate,
-    this.order,
-    this.updateOnly,
-    this.delayedDays,
-    this.remarks});
+  ProductionProgressModel(
+      {this.phase,
+      this.quantity,
+      this.medias,
+      this.sequence,
+      this.estimatedDate,
+      this.finishDate,
+      this.order,
+      this.updateOnly,
+      this.delayedDays,
+      this.remarks});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>
       _$ProductionProgressModelFromJson(json);

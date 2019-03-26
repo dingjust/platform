@@ -6,7 +6,7 @@ class Stars extends StatelessWidget {
   const Stars(
       {Key key,
       this.starLevel = 1,
-      this.color =const Color.fromRGBO(255,214,12, 1),
+      this.color = const Color.fromRGBO(255, 214, 12, 1),
       this.highlightOnly = true,
       this.size = 20})
       : super(key: key);
@@ -44,6 +44,55 @@ class Stars extends StatelessWidget {
           ),
         ));
       }
+    }
+
+    return Container(
+      child: Row(
+        children: stars,
+      ),
+    );
+  }
+}
+
+class StarsRating extends StatefulWidget {
+  int starRate;
+
+  int maxRate;
+
+  final Color color;
+  final double size;
+
+  StarsRating(
+      {this.starRate = 1,
+      this.maxRate = 5,
+      this.color = const Color.fromRGBO(255, 214, 12, 1),
+      this.size = 20});
+
+  @override
+  _StarsRatingState createState() => _StarsRatingState();
+}
+
+class _StarsRatingState extends State<StarsRating> {
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> stars = [];
+
+    for (int i = 0; i < widget.maxRate; i++) {
+      stars.add(GestureDetector(
+        onTap: () {
+          setState(() {
+            widget.starRate = i + 1;
+          });
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+          child: Icon(
+            B2BIcons.star,
+            color: i + 1 <= widget.starRate ? widget.color : Colors.grey[300],
+            size: widget.size,
+          ),
+        ),
+      ));
     }
 
     return Container(

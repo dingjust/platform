@@ -176,7 +176,7 @@ class MyHomePage extends StatelessWidget {
                 background: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    _buildTopBackgroud(context),
+                    _buildTopBackgroud(context,UserBLoC.instance.currentUser),
                   ],
                 ),
               ),
@@ -190,13 +190,13 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildTopBackgroud(BuildContext context) {
+  Widget _buildTopBackgroud(BuildContext context,UserModel user) {
     return Container(
 //      constraints: BoxConstraints.expand(width: 300.0, height: 300.0,),
       child: Row(
         children: <Widget>[
-          _buildPortrait(context),
-          _buildInfomation(context),
+          _buildPortrait(context,user),
+          _buildInfomation(context,user),
         ],
       ),
       decoration: BoxDecoration(
@@ -205,14 +205,19 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildPortrait(BuildContext context) {
+  Widget _buildPortrait(BuildContext context,UserModel user) {
     return Container(
       height: 80,
       margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
       child: Container(
-          child: CircleAvatar(
+          child: user.profilePicture != null ?
+          CircleAvatar(
             backgroundImage: NetworkImage(
-                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1551440775165&di=888256c517822e8d6e57b641cfb83114&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20170507%2F3de55040afb04926a0cfbcbbf5af49a6_th.jpeg'),
+              user.profilePicture.url,
+            ),
+            radius: 40.0,
+          ):CircleAvatar(
+            child: Icon(B2BIcons.noPicture),
             radius: 40.0,
           ),
           decoration: BoxDecoration(
@@ -224,7 +229,7 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfomation(BuildContext context) {
+  Widget _buildInfomation(BuildContext context,UserModel user) {
     return Container(
       height: 80,
       child: Column(
@@ -236,27 +241,27 @@ class MyHomePage extends StatelessWidget {
               children: <Widget>[
                 Container(
                     child: Text(
-                  "${UserBLoC.instance.currentUser.name}",
+                  "${user.name}",
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Color.fromRGBO(36, 38, 41, 1)),
                 )),
-                Container(
-                  padding: EdgeInsets.all(3),
-                  margin: EdgeInsets.only(left: 10),
-                  child: Text(
-                    '采购员',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(255, 214, 12, 1)),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(36, 38, 41, 1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                )
+//                Container(
+//                  padding: EdgeInsets.all(3),
+//                  margin: EdgeInsets.only(left: 10),
+//                  child: Text(
+//                    '采购员',
+//                    style: TextStyle(
+//                        fontSize: 16,
+//                        fontWeight: FontWeight.w500,
+//                        color: Color.fromRGBO(255, 214, 12, 1)),
+//                  ),
+//                  decoration: BoxDecoration(
+//                    color: Color.fromRGBO(36, 38, 41, 1),
+//                    borderRadius: BorderRadius.circular(12),
+//                  ),
+//                )
               ],
             ),
           ),

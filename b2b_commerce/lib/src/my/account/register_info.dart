@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:b2b_commerce/src/my/address/region_select.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
@@ -28,6 +29,8 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
 
   String userType = 'FACTORY';
 
+  GlobalKey _scaffoldKey = GlobalKey();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -38,6 +41,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0.5,
         iconTheme: IconThemeData(color: Color.fromRGBO(36, 38, 41, 1)),
@@ -57,7 +61,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
             child: Column(
               children: <Widget>[
                 InputRow(
-                  label: '公司名称',
+                  label: '公司名称（店铺名）',
                   field: TextField(
                     autofocus: false,
                     onChanged: (value) {
@@ -87,6 +91,11 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                         formValidate();
                       },
                       controller: _contactPhoneController,
+                      keyboardType: TextInputType.phone,
+                      //只能输入数字
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
                       decoration: InputDecoration(
                           hintText: '请输入', border: InputBorder.none),
                     )),
@@ -210,23 +219,26 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
         await UserRepositoryImpl().register(type: userType, form: form);
 
     if (response != null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => B2BLoginPage(
+                  isLoginSuccess: true,
+                )),
+        (Route<dynamic> route) => false,
+      );
+    } else {
       showDialog<void>(
         context: context,
         barrierDismissible: true, // user must tap button!
         builder: (context) {
           return AlertDialog(
-            title: Text('注册成功'),
+            title: Text('注册失败'),
             actions: <Widget>[
               FlatButton(
                 child: Text('确定'),
                 onPressed: () {
-                  // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>))
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => B2BLoginPage()),
-                    (Route<dynamic> route) => false,
-                  );
+                  Navigator.of(context).pop();
                 },
               ),
             ],

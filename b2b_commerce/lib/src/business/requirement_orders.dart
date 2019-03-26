@@ -118,7 +118,7 @@ class RequirementOrderList extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.refreshData(status.code);
+            if (!bloc.lock) bloc.refreshData(status.code);
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -332,7 +332,7 @@ class RequirementOrderItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         )
                       : Text(
-                          '暂无产品',
+                          ' ',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
                   order.details.productSkuID != null
@@ -354,7 +354,7 @@ class RequirementOrderItem extends StatelessWidget {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${order.details.majorCategory?.name}   ${order.details.category?.name}   ${order.totalQuantity}件",
+                      "${order.details.majorCategoryName()}   ${order.details.category?.name}   ${order.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

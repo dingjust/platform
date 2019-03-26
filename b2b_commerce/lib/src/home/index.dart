@@ -1,10 +1,11 @@
+import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 /// 网站主页
@@ -115,14 +116,46 @@ class _HomePageState extends State<HomePage> {
     return [
       GridItem(
           title: '当季快反',
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_FACTORY);
+          onPressed: () async {
+            //加载条
+            showDialog(
+                context: context,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ));
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categorys) {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CategorySelectPage(
+                        minCategorySelect: [],
+                        categorys: categorys,
+                        categoryActionType: CategoryActionType.TO_FACTORIES,
+                      )));
+            });
           },
           pic: B2BImage.fast_factory(width: 60, height: 80)),
       GridItem(
           title: '看款下单',
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_HOT_CATEGORY_PRODUCT);
+          onPressed: () async {
+            //加载条
+            showDialog(
+                context: context,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ));
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categorys) {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CategorySelectPage(
+                        minCategorySelect: [],
+                        categorys: categorys,
+                        categoryActionType: CategoryActionType.TO_PRODUCTS,
+                      )));
+            });
           },
           pic: B2BImage.order(width: 60, height: 80)),
       // GridItem(
@@ -146,19 +179,19 @@ class _HomePageState extends State<HomePage> {
   Widget _buildBroadcast() {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      color: Color.fromRGBO(246, 247, 249, 1),
+      color: Color.fromRGBO(254, 252, 235, 1),
       child: Row(
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.volume_up,
-              color: Color.fromRGBO(255, 102, 102, 1),
+              color: Color.fromRGBO(247, 114, 47, 1),
             ),
           ),
           Text(
             '进入蕉衣请优先注册并提交认证资料',
-            style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
+            style: TextStyle(color: Color.fromRGBO(247, 114, 47, 1)),
           ),
         ],
       ),
@@ -222,11 +255,11 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   '没有唯一码？点击这里',
                   style: TextStyle(
-                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 15),
+                      color: Color.fromRGBO(180, 180, 180, 1), fontSize: 15),
                 ),
                 Icon(
                   B2BIcons.arrow_right,
-                  color: Color.fromRGBO(255, 45, 45, 1),
+                  color: Color.fromRGBO(180, 180, 180, 1),
                   size: 12,
                 )
               ],

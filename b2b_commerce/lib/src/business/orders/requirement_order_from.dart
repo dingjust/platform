@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/delivery_address_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_invoice_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
@@ -10,7 +7,6 @@ import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart'
 import 'package:b2b_commerce/src/business/orders/form/max_expected_price_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/remarks_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -34,10 +30,9 @@ class RequirementOrderFrom extends StatefulWidget {
 
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   RequirementOrderModel model =
-      RequirementOrderModel(details: RequirementInfoModel());
+      RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
   List<CategoryModel> _categorySelected = [];
   bool _isShowMore = true;
-
   DateTime selectDate = DateTime.now();
 
   @override
@@ -124,7 +119,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: ListView(
           children: <Widget>[
             _buildBody(context),
-//            _buildCommitButton(context),
           ],
         ),
       ),
@@ -132,38 +126,26 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         Container(
           width: MediaQuery.of(context).size.width - 16,
           child: ActionChip(
-            shape:
-            StadiumBorder(side: BorderSide(color: Color(0xffFF9516))),
-            labelPadding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width/2.8,vertical: 8),
+            shape: StadiumBorder(side: BorderSide(color: Color(0xffFF9516))),
+            labelPadding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 2.8,
+                vertical: 8),
             backgroundColor: Color(0xffFF9516),
             label: Text('确定发布'),
-            labelStyle: TextStyle(color: Colors.white,fontSize: 20),
-            onPressed: () async{
-              model.entries = [
-                RequirementOrderEntryModel(
-                    product: widget.product, order: model)
-              ];
-//                print('${_normalImages}');
-//                print(
-//                    '${model.code},${model.details.majorCategory},${model.details.category}');
-//                print(
-//                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
-//                print(
-//                    '${model.details.region},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
-//                print(
-//                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
-
-
-              await RequirementOrderRepository().publishNewRequirement(model);
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PublishRequirementSuccessDialog(
-                    model: model,
-                  ),
-                ),
-              );
+            labelStyle: TextStyle(color: Colors.white, fontSize: 20),
+            onPressed: () async {
+              String code = await RequirementOrderRepository()
+                  .publishNewRequirement(model);
+              if (code != null) {
+                model.code = code;
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => PublishRequirementSuccessDialog(
+                            model: model,
+                          ),
+                    ),
+                    ModalRoute.withName('/'));
+              }
             },
           ),
         ),
@@ -178,7 +160,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Column(
           children: <Widget>[
 //            _buildPic(context),
-            PicturesField(widget.product  ),
+            PicturesField(
+              model: model,
+            ),
             Offstage(
               offstage: widget.product == null,
               child: ProductField(widget.product),
@@ -195,10 +179,29 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             new Divider(height: 0),
             ContactWayField(model),
             new Divider(height: 0),
-            DeliveryAddressField(model),
 //            _isShowMore ? Container() : new Divider(height: 0),
             _buildHideBody(context),
 //            _buildHideTips(context),
+            Column(
+              children: <Widget>[
+                Container(
+                  margin:
+                      EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '附件',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+                EditableAttachments(
+                  list: model.attachments,
+                  maxNum: 5,
+                )
+              ],
+            )
           ],
         ),
       ),
@@ -273,86 +276,5 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             _isShowMore = !_isShowMore;
           });
         });
-  }
-
-  //确认发布按钮
-  Widget _buildCommitButton(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            child: RaisedButton(
-              color: Color.fromRGBO(255, 214, 12, 1),
-              child: Text(
-                '确定发布',
-                style: TextStyle(
-                  color: Color.fromRGBO(36, 38, 41, 1),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                ),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              onPressed: () async {
-                model.entries = [
-                  RequirementOrderEntryModel(
-                      product: widget.product, order: model)
-                ];
-//                print('${_normalImages}');
-//                print(
-//                    '${model.code},${model.details.majorCategory},${model.details.category}');
-//                print(
-//                    '${model.details.expectedMachiningQuantity},${model.details.maxExpectedPrice},${model.details.expectedDeliveryDate},${model.details.contactPerson},${model.details.contactPhone}');
-//                print(
-//                    '${model.details.region},${model.details.productiveOrientations},${model.details.machiningType},${model.details.proofingNeeded},${model.details.samplesNeeded}');
-//                print(
-//                    '${model.details.invoiceNeeded},${model.remarks},${model.details.isToRequirementPool}');
-
-                String code = await RequirementOrderRepository()
-                    .publishNewRequirement(model);
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PublishRequirementSuccessDialog(
-                          model: model,
-                        ),
-                  ),
-                );
-              },
-            ),
-          ),
-//          Container(
-//            margin: EdgeInsets.all(0),
-//            padding: EdgeInsets.all(0),
-//            width: 200,
-//            child: Center(
-//              child: CheckboxListTile(
-//                title: Text(
-//                  '发布到需求池',
-//                  style: TextStyle(
-//                      fontWeight: FontWeight.w500,
-//                      fontSize: 14,
-//                      color: Colors.grey),
-//                ),
-//                value: model.details.isToRequirementPool,
-//                onChanged: (T) {
-//                  setState(() {
-//                    model.details.isToRequirementPool =
-//                        !model.details.isToRequirementPool;
-//                  });
-//                },
-//              ),
-//            ),
-//          )
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(242, 242, 242, 1),
-      ),
-    );
   }
 }

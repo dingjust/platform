@@ -1,7 +1,7 @@
+import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'dart:math';
-import 'quick_reaction_factory.dart';
 
 class IndustrialClusterPage extends StatefulWidget {
   List<LabelModel> labels;
@@ -199,7 +199,7 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
         ),
       ),
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => QuickReactionFactoryPage(route: item.name,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => FactoryPage(route: item.name,)));
       },
     );
   }

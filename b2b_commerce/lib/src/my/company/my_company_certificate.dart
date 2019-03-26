@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/my/my_company_certificate_select.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
@@ -8,7 +9,10 @@ class MyCompanyCertificatePage extends StatefulWidget {
   CompanyModel company;
   bool onlyRead;
 
-  MyCompanyCertificatePage(this.company, {this.onlyRead = false,});
+  MyCompanyCertificatePage(
+    this.company, {
+    this.onlyRead = false,
+  });
 
   MyCompanyCertificatePageState createState() =>
       MyCompanyCertificatePageState();
@@ -25,7 +29,6 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage> {
   FocusNode _legalRepresentativeFocusNode = FocusNode();
   TextEditingController _certificateOfLegalController = TextEditingController();
   FocusNode _certificateOfLegalFocusNode = FocusNode();
-  List<MediaModel> medias = [];
 
   @override
   void initState() {
@@ -164,7 +167,9 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage> {
                   ),
                   EditableAttachments(
                     list: widget.company.certificates,
-                    maxNum: widget.company.certificates.length,
+                    maxNum: widget.onlyRead
+                        ? widget.company.certificates.length
+                        : 5,
                     editable: !widget.onlyRead,
                   ),
                 ],
@@ -186,8 +191,10 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage> {
                   style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
                 onPressed: () async {
-                  if(UserBLoC.instance.currentUser.type == UserType.BRAND) widget.company.type = CompanyType.BRAND;
-                  if(UserBLoC.instance.currentUser.type == UserType.FACTORY) widget.company.type = CompanyType.FACTORY;
+                  if (UserBLoC.instance.currentUser.type == UserType.BRAND)
+                    widget.company.type = CompanyType.BRAND;
+                  if (UserBLoC.instance.currentUser.type == UserType.FACTORY)
+                    widget.company.type = CompanyType.FACTORY;
                   widget.company.name = _nameController.text;
                   widget.company.businessRegistrationNo =
                       _businessRegistrationNoController.text;
@@ -195,8 +202,21 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage> {
                       _certificateOfLegalController.text;
                   widget.company.legalRepresentative =
                       _legalRepresentativeController.text;
-                  UserRepositoryImpl().applyCertification(widget.company).then((a){
-                    Navigator.pop(context);
+                  UserRepositoryImpl()
+                      .applyCertification(widget.company)
+                      .then((a) {
+                    if (UserBLoC.instance.currentUser.type == UserType.BRAND)
+                      UserRepositoryImpl()
+                          .getBrand(widget.company.uid)
+                          .then((brand){
+                        Navigator.pop(context, brand);
+                      });
+                    if (UserBLoC.instance.currentUser.type == UserType.FACTORY)
+                      UserRepositoryImpl()
+                          .getFactory(widget.company.uid)
+                          .then((factory){
+                        Navigator.pop(context, factory);
+                      });
                   });
                 },
               ),

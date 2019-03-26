@@ -259,8 +259,8 @@ class PurchaseOrderItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                (order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ) ||
-            (order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ) ?
+                (order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ) ||
+            (order.salesApplication == SalesApplication.ONLINE && order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ) ?
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -274,7 +274,7 @@ class PurchaseOrderItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ?
+                      '${order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ?
                       order.deposit : order.balance}',
                       textAlign: TextAlign.start,
                       style: TextStyle(
@@ -339,7 +339,7 @@ class PurchaseOrderItem extends StatelessWidget {
   }
 
   Widget _buildHeaderText(BuildContext context){
-    if(order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ){
+    if(order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ){
           return Text(
             '（待付定金）',
             textAlign: TextAlign.start,
@@ -350,7 +350,7 @@ class PurchaseOrderItem extends StatelessWidget {
             ),
           );
     }
-    else if(order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ){
+    else if(order.salesApplication == SalesApplication.ONLINE && order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ){
       return Text(
         '（待付尾款）',
         textAlign: TextAlign.start,
@@ -362,15 +362,7 @@ class PurchaseOrderItem extends StatelessWidget {
       );
     }
     else{
-      return Text(
-        '${PurchaseOrderStatusLocalizedMap[order.status]}',
-        textAlign: TextAlign.start,
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.red,
-          fontWeight: FontWeight.w500,
-        ),
-      );
+      return Container();
     }
   }
 

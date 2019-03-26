@@ -397,7 +397,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     } else {
       showDialog<void>(
         context: context,
-        barrierDismissible: true, // user must tap button!
+        barrierDismissible: false, // user must tap button!
         builder: (context) {
           return AlertDialog(
             title: Text('确定提交？'),
