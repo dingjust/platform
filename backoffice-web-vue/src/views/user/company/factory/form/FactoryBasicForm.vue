@@ -75,19 +75,61 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="车位数量" prop="latheQuantity">
-            <el-input-number class="w-100" v-model="slotData.latheQuantity" :min="0"></el-input-number>
+          <el-form-item label="公司规模" prop="populationScales">
+            <el-select v-model="slotData.populationScales" class="w-100" multiple>
+              <el-option v-for="item in populationScales"
+                         :key="item.code"
+                         :label="item.name"
+                         :value="item.code">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
-          <el-form-item label="优势品类" prop="adeptAtCategories">
-            <el-checkbox-group v-model="slotData.adeptAtCategories">
-              <el-checkbox v-for="item in adeptAtCategories" :label="item.code" :key="item.code">
+          <el-form-item label="车位数量" prop="latheQuantity">
+            <el-input-number class="w-100" v-model="slotData.latheQuantity" :min="0"></el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="生产大类" prop="categories">
+            <el-select class="w-100" v-model="slotData.categories" value-key="code" multiple>
+              <el-option v-for="item in categories" :label="item.code" :key="item.code" :value="item">
                 {{item.name}}
-              </el-checkbox>
-            </el-checkbox-group>
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="优势品类" prop="adeptAtCategories">
+            <el-select class="w-100"
+                       placeholder="请选择"
+                       v-model="slotData.adeptAtCategories"
+                       value-key="code" multiple>
+              <el-option-group
+                v-for="group in adeptAtCategories"
+                :key="group.code"
+                :label="group.name">
+                <el-option
+                  v-for="item in group.children"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item">
+                </el-option>
+              </el-option-group>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="标签" prop="labels">
+            <el-select class="w-100" v-model="slotData.labels" value-key="id" multiple>
+              <el-option v-for="item in labels"
+                         :label="item.name"
+                         :key="item.id"
+                         :value="item">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -152,6 +194,16 @@
           this.addressDialogVisible = false;
         }
       },
+      async getMinorCategories() {
+        const url = this.apis().getMinorCategories();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.adeptAtCategories = result;
+      },
       async getCategories() {
         const url = this.apis().getMajorCategories();
         const result = await this.$http.get(url);
@@ -160,7 +212,17 @@
           return;
         }
 
-        this.adeptAtCategories = result;
+        this.categories = result;
+      },
+      async getLabels() {
+        const url = this.apis().getAllLabels();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.labels = result;
       },
       _copyContactAddress() {
         if (this.slotData.contactAddress) {
@@ -172,6 +234,8 @@
     },
     data() {
       return {
+        labels: [],
+        categories: [],
         adeptAtCategories: [],
         addressFormData: this.$store.state.FactoriesModule.addressFormData,
         addressDialogVisible: false,
@@ -193,10 +257,13 @@
         cooperationModes: this.$store.state.EnumsModule.cooperationModes,
         scaleRanges: this.$store.state.EnumsModule.scaleRanges,
         monthlyCapacityRanges: this.$store.state.EnumsModule.monthlyCapacityRanges,
+        populationScales: this.$store.state.EnumsModule.populationScales,
       };
     },
     created() {
       this.getCategories();
+      this.getMinorCategories();
+      this.getLabels();
       this._copyContactAddress();
     }
   };
