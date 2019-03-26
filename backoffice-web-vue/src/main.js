@@ -81,6 +81,22 @@ Vue.mixin({
     isTenant() {
       return this.$store.getters.currentUser.type === 'TENANT';
     },
+    compareDate(date1, date2) {
+      let result = false;
+      if (date1.getFullYear() > date2.getFullYear()) {
+        result = true;
+      } else if (date1.getFullYear() === date2.getFullYear()) {
+        if (date1.getMonth() > date2.getMonth()) {
+          result = true;
+        } else if (date1.getMonth() === date2.getMonth()) {
+          if (date1.getDate() > date2.getDate()) {
+            result = true;
+          }
+        }
+      }
+
+      return result;
+    },
     // 枚举类型
     getEnum(enumsName, code) {
       const result = this.$store.state.EnumsModule[enumsName].find(e => e.code === code);

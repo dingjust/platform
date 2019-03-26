@@ -33,7 +33,8 @@
     props: ['slotData', 'readOnly'],
     methods: {
       async getLabels() {
-        const results = await this.$http.get('/djwebservices/labels/all');
+        const url = this.apis().getAllLabels();
+        const results = await this.$http.get(url);
         if (results["errors"]) {
           this.$message.error(results["errors"][0].message);
           return;

@@ -39,10 +39,10 @@ const state = {
     balancePaidDate: null,
     machiningType: null,
     invoiceNeeded: false,
+    proofingNeeded: false,
     uniqueCode: '',
     requirementOrderCode: '',
     unitPrice: 0,
-    entries: [],
     remarks: '',
     deliveryAddress: {
       id: null,
@@ -73,6 +73,24 @@ const state = {
     createdDateFrom: null,
     createdDateTo: null,
     belongTos: [],
+  },
+  addressFormData: {
+    id: null,
+    fullname: '',
+    cellphone: '',
+    region: {
+      isocode: '',
+      name: ''
+    },
+    city: {
+      code: '',
+      name: ''
+    },
+    cityDistrict: {
+      code: '',
+      name: ''
+    },
+    line1: ''
   }
 };
 

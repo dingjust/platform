@@ -15,7 +15,7 @@
         <span>需求信息</span>
       </div>
       <requirement-order-request-form ref="requestForm"
-                                      :slot-data="slotData"
+                                      :slot-data="slotData.details"
                                       :read-only="readOnly">
       </requirement-order-request-form>
     </el-card>

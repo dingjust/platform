@@ -4,7 +4,7 @@
       <div slot="header" class="clearfix">
         <span>需求信息</span>
       </div>
-      <requirement-order-request-form :read-only="true" :slot-data="slotData.requirementOrder"/>
+      <requirement-order-request-form :read-only="true" :slot-data="slotData.requirementOrder.details"/>
     </el-card>
     <div class="pt-2"></div>
     <el-card class="box-card">
