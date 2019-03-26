@@ -131,6 +131,33 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
             IconButton(
               icon: Text('确定'),
               onPressed: () {
+                if(widget.colorFilters.length <= 0 && widget.sizeFilters.length <= 0){
+                  showDialog(
+                      context: (context),
+                      builder: (context) => AlertDialog(
+                        content: Text('颜色和尺码不能为空'),
+                      ));
+                  return;
+                }
+
+                if(widget.colorFilters.length <= 0){
+                  showDialog(
+                      context: (context),
+                      builder: (context) => AlertDialog(
+                        content: Text('颜色不能为空'),
+                      ));
+                  return;
+                }
+
+                if(widget.sizeFilters.length <= 0){
+                  showDialog(
+                      context: (context),
+                      builder: (context) => AlertDialog(
+                        content: Text('尺码不能为空'),
+                      ));
+                  return;
+                }
+
                 Navigator.pop(context);
               },
             )
