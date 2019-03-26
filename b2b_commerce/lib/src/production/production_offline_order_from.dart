@@ -586,6 +586,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             //接收返回数据并处理
           ).then((value) {
             setState(() {
+              if(value != null)
               addressModel = value;
             });
           });

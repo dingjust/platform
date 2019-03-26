@@ -487,7 +487,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         MonthlyCapacityRangesLocalizedMap[
-                            widget.supplierModel.factory.monthlyCapacityRanges],
+                            widget.supplierModel.factory.monthlyCapacityRange],
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

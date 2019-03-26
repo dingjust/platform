@@ -17,7 +17,7 @@ class EnumSelectPage extends StatefulWidget {
   //页面title
   final String title;
   //全部枚举的集合
-  final List<EnumModel> items;
+  final List<dynamic> items;
   //是否多选
   final bool multiple;
   //被选中的枚举的code
@@ -25,14 +25,14 @@ class EnumSelectPage extends StatefulWidget {
   //一行显示多少个
   final int count;
   //被选中的枚举model
-  List<EnumModel> models;
+  List<dynamic> models;
 
   EnumSelectPageState createState() => EnumSelectPageState();
 }
 
 class EnumSelectPageState extends State<EnumSelectPage> {
   List<String> _beforeModifyCodes = [];
-  List<EnumModel> _beforModifyModels;
+  List<dynamic> _beforModifyModels;
 
   @override
   void initState() {
@@ -52,7 +52,13 @@ class EnumSelectPageState extends State<EnumSelectPage> {
   @override
   Widget build(BuildContext context) {
     //当有键盘的状态进来时，widget.codes会被清空，所以在build的时候重新赋值
-    if(widget.models != null) widget.codes = widget.models.map((model) => model.code).toList();
+    if(widget.models != null) widget.codes = widget.models.map<String>((model) {
+      if(model is LabelModel){
+        return model.name;
+      }else{
+        return model.code;
+      }
+    }).toList();
     final List<dynamic> _items = widget.items.map((item) {
 //      print(widget.codes.toString() + '-----'+ item.code);
       return Container(
@@ -60,7 +66,7 @@ class EnumSelectPageState extends State<EnumSelectPage> {
         child: ChoiceChip(
           selectedColor: Color.fromRGBO(255,214,12, 1),
           label: Text(item.name,style: TextStyle(color: Colors.black),),
-          selected: widget.codes.contains(item.code),
+          selected: _isContains(item),
           onSelected: (value) {
             setState(() {
               if (value) {
@@ -68,11 +74,29 @@ class EnumSelectPageState extends State<EnumSelectPage> {
                   widget.codes.clear();
                   if(widget.models != null) widget.models.clear();
                 }
-                widget.codes.add(item.code);
+                //是否是标签对象
+                if(item is LabelModel){
+                  widget.codes.add(item.name);
+                }else{
+                  widget.codes.add(item.code);
+                }
                 if(widget.models != null) widget.models.add(item);
+                print(widget.models);
               } else {
-                widget.codes.remove(item.code);
-                if(widget.models != null) widget.models.removeWhere((model)=> item.code == model.code);
+                //是否是标签对象
+                if(item is LabelModel){
+                  widget.codes.remove(item.name);
+                }else{
+                  widget.codes.remove(item.code);
+                }
+                if(widget.models != null) widget.models.removeWhere((model){
+                  //是否是标签对象
+                  if(model is LabelModel){
+                    return item.name == model.name;
+                  }else{
+                    return item.code == model.code;
+                  }
+                });
               }
             });
           },
@@ -105,6 +129,8 @@ class EnumSelectPageState extends State<EnumSelectPage> {
             IconButton(
               icon: Text('确定',style: TextStyle(color: Color(0xffFF9516)),),
               onPressed: () {
+                print(widget.models);
+                print(widget.codes);
                 Navigator.pop(context);
               },
             ),
@@ -123,5 +149,13 @@ class EnumSelectPageState extends State<EnumSelectPage> {
         )
       ),
     );
+  }
+
+  bool _isContains(item) {
+    if(item is LabelModel){
+      return widget.codes.contains(item.name);
+    }else{
+      return widget.codes.contains(item.code);
+    }
   }
 }

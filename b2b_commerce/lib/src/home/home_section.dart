@@ -128,7 +128,7 @@ class HomeTabSection extends StatelessWidget {
       ),
       AdvanceIconButton(
         onPressed: () async {
-          List<LabelModel> labels = await UserRepositoryImpl().labels();
+          List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
 
           Navigator.push(
               context,

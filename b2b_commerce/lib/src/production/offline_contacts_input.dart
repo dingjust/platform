@@ -17,26 +17,22 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
   final TextEditingController _lineController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  AddressModel addressModel = new AddressModel();
-  String address;
+  AddressModel _address;
 
   @override
   void initState() {
-    addressModel = widget.model;
-    if(addressModel != null){
-      if(addressModel.region != null && addressModel.region.name != null && addressModel.region.name != ''
-      && addressModel.city != null && addressModel.city.name != null && addressModel.city.name != ''
-          && addressModel.cityDistrict != null && addressModel.cityDistrict.name != null &&
-          addressModel.cityDistrict.name != ''){
-        address = addressModel.region.name + addressModel.city.name +
-            addressModel.cityDistrict.name;
-      }
-
-      _lineController.text = addressModel.line1;
-      _nameController.text = addressModel.fullname;
-      _phoneController.text = addressModel.cellphone;
-
-    }
+    _address = AddressModel(
+      fullname: widget.model?.fullname,
+      cellphone: widget.model?.cellphone,
+      region: widget.model?.region,
+      city: widget.model?.city,
+      cityDistrict: widget.model?.cityDistrict,
+      line1: widget.model?.line1,
+      defaultAddress: widget.model?.defaultAddress,
+    );
+    _lineController.text =  widget.model.line1 ?? '';
+    _nameController.text =  widget.model.fullname ?? '';
+    _phoneController.text =  widget.model.cellphone ?? '';
     super.initState();
   }
 
@@ -55,14 +51,16 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
                     child: Center(
                       child: Text(
                         '确定',
-                        style: TextStyle(
-                            color: Color.fromRGBO(255, 214, 12, 1)),
                       ),
                     ),
                   ),
                   onTap: () async {
+                    _address.fullname = _nameController.text == '' ? null : _nameController.text;
+                    _address.cellphone = _phoneController.text == '' ? null : _phoneController.text;
+                    _address.line1 = _lineController.text == '' ? null : _lineController.text;
+
                     //带值返回上一页
-                    Navigator.of(context).pop(addressModel);
+                    Navigator.of(context).pop(_address);
                   }
               )
             ]
@@ -81,79 +79,6 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
     return Container(
       child: Column(
         children: <Widget>[
-          GestureDetector(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(15, 20, 5, 0),
-                child: ListTile(
-                    leading: Text(
-                      '送货地址',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    trailing: address == null ||
-                        address == ''
-                        ? Icon(Icons.keyboard_arrow_right)
-                        :
-                    Container(
-                      width: 150,
-                      child: Text(
-                        addressModel.region.name + addressModel.city.name +
-                            addressModel.cityDistrict.name,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey
-                        ),
-                      ),
-                    )
-                ),
-              ),
-              onTap: () {
-                address = '';
-                setState(() {
-                  address = address;
-                });
-                AddressPicker(cacel: () {
-                  Navigator.pop(context);
-                }).showAddressPicker(
-                  context,
-                  selectProvince: (province) {
-                    address += province['name'];
-                    addressModel.region = RegionModel.fromJson(province);
-                  },
-                  selectCity: (city) {
-                    address += city['name'];
-                    addressModel.city = CityModel.fromJson(city);
-                  },
-                  selectArea: (area) {
-                    address += area['name'];
-                    addressModel.cityDistrict = DistrictModel.fromJson(area);
-                    setState(() {
-                      address = address;
-                    });
-                  },
-                );
-              }),
-          Container(
-            padding: EdgeInsets.all(5),
-            margin: EdgeInsets.all(10),
-            child: TextFieldComponent(
-              focusNode: _lineFocusNode,
-              controller: _lineController,
-              leadingText: '详细地址',
-              hintText: addressModel == null || addressModel.line1 == null|| addressModel.line1 == ''
-                  ? '请输入详细地址'
-                  : addressModel.line1,
-              onChanged: (value) {
-                setState(() {
-                  addressModel.line1 = value;
-                });
-              },
-            ),
-          ),
           Container(
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(10),
@@ -161,12 +86,7 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
               focusNode: _nameFocusNode,
               controller: _nameController,
               leadingText: '联系人名',
-              hintText: addressModel == null || addressModel.fullname == null ?'请输入联系人名':addressModel.fullname,
-              onChanged: (value) {
-                setState(() {
-                  addressModel.fullname = value;
-                });
-              },
+              hintText: _address.fullname ?? '请输入联系人名',
             ),
           ),
           Container(
@@ -176,13 +96,60 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
               focusNode: _phoneFocusNode,
               controller: _phoneController,
               leadingText: '联系电话',
-              hintText: addressModel == null || addressModel.cellphone == null ?'请输入联系电话':addressModel.cellphone,
+              hintText: _address.cellphone ?? '请输入联系电话',
               inputType: TextInputType.phone,
-              onChanged: (value) {
-                setState(() {
-                  addressModel.cellphone = value;
-                });
-              },
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(10),
+            child: Column(
+              children: <Widget>[
+                InkWell(
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(child: Text('省市区',style: TextStyle(fontSize: 16,),),),
+                        Text(_address.region != null ? _address.regionCityAndDistrict : '选取',style: TextStyle(color: Colors.grey,),),
+                        Icon(Icons.chevron_right,color: Colors.grey,),
+                      ],
+                    ),
+                  ),
+                  onTap: (){
+                    AddressPicker(cacel: () {
+                      Navigator.pop(context);
+                    }).showAddressPicker(
+                      context,
+                      selectProvince: (province) {
+                        _address.region = RegionModel.fromJson(province);
+                      },
+                      selectCity: (city) {
+                        _address.city = CityModel.fromJson(city);
+                      },
+                      selectArea: (area) {
+                        setState(() {
+                          _address.cityDistrict = DistrictModel.fromJson(area);
+                        });
+                      },
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Divider(height: 0,color: Colors.grey,),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(10),
+            child: TextFieldComponent(
+                focusNode: _lineFocusNode,
+                controller: _lineController,
+                leadingText: '详细地址',
+                hintText: _address.line1 ?? '请输入详细地址'
             ),
           ),
         ],

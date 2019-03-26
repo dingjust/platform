@@ -56,8 +56,14 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<List<LabelModel>> labels() async{
+  Future<List<LabelModel>> industrialClustersFromLabels() async{
     Response response = await http$.get(UserApis.getIndustrialClusterFromLabels);
+    return response.data.map<LabelModel>((label) => LabelModel.fromJson(label)).toList();
+  }
+
+  @override
+  Future<List<LabelModel>> labels()async {
+    Response response = await http$.get(UserApis.labels);
     return response.data.map<LabelModel>((label) => LabelModel.fromJson(label)).toList();
   }
 

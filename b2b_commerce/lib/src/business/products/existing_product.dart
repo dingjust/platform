@@ -8,7 +8,8 @@ import 'package:widgets/widgets.dart';
 
 class ExistingProductsPage extends StatefulWidget {
   List<ApparelProductModel> products;
-  ExistingProductsPage(this.products);
+  bool isFactoryDetail;
+  ExistingProductsPage(this.products,{this.isFactoryDetail = false});
 
   _ExistingProductsPageState createState() => _ExistingProductsPageState();
 }
@@ -48,7 +49,7 @@ class _ExistingProductsPageState extends State<ExistingProductsPage> {
             childAspectRatio: 0.77,
             crossAxisSpacing: 10),
         children: List.generate(widget.products.length, (index) {
-          return ExistingProductItem(widget.products[index]);
+          return ExistingProductItem(widget.products[index],isFactoryDetail: true,);
         }),
       ),
     );

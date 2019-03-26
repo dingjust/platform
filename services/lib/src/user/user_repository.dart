@@ -20,6 +20,8 @@ abstract class UserRepository {
   Future<String> applyCertification(CompanyModel form);
 
   //产业集群类别
-  Future<List<LabelModel>> labels();
+  Future<List<LabelModel>> industrialClustersFromLabels();
 
+  //获取所有标签
+  Future<List<LabelModel>> labels();
 }

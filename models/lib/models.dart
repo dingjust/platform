@@ -320,6 +320,13 @@ const MonthlyCapacityRangesEnum = <EnumModel>[
   EnumModel('MCR004', '30000件以上'),
 ];
 
+const PopulationScaleEnum = <EnumModel>[
+  EnumModel('N01', '50人以下'),
+  EnumModel('N02', '51~100人'),
+  EnumModel('N03', '101到200人'),
+  EnumModel('N04', '200人以下'),
+];
+
 
 /// 分页数据
 @JsonSerializable()

@@ -36,6 +36,7 @@ class UserGroupModel extends PrincipalGroupModel {
 class CompanyModel extends UserGroupModel {
   /// 星级
   int starLevel;
+  @JsonKey(toJson: _addressToJson)
   AddressModel contactAddress;
   String address;
   String describe;
@@ -85,7 +86,11 @@ class CompanyModel extends UserGroupModel {
 
   //图文详情列表
   @JsonKey(toJson: _companyProfilesToJson)
-  List<CompanyProfileModel> companyProfiles;
+  List<CompanyProfileModel> profiles;
+
+  //标签
+  @JsonKey(toJson: _labelsToJson)
+  List<LabelModel> labels;
 
   CompanyModel({
     MediaModel profilePicture,
@@ -110,7 +115,8 @@ class CompanyModel extends UserGroupModel {
     this.legalRepresentative,
     this.type,
     this.approvalStatus,
-    this.companyProfiles,
+    this.profiles,
+    this.labels,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -124,11 +130,20 @@ class CompanyModel extends UserGroupModel {
   static Map<String, dynamic> toJson(CompanyModel model) =>
       _$CompanyModelToJson(model);
 
+  static Map<String, dynamic> _addressToJson(AddressModel model) =>
+      AddressModel.toJson(model);
+
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
       models.map((model) => MediaModel.toJson(model)).toList();
 
-  static List<Map<String, dynamic>> _companyProfilesToJson(List<CompanyProfileModel> models) =>
+  static List<Map<String, dynamic>> _companyProfilesToJson(
+          List<CompanyProfileModel> models) =>
       models.map((model) => CompanyProfileModel.toJson(model)).toList();
+
+  static List<Map<String, dynamic>> _labelsToJson(List<LabelModel> models) =>
+      models.map((model) => LabelModel.toJson(model)).toList();
+
+
 }
 
 @JsonSerializable()
@@ -159,6 +174,7 @@ class OrgUnitModel extends CompanyModel {
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
     List<CompanyProfileModel> companyProfiles,
+    List<LabelModel> labels,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -183,7 +199,8 @@ class OrgUnitModel extends CompanyModel {
           legalRepresentative: legalRepresentative,
           type: type,
           approvalStatus: approvalStatus,
-          companyProfiles: companyProfiles,
+          profiles: companyProfiles,
+          labels: labels,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -224,6 +241,7 @@ class B2BUnitModel extends OrgUnitModel {
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
     List<CompanyProfileModel> companyProfiles,
+    List<LabelModel> labels,
     this.active,
     this.email,
     this.phone,
@@ -252,6 +270,7 @@ class B2BUnitModel extends OrgUnitModel {
           type: type,
           approvalStatus: approvalStatus,
           companyProfiles: companyProfiles,
+          labels: labels,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -316,6 +335,7 @@ class BrandModel extends B2BUnitModel {
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
     List<CompanyProfileModel> companyProfiles,
+    List<LabelModel> labels,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -351,6 +371,7 @@ class BrandModel extends B2BUnitModel {
           type: type,
           approvalStatus: approvalStatus,
           companyProfiles: companyProfiles,
+          labels: labels,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -359,7 +380,8 @@ class BrandModel extends B2BUnitModel {
   static Map<String, dynamic> toJson(BrandModel model) =>
       _$BrandModelToJson(model);
 
-  static List<Map<String, dynamic>> _categorysToJson(List<CategoryModel> models) =>
+  static List<Map<String, dynamic>> _categorysToJson(
+          List<CategoryModel> models) =>
       models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
@@ -392,7 +414,7 @@ class FactoryModel extends B2BUnitModel {
   bool developmentCapacity;
 
   //月均产能
-  MonthlyCapacityRanges monthlyCapacityRanges;
+  MonthlyCapacityRange monthlyCapacityRange;
 
   //车位数量
   int latheQuantity;
@@ -438,9 +460,10 @@ class FactoryModel extends B2BUnitModel {
       CompanyType type,
       ArticleApprovalStatus approvalStatus,
       List<CompanyProfileModel> companyProfiles,
+      List<LabelModel> labels,
       this.historyOrdersCount,
       this.orderedSuccessRate,
-      this.monthlyCapacityRanges,
+      this.monthlyCapacityRange,
       this.categories,
       this.scaleRange,
       this.developmentCapacity,
@@ -479,6 +502,7 @@ class FactoryModel extends B2BUnitModel {
           type: type,
           approvalStatus: approvalStatus,
           companyProfiles: companyProfiles,
+          labels: labels,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>
@@ -542,6 +566,7 @@ class IndustrialClusterModel extends ItemModel {
 //工厂图文详情
 @JsonSerializable()
 class CompanyProfileModel extends ItemModel {
+  @JsonKey(toJson: _mediasToJson)
   List<MediaModel> medias;
   String description;
 
@@ -555,6 +580,9 @@ class CompanyProfileModel extends ItemModel {
 
   static Map<String, dynamic> toJson(CompanyProfileModel model) =>
       _$CompanyProfileModelToJson(model);
+
+  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
 }
 
 //供应商
@@ -577,10 +605,10 @@ class SupplierModel extends ItemModel {
 
   SupplierModel(
       {this.factory,
-        this.orderCount,
-        this.quoteOrder,
-        this.purchaseOrder,
-        this.quoteCount});
+      this.orderCount,
+      this.quoteOrder,
+      this.purchaseOrder,
+      this.quoteCount});
 
   factory SupplierModel.fromJson(Map<String, dynamic> json) =>
       _$SupplierModelFromJson(json);
@@ -612,7 +640,7 @@ const CooperationModesLocalizedMap = {
 };
 
 //月均产能
-enum MonthlyCapacityRanges {
+enum MonthlyCapacityRange {
   //0-5000件
   MCR001,
 
@@ -627,10 +655,10 @@ enum MonthlyCapacityRanges {
 }
 
 const MonthlyCapacityRangesLocalizedMap = {
-  MonthlyCapacityRanges.MCR001: "0-5000件",
-  MonthlyCapacityRanges.MCR002: "5000-10000件",
-  MonthlyCapacityRanges.MCR003: "10000-30000件",
-  MonthlyCapacityRanges.MCR004: "30000件以上",
+  MonthlyCapacityRange.MCR001: "0-5000件",
+  MonthlyCapacityRange.MCR002: "5000-10000件",
+  MonthlyCapacityRange.MCR003: "10000-30000件",
+  MonthlyCapacityRange.MCR004: "30000件以上",
 };
 
 //产值规模
@@ -661,23 +689,23 @@ const ScaleRangesLocalizedMap = {
 
 enum PopulationScale {
   /// 50人以下
-  PS001,
+  N01,
 
   /// 51~100人
-  PS002,
+  N02,
 
   /// 101到200人
-  PS003,
+  N03,
 
   /// 200人以下<
-  PS004
+  N04
 }
 
 const PopulationScaleLocalizedMap = {
-  PopulationScale.PS001: "50人以下",
-  PopulationScale.PS002: "51~100人",
-  PopulationScale.PS003: "101到200人",
-  PopulationScale.PS004: "200人以下",
+  PopulationScale.N01: "50人以下",
+  PopulationScale.N02: "51~100人",
+  PopulationScale.N03: "101到200人",
+  PopulationScale.N04: "200人以下",
 };
 
 //年龄段
@@ -718,5 +746,3 @@ const PriceRangesLocalizedMap = {
   PriceRanges.PR005: '301-500',
   PriceRanges.PR006: '500以上',
 };
-
-
