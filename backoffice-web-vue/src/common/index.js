@@ -1,4 +1,7 @@
 const COMMON_APIS = {
+  changePassword(username) {
+    return '/djwebservices/users/' + username + '/password';
+  },
   getRegions() {
     return '/djwebservices/addresses/CN/regions';
   },
