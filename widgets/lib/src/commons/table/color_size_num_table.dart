@@ -279,7 +279,9 @@ class EditColorSizeNumTable extends StatelessWidget {
                     height: 40.0,
                   )),
                 ],
-              ))
+              )
+              
+              )
           .toList();
 
       String colorCode =

@@ -6,8 +6,11 @@ import 'package:widgets/widgets.dart';
 import 'address/address_form.dart';
 
 class MyAddressesPage extends StatelessWidget {
+  bool isJumpSourec = false;
   AddressModel model = AddressModel();
   ScrollController _scrollController = new ScrollController();
+
+  MyAddressesPage({this.isJumpSourec});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class MyAddressesPage extends StatelessWidget {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses('');
+        bloc.loadingMoreByStatuses();
       }
     });
 
@@ -45,7 +48,7 @@ class MyAddressesPage extends StatelessWidget {
           centerTitle: true,
           title: Text('地址管理'),
         ),
-        body: AddressList(),
+        body: AddressList(isJumpSourec: isJumpSourec,),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -63,7 +66,9 @@ class MyAddressesPage extends StatelessWidget {
 }
 
 class AddressList extends StatelessWidget {
+  bool isJumpSourec = false;
   ScrollController _scrollController = new ScrollController();
+  AddressList({this.isJumpSourec});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +77,7 @@ class AddressList extends StatelessWidget {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses('');
+        bloc.loadingMoreByStatuses();
       }
     });
 
@@ -98,7 +103,7 @@ class AddressList extends StatelessWidget {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.filterByStatuses('');
+            return await bloc.filterByStatuses();
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -109,7 +114,7 @@ class AddressList extends StatelessWidget {
                 // initialData: null,
                 builder: (BuildContext context, AsyncSnapshot<List<AddressModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByStatuses('');
+                    bloc.filterByStatuses();
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
                       child: Center(child: CircularProgressIndicator()),
@@ -118,7 +123,7 @@ class AddressList extends StatelessWidget {
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((address) {
-                        return AddressItem(address);
+                        return AddressItem(address,isJumpSourec);
                       }).toList(),
                     );
                   } else if (snapshot.hasError) {
@@ -169,8 +174,9 @@ class AddressList extends StatelessWidget {
 }
 
 class AddressItem extends StatelessWidget{
+  bool isJumpSourec = false;
   final AddressModel item;
-  AddressItem(this.item);
+  AddressItem(this.item,this.isJumpSourec);
 
   @override
   Widget build(BuildContext context) {
@@ -218,12 +224,17 @@ class AddressItem extends StatelessWidget{
 
     return ListTile(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AddressFormPage(address: item),
-          ),
-        );
+        if(isJumpSourec){
+          Navigator.of(context).pop(item);
+        }else{
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddressFormPage(address: item),
+            ),
+          );
+        }
+
       },
       title: _buildRow(
         item.fullname,

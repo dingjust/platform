@@ -104,7 +104,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                   widget.item.roles = null;
                   widget.item.name = null;
                   widget.item.mobileNumber = null;
-                  Navigator.pop(context);
+
                 }
               },
             )

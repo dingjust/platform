@@ -41,7 +41,12 @@ class CategoryModel extends ItemModel {
   String name;
   @JsonKey(toJson: _categoryToJson)
   CategoryModel parent;
+
+  @JsonKey(toJson: _categorysToJson)
   List<CategoryModel> children;
+
+  @JsonKey(toJson: _mediaToJson)
+  MediaModel thumbnail;
 
   CategoryModel({
     this.code,
@@ -58,6 +63,12 @@ class CategoryModel extends ItemModel {
 
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
       CategoryModel.toJson(model);
+
+  static Map<String, dynamic> _mediaToJson(MediaModel model) =>
+      MediaModel.toJson(model);
+
+  static List<Map<String, dynamic>> _categorysToJson(List<CategoryModel> models) =>
+      models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -135,7 +146,7 @@ class ApparelProductAttributesModel extends ItemModel {
     this.filler,
     this.thickness,
     this.season,
-    this.taggable,
+    this.taggable = false,
     this.placket,
   });
 
@@ -190,26 +201,25 @@ class ProductModel extends ItemModel {
   @JsonKey(toJson: companyToJson)
   CompanyModel belongTo;
 
-  ProductModel({
-    this.code,
-    this.name,
-    this.price,
-    this.minPrice,
-    this.maxPrice,
-    this.thumbnail,
-    this.staircasePrices,
-    this.privacy,
-    this.superCategories,
-    this.category,
-    this.ratingIfPrivacy,
-    this.stockLevel,
-    this.salesVolume,
-    this.approvalStatus,
-    this.images,
-    this.belongTo,
-    this.thumbnails,
-    this.skuID
-  });
+  ProductModel(
+      {this.code,
+      this.name,
+      this.price,
+      this.minPrice,
+      this.maxPrice,
+      this.thumbnail,
+      this.staircasePrices,
+      this.privacy,
+      this.superCategories,
+      this.category,
+      this.ratingIfPrivacy,
+      this.stockLevel,
+      this.salesVolume,
+      this.approvalStatus,
+      this.images,
+      this.belongTo,
+      this.thumbnails,
+      this.skuID});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);
@@ -325,6 +335,9 @@ class ApparelProductModel extends ProductModel {
     StockLevelModel stockLevel,
     List<MediaModel> thumbnails,
     List<MediaModel> images,
+    double minPrice,
+    double maxPrice,
+    CompanyModel belongTo,
     this.variants,
     this.attributes,
     this.skuID,
@@ -336,19 +349,21 @@ class ApparelProductModel extends ProductModel {
     this.suggestedPrice,
     this.isRecommend,
   }) : super(
-          code: code,
-          name: name,
-          price: price,
-          thumbnail: thumbnail,
-          staircasePrices: staircasePrices,
-          privacy: privacy,
-          salesVolume: salesVolume,
-          ratingIfPrivacy: ratingIfPrivacy,
-          superCategories: superCategories,
-          stockLevel: stockLevel,
-          thumbnails: thumbnails,
-          images: images,
-        );
+            code: code,
+            name: name,
+            price: price,
+            thumbnail: thumbnail,
+            staircasePrices: staircasePrices,
+            privacy: privacy,
+            salesVolume: salesVolume,
+            ratingIfPrivacy: ratingIfPrivacy,
+            superCategories: superCategories,
+            stockLevel: stockLevel,
+            thumbnails: thumbnails,
+            images: images,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            belongTo: belongTo);
 
   ApparelProductModel.empty() {
     this.attributes = ApparelProductAttributesModel.empty();

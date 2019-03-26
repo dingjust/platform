@@ -24,7 +24,7 @@ class RequirementPoolAllPage extends StatefulWidget {
 }
 
 class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
-  GlobalKey _quickReactionFactoryBLoCProviderKey = GlobalKey();
+  GlobalKey _FactoryBLoCProviderKey = GlobalKey();
 
   bool showDateFilterMenu = false;
   bool showMachineTypeFilterMenu = false;
@@ -73,7 +73,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
     print(categoriesConditionEntries);
 
     return BLoCProvider<RequirementPoolBLoC>(
-        key: _quickReactionFactoryBLoCProviderKey,
+        key: _FactoryBLoCProviderKey,
         bloc: RequirementPoolBLoC.instance,
         child: Scaffold(
           appBar: AppBar(

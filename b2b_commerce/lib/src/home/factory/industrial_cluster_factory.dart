@@ -1,9 +1,12 @@
+import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'dart:math';
-import 'quick_reaction_factory.dart';
 
 class IndustrialClusterPage extends StatefulWidget {
+  List<LabelModel> labels;
+  IndustrialClusterPage(this.labels);
+
   IndustrialClusterPageState createState() => IndustrialClusterPageState();
 }
 
@@ -13,156 +16,156 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
   String _selectLeft;
   Color _color;
 
-  List<LabelModel> labels = [
-    LabelModel(
-      name:  '牛仔',
-      group: 'FACTORY',
-      clusters: [
-        IndustrialClusterModel(
-          code: 'IC001',
-          name: '广州新塘',
-        ),
-        IndustrialClusterModel(
-          code: 'IC002',
-          name: '中山大涌',
-        ),
-        IndustrialClusterModel(
-          code: 'IC003',
-          name: '顺德均安',
-        ),
-        IndustrialClusterModel(
-          code: 'IC004',
-          name: '开平三埠',
-        ),
-        IndustrialClusterModel(
-          code: 'IC005',
-          name: '山东淮坊',
-        ),
-        IndustrialClusterModel(
-          code: 'IC006',
-          name: '江苏常州',
-        ),
-        IndustrialClusterModel(
-          code: 'IC007',
-          name: '江苏杭州',
-        ),
-      ],
-    ),
-    LabelModel(
-      name:  '羽绒服',
-      group: 'FACTORY',
-      clusters: [
-        IndustrialClusterModel(
-          code: 'IC001',
-          name: '广州新塘',
-        ),
-        IndustrialClusterModel(
-          code: 'IC002',
-          name: '中山大涌',
-        ),
-        IndustrialClusterModel(
-          code: 'IC003',
-          name: '顺德均安',
-        ),
-        IndustrialClusterModel(
-          code: 'IC004',
-          name: '开平三埠',
-        ),
-        IndustrialClusterModel(
-          code: 'IC005',
-          name: '山东淮坊',
-        ),
-      ],
-    ),
-    LabelModel(
-      name:  '风衣',
-      group: 'FACTORY',
-      clusters: [
-        IndustrialClusterModel(
-          code: 'IC001',
-          name: '广州新塘',
-        ),
-        IndustrialClusterModel(
-          code: 'IC002',
-          name: '中山大涌',
-        ),
-        IndustrialClusterModel(
-          code: 'IC005',
-          name: '山东淮坊',
-        ),
-        IndustrialClusterModel(
-          code: 'IC006',
-          name: '江苏常州',
-        ),
-        IndustrialClusterModel(
-          code: 'IC007',
-          name: '江苏杭州',
-        ),
-      ],
-    ),
-    LabelModel(
-      name:  '棉服',
-      group: 'FACTORY',
-      clusters: [
-        IndustrialClusterModel(
-          code: 'IC002',
-          name: '中山大涌',
-        ),
-        IndustrialClusterModel(
-          code: 'IC003',
-          name: '顺德均安',
-        ),
-        IndustrialClusterModel(
-          code: 'IC004',
-          name: '开平三埠',
-        ),
-        IndustrialClusterModel(
-          code: 'IC005',
-          name: '山东淮坊',
-        ),
-        IndustrialClusterModel(
-          code: 'IC006',
-          name: '江苏常州',
-        ),
-        IndustrialClusterModel(
-          code: 'IC007',
-          name: '江苏杭州',
-        ),
-      ],
-    ),
-    LabelModel(
-      name:  '毛呢大衣',
-      group: 'FACTORY',
-      clusters: [
-        IndustrialClusterModel(
-          code: 'IC001',
-          name: '广州新塘',
-        ),
-        IndustrialClusterModel(
-          code: 'IC002',
-          name: '中山大涌',
-        ),
-        IndustrialClusterModel(
-          code: 'IC003',
-          name: '顺德均安',
-        ),
-        IndustrialClusterModel(
-          code: 'IC004',
-          name: '开平三埠',
-        ),
-        IndustrialClusterModel(
-          code: 'IC007',
-          name: '江苏杭州',
-        ),
-      ],
-    ),
-  ];
+//  List<LabelModel> widget.labels = [
+//    LabelModel(
+//      name:  '牛仔',
+//      group: 'FACTORY',
+//      clusters: [
+//        IndustrialClusterModel(
+//          code: 'IC001',
+//          name: '广州新塘',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC002',
+//          name: '中山大涌',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC003',
+//          name: '顺德均安',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC004',
+//          name: '开平三埠',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC005',
+//          name: '山东淮坊',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC006',
+//          name: '江苏常州',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC007',
+//          name: '江苏杭州',
+//        ),
+//      ],
+//    ),
+//    LabelModel(
+//      name:  '羽绒服',
+//      group: 'FACTORY',
+//      clusters: [
+//        IndustrialClusterModel(
+//          code: 'IC001',
+//          name: '广州新塘',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC002',
+//          name: '中山大涌',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC003',
+//          name: '顺德均安',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC004',
+//          name: '开平三埠',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC005',
+//          name: '山东淮坊',
+//        ),
+//      ],
+//    ),
+//    LabelModel(
+//      name:  '风衣',
+//      group: 'FACTORY',
+//      clusters: [
+//        IndustrialClusterModel(
+//          code: 'IC001',
+//          name: '广州新塘',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC002',
+//          name: '中山大涌',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC005',
+//          name: '山东淮坊',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC006',
+//          name: '江苏常州',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC007',
+//          name: '江苏杭州',
+//        ),
+//      ],
+//    ),
+//    LabelModel(
+//      name:  '棉服',
+//      group: 'FACTORY',
+//      clusters: [
+//        IndustrialClusterModel(
+//          code: 'IC002',
+//          name: '中山大涌',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC003',
+//          name: '顺德均安',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC004',
+//          name: '开平三埠',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC005',
+//          name: '山东淮坊',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC006',
+//          name: '江苏常州',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC007',
+//          name: '江苏杭州',
+//        ),
+//      ],
+//    ),
+//    LabelModel(
+//      name:  '毛呢大衣',
+//      group: 'FACTORY',
+//      clusters: [
+//        IndustrialClusterModel(
+//          code: 'IC001',
+//          name: '广州新塘',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC002',
+//          name: '中山大涌',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC003',
+//          name: '顺德均安',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC004',
+//          name: '开平三埠',
+//        ),
+//        IndustrialClusterModel(
+//          code: 'IC007',
+//          name: '江苏杭州',
+//        ),
+//      ],
+//    ),
+//  ];
 
   @override
   void initState() {
-    if (labels.isNotEmpty) {
-      _selectLeft = labels[0].name;
-      _valueItem = labels[0].clusters;
+    if (widget.labels.isNotEmpty) {
+      _selectLeft = widget.labels[0].name;
+      _valueItem = widget.labels[0].clusters;
     }
 
     // TODO: implement initState
@@ -180,7 +183,7 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
               child: Center(
                 child: Text(
                   item.name,
-                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,),
+                  style: TextStyle(fontSize: 18,),
                 ),
               ),
             ),
@@ -196,14 +199,14 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
         ),
       ),
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => QuickReactionFactoryPage(route: item.name,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => FactoryPage(route: item.name,)));
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    _keyItem = labels.map((label) {
+    _keyItem = widget.labels.map((label) {
       if (_selectLeft == label.name) {
         _color = Color(0xFFFF9516);
       } else {

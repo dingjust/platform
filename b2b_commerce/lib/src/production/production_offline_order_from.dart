@@ -2,6 +2,8 @@ import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:b2b_commerce/src/my/my_addresses.dart';
+import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
@@ -56,7 +58,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   ApparelProductModel productModel = new ApparelProductModel();
   List<ApparelSizeVariantProductModel> variants;
   EarnestMoney earnest = new EarnestMoney();
-  bool isSave = false;
   PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
   String userType;
 
@@ -140,11 +141,12 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Divider(
             height: 0,
           ),
+          userType == 'brand' ?
+          _buildAddressPick(context):
           _buildAddress(context),
           Divider(
             height: 0,
           ),
-          _buildDetailAddress(context),
           Divider(
             height: 0,
           ),
@@ -505,8 +507,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         });
   }
 
-  //送货地址
-  Widget _buildAddress(BuildContext context) {
+  //送货地址（品牌）
+  Widget _buildAddressPick(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
@@ -536,47 +538,38 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         ),
         onTap: () {
           address = '';
-          setState(() {
-            address = address;
-          });
-          AddressPicker(cacel:(){
-            Navigator.pop(context);
-          }).showAddressPicker(
+          Navigator.push(
             context,
-            selectProvince: (province) {
-              address += province['name'];
-              addressModel.region = RegionModel.fromJson(province);
-            },
-            selectCity: (city) {
-              address += city['name'];
-              addressModel.city = CityModel.fromJson(city);
-            },
-            selectArea: (area) {
-              address += area['name'];
-              addressModel.cityDistrict = DistrictModel.fromJson(area);
-              setState(() {
-                address = address;
-              });
-            },
-          );
+            MaterialPageRoute(
+                builder: (context) => MyAddressesPage(isJumpSourec: true)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              addressModel = value;
+              address = addressModel.region.name + addressModel.city.name +
+                  addressModel.cityDistrict.name;
+            });
+          });
         });
   }
 
-  //详细地址
-  Widget _buildDetailAddress(BuildContext context) {
+
+  //送货地址（工厂）
+  Widget _buildAddress(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
             leading: Text(
-              '详细地址',
+              '送货地址',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: addressModel.line1 == null || addressModel.line1 == ''
+            trailing: addressModel == null || addressModel.region == null
                 ? Icon(Icons.keyboard_arrow_right)
-                : Text(addressModel.line1,
+                : Text(addressModel.region.name + addressModel.city.name +
+                addressModel.cityDistrict.name,
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -589,11 +582,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(fieldText: '详细地址',inputType: TextInputType.text)),
+                builder: (context) => OfflineContactsInput(model: addressModel,)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
-              addressModel.line1 = value;
+              addressModel = value;
             });
           });
         });
@@ -704,6 +697,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   Widget _buildCommitButton(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: Column(
         children: <Widget>[
           Container(
@@ -723,85 +717,134 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   onPressed: () async {
-
-                    List<PurchaseOrderEntryModel> entries = new List();
-                    //联系人填写
-                    purchaseOrder.companyOfSeller = company.name;
-                    purchaseOrder.contactPersonOfSeller = company.contactPerson;
-                    purchaseOrder.contactOfSeller = company.contactPhone;
-                    //收货地址
-                    purchaseOrder.deliveryAddress = addressModel;
-                    //收货日期
-                    purchaseOrder.expectedDeliveryDate = deliveryDate;
-                    //加工方式
-                    purchaseOrder.machiningType = machiningType;
-                    //是否需要发票
-                    purchaseOrder.invoiceNeeded = isInvoice;
-                    //生产总数
-                    purchaseOrder.totalQuantity = _totalQuantity;
-                    //备注
-                    purchaseOrder.remarks = remarks;
-                    //添加订单行
-                    if(productModel != null && productModel.variants != null && productModel.variants.length > 0){
-                      for(int i = 0; i < productModel.variants.length; i++){
-                        PurchaseOrderEntryModel entryModel = new PurchaseOrderEntryModel();
-                        entryModel.product = productModel.variants[i];
-                        entryModel.product.thumbnail = productModel.thumbnail;
-                        entryModel.product.thumbnails = productModel.thumbnails;
-                        entryModel.product.images = productModel.images;
-                        _items.forEach((color, items) {
-                          items.forEach((item) {
-                            if(productModel.variants[i].color.code == color.code && productModel.variants[i].size.code == item.size.code){
-                              entryModel.quantity = int.parse(item.quantityController.text == ''
-                                  ? '0'
-                                  : item.quantityController.text);
-                            }
-                          });
-                        });
-                        entries.add(entryModel);
-                      }
-                    }
-
-                    //单价
-                    if(price != null){
-                      purchaseOrder.unitPrice = double.parse(price);
-                    }
-                    purchaseOrder.entries = entries;
-
-                    if(earnest != null){
-                      //定金
-                      if(earnest.earnestMoney != null){
-                        purchaseOrder.deposit = double.parse(earnest.earnestMoney);
-                      }
-                      purchaseOrder.depositPaid = earnest.isEarnestPayment;
-                      purchaseOrder.depositPaidDate = earnest.estimatePaymentDate;
-                      //尾款
-                      if(earnest.tailMoney != null){
-                        purchaseOrder.balance = double.parse(earnest.tailMoney);
-                      }
-                      purchaseOrder.balancePaid = earnest.isTailPayment;
-                      purchaseOrder.balancePaidDate = earnest.tailPaymentDate;
-                    }
-                    purchaseOrder.salesApplication = SalesApplication.BELOW_THE_LINE;
-
-                    try{
-                      await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
-                      setState(() {
-                        isSave = true;
-                      });
-                    }catch(e){
-                      print(e);
-                    }
-                    _showSaveTips(context);
-
+                    onSubmit();
                   })
           ),
         ],
       ),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(242, 242, 242, 1),
-      ),
     );
+  }
+
+  void onSubmit() async{
+    bool result = false;
+    List<PurchaseOrderEntryModel> entries = new List();
+    //联系人填写
+    if(company != null) {
+      if (company.name != null) {
+        purchaseOrder.companyOfSeller = company.name;
+      }
+      if (company.name != null) {
+        purchaseOrder.contactPersonOfSeller = company.contactPerson;
+      }
+      if (company.name != null) {
+        purchaseOrder.contactOfSeller = company.contactPhone;
+      }
+    }
+    //收货地址
+    if(addressModel != null && addressModel.region != null && addressModel.city != null && addressModel.cityDistrict != null){
+      purchaseOrder.deliveryAddress = addressModel;
+    }
+    //收货日期
+    if(deliveryDate != null){
+      purchaseOrder.expectedDeliveryDate = deliveryDate;
+    }
+
+    //加工方式
+    purchaseOrder.machiningType = machiningType;
+    //是否需要发票
+    purchaseOrder.invoiceNeeded = isInvoice;
+
+    //生产总数
+    if(_totalQuantity != null) {
+      purchaseOrder.totalQuantity = _totalQuantity;
+    }
+    //备注
+    if(remarks != null) {
+      purchaseOrder.remarks = remarks;
+    }
+    //添加订单行
+    if (productModel != null && productModel.variants != null &&
+        productModel.variants.length > 0) {
+      for (int i = 0; i < productModel.variants.length; i++) {
+        PurchaseOrderEntryModel entryModel = new PurchaseOrderEntryModel();
+        entryModel.product = productModel.variants[i];
+        entryModel.product.thumbnail = productModel.thumbnail;
+        entryModel.product.thumbnails = productModel.thumbnails;
+        entryModel.product.images = productModel.images;
+        _items.forEach((color, items) {
+          items.forEach((item) {
+            if (productModel.variants[i].color.code == color.code &&
+                productModel.variants[i].size.code == item.size.code) {
+              entryModel.quantity =
+                  int.parse(item.quantityController.text == ''
+                      ? '0'
+                      : item.quantityController.text);
+            }
+          });
+        });
+        entries.add(entryModel);
+      }
+    }
+
+    //单价
+    if (price != null && double.parse(price) > 0) {
+      purchaseOrder.unitPrice = double.parse(price);
+    }
+    //添加订单行
+    if(entries.length > 0 && entries.isNotEmpty){
+      purchaseOrder.entries = entries;
+    }
+    if (earnest != null) {
+      //定金
+      if (earnest.earnestMoney != null) {
+        purchaseOrder.deposit =
+            double.parse(earnest.earnestMoney);
+      }
+      purchaseOrder.depositPaid = earnest.isEarnestPayment;
+      purchaseOrder.depositPaidDate = earnest.estimatePaymentDate;
+      //尾款
+      if (earnest.tailMoney != null) {
+        purchaseOrder.balance = double.parse(earnest.tailMoney);
+      }
+      purchaseOrder.balancePaid = earnest.isTailPayment;
+      purchaseOrder.balancePaidDate = earnest.tailPaymentDate;
+    }
+    purchaseOrder.salesApplication = SalesApplication.BELOW_THE_LINE;
+
+    bool isSubmit = false;
+    try{
+      //非空验证
+      if(purchaseOrder.entries == null || purchaseOrder.entries.length <= 0){
+        isSubmit = _showValidateMsg(context, '请选择商品');
+      }
+      else if(purchaseOrder.totalQuantity == null || purchaseOrder.totalQuantity <= 0){
+        isSubmit = _showValidateMsg(context, '请输入生产数量');
+      }
+      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice <= 0){
+        isSubmit = _showValidateMsg(context, '请输入生产单价');
+      }
+      else if(purchaseOrder.deposit == null || purchaseOrder.deposit <= 0){
+        isSubmit = _showValidateMsg(context, '请输入定金');
+      }
+      else if(purchaseOrder.machiningType == null){
+        isSubmit = _showValidateMsg(context, '请选择加工类型');
+      }
+      else if(purchaseOrder.invoiceNeeded == null){
+        isSubmit = _showValidateMsg(context, '请选择是否开具发票');
+      }else{
+        isSubmit = true;
+      }
+      if(isSubmit){
+        String code = await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
+        if(code != null){
+          result = true;
+        }
+        _showMessage(context,result,'添加线下单',code);
+      }
+
+    }catch(e){
+      print(e);
+    }
   }
 
   //打开日期选择器
@@ -895,8 +938,35 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     );
   }
 
+  //非空提示
+  bool _showValidateMsg(BuildContext context,String message){
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
   //保存后是否成功提示
-  Future<void> _showSaveTips(BuildContext context) async {
+  void _showMessage(BuildContext context,bool result,String message,String code){
+    _requestMessage(context,result == true? '${message}成功' : '${message}失败',result,code);
+  }
+
+  Future<void> _validateMessage(BuildContext context,String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('提示'),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('${message}'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _requestMessage(BuildContext context,String message,bool result,String code) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -904,25 +974,26 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         return AlertDialog(
           title: Text('提示'),
           content: SingleChildScrollView(
-            child: Text(
-              isSave == true? '创建线下单成功！':'创建线下单失败，请核对输入内容！',
-              style: TextStyle(
-                fontSize: 22,
-              ),
-            )
+              child: Text(
+                '${message}',
+                style: TextStyle(
+                  fontSize: 22,
+                ),
+              )
           ),
           actions: <Widget>[
             FlatButton(
               child: Text('确定'),
-              onPressed: () {
+              onPressed: () async {
+                PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
+                ProductionBLoC.instance.refreshData();
+
                 Navigator.of(context).pop();
-                isSave == true?
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PurchaseOrderDetailPage(order: purchaseOrder)
-                  ),
-                ):null;
+                result == true ?
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) =>
+                        PurchaseOrderDetailPage(order: model)
+                    ), ModalRoute.withName('/')) : null;
               },
             ),
           ],

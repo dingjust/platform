@@ -114,13 +114,17 @@ class ProductionBLoC extends BLoCBase {
             'phases': phasesList,
             'expectedDeliveryDateFrom': startDate == null ? null : startDate.millisecondsSinceEpoch,
             'expectedDeliveryDateTo': endDate == null ? null : endDate.millisecondsSinceEpoch,
-            'status': status == null || status == '' ? 'producting' : status,
+            'statuses': 'IN_PRODUCTION',
           };
           Response<Map<String, dynamic>> response;
 
           try {
             response = await http$.post(OrderApis.purchaseOrders,
-                data:data
+                data:data,
+                queryParameters: {
+                  'page': 0,
+                  'size': 100
+                }
             );
           } on DioError catch (e) {
             print(e);
@@ -134,7 +138,17 @@ class ProductionBLoC extends BLoCBase {
           }
 
     }
-    _controller.sink.add(_purchaseOrders);
+    if(status == 'delayWarning'){
+      List<PurchaseOrderModel> orders = [];
+      for(int i =0;i<_purchaseOrders.length;i++){
+        if(_purchaseOrders[i].delayed){
+          orders.add(_purchaseOrders[i]);
+        }
+      }
+      _controller.sink.add(orders);
+    }else{
+      _controller.sink.add(_purchaseOrders);
+    }
   }
 
   clear() async {
@@ -167,13 +181,17 @@ class ProductionBLoC extends BLoCBase {
       'phases': phasesList,
       'expectedDeliveryDateFrom': startDate == null ? null : startDate.millisecondsSinceEpoch,
       'expectedDeliveryDateTo': endDate == null ? null : endDate.millisecondsSinceEpoch,
-      'status' : status == null || status == ''? 'producting' : status,
+      'statuses': 'IN_PRODUCTION',
     };
     Response<Map<String, dynamic>> response;
 
     try {
       response = await http$.post(OrderApis.purchaseOrders,
-          data:data
+          data:data,
+          queryParameters: {
+            'page': 0,
+            'size': 100
+          }
       );
     } on DioError catch (e) {
       print(e);
@@ -185,8 +203,17 @@ class ProductionBLoC extends BLoCBase {
       _purchaseOrders.clear();
       _purchaseOrders.addAll(ordersResponse.content);
     }
-
-    _controller.sink.add(_purchaseOrders);
+    if(status == 'delayWarning'){
+      List<PurchaseOrderModel> orders = [];
+      for(int i =0;i<_purchaseOrders.length;i++){
+        if(_purchaseOrders[i].delayed){
+          orders.add(_purchaseOrders[i]);
+        }
+      }
+      _controller.sink.add(orders);
+    }else{
+      _controller.sink.add(_purchaseOrders);
+    }
   }
 
   //页面控制

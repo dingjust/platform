@@ -1,8 +1,9 @@
 import 'package:b2b_commerce/src/business/search/apparel_product_search.dart';
-import 'package:b2b_commerce/src/common/screen_conditions.dart';
-import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
+import 'package:b2b_commerce/src/common/find_factory_by_map.dart';
+import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'factory/industrial_cluster_factory.dart';
@@ -108,10 +109,14 @@ class HomeTabSection extends StatelessWidget {
     List<AdvanceIconButton> iconList = <AdvanceIconButton>[
       AdvanceIconButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(
-                    route: '地图找厂',
-                  )));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FindFactoryByMap()),
+          );
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => ScreenConditions(
+          //           route: '地图找厂',
+          //         )));
         },
         title: '地图找厂',
         isHot: true,
@@ -122,9 +127,13 @@ class HomeTabSection extends StatelessWidget {
         ),
       ),
       AdvanceIconButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => IndustrialClusterPage()));
+        onPressed: () async {
+          List<LabelModel> labels = await UserRepositoryImpl().labels();
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IndustrialClusterPage(labels)));
         },
         title: '产业集群',
         icon: Icon(
@@ -136,7 +145,7 @@ class HomeTabSection extends StatelessWidget {
       AdvanceIconButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(
+              builder: (context) => FactoryPage(
                     route: '品牌工厂',
                   )));
         },
@@ -149,24 +158,10 @@ class HomeTabSection extends StatelessWidget {
       ),
       AdvanceIconButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ScreenConditions(
-                    route: '免费打样',
-                  )));
-        },
-        title: '免费打样',
-        icon: Icon(
-          B2BIcons.free_proofing,
-          color: Color.fromRGBO(255, 123, 118, 1.0),
-          size: 30,
-        ),
-      ),
-      AdvanceIconButton(
-        onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => QuickReactionFactoryPage(
+                builder: (context) => FactoryPage(
                       route: '全部工厂',
                     )),
           );

@@ -25,6 +25,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   Map<ColorModel, List<SizeQuantityItem>> _items = Map();
   Map<ColorModel, List<SizeQuantityItem>> _newItems;
   Map<ColorModel, List<SizeQuantityItem>> sizeQuantityList;
+  List<MediaModel> mediaList;
   int _totalQuantity;
   String price;
   String earnestMoney;
@@ -558,7 +559,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
               )
             ],
           ),
-          EditableAttachments(list: [])
+          EditableAttachments(list: mediaList)
         ],
       ),
     );
@@ -740,6 +741,8 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     purchaseOrder.totalQuantity = _totalQuantity;
     //备注
     purchaseOrder.remarks = remarks;
+    //附件
+    purchaseOrder.attachments = mediaList;
     //添加订单行
     if (productModel != null &&
         productModel.variants != null &&
@@ -752,7 +755,8 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
         entryModel.product.images = productModel.images;
         _items.forEach((color, items) {
           items.forEach((item) {
-            if (productModel.variants[i].color.code == color.code) {
+            if (productModel.variants[i].color.code == color.code &&
+                productModel.variants[i].size.code == item.size.code) {
               entryModel.quantity = int.parse(item.quantityController.text == ''
                   ? '0'
                   : item.quantityController.text);

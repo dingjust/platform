@@ -37,5 +37,6 @@ export 'src/commons/stars/stars.dart';
 export 'src/commons/stepbar/production_circle_step.dart';
 export 'src/commons/stepbar/status_step.dart';
 export 'src/commons/table/color_size_num_table.dart';
+export 'src/commons/table/attribute_table.dart';
 export 'src/report/site_statistics_section.dart';
 export 'src/commons/filterTabBar/filter_bar.dart';

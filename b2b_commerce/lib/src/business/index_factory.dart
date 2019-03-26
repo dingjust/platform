@@ -16,7 +16,7 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('统计'),
+        title: Text('工作'),
         centerTitle: true,
         elevation: 0.5,
       ),

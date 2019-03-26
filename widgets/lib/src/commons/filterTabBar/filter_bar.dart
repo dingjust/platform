@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 
 class FilterBar extends StatefulWidget implements PreferredSizeWidget {
-  FilterBar(
-      {Key key,
-      this.itemHeight = 20,
-      this.itemWidth = 100,
-      this.unselectedColor = Colors.black54,
-      this.color = const Color.fromRGBO(255, 214, 12, 1),
-      this.action,
-      @required this.onPressed,
-      @required this.label,
-      this.onCategoryPressed,
-      this.categoryLabel})
-      : super(key: key);
+  FilterBar({
+    Key key,
+    this.itemHeight = 20,
+    this.itemWidth = 100,
+    this.unselectedColor = Colors.black54,
+    this.color = const Color.fromRGBO(255, 214, 12, 1),
+    this.action,
+    @required this.onChanged,
+    @required this.filterConditionEntries,
+  }) : super(key: key);
 
   _FilterBarState createState() => _FilterBarState();
 
@@ -21,12 +20,9 @@ class FilterBar extends StatefulWidget implements PreferredSizeWidget {
   final Color unselectedColor;
   final Color color;
   final Widget action;
-  String label;
-  String categoryLabel;
+  final List<FilterConditionEntry> filterConditionEntries;
 
-  final VoidCallback onCategoryPressed;
-
-  final VoidCallback onPressed;
+  final ValueChanged<FilterConditionEntry> onChanged;
 
   @override
   // TODO: implement preferredSize
@@ -34,6 +30,10 @@ class FilterBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
+  void _handleTap(FilterConditionEntry condition) {
+    widget.onChanged(condition);
+  }
+
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
@@ -44,38 +44,41 @@ class _FilterBarState extends State<FilterBar> {
                 flex: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    FlatButton(
-                      onPressed: widget.onCategoryPressed,
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: Color.fromRGBO(255, 214, 12, 1)),
-                          borderRadius: BorderRadius.circular(20)),
-                      color: Colors.white,
-                      child: Text(
-                        widget.categoryLabel,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Color.fromRGBO(255, 214, 12, 1)),
-                      ),
-                    ),
-                    Container(
-                      width: 118,
-                      child: FlatButton(
-                          onPressed: widget.onPressed,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                widget.label,
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.black),
-                              ),
-                              Icon(Icons.keyboard_arrow_down)
-                            ],
-                          )),
-                    )
-                  ],
+                  children: widget.filterConditionEntries
+                      .map((condition) => Container(
+                            child: FlatButton(
+                                onPressed: () {
+                                  setState(() {
+                                    widget.filterConditionEntries
+                                        .forEach((condition) {
+                                      condition.checked = false;
+                                    });
+                                    condition.checked = true;
+                                    _handleTap(condition);
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      '${condition.label}',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: condition.checked
+                                              ? Color.fromRGBO(255, 219, 0, 1)
+                                              : Colors.black),
+                                    ),
+                                    condition.checked
+                                        ? Icon(
+                                            Icons.keyboard_arrow_down,
+                                            color:
+                                                Color.fromRGBO(255, 219, 0, 1),
+                                          )
+                                        : Icon(null)
+                                  ],
+                                )),
+                          ))
+                      .toList(),
                 )),
             widget.action
           ],

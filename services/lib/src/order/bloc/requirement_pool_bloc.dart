@@ -73,32 +73,37 @@ class RequirementPoolBLoC extends BLoCBase {
   }
 
   loadingMoreByCondition(RequirementFilterCondition conditions) async {
-    //数据到底
-    if (currentPage + 1 == totalPages) {
-      //通知显示已经到底部
-      _bottomController.sink.add(true);
-    } else {
-      Map data = generateConditionsMap(conditions);
-      Response<Map<String, dynamic>> response;
-      try {
-        currentPage++;
-        response = await http$.post(OrderApis.requirementOrdersAll,
-            data: data,
-            queryParameters: {'page': currentPage, 'size': pageSize});
-      } on DioError catch (e) {
-        print(e);
-      }
+    if (!lock) {
+      lock = true;
 
-      if (response != null && response.statusCode == 200) {
-        RequirementOrdersResponse ordersResponse =
-            RequirementOrdersResponse.fromJson(response.data);
-        totalPages = ordersResponse.totalPages;
-        totalElements = ordersResponse.totalElements;
-        _requirementOrders.addAll(ordersResponse.content);
+      //数据到底
+      if (currentPage + 1 == totalPages) {
+        //通知显示已经到底部
+        _bottomController.sink.add(true);
+      } else {
+        Map data = generateConditionsMap(conditions);
+        Response<Map<String, dynamic>> response;
+        try {
+          currentPage++;
+          response = await http$.post(OrderApis.requirementOrdersAll,
+              data: data,
+              queryParameters: {'page': currentPage, 'size': pageSize});
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          RequirementOrdersResponse ordersResponse =
+              RequirementOrdersResponse.fromJson(response.data);
+          totalPages = ordersResponse.totalPages;
+          totalElements = ordersResponse.totalElements;
+          _requirementOrders.addAll(ordersResponse.content);
+        }
       }
+      _loadingController.sink.add(false);
+      _controller.sink.add(_requirementOrders);
+      lock = false;
     }
-    _loadingController.sink.add(false);
-    _controller.sink.add(_requirementOrders);
   }
 
   clear() async {

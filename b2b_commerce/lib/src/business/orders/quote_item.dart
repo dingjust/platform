@@ -444,7 +444,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                           overflow: TextOverflow.ellipsis,
                         )
                       : Text(
-                          '暂无产品',
+                          ' ',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
                   widget.model.requirementOrder.details?.productSkuID != null

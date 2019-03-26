@@ -1,8 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
-import 'package:b2b_commerce/src/business/quote_orders.dart';
-import 'package:b2b_commerce/src/home/factory/quick_reaction_factory.dart';
+import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -379,7 +378,7 @@ class _RequirementOrderDetailPageState
                           overflow: TextOverflow.ellipsis,
                         )
                       : Text(
-                          '暂无产品',
+                          ' ',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
                   widget.order.details.productSkuID != null
@@ -557,7 +556,7 @@ class _RequirementOrderDetailPageState
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => QuickReactionFactoryPage(
+                        builder: (context) => FactoryPage(
                               route: '全部工厂',
                             )),
                   );

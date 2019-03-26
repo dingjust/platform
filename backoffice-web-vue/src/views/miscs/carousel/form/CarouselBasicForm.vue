@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="readOnly">
+    <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="!readOnly">
       <el-row :gutter="20">
         <el-row :gutter="20">
           <el-col :span="12">

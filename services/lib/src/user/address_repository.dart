@@ -3,7 +3,7 @@ import 'package:services/src/user/response/address_response.dart';
 
 abstract class AddressRepository {
   //获取地址列表
-  Future<AddressResponse> list(Map<String,dynamic> params);
+  Future<List<AddressModel>> list();
   //获取地址明细
   Future<AddressModel> detail(String id);
   //创建地址

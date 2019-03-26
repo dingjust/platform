@@ -1,4 +1,6 @@
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
+import 'package:b2b_commerce/src/business/products/existing_product_item.dart';
+import 'package:b2b_commerce/src/my/company/form/my_company_profile_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_way.dart';
@@ -200,18 +202,18 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                         ),
 //                        company.starLevel == null ? Container() : Stars(starLevel:company.starLevel),
                         Stars(
-                          starLevel: 5,
+                          starLevel: company.starLevel ?? 0,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              "已认证",
+                              company.approvalStatus == ArticleApprovalStatus.approved ? "已认证" : '未认证',
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Color.fromRGBO(255, 214, 12, 1)),
                             ),
-                            Text('广东广州白云'),
+//                            Text('广东广州白云'),
                           ],
                         ),
                       ],
@@ -376,60 +378,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                       crossAxisCount: 3,
                       childAspectRatio: 2.5 / 5,
                       children: List.generate(products.length, (index) {
-                        return Container(
-                            child: Center(
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                child: products != null &&
-                                        products.length > 0 &&
-                                        products[index].thumbnail != null
-                                    ? Image.network(
-                                        '${GlobalConfigs.IMAGE_BASIC_URL}${products[index].thumbnail.url}',
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.fill,
-                                      )
-                                    : Container(
-                                        width: 100,
-                                        height: 100,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            color: Color.fromRGBO(
-                                                243, 243, 243, 1)),
-                                        child: Icon(
-                                          B2BIcons.noPicture,
-                                          color:
-                                              Color.fromRGBO(200, 200, 200, 1),
-                                          size: 25,
-                                        ),
-                                      ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  products != null && products.length > 0
-                                      ? products[index].name ?? ''
-                                      : '',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                child: Text(
-                                  '￥${products != null && products.length > 0 ? products[index].price : ''}',
-//                                      ' ～ ￥${products != null && products.length > 0 ? products[index].price : ''}',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ));
+                        return ExistingProductItem(products[index]);
                       })),
                 )
               ],
@@ -446,7 +395,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ExistingProduct(productsResponse.content),
+                builder: (context) => ExistingProductsPage(productsResponse.content),
               ),
             );
           }),
@@ -467,13 +416,19 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      borderRadius: BorderRadius.circular(5),
+                  GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text('编辑'),
                     ),
-                    child: Text('编辑'),
+                    onTap: (){
+                      if(company.companyProfiles == null) company.companyProfiles = [];
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MyCompanyProfileFormPage(company)));
+                    },
                   )
                 ],
               ),

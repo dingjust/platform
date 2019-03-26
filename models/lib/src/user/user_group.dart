@@ -59,6 +59,7 @@ class CompanyModel extends UserGroupModel {
   String certificateOfLegal;
 
   //认证证件
+  @JsonKey(toJson: _mediasToJson)
   List<MediaModel> certificates;
 
   //联系人
@@ -81,6 +82,10 @@ class CompanyModel extends UserGroupModel {
 
   //认证状态
   ArticleApprovalStatus approvalStatus;
+
+  //图文详情列表
+  @JsonKey(toJson: _companyProfilesToJson)
+  List<CompanyProfileModel> companyProfiles;
 
   CompanyModel({
     MediaModel profilePicture,
@@ -105,6 +110,7 @@ class CompanyModel extends UserGroupModel {
     this.legalRepresentative,
     this.type,
     this.approvalStatus,
+    this.companyProfiles,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -117,6 +123,12 @@ class CompanyModel extends UserGroupModel {
 
   static Map<String, dynamic> toJson(CompanyModel model) =>
       _$CompanyModelToJson(model);
+
+  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
+
+  static List<Map<String, dynamic>> _companyProfilesToJson(List<CompanyProfileModel> models) =>
+      models.map((model) => CompanyProfileModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -146,6 +158,7 @@ class OrgUnitModel extends CompanyModel {
     String certificateOfLegal,
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
+    List<CompanyProfileModel> companyProfiles,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -170,6 +183,7 @@ class OrgUnitModel extends CompanyModel {
           legalRepresentative: legalRepresentative,
           type: type,
           approvalStatus: approvalStatus,
+          companyProfiles: companyProfiles,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -209,6 +223,7 @@ class B2BUnitModel extends OrgUnitModel {
     String certificateOfLegal,
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
+    List<CompanyProfileModel> companyProfiles,
     this.active,
     this.email,
     this.phone,
@@ -236,6 +251,7 @@ class B2BUnitModel extends OrgUnitModel {
           legalRepresentative: legalRepresentative,
           type: type,
           approvalStatus: approvalStatus,
+          companyProfiles: companyProfiles,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -256,10 +272,12 @@ class BrandModel extends B2BUnitModel {
   //风格
   List<String> styles;
 
-  //品类
+  //生产大类
+  @JsonKey(toJson: _categorysToJson)
   List<CategoryModel> categories;
 
-  //擅长品类
+  //优势类目
+  @JsonKey(toJson: _categorysToJson)
   List<CategoryModel> adeptAtCategories;
 
   //年龄段
@@ -297,6 +315,7 @@ class BrandModel extends B2BUnitModel {
     String certificateOfLegal,
     CompanyType type,
     ArticleApprovalStatus approvalStatus,
+    List<CompanyProfileModel> companyProfiles,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -331,6 +350,7 @@ class BrandModel extends B2BUnitModel {
           legalRepresentative: legalRepresentative,
           type: type,
           approvalStatus: approvalStatus,
+          companyProfiles: companyProfiles,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -338,6 +358,9 @@ class BrandModel extends B2BUnitModel {
 
   static Map<String, dynamic> toJson(BrandModel model) =>
       _$BrandModelToJson(model);
+
+  static List<Map<String, dynamic>> _categorysToJson(List<CategoryModel> models) =>
+      models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -351,10 +374,15 @@ class FactoryModel extends B2BUnitModel {
   //规模范围
   ScaleRanges scaleRange;
 
+  /// 人数规模
+  PopulationScale populationScale;
+
   //生产大类
+  @JsonKey(toJson: _categoriesToJson)
   List<CategoryModel> categories;
 
   //优势类目
+  @JsonKey(toJson: _categoriesToJson)
   List<CategoryModel> adeptAtCategories;
 
   //合作方式
@@ -384,48 +412,48 @@ class FactoryModel extends B2BUnitModel {
   @JsonKey(toJson: _industrialClusterToJson)
   IndustrialClusterModel industrialCluster;
 
-  //图文详情
-
-  FactoryModel({
-    MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    String path,
-    bool active,
-    int starLevel,
-    AddressModel contactAddress,
-    String address,
-    String describe,
-    DateTime registrationDate,
-    String taxNumber,
-    String bankOfDeposit,
-    List<MediaModel> certificates,
-    String contactPerson,
-    String contactPhone,
-    String cooperativeBrand,
-    String qq,
-    String wechat,
-    String businessRegistrationNo,
-    String legalRepresentative,
-    String certificateOfLegal,
-    CompanyType type,
-    ArticleApprovalStatus approvalStatus,
-    this.historyOrdersCount,
-    this.orderedSuccessRate,
-    this.monthlyCapacityRanges,
-    this.categories,
-    this.scaleRange,
-    this.developmentCapacity,
-    this.latheQuantity,
-    this.cooperationModes,
-    this.responseQuotedTime,
-    this.products,
-    this.adeptAtCategories,
-    this.locationX,
-    this.locationY,
-    this.industrialCluster,
-  }) : super(
+  FactoryModel(
+      {MediaModel profilePicture,
+      String uid,
+      String name,
+      List<PrincipalModel> members,
+      String path,
+      bool active,
+      int starLevel,
+      AddressModel contactAddress,
+      String address,
+      String describe,
+      DateTime registrationDate,
+      String taxNumber,
+      String bankOfDeposit,
+      List<MediaModel> certificates,
+      String contactPerson,
+      String contactPhone,
+      String cooperativeBrand,
+      String qq,
+      String wechat,
+      String businessRegistrationNo,
+      String legalRepresentative,
+      String certificateOfLegal,
+      CompanyType type,
+      ArticleApprovalStatus approvalStatus,
+      List<CompanyProfileModel> companyProfiles,
+      this.historyOrdersCount,
+      this.orderedSuccessRate,
+      this.monthlyCapacityRanges,
+      this.categories,
+      this.scaleRange,
+      this.developmentCapacity,
+      this.latheQuantity,
+      this.cooperationModes,
+      this.responseQuotedTime,
+      this.products,
+      this.adeptAtCategories,
+      this.locationX,
+      this.locationY,
+      this.industrialCluster,
+      this.populationScale})
+      : super(
           profilePicture: profilePicture,
           uid: uid,
           name: name,
@@ -450,6 +478,7 @@ class FactoryModel extends B2BUnitModel {
           legalRepresentative: legalRepresentative,
           type: type,
           approvalStatus: approvalStatus,
+          companyProfiles: companyProfiles,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>
@@ -528,6 +557,38 @@ class CompanyProfileModel extends ItemModel {
       _$CompanyProfileModelToJson(model);
 }
 
+//供应商
+@JsonSerializable()
+class SupplierModel extends ItemModel {
+  //工厂信息
+  FactoryModel factory;
+
+  //合作次数
+  int orderCount;
+
+  //报价次数
+  int quoteCount;
+
+  //报价单信息（取最新一条）
+  QuoteModel quoteOrder;
+
+  //采购订单信息（取最新一条）
+  PurchaseOrderModel purchaseOrder;
+
+  SupplierModel(
+      {this.factory,
+        this.orderCount,
+        this.quoteOrder,
+        this.purchaseOrder,
+        this.quoteCount});
+
+  factory SupplierModel.fromJson(Map<String, dynamic> json) =>
+      _$SupplierModelFromJson(json);
+
+  static Map<String, dynamic> toJson(SupplierModel model) =>
+      _$SupplierModelToJson(model);
+}
+
 //合作方式枚举
 enum CooperationModes {
   ///  纯加工
@@ -598,6 +659,27 @@ const ScaleRangesLocalizedMap = {
   ScaleRanges.SR005: "5000万以上",
 };
 
+enum PopulationScale {
+  /// 50人以下
+  PS001,
+
+  /// 51~100人
+  PS002,
+
+  /// 101到200人
+  PS003,
+
+  /// 200人以下<
+  PS004
+}
+
+const PopulationScaleLocalizedMap = {
+  PopulationScale.PS001: "50人以下",
+  PopulationScale.PS002: "51~100人",
+  PopulationScale.PS003: "101到200人",
+  PopulationScale.PS004: "200人以下",
+};
+
 //年龄段
 enum AgeRanges {
   AR001,
@@ -637,34 +719,4 @@ const PriceRangesLocalizedMap = {
   PriceRanges.PR006: '500以上',
 };
 
-//供应商
-@JsonSerializable()
-class SupplierModel extends ItemModel {
-  //工厂信息
-  FactoryModel factory;
 
-  //合作次数
-  int orderCount;
-
-  //报价次数
-  int quoteCount;
-
-  //报价单信息（取最新一条）
-  QuoteModel quoteOrder;
-
-  //采购订单信息（取最新一条）
-  PurchaseOrderModel purchaseOrder;
-
-  SupplierModel(
-      {this.factory,
-      this.orderCount,
-      this.quoteOrder,
-      this.purchaseOrder,
-      this.quoteCount});
-
-  factory SupplierModel.fromJson(Map<String, dynamic> json) =>
-      _$SupplierModelFromJson(json);
-
-  static Map<String, dynamic> toJson(SupplierModel model) =>
-      _$SupplierModelToJson(model);
-}

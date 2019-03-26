@@ -22,12 +22,22 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<String> brandUpdate(BrandModel brand) async{
+    Response response = await http$.put(Apis.brandUpdate(brand.uid),data: BrandModel.toJson(brand));
+    return response.data;
+  }
+
+  @override
+  Future<String> factoryUpdate(FactoryModel factory) async{
+    Response response = await http$.put(Apis.factoryUpdate(factory.uid),data: FactoryModel.toJson(factory));
+    return response.data;
+  }
+
+  @override
   Future<String> applyCertification(CompanyModel form) async{
     Response response = await http$.put(Apis.applyCertification,data: CompanyModel.toJson(form));
     return response.data;
   }
-
-
 
   ///注册
   Future<String> register({String type, CompanyRegisterDTO form}) async {
@@ -44,4 +54,12 @@ class UserRepositoryImpl implements UserRepository {
       return null;
     }
   }
+
+  @override
+  Future<List<LabelModel>> labels() async{
+    Response response = await http$.get(UserApis.getIndustrialClusterFromLabels);
+    return response.data.map<LabelModel>((label) => LabelModel.fromJson(label)).toList();
+  }
+
+
 }

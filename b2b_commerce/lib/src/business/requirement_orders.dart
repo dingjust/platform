@@ -332,7 +332,7 @@ class RequirementOrderItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         )
                       : Text(
-                          '暂无产品',
+                          ' ',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
                   order.details.productSkuID != null
