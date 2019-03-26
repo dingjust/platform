@@ -76,20 +76,30 @@ class BottomNavigation extends StatelessWidget {
 
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
-      icon: const Icon(B2BIcons.home),
+      icon: Container(
+        margin: EdgeInsets.only(right: 12),
+        child: const Icon(B2BIcons.home),
+      ),
       title: const Text('商机'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(B2BIcons.production),
+      icon: Container(
+        margin: EdgeInsets.only(right: 15),
+        child: const Icon(B2BIcons.production),
+      ),
       title: const Text('生产'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(B2BIcons.business),
+      icon: Container(
+        margin: EdgeInsets.only(right: 10),
+        child: const Icon(B2BIcons.business),
+      ),
       title: const Text('统计'),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(
-        B2BIcons.my,
+      icon: Container(
+        margin: EdgeInsets.only(right: 10),
+        child: const Icon(B2BIcons.my),
       ),
       title: const Text('我的'),
     )

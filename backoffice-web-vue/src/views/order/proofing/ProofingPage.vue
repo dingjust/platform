@@ -37,7 +37,9 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        this.search({keyword, page, size});
+
+        const url = this.apis().getProofings();
+        this.search({url, keyword, page, size});
       },
       async onDetails(row) {
         const url = this.apis().getProofing(row.code);
@@ -64,7 +66,7 @@
       return {}
     },
     created() {
-      this.search('');
+      this.onSearch();
     }
   }
 </script>

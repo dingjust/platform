@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:services/src/order/response/order_response.dart';
 
 class RequirementOrderRepository {
   /// 发布需求
@@ -9,8 +10,7 @@ class RequirementOrderRepository {
     Response response;
     try {
       response = await http$.post(OrderApis.requirementOrderNew,
-          data: RequirementOrderModel.toJson(form),
-          options: Options(responseType: ResponseType.plain));
+          data: RequirementOrderModel.toJson(form), options: Options(responseType: ResponseType.plain));
     } on DioError catch (e) {
       print(e);
     }
@@ -30,26 +30,22 @@ class RequirementOrderRepository {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      RequirementOrderModel model =
-          RequirementOrderModel.fromJson(response.data);
+      RequirementOrderModel model = RequirementOrderModel.fromJson(response.data);
       return model;
     } else
       return null;
   }
 
   /// 根据订单编号获取报价单列表
-  Future<List<QuoteModel>> getRequirementOrderQuotes(
-      {String code, int size, int page}) async {
+  Future<List<QuoteModel>> getRequirementOrderQuotes({String code, int size, int page}) async {
     Response<Map<String, dynamic>> response;
     try {
-      response = await http$.get(OrderApis.requirementOrderQuotes(code),
-          data: {'page': page, 'size': size});
+      response = await http$.get(OrderApis.requirementOrderQuotes(code), data: {'page': page, 'size': size});
     } on DioError catch (e) {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      QuoteOrdersResponse ordersResponse =
-          QuoteOrdersResponse.fromJson(response.data);
+      QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
       return ordersResponse.content;
     } else
       return null;
