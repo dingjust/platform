@@ -519,7 +519,10 @@ class PurchaseOrderItem extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius:
                           BorderRadius.all(Radius.circular(20))),
-                      onPressed: () {}
+                      onPressed: () async {
+                        bool result = await PurchaseOrderRepository().confirmProduction(order.code);
+                        _showMessage(context, result, '确认生产');
+                      }
                   ),
                 ),
               )
