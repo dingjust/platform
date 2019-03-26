@@ -17,7 +17,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button v-if="canUpdateAddress(scope.row)" type="text" icon="el-icon-edit"
-                     @click="onDetails(scope.row)">
+                     @click="onUpdateAddress(scope.row)">
             修改地址
           </el-button>
           <el-button type="text" icon="el-icon-edit"
@@ -58,9 +58,6 @@
     components: {AddressForm},
     computed: {},
     methods: {
-      canUpdateAddress(row) {
-        return this.isBrand() && row.status === 'PENDING_PAYMENT';
-      },
       onPageSizeChanged(val) {
         this._reset();
 
@@ -90,9 +87,28 @@
       onShowQuote(row) {
         this.$emit('onShowQuote', row);
       },
+      onUpdateAddress(row) {
+        this.addressFormData = Object.assign({}, row.deliveryAddress);
+        this.addressDialogVisible = true;
+      },
+      canUpdateAddress(row) {
+        return this.isBrand() && row.status === 'PENDING_PAYMENT';
+      },
+      onAddressInputCanceled() {
+        this.addressDialogVisible = false;
+      },
+      onAddressInputConfirmed() {
+        if (this.$refs['addressForm'].validate()) {
+          // TODO: UPDATE ADDRESS
+          this.addressDialogVisible = false;
+        }
+      },
     },
     data() {
-      return {}
+      return {
+        addressDialogVisible: false,
+        addressFormData: this.$store.state.ProofingsModule.addressFormData,
+      }
     },
     created() {
     }

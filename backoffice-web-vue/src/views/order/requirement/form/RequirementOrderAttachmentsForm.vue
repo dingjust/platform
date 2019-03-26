@@ -11,7 +11,7 @@
           :before-upload="onBeforeUpload"
           :on-success="onSuccess"
           :headers="headers"
-          :file-list="slotData.images"
+          :file-list="slotData.attachments"
           :on-preview="handlePreview"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>

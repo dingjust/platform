@@ -107,14 +107,12 @@
         this.$emit('onAdvancedSearch', 0);
       },
       onNew() {
-        let formData = {};
-        Object.assign(formData, this.formData);
+        let formData = Object.assign({}, this.formData);
 
         this.$emit('onNew', formData);
       },
       onSimpleNew() {
-        let formData = {};
-        Object.assign(formData, this.formData);
+        let formData = Object.assign({}, this.formData);
 
         this.$emit('onSimpleNew', formData);
       }
