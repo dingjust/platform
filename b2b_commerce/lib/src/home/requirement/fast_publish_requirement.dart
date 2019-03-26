@@ -23,14 +23,6 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   List<CategoryModel> _categorySelected = [];
   String category = '点击选择分类';
 
-  /// 快速需求表单
-  FastRequirementForm fastRequirementForm = FastRequirementForm(
-      categories: [],
-      deliveryDate: DateTime.now(),
-      contactPerson: TextEditingController(),
-      phone: TextEditingController(),
-      requirementNum: TextEditingController());
-
   @override
   void initState() {
     // TODO: implement initState
@@ -40,6 +32,14 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   @override
   Widget build(BuildContext context) {
     FocusNode _focusNode = FocusNode();
+
+    /// 快速需求表单
+    FastRequirementForm fastRequirementForm = FastRequirementForm(
+        categories: [],
+        deliveryDate: DateTime.now(),
+        contactPerson: TextEditingController(),
+        phone: TextEditingController(),
+        requirementNum: TextEditingController());
 
     return Form(
         key: _formKey,

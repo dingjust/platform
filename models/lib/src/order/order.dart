@@ -550,6 +550,7 @@ class RequirementOrderModel extends OrderModel {
   RequirementOrderStatus status;
 
   /// 发布者
+  @JsonKey(toJson: _brandToJson)
   BrandModel belongTo;
 
   ///需求信息
@@ -604,6 +605,9 @@ class RequirementOrderModel extends OrderModel {
   static List<Map<String, dynamic>> _mediasToJson(
           List<MediaModel> attachments) =>
       attachments.map((media) => MediaModel.toJson(media)).toList();
+
+  static Map<String, dynamic> _brandToJson(BrandModel belongTo) =>
+      BrandModel.toJson(belongTo);
 }
 
 /// 采购订单
@@ -691,6 +695,9 @@ class PurchaseOrderModel extends OrderModel {
   //是否延期
   bool delayed;
 
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime modifiedtime;
+
   PurchaseOrderModel(
       {String code,
       this.status,
@@ -722,7 +729,7 @@ class PurchaseOrderModel extends OrderModel {
       this.balancePaidDate,
       this.depositPaidDate,
       this.uniqueCode,
-      this.delayed,
+      this.delayed, this.modifiedtime,
       SalesApplication salesApplication})
       : super(
             code: code,

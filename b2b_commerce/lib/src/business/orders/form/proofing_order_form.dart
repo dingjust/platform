@@ -204,9 +204,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   controller: _unitPriceController,
                   onChanged: (value) {
                     _countTotalPrice(value);
-                    // setState(() {
-                    //   totalPrice = double.parse(value) * productEntries.length;
-                    // });
                   },
                   //只能输入数字
                   inputFormatters: <TextInputFormatter>[
@@ -369,7 +366,10 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
       sum = totalQuantity;
     } else {
       productEntries.forEach((entry) {
-        sum = sum + int.parse(entry.controller.text);
+        print(entry.controller.text);
+        if (entry.controller.text != '') {
+          sum = sum + int.parse(entry.controller.text);
+        }
       });
     }
 
@@ -413,10 +413,12 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                       ..thumbnail = product.thumbnail
                       ..thumbnails = product.thumbnails
                       ..images = product.images;
-                    return ProofingEntryModel(
-                      quantity: int.parse(entry.controller.text),
-                      product: variantProduct,
-                    );
+                    if (entry.controller.text != '') {
+                      return ProofingEntryModel(
+                        quantity: int.parse(entry.controller.text),
+                        product: variantProduct,
+                      );
+                    }
                   }).toList();
                   model
                     ..unitPrice = double.parse(_unitPriceController.text)
