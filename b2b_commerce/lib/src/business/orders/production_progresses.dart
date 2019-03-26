@@ -58,8 +58,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         ],
       ),
       body: Container(
-//        padding: EdgeInsets.all(10),
-//        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        margin: EdgeInsets.only(bottom: 10),
         child: _buildProgresses(context),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -70,7 +69,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   Widget _buildProgresses(BuildContext context) {
-    return ListView(children: _buildPurchaseProductionProgresses(context));
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      child: ListView(children: _buildPurchaseProductionProgresses(context)),
+    );
   }
 
   List<Widget> _buildPurchaseProductionProgresses(BuildContext context) {
@@ -95,10 +97,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   //TimeLineUI
   Widget _buildProductionProgress(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index) {
-//    String phase = progress.phase.toString();
-//    if (phase == currentPhase) {
-//      _index = progress.sequence;
-//    }
     return Stack(
       children: <Widget>[
         Padding(padding: const EdgeInsets.only(left: 30.0),
@@ -208,7 +206,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               ),
             ],
           ),
-
           _buildRemarks(context,progress,currentPhase,sequence,_index),
           Container(
               width: double.infinity,
@@ -343,7 +340,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     return Container(
       child: GestureDetector(
         child: Container(
-            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
             child: Row(
                 children: <Widget>[
                    Text('备注', style: TextStyle(fontWeight: FontWeight.w500)),
