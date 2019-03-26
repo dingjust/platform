@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:b2b_commerce/src/home/home_section.dart';
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
+import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
@@ -248,7 +249,14 @@ class _HomePageState extends State<HomePage> {
                 )),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,MaterialPageRoute(
+                  builder: (context) =>
+                      ProductionOfflineOrder()
+              )
+              );
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

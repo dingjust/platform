@@ -630,35 +630,36 @@ class PurchaseOrderItem extends StatelessWidget {
         );
     }
    //流程是生产中时，显示验货完成按钮
-   else if(order.status == PurchaseOrderStatus.IN_PRODUCTION && order.currentPhase == ProductionProgressPhase.INSPECTION){
-       return Container(
-         child: Align(
-           alignment: Alignment.bottomRight,
-           child: Container(
-             padding: EdgeInsets.only(right: 30),
-             width: 150,
-             child: FlatButton(
-                 color: Color(0xFFFFD600),
-                 child: Text(
-                   '验货完成',
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontWeight: FontWeight.w500,
-                     fontSize: 18,
-                   ),
-                 ),
-                 shape: RoundedRectangleBorder(
-                     borderRadius:
-                     BorderRadius.all(Radius.circular(20))),
-                 onPressed: () {
-                   _showBalanceDialog(context, order);
-                 }
-             ),
-           ),
-         )
-     );
-   }
+//   else if(order.status == PurchaseOrderStatus.IN_PRODUCTION && order.currentPhase == ProductionProgressPhase.INSPECTION){
+//       return Container(
+//         child: Align(
+//           alignment: Alignment.bottomRight,
+//           child: Container(
+//             padding: EdgeInsets.only(right: 30),
+//             width: 150,
+//             child: FlatButton(
+//                 color: Color(0xFFFFD600),
+//                 child: Text(
+//                   '验货完成',
+//                   style: TextStyle(
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.w500,
+//                     fontSize: 18,
+//                   ),
+//                 ),
+//                 shape: RoundedRectangleBorder(
+//                     borderRadius:
+//                     BorderRadius.all(Radius.circular(20))),
+//                 onPressed: () {
+//                   _showBalanceDialog(context, order);
+//                 }
+//             ),
+//           ),
+//         )
+//     );
+//   }
     //当流程是待出库状态下
+
    else if(order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE){
      //尾款已付时，出现确认发货
      if(order.balancePaid || order.salesApplication == SalesApplication.BELOW_THE_LINE){

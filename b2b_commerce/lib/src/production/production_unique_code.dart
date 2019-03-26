@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -83,39 +84,52 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                     ),
                   ),
                   uniqueCodeEntry == null
-                      ? Container(
-                    child: Center(
-                      child: Text(
-                        '请输入正确且有效的唯一码匹配！',
-                        style: TextStyle(
-                          color: Colors.red,
+                      ? GestureDetector(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                      child: Center(
+                        child: Text(
+                          '没有唯一码？ 点击这里 >>',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     ),
+                    onTap: () {
+                      Navigator.push(
+                          context,MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductionOfflineOrder()
+                          )
+                      );
+                    },
                   )
                       : Container(
-                          margin: EdgeInsets.only(top: 10),
-                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                '唯一码对应订单信息',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 18),
-                              ),
-                              uniqueCodeEntry != null ?
-                              UniqueCodeItem(
-                                order: uniqueCodeEntry,
-                              ) : Container()
-                            ],
-                          ),
+                    margin: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '唯一码对应订单信息',
+                          style: TextStyle(
+                              color: Colors.black, fontSize: 18),
                         ),
+                        uniqueCodeEntry != null ?
+                        UniqueCodeItem(
+                          order: uniqueCodeEntry,
+                        ) : Container()
+                      ],
+                    ),
+                  ),
                 ],
               ),
+              uniqueCodeEntry != null ?
                   Container(
                       width: double.infinity,
                       height: 50,
@@ -145,7 +159,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                           _showMessage(context,result,'绑定唯一码',uniqueCodeEntry.code);
                         },
                       ),
-                    ),
+                    ):Container(),
             ],
           ),
         ));

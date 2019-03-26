@@ -153,9 +153,12 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           fontSize: 18)
                   ),
                 ),
-                Text(
-                  '${progress.delayedDays >0 ? '已延期${progress.delayedDays}天': '' }',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
+                Container(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Text(
+                    '${progress.delayedDays >0 ? '已延期${progress.delayedDays}天': '' }',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
+                  ),
                 ),
               ],
             ),
@@ -360,10 +363,13 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                             ),
                           ),
                         ):
-                        Text(
-                          '${progress.remarks}',
-                          textAlign: TextAlign.start,
-                          softWrap: true,
+                        Container(
+                          child: Text(
+                            '${progress.remarks}',
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines:2,
+                          ),
                         )
                     ),
                   )
@@ -413,13 +419,23 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           content: Text('当前阶段是否完成？'),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text(
+                  '取消',
+                style: TextStyle(
+                    color: Colors.grey
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text(
+                  '确定',
+                style: TextStyle(
+                    color: Colors.grey
+                ),
+              ),
               onPressed: () async {
                 bool result;
                 try {
@@ -461,13 +477,23 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text(
+                  '取消',
+                style: TextStyle(
+                    color: Colors.grey
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text(
+                  '确定',
+                style: TextStyle(
+                    color: Colors.black
+                ),
+              ),
               onPressed: () async {
                 bool result = false;
                 if(dialogText.text != null){
@@ -497,6 +523,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type) async {
     dialogText = TextEditingController();
+    FocusNode focusNode = new FocusNode();
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -508,6 +535,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               children: <Widget>[
                 TextField(
                   controller:dialogText,
+                  focusNode: focusNode,
                   keyboardType: TextInputType.text,
                 ),
               ],
@@ -515,13 +543,23 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text(
+                '取消',
+                style: TextStyle(
+                    color: Colors.grey
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text(
+                  '确定',
+                style: TextStyle(
+                    color: Colors.grey
+                ),
+              ),
               onPressed: () async {
                 bool result = false;
                 if(dialogText.text != null){
