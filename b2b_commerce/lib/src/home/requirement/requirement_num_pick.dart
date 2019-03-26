@@ -156,17 +156,16 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
                     // 组合成Model
                     RequirementOrderModel requirementOrder =
                         RequirementOrderModel(
-                            details: RequirementInfoModel(
-                                category:
-                                    widget.fastRequirementForm.categories[0],
-                                contactPerson: widget
-                                    .fastRequirementForm.contactPerson.text,
-                                contactPhone:
-                                    widget.fastRequirementForm.phone.text,
-                                expectedDeliveryDate:
-                                    widget.fastRequirementForm.deliveryDate),
-                            totalQuantity: int.parse(widget
-                                .fastRequirementForm.requirementNum.text));
+                      details: RequirementInfoModel(
+                          category: widget.fastRequirementForm.categories[0],
+                          contactPerson:
+                              widget.fastRequirementForm.contactPerson.text,
+                          contactPhone: widget.fastRequirementForm.phone.text,
+                          expectedDeliveryDate:
+                              widget.fastRequirementForm.deliveryDate,
+                          expectedMachiningQuantity: int.parse(
+                              widget.fastRequirementForm.requirementNum.text)),
+                    );
 
                     String code = await RequirementOrderRepository()
                         .publishNewRequirement(requirementOrder);
