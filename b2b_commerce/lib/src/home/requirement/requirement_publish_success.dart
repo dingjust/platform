@@ -1,5 +1,5 @@
-import 'package:b2b_commerce/main.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -262,7 +262,14 @@ class _PublishRequirementSuccessDialogState
               width: double.infinity,
               height: 45,
               child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => RequirementOrderFrom(
+                                order: widget.model,
+                              )),
+                      ModalRoute.withName('/'));
+                },
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 shape: RoundedRectangleBorder(
@@ -281,10 +288,7 @@ class _PublishRequirementSuccessDialogState
               height: 45,
               child: FlatButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => MyApp()));
+                  Navigator.of(context).popUntil(ModalRoute.withName('/'));
                 },
                 color: Color.fromRGBO(255, 245, 193, 1),
                 shape: RoundedRectangleBorder(

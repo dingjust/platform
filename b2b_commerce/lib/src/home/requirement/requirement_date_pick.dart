@@ -41,7 +41,7 @@ class _RequirementDatePickState extends State<RequirementDatePick> {
             child: Row(
               children: <Widget>[
                 Text(
-                  '已填选结果: ',
+                  '已填选结果: ${widget.fastRequirementForm.categories[0].name}',
                   style: TextStyle(
                       color: Color.fromRGBO(100, 100, 100, 1), fontSize: 18),
                 )
@@ -56,7 +56,7 @@ class _RequirementDatePickState extends State<RequirementDatePick> {
                   widget.fastRequirementForm.deliveryDate = date;
                 });
               },
-              firstDate: DateTime(1997),
+              firstDate: widget.fastRequirementForm.deliveryDate,
               lastDate: DateTime(2099),
               selectedDate: widget.fastRequirementForm.deliveryDate,
             ),

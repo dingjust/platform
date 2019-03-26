@@ -1,6 +1,7 @@
 import http from '@/common/js/http';
 
 const state = {
+  url: '',
   statusOptions: [
     {text: '报价中', value: 'PENDING_QUOTE'},
     {text: '已完成', value: 'COMPLETED'},
@@ -37,8 +38,10 @@ const state = {
       maxExpectedPrice: 0,
       invoiceNeeded: false,
       samplesNeeded: false,
+      proofingNeeded: false,
       contactPerson: '',
-      contactPhone: ''
+      contactPhone: '',
+      productiveOrientations: []
     },
     attachments: []
   },
@@ -67,6 +70,7 @@ const state = {
 };
 
 const mutations = {
+  url: (state, url) => state.url = url,
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
@@ -78,6 +82,7 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
+    commit('url', url);
     commit('keyword', keyword);
     commit('statuses', statuses);
     commit('currentPageNumber', page);
@@ -121,11 +126,12 @@ const actions = {
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {keyword, statuses, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {url: state.url, keyword, statuses, page: currentPageNumber, size: currentPageSize});
   }
 };
 
 const getters = {
+  url: state => state.url,
   keyword: state => state.keyword,
   statuses: state => state.statuses,
   isAdvancedSearch: state => state.isAdvancedSearch,

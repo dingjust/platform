@@ -3,21 +3,25 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class CategoryField extends StatefulWidget{
+class CategoryField extends StatefulWidget {
   final RequirementOrderModel item;
-  ApparelProductModel product;
-  CategoryField(this.item,this.product);
-
+  CategoryField(this.item);
 
   CategoryFieldState createState() => CategoryFieldState();
 }
 
-class CategoryFieldState extends State<CategoryField>{
+class CategoryFieldState extends State<CategoryField> {
   List<CategoryModel> _category;
   List<CategoryModel> _categorySelected = [];
 
-  void initState(){
-    ProductRepositoryImpl().cascadedCategories().then((categorys)=>_category = categorys);
+  void initState() {
+    ProductRepositoryImpl()
+        .cascadedCategories()
+        .then((categorys) => _category = categorys);
+
+    if (widget.item != null&&widget.item.details.category!=null) {
+      _categorySelected.add(widget.item.details.category);
+    }
     super.initState();
   }
 
@@ -29,7 +33,6 @@ class CategoryFieldState extends State<CategoryField>{
 
   @override
   Widget build(BuildContext context) {
-    if(widget.product?.category != null) _categorySelected = [widget.product.category];
     return GestureDetector(
         child: Container(
           child: ListTile(
@@ -53,29 +56,27 @@ class CategoryFieldState extends State<CategoryField>{
                   ))),
         ),
         onTap: () {
-          if(widget.product == null){
-            showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return Container(
-                  child: CategorySelect(
-                    categorys: _category,
-                    multiple: false,
-                    verticalDividerOpacity: 1,
-                    categorySelect: _categorySelected,
-                  ),
-                );
-              },
-            ).then((a) {
-              setState(() {
-                if(_categorySelected.isEmpty){
-                  widget.item.details.category = null;
-                }else{
-                  widget.item.details.category = _categorySelected[0];
-                }
-              });
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                child: CategorySelect(
+                  categorys: _category,
+                  multiple: false,
+                  verticalDividerOpacity: 1,
+                  categorySelect: _categorySelected,
+                ),
+              );
+            },
+          ).then((a) {
+            setState(() {
+              if (_categorySelected.isEmpty) {
+                widget.item.details.category = null;
+              } else {
+                widget.item.details.category = _categorySelected[0];
+              }
             });
-          }
+          });
         });
   }
 }

@@ -118,7 +118,7 @@ class RequirementOrderList extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.refreshData(status.code);
+            if (!bloc.lock) bloc.refreshData(status.code);
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),

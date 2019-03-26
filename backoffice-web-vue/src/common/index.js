@@ -104,6 +104,9 @@ const COMMON_APIS = {
   createBrand() {
     return '/b2b/brands/new';
   },
+  updateBrand(uid) {
+    return '/b2b/brands/'+uid;
+  },
   getBrands() {
     return '/b2b/brands';
   },
@@ -115,6 +118,9 @@ const COMMON_APIS = {
   },
   createFactory() {
     return '/b2b/factories/new';
+  },
+  updateFactory(uid) {
+    return '/b2b/factories/'+uid;
   },
   getFactories() {
     return '/b2b/factories';
@@ -216,6 +222,9 @@ const COMMON_APIS = {
   getPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code;
   },
+  updateDeliveryAddressOfPurchaseOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/deliveryAddress';
+  },
   createPurchaseOrder() {
     return '/b2b/orders/purchase/create';
   },
@@ -227,6 +236,9 @@ const COMMON_APIS = {
   },
   getProofing(code) {
     return '/b2b/orders/proofing/' + code;
+  },
+  updateDeliveryAddressOfProofing(code) {
+    return '/b2b/orders/proofing/' + code + '/deliveryAddress';
   },
   createProofing(quote) {
     return '/b2b/orders/proofing/create/' + quote;
@@ -252,6 +264,9 @@ let TENANT_APIS = {
   getPurchaseOrders() {
     return '/b2b/orders/purchase/all';
   },
+  getProofings() {
+    return '/b2b/orders/proofing/all';
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
@@ -271,10 +286,13 @@ let NONE_TENANT_APIS = {
   getPurchaseOrders() {
     return '/b2b/orders/purchase';
   },
+  getProofings() {
+    return '/b2b/orders/proofing';
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
 export {
   TENANT_APIS,
-  NONE_TENANT_APIS
+  NONE_TENANT_APIS,
 }

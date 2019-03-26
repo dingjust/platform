@@ -33,7 +33,7 @@
           return;
         }
 
-        this.$message.success('生产订单创建成功，订单号：' + result);
+        this.$message.success('报价单创建成功，订单号：' + result);
 
         this.refresh();
 

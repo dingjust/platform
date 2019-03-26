@@ -76,6 +76,24 @@ const state = {
     createdDateFrom: null,
     createdDateTo: null,
     belongTos: [],
+  },
+  addressFormData: {
+    id: null,
+    fullname: '',
+    cellphone: '',
+    region: {
+      isocode: '',
+      name: ''
+    },
+    city: {
+      code: '',
+      name: ''
+    },
+    cityDistrict: {
+      code: '',
+      name: ''
+    },
+    line1: ''
   }
 };
 

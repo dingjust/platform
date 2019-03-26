@@ -27,12 +27,22 @@
       onSubmit() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
+            const expectedDeliveryDate = this.slotData.details.expectedDeliveryDate;
+            if (this.compareDate(new Date(), new Date(expectedDeliveryDate))) {
+              this.$message.error('预计完成时间不能小于当前时间');
+              return false;
+            }
+
             this._onSubmit();
             return true;
           }
 
           return false;
         });
+      },
+      _getDate(timestamp) {
+        const result = new Date(timestamp);
+        return result.getFullYear() + '' + result.getMonth() + '' + result.getDate();
       },
       onCancel() {
         this.fn.closeSlider();
