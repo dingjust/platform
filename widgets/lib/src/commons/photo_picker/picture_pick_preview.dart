@@ -106,8 +106,12 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
       onWillPop: () {
         if (userType == 'factory') {
           //带参数返回
-          widget.medias.removeAt(0);
-          Navigator.of(context).pop(widget.medias);
+          if(widget.isUpload) {
+            widget.medias.removeAt(0);
+            Navigator.of(context).pop(widget.medias);
+          }else{
+            Navigator.of(context).pop();
+          }
         } else {
           Navigator.of(context).pop();
         }
@@ -195,12 +199,19 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
   //图片预览
   void onPreview(BuildContext context, String url) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return Container(
-            child: PhotoView(
-              imageProvider: NetworkImage(url),
-            ));
+        return GestureDetector(
+          child: Container(
+              child: PhotoView(
+                imageProvider: NetworkImage(url),
+              )
+          ),
+          onTap: (){
+            Navigator.of(context).pop();
+          },
+        );
       },
     );
   }
