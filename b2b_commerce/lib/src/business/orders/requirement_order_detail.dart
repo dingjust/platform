@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
@@ -45,6 +46,14 @@ class _RequirementOrderDetailPageState
           '需求订单明细',
           style: TextStyle(color: Colors.black),
         ),
+        actions: <Widget>[
+          widget.order.status == RequirementOrderStatus.PENDING_QUOTE
+              ? FlatButton(
+                  onPressed: onEdit,
+                  child: Text('编辑'),
+                )
+              : Container()
+        ],
       ),
       body: Container(
         color: Colors.grey[100],
@@ -236,7 +245,7 @@ class _RequirementOrderDetailPageState
 
     if (widget.order.details.productiveOrientations != null) {
       widget.order.details.productiveOrientations.forEach((str) {
-        addressStr = "${addressStr} ${str}";
+        addressStr = "${addressStr} ${str.name}";
       });
     }
     return Container(
@@ -612,6 +621,13 @@ class _RequirementOrderDetailPageState
         ),
       );
     }
+  }
+
+  void onEdit() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RequirementOrderFrom(
+              order: widget.order,
+            )));
   }
 }
 

@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/max_expected_price_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/remarks_field.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -23,25 +24,36 @@ import 'form/production_areas_field.dart';
 class RequirementOrderFrom extends StatefulWidget {
   ApparelProductModel product;
 
-  RequirementOrderFrom({this.product});
+  RequirementOrderModel order;
+
+  RequirementOrderFrom({this.product, this.order});
 
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
 
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
-  RequirementOrderModel model =
-      RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
-  List<CategoryModel> _categorySelected = [];
+  RequirementOrderModel model;
   bool _isShowMore = true;
   DateTime selectDate = DateTime.now();
 
   @override
   void initState() {
+    if (widget.order != null) {
+      model = widget.order;
+      if(model.attachments==null){
+        model.attachments=[];
+      }
+      if(model.details.pictures==null){
+        model.details.pictures=[];
+      }
+    } else {
+      model = RequirementOrderModel(
+          details: RequirementInfoModel(), attachments: []);
+    }
+
     if (widget.product != null) {
       model.details.category = widget.product.category;
-      if (widget.product?.category != null) {
-        _categorySelected = [widget.product.category];
-      }
+      if (widget.product?.category != null) {}
     }
 
     // TODO: implement initState
@@ -86,32 +98,17 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                         ),
                   ),
                 );
-
                 //TODO：导入商品后的一系列操作
                 widget.product = result;
                 if (result != null) {
-                  model.details.productName = widget.product.name;
-                  model.details.productSkuID = widget.product.skuID;
-                  _categorySelected = [widget.product.category];
+                  setState(() {
+                    model.details.productName = widget.product.name;
+                    model.details.productSkuID = widget.product.skuID;
+                    if (widget.product.category != null) {
+                      model.details.category = widget.product.category;
+                    }
+                  });
                 }
-
-                model.details.category =
-                    _categorySelected.length > 0 ? _categorySelected[0] : null;
-//                if (model.details.pictures != null) {
-//                  model.details.pictures.forEach((media) {
-//                    //缓存图片并获取缓存图片
-////                      CacheManager.getInstance().then((cacheManager){
-////                        cacheManager.getFile(media.url).then((file){
-////                          _normalImages.add(file);
-////                        });
-////                      });
-//                    DefaultCacheManager().getSingleFile(media.url).then((file) {
-//                      setState(() {
-//                        _normalImages.add(file);
-//                      });
-//                    });
-//                  });
-//                }
               })
         ],
       ),
@@ -131,21 +128,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 horizontal: MediaQuery.of(context).size.width / 2.8,
                 vertical: 8),
             backgroundColor: Color(0xffFF9516),
-            label: Text('确定发布'),
+            label: Text(widget.order != null ? '修改需求' : '确定发布'),
             labelStyle: TextStyle(color: Colors.white, fontSize: 20),
-            onPressed: () async {
-              String code = await RequirementOrderRepository()
-                  .publishNewRequirement(model);
-              if (code != null) {
-                model.code = code;
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => PublishRequirementSuccessDialog(
-                            model: model,
-                          ),
-                    ),
-                    ModalRoute.withName('/'));
-              }
+            onPressed: () {
+              widget.order != null ? onUpdate() : onPublish();
             },
           ),
         ),
@@ -167,7 +153,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               offstage: widget.product == null,
               child: ProductField(widget.product),
             ),
-            CategoryField(model, widget.product),
+            CategoryField(model),
             new Divider(height: 0),
             MajorCategoryField(model),
             new Divider(height: 0),
@@ -276,5 +262,54 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             _isShowMore = !_isShowMore;
           });
         });
+  }
+
+  /// 发布
+  void onPublish() async {
+    String code =
+        await RequirementOrderRepository().publishNewRequirement(model);
+    if (code != null) {
+      model.code = code;
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => PublishRequirementSuccessDialog(
+                  model: model,
+                ),
+          ),
+          ModalRoute.withName('/'));
+    }
+  }
+
+  ///完善信息
+  void onUpdate() async {
+    String code = await RequirementOrderRepository().updateRequirement(model);
+    if (code != null) {
+      //根据code查询明
+      RequirementOrderModel model =
+          await RequirementOrderRepository().getRequirementOrderDetail(code);
+
+      List<QuoteModel> quotes = await RequirementOrderRepository()
+          .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
+
+      if (model != null && quotes != null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => RequirementOrderDetailPage(
+                    order: model,
+                    quotes: quotes,
+                  ),
+            ),
+            ModalRoute.withName('/'));
+      }
+    } else {
+      showDialog<void>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('更新失败'),
+          );
+        },
+      );
+    }
   }
 }
