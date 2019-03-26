@@ -10,11 +10,6 @@ class ProductionItem extends StatelessWidget {
 
   final PurchaseOrderModel order;
 
-  static Map<SalesApplication, Color> _typeColors = {
-    SalesApplication.ONLINE: Color.fromRGBO(86, 194, 117, 1),
-    SalesApplication.BELOW_THE_LINE: Color.fromRGBO(22, 141, 255, 1),
-  };
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -35,11 +30,8 @@ class ProductionItem extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildHeader(),
-            Column(
-              children: <Widget>[
-                _buildContent(context),
-              ],
-            ),
+            _buildContent(context),
+            _buildBottom(),
           ],
         ),
         decoration: BoxDecoration(
@@ -62,16 +54,28 @@ class ProductionItem extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  '生产订单号：' + order.code,
-                  style: TextStyle(fontSize: 14),
+                  '${order.purchaser != null && order.purchaser.name != null?order.purchaser.name:order.companyOfSeller}1111111111111111111111111111',
+                  style: TextStyle(fontSize: 16),
+                  overflow: TextOverflow.ellipsis,
                 ),
+              ),
+              Expanded(
+                child:
+                   order.delayed == true ?
+                Text(
+                  '已延期',
+                  style: TextStyle(
+                    color:Colors.red,
+                    fontSize: 16,
+                  ),
+                ):Container(),
               ),
               Text(
                 '${order.salesApplication == null ? '' : SalesApplicationLocalizedMap[order.salesApplication]}',
                 style: TextStyle(
-                    color: _typeColors[order.salesApplication],
+                    color: Colors.grey,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold),
+                    ),
               )
             ],
           ),
@@ -165,5 +169,19 @@ class ProductionItem extends StatelessWidget {
             )
           ],
         ));
+  }
+
+  Widget _buildBottom() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child:Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          '最近更新时间：' + DateFormatUtil.format(order.modifiedtime),
+          textAlign: TextAlign.start,
+          style: TextStyle(fontSize: 14),
+        ),
+      )
+    );
   }
 }
