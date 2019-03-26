@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class ProductionGenerateUniqueCodePage extends StatefulWidget {
   final PurchaseOrderModel model;
@@ -11,17 +12,18 @@ class ProductionGenerateUniqueCodePage extends StatefulWidget {
   ProductionGenerateUniqueCodePage({@required this.model});
 
   _ProductionGenerateUniqueCodePageState createState() =>
-      _ProductionGenerateUniqueCodePageState();
+      _ProductionGenerateUniqueCodePageState(model: model);
 }
 
 class _ProductionGenerateUniqueCodePageState
     extends State<ProductionGenerateUniqueCodePage> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
-
+  PurchaseOrderModel model;
   String uniqueCode;
 
   SimpleAutoCompleteTextField textField;
+  _ProductionGenerateUniqueCodePageState({this.model,this.uniqueCode});
 
   List<String> added = [];
   String currentText = "";
@@ -39,8 +41,8 @@ class _ProductionGenerateUniqueCodePageState
 
   @override
   void initState(){
-    widget.model.uniqueCode != null && widget.model.uniqueCode != null ?
-    uniqueCode = widget.model.uniqueCode : uniqueCode = '';
+    model.uniqueCode != null && model.uniqueCode != null ?
+    uniqueCode = model.uniqueCode : uniqueCode = '';
     super.initState();
   }
 
@@ -332,10 +334,8 @@ class GenerateUniqueCodeItem extends StatelessWidget {
       child: Container(
         child: Column(
           children: <Widget>[
-            _buildHeader(),
-            Column(
-              children: _buildEntries(),
-            ),
+            _buildHeader(context),
+            _buildEntries(),
           ],
         ),
         decoration: BoxDecoration(
@@ -346,7 +346,8 @@ class GenerateUniqueCodeItem extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
+    final bloc = BLoCProvider.of<UserBLoC>(context);
     return Container(
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
@@ -376,9 +377,8 @@ class GenerateUniqueCodeItem extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildEntries() {
-    return order.entries
-        .map((entry) => Container(
+  Widget _buildEntries() {
+    return Container(
               color: Color.fromRGBO(250, 250, 250, 1),
               padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: Row(
@@ -412,7 +412,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                '${entry.product.name == null? '' : entry.product.name}',
+                                '${order.product.name == null? '' : order.product.name}',
                                 style: TextStyle(fontSize: 15),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -423,7 +423,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                                     color: Colors.grey[200],
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Text(
-                                  '货号：${entry.product.skuID == null? '' : entry.product.skuID}' ,
+                                  '货号：${order.product.skuID == null? '' : order.product.skuID}' ,
                                   style: TextStyle(
                                       fontSize: 12,
                                       color: Color.fromRGBO(150, 150, 150, 1)),
@@ -459,8 +459,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                   ),
                 ],
               ),
-            ))
-        .toList();
+            );
   }
 }
 
@@ -487,8 +486,6 @@ class CompleteTextFieldDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
-    // TODO: implement build
     return AlertDialog(
       title: Text(
         '请输入对方工厂名称',
