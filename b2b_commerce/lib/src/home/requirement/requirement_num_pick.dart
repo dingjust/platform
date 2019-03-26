@@ -176,10 +176,13 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
                     ///清空表单数据
                     resetFastRequirementForm(widget.fastRequirementForm);
 
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PublishRequirementSuccessDialog(
-                              model: requirementOrder,
-                            )));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PublishRequirementSuccessDialog(
+                                  model: requirementOrder,
+                                )),
+                        ModalRoute.withName('/'));
                   } else {
                     showDialog(
                         context: context,

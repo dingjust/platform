@@ -30,6 +30,7 @@ class CategorySelectPage extends StatefulWidget {
 
 class CategorySelectPageState extends State<CategorySelectPage> {
   List<CategoryModel> _beforeMinCategorySelect = [];
+  GlobalKey _scaffoldKey = GlobalKey();
 
   @override
   void initState() {
@@ -85,6 +86,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
         return Future.value(false);
       },
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           elevation: widget.hasNextPage ? 0 : 0.5,
           centerTitle: true,
@@ -104,10 +106,21 @@ class CategorySelectPageState extends State<CategorySelectPage> {
             widget.hasNextPage
                 ? FlatButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RequirementDatePick(
-                                fastRequirementForm: widget.fastRequirementForm,
-                              )));
+                      if (widget.fastRequirementForm.categories.isEmpty) {
+                        (_scaffoldKey.currentState as ScaffoldState)
+                            .showSnackBar(
+                          SnackBar(
+                            content: Text('请选择品类'),
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => RequirementDatePick(
+                                  fastRequirementForm:
+                                      widget.fastRequirementForm,
+                                )));
+                      }
                     },
                     child: Text(
                       '下一步',
