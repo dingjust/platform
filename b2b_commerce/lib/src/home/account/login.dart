@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
 class B2BLoginPage extends StatelessWidget {
+  final bool isLoginSuccess;
+
+  const B2BLoginPage({Key key, this.isLoginSuccess = false}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return LoginPage(
@@ -15,6 +19,7 @@ class B2BLoginPage extends StatelessWidget {
       ),
       registerPage: RegisterPage(),
       forgetPasswordPage: ResetPasswordPage(),
+      isLoginSuccess: isLoginSuccess,
     );
   }
 }

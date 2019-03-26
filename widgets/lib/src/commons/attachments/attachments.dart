@@ -579,6 +579,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     // TODO： 引入StreamBuilder实时更新进度条
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[

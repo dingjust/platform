@@ -118,7 +118,7 @@ class RequirementOrderBLoC extends BLoCBase {
           _ordersMap[status].data.addAll(ordersResponse.content);
         }
       }
-//    _loadingController.sink.add(false);
+      _loadingController.sink.add(false);
       _controller.sink.add(_ordersMap[status].data);
       lock = false;
     }
@@ -126,10 +126,12 @@ class RequirementOrderBLoC extends BLoCBase {
 
   //下拉刷新
   refreshData(String status) async {
-    //重置信息
-    _ordersMap[status].data.clear();
-    _ordersMap[status].currentPage = 0;
-    await filterByStatuses(status);
+    if (!lock) {
+      //重置信息
+      _ordersMap[status].data.clear();
+      _ordersMap[status].currentPage = 0;
+      await filterByStatuses(status);
+    }
   }
 
   //页面控制

@@ -563,30 +563,27 @@ class RequirementOrderModel extends OrderModel {
   List<QuoteModel> latestQuotes;
 
   ///附件
+  @JsonKey(toJson: _mediasToJson)
   List<MediaModel> attachments;
-
-  ///订单行
-  @JsonKey(toJson: entriesToJson)
-  List<RequirementOrderEntryModel> entries;
 
   ///延期天数
   int delayDays;
 
-  RequirementOrderModel({
-    this.status,
-    this.belongTo,
-    this.details,
-    this.totalQuotesCount,
-    this.latestQuotes,
-    this.entries,
-    this.delayDays,
-    String code,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-  }) : super(
+  RequirementOrderModel(
+      {this.status,
+      this.belongTo,
+      this.details,
+      this.totalQuotesCount,
+      this.latestQuotes,
+      this.delayDays,
+      String code,
+      int totalQuantity,
+      double totalPrice,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      this.attachments})
+      : super(
           code: code,
           totalQuantity: totalQuantity,
           totalPrice: totalPrice,
@@ -604,45 +601,9 @@ class RequirementOrderModel extends OrderModel {
   static Map<String, dynamic> infoToJson(RequirementInfoModel detail) =>
       RequirementInfoModel.toJson(detail);
 
-  static List<Map<String, dynamic>> entriesToJson(
-          List<RequirementOrderEntryModel> entries) =>
-      entries.map((entry) => RequirementOrderEntryModel.toJson(entry)).toList();
-}
-
-/// 需求订单行
-@JsonSerializable()
-class RequirementOrderEntryModel extends OrderEntryModel {
-  @JsonKey(toJson: productToJson)
-  ApparelProductModel product;
-
-  @JsonKey(toJson: orderToJson)
-  RequirementOrderModel order;
-
-  RequirementOrderEntryModel({
-    int entryNumber,
-    this.product,
-    this.order,
-    double price,
-    int quantity,
-    double totalPrice,
-  }) : super(
-          entryNumber: entryNumber,
-          price: price,
-          quantity: quantity,
-          totalPrice: totalPrice,
-        );
-
-  factory RequirementOrderEntryModel.fromJson(Map<String, dynamic> json) =>
-      _$RequirementOrderEntryModelFromJson(json);
-
-  static Map<String, dynamic> toJson(RequirementOrderEntryModel model) =>
-      _$RequirementOrderEntryModelToJson(model);
-
-  static Map<String, String> orderToJson(RequirementOrderModel model) =>
-      {'code': model.code ?? ''};
-
-  static Map<String, String> productToJson(ApparelProductModel model) =>
-      ApparelProductModel.toJson(model);
+  static List<Map<String, dynamic>> _mediasToJson(
+          List<MediaModel> attachments) =>
+      attachments.map((media) => MediaModel.toJson(media)).toList();
 }
 
 /// 采购订单

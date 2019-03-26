@@ -2,17 +2,19 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-class ExpectedDeliveryDateField extends StatefulWidget{
+class ExpectedDeliveryDateField extends StatefulWidget {
   final RequirementOrderModel item;
   ExpectedDeliveryDateField(this.item);
 
-  ExpectedDeliveryDateFieldState createState() => ExpectedDeliveryDateFieldState();
+  ExpectedDeliveryDateFieldState createState() =>
+      ExpectedDeliveryDateFieldState();
 }
 
-class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField>{
-
+class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+
     return GestureDetector(
         child: Container(
           child: ListTile(
@@ -27,7 +29,10 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField>{
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(DateFormatUtil.formatYMD(widget.item.details?.expectedDeliveryDate) ?? '选取',
+                    child: Text(
+                        DateFormatUtil.formatYMD(
+                                widget.item.details?.expectedDeliveryDate) ??
+                            '选取',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -38,8 +43,12 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField>{
         onTap: () {
           showDatePicker(
             context: context,
-            initialDate: widget.item.details?.expectedDeliveryDate == null ? DateTime.now() : widget.item.details?.expectedDeliveryDate,
-            firstDate: DateTime(2015, 8),
+            initialDate: widget.item.details?.expectedDeliveryDate == null
+                ? now
+                : widget.item.details?.expectedDeliveryDate,
+            firstDate: widget.item.details?.expectedDeliveryDate == null
+                ? now
+                : widget.item.details?.expectedDeliveryDate,
             lastDate: DateTime(2101),
           ).then((value) {
             setState(() {
