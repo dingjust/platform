@@ -18,6 +18,7 @@ class PublishRequirementSuccessDialog extends StatefulWidget {
 class _PublishRequirementSuccessDialogState
     extends State<PublishRequirementSuccessDialog> {
   bool _isSelected = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,7 +190,7 @@ class _PublishRequirementSuccessDialogState
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.details.majorCategory?.name}   ${widget.model.details.category?.name}   ${widget.model.totalQuantity}件",
+                      "${widget.model.details.majorCategoryName()}   ${widget.model.details.category?.name}   ${widget.model.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

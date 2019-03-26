@@ -383,7 +383,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    '${pageItem.requirementOrder.details?.majorCategory.name},${pageItem.requirementOrder.details?.category.name},${pageItem.requirementOrder.totalQuantity}件',
+                    '${pageItem.requirementOrder.details.majorCategoryName()},${pageItem.requirementOrder.details?.category.name},${pageItem.requirementOrder.totalQuantity}件',
                     style: TextStyle(
                       color: Color.fromRGBO(255, 133, 148, 1),
                       fontSize: 15,
