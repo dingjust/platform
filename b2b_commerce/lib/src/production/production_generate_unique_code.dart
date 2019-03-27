@@ -158,7 +158,7 @@ class _ProductionGenerateUniqueCodePageState
             '生成',
             style: TextStyle(color: Colors.white),
           ),
-          disabledColor : Color(0xffBC8F8F),
+          disabledColor : Colors.black12,
           disabledTextColor: Colors.black26,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))
@@ -189,7 +189,7 @@ class _ProductionGenerateUniqueCodePageState
           ),
           shape: RoundedRectangleBorder(
               side: BorderSide(
-                  width: 0.5, color: Color.fromRGBO(22, 141, 255, 1)),
+                  width: 0.5, color: Colors.white),
               borderRadius: BorderRadius.all(Radius.circular(20))),
         )
       ],
