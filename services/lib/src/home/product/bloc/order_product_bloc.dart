@@ -39,7 +39,8 @@ class OrderByProductBLoc extends BLoCBase {
   //锁
   bool lock = false;
 
-  getData() async {
+  getData(String categoryCode) async {
+    print(categoryCode);
     if (!lock) {
       lock = true;
       //重置参数
@@ -47,7 +48,8 @@ class OrderByProductBLoc extends BLoCBase {
       Response<Map<String, dynamic>> response;
       try {
         response = await http$.post(ProductApis.factoriesApparel,
-            data: {}, queryParameters: {'page': currentPage, 'size': pageSize});
+            data: {"categories": categoryCode},
+            queryParameters: {'page': currentPage, 'size': pageSize});
       } on DioError catch (e) {
         print(e);
       }
@@ -65,7 +67,7 @@ class OrderByProductBLoc extends BLoCBase {
     }
   }
 
-  loadingMore() async {
+  loadingMore(String categoryCode) async {
     if (!lock) {
       lock = true;
 
@@ -78,7 +80,7 @@ class OrderByProductBLoc extends BLoCBase {
         try {
           currentPage++;
           response = await http$.post(ProductApis.factoriesApparel,
-              data: {},
+              data: {"categories": categoryCode},
               queryParameters: {'page': currentPage, 'size': pageSize});
         } on DioError catch (e) {
           print(e);
@@ -103,9 +105,6 @@ class OrderByProductBLoc extends BLoCBase {
     _products.clear();
     _controller.sink.add(_products);
   }
-
-  //下拉刷新
-  Future refreshData() async {}
 
   void reset() {
     _products = [];
