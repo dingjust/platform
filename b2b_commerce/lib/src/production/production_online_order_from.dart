@@ -39,6 +39,11 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   @override
   void initState() {
     _product = productModel;
+    if (widget.quoteModel.attachments != null) {
+      mediaList = widget.quoteModel.attachments;
+    } else {
+      mediaList = [];
+    }
     super.initState();
   }
 
