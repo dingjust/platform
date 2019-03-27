@@ -13,6 +13,9 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>基本信息</span>
+        <span v-if="!isTenant()">
+          <el-button class="float-right" type="text" @click="onUpdateBasic">编辑</el-button>
+        </span>
       </div>
       <apparel-product-basic-form ref="basicForm"
                                   :slot-data="slotData"
@@ -23,6 +26,9 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>产品颜色/尺码</span>
+        <span v-if="!isTenant()">
+          <el-button class="float-right" type="text" @click="onUpdateVariants">编辑</el-button>
+        </span>
       </div>
       <apparel-product-variants-form ref="variantsForm"
                                      :slot-data="slotData"
@@ -33,12 +39,51 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>产品属性</span>
+        <span v-if="!isTenant()">
+          <el-button class="float-right" type="text" @click="onUpdateAttributes">编辑</el-button>
+        </span>
       </div>
       <apparel-product-attributes-form ref="attributesForm"
                                        :slot-data="slotData"
                                        :read-only="readOnly">
       </apparel-product-attributes-form>
     </el-card>
+    <el-dialog v-if="!isTenant()" title="更新基本信息" :modal="false"
+               :visible.sync="basicDialogVisible"
+               :show-close="false" append-to-body width="50%">
+      <apparel-product-basic-form ref="basicForm1"
+                                  :slot-data="slotData"
+                                  :read-only="false">
+      </apparel-product-basic-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="basicDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onBasicFormSubmit">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog v-if="!isTenant()" title="更新颜色/尺码" :modal="false"
+               :visible.sync="variantsDialogVisible"
+               :show-close="false" append-to-body width="50%">
+      <apparel-product-variants-form ref="variantsForm1"
+                                     :slot-data="slotData"
+                                     :read-only="false">
+      </apparel-product-variants-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="variantsDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onVariantsFormSubmit">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog v-if="!isTenant()" title="更新属性" :modal="false"
+               :visible.sync="attributesDialogVisible"
+               :show-close="false" append-to-body width="50%">
+      <apparel-product-attributes-form ref="attributesForm1"
+                                       :slot-data="slotData"
+                                       :read-only="false">
+      </apparel-product-attributes-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="attributesDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onAttributesFormSubmit">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -62,11 +107,86 @@
         // TODO: validation
         return true;
         // return this.$refs['basicForm'].validate(callback);
+      },
+      onUpdateBasic() {
+        this.formData = Object.assign({}, this.slotData);
+        this.basicDialogVisible = true;
+      },
+      onBasicFormSubmit() {
+        this.$refs['basicForm1'].validate(valid => {
+          if (valid) {
+            this._onUpdateBasic();
+            this.basicDialogVisible = false;
+            return true;
+          }
+
+          return false;
+        });
+      },
+      async _onUpdateBasic() {
+        const url = this.apis().updateBasicOfApparelProduct(this.slotData.code);
+        const result = await this.$http.put(url, this.slotData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('更新基本信息成功');
+      },
+      onUpdateVariants() {
+        this.formData = Object.assign({}, this.slotData);
+        this.variantsDialogVisible = true;
+      },
+      onVariantsFormSubmit() {
+        if (this.$refs['variantsForm1'].validate()) {
+          this._onUpdateVariants();
+          this.variantsDialogVisible = false;
+        }
+      },
+      async _onUpdateVariants() {
+        const url = this.apis().updateVariantsOfApparelProduct(this.slotData.code);
+        const result = await this.$http.put(url, this.slotData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('更新颜色/尺码成功');
+      },
+      onUpdateAttributes() {
+        this.formData = Object.assign({}, this.slotData);
+        this.attributesDialogVisible = true;
+      },
+      onAttributesFormSubmit() {
+        this.$refs['attributesForm1'].validate(valid => {
+          if (valid) {
+            this._onUpdateAttributes();
+            this.attributesDialogVisible = false;
+            return true;
+          }
+
+          return false;
+        });
+      },
+      async _onUpdateAttributes() {
+        const url = this.apis().updateAttributesOfApparelProduct(this.slotData.code);
+        const result = await this.$http.put(url, this.slotData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('更新产品属性成功');
       }
     },
     computed: {},
     data() {
-      return {}
+      return {
+        basicDialogVisible: false,
+        variantsDialogVisible: false,
+        attributesDialogVisible: false,
+        formData: {}
+      }
     }
   }
 </script>
