@@ -38,7 +38,8 @@ const state = {
       contactPhone: '',
       productiveOrientations: []
     },
-    attachments: []
+    attachments: [],
+    labels: []
   },
   queryFormData: {
     code: '',

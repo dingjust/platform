@@ -77,6 +77,9 @@ const COMMON_APIS = {
   createLabel() {
     return '/djwebservices/labels/create';
   },
+  getGroupAllLabels(group) {
+    return '/djwebservices/labels/'+group+'/all';
+  },
   getAllLabels() {
     return '/djwebservices/labels/all';
   },
@@ -224,6 +227,9 @@ const COMMON_APIS = {
   },
   createRequirementOrder() {
     return '/b2b/orders/requirement/new';
+  },
+  updateRequirementOrder(code) {
+    return '/b2b/orders/requirement/'+code+'/request';
   },
   getQuote(code) {
     return '/b2b/orders/quote/' + code;

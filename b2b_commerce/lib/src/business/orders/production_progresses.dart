@@ -225,7 +225,11 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     borderRadius:
                     BorderRadius.all(Radius.circular(20))),
                 onPressed: () {
-                  _showTipsDialog(progress);
+                  if(phase == currentPhase && (progress.phase == ProductionProgressPhase.INSPECTION) && order.salesApplication == SalesApplication.ONLINE){
+                    _showBalanceDialog(context, order);
+                  }else{
+                    _showTipsDialog(progress);
+                  }
                 },
               )
                   : null)
@@ -433,7 +437,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               child: Text(
                   '确定',
                 style: TextStyle(
-                    color: Colors.grey
+                    color: Colors.black
                 ),
               ),
               onPressed: () async {
@@ -650,7 +654,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('确定'),
+              child: Text('确定',style: TextStyle(color: Colors.black),),
               onPressed: () async {
                 order = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
                 setState(() {
@@ -660,6 +664,173 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     MaterialPageRoute(builder: (context) =>
                         ProductionProgressesPage(order: order)
                     ), ModalRoute.withName('/'));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //打开修改尾款金额弹框
+  void _showBalanceDialog(BuildContext context,PurchaseOrderModel model){
+    _neverUpdateBalance(context,model);
+  }
+
+  //修改金额按钮方法
+  Future<void> _neverUpdateBalance(BuildContext context,PurchaseOrderModel model) async {
+    TextEditingController dialogText = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  '订单总额：￥${model.totalPrice}',
+                ),
+                Text(
+                  '已付定金：￥${model.deposit}',
+                ),
+                Text(
+                  '应付尾款：￥${model.totalPrice != null && model.deposit != null ? model.totalPrice-model.deposit : ''}',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  color: Colors.black12,
+                  child: TextField(
+                    controller:dialogText,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: '请输入尾款',
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(right: 30),
+                  width: 230,
+                  child: FlatButton(
+                      color: Color(0xFFFFD600),
+                      child: Text(
+                        '确定',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(20))),
+                      onPressed: () async {
+                        bool result = false;
+                        print(dialogText.text);
+                        if (dialogText.text != null && dialogText.text != '') {
+                          double balance = double.parse(dialogText.text);
+                          model.balance = balance;
+                          model.skipPayBalance = false;
+                          try {
+                            await PurchaseOrderRepository()
+                                .purchaseOrderBalanceUpdate(model.code, model);
+                          } catch (e) {
+                            print(e);
+                          }
+                          if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
+                            try {
+                              for (int i = 0; i < order.progresses.length; i++) {
+                                if (order.currentPhase == order.progresses[i].phase) {
+                                  result = await PurchaseOrderRepository() .productionProgressUpload(order.code,
+                                      order.progresses[i].id.toString(),
+                                      order.progresses[i]);
+                                }
+                              }
+                            } catch (e) {
+                              print(e);
+                            }
+                          }
+                          Navigator.of(context).pop();
+                          _showMessage(context, result);
+                        }
+
+                      }
+                  ),
+                ),
+                FlatButton(
+                  child: Text(
+                    '无需付款直接跳过>>',
+                    style: TextStyle(
+                        color: Colors.grey
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _showTips(context,model);
+                  },
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _showTips(BuildContext context,PurchaseOrderModel model){
+    _neverJump(context,model);
+  }
+
+  //确认跳过按钮
+  Future<void> _neverJump(BuildContext context,PurchaseOrderModel model) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text('是否无需付款直接跳过？'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () async {
+                bool result = false;
+                model.balance = 0;
+                model.skipPayBalance = true;
+                try {
+                  await PurchaseOrderRepository().purchaseOrderBalanceUpdate(model.code , model);
+                  if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
+                    try {
+                      for(int i=0;i<order.progresses.length;i++){
+                        if(order.currentPhase == order.progresses[i].phase){
+                          result = await PurchaseOrderRepository().productionProgressUpload(order.code,order.progresses[i].id.toString(),order.progresses[i]);
+                        }
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  }
+                } catch (e) {
+                  print(e);
+                }
+                Navigator.of(context).pop();
+                _showMessage(context,result);
               },
             ),
           ],

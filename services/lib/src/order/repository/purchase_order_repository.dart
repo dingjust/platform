@@ -130,12 +130,11 @@ class PurchaseOrderRepository {
   }
 
   ///取消订单
-  Future<bool> purchaseOrderCancelling(String code , PurchaseOrderModel form) async {
+  Future<bool> purchaseOrderCancelling(String code) async {
     Response<String> response;
     try{
       response =  await http$.put(
         OrderApis.purchaseOrderCancelling(code),
-        data: PurchaseOrderModel.toJson(form),
       );
     }on DioError catch(e){
       print(e);
@@ -229,6 +228,25 @@ class PurchaseOrderRepository {
     try{
       response =  await http$.put(
           OrderApis.confirmProduction(code),
+          options: Options(responseType: ResponseType.plain));
+    }on DioError catch(e){
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //品牌修改送货地址
+  Future<bool> updateAddress(String code , PurchaseOrderModel form) async {
+    Response<String> response;
+    try{
+      response =  await http$.put(
+          OrderApis.updateAddress(code),
+          data: PurchaseOrderModel.toJson(form),
           options: Options(responseType: ResponseType.plain));
     }on DioError catch(e){
       print(e);
