@@ -25,7 +25,7 @@
             <el-select v-model="queryFormData.statuses" placeholder="请选择"
                        multiple class="w-100">
               <el-option
-                v-for="item in statusOptions"
+                v-for="item in requirementOrderStatuses"
                 :key="item.value"
                 :label="item.text"
                 :value="item.value">
@@ -122,7 +122,7 @@
         keyword: this.$store.state.RequirementOrdersModule.keyword,
         formData: this.$store.state.RequirementOrdersModule.formData,
         queryFormData: this.$store.state.RequirementOrdersModule.queryFormData,
-        statusOptions: this.$store.state.RequirementOrdersModule.statusOptions,
+        requirementOrderStatuses: this.$store.state.EnumsModule.requirementOrderStatuses,
       }
     }
   }
