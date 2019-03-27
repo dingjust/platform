@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
-import 'package:b2b_commerce/src/home/factory/hot_category.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/my_bill.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
@@ -10,9 +9,12 @@ import '../business/apparel_product_stock_adjust_history.dart';
 import '../business/apparel_product_stocks.dart';
 import '../business/apparel_products.dart';
 import '../business/apparel_products_off_the_shelf.dart';
+import '../business/delivery.dart';
 import '../business/employees.dart';
 import '../business/member_requests.dart';
 import '../business/memberships.dart';
+import '../business/orders/requirement_order_detail.dart';
+import '../business/orders/requirement_quote_detail.dart';
 import '../business/production_orders.dart';
 import '../business/purchase_orders.dart';
 import '../business/quote_orders.dart';
@@ -22,18 +24,15 @@ import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
 import '../home/account/login.dart';
 import '../my/account/register.dart';
+import '../my/index.dart';
 import '../my/my_account.dart';
 import '../my/my_addresses.dart';
+import '../my/my_brand.dart';
 import '../my/my_cart.dart';
 import '../my/my_client_services.dart';
 import '../my/my_collections.dart';
-import '../my/my_brand.dart';
 import '../my/my_invoices.dart';
-import '../my/index.dart';
 import '../my/my_settings.dart';
-import '../business/orders/requirement_order_detail.dart';
-import '../business/orders/requirement_quote_detail.dart';
-import '../business/delivery.dart';
 
 class AppRoutes with GlobalRoutes {
   static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
@@ -109,7 +108,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_REGISTER: (context) => RegisterPage(),
     ROUTE_REQUIREMENT_QUOTE_DETAIL: (context) => RequirementQuoteDetailPage(),
     ROUTE_DELIVERY: (context) => DeliveryPage(),
-    ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
+    // ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
     ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage(),
     ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage(),
     ROUTE_MY_BILL: (context) => MyBillPage()

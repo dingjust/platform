@@ -147,8 +147,8 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Row(
-                          children: _buildItemsStarIcon(
-                              context, widget.supplierModel.factory.starLevel),
+                          children: _buildItemsStarIcon(context,
+                              widget.supplierModel.factory.starLevel ?? 1),
                         ),
                       ),
                     ],
@@ -161,7 +161,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            widget.supplierModel.factory.address,
+                            '${widget.supplierModel.factory.address}',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
@@ -486,8 +486,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        MonthlyCapacityRangesLocalizedMap[
-                            widget.supplierModel.factory.monthlyCapacityRange],
+                        '${MonthlyCapacityRangesLocalizedMap[widget.supplierModel.factory.monthlyCapacityRange]}',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

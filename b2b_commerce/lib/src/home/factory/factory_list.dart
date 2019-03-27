@@ -12,7 +12,9 @@ class FactoryPage extends StatefulWidget {
   /// 邀请工厂报价的需求订单号
   String requirementCode;
 
-  FactoryPage({this.route});
+  FactoryCondition factoryCondition;
+
+  FactoryPage(this.factoryCondition, {this.route});
 
   _FactoryPageState createState() => _FactoryPageState();
 }
@@ -66,17 +68,26 @@ class _FactoryPageState extends State<FactoryPage> {
                     onPressed: () async {
                       await ProductRepositoryImpl()
                           .majorCategories()
-                          .then((categories) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CondtionPage(
-                                  categories: categories,
-                                )));
+                          .then((categories) async {
+                        FactoryCondition newfactoryCondition =
+                            await Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => CondtionPage(
+                                      categories: categories,
+                                      factoryCondition: widget.factoryCondition,
+                                    )));
+
+                        ///条件更新数据
+                        FactoryBLoC.instance
+                            .filterByCondition(newfactoryCondition);
                       });
                     },
                   ),
                 ),
               ),
-              body: FactoriesListView()),
+              body: FactoriesListView(
+                factoryCondition: widget.factoryCondition,
+                showButton: widget.requirementCode != null,
+              )),
         ));
   }
 
@@ -88,7 +99,13 @@ class _FactoryPageState extends State<FactoryPage> {
 }
 
 class FactoriesListView extends StatelessWidget {
+  FactoryCondition factoryCondition;
+
+  bool showButton;
+
   ScrollController _scrollController = ScrollController();
+
+  FactoriesListView({this.showButton = false, this.factoryCondition});
 
   ///当前选中条件
   FilterConditionEntry currentCondition =
@@ -109,7 +126,7 @@ class FactoriesListView extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByCondition(
+        bloc.loadingMoreByCondition(factoryCondition,
             condition: currentCondition.value, isDESC: currentCondition.isDESC);
       }
     });
@@ -119,9 +136,7 @@ class FactoriesListView extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.refreshData(
-                condition: currentCondition.value,
-                isDESC: currentCondition.isDESC);
+            bloc.clear();
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -134,7 +149,7 @@ class FactoriesListView extends StatelessWidget {
                     AsyncSnapshot<List<FactoryModel>> snapshot) {
                   if (snapshot.data == null) {
                     //默认条件查询
-                    bloc.filterByCondition(
+                    bloc.filterByCondition(factoryCondition,
                         condition: this.currentCondition.value,
                         isDESC: this.currentCondition.isDESC);
                     return Padding(
@@ -147,7 +162,7 @@ class FactoriesListView extends StatelessWidget {
                       children: snapshot.data.map((item) {
                         return FactoryItem(
                           model: item,
-                          showButton: true,
+                          showButton: showButton,
                         );
                       }).toList(),
                     );

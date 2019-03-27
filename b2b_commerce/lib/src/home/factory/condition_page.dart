@@ -6,9 +6,13 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class CondtionPage extends StatefulWidget {
+  FactoryCondition factoryCondition;
+
+  /// 大类
   final List<CategoryModel> categories;
 
-  const CondtionPage({Key key, @required this.categories}) : super(key: key);
+  CondtionPage({Key key, @required this.categories, this.factoryCondition})
+      : super(key: key);
 
   @override
   _CondtionPageState createState() => _CondtionPageState();
@@ -16,36 +20,36 @@ class CondtionPage extends StatefulWidget {
 
 class _CondtionPageState extends State<CondtionPage> {
   PopulationScale populationScale;
-  DistrictModel districtModel;
-  int starsRate = 0;
-  CategoryModel majorCategory;
-  List<CategoryModel> categoriesSelect = [];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('更多'),
-        centerTitle: true,
-        elevation: 0.5,
-      ),
-      body: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.only(left: 10, top: 5),
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverList(
-                delegate: SliverChildListDelegate(<Widget>[
-                  _buildCategoryBlock(),
-                  _buildPopulationBlock(),
-                  _buildAddressBlock(),
-                  _buildStarsBlock(),
-                  _buildMajorCategoryBlock()
-                ]),
-              )
-            ],
-          )),
-    );
+    return WillPopScope(
+        onWillPop: () {
+          Navigator.pop(context, widget.factoryCondition);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('更多'),
+            centerTitle: true,
+            elevation: 0.5,
+          ),
+          body: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.only(left: 10, top: 5),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildListDelegate(<Widget>[
+                      _buildCategoryBlock(),
+                      _buildPopulationBlock(),
+                      _buildAddressBlock(),
+                      _buildStarsBlock(),
+                      _buildMajorCategoryBlock()
+                    ]),
+                  )
+                ],
+              )),
+        ));
   }
 
   Widget _buildCategoryBlock() {
@@ -66,7 +70,8 @@ class _CondtionPageState extends State<CondtionPage> {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
-                          minCategorySelect: categoriesSelect,
+                          minCategorySelect:
+                              widget.factoryCondition.adeptAtCategory,
                           categorys: categorys,
                           categoryActionType: CategoryActionType.none,
                         )));
@@ -78,9 +83,9 @@ class _CondtionPageState extends State<CondtionPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    categoriesSelect.isEmpty
+                    widget.factoryCondition.adeptAtCategory.isEmpty
                         ? '选择分类'
-                        : '${categoriesSelect[0].name}',
+                        : '${widget.factoryCondition.adeptAtCategory[0].name}',
                     style: TextStyle(fontSize: 16),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -119,17 +124,19 @@ class _CondtionPageState extends State<CondtionPage> {
         height: 100,
         child: GestureDetector(
             onTap: () async {
-              DistrictModel result = await Navigator.push(
+              RegionModel result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      RegionSelectPage(RegionRepositoryImpl()),
+                  builder: (context) => RegionSelectPage(
+                        RegionRepositoryImpl(),
+                        onlySelectRegion: true,
+                      ),
                 ),
               );
 
               if (result != null) {
                 setState(() {
-                  districtModel = result;
+                  widget.factoryCondition.productiveOrientations = result;
                 });
               }
             },
@@ -139,9 +146,9 @@ class _CondtionPageState extends State<CondtionPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    districtModel == null
-                        ? '选择地区'
-                        : '${districtModel.city.region.name}  ${districtModel.city.name} ${districtModel.name}',
+                    widget.factoryCondition.productiveOrientations == null
+                        ? '请选择'
+                        : '${widget.factoryCondition.productiveOrientations.name}',
                     style: TextStyle(fontSize: 16),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -161,8 +168,9 @@ class _CondtionPageState extends State<CondtionPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               StarsRating(
-                starRate: starsRate,
+                starRate: widget.factoryCondition.starLevel,
                 size: 30,
+                onChanged: _handleStarChanged,
               ),
             ],
           ),
@@ -180,16 +188,22 @@ class _CondtionPageState extends State<CondtionPage> {
                 (categoryItem) => RadioListTile(
                       onChanged: (value) {
                         setState(() {
-                          majorCategory = value;
+                          widget.factoryCondition.category = value;
                         });
                       },
-                      groupValue: majorCategory,
-                      value: categoryItem,
+                      groupValue: widget.factoryCondition.category,
+                      value: categoryItem.code,
                       title: Text('${categoryItem.name}'),
                     ),
               )
               .toList(),
         ));
+  }
+
+  void _handleStarChanged(int newValue) {
+    setState(() {
+      widget.factoryCondition.starLevel = newValue;
+    });
   }
 }
 

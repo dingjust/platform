@@ -7,7 +7,9 @@ import 'city_select.dart';
 class RegionSelectPage extends StatelessWidget {
   final RegionRepository regionRepository;
 
-  RegionSelectPage(this.regionRepository);
+  final bool onlySelectRegion;
+
+  RegionSelectPage(this.regionRepository, {this.onlySelectRegion = false});
 
   _selectCity(BuildContext context, RegionModel region) async {
     final result = await Navigator.push(
@@ -40,7 +42,11 @@ class RegionSelectPage extends StatelessWidget {
               children: snapshot.data.map((region) {
                 return ListTile(
                   onTap: () {
-                    _selectCity(context, region);
+                    if (onlySelectRegion) {
+                      Navigator.pop(context, region);
+                    } else {
+                      _selectCity(context, region);
+                    }
                   },
                   title: Text(region.name),
                   trailing: Icon(Icons.chevron_right),
