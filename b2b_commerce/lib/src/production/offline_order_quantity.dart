@@ -43,14 +43,24 @@ class OfflineOrderQuantityInputPageState
           centerTitle: true,
           title: Text('数量'),
           leading: IconButton(
-              icon: Text('取消'),
+              icon: Text(
+                  '取消',
+                style: TextStyle(
+                  color: Colors.grey
+                ),
+              ),
               onPressed: () {
                 widget.items.clear();
                 Navigator.pop(context, _beforeItems);
               }),
           actions: <Widget>[
             IconButton(
-              icon: Text('确定'),
+              icon: Text(
+                  '确定',
+                style: TextStyle(
+                  color: Colors.black
+                ),
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },

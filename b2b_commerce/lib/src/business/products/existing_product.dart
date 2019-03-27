@@ -41,8 +41,12 @@ class _ExistingProductsPageState extends State<ExistingProductsPage> {
   Widget _buildExistingProductItem(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
-      child: GridView.count(
-        crossAxisCount: 2,
+      child: GridView(
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 0.77,
+            crossAxisSpacing: 10),
         children: List.generate(widget.products.length, (index) {
           return ExistingProductItem(widget.products[index]);
         }),
