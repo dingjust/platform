@@ -24,8 +24,8 @@ class Apis {
 
   /// 获取品牌明细 GET
   static get brandUpdate => (uid) {
-    return '/{baseSiteId}/b2b/brands/$uid';
-  };
+        return '/{baseSiteId}/b2b/brands/$uid';
+      };
 
   /// 获取工厂明细 GET
   static get factory => (uid) {
@@ -34,8 +34,8 @@ class Apis {
 
   /// 获取工厂明细 GET
   static get factoryUpdate => (uid) {
-    return '/{baseSiteId}/b2b/factories/$uid';
-  };
+        return '/{baseSiteId}/b2b/factories/$uid';
+      };
 
   /// 图片上传
   static get upload => () {
@@ -48,10 +48,13 @@ class Apis {
       };
 
   ///需求发布
-  static get publishNewRequirement => (){
-    return '/{baseSiteId}/b2b/orders/requirement/new';
-  };
+  static get publishNewRequirement => () {
+        return '/{baseSiteId}/b2b/orders/requirement/new';
+      };
 
   //公司认证
   static get applyCertification => '/{baseSiteId}/b2b/companies/certification';
+
+  /// 全部工厂列表
+  static get factories => '/{baseSiteId}/b2b/factories';
 }

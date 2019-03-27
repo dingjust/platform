@@ -1,12 +1,8 @@
-import 'package:b2b_commerce/src/business/products/apparel_product_size_stock_item.dart';
 import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
-import 'package:b2b_commerce/src/home/product/product_color_size_select.dart';
-import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -268,7 +264,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         context: context,
         builder: (BuildContext context) {
           return AttributeTable(
-            attributes: widget.product.attributes,
+            product: widget.product,
           );
         });
   }

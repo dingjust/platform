@@ -25,7 +25,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   Map<ColorModel, List<SizeQuantityItem>> _items = Map();
   Map<ColorModel, List<SizeQuantityItem>> _newItems;
   Map<ColorModel, List<SizeQuantityItem>> sizeQuantityList;
-  List<MediaModel> mediaList;
+  List<MediaModel> mediaList = new List();
   int _totalQuantity;
   String price;
   String earnestMoney;
@@ -39,6 +39,11 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   @override
   void initState() {
     _product = productModel;
+    if (widget.quoteModel.attachments != null) {
+      mediaList = widget.quoteModel.attachments;
+    } else {
+      mediaList = [];
+    }
     super.initState();
   }
 
@@ -71,23 +76,65 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
 
   Widget _buildBrandInfo(BuildContext context) {
     return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
-      child: Row(
+      child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(8),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(widget.quoteModel.requirementOrder
-                          .belongTo?.profilePicture !=
-                      null
-                  ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo.profilePicture}'
-                  : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg'),
-              radius: 40.0,
+            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(widget
+                                  .quoteModel
+                                  .requirementOrder
+                                  .belongTo
+                                  ?.profilePicture !=
+                                  null
+                                  ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo}'
+                                  : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 10),
+                      height: 70,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            '${widget.quoteModel.requirementOrder.belongTo?.name}',
+                            style: TextStyle(
+                                color: Color.fromRGBO(36, 38, 41, 1)),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color.fromRGBO(229, 242, 255, 1),
+                            ),
+                            padding: EdgeInsets.all(2),
+                            child: Text(
+                              '已认证',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(22, 141, 255, 1)),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ],
             ),
-          ),
-          Text(
-            '${widget.quoteModel.requirementOrder.belongTo?.name}',
-            textScaleFactor: 1.3,
           ),
         ],
       ),
@@ -390,10 +437,10 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  trailing: price == null || price == ''
+                  trailing: widget.quoteModel == null || widget.quoteModel.unitPrice == null
                       ? Icon(Icons.keyboard_arrow_right)
                       : Text(
-                          price,
+                          '￥${widget.quoteModel.unitPrice}',
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -411,6 +458,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                 ).then((value) {
                   setState(() {
                     price = value;
+                    widget.quoteModel.unitPrice = double.parse(price);
                     totalPrice = double.parse(price) * _totalQuantity;
                   });
                 });
@@ -460,7 +508,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             trailing: earnestMoney == null || earnestMoney == ''
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
-                    earnestMoney,
+                    '￥${earnestMoney}',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -611,6 +659,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
 
   Widget _buildCommitButton(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(bottom: 20),
       child: Column(
         children: <Widget>[
           Container(
@@ -620,9 +669,9 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
               child: RaisedButton(
                   color: Color.fromRGBO(255, 214, 12, 1),
                   child: Text(
-                    '确认',
+                    '提交订单',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
                     ),
@@ -715,14 +764,24 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           title: Text('确定提交？'),
           actions: <Widget>[
             FlatButton(
-              child: Text('确定'),
-              onPressed: onSure,
-            ),
-            FlatButton(
-              child: Text('取消'),
+              child: Text(
+                '取消',
+                style: TextStyle(
+                  color: Colors.grey
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+            ),
+            FlatButton(
+              child: Text(
+                  '确定',
+                style: TextStyle(
+                  color:Colors.black
+                ),
+              ),
+              onPressed: onSure,
             ),
           ],
         );
@@ -770,6 +829,8 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     //单价
     if (price != null) {
       purchaseOrder.unitPrice = double.parse(price);
+    }else{
+      purchaseOrder.unitPrice = widget.quoteModel.unitPrice;
     }
     purchaseOrder.entries = entries;
 

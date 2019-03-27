@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -24,17 +24,17 @@ class FactoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         //TODO 工厂跳转
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SuppliersDetail(
-                  supplierModel: SupplierModel(
-                    factory: model,
-                  ),
-                  isSupplier: false,
-                ),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => SuppliersDetail(
+        //           supplierModel: SupplierModel(
+        //             factory: model,
+        //           ),
+        //           isSupplier: false,
+        //         ),
+        //   ),
+        // );
       },
       child: Container(
         color: Colors.white,
@@ -66,8 +66,14 @@ class FactoryItem extends StatelessWidget {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           image: DecorationImage(
-                            image: NetworkImage(model.profilePicture.url),
-                            fit: BoxFit.cover,
+                            image: model.profilePicture == null
+                                ? AssetImage(
+                                    'temp/picture.png',
+                                    package: "assets",
+                                  )
+                                : NetworkImage(
+                                    '${GlobalConfigs.IMAGE_BASIC_URL}${model.profilePicture.url}'),
+                            fit: BoxFit.fill,
                           )),
                     ),
                     Expanded(
@@ -79,7 +85,7 @@ class FactoryItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              '${PopulationScaleLocalizedMap[model.populationScale]}',
+                              '${ScaleRangesLocalizedMap[model.scaleRange]}',
                               style: TextStyle(
                                   color: Color.fromRGBO(180, 180, 180, 1)),
                             ),
@@ -115,7 +121,7 @@ class FactoryItem extends StatelessWidget {
                                       size: 14,
                                       color: Color.fromRGBO(255, 183, 0, 1),
                                       highlightOnly: false,
-                                      starLevel: model.starLevel,
+                                      starLevel: model.starLevel ?? 0,
                                     ),
                                   ),
                                   RichText(
@@ -164,25 +170,27 @@ class FactoryItem extends StatelessWidget {
   Widget _buildCategoryTags() {
     //取前3条
     var tags = <Container>[];
-    if (model.categories.length > 6) {
-      for (int i = 0; i < model.categories.length && i < 6; i++) {
-        tags.add(Container(
-          margin: EdgeInsets.only(right: 10),
-          child: Text(
-            '${model.categories[i].name}',
-            style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
-          ),
-        ));
-      }
-    } else {
-      for (int i = 0; i < model.categories.length; i++) {
-        tags.add(Container(
-          margin: EdgeInsets.only(right: 10),
-          child: Text(
-            '${model.categories[i].name}',
-            style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
-          ),
-        ));
+    if (model.categories != null) {
+      if (model.categories.length > 6) {
+        for (int i = 0; i < model.categories.length && i < 6; i++) {
+          tags.add(Container(
+            margin: EdgeInsets.only(right: 10),
+            child: Text(
+              '${model.categories[i].name}',
+              style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+            ),
+          ));
+        }
+      } else {
+        for (int i = 0; i < model.categories.length; i++) {
+          tags.add(Container(
+            margin: EdgeInsets.only(right: 10),
+            child: Text(
+              '${model.categories[i].name}',
+              style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+            ),
+          ));
+        }
       }
     }
 

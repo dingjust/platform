@@ -51,7 +51,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
             child: Scaffold(
               appBar: TabBar(
                 unselectedLabelColor: Colors.black26,
-                labelColor: Colors.orange,
+                labelColor: Colors.black,
                 indicatorSize: TabBarIndicatorSize.label,
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);

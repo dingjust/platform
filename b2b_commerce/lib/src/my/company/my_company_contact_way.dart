@@ -9,8 +9,9 @@ import 'package:widgets/widgets.dart';
 
 class MyCompanyContactWayPage extends StatefulWidget {
   B2BUnitModel company;
+  bool isCompanyIntroduction;
 
-  MyCompanyContactWayPage(this.company);
+  MyCompanyContactWayPage(this.company,{this.isCompanyIntroduction = false});
 
   State createState() => MyCompanyContactWayPageState();
 }
@@ -50,43 +51,46 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          Container(
-              width: 80,
-              child: ActionChip(
-                label: Text(btnText),
-                onPressed: () async{
-                    if (!isEditing) {
-                      setState(() {
-                        isEditing = !isEditing;
-                        btnText = '确定';
-                      });
-                    } else {
-                      widget.company.contactAddress = address;
-                      widget.company.phone = _phoneController.text == '' ? null : _phoneController.text;
-                      widget.company.email = _emailController.text == '' ? null : _emailController.text;
-                      widget.company.qq = _qqController.text == '' ? null : _qqController.text;
-                      widget.company.wechat = _wechatController.text == '' ? null : _wechatController.text;
-                      print(CompanyModel.toJson(widget.company));
+          Offstage(
+            offstage: !widget.isCompanyIntroduction,
+            child: Container(
+                width: 80,
+                child: ActionChip(
+                  label: Text(btnText),
+                  onPressed: () async{
+                      if (!isEditing) {
+                        setState(() {
+                          isEditing = !isEditing;
+                          btnText = '确定';
+                        });
+                      } else {
+                        widget.company.contactAddress = address;
+                        widget.company.phone = _phoneController.text == '' ? null : _phoneController.text;
+                        widget.company.email = _emailController.text == '' ? null : _emailController.text;
+                        widget.company.qq = _qqController.text == '' ? null : _qqController.text;
+                        widget.company.wechat = _wechatController.text == '' ? null : _wechatController.text;
+                        print(CompanyModel.toJson(widget.company));
 
-                      if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-                        UserRepositoryImpl().brandUpdate(widget.company).then((a){
-                          setState(() {
-                            btnText = '编辑';
-                            isEditing = !isEditing;
+                        if(UserBLoC.instance.currentUser.type == UserType.BRAND){
+                          UserRepositoryImpl().brandUpdate(widget.company).then((a){
+                            setState(() {
+                              btnText = '编辑';
+                              isEditing = !isEditing;
+                            });
                           });
-                        });
-                      }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
-                        UserRepositoryImpl().factoryUpdate(widget.company).then((a){
-                          setState(() {
-                            btnText = '编辑';
-                            isEditing = !isEditing;
+                        }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+                          UserRepositoryImpl().factoryUpdate(widget.company).then((a){
+                            setState(() {
+                              btnText = '编辑';
+                              isEditing = !isEditing;
+                            });
                           });
-                        });
+                        }
                       }
-                    }
-                },
-                backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-              )),
+                  },
+                  backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+                )),
+          ),
         ],
       ),
       body: ListView(
@@ -108,17 +112,11 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text('联系人',style: TextStyle(fontSize: 16,),),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 25),
-                                  child: Text('${address.fullname ?? ''}',style: TextStyle(color: Colors.grey,fontSize: 16,),),
-                                ),
+                                Text('${address.fullname ?? ''}',style: TextStyle(color: Colors.grey,fontSize: 16,),),
                               ],
                             ),
                             SizedBox(height: 5,),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 25),
-                              child: Text('${address.cellphone ?? ''}',style: TextStyle(color: Colors.grey,fontSize: 16,),),
-                            ),
+                            Text('${address.cellphone ?? ''}',style: TextStyle(color: Colors.grey,fontSize: 16,),),
                             SizedBox(height: 5,),
                             Row(
                               children: <Widget>[
@@ -130,20 +128,17 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                                     ),
                                   ),
                                 ),
-//                                Text(
-//                                  address != null && address.region != null
-//                                      ? address.regionCityAndDistrict
-//                                      : '选取',
-//                                  style: TextStyle(color: Colors.grey,fontSize: 16,),
-//                                ),
-                                Icon(
-                                  Icons.chevron_right,
-                                  color: this.isEditing ? Colors.grey : Colors.white,
+                                Offstage(
+                                  offstage: !widget.isCompanyIntroduction,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    color: this.isEditing ? Colors.grey : Colors.white,
+                                  ),
                                 ),
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(right: 20,top: 10),
+                              padding: const EdgeInsets.only(right: 0,top: 10),
                               child: Text(
                                 address != null && address.region != null
                                     ? address.details
