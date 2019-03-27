@@ -29,17 +29,35 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item label="品牌" prop="brand">
             <el-input v-model="slotData.brand"></el-input>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item label="供货价" prop="price">
             <el-input-number class="w-100"
                              v-model="slotData.price"
+                             :precision="2"
+                             :min="0">
+            </el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="生产单价（最小值）" prop="minPrice">
+            <el-input-number class="w-100"
+                             v-model="slotData.minPrice"
+                             :precision="2"
+                             :min="0">
+            </el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="生产单价（最大值）" prop="maxPrice">
+            <el-input-number class="w-100"
+                             v-model="slotData.maxPrice"
                              :precision="2"
                              :min="0">
             </el-input-number>
@@ -67,17 +85,7 @@
       validate(callback) {
         this.$refs.form.validate(callback);
       },
-      onFilterCategories(query) {
-        this.categories = [];
-        if (query && query !== '') {
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.getCategories(query);
-          }, 200);
-        }
-      },
-      async getCategories(query) {
+      async getCategories() {
         const url = this.apis().getMinorCategories();
         const result = await this.$http.get(url);
         if (result["errors"]) {
@@ -87,20 +95,9 @@
 
         this.categories = result;
       },
-      async getStyles() {
-        const url = this.apis().getAllStyles();
-        const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.styles = result;
-      }
     },
     data() {
       return {
-        loading: false,
         rules: {
           name: [{required: true, message: '必填', trigger: 'blur'}],
           skuID: [{required: true, message: '必填', trigger: 'blur'}],
@@ -108,18 +105,11 @@
           price: [{required: true, message: '必填', trigger: 'blur'}]
         },
         categories: [],
-        companies: [],
-        styles: [],
-        categoryProps: {
-          label: 'name',
-          value: 'code',
-          children: 'children'
-        }
+        companies: []
       };
     },
     created() {
-      this.getCategories('');
-      this.getStyles();
+      this.getCategories();
     }
   };
 </script>

@@ -3,33 +3,38 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:services/src/home/product/response/apparel_product_response.dart';
+import 'package:services/src/home/factory/response/factory_response.dart';
 
-class OrderByProductBLoc extends BLoCBase {
+class FactoryBLoC extends BLoCBase {
   // 工厂模式
-  factory OrderByProductBLoc() => _getInstance();
+  factory FactoryBLoC() => _getInstance();
 
-  static OrderByProductBLoc get instance => _getInstance();
-  static OrderByProductBLoc _instance;
+  static FactoryBLoC get instance => _getInstance();
+  static FactoryBLoC _instance;
 
-  OrderByProductBLoc._internal() {
+  FactoryBLoC._internal() {
     // 初始化
   }
 
-  static OrderByProductBLoc _getInstance() {
+  static FactoryBLoC _getInstance() {
     if (_instance == null) {
-      _instance = new OrderByProductBLoc._internal();
+      _instance = new FactoryBLoC._internal();
     }
     return _instance;
   }
 
-  List<ApparelProductModel> _products = [];
+  List<FactoryModel> _factories = [];
 
-  List<ApparelProductModel> get products => _products;
+  List<FactoryModel> get factories => _factories;
 
-  var _controller = StreamController<List<ApparelProductModel>>.broadcast();
+  var _controller = StreamController<List<FactoryModel>>.broadcast();
 
-  Stream<List<ApparelProductModel>> get stream => _controller.stream;
+  Stream<List<FactoryModel>> get stream => _controller.stream;
+
+  var conditionController = StreamController<FilterConditionEntry>.broadcast();
+
+  Stream<FilterConditionEntry> get conditionStream =>
+      conditionController.stream;
 
   int pageSize = 10;
   int currentPage = 0;
@@ -39,34 +44,36 @@ class OrderByProductBLoc extends BLoCBase {
   //锁
   bool lock = false;
 
-  getData(String categoryCode) async {
+  filterByCondition(FactoryCondition factoryCondition,
+      {String condition, bool isDESC}) async {
     if (!lock) {
       lock = true;
       //重置参数
       reset();
       Response<Map<String, dynamic>> response;
       try {
-        response = await http$.post(ProductApis.factoriesApparel,
-            data: {"categories": categoryCode},
+        response = await http$.post(Apis.factories,
+            data: factoryCondition.toDataJson(),
             queryParameters: {'page': currentPage, 'size': pageSize});
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        ApparelProductResponse productResponse =
-            ApparelProductResponse.fromJson(response.data);
-        totalPages = productResponse.totalPages;
-        totalElements = productResponse.totalElements;
-        _products.clear();
-        _products.addAll(productResponse.content);
+        FactoriesResponse factoriesResponse =
+            FactoriesResponse.fromJson(response.data);
+        totalPages = factoriesResponse.totalPages;
+        totalElements = factoriesResponse.totalElements;
+        _factories.clear();
+        _factories.addAll(factoriesResponse.content);
       }
-      _controller.sink.add(_products);
+      _controller.sink.add(_factories);
       lock = false;
     }
   }
 
-  loadingMore(String categoryCode) async {
+  loadingMoreByCondition(FactoryCondition factoryCondition,
+      {String condition, bool isDESC}) async {
     if (!lock) {
       lock = true;
 
@@ -78,46 +85,44 @@ class OrderByProductBLoc extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
-          response = await http$.post(ProductApis.factoriesApparel,
-              data: {"categories": categoryCode},
+          response = await http$.post(Apis.factories,
+              data: factoryCondition.toDataJson(),
               queryParameters: {'page': currentPage, 'size': pageSize});
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          ApparelProductResponse productResponse =
-              ApparelProductResponse.fromJson(response.data);
-          totalPages = productResponse.totalPages;
-          totalElements = productResponse.totalElements;
-          _products.addAll(productResponse.content);
+          FactoriesResponse factoriesResponse =
+              FactoriesResponse.fromJson(response.data);
+          totalPages = factoriesResponse.totalPages;
+          totalElements = factoriesResponse.totalElements;
+          _factories.addAll(factoriesResponse.content);
         }
       }
       _loadingController.sink.add(false);
-      _controller.sink.add(_products);
+      _controller.sink.add(_factories);
       lock = false;
     }
   }
 
   clear() async {
     //清空
-    _products.clear();
-    _controller.sink.add(_products);
+    _factories.clear();
+    _controller.sink.add(null);
   }
 
   void reset() {
-    _products = [];
+    _factories = [];
     currentPage = 0;
     totalPages = 0;
     totalElements = 0;
   }
 
+  //下拉刷新
+  Future refreshData({String condition, bool isDESC}) async {}
+
   //页面控制
-
-  //记录是否已经到底
-  bool _isBottom = false;
-
-  bool get isBottom => _isBottom;
 
   var _loadingController = StreamController<bool>.broadcast();
   var _bottomController = StreamController<bool>.broadcast();

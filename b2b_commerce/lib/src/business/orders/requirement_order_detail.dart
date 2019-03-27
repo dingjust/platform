@@ -260,7 +260,7 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '期望价格',
             value: Text(
-              '￥${widget.order.details.maxExpectedPrice??0}',
+              '￥${widget.order.details.maxExpectedPrice ?? 0}',
               style: TextStyle(color: Colors.red, fontSize: 16),
             ),
           ),
@@ -572,6 +572,8 @@ class _RequirementOrderDetailPageState
                     context,
                     MaterialPageRoute(
                         builder: (context) => FactoryPage(
+                              FactoryCondition(
+                                  starLevel: 0, adeptAtCategory: []),
                               route: '全部工厂',
                             )),
                   );

@@ -19,6 +19,17 @@ class SuppliersDetail extends StatefulWidget {
 }
 
 class _SuppliersDetailState extends State<SuppliersDetail> {
+
+  @override
+  void initState() {
+//    if(widget.supplierModel.quoteOrder.requirementOrder == null)
+//      widget.supplierModel.quoteOrder.requirementOrder = RequirementOrderModel(details: RequirementInfoModel());
+
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,8 +158,8 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Row(
-                          children: _buildItemsStarIcon(
-                              context, widget.supplierModel.factory.starLevel),
+                          children: _buildItemsStarIcon(context,
+                              widget.supplierModel.factory.starLevel ?? 1),
                         ),
                       ),
                     ],
@@ -161,7 +172,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            widget.supplierModel.factory.address,
+                            '${widget.supplierModel.factory.address}',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
@@ -486,8 +497,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        MonthlyCapacityRangesLocalizedMap[
-                            widget.supplierModel.factory.monthlyCapacityRange],
+                        '${MonthlyCapacityRangesLocalizedMap[widget.supplierModel.factory.monthlyCapacityRange]}',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -1089,7 +1099,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                     ]),
               ),
               Text(
-                  QuoteStateLocalizedMap[widget.supplierModel.quoteOrder.state],
+                  QuoteStateLocalizedMap[widget.supplierModel.quoteOrder.state] ?? '',
                   style: TextStyle(color: Colors.blue, fontSize: 15))
             ],
           ),

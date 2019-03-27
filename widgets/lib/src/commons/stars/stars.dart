@@ -62,17 +62,24 @@ class StarsRating extends StatefulWidget {
   final Color color;
   final double size;
 
+  final ValueChanged<int> onChanged;
+
   StarsRating(
       {this.starRate = 1,
       this.maxRate = 5,
       this.color = const Color.fromRGBO(255, 214, 12, 1),
-      this.size = 20});
+      this.size = 20,
+      this.onChanged});
 
   @override
   _StarsRatingState createState() => _StarsRatingState();
 }
 
 class _StarsRatingState extends State<StarsRating> {
+  void _handleTap(int value) {
+    widget.onChanged(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> stars = [];
@@ -80,6 +87,7 @@ class _StarsRatingState extends State<StarsRating> {
     for (int i = 0; i < widget.maxRate; i++) {
       stars.add(GestureDetector(
         onTap: () {
+          _handleTap(i + 1);
           setState(() {
             widget.starRate = i + 1;
           });

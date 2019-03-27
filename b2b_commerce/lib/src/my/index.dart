@@ -1,7 +1,8 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
+import 'package:b2b_commerce/src/my/my_brand.dart';
 import 'package:b2b_commerce/src/my/my_company_certificate_select.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -37,8 +38,48 @@ class MyHomePage extends StatelessWidget {
             height: 0,
           ),
         ),
-        MenuItem(B2BImage.certicate_info(width: 26, height: 19), '公司介绍',
-            companyRoute),
+        InkWell(
+          child: Container(
+            padding: EdgeInsets.all(15),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 32),
+                  child: B2BImage.certicate_info(width: 26, height: 19),
+                ),
+                Expanded(
+                    child: Text(
+                      '公司介绍',
+                      style: TextStyle(fontSize: 17),
+                    )),
+                Icon(
+                  Icons.chevron_right,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+          ),
+          onTap: () {
+            //品牌详情
+            if (bloc.currentUser.type == UserType.BRAND){
+              UserRepositoryImpl().getBrand(UserBLoC.instance.currentUser.companyCode).then((brand){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyBrandPage(brand)));
+              });
+            }
+            //工厂详情
+            if (bloc.currentUser.type == UserType.FACTORY) {
+              UserRepositoryImpl().getFactory(UserBLoC.instance.currentUser.companyCode).then((factory){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyFactoryPage(factory,isCompanyIntroduction: true,)));
+              });
+            }
+          },
+        ),
         Container(
           padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
           child: Divider(

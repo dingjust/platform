@@ -678,7 +678,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               update: true,
             )));
     //成功调用列表页传递的更新函数刷新页面
-    if (isSuccessfule) {
+    if (isSuccessfule != null && isSuccessfule) {
       widget.onRefresh();
     }
   }
@@ -702,4 +702,5 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   quoteModel: widget.model,
                 )));
   }
+
 }
