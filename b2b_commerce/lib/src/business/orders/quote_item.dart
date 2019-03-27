@@ -702,4 +702,5 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   quoteModel: widget.model,
                 )));
   }
+
 }
