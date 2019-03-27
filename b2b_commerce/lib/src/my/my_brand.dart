@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/my/company/my_personal_certificate.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 /// 认证信息

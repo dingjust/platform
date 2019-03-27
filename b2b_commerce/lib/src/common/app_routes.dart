@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/my_bill.dart';
-import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +26,6 @@ import '../my/account/register.dart';
 import '../my/index.dart';
 import '../my/my_account.dart';
 import '../my/my_addresses.dart';
-import '../my/my_brand.dart';
 import '../my/my_cart.dart';
 import '../my/my_client_services.dart';
 import '../my/my_collections.dart';

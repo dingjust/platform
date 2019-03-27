@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
 import 'package:b2b_commerce/src/my/my_brand.dart';
 import 'package:b2b_commerce/src/my/my_company_certificate_select.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
