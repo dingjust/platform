@@ -2,7 +2,7 @@
 
 class OrderProductRepository {
 
-  // ///创建打样单
+  /// 看款下单（工厂款）
   // Future<String> proofingCreate(String quoteCode, ProofingModel model) async {
   //   Response response;
   //   try {

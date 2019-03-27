@@ -36,6 +36,8 @@ class UserGroupModel extends PrincipalGroupModel {
 class CompanyModel extends UserGroupModel {
   /// 星级
   int starLevel;
+
+  @JsonKey(toJson: addressToJson)
   AddressModel contactAddress;
   String address;
   String describe;
@@ -127,8 +129,12 @@ class CompanyModel extends UserGroupModel {
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
       models.map((model) => MediaModel.toJson(model)).toList();
 
-  static List<Map<String, dynamic>> _companyProfilesToJson(List<CompanyProfileModel> models) =>
+  static List<Map<String, dynamic>> _companyProfilesToJson(
+          List<CompanyProfileModel> models) =>
       models.map((model) => CompanyProfileModel.toJson(model)).toList();
+
+  static Map<String, dynamic> addressToJson(AddressModel contactAddress) =>
+      AddressModel.toJson(contactAddress);
 }
 
 @JsonSerializable()
@@ -359,7 +365,8 @@ class BrandModel extends B2BUnitModel {
   static Map<String, dynamic> toJson(BrandModel model) =>
       _$BrandModelToJson(model);
 
-  static List<Map<String, dynamic>> _categorysToJson(List<CategoryModel> models) =>
+  static List<Map<String, dynamic>> _categorysToJson(
+          List<CategoryModel> models) =>
       models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
@@ -577,10 +584,10 @@ class SupplierModel extends ItemModel {
 
   SupplierModel(
       {this.factory,
-        this.orderCount,
-        this.quoteOrder,
-        this.purchaseOrder,
-        this.quoteCount});
+      this.orderCount,
+      this.quoteOrder,
+      this.purchaseOrder,
+      this.quoteCount});
 
   factory SupplierModel.fromJson(Map<String, dynamic> json) =>
       _$SupplierModelFromJson(json);
@@ -718,5 +725,3 @@ const PriceRangesLocalizedMap = {
   PriceRanges.PR005: '301-500',
   PriceRanges.PR006: '500以上',
 };
-
-

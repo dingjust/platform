@@ -68,7 +68,7 @@ class ProductsView extends StatelessWidget {
       }
     });
 
-        //监听滚动事件，打印滚动位置
+    //监听滚动事件，打印滚动位置
     _scrollController.addListener(() {
       if (_scrollController.offset < 500) {
         bloc.hideToTopBtn();
@@ -98,17 +98,16 @@ class ProductsView extends StatelessWidget {
         decoration: BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
         child: RefreshIndicator(
           onRefresh: () async {
-            // bloc.loadingEnd();
-            return await bloc.refreshData();
+            bloc.clear();
           },
           child: CustomScrollView(
             controller: _scrollController,
             slivers: <Widget>[
-              StreamBuilder<List<ProductModel>>(
+              StreamBuilder<List<ApparelProductModel>>(
                   stream: bloc.stream,
                   initialData: bloc.products,
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<ProductModel>> snapshot) {
+                      AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                     //数据为空查询数据，显示加载条
                     if (snapshot.data.isEmpty) {
                       bloc.getData();
@@ -124,11 +123,11 @@ class ProductsView extends StatelessWidget {
                       );
                     }
                   }),
-              StreamBuilder<List<ProductModel>>(
+              StreamBuilder<List<ApparelProductModel>>(
                   stream: bloc.stream,
                   initialData: bloc.products,
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<ProductModel>> snapshot) {
+                      AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                     if (snapshot.data.isNotEmpty) {
                       List<RecommendProductItem> recommendProductItems =
                           snapshot.data

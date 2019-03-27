@@ -36,7 +36,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
     /// 快速需求表单
     FastRequirementForm fastRequirementForm = FastRequirementForm(
         categories: [],
-        deliveryDate: DateTime.now(),
+        // deliveryDate: DateTime.now(),
         contactPerson: TextEditingController(),
         phone: TextEditingController(),
         requirementNum: TextEditingController());

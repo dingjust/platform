@@ -119,6 +119,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                             builder: (context) => RequirementDatePick(
                                   fastRequirementForm:
                                       widget.fastRequirementForm,
+                                  nowTime: DateTime.now(),
                                 )));
                       }
                     },

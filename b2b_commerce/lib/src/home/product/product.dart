@@ -1,13 +1,15 @@
 import 'package:b2b_commerce/src/home/product/product_detail.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class RecommendProductItem extends StatelessWidget {
   const RecommendProductItem(
       {Key key, this.model, this.imageSize = 200, this.showAddress = false})
       : super(key: key);
 
-  final ProductModel model;
+  final ApparelProductModel model;
 
   final double imageSize;
 
@@ -16,11 +18,13 @@ class RecommendProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         //TODO: 跳转到产品详情页
+        ApparelProductModel detailProduct =
+            await ProductRepositoryImpl().detail(model.code);
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ProductDetailPage(
-                  productCode: model.code,
+                  product: detailProduct,
                 )));
       },
       child: Container(
@@ -35,7 +39,13 @@ class RecommendProductItem extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5), topRight: Radius.circular(5)),
                 image: DecorationImage(
-                  image: NetworkImage(model.thumbnail.url),
+                  image: model.thumbnail != null
+                      ? NetworkImage(
+                          '${GlobalConfigs.IMAGE_BASIC_URL}${model.thumbnail.url}')
+                      : AssetImage(
+                          'temp/picture.png',
+                          package: "assets",
+                        ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -62,7 +72,8 @@ class RecommendProductItem extends StatelessWidget {
                           style: TextStyle(color: Colors.red, fontSize: 14),
                           children: <TextSpan>[
                             TextSpan(
-                                text: '${model.minPrice}—${model.maxPrice}',
+                                text:
+                                    '${model.minPrice ?? 0}—${model.maxPrice ?? 0}',
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold)),
                           ]),
