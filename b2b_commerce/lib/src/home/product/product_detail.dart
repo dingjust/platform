@@ -1,320 +1,39 @@
-import 'package:b2b_commerce/src/business/products/apparel_product_size_stock_item.dart';
 import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
-import 'package:b2b_commerce/src/home/product/product_color_size_select.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductDetailPage extends StatefulWidget {
-  const ProductDetailPage({Key key, @required this.productCode})
-      : super(key: key);
+  ProductDetailPage({Key key, @required this.product}) : super(key: key);
 
-  final String productCode;
+  ApparelProductModel product;
 
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  final List<MediaModel> items = <MediaModel>[
-    MediaModel(
-        url:
-            'https://img.alicdn.com/imgextra/i2/29473371/O1CN018iO48c1alxcrQ5TCo_!!0-saturn_solar.jpg_220x220.jpg_.webp'),
-    MediaModel(
-      url:
-          'https://img.alicdn.com/imgextra/i1/772352038/O1CN01Tg40Eb1QvRfVPq2Me_!!772352038.jpg',
-    ),
-    MediaModel(
-      url:
-          'https://img.alicdn.com/imgextra/i4/772352038/O1CN01g4qsIq1QvRfTWbVBE_!!772352038.jpg',
-    ),
-    MediaModel(
-        url:
-            'https://img.alicdn.com/imgextra/i1/772352038/O1CN01S9gNeK1QvRfV9E3c8_!!772352038.jpg'),
-    MediaModel(
-        url:
-            'https://img.alicdn.com/imgextra/i2/772352038/O1CN01zdkaHt1QvRfUl0KDV_!!772352038.jpg')
-  ];
-  final List<ColorSelectEntry> colorEntries = [];
-  final List<SizeSelectEntry> sizeEntries = [];
-  Map<ColorSelectEntry, List<SizeStockItem>> apparelProductStockInputItems =
-      Map<ColorSelectEntry, List<SizeStockItem>>();
-
-  //TODO 根据code查询款式详情
-  final product = ApparelProductModel(
-      name: '冬季女棉服',
-//      thumbnail:
-//          'https://img.alicdn.com/imgextra/i4/311670094/O1CN014LCreL1CZ5iva14YN_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-      minPrice: 99.00,
-      maxPrice: 500.00,
-      belongTo: FactoryModel.fromJson({
-        'profilePicture': {
-          'profilePicture':
-              'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'
-        },
-        'uid': 'BB123456',
-        'name': '森马',
-        'starLevel': 5,
-        'historyOrdersCount': 35,
-        'responseQuotedTime': 50,
-        'email': 'monkey.D.luffy@163.com',
-        'phone': '020-12345678',
-        'cooperationModes': ['FOB'],
-        'developmentCapacity': true,
-        'monthlyCapacityRanges': 'MCR003',
-        'latheQuantity': 5,
-        'contactPerson': 'luffy',
-        'contactPhone': '13123456789',
-        'address': '广东省广州市海珠区广州大道南',
-        'contactAddress': {
-          'fullname': "张三",
-          'cellphone': '13123456789',
-          'region': {'isocode': 'R123', 'name': '广东省'},
-          'city': {'code': 'C123', 'name': '广州市'},
-          'cityDistrict': {'code': 'D123', 'name': '海珠区'},
-          'line1': '广州大道南',
-        },
-        'categories': [
-          {
-            'code': '1001',
-            'name': '卫衣',
-          },
-          {
-            'code': '1002',
-            'name': '毛衣',
-          },
-        ],
-        'scaleRange': 'SR005',
-        'registrationDate': DateTime.now().toString(),
-        'taxNumber': '41553315446687844',
-        'bankOfDeposit': '中国工商银行',
-        'certificate': [
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg',
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg',
-          },
-          {
-            'url':
-                'https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=05e1074ebf096b63814c56563c03ab7c/8b82b9014a90f6037c2a5c263812b31bb051ed3d.jpg',
-            'mediaType': 'jpg',
-          },
-        ],
-        'cooperativeBrands': [
-          {
-            'profilePicture':
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-            'uid': 'BB123456',
-            'name': '森马',
-            'starLevel': 5,
-            'email': 'monkey.D.luffy@163.com',
-            'phone': '020-12345678',
-            'cooperationModes': ['FOB'],
-            'developmentCapacity': true,
-            'monthlyCapacityRanges': 'MCR003',
-            'latheQuantity': 5,
-            'contactPerson': 'luffy',
-            'contactPhone': '13123456789',
-          },
-          {
-            'profilePicture':
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-            'uid': 'BB123456',
-            'name': '森马',
-            'starLevel': 5,
-            'email': 'monkey.D.luffy@163.com',
-            'phone': '020-12345678',
-            'cooperationModes': ['FOB'],
-            'developmentCapacity': true,
-            'monthlyCapacityRanges': 'MCR003',
-            'latheQuantity': 5,
-            'contactPerson': 'luffy',
-            'contactPhone': '13123456789',
-          },
-          {
-            'profilePicture':
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-            'uid': 'BB123456',
-            'name': '森马',
-            'starLevel': 5,
-            'email': 'monkey.D.luffy@163.com',
-            'phone': '020-12345678',
-            'cooperationModes': ['FOB'],
-            'developmentCapacity': true,
-            'monthlyCapacityRanges': 'MCR003',
-            'latheQuantity': 5,
-            'contactPerson': 'luffy',
-            'contactPhone': '13123456789',
-          },
-          {
-            'profilePicture':
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-            'uid': 'BB123456',
-            'name': '森马',
-            'starLevel': 5,
-            'email': 'monkey.D.luffy@163.com',
-            'phone': '020-12345678',
-            'cooperationModes': ['FOB'],
-            'developmentCapacity': true,
-            'monthlyCapacityRanges': 'MCR003',
-            'latheQuantity': 5,
-            'contactPerson': 'luffy',
-            'contactPhone': '13123456789',
-          },
-          {
-            'profilePicture':
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-            'uid': 'BB123456',
-            'name': '森马',
-            'starLevel': 5,
-            'email': 'monkey.D.luffy@163.com',
-            'phone': '020-12345678',
-            'cooperationModes': ['FOB'],
-            'developmentCapacity': true,
-            'monthlyCapacityRanges': 'MCR003',
-            'latheQuantity': 5,
-            'contactPerson': 'luffy',
-            'contactPhone': '13123456789',
-          },
-          {
-            'profilePicture':
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-            'uid': 'BB123456',
-            'name': '森马',
-            'starLevel': 5,
-            'email': 'monkey.D.luffy@163.com',
-            'phone': '020-12345678',
-            'cooperationModes': ['FOB'],
-            'developmentCapacity': true,
-            'monthlyCapacityRanges': 'MCR003',
-            'latheQuantity': 5,
-            'contactPerson': 'luffy',
-            'contactPhone': '13123456789',
-          },
-          {
-            'profilePicture':
-                'http://img.jf258.com/uploads/2015-05-14/030643325.jpg',
-            'uid': 'BB123456',
-            'name': '森马',
-            'starLevel': 5,
-            'email': 'monkey.D.luffy@163.com',
-            'phone': '020-12345678',
-            'cooperationModes': ['FOB'],
-            'developmentCapacity': true,
-            'monthlyCapacityRanges': 'MCR003',
-            'latheQuantity': 5,
-            'contactPerson': 'luffy',
-            'contactPhone': '13123456789',
-          },
-        ],
-        'products': [
-          {
-            'name': '春秋薄款卫衣',
-            'normal': [
-              {
-                'url':
-                    'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
-              },
-              {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-            ],
-            'price': 33.3,
-          },
-          {
-            'name': '春秋薄款卫衣',
-            'normal': [
-              {
-                'url':
-                    'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
-              },
-              {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-            ],
-            'price': 33.3,
-          },
-          {
-            'name': '春秋薄款卫衣',
-            'normal': [
-              {
-                'url':
-                    'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
-              },
-              {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-            ],
-            'price': 33.3,
-          },
-          {
-            'name': '春秋薄款卫衣',
-            'normal': [
-              {
-                'url':
-                    'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
-              },
-              {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-            ],
-            'price': 33.3,
-          },
-          {
-            'name': '春秋薄款卫衣',
-            'normal': [
-              {
-                'url':
-                    'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg'
-              },
-              {'url': 'https://node.500px.me/tpl/baijia0103/imgs/shili1.jpg'},
-            ],
-            'price': 33.3,
-          },
-        ]
-      }));
-
-  //TODO 对应产品的颜色尺码数据
-  List<ColorModel> mockColors = <ColorModel>[
-    ColorModel(code: 'C01', name: '红色', colorCode: 'FF0033'),
-    ColorModel(code: 'C02', name: '黄色', colorCode: 'FFCC00'),
-    ColorModel(code: 'C03', name: '粉红', colorCode: 'FF9999'),
-    ColorModel(code: 'C04', name: '海军蓝', colorCode: '0066FF'),
-    ColorModel(code: 'C05', name: '浅紫', colorCode: 'CC99CC'),
-    ColorModel(code: 'C06', name: '藏青', colorCode: '000033'),
-  ];
-
-  List<SizeModel> mockSizes = <SizeModel>[
-    SizeModel(code: 'S01', name: 'XXXL'),
-    SizeModel(code: 'S02', name: 'XXL'),
-    SizeModel(code: 'S03', name: 'XL'),
-    SizeModel(code: 'S04', name: 'L'),
-    SizeModel(code: 'S05', name: 'M'),
-    SizeModel(code: 'S06', name: 'S'),
-    SizeModel(code: 'S07', name: 'XS')
-  ];
+  TextEditingController _numController = TextEditingController();
+  TextEditingController _remarksController = TextEditingController();
 
   void initState() {
     super.initState();
-    colorEntries.clear();
-    sizeEntries.clear();
-    apparelProductStockInputItems.clear();
-
-    ///构建颜色尺码选中数据列
-    colorEntries.addAll(mockColors
-        .map((color) => ColorSelectEntry(colorModel: color))
-        .toList());
-
-    sizeEntries.addAll(
-        mockSizes.map((size) => SizeSelectEntry(sizeModel: size)).toList());
-
-    ///构建数量控制列
-    colorEntries.forEach((color) {
-      apparelProductStockInputItems[color] = sizeEntries
-          .map((size) => SizeStockItem(size: size.sizeModel, selectEntry: size))
-          .toList();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    List<MediaModel> thumbnails = widget.product.thumbnails
+        .map((thumbnail) => MediaModel(
+            convertedMedias: thumbnail.convertedMedias,
+            mediaFormat: thumbnail.mediaFormat,
+            mediaType: thumbnail.mediaType,
+            mime: thumbnail.mime,
+            name: thumbnail.name,
+            url: '${GlobalConfigs.IMAGE_BASIC_URL}${thumbnail.url}',
+            id: thumbnail.id))
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -334,7 +53,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         color: Color.fromRGBO(248, 248, 248, 1),
         child: ListView(
           children: <Widget>[
-            ProductCarousel(items, 300),
+            ProductCarousel(thumbnails, 300),
             _buildHeaderSection(),
             _buildBasicInfoSection(),
             _buildOrderButton(),
@@ -346,8 +65,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Widget _buildHeaderSection() {
     //因字符样式不同，将价格按小数点分割
-    List<String> _minPrice = product.minPrice.toString().split(".");
-    List<String> _maxPrice = product.maxPrice.toString().split(".");
+    List<String> _minPrice = widget.product.minPrice != null
+        ? widget.product.minPrice.toString().split(".")
+        : ['0', '0'];
+    List<String> _maxPrice = widget.product.maxPrice != null
+        ? widget.product.minPrice.toString().split(".")
+        : ['0', '0'];
 
     return Container(
       height: 110,
@@ -359,7 +82,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '${product.name}',
+            '${widget.product.name}',
             style: TextStyle(
                 color: Color.fromRGBO(50, 50, 50, 1),
                 fontSize: 16,
@@ -390,7 +113,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
               ),
               Text(
-                '${product.belongTo.address}',
+                '${widget.product.belongTo?.address}',
                 style: TextStyle(
                     color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
               )
@@ -403,7 +126,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Widget _buildBasicInfoSection() {
     return Container(
-      height: 100,
+      height: 80,
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
@@ -413,7 +136,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         children: <Widget>[
           BasicInfoRow(
             label: '工厂',
-            value: '${product.belongTo.name}',
+            value: '${widget.product.belongTo?.name}',
             action: JumpTo(
               label: '进厂',
               onTap: () {
@@ -422,7 +145,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   MaterialPageRoute(
                     builder: (context) => SuppliersDetail(
                           supplierModel: SupplierModel(
-                            factory: product.belongTo,
+                            factory: widget.product.belongTo,
                           ),
                           isSupplier: false,
                         ),
@@ -430,10 +153,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 );
               },
             ),
-          ),
-          BasicInfoRow(
-            label: '生产周期',
-            value: '220件/天',
           ),
           BasicInfoRow(
             label: '参数',
@@ -493,7 +212,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   child: TextField(
                     autofocus: true,
                     keyboardType: TextInputType.number,
-                    // controller: _unitPriceController,
+                    controller: _numController,
                     onChanged: (value) {},
                     //只能输入数字
                     inputFormatters: <TextInputFormatter>[
@@ -513,7 +232,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               color: Color.fromRGBO(200, 200, 200, 1)))),
                   child: TextField(
                     autofocus: true,
-                    // controller: _unitPriceController,
+                    controller: _remarksController,
                     onChanged: (value) {},
                     decoration: InputDecoration(
                         hintText: '请填写颜色、尺码、特殊工艺以及其他要求',
@@ -545,10 +264,28 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         context: context,
         builder: (BuildContext context) {
           return AttributeTable(
-            attributes:
-                ApparelProductAttributesModel(fabricComposition: 'asdadasd'),
+            product: widget.product,
           );
         });
+  }
+
+  /// 发布
+  void onPublish() async {
+    RequirementOrderModel form = RequirementOrderModel();
+
+    // // form..
+    // String code =
+    //     await RequirementOrderRepository().publishNewRequirement(form);
+    // if (code != null) {
+    //   form.code = code;
+    //   Navigator.of(context).pushAndRemoveUntil(
+    //       MaterialPageRoute(
+    //         builder: (context) => PublishRequirementSuccessDialog(
+    //               model: form,
+    //             ),
+    //       ),
+    //       ModalRoute.withName('/'));
+    // }
   }
 }
 

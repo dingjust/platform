@@ -29,7 +29,7 @@ class ProductionItem extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: Column(
           children: <Widget>[
-            _buildHeader(),
+            _buildHeader(context),
             _buildContent(context),
             _buildBottom(),
           ],
@@ -42,7 +42,40 @@ class ProductionItem extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildCompanyName(BuildContext context){
+    final bloc = BLoCProvider.of<UserBLoC>(context);
+    if(bloc.isBrandUser){
+      if((order.belongTo != null && order.belongTo.name != null) || order.companyOfSeller != null){
+        return Text(
+          '${order.belongTo != null && order.belongTo.name != null?order.belongTo.name:order.companyOfSeller}',
+          style: TextStyle(fontSize: 16),
+          overflow: TextOverflow.ellipsis,
+        );
+      }else{
+        return Text(
+          ' ',
+          style: TextStyle(fontSize: 16),
+          overflow: TextOverflow.ellipsis,
+        );
+      }
+    }else{
+      if((order.purchaser != null && order.purchaser.name != null)|| order.companyOfSeller != null){
+        return Text(
+          '${order.purchaser != null && order.purchaser.name != null?order.purchaser.name:order.companyOfSeller}',
+          style: TextStyle(fontSize: 16),
+          overflow: TextOverflow.ellipsis,
+        );
+      }else{
+        return Text(
+          ' ',
+          style: TextStyle(fontSize: 16),
+          overflow: TextOverflow.ellipsis,
+        );
+      }
+    }
+  }
+
+  Widget _buildHeader(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Column(
@@ -53,11 +86,7 @@ class ProductionItem extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Text(
-                  '${order.purchaser != null && order.purchaser.name != null?order.purchaser.name:order.companyOfSeller}1111111111111111111111111111',
-                  style: TextStyle(fontSize: 16),
-                  overflow: TextOverflow.ellipsis,
-                ),
+                child: _buildCompanyName(context),
               ),
               Expanded(
                 child:

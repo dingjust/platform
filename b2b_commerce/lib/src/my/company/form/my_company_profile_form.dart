@@ -2,7 +2,6 @@ import 'package:b2b_commerce/src/my/company/company_profile_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 class MyCompanyProfileFormPage extends StatefulWidget {
   CompanyModel company;
@@ -14,20 +13,20 @@ class MyCompanyProfileFormPage extends StatefulWidget {
 }
 
 class MyCompanyProfileFormPageState extends State<MyCompanyProfileFormPage> {
-  List<CompanyProfileModel> _companyProfiles = List(3);
+  List<CompanyProfileModel> _companyProfiles = [];
 
   @override
   void initState() {
-    for (int i = 0; i < widget.company.companyProfiles.length; i++) {
-      _companyProfiles[i] = widget.company.companyProfiles[i];
-    }
-    _companyProfiles.fillRange(
-        widget.company.companyProfiles.length,
-        3,
-        CompanyProfileModel(
+   if(widget.company.profiles != null) _companyProfiles.addAll(widget.company.profiles);
+    if(widget.company.profiles.length < 3){
+      for(int i = widget.company.profiles.length;i<3-widget.company.profiles.length;i++){
+        _companyProfiles.add(CompanyProfileModel(
           medias: [],
           description: '',
         ));
+      }
+    }
+
     print(_companyProfiles);
 
     // TODO: implement initState
@@ -50,7 +49,13 @@ class MyCompanyProfileFormPageState extends State<MyCompanyProfileFormPage> {
               ),
             ),
             onPressed: () {
+              print(widget.company.profiles);
+              widget.company.profiles = _companyProfiles;
+              widget.company.profiles.forEach((profile){
+                print(CompanyProfileModel.toJson(profile));
+              });
 
+              UserRepositoryImpl().factoryUpdate(widget.company).then((a)=>Navigator.pop(context));
             },
           ),
         ],

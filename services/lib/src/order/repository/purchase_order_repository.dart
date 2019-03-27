@@ -223,5 +223,22 @@ class PurchaseOrderRepository {
     }
   }
 
+  //确认生产
+  Future<bool> confirmProduction(String code) async {
+    Response<String> response;
+    try{
+      response =  await http$.put(
+          OrderApis.confirmProduction(code),
+          options: Options(responseType: ResponseType.plain));
+    }on DioError catch(e){
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 }

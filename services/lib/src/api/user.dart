@@ -23,4 +23,7 @@ abstract class UserApis {
 
   //产业集群
   static get getIndustrialClusterFromLabels => '/{baseSiteId}/b2b/industrialClusters/labels';
+
+  //标签列表
+  static get labels => '/{baseSiteId}/labels/all';
 }

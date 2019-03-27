@@ -34,7 +34,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
                       child: Text(
                         '确定',
                         style: TextStyle(
-                            color: Color.fromRGBO(255, 214, 12, 1)),
+                            color: Colors.black),
                       ),
                     ),
                   ),
@@ -220,7 +220,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(fieldText: '定金金额',inputType: TextInputType.number)),
+                builder: (context) => OfflineOrderInputPage(fieldText: '尾款金额',inputType: TextInputType.number)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {

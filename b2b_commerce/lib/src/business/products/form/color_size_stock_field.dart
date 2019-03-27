@@ -25,8 +25,11 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
     ProductRepositoryImpl().colors().then((colors)=>_colors = colors);
     ProductRepositoryImpl().sizes().then((sizes)=>_sizes = sizes);
 
+
     List<String> colorCodes = [];
     List<String> sizeCodes = [];
+    _colorFilters.clear();
+    _sizeFilters.clear();
     if(widget.item?.variants != null){
       widget.item.variants.forEach((variant){
         if(!colorCodes.contains(variant.color.code)) {
@@ -61,6 +64,9 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
               _colorFilters = result[0];
               _sizeFilters = result[1];
             }
+
+            print(_colorFilters);
+            print(_sizeFilters);
 
             List<ApparelSizeVariantProductModel> variants = [];
             _colorFilters.forEach((color){

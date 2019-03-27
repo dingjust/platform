@@ -1,14 +1,13 @@
 import 'package:b2b_commerce/src/business/products/existing_product_item.dart';
 import 'package:b2b_commerce/src/business/search/existing_product_search.dart';
-import 'package:b2b_commerce/src/home/product/product_detail.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class ExistingProductsPage extends StatefulWidget {
   List<ApparelProductModel> products;
-  ExistingProductsPage(this.products);
+  bool isFactoryDetail;
+  ExistingProductsPage(this.products,{this.isFactoryDetail = false});
 
   _ExistingProductsPageState createState() => _ExistingProductsPageState();
 }
@@ -41,10 +40,14 @@ class _ExistingProductsPageState extends State<ExistingProductsPage> {
   Widget _buildExistingProductItem(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
-      child: GridView.count(
-        crossAxisCount: 2,
+      child: GridView(
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 0.77,
+            crossAxisSpacing: 10),
         children: List.generate(widget.products.length, (index) {
-          return ExistingProductItem(widget.products[index]);
+          return ExistingProductItem(widget.products[index],isFactoryDetail: true,);
         }),
       ),
     );

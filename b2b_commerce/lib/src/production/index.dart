@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/my/my_client_services.dart';
 import 'package:b2b_commerce/src/production/production.dart';
 import 'package:b2b_commerce/src/production/production_filter.dart';
 import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
@@ -28,20 +27,20 @@ class _ProductionPageState extends State<ProductionPage> {
             title: ProductionSearchInputBox(),
             brightness: Brightness.dark,
             actions: <Widget>[
-              IconButton(
-                padding: EdgeInsets.only(right: 20),
-                icon: const Icon(B2BIcons.message),
-                color: Color.fromRGBO(255,214,12, 1),
-                tooltip: 'message',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyClientServicesPage(),
-                    ),
-                  );
-                },
-              ),
+//              IconButton(
+//                padding: EdgeInsets.only(right: 20),
+//                icon: const Icon(B2BIcons.message),
+//                color: Color.fromRGBO(255,214,12, 1),
+//                tooltip: 'message',
+//                onPressed: () {
+//                  Navigator.push(
+//                    context,
+//                    MaterialPageRoute(
+//                      builder: (context) => MyClientServicesPage(),
+//                    ),
+//                  );
+//                },
+//              ),
             ],
           ),
           body: Scaffold(
@@ -91,15 +90,10 @@ class _ProductionPageState extends State<ProductionPage> {
             // this is ignored if animatedIcon is non null
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  '添加',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-                Text(
                   '线下订单',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  style: TextStyle(color: Colors.black, fontSize: 12),
                 )
               ],
             ),

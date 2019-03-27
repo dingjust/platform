@@ -6,6 +6,7 @@ class TextFieldComponent extends StatefulWidget {
   final String helperText;
   double leadingWidth;
   TextEditingController controller;
+  //必传
   final FocusNode focusNode;
   final TextInputType inputType;
   final Widget trailing;
@@ -18,6 +19,7 @@ class TextFieldComponent extends StatefulWidget {
   TextInputAction textInputAction;
   TextAlign textAlign;
   Color leadingColor;
+  bool hideDivider;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -27,7 +29,7 @@ class TextFieldComponent extends StatefulWidget {
     this.helperText,
     this.leadingWidth = 75,
     this.controller,
-    this.focusNode,
+    @required this.focusNode,
     this.inputType,
     this.trailing,
     this.onChanged,
@@ -39,6 +41,7 @@ class TextFieldComponent extends StatefulWidget {
     this.textInputAction,
     this.textAlign = TextAlign.right,
     this.leadingColor = Colors.black,
+    this.hideDivider = false,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
@@ -49,19 +52,17 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   void initState() {
-    if(widget.focusNode != null){
-      widget.focusNode.addListener(() {
-        if (widget.focusNode.hasFocus) {
-          setState(() {
-            _dividerColor = Color.fromRGBO(255,214,12, 1);
-          });
-        } else {
-          setState(() {
-            _dividerColor = Colors.grey[400];
-          });
-        }
-      });
-    }
+    widget.focusNode.addListener(() {
+      if (widget.focusNode.hasFocus) {
+        setState(() {
+          _dividerColor = Color.fromRGBO(255,214,12, 1);
+        });
+      } else {
+        setState(() {
+          _dividerColor = Colors.grey[400];
+        });
+      }
+    });
 
     if (widget.leadingText == null || widget.leadingText == '') {
       widget.leadingWidth = 0.0;
@@ -132,7 +133,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
           ),
         ),
         Offstage(
-          offstage: widget.focusNode == null,
+          offstage: widget.hideDivider,
           child: Padding(
             padding: widget.dividerPadding ?? widget.dividerPadding ?? EdgeInsets.symmetric(horizontal: 15),
             child: Column(

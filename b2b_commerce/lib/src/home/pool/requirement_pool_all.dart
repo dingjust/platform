@@ -436,7 +436,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
                 ),
               ),
               Text(
-                '${order.totalQuantity ?? 0}件',
+                '${order.details.expectedMachiningQuantity ?? 0}件',
                 style: TextStyle(
                     fontSize: 15, color: Color.fromRGBO(255, 149, 22, 1)),
               ),
@@ -449,7 +449,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
               style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
               children: <TextSpan>[
                 TextSpan(
-                    text: '${order.totalPrice}', style: TextStyle(fontSize: 18))
+                    text: '${order.details.maxExpectedPrice??0}', style: TextStyle(fontSize: 18))
               ]),
         )
       ],

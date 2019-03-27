@@ -88,6 +88,11 @@ class OrderApis {
         return '/{baseSiteId}/b2b/orders/purchase/link/$code';
       };
 
+  //确认生产
+  static get confirmProduction => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/$code/production';
+  };
+
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/b2b/orders/quote';
 

@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart'
 import 'package:b2b_commerce/src/home/requirement/requirement_date_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class CategorySelectPage extends StatefulWidget {
@@ -39,13 +40,17 @@ class CategorySelectPageState extends State<CategorySelectPage> {
   }
 
   void _jumpToFactories(CategoryModel category) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => FactoryPage()));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => FactoryPage(
+              FactoryCondition(starLevel: 0, adeptAtCategory: [category]),
+            )));
   }
 
   void _jumpToProducts(CategoryModel category) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ProductsPage()));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProductsPage(
+              categoryModel: category,
+            )));
   }
 
   @override
@@ -119,6 +124,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                             builder: (context) => RequirementDatePick(
                                   fastRequirementForm:
                                       widget.fastRequirementForm,
+                                  nowTime: DateTime.now(),
                                 )));
                       }
                     },

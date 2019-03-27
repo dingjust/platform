@@ -15,6 +15,9 @@ import 'package:widgets/widgets.dart';
 class PicturePickPreviewWidget extends StatefulWidget {
   List<MediaModel> medias;
 
+  //是否能上传图片
+  final bool isUpload;
+
   //标题字体样式
   final TextStyle titleFont;
 
@@ -31,12 +34,13 @@ class PicturePickPreviewWidget extends StatefulWidget {
   final bool primary;
 
   PicturePickPreviewWidget({
-    this.medias,
+    @required this.medias,
     this.subtitleFont,
     this.titleFont,
     this.height = 300,
     this.itemWidth = 240.0,
     this.primary = false,
+    this.isUpload = false,
   });
 
   _PicturePickPreviewWidget createState() => _PicturePickPreviewWidget();
@@ -58,8 +62,10 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
       userType = 'brand';
     }else{
       userType = 'factory';
-      MediaModel model = new MediaModel();
-      widget.medias.insert(0, model);
+      if(widget.isUpload) {
+        MediaModel model = new MediaModel();
+        widget.medias.insert(0, model);
+      }
     }
 
     super.initState();
@@ -75,8 +81,12 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
               onPressed: () {
                 if (userType == 'factory') {
                   //带参数返回
-                  widget.medias.removeAt(0);
-                  Navigator.of(context).pop(widget.medias);
+                  if(widget.isUpload) {
+                    widget.medias.removeAt(0);
+                    Navigator.of(context).pop(widget.medias);
+                  }else{
+                    Navigator.of(context).pop();
+                  }
                 } else {
                   Navigator.of(context).pop();
                 }
@@ -96,8 +106,12 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
       onWillPop: () {
         if (userType == 'factory') {
           //带参数返回
-          widget.medias.removeAt(0);
-          Navigator.of(context).pop(widget.medias);
+          if(widget.isUpload) {
+            widget.medias.removeAt(0);
+            Navigator.of(context).pop(widget.medias);
+          }else{
+            Navigator.of(context).pop();
+          }
         } else {
           Navigator.of(context).pop();
         }
@@ -114,7 +128,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
           maxCrossAxisExtent: widget.itemWidth,
           crossAxisSpacing: 10),
       children: List.generate(widget.medias.length, (index) {
-        if (index == 0 && userType == 'factory') {
+        if (index == 0 && userType == 'factory' && widget.isUpload == true) {
           return GestureDetector(
               child: Container(
                   margin: EdgeInsets.all(10),
@@ -149,7 +163,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
               margin: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey[200],
@@ -160,22 +174,23 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                 ],
               ),
               child: Container(
-                padding: EdgeInsets.fromLTRB(5, 5, 15, 5),
-                child: Center(
-                  child: Image.network(
-                    '${GlobalConfigs.IMAGE_BASIC_URL}${widget.medias[index].url}',
-                    width: 500,
-                    height: 500,
-                  ),
-                ),
-              )
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image:
+                      NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.medias[index].url}'),
+                      fit: BoxFit.fill,
+                    )),
+              ),
           ),
           onTap: () {
             onPreview(
                 context,'${GlobalConfigs.IMAGE_BASIC_URL}${widget.medias[index].url}');
           },
+
           onLongPress: () {
-            _deleteFile(widget.medias[index]);
+            userType == 'factory' ? _deleteFile(widget.medias[index]):null;
           },
         );
       }),
@@ -185,12 +200,19 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
   //图片预览
   void onPreview(BuildContext context, String url) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return Container(
-            child: PhotoView(
-              imageProvider: NetworkImage(url),
-            ));
+        return GestureDetector(
+          child: Container(
+              child: PhotoView(
+                imageProvider: NetworkImage(url),
+              )
+          ),
+          onTap: (){
+            Navigator.of(context).pop();
+          },
+        );
       },
     );
   }
@@ -395,6 +417,12 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
           ),
           actions: <Widget>[
             FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
               child: Text('确认'),
               onPressed: () async {
                 //TODO :调用删除接口,暂时隐藏
@@ -415,12 +443,6 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                 // }
               },
             ),
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
           ],
         );
       },

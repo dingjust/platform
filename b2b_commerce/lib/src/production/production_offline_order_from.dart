@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
@@ -482,7 +481,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-            trailing: earnest.earnestMoney == null || earnest.earnestMoney == ''
+            trailing: earnest == null || earnest.earnestMoney == null || earnest.earnestMoney == ''
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(earnest.earnestMoney,
               style: TextStyle(
@@ -586,6 +585,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             //接收返回数据并处理
           ).then((value) {
             setState(() {
+              if(value != null)
               addressModel = value;
             });
           });
@@ -709,7 +709,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   child: Text(
                     '确认',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
                     ),

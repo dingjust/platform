@@ -183,6 +183,7 @@ class SampleProductHistoryFormPageState
                               padding: EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 17.5),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Container(
                                     width: 100,
@@ -191,29 +192,27 @@ class SampleProductHistoryFormPageState
                                       style: TextStyle(fontSize: 16),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Container(
-                                      child: GestureDetector(
-                                        child: _nameText,
-                                        onTap: () async {
-                                          _smapleProduct =
-                                              await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SampleProductsPage(
-                                                      isHistoryCreate: true),
-                                            ),
-                                          );
-                                          if(_smapleProduct != null){
-                                            _nameText = Text(_smapleProduct.name,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 16));
-                                            _skuIDText = _smapleProduct.code;
-                                          }
-                                        },
-                                      ),
+                                  Container(
+                                    child: GestureDetector(
+                                      child: _nameText,
+                                      onTap: () async {
+                                        _smapleProduct =
+                                            await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                SampleProductsPage(
+                                                    isHistoryCreate: true),
+                                          ),
+                                        );
+                                        if(_smapleProduct != null){
+                                          _nameText = Text(_smapleProduct.name,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16));
+                                          _skuIDText = _smapleProduct.code;
+                                        }
+                                      },
                                     ),
                                   )
                                 ],
@@ -231,6 +230,7 @@ class SampleProductHistoryFormPageState
                               padding: EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 17.5),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Container(
                                     width: 100,
@@ -239,9 +239,7 @@ class SampleProductHistoryFormPageState
                                       style: TextStyle(fontSize: 16),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Text(_skuIDText,style: TextStyle(fontSize: 16),),
-                                  )
+                                  Text(_skuIDText,style: TextStyle(fontSize: 16),)
                                 ],
                               ),
                             ),
@@ -285,6 +283,7 @@ class SampleProductHistoryFormPageState
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 18),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Container(
                           width: 100,
@@ -293,27 +292,25 @@ class SampleProductHistoryFormPageState
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
-                        Expanded(
-                          child: GestureDetector(
-                            child: _expectedReturnDateText,
-                            onTap: () {
-                              _selectDate(context).then((value) {
-                                setState(() {
-                                  widget.model.expectedReturnDate = value;
-                                  if (value != null) {
-                                    _expectedReturnDateText =
-                                        Text(DateFormatUtil.formatYMD(value));
-                                  } else {
-                                    _expectedReturnDateText = Text(
-                                      '点击选择日期',
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 16),
-                                    );
-                                  }
-                                });
+                        GestureDetector(
+                          child: _expectedReturnDateText,
+                          onTap: () {
+                            _selectDate(context).then((value) {
+                              setState(() {
+                                widget.model.expectedReturnDate = value;
+                                if (value != null) {
+                                  _expectedReturnDateText =
+                                      Text(DateFormatUtil.formatYMD(value));
+                                } else {
+                                  _expectedReturnDateText = Text(
+                                    '点击选择日期',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 16),
+                                  );
+                                }
                               });
-                            },
-                          ),
+                            });
+                          },
                         )
                       ],
                     ),

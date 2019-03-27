@@ -5,19 +5,17 @@ import 'package:b2b_commerce/src/my/company/my_personal_certificate.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 /// 认证信息
 class MyBrandPage extends StatefulWidget {
+  BrandModel brand;
+  MyBrandPage(this.brand);
+
   _MyBrandPageState createState() => _MyBrandPageState();
 }
 
 class _MyBrandPageState extends State<MyBrandPage> {
-  BrandModel company;
-  UserRepository _userRepository = UserRepositoryImpl();
-  UserType type = UserType.ANONYMOUS;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -43,33 +41,14 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MyCompanyContactWayPage(company)),
+                      builder: (context) => MyCompanyContactWayPage(widget.brand,isCompanyIntroduction: true,)),
                 );
               },
             ),
           ),
         ],
       ),
-      body: FutureBuilder<dynamic>(
-        future:
-            _userRepository.getBrand(UserBLoC.instance.currentUser.companyCode),
-        // initialData: null,
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.data == null) {
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 200),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-          if (snapshot.hasData) {
-            company = snapshot.data;
-            company.type = CompanyType.INDIVIDUAL_HOUSEHOLD;
-            return Container(child: _buildBrand(context));
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-        },
-      ),
+      body: _buildBrand(context),
     );
   }
 
@@ -85,10 +64,10 @@ class _MyBrandPageState extends State<MyBrandPage> {
             title: Text('公司认证信息'),
             trailing: Icon(Icons.chevron_right),
             onTap: (){
-              if(company.type == CompanyType.INDIVIDUAL_HOUSEHOLD){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyPersonalCertificatePage(company,onlyRead: true,)));
+              if(widget.brand.type == CompanyType.INDIVIDUAL_HOUSEHOLD){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyPersonalCertificatePage(widget.brand,onlyRead: true,)));
               }else{
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyCertificatePage(company,onlyRead: true,)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyCertificatePage(widget.brand,onlyRead: true,)));
               }
             },
           ),
@@ -98,7 +77,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
           margin: EdgeInsets.only(top: 10),
           child: ListTile(
             title: Text('注册时间'),
-            trailing: Text(DateFormatUtil.formatYMD(company.registrationDate) ?? ''),
+            trailing: Text(DateFormatUtil.formatYMD(widget.brand.registrationDate) ?? ''),
           ),
         )
       ],
@@ -120,7 +99,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   children: <Widget>[
                     GestureDetector(
                       onTap:(){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>MyBrandBaseFormPage(company)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>MyBrandBaseFormPage(widget.brand)));
                       },
                       child: Container(
                         padding:
@@ -143,9 +122,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                          image: company.profilePicture != null
+                          image: widget.brand.profilePicture != null
                               ? NetworkImage(
-                                  '${GlobalConfigs.IMAGE_BASIC_URL}${company.profilePicture.url}')
+                                  '${GlobalConfigs.IMAGE_BASIC_URL}${widget.brand.profilePicture.url}')
                               : AssetImage(
                                   'temp/picture.png',
                                   package: "assets",
@@ -163,19 +142,19 @@ class _MyBrandPageState extends State<MyBrandPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            company.name,
+                            widget.brand.name,
                             style: TextStyle(
                               fontSize: 18,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
-//                        company.starLevel == null ? Container() : Stars(starLevel:company.starLevel),
+//                        widget.brand.starLevel == null ? Container() : Stars(starLevel:widget.brand.starLevel),
                           Stars(
-                            starLevel: company.starLevel ?? 0,
+                            starLevel: widget.brand.starLevel ?? 0,
                           ),
                           Container(
                             child: Text(
-                              company.approvalStatus == ArticleApprovalStatus.approved ? "已认证" : '未认证',
+                              widget.brand.approvalStatus == ArticleApprovalStatus.approved ? "已认证" : '未认证',
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Color.fromRGBO(255, 214, 12, 1)),
@@ -201,7 +180,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     ),
                   ),
                   Text(
-                    company.brand,
+                    widget.brand.brand,
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -220,7 +199,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     ),
                   ),
                   Text(
-                    company.cooperativeBrand,
+                    widget.brand.cooperativeBrand,
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -239,7 +218,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     ),
                   ),
                   Text(
-                    company.scaleRange == null ? '' : ScaleRangesLocalizedMap[company.scaleRange],
+                    widget.brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.brand.scaleRange],
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -258,7 +237,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     ),
                   ),
                   Text(
-                    formatCategorySelectText(company.adeptAtCategories),
+                    formatCategorySelectText(widget.brand.adeptAtCategories),
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -277,7 +256,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     ),
                   ),
                   Text(
-                    formatEnumSelectsText(company.styles, StyleEnum, 4),
+                    formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -296,7 +275,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     ),
                   ),
                   Text(
-                    formatAgeRangesText(company.ageRanges),
+                    formatAgeRangesText(widget.brand.ageRanges),
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -315,7 +294,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     ),
                   ),
                   Text(
-                    formatPriceRangesText(company.priceRange1s),
+                    formatPriceRangesText(widget.brand.priceRange1s),
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -334,7 +313,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                     ),
                   ),
                   Text(
-                    formatPriceRangesText(company.priceRange2s),
+                    formatPriceRangesText(widget.brand.priceRange2s),
                     style: TextStyle(fontSize: 16),
                   ),
                 ],

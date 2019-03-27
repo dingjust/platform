@@ -192,7 +192,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                       child: new Text(
                         '取消',
                         style: new TextStyle(
-                          color: Color.fromRGBO(255,214,12, 1),
+                          color: Colors.grey,
                         ),
                       ),
                     ),
@@ -228,7 +228,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                       child: new Text(
                         '确定',
                         style: new TextStyle(
-                          color: Color.fromRGBO(255,214,12, 1),
+                          color: Colors.black,
                         ),
                       ),
                     ),
