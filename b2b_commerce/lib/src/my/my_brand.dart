@@ -63,7 +63,6 @@ class _MyBrandPageState extends State<MyBrandPage> {
           }
           if (snapshot.hasData) {
             company = snapshot.data;
-            company.type = CompanyType.INDIVIDUAL_HOUSEHOLD;
             return Container(child: _buildBrand(context));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');

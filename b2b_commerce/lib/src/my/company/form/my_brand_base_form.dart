@@ -18,6 +18,9 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _brandController = TextEditingController();
   TextEditingController _cooperativeBrandController = TextEditingController();
+  FocusNode _nameFocusNode = FocusNode();
+  FocusNode _brandFocusNode = FocusNode();
+  FocusNode _cooperativeBrandFocusNode = FocusNode();
 
   List<String> _scaleRange = [];
   List<String> _styleCodes = [];
@@ -30,17 +33,17 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
     _nameController.text = widget.brand.name;
     _brandController.text = widget.brand.brand;
     _cooperativeBrandController.text = widget.brand.cooperativeBrand;
-    _scaleRange.add(widget.brand.scaleRange.toString().split('.')[1]);
-    _styleCodes.addAll(widget.brand.styles);
+    if(widget.brand.scaleRange != null) _scaleRange.add(widget.brand.scaleRange.toString().split('.')[1]);
+    _styleCodes.addAll(widget.brand.styles ?? []);
     _ageRanges.addAll(widget.brand.ageRanges
         .map((ageRange) => ageRange.toString().split('.')[1])
-        .toList());
+        .toList() ?? []);
     _priceRange1s.addAll(widget.brand.priceRange1s
         .map((priceRange1s) => priceRange1s.toString().split('.')[1])
-        .toList());
+        .toList() ?? []);
     _priceRange2s.addAll(widget.brand.priceRange2s
         .map((priceRange2s) => priceRange2s.toString().split('.')[1])
-        .toList());
+        .toList() ?? []);
 
     // TODO: implement initState
     super.initState();
@@ -95,6 +98,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
             Container(
               color: Colors.white,
               child: TextFieldComponent(
+                focusNode: _nameFocusNode,
                 leadingText: '公司名称',
                 controller: _nameController,
                 leadingColor: Colors.grey,
@@ -105,6 +109,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
             Container(
               color: Colors.white,
               child: TextFieldComponent(
+                focusNode: _brandFocusNode,
                 leadingText: '品牌名称',
                 controller: _brandController,
                 leadingColor: Colors.grey,
@@ -115,6 +120,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
             Container(
               color: Colors.white,
               child: TextFieldComponent(
+                focusNode: _cooperativeBrandFocusNode,
                 leadingText: '合作品牌',
                 controller: _cooperativeBrandController,
                 leadingColor: Colors.grey,

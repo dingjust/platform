@@ -64,7 +64,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
             );
           }
           if (snapshot.hasData) {
-            company = snapshot.data;
+            if(company == null) company = snapshot.data;
             print('${company.approvalStatus}=============');
             return Container(child: _buildFactory(context));
           } else if (snapshot.hasError) {
@@ -111,8 +111,10 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            MyCompanyCertificatePage(company,onlyRead: true,)));
+                        builder: (context) => MyCompanyCertificatePage(
+                              company,
+                              onlyRead: true,
+                            )));
               },
             ),
           ),
@@ -208,7 +210,10 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              company.approvalStatus == ArticleApprovalStatus.approved ? "已认证" : '未认证',
+                              company.approvalStatus ==
+                                      ArticleApprovalStatus.approved
+                                  ? "已认证"
+                                  : '未认证',
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Color.fromRGBO(255, 214, 12, 1)),
@@ -228,12 +233,12 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 children: <Widget>[
                   Text('历史接单'),
                   Text(
-                    '${company.historyOrdersCount}',
+                    '${company.historyOrdersCount ?? 0}',
                     style: TextStyle(color: Colors.red),
                   ),
                   Text('单，响应报价时间：'),
                   Text(
-                    '${company.responseQuotedTime}',
+                    '${company.responseQuotedTime ?? 0}',
                     style: TextStyle(color: Colors.red),
                   ),
                   Text('小时（平均）'),
@@ -252,10 +257,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  company.monthlyCapacityRanges == null
-                      ? ''
-                      : MonthlyCapacityRangesLocalizedMap[
-                          company.monthlyCapacityRanges],
+                  MonthlyCapacityRangesLocalizedMap[company.monthlyCapacityRange] ?? '',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -273,6 +275,23 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 ),
                 Text(
                   ScaleRangesLocalizedMap[company.scaleRange],
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '工厂规模',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  PopulationScaleLocalizedMap[company.populationScale] ?? '',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -323,7 +342,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  company.cooperativeBrand,
+                  company.cooperativeBrand ?? '',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -378,7 +397,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                       crossAxisCount: 3,
                       childAspectRatio: 2.5 / 5,
                       children: List.generate(products.length, (index) {
-                        return ExistingProductItem(products[index]);
+                        return ExistingProductItem(products[index],isFactoryDetail: true,);
                       })),
                 )
               ],
@@ -395,7 +414,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ExistingProductsPage(productsResponse.content),
+                builder: (context) =>
+                    ExistingProductsPage(productsResponse.content,isFactoryDetail: true,),
               ),
             );
           }),
@@ -412,22 +432,28 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 5, right: 5),
+              padding: const EdgeInsets.only(top: 5, right: 5,bottom: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   GestureDetector(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 214, 12, 1),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Text('编辑'),
                     ),
-                    onTap: (){
-                      if(company.companyProfiles == null) company.companyProfiles = [];
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MyCompanyProfileFormPage(company)));
+                    onTap: () {
+                      if (company.profiles == null)
+                        company.profiles = [];
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyCompanyProfileFormPage(company)));
                     },
                   )
                 ],
@@ -437,52 +463,37 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 width: double.infinity,
                 child: Container(
                   child: Column(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.all(5),
-                        child: Image.network(
-                          'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548324012344&di=9d970990f5941d68919dfbe264b328c9&imgtype=0&src=http%3A%2F%2Fwww.gdhangying.com%2Fewinupfile%2F2016102911390175014.jpg',
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(5),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '新型H-365裁衣机床',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
+                    children: company.profiles.map((profile){
+                      return Column(
+                        children: <Widget>[
+                          profile.medias != null && profile.medias.length > 0 ?
+                          Container(
+                            margin: EdgeInsets.all(5),
+                            child: Image.network(
+                              '${GlobalConfigs.IMAGE_BASIC_URL}${profile.medias[0].url}',
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.fill,
+                            ),
+                          ):Container(
+                            height: 50,
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(5),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${profile.description ?? ''}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(5),
-                        child: Image.network(
-                          'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548324406887&di=065efea8f76ed217de5dbaaed0178471&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F6a600c338744ebf835dc43c9d3f9d72a6159a792.jpg',
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(5),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '新型H-365裁衣机床',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                        ],
+                      );
+                    }).toList(),
                   ),
                 )),
           ],

@@ -10,12 +10,12 @@ class CompanyProfileItem extends StatefulWidget {
 }
 
 class CompanyProfileItemState extends State<CompanyProfileItem> {
-  FocusNode __descriptionFocusNode = FocusNode();
+  FocusNode _descriptionFocusNode = FocusNode();
   TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
-    _descriptionController.text = widget.companyProfile.description;;
+    _descriptionController.text = widget.companyProfile.description;
 
     // TODO: implement initState
     super.initState();
@@ -39,11 +39,14 @@ class CompanyProfileItemState extends State<CompanyProfileItem> {
 //        ),
         EditableAttachments(list: widget.companyProfile.medias,),
         TextFieldComponent(
-          focusNode: __descriptionFocusNode,
+          focusNode: _descriptionFocusNode,
           controller: _descriptionController,
           leadingText: '说明',
           leadingColor: Colors.grey,
           textAlign: TextAlign.start,
+          onChanged: (value){
+            widget.companyProfile.description = value == '' ? null : value;
+          },
         )
       ],
     );

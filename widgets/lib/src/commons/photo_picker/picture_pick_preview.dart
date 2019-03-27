@@ -163,7 +163,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
               margin: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey[200],
@@ -174,14 +174,15 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                 ],
               ),
               child: Container(
-                padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                child: Center(
-                  child: Image.network(
-                    '${GlobalConfigs.IMAGE_BASIC_URL}${widget.medias[index].url}',
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              )
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image:
+                      NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.medias[index].url}'),
+                      fit: BoxFit.fill,
+                    )),
+              ),
           ),
           onTap: () {
             onPreview(

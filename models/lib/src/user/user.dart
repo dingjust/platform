@@ -143,9 +143,9 @@ class AddressModel extends ItemModel {
   String get regionCityAndDistrict =>
       region.name == city.name && region.name == cityDistrict.name
           ? region.name
-          : region.name + city.name + cityDistrict.name;
+          :  region.name + city.name + cityDistrict.name;
 
-  String get details => (region.name + city.name + cityDistrict.name + line1);
+  String get details => (region.name + city.name + cityDistrict.name + '${line1 ?? ''}');
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);

@@ -16,7 +16,6 @@ class AddressFormPage extends StatefulWidget {
 }
 
 class AddressFormState extends State<AddressFormPage> {
-  bool _defaultAddress;
   GlobalKey _addressForm = GlobalKey<FormState>();
   TextEditingController _fullnameController;
   TextEditingController _cellphoneController;
