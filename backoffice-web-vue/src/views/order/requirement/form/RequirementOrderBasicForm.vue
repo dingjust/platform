@@ -15,24 +15,49 @@
             <el-input v-model="slotData.remarks"></el-input>
           </el-form-item>
         </el-col>
+
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+            <requirement-order-labels-form :slot-data="slotData" :read-only="true"></requirement-order-labels-form>
+        </el-col>
       </el-row>
     </el-form>
   </div>
 </template>
 
 <script>
+  import RequirementOrderLabelsForm from './RequirementOrderLabelsForm';
+
   export default {
     name: 'RequirementOrderBasicForm',
+    components: {
+      RequirementOrderLabelsForm
+    },
     props: ['slotData', 'readOnly'],
     mixins: [],
     methods: {
+      async getLabels() {
+        const url = this.apis().getGroupAllLabels('ORDER');
+        const results = await this.$http.get(url);
+        if (results["errors"]) {
+          this.$message.error(results["errors"][0].message);
+          return;
+        }
+        this.labels = results;
+      },
       validate(callback) {
         this.$refs['form'].validate(callback);
       }
     },
     computed: {},
     data() {
-      return {}
+      return {
+        labels: [],
+      }
+    },
+    created() {
+      this.getLabels();
     }
   }
 </script>
