@@ -6,11 +6,11 @@ import 'package:widgets/widgets.dart';
 import 'address/address_form.dart';
 
 class MyAddressesPage extends StatelessWidget {
-  bool isJumpSourec = false;
+  bool isJumpSourec;
   AddressModel model = AddressModel();
   ScrollController _scrollController = new ScrollController();
 
-  MyAddressesPage({this.isJumpSourec});
+  MyAddressesPage({this.isJumpSourec = false});
 
   @override
   Widget build(BuildContext context) {

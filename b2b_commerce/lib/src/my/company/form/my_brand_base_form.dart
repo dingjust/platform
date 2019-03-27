@@ -6,7 +6,6 @@ import 'package:widgets/widgets.dart';
 
 class MyBrandBaseFormPage extends StatefulWidget {
   BrandModel brand;
-
   MyBrandBaseFormPage(this.brand);
 
   @override
@@ -73,9 +72,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                     _cooperativeBrandController.text == ''
                         ? null
                         : _cooperativeBrandController.text;
-
-                var brand = BrandModel.toJson(widget.brand);
-                print(brand);
 
                 UserRepositoryImpl().brandUpdate(widget.brand).then((a)=>Navigator.pop(context));
               })
