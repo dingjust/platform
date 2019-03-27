@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/products/existing_product_item.dart';
+import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:b2b_commerce/src/my/company/form/my_company_profile_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
@@ -12,14 +13,14 @@ import 'package:widgets/widgets.dart';
 
 /// 认证信息
 class MyFactoryPage extends StatefulWidget {
+  FactoryModel factory;
+  bool isCompanyIntroduction;
+  MyFactoryPage(this.factory,{this.isCompanyIntroduction = false});
+
   _MyFactoryPageState createState() => _MyFactoryPageState();
 }
 
 class _MyFactoryPageState extends State<MyFactoryPage> {
-  FactoryModel company;
-  UserRepository _userRepository = UserRepositoryImpl();
-  UserType type = UserType.ANONYMOUS;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -45,33 +46,14 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MyCompanyContactWayPage(company)),
+                      builder: (context) => MyCompanyContactWayPage(widget.factory,isCompanyIntroduction: true,)),
                 );
               },
             ),
           ),
         ],
       ),
-      body: FutureBuilder<dynamic>(
-        future: _userRepository
-            .getFactory(UserBLoC.instance.currentUser.companyCode),
-        // initialData: null,
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.data == null) {
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 200),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-          if (snapshot.hasData) {
-            if(company == null) company = snapshot.data;
-            print('${company.approvalStatus}=============');
-            return Container(child: _buildFactory(context));
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-        },
-      ),
+      body: _buildFactory(context),
     );
   }
 
@@ -112,7 +94,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => MyCompanyCertificatePage(
-                              company,
+                              widget.factory,
                               onlyRead: true,
                             )));
               },
@@ -124,7 +106,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
             child: ListTile(
               title: Text('注册时间'),
               trailing: Text(
-                  DateFormatUtil.formatYMD(company.registrationDate) ?? ''),
+                  DateFormatUtil.formatYMD(widget.factory.registrationDate) ?? ''),
             ),
           ),
         ],
@@ -133,6 +115,27 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
   }
 
   Card _buildBaseInfo() {
+    List<Widget> _buildFactoryHeaderRow = [
+      widget.factory.approvalStatus == ArticleApprovalStatus.approved ?
+      Tag(
+        label: '  已认证  ',
+        backgroundColor:
+        Color.fromRGBO(254, 252, 235, 1),
+
+      ):Tag(
+        label: '  未认证  ',
+        color: Colors.black,
+        backgroundColor:
+        Colors.grey[300],
+      )
+    ];
+    widget.factory.labels.forEach((label){
+      return _buildFactoryHeaderRow.add(Padding(
+        padding: const EdgeInsets.only(right:5.0),
+        child: Tag(label: label.name,color: Colors.grey,),
+      ));
+    });
+
     return Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 10),
@@ -145,28 +148,31 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  GestureDetector(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 214, 12, 1),
-                        borderRadius: BorderRadius.circular(5),
+              child: Offstage(
+                offstage: !widget.isCompanyIntroduction,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text('编辑'),
                       ),
-                      child: Text('编辑'),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyFactoryBaseFormPage(company)));
-                    },
-                  )
-                ],
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MyFactoryBaseFormPage(widget.factory)));
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
             Row(
@@ -177,9 +183,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image: company.profilePicture != null
+                        image: widget.factory.profilePicture != null
                             ? NetworkImage(
-                                '${GlobalConfigs.IMAGE_BASIC_URL}${company.profilePicture.url}')
+                                '${GlobalConfigs.IMAGE_BASIC_URL}${widget.factory.profilePicture.url}')
                             : AssetImage(
                                 'temp/picture.png',
                                 package: "assets",
@@ -196,30 +202,18 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          company.name,
+                          widget.factory.name,
                           style: TextStyle(
                             fontSize: 18,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-//                        company.starLevel == null ? Container() : Stars(starLevel:company.starLevel),
+//                        widget.factory.starLevel == null ? Container() : Stars(starLevel:widget.factory.starLevel),
                         Stars(
-                          starLevel: company.starLevel ?? 0,
+                          starLevel: widget.factory.starLevel ?? 0,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              company.approvalStatus ==
-                                      ArticleApprovalStatus.approved
-                                  ? "已认证"
-                                  : '未认证',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color.fromRGBO(255, 214, 12, 1)),
-                            ),
-//                            Text('广东广州白云'),
-                          ],
+                          children: _buildFactoryHeaderRow,
                         ),
                       ],
                     ),
@@ -233,12 +227,12 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 children: <Widget>[
                   Text('历史接单'),
                   Text(
-                    '${company.historyOrdersCount ?? 0}',
+                    '${widget.factory.historyOrdersCount ?? 0}',
                     style: TextStyle(color: Colors.red),
                   ),
                   Text('单，响应报价时间：'),
                   Text(
-                    '${company.responseQuotedTime ?? 0}',
+                    '${widget.factory.responseQuotedTime ?? 0}',
                     style: TextStyle(color: Colors.red),
                   ),
                   Text('小时（平均）'),
@@ -257,7 +251,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  MonthlyCapacityRangesLocalizedMap[company.monthlyCapacityRange] ?? '',
+                  MonthlyCapacityRangesLocalizedMap[widget.factory.monthlyCapacityRange] ?? '',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -274,7 +268,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  ScaleRangesLocalizedMap[company.scaleRange],
+                  ScaleRangesLocalizedMap[widget.factory.scaleRange],
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -291,7 +285,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  PopulationScaleLocalizedMap[company.populationScale] ?? '',
+                  PopulationScaleLocalizedMap[widget.factory.populationScale] ?? '',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -308,7 +302,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  formatCategorySelectText(company.categories),
+                  formatCategorysSelectText(widget.factory.categories,5),
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -325,7 +319,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  formatCategorySelectText(company.adeptAtCategories),
+                  formatCategorysSelectText(widget.factory.adeptAtCategories,2),
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -342,7 +336,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  company.cooperativeBrand ?? '',
+                  widget.factory.cooperativeBrand ?? '',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -433,37 +427,41 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top: 5, right: 5,bottom: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  GestureDetector(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 214, 12, 1),
-                        borderRadius: BorderRadius.circular(5),
+              child: Offstage(
+                offstage: !widget.isCompanyIntroduction,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('图文详情',style: TextStyle(fontSize: 16),),
+                    GestureDetector(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text('编辑'),
                       ),
-                      child: Text('编辑'),
-                    ),
-                    onTap: () {
-                      if (company.profiles == null)
-                        company.profiles = [];
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyCompanyProfileFormPage(company)));
-                    },
-                  )
-                ],
+                      onTap: () {
+                        if (widget.factory.profiles == null)
+                          widget.factory.profiles = [];
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MyCompanyProfileFormPage(widget.factory)));
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
             Container(
                 width: double.infinity,
                 child: Container(
                   child: Column(
-                    children: company.profiles.map((profile){
+                    children: widget.factory.profiles.map((profile){
                       return Column(
                         children: <Widget>[
                           profile.medias != null && profile.medias.length > 0 ?
@@ -506,13 +504,47 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     );
   }
 
-  String formatCategorySelectText(List<CategoryModel> categorys) {
+  String formatCategorysSelectText(List<CategoryModel> categorys,int count) {
     String text = '';
-    if (categorys != null && categorys.isNotEmpty) {
-      categorys.forEach((category) {
-        text += category.name;
-      });
+
+    if (categorys != null) {
+      text = '';
+      for (int i = 0; i < categorys.length; i++) {
+        if (i > count-1) {
+          text += '...';
+          break;
+        }
+
+        if (i == categorys.length - 1) {
+          text += categorys[i].name;
+        } else {
+          text += categorys[i].name + '、';
+        }
+      }
     }
+
+    return text;
+  }
+
+  String formatLabelsSelectText(List<LabelModel> labels) {
+    String text = '';
+
+    if (labels != null) {
+      text = '';
+      for (int i = 0; i < labels.length; i++) {
+        if (i > 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == labels.length - 1) {
+          text += labels[i].name;
+        } else {
+          text += labels[i].name + '、';
+        }
+      }
+    }
+
     return text;
   }
 

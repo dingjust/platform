@@ -19,6 +19,17 @@ class SuppliersDetail extends StatefulWidget {
 }
 
 class _SuppliersDetailState extends State<SuppliersDetail> {
+
+  @override
+  void initState() {
+//    if(widget.supplierModel.quoteOrder.requirementOrder == null)
+//      widget.supplierModel.quoteOrder.requirementOrder = RequirementOrderModel(details: RequirementInfoModel());
+
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1088,7 +1099,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                     ]),
               ),
               Text(
-                  QuoteStateLocalizedMap[widget.supplierModel.quoteOrder.state],
+                  QuoteStateLocalizedMap[widget.supplierModel.quoteOrder.state] ?? '',
                   style: TextStyle(color: Colors.blue, fontSize: 15))
             ],
           ),

@@ -6,7 +6,6 @@ import 'package:widgets/widgets.dart';
 
 class MyBrandBaseFormPage extends StatefulWidget {
   BrandModel brand;
-
   MyBrandBaseFormPage(this.brand);
 
   @override
@@ -30,9 +29,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
 
   @override
   void initState() {
-    _nameController.text = widget.brand.name;
-    _brandController.text = widget.brand.brand;
-    _cooperativeBrandController.text = widget.brand.cooperativeBrand;
+    if(widget.brand.profilePicture != null) medias = [widget.brand.profilePicture];
+    _nameController.text = widget.brand.name ?? '';
+    _brandController.text = widget.brand.brand ?? '';
+    _cooperativeBrandController.text = widget.brand.cooperativeBrand ??'';
     if(widget.brand.scaleRange != null) _scaleRange.add(widget.brand.scaleRange.toString().split('.')[1]);
     _styleCodes.addAll(widget.brand.styles ?? []);
     _ageRanges.addAll(widget.brand.ageRanges
@@ -72,9 +72,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                     _cooperativeBrandController.text == ''
                         ? null
                         : _cooperativeBrandController.text;
-
-                var brand = BrandModel.toJson(widget.brand);
-                print(brand);
 
                 UserRepositoryImpl().brandUpdate(widget.brand).then((a)=>Navigator.pop(context));
               })

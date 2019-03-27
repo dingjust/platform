@@ -42,18 +42,27 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.done),
-            onPressed: () {
-              widget.bloc.setOrderType(widget._orderType);
-              widget.bloc.setCurrentStatus(widget._currentStatus);
-              widget.bloc.setStartDate(widget._startDate);
-              widget.bloc.setEndDate(widget._endDate);
-              widget.bloc.clear();
-              widget.bloc.getData();
-              Navigator.pop(context);
-            },
-          )
+          GestureDetector(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Center(
+                  child: Text(
+                    '确定',
+                    style: TextStyle(
+                        color: Colors.black),
+                  ),
+                ),
+              ),
+              onTap: () async {
+                widget.bloc.setOrderType(widget._orderType);
+                widget.bloc.setCurrentStatus(widget._currentStatus);
+                widget.bloc.setStartDate(widget._startDate);
+                widget.bloc.setEndDate(widget._endDate);
+                widget.bloc.clear();
+                widget.bloc.getData();
+                Navigator.pop(context);
+              }
+          ),
         ],
       ),
       body: Container(

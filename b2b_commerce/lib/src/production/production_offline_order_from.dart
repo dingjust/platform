@@ -481,7 +481,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-            trailing: earnest.earnestMoney == null || earnest.earnestMoney == ''
+            trailing: earnest == null || earnest.earnestMoney == null || earnest.earnestMoney == ''
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(earnest.earnestMoney,
               style: TextStyle(

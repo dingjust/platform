@@ -34,7 +34,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
                       child: Text(
                         '确定',
                         style: TextStyle(
-                            color: Color.fromRGBO(255, 214, 12, 1)),
+                            color: Colors.black),
                       ),
                     ),
                   ),
