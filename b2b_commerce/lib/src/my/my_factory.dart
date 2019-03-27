@@ -318,7 +318,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  formatCategorysSelectText(company.categories),
+                  formatCategorysSelectText(company.categories,5),
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -335,7 +335,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  formatCategorysSelectText(company.adeptAtCategories),
+                  formatCategorysSelectText(company.adeptAtCategories,2),
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -444,8 +444,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
             Padding(
               padding: const EdgeInsets.only(top: 5, right: 5,bottom: 5),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  Text('图文详情',style: TextStyle(fontSize: 16),),
                   GestureDetector(
                     child: Container(
                       padding:
@@ -516,13 +517,13 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     );
   }
 
-  String formatCategorysSelectText(List<CategoryModel> categorys) {
+  String formatCategorysSelectText(List<CategoryModel> categorys,int count) {
     String text = '';
 
     if (categorys != null) {
       text = '';
       for (int i = 0; i < categorys.length; i++) {
-        if (i > 1) {
+        if (i > count-1) {
           text += '...';
           break;
         }
