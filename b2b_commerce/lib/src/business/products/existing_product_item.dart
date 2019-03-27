@@ -67,7 +67,7 @@ class ExistingProductItem extends StatelessWidget{
             context,
             MaterialPageRoute(
               builder: (context) => ProductDetailPage(
-                productCode: '',
+                product: product,
               ),
             ),
           );
@@ -134,7 +134,7 @@ class ExistingProductItem extends StatelessWidget{
             context,
             MaterialPageRoute(
               builder: (context) => ProductDetailPage(
-                productCode: '',
+                product: product,
               ),
             ),
           );

@@ -2,7 +2,6 @@ import 'package:b2b_commerce/src/my/company/company_profile_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 class MyCompanyProfileFormPage extends StatefulWidget {
   CompanyModel company;

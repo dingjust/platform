@@ -44,8 +44,10 @@ class CategorySelectPageState extends State<CategorySelectPage> {
   }
 
   void _jumpToProducts(CategoryModel category) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ProductsPage()));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProductsPage(
+              categoryModel: category,
+            )));
   }
 
   @override
@@ -119,6 +121,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                             builder: (context) => RequirementDatePick(
                                   fastRequirementForm:
                                       widget.fastRequirementForm,
+                                  nowTime: DateTime.now(),
                                 )));
                       }
                     },
