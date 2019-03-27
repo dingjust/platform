@@ -237,7 +237,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                           ),
                         )),
                     Text(
-                      formatCategorySelectText(widget.factory.categories),
+                      formatCategorySelectText(widget.factory.categories,5),
                     ),
                     Icon(Icons.chevron_right),
                   ],
@@ -280,7 +280,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                           ),
                         )),
                     Text(
-                      formatCategorySelectText(widget.factory.adeptAtCategories),
+                      formatCategorySelectText(widget.factory.adeptAtCategories,2),
                     ),
                     Icon(Icons.chevron_right),
                   ],
@@ -315,6 +315,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 leadingColor: Colors.grey,
               ),
             ),
+            SizedBox(height: 2,),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -363,13 +364,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     );
   }
 
-  String formatCategorySelectText(List<CategoryModel> categorys) {
+  String formatCategorySelectText(List<CategoryModel> categorys,int count) {
     String text = '';
 
     if (categorys != null) {
       text = '';
       for (int i = 0; i < categorys.length; i++) {
-        if (i > 1) {
+        if (i > count-1) {
           text += '...';
           break;
         }

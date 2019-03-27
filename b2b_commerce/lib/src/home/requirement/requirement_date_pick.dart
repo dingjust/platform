@@ -5,14 +5,27 @@ import 'package:flutter/material.dart';
 class RequirementDatePick extends StatefulWidget {
   FastRequirementForm fastRequirementForm;
 
-  RequirementDatePick({Key key, this.fastRequirementForm}) : super(key: key);
+  final DateTime nowTime;
+
+  RequirementDatePick({Key key, this.fastRequirementForm, this.nowTime})
+      : super(key: key);
 
   _RequirementDatePickState createState() => _RequirementDatePickState();
 }
 
 class _RequirementDatePickState extends State<RequirementDatePick> {
   @override
+  void initState() {
+    // TODO: implement initState
+    widget.fastRequirementForm.deliveryDate = DateTime.now();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // int firstDateYear = widget.fastRequirementForm.deliveryDate.year;
+    // int firstDateMonth = widget.fastRequirementForm.deliveryDate.month;
+    // int firstDateDay = widget.fastRequirementForm.deliveryDate.day;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -56,7 +69,7 @@ class _RequirementDatePickState extends State<RequirementDatePick> {
                   widget.fastRequirementForm.deliveryDate = date;
                 });
               },
-              firstDate: widget.fastRequirementForm.deliveryDate,
+              firstDate: widget.nowTime,
               lastDate: DateTime(2099),
               selectedDate: widget.fastRequirementForm.deliveryDate,
             ),

@@ -260,7 +260,7 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '期望价格',
             value: Text(
-              '￥15.00',
+              '￥${widget.order.details.maxExpectedPrice??0}',
               style: TextStyle(color: Colors.red, fontSize: 16),
             ),
           ),

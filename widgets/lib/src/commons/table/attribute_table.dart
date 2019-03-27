@@ -17,19 +17,26 @@ class AttributeTable extends StatelessWidget {
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             border: TableBorder.all(width: 1.0, color: Colors.grey[300]),
             children: [
-              _buildRow(label: '风格', values: attributes.styles),
-              _buildRow(label: '面料成分', value: attributes.fabricComposition),
-              _buildRow(label: '版型', value: attributes.editionType),
-              _buildRow(label: '款式', value: attributes.pattern),
-              _buildRow(label: '袖型', value: attributes.sleeveType),
-              _buildRow(label: '袖长/裤腿', value: attributes.sleeveLength),
-              _buildRow(label: '图案', values: attributes.decorativePatterns),
-              _buildRow(label: '流行元素', values: attributes.popularElements),
-              _buildRow(label: '填充物', value: attributes.filler),
-              _buildRow(label: '厚薄', value: attributes.thickness),
-              _buildRow(label: '季节', value: attributes.season),
-              _buildRow(label: '是否有吊牌', value: attributes.taggable ? '是' : '否'),
-              _buildRow(label: '门襟', value: attributes.placket),
+              _buildRow(label: '风格', values: attributes.styles ?? []),
+              _buildRow(
+                  label: '面料成分', value: attributes.fabricComposition ?? ''),
+              _buildRow(label: '版型', value: attributes.editionType ?? ''),
+              _buildRow(label: '款式', value: attributes.pattern ?? ''),
+              _buildRow(label: '袖型', value: attributes.sleeveType ?? ''),
+              _buildRow(label: '袖长/裤腿', value: attributes.sleeveLength ?? ''),
+              _buildRow(
+                  label: '图案', values: attributes.decorativePatterns ?? []),
+              _buildRow(
+                  label: '流行元素', values: attributes.popularElements ?? []),
+              _buildRow(label: '填充物', value: attributes.filler ?? ''),
+              _buildRow(label: '厚薄', value: attributes.thickness ?? ''),
+              _buildRow(label: '季节', value: attributes.season ?? ''),
+              _buildRow(
+                  label: '是否有吊牌',
+                  value: attributes.taggable == null
+                      ? ''
+                      : attributes.taggable ? '是' : '否'),
+              _buildRow(label: '门襟', value: attributes.placket??''),
             ],
           )
         ],

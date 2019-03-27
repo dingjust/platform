@@ -6,6 +6,11 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductsPage extends StatefulWidget {
+  /// 品类
+  CategoryModel categoryModel;
+
+   ProductsPage({Key key, this.categoryModel}) : super(key: key);
+
   _ProductsPageState createState() => _ProductsPageState();
 }
 
@@ -46,14 +51,27 @@ class _ProductsPageState extends State<ProductsPage> {
             )
           ],
         ),
-        body: ProductsView(),
+        body: ProductsView(
+          categoryCode: widget.categoryModel.code,
+        ),
         floatingActionButton: _ToTopBtn(),
       ),
     );
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    OrderByProductBLoc.instance.clear();
+    super.dispose();
+  }
 }
 
 class ProductsView extends StatelessWidget {
+  String categoryCode;
+
+  ProductsView({this.categoryCode});
+
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -68,7 +86,7 @@ class ProductsView extends StatelessWidget {
       }
     });
 
-        //监听滚动事件，打印滚动位置
+    //监听滚动事件，打印滚动位置
     _scrollController.addListener(() {
       if (_scrollController.offset < 500) {
         bloc.hideToTopBtn();
@@ -90,7 +108,7 @@ class ProductsView extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMore();
+        bloc.loadingMore(categoryCode);
       }
     });
 
@@ -98,20 +116,19 @@ class ProductsView extends StatelessWidget {
         decoration: BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
         child: RefreshIndicator(
           onRefresh: () async {
-            // bloc.loadingEnd();
-            return await bloc.refreshData();
+            bloc.clear();
           },
           child: CustomScrollView(
             controller: _scrollController,
             slivers: <Widget>[
-              StreamBuilder<List<ProductModel>>(
+              StreamBuilder<List<ApparelProductModel>>(
                   stream: bloc.stream,
-                  initialData: bloc.products,
+                  initialData: null,
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<ProductModel>> snapshot) {
+                      AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                     //数据为空查询数据，显示加载条
-                    if (snapshot.data.isEmpty) {
-                      bloc.getData();
+                    if (snapshot.data==null) {
+                      bloc.getData(categoryCode);
                       return SliverToBoxAdapter(
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 200),
@@ -124,11 +141,11 @@ class ProductsView extends StatelessWidget {
                       );
                     }
                   }),
-              StreamBuilder<List<ProductModel>>(
+              StreamBuilder<List<ApparelProductModel>>(
                   stream: bloc.stream,
                   initialData: bloc.products,
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<ProductModel>> snapshot) {
+                      AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                     if (snapshot.data.isNotEmpty) {
                       List<RecommendProductItem> recommendProductItems =
                           snapshot.data
@@ -211,6 +228,9 @@ class ProductsView extends StatelessWidget {
           ),
         ));
   }
+
+
+
 }
 
 class _ToTopBtn extends StatelessWidget {

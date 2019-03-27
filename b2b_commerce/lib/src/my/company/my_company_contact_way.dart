@@ -1,12 +1,11 @@
-import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:widgets/widgets.dart';
 
 class MyCompanyContactWayPage extends StatefulWidget {
   B2BUnitModel company;

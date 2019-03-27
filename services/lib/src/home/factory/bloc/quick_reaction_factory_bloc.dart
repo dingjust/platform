@@ -95,7 +95,7 @@ Map<String, dynamic> mockFactory = {
   'profilePicture': {
     'url': 'http://img.jf258.com/uploads/2015-05-14/030643325.jpg'
   },
-  'populationScale': 'PS001',
+  'populationScale': 'N01',
   'uid': 'BB123456',
   'name': '定制加(深圳)科技有限公司',
   'starLevel': 5,
