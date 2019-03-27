@@ -210,6 +210,15 @@ const COMMON_APIS = {
   createApparelProduct() {
     return '/b2b/products/apparel/create';
   },
+  updateBasicOfApparelProduct(code) {
+    return '/b2b/products/apparel/' + code + '/basic';
+  },
+  updateVariantsOfApparelProduct(code) {
+    return '/b2b/products/apparel/' + code + '/variants';
+  },
+  updateAttributesOfApparelProduct(code) {
+    return '/b2b/products/apparel/' + code + '/attributes';
+  },
   getRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code;
   },

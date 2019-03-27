@@ -1,6 +1,7 @@
 import http from '@/common/js/http';
 
 const state = {
+  url: '',
   keyword: '',
   isAdvancedSearch: false,
   currentPageNumber: 0,
@@ -19,6 +20,8 @@ const state = {
     skuID: '',
     name: '',
     price: 0.00,
+    minPrice: 0.00,
+    maxPrice: 0.00,
     category: {
       code: '',
       name: ''
@@ -57,6 +60,7 @@ const state = {
 };
 
 const mutations = {
+  url: (state, url) => state.url = url,
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
@@ -67,6 +71,7 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {url, keyword, page, size}) {
+    commit('url', url);
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
@@ -75,7 +80,7 @@ const actions = {
 
     const response = await http.post(url, {
       keyword: state.keyword
-    },{
+    }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -112,6 +117,7 @@ const actions = {
 };
 
 const getters = {
+  url: state => state.url,
   keyword: state => state.keyword,
   isAdvancedSearch: state => state.isAdvancedSearch,
   queryFormData: state => state.queryFormData,
