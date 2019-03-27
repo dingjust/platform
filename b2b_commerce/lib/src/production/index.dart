@@ -90,15 +90,10 @@ class _ProductionPageState extends State<ProductionPage> {
             // this is ignored if animatedIcon is non null
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  '添加',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-                Text(
                   '线下订单',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  style: TextStyle(color: Colors.black, fontSize: 12),
                 )
               ],
             ),
