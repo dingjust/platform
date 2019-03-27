@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/products/existing_product_item.dart';
+import 'package:b2b_commerce/src/home/factory/factory.dart';
 import 'package:b2b_commerce/src/my/company/form/my_company_profile_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
@@ -133,6 +134,27 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
   }
 
   Card _buildBaseInfo() {
+    List<Widget> _buildFactoryHeaderRow = [
+      company.approvalStatus == ArticleApprovalStatus.approved ?
+      Tag(
+        label: '  已认证  ',
+        backgroundColor:
+        Color.fromRGBO(254, 252, 235, 1),
+
+      ):Tag(
+        label: '  未认证  ',
+        color: Colors.black,
+        backgroundColor:
+        Colors.grey[300],
+      )
+    ];
+    company.labels.forEach((label){
+      return _buildFactoryHeaderRow.add(Padding(
+        padding: const EdgeInsets.only(right:5.0),
+        child: Tag(label: label.name,color: Colors.grey,),
+      ));
+    });
+
     return Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 10),
@@ -207,19 +229,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                           starLevel: company.starLevel ?? 0,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              company.approvalStatus ==
-                                      ArticleApprovalStatus.approved
-                                  ? "已认证"
-                                  : '未认证',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color.fromRGBO(255, 214, 12, 1)),
-                            ),
-//                            Text('广东广州白云'),
-                          ],
+                          children: _buildFactoryHeaderRow,
                         ),
                       ],
                     ),
@@ -308,7 +318,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  formatCategorySelectText(company.categories),
+                  formatCategorysSelectText(company.categories),
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -325,7 +335,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  formatCategorySelectText(company.adeptAtCategories),
+                  formatCategorysSelectText(company.adeptAtCategories),
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -506,13 +516,47 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     );
   }
 
-  String formatCategorySelectText(List<CategoryModel> categorys) {
+  String formatCategorysSelectText(List<CategoryModel> categorys) {
     String text = '';
-    if (categorys != null && categorys.isNotEmpty) {
-      categorys.forEach((category) {
-        text += category.name;
-      });
+
+    if (categorys != null) {
+      text = '';
+      for (int i = 0; i < categorys.length; i++) {
+        if (i > 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == categorys.length - 1) {
+          text += categorys[i].name;
+        } else {
+          text += categorys[i].name + '、';
+        }
+      }
     }
+
+    return text;
+  }
+
+  String formatLabelsSelectText(List<LabelModel> labels) {
+    String text = '';
+
+    if (labels != null) {
+      text = '';
+      for (int i = 0; i < labels.length; i++) {
+        if (i > 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == labels.length - 1) {
+          text += labels[i].name;
+        } else {
+          text += labels[i].name + '、';
+        }
+      }
+    }
+
     return text;
   }
 
