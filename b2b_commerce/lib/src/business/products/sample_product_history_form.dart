@@ -81,6 +81,7 @@ class SampleProductHistoryFormPageState
                   }
                 }
 
+                widget.model.state = ReturnState.NOT_RETURNED;
                 widget.model.type = _type;
                 widget.model.quantity = _quantityController.text == '' ? 0 : int.parse(_quantityController.text);
                 widget.model.contact = _contactWayController.text == ''

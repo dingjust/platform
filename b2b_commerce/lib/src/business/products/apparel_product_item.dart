@@ -9,23 +9,21 @@ import '../orders/requirement_order_from.dart';
 
 class ApparelProductItem extends StatefulWidget {
   ApparelProductItem(this.item,
-      {this.isRequirement = false, this.isSelectItem = false});
+      {this.isRequirement = false, this.isSelectItem = false,this.status,});
 
   final ApparelProductModel item;
   final bool isRequirement;
   final bool isSelectItem;
+  String status;
 
   ApparelProductItemState createState() => ApparelProductItemState();
 }
 
 class ApparelProductItemState extends State<ApparelProductItem> {
-  bool _isRecommend;
   String _approvalStatusText = '上架';
 
   @override
   void initState() {
-    _isRecommend = widget.item.isRecommend;
-
     if (widget.item.approvalStatus == ArticleApprovalStatus.approved) {
       _approvalStatusText = '下架';
     } else if (widget.item.approvalStatus == ArticleApprovalStatus.unapproved) {
@@ -236,7 +234,8 @@ class ApparelProductItemState extends State<ApparelProductItem> {
               labelStyle: TextStyle(color: Colors.grey),
               onPressed: () async {
                 await ProductRepositoryImpl().delete(widget.item.code);
-                ApparelProductBLoC.instance.filterByStatuses();
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text('删除商品成功'),duration: Duration(seconds: 2,),));
+                ApparelProductBLoC.instance.filterByStatuses(widget.status);
               },
             ),
             ActionChip(
@@ -295,6 +294,15 @@ class ApparelProductItemState extends State<ApparelProductItem> {
               labelStyle: TextStyle(color: Colors.black),
               onPressed: () {
                 //TODO:商品上下架
+                if(widget.item.approvalStatus == ArticleApprovalStatus.approved){
+                  ProductRepositoryImpl().off(widget.item.code).then((a){
+                    ApparelProductBLoC.instance.filterByStatuses(widget.status);
+                  });
+                }else if(widget.item.approvalStatus == ArticleApprovalStatus.unapproved){
+                  ProductRepositoryImpl().on(widget.item.code).then((a){
+                    ApparelProductBLoC.instance.filterByStatuses(widget.status);
+                  });
+                }
               },
             ),
           ],

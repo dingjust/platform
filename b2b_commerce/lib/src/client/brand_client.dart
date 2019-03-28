@@ -99,12 +99,20 @@ class BottomNavigation extends StatelessWidget {
         margin: EdgeInsets.only(right: 5),
         child: const Icon(B2BIcons.home),
       ),
+      activeIcon: Container(
+        margin: EdgeInsets.only(right: 5),
+        child: const Icon(B2BIcons.home_active),
+      ),
       title: const Text('商机'),
     ),
     BottomNavigationBarItem(
       icon: Container(
         margin: EdgeInsets.only(right: 35),
         child: const Icon(B2BIcons.production),
+      ),
+      activeIcon: Container(
+        margin: EdgeInsets.only(right: 35),
+        child: const Icon(B2BIcons.production_active),
       ),
       title: Container(
         margin: EdgeInsets.only(right: 30),
@@ -116,6 +124,10 @@ class BottomNavigation extends StatelessWidget {
           margin: EdgeInsets.only(left: 35),
           child: const Icon(B2BIcons.business),
         ),
+        activeIcon: Container(
+          margin: EdgeInsets.only(left: 35),
+          child: const Icon(B2BIcons.business_active),
+        ),
         title: Container(
           margin: EdgeInsets.only(left: 45),
           child: const Text('工作'),
@@ -125,6 +137,12 @@ class BottomNavigation extends StatelessWidget {
         margin: EdgeInsets.only(right: 5),
         child: const Icon(
           B2BIcons.my,
+        ),
+      ),
+      activeIcon: Container(
+        margin: EdgeInsets.only(right: 5),
+        child: const Icon(
+          B2BIcons.my_active,
         ),
       ),
       title: const Text('我的'),
@@ -144,7 +162,7 @@ class BottomNavigation extends StatelessWidget {
       currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
       onTap: _handleTap,
-      fixedColor: themeData.accentColor,
+      fixedColor: Color.fromRGBO(51, 51, 51, 1),
     );
   }
 }

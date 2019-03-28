@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import '../common/app_routes.dart';
@@ -12,8 +15,14 @@ class BusinessHomePage extends StatefulWidget {
 }
 
 class _BusinessHomePageState extends State<BusinessHomePage> {
+  final StreamController _reportsStreamController =
+      StreamController<Reports>.broadcast();
+
+  Reports companyReports = Reports();
+
   @override
   Widget build(BuildContext context) {
+    queryReports();
     return Scaffold(
       appBar: AppBar(
         title: Text('工作'),
@@ -24,13 +33,23 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
         color: Color.fromRGBO(245, 245, 245, 1),
         child: ListView(
           children: <Widget>[
-            SiteStatisticsSectionForFactory(<SiteStatisticsModel>[
-              SiteStatisticsModel(label: '延期订单', value: '5'),
-              SiteStatisticsModel(label: '待出库订单', value: '5'),
-              SiteStatisticsModel(label: '待收款订单', value: '6'),
-              SiteStatisticsModel(label: '正在报价', value: '5'),
-              SiteStatisticsModel(label: '本月产能', value: '5000'),
-            ]),
+            StreamBuilder<Reports>(
+                stream: _reportsStreamController.stream,
+                initialData: companyReports,
+                builder:
+                    (BuildContext context, AsyncSnapshot<Reports> snapshot) {
+                  return SiteStatisticsSectionForFactory(<SiteStatisticsModel>[
+                    SiteStatisticsModel(
+                        label: '报价中',
+                        value: '${snapshot.data?.ordersCount1 ?? 0}'),
+                    SiteStatisticsModel(
+                        label: '生产中',
+                        value: '${snapshot.data?.ordersCount7 ?? 0}'),
+                    SiteStatisticsModel(
+                        label: '已延期',
+                        value: '${snapshot.data?.ordersCount5 ?? 0}'),
+                  ]);
+                }),
             AdvanceMenu('订单管理', <AdvanceMenuItem>[
               AdvanceMenuItem(
                   MenuItemImage.quote_factory, '报价管理', AppRoutes.ROUTE_QUOTES),
@@ -57,5 +76,13 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
         ),
       ),
     );
+  }
+
+  void queryReports() async {
+    Reports response = await ReportsRepository().report();
+    if (response != null) {
+      companyReports = response;
+      _reportsStreamController.add(companyReports);
+    }
   }
 }

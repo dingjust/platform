@@ -42,6 +42,18 @@ class ProductRepositoryImpl extends ProductRepository{
   }
 
   @override
+  Future<String> on(String code) async{
+    Response response = await http$.put(ProductApis.on(code));
+    return response.data;
+  }
+
+  @override
+  Future<String> off(String code) async{
+    Response response = await http$.put(ProductApis.off(code));
+    return response.data;
+  }
+
+  @override
   Future<List<CategoryModel>> cascadedCategories() async{
    Response response  = await http$.get(ProductApis.cascadedCategories);
     return response.data.map<CategoryModel>((category){

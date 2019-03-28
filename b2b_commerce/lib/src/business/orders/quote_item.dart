@@ -151,7 +151,7 @@ class _QuoteItemState extends State<QuoteItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '${widget.model.belongTo.name}',
+                  '${widget.model?.supplier.name}',
                   style: TextStyle(fontSize: 15),
                 ),
                 Text(
@@ -380,7 +380,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '${widget.model.belongTo.name}',
+                  '${widget.model?.supplier?.name}',
                   style: TextStyle(fontSize: 15),
                 ),
                 Text(

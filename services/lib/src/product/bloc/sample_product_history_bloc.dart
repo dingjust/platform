@@ -44,6 +44,7 @@ class SampleProductHistoryBLoC extends BLoCBase {
   Stream<SampleBorrowReturnHistoryModel> get detailStream => _detailController.stream;
 
   filterByStatuses(String state) async {
+    print(state+'filter');
     Map<String,dynamic> data = {};
     if(state != 'ALL'){
       data = {
@@ -56,11 +57,20 @@ class SampleProductHistoryBLoC extends BLoCBase {
     _controller.sink.add(products);
   }
 
-  loadingMoreByStatuses() async {
+  loadingMoreByStatuses(String state) async {
+    print(state);
+    Map<String,dynamic> data = {};
+    if(state != 'ALL'){
+      data = {
+        'state':[state],
+      };
+    }
+    print('${productsResponse.number}、${productsResponse.totalPages}');
     if(productsResponse.number < productsResponse.totalPages-1){
-//      productsResponse = await ProductRepositoryImpl().list({
-//        'page':productsResponse.number+1,
-//      },{});
+      productsResponse = await ProductRepositoryImpl().sampleHistorys(data,{
+        'page':productsResponse.number + 1
+      });
+      print(productsResponse.content);
       products.addAll(productsResponse.content);
     }else{
       _bottomController.sink.add(true);

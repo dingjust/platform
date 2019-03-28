@@ -14,7 +14,6 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _captchaController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-
   bool _isAgree = true;
   String _userType = "brand";
   String _verifyStr = '获取验证码';

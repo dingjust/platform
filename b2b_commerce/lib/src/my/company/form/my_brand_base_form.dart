@@ -63,7 +63,11 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
               ),
               onPressed: () {
-                if (medias.length > 0) widget.brand.profilePicture = medias[0];
+                if(medias.length > 0){
+                  widget.brand.profilePicture = medias[0];
+                }else{
+                  widget.brand.profilePicture = null;
+                }
                 widget.brand.name =
                     _nameController.text == '' ? null : _nameController.text;
                 widget.brand.brand =

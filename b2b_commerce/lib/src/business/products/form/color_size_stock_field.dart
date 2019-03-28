@@ -22,10 +22,6 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
 
   @override
   void initState() {
-    ProductRepositoryImpl().colors().then((colors)=>_colors = colors);
-    ProductRepositoryImpl().sizes().then((sizes)=>_sizes = sizes);
-
-
     List<String> colorCodes = [];
     List<String> sizeCodes = [];
     _colorFilters.clear();
@@ -53,6 +49,9 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
       children: <Widget>[
         InkWell(
           onTap: () async{
+            await ProductRepositoryImpl().colors().then((colors)=>_colors = colors);
+            await ProductRepositoryImpl().sizes().then((sizes)=>_sizes = sizes);
+
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
@@ -65,8 +64,8 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
               _sizeFilters = result[1];
             }
 
-            print(_colorFilters);
-            print(_sizeFilters);
+//            print(_colorFilters);
+//            print(_sizeFilters);
 
             List<ApparelSizeVariantProductModel> variants = [];
             _colorFilters.forEach((color){

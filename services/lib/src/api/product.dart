@@ -31,6 +31,13 @@ abstract class ProductApis {
   static get delete =>
       (code) => '/{baseSiteId}/b2b/products/apparel/$code/deleted';
 
+  //商品上架
+  static get on =>
+          (code) => '/{baseSiteId}/b2b/products/apparel/$code/on';
+  //商品下架
+  static get off =>
+          (code) => '/{baseSiteId}/b2b/products/apparel/$code/off';
+
   ///获取所有样衣
   static get samples => '/{baseSiteId}/b2b/products/sample/all';
 
@@ -45,7 +52,7 @@ abstract class ProductApis {
   static get sampleUpdate => '/{baseSiteId}/b2b/products/sample/update';
   //获取样衣借还记录
   static get sampleHistorys =>
-      '/{baseSiteId}/b2b/products/sampleCheckoutHist/search';
+      '/{baseSiteId}/b2b/products/sampleCheckoutHist';
   //获取样衣借还记录明细
 
   //创建样衣借还记录
