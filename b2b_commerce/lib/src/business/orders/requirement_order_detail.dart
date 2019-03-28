@@ -47,10 +47,10 @@ class _RequirementOrderDetailPageState
           style: TextStyle(color: Colors.black),
         ),
         actions: <Widget>[
-          widget.order.status == RequirementOrderStatus.PENDING_QUOTE
+          widget.order.editable
               ? FlatButton(
                   onPressed: onEdit,
-                  child: Text('编辑'),
+                  child: Text('修改'),
                 )
               : Container()
         ],

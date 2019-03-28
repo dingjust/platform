@@ -570,6 +570,9 @@ class RequirementOrderModel extends OrderModel {
   ///延期天数
   int delayDays;
 
+  /// 是否可修改
+  bool editable;
+
   RequirementOrderModel(
       {this.status,
       this.belongTo,
@@ -583,6 +586,7 @@ class RequirementOrderModel extends OrderModel {
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
+      this.editable,
       this.attachments})
       : super(
           code: code,
