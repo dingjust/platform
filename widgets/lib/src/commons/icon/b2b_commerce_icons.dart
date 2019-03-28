@@ -69,9 +69,9 @@ class B2BIcons {
       const IconData(0xe6c2, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData home_active =
       const IconData(0xe6c0, fontFamily: 'b2bIcons2', matchTextDirection: true);
-  static const IconData business =
-      const IconData(0xe6c5, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData business_active =
+      const IconData(0xe6c5, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData business =
       const IconData(0xe6c4, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData my =
       const IconData(0xe6bf, fontFamily: 'b2bIcons2', matchTextDirection: true);
