@@ -714,38 +714,13 @@ class PurchaseOrderItem extends StatelessWidget {
           );
         }
       }
-      //查看物流
+      //确认收货
       if (order.status == PurchaseOrderStatus.OUT_OF_STORE) {
         return Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(right: 10),
-                width: 150,
-                child: FlatButton(
-                    color: Colors.white,
-                    child: Text(
-                      '查看物流',
-                      style: TextStyle(
-                        color: Color(0xFF969696),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        side: BorderSide(
-                            color: Color(0xFF969696),
-                            style: BorderStyle.solid,
-                            width: 2)),
-                    clipBehavior: Clip.antiAlias,
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    onPressed: () {}
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                padding: EdgeInsets.only(right: 30),
                 width: 150,
                 child: FlatButton(
                     color: Color(0xFFFFD600),
@@ -758,23 +733,16 @@ class PurchaseOrderItem extends StatelessWidget {
                       ),
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(20)),
-                      side: BorderSide(
-                          color: Color(0xFFFFD600),
-                          style: BorderStyle.solid,
-                          width: 2),
-                    ),
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(20))),
                     onPressed: () async{
                       bool result = false;
-
                       result = await PurchaseOrderRepository().purchaseOrderShipped(order.code, order);
                       _showMessage(context, result, '确认收货');
                     }
                 ),
               ),
-            ],
-          ),
+            )
         );
       }
       else {

@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -172,7 +174,6 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                           .purchaseOrderDelivering(
                           widget.purchaseOrderModel.code,
                           widget.purchaseOrderModel);
-                      print(widget.purchaseOrderModel);
                     }
                     //打样单的确认发货
                     else if(!widget.isProductionOrder && widget.proofingModel != null) {
@@ -182,6 +183,10 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                           widget.proofingModel.code,
                           widget.proofingModel);
                     }
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) =>
+                            PurchaseOrdersPage()), ModalRoute.withName('/'));
+                    PurchaseOrderBLoC().refreshData('ALL');
                     showDialog<void>(
                       context: context,
                       barrierDismissible: true, // user must tap button!
@@ -196,7 +201,6 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                         );
                       },
                     );
-                    Navigator.of(context).pop();
                   }else{
                     showDialog<void>(
                       context: context,
@@ -232,7 +236,37 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 shape: RoundedRectangleBorder(
                     borderRadius:
                     BorderRadius.all(Radius.circular(20))),
-                onPressed: () {
+                onPressed: () async{
+                  bool result = false;
+                  if(widget.isProductionOrder){
+                     result = await PurchaseOrderRepository()
+                            .purchaseOrderDelivering(
+                        widget.purchaseOrderModel.code,
+                        widget.purchaseOrderModel);
+                  }else{
+                    result = await ProofingOrderRepository()
+                        .proofingDelivering(
+                        widget.proofingModel.code,
+                        widget.proofingModel);
+                  }
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) =>
+                          PurchaseOrdersPage()), ModalRoute.withName('/'));
+                  PurchaseOrderBLoC().refreshData('ALL');
+                  showDialog<void>(
+                    context: context,
+                    barrierDismissible: true, // user must tap button!
+                    builder: (context) {
+                      return SimpleDialog(
+                        title: const Text('提示'),
+                        children: <Widget>[
+                          SimpleDialogOption(
+                            child: Text('发货${result ? '成功' : '失败'}'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 }
             ),
           ),

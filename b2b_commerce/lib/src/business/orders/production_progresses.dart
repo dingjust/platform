@@ -348,40 +348,42 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     return Container(
       child: GestureDetector(
         child: Container(
-            padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
+            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: Row(
                 children: <Widget>[
-                   Text('备注', style: TextStyle(fontWeight: FontWeight.w500)),
-
-                  Container(
-                    padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
-                    child: Align(
-                        alignment: Alignment.centerRight,
-                        child: progress.remarks == null?
-                        Align(
+                  Text('备注', style: TextStyle(fontWeight: FontWeight.w500)),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
+                      child: Align(
                           alignment: Alignment.centerRight,
-                          child: Text(
-                            '填写',
-                            style: TextStyle(
-                              color: Colors.grey,
+                          child: progress.remarks == null?
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '填写',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                        ):
-                        Container(
-                          child: Text(
-                            '${progress.remarks}',
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines:2,
-                          ),
-                        )
+                          ):
+                          Container(
+                            margin: EdgeInsets.only(right: 20),
+                            child: Text(
+                              '${progress.remarks}',
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines:2,
+                            ),
+                          )
+                      ),
                     ),
                   )
                 ])
         ),
         onTap: () async {
           userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
-          _showRemarksDialog(progress,'备注') : null;
+          _showRemarksDialog(progress,'备注',remarks) : null;
         },
       )
     );
@@ -525,7 +527,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     );
   }
 
-  Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type) async {
+  Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type,String remarks) async {
     dialogText = TextEditingController();
     FocusNode focusNode = new FocusNode();
     return showDialog<void>(
@@ -541,6 +543,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   controller:dialogText,
                   focusNode: focusNode,
                   keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(10.0),
+                    helperText: '${remarks==null?'':remarks}',
+                  ),
                 ),
               ],
             ),
@@ -602,8 +608,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   //备注输入框
-  void _showRemarksDialog(ProductionProgressModel model,String type){
-    _neverRemarks(context,model,type);
+  void _showRemarksDialog(ProductionProgressModel model,String type,String remakrs){
+    _neverRemarks(context,model,type,remakrs);
   }
 
 //确认是否完成动作

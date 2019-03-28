@@ -217,7 +217,7 @@ class AbstractOrderModel extends ItemModel {
   SalesApplication salesApplication;
 
   //物流信息
-  @JsonKey(fromJson: _consignmentModelToJson)
+  @JsonKey(toJson: _consignmentModelToJson)
   ConsignmentModel consignmentModel;
 
   AbstractOrderModel(
@@ -239,6 +239,7 @@ class AbstractOrderModel extends ItemModel {
 
   static Map<String, dynamic> _consignmentModelToJson(ConsignmentModel model) =>
       ConsignmentModel.toJson(model);
+
 }
 
 /// 订单
@@ -394,10 +395,11 @@ class ConsignmentModel extends ItemModel {
   String trackingID;
 
   /// 发货行
+  @JsonKey(toJson: _entriesToJson)
   List<ConsignmentEntryModel> consignmentEntries;
 
   //物流公司
-  @JsonKey(fromJson: _carrierToJson)
+  @JsonKey(toJson: _carrierToJson)
   CarrierModel carrierModel;
 
   ConsignmentModel({
@@ -415,6 +417,9 @@ class ConsignmentModel extends ItemModel {
 
   static Map<String, dynamic> _carrierToJson(CarrierModel model) =>
       CarrierModel.toJson(model);
+
+  static List<Map<String, dynamic>> _entriesToJson(List<ConsignmentEntryModel> models) =>
+      models.map((model) => ConsignmentEntryModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -716,6 +721,9 @@ class PurchaseOrderModel extends OrderModel {
   //是否延期
   bool delayed;
 
+  //报价单号
+  String quoteRef;
+
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime modifiedtime;
 
@@ -751,6 +759,7 @@ class PurchaseOrderModel extends OrderModel {
       this.depositPaidDate,
       this.uniqueCode,
       this.delayed,
+        this.quoteRef,
         this.modifiedtime,
       SalesApplication salesApplication,
         ConsignmentModel consignmentModel})
@@ -1179,4 +1188,22 @@ class ProofingEntryModel extends OrderEntryModel {
 
   static Map<String, dynamic> _orderToJson(ProofingModel order) =>
       ProofingModel.toJson(order);
+}
+
+
+@JsonSerializable()
+class CarrierModel extends ItemModel{
+  String code;
+  String name;
+
+  CarrierModel({this.code, this.name});
+
+  factory CarrierModel.fromJson(Map<String, dynamic> json) =>
+      _$CarrierModelFromJson(json);
+
+  static Map<String, dynamic> toJson(CarrierModel model) =>
+      _$CarrierModelToJson(model);
+
+  static List<CarrierModel> fromJsonList(List<dynamic> jsons) =>
+      jsons.map((json) => CarrierModel.fromJson(json)).toList();
 }
