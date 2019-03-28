@@ -214,8 +214,11 @@ class AbstractOrderModel extends ItemModel {
   String remarks;
 
   //线上线下订单
-
   SalesApplication salesApplication;
+
+  //物流信息
+  @JsonKey(fromJson: _consignmentModelToJson)
+  ConsignmentModel consignmentModel;
 
   AbstractOrderModel(
       {@required this.code,
@@ -225,13 +228,17 @@ class AbstractOrderModel extends ItemModel {
       this.deliveryAddress,
       this.remarks,
       this.unitPrice,
-      this.salesApplication});
+      this.salesApplication,
+      this.consignmentModel});
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
 
   static Map<String, dynamic> _deliverAddressToJson(AddressModel model) =>
       AddressModel.toJson(model);
+
+  static Map<String, dynamic> _consignmentModelToJson(ConsignmentModel model) =>
+      ConsignmentModel.toJson(model);
 }
 
 /// 订单
@@ -247,7 +254,9 @@ class OrderModel extends AbstractOrderModel {
       AddressModel deliveryAddress,
       String remarks,
       //线上线下订单
-      SalesApplication salesApplication})
+      SalesApplication salesApplication,
+        //物流信息
+        ConsignmentModel consignmentModel})
       : super(
             code: code,
             totalQuantity: totalQuantity,
@@ -256,6 +265,7 @@ class OrderModel extends AbstractOrderModel {
             deliveryAddress: deliveryAddress,
             remarks: remarks,
             salesApplication: salesApplication,
+      consignmentModel: consignmentModel,
             unitPrice: unitPrice);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
@@ -386,6 +396,10 @@ class ConsignmentModel extends ItemModel {
   /// 发货行
   List<ConsignmentEntryModel> consignmentEntries;
 
+  //物流公司
+  @JsonKey(fromJson: _carrierToJson)
+  CarrierModel carrierModel;
+
   ConsignmentModel({
     @required this.code,
     @required this.status,
@@ -398,6 +412,9 @@ class ConsignmentModel extends ItemModel {
 
   static Map<String, dynamic> toJson(ConsignmentModel model) =>
       _$ConsignmentModelToJson(model);
+
+  static Map<String, dynamic> _carrierToJson(CarrierModel model) =>
+      CarrierModel.toJson(model);
 }
 
 @JsonSerializable()
@@ -729,16 +746,19 @@ class PurchaseOrderModel extends OrderModel {
       this.balancePaidDate,
       this.depositPaidDate,
       this.uniqueCode,
-      this.delayed, this.modifiedtime,
-      SalesApplication salesApplication})
+      this.delayed,
+        this.modifiedtime,
+      SalesApplication salesApplication,
+        ConsignmentModel consignmentModel})
       : super(
-            code: code,
-            totalQuantity: totalQuantity,
-            totalPrice: totalPrice,
-            creationTime: creationTime,
-            deliveryAddress: deliveryAddress,
-            remarks: remarks,
-            salesApplication: salesApplication);
+      code: code,
+      totalQuantity: totalQuantity,
+      totalPrice: totalPrice,
+      creationTime: creationTime,
+      deliveryAddress: deliveryAddress,
+      remarks: remarks,
+      salesApplication: salesApplication,
+      consignmentModel: consignmentModel);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
       _$PurchaseOrderModelFromJson(json);

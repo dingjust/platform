@@ -90,7 +90,7 @@ class PurchaseOrderRepository {
     }
 
 
-  /// 修改订单定金金额
+  /// 修改订单尾款金额
   Future<bool> purchaseOrderBalanceUpdate(String code , PurchaseOrderModel form) async {
       Response response;
       try{
@@ -110,7 +110,7 @@ class PurchaseOrderRepository {
       }
     }
 
-  /// 修改订单尾款金额
+  /// 修改订单定金金额
   Future<bool> purchaseOrderDepositUpdate(String code , PurchaseOrderModel form) async {
     Response<String> response;
     try{
@@ -148,23 +148,21 @@ class PurchaseOrderRepository {
   }
 
   //确认发货
-  Future<String> purchaseOrderDelivering(String code , PurchaseOrderModel form) async {
-    Response<String> response;
-    String message;
+  Future<bool> purchaseOrderDelivering(String code , PurchaseOrderModel form) async {
+    Response response;
     try{
       response =  await http$.put(
         OrderApis.purchaseOrderDelivering(code),
         data: PurchaseOrderModel.toJson(form),
       );
     }on DioError catch(e){
-      message = e.message;
       print(e);
     }
 
     if (response != null && response.statusCode == 200) {
-      return response.data;
+      return true;
     } else {
-      return message;
+      return false;
     }
   }
 

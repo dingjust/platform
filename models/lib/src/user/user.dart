@@ -238,3 +238,20 @@ class RoleModel extends ItemModel {
   static Map<String, dynamic> toJson(RoleModel model) =>
       _$RoleModelToJson(model);
 }
+
+@JsonSerializable()
+class CarrierModel extends ItemModel{
+  String code;
+  String name;
+
+  CarrierModel({this.code, this.name});
+
+  factory CarrierModel.fromJson(Map<String, dynamic> json) =>
+      _$CarrierModelFromJson(json);
+
+  static Map<String, dynamic> toJson(CarrierModel model) =>
+      _$CarrierModelToJson(model);
+
+  static List<CarrierModel> fromJsonList(List<dynamic> jsons) =>
+      jsons.map((json) => CarrierModel.fromJson(json)).toList();
+}
