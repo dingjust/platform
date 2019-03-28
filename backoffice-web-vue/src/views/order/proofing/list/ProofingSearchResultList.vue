@@ -12,19 +12,23 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="需求订单号" prop="requirementOrderRef"></el-table-column>
-      <el-table-column label="报价订单号" prop="quoteRef"></el-table-column>
+      <el-table-column label="需求订单号" prop="requirementOrderRef">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.requirementOrderRef" type="text" @click="onShowRequirement(scope.row)">
+            {{scope.row.requirementOrderRef}}
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="报价订单号" prop="quoteRef">
+        <template slot-scope="scope">
+          <el-button type="text" @click="onShowQuote(scope.row)">
+            {{scope.row.quoteRef}}
+          </el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
-          <el-button v-if="canUpdateAddress(scope.row)" type="text" icon="el-icon-edit"
-                     @click="onUpdateAddress(scope.row)">
-            修改地址
-          </el-button>
-          <el-button type="text" icon="el-icon-edit"
-                     @click="onShowQuote(scope.row)">
-            查看报价单
-          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -39,20 +43,10 @@
                      :total="page.totalElements">
       </el-pagination>
     </div>
-    <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
-               :show-close="false" append-to-body width="50%">
-      <address-form ref="addressForm" :slot-data="addressFormData"/>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="onAddressInputCanceled">取 消</el-button>
-        <el-button type="primary" @click="onAddressInputConfirmed">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-  import AddressForm from "@/views/shared/user/address/AddressForm";
-
   import {createNamespacedHelpers} from 'vuex';
 
   const {mapActions} = createNamespacedHelpers('PurchaseOrdersModule');
@@ -60,7 +54,6 @@
   export default {
     name: 'ProofingSearchResultList',
     props: ["page"],
-    components: {AddressForm},
     computed: {},
     methods: {
       ...mapActions({
@@ -95,46 +88,13 @@
       onShowQuote(row) {
         this.$emit('onShowQuote', row);
       },
-      onUpdateAddress(row) {
-        if (row.deliveryAddress != null) {
-          this.addressFormData = Object.assign({}, row.deliveryAddress);
-        }
-
-        this.addressDialogVisible = true;
-
-        this.currentRow = row;
+      onShowRequirement(row) {
+        this.$emit('onShowRequirement', row);
       },
-      canUpdateAddress(row) {
-        return this.isBrand() && row.status === 'PENDING_PAYMENT';
-      },
-      onAddressInputCanceled() {
-        this.addressDialogVisible = false;
-      },
-      onAddressInputConfirmed() {
-        if (this.$refs['addressForm'].validate()) {
-          const row = this.currentRow;
-          this._updateDeliveryAddress(row);
-
-          this.addressDialogVisible = false;
-        }
-      },
-      async _updateDeliveryAddress(row) {
-        const url = this.apis().updateDeliveryAddressOfProofing(row.code);
-        const result = await this.$http.post(url, this.addressFormData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.$message.error('地址更新成功');
-        this.refresh();
-      }
     },
     data() {
       return {
-        addressDialogVisible: false,
-        addressFormData: this.$store.state.ProofingsModule.addressFormData,
-        currentRow: null
+
       }
     },
     created() {

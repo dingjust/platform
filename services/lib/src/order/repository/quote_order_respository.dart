@@ -37,7 +37,7 @@ class QuoteOrderRepository {
     Response response;
     try {
       response = await http$
-          .put(OrderApis.quoteReject(code), data: {'reason': reason});
+          .put(OrderApis.quoteReject(code), data: reason);
     } on DioError catch (e) {
       print(e);
     }

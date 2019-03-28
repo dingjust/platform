@@ -17,7 +17,7 @@ class SampleProductHistoryFormPage extends StatefulWidget {
 
 class SampleProductHistoryFormPageState
     extends State<SampleProductHistoryFormPage> {
-  SampleProductModel _smapleProduct = SampleProductModel();
+  SampleProductModel _sampleProduct;
   LendBorrowType _type = LendBorrowType.BORROW;
   List<MediaModel> _pictures = [];
   FocusNode _nameFocusNode = FocusNode();
@@ -51,19 +51,21 @@ class SampleProductHistoryFormPageState
           IconButton(
               icon: Text(
                 '确定',
-                style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                style: TextStyle(),
               ),
               onPressed: () async{
                 if(_type == LendBorrowType.BORROW){
-                  if(_smapleProduct == null){
+                  if(_sampleProduct == null){
                     showDialog(
                         context: (context),
                         builder: (context) => AlertDialog(
-                          content: Text('样衣名称和货号不能为空'),
+                          content: Text('样衣不能为空'),
                         ));
                     return;
                   }else{
-                    widget.model.sampleProduct = _smapleProduct;
+                    widget.model.name = _sampleProduct.name;
+                    widget.model.code = _sampleProduct.code;
+                    widget.model.images = _sampleProduct.pictures;
                   }
                 }else{
                   if (_nameController.text == '' && _skuIDController.text == '') {
@@ -74,19 +76,18 @@ class SampleProductHistoryFormPageState
                         ));
                     return;
                   }else{
-                    widget.model.sampleProduct.name =_nameController.text;
-                    widget.model.sampleProduct.code =_skuIDController.text;
+                    widget.model.name =_nameController.text;
+                    widget.model.code =_skuIDController.text;
                   }
                 }
 
+                widget.model.state = ReturnState.NOT_RETURNED;
                 widget.model.type = _type;
-                widget.model.quantity = int.parse(_quantityController.text == ''
-                    ? 0
-                    : _quantityController.text);
-                widget.model.contactWay = _contactWayController.text == ''
+                widget.model.quantity = _quantityController.text == '' ? 0 : int.parse(_quantityController.text);
+                widget.model.contact = _contactWayController.text == ''
                     ? null
                     : _contactWayController.text;
-                widget.model.remake = _remakeController.text == ''
+                widget.model.remakes = _remakeController.text == ''
                     ? null
                     : _remakeController.text;
                 widget.model.relatedParty = _relatedPartyController.text == ''
@@ -148,26 +149,29 @@ class SampleProductHistoryFormPageState
               ),
             ],
           ),
-          Column(
-            children: <Widget>[
-              Container(
-                margin:
-                    EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '样衣图片',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      '（若无图片可不上传）',
-                      style: TextStyle(color: Colors.red, fontSize: 14),
-                    )
-                  ],
+          Offstage(
+            offstage: _type == LendBorrowType.BORROW && _sampleProduct == null,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin:
+                      EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '样衣图片',
+                        style: TextStyle(fontSize: 16),
+                      ),
+//                      Text(
+//                        '（若无图片可不上传）',
+//                        style: TextStyle(color: Colors.red, fontSize: 14),
+//                      )
+                    ],
+                  ),
                 ),
-              ),
-              EditableAttachments(list: _pictures)
-            ],
+                EditableAttachments(list: _pictures,maxNum: _type == LendBorrowType.BORROW ? _pictures.length : 5,)
+              ],
+            ),
           ),
           Card(
             elevation: 0,
@@ -192,29 +196,31 @@ class SampleProductHistoryFormPageState
                                       style: TextStyle(fontSize: 16),
                                     ),
                                   ),
-                                  Container(
-                                    child: GestureDetector(
+                                  GestureDetector(
+                                    child: Container(
                                       child: _nameText,
-                                      onTap: () async {
-                                        _smapleProduct =
-                                            await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                SampleProductsPage(
-                                                    isHistoryCreate: true),
-                                          ),
-                                        );
-                                        if(_smapleProduct != null){
-                                          _nameText = Text(_smapleProduct.name,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16));
-                                          _skuIDText = _smapleProduct.code;
-                                        }
-                                      },
                                     ),
-                                  )
+                                    onTap: () async {
+                                      _sampleProduct =
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              SampleProductsPage(
+                                                  isHistoryCreate: true),
+                                        ),
+                                      );
+                                      if(_sampleProduct != null){
+                                        _nameText = Text(_sampleProduct.name,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16));
+                                        _skuIDText = _sampleProduct.code;
+                                        _pictures = _sampleProduct.pictures;
+                                      }
+                                    },
+                                  ),
+
                                 ],
                               ),
                             ),

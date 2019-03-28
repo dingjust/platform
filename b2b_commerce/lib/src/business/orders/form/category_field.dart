@@ -5,7 +5,8 @@ import 'package:widgets/widgets.dart';
 
 class CategoryField extends StatefulWidget {
   final RequirementOrderModel item;
-  CategoryField(this.item);
+  ApparelProductModel product;
+  CategoryField(this.item,{this.product});
 
   CategoryFieldState createState() => CategoryFieldState();
 }
@@ -18,10 +19,8 @@ class CategoryFieldState extends State<CategoryField> {
     ProductRepositoryImpl()
         .cascadedCategories()
         .then((categorys) => _category = categorys);
+    print(RequirementInfoModel.toJson(widget.item.details));
 
-    if (widget.item != null&&widget.item.details.category!=null) {
-      _categorySelected.add(widget.item.details.category);
-    }
     super.initState();
   }
 
@@ -33,6 +32,10 @@ class CategoryFieldState extends State<CategoryField> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.item != null&&widget.item.details.category!=null) {
+      _categorySelected.add(widget.item.details.category);
+    }
+
     return GestureDetector(
         child: Container(
           child: ListTile(
@@ -56,6 +59,7 @@ class CategoryFieldState extends State<CategoryField> {
                   ))),
         ),
         onTap: () {
+          if(widget.product != null) return;
           showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {

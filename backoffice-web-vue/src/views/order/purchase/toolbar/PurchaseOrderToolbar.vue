@@ -11,13 +11,9 @@
 </template>
 
 <script>
-  import PurchaseOrderAdvancedSearchForm from '../form/PurchaseOrderAdvancedSearchForm';
-
   export default {
     name: 'PurchaseOrderToolbar',
-    components: {
-      PurchaseOrderAdvancedSearchForm
-    },
+    components: {},
     computed: {},
     methods: {
       onSearch() {
@@ -37,8 +33,6 @@
       return {
         keyword: this.$store.state.PurchaseOrdersModule.keyword,
         formData: this.$store.state.PurchaseOrdersModule.formData,
-        queryFormData: this.$store.state.PurchaseOrdersModule.queryFormData,
-        statusOptions: this.$store.state.PurchaseOrdersModule.statusOptions,
       }
     }
   }

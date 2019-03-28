@@ -22,6 +22,8 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
   List<ColorModel> _beforeColors = [];
   List<SizeModel> _beforeSizes = [];
 
+  bool isOpen = false;
+
   @override
   void initState() {
     _colorCodes = widget.colorFilters.map((color) => color.code).toList();
@@ -49,47 +51,63 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> colorFilterChips = widget.colors.map((ColorModel color) {
-      return ChoiceChip(
-        avatar: _colorCodes.contains(color.code)
-            ? Icon(
-                Icons.done,
-                size: 18,
-                color: Colors.white,
+    List<ColorModel> _colors;
+
+    if(isOpen){
+      _colors = widget.colors;
+    }else{
+      _colors = widget.colors.sublist(0,25);
+    }
+
+    List<Widget> colorFilterChips = _colors.map((ColorModel color) {
+      return Container(
+        child: ChoiceChip(
+          avatar: _colorCodes.contains(color.code)
+              ? Icon(
+                  Icons.done,
+                  size: 18,
+                  color: isLightColor(
+                          int.parse(
+                            '0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}',
+                          ),
+                        )
+                      ? Colors.black
+                      : Colors.white,
+                )
+              : null,
+          labelPadding:
+              _colorCodes.contains(color) ? EdgeInsets.only(right: 10) : null,
+          backgroundColor: Color(int.parse(
+              '0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}')),
+          selectedColor: Color(int.parse(
+              '0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}')),
+          key: ValueKey<String>(color.code),
+          label: Text(
+            color.name,
+            style: TextStyle(
+              color: isLightColor(
+                int.parse(
+                  '0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}',
+                ),
               )
-            : null,
-        labelPadding:
-            _colorCodes.contains(color) ? EdgeInsets.only(right: 10) : null,
-        backgroundColor: Color(int.parse(
-            '0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}')),
-        selectedColor: Color(int.parse(
-            '0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}')),
-        key: ValueKey<String>(color.code),
-        label: Text(
-          color.name,
-          style: TextStyle(
-            color: isLightColor(
-              int.parse(
-                '0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}',
-              ),
-            )
-                ? Colors.black
-                : Colors.white,
+                  ? Colors.black
+                  : Colors.white,
+            ),
           ),
+          selected: _colorCodes.contains(color.code),
+          onSelected: (value) {
+            setState(() {
+              if (value) {
+                widget.colorFilters.add(color);
+                _colorCodes.add(color.code);
+              } else {
+                widget.colorFilters
+                    .removeWhere((model) => model.code == color.code);
+                _colorCodes.remove(color.code);
+              }
+            });
+          },
         ),
-        selected: _colorCodes.contains(color.code),
-        onSelected: (value) {
-          setState(() {
-            if (value) {
-              widget.colorFilters.add(color);
-              _colorCodes.add(color.code);
-            } else {
-              widget.colorFilters
-                  .removeWhere((model) => model.code == color.code);
-              _colorCodes.remove(color.code);
-            }
-          });
-        },
       );
     }).toList();
 
@@ -126,7 +144,7 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
           centerTitle: true,
           elevation: 0.5,
           title: Text('颜色/尺码'),
-          leading: IconButton(icon: Text('取消'), onPressed: () => Navigator.pop(context,[_beforeColors,_beforeSizes])),
+          leading: IconButton(icon: Text('取消',style: TextStyle(color: Colors.grey,),), onPressed: () => Navigator.pop(context,[_beforeColors,_beforeSizes])),
           actions: <Widget>[
             IconButton(
               icon: Text('确定'),
@@ -174,6 +192,37 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
                 crossAxisCount: 5,
                 padding: const EdgeInsets.all(5),
                 children: colorFilterChips,
+                mainAxisSpacing: 0.5,
+              ),
+              GestureDetector(
+                child: isOpen ?
+                Center(
+                  child: Column(
+                    children: <Widget>[
+                      Icon(Icons.keyboard_arrow_up),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 30,),
+                        child: Text('收起',style: TextStyle(color: Colors.grey,fontSize: 18,),),
+                      ),
+                    ],
+                  ),
+                ):
+                Center(
+                  child: Column(
+                    children: <Widget>[
+                      Icon(Icons.keyboard_arrow_down),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 30,),
+                        child: Text('显示全部颜色',style: TextStyle(color: Colors.grey,fontSize: 18,),),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: (){
+                  setState(() {
+                    isOpen = !isOpen;
+                  });
+                },
               ),
               Text('选择尺码'),
               GridView.count(

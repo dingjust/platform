@@ -197,7 +197,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => PicturePickPreviewWidget(
                         medias: progress.medias,
-                        isUpload: userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ? true : false,
+                        isUpload: userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ? true : false,
                       ))
                   ).then((value){
                     if(value != null){
@@ -248,7 +248,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 child: Text('预计完成时间',
                     style: TextStyle(fontWeight: FontWeight.w500)),
                 onTap: () {
-                  userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                  userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
                   _showDatePicker(progress) : null;
                 }),
           ),
@@ -262,7 +262,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     style: TextStyle(fontWeight: FontWeight.w500)),
               ),
               onTap: () {
-                userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
                 _showDatePicker(progress) : null;
               }),
           Align(
@@ -270,7 +270,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             child: IconButton(
                 icon: Icon(Icons.date_range),
                 onPressed: () {
-                  userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                  userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
                   _showDatePicker(progress) : null;
                 }
             ),
@@ -312,7 +312,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       child: Text('数量',
                           style: TextStyle(fontWeight: FontWeight.w500)),
                       onTap: () {
-                        userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                        userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
                         _showDialog(progress,'数量'): null;
                       }),
                 ),
@@ -323,7 +323,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           style: TextStyle(fontWeight: FontWeight.w500)),
                     ),
                     onTap: () {
-                      userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                      userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
                       _showDialog(progress,'数量')
                           : null;
                     }
@@ -333,7 +333,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   child: IconButton(
                       icon: Icon(Icons.keyboard_arrow_right),
                       onPressed: (){
-                        userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                        userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
                         _showDialog(progress,'数量') : null;
                       }
                   ),
@@ -348,40 +348,42 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     return Container(
       child: GestureDetector(
         child: Container(
-            padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
+            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
             child: Row(
                 children: <Widget>[
-                   Text('备注', style: TextStyle(fontWeight: FontWeight.w500)),
-
-                  Container(
-                    padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
-                    child: Align(
-                        alignment: Alignment.centerRight,
-                        child: progress.remarks == null?
-                        Align(
+                  Text('备注', style: TextStyle(fontWeight: FontWeight.w500)),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
+                      child: Align(
                           alignment: Alignment.centerRight,
-                          child: Text(
-                            '填写',
-                            style: TextStyle(
-                              color: Colors.grey,
+                          child: progress.remarks == null?
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '填写',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                        ):
-                        Container(
-                          child: Text(
-                            '${progress.remarks}',
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines:2,
-                          ),
-                        )
+                          ):
+                          Container(
+                            margin: EdgeInsets.only(right: 20),
+                            child: Text(
+                              '${progress.remarks}',
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines:2,
+                            ),
+                          )
+                      ),
                     ),
                   )
                 ])
         ),
         onTap: () async {
-          userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
-          _showRemarksDialog(progress,'备注') : null;
+          userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
+          _showRemarksDialog(progress,'备注',remarks) : null;
         },
       )
     );
@@ -525,7 +527,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     );
   }
 
-  Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type) async {
+  Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type,String remarks) async {
     dialogText = TextEditingController();
     FocusNode focusNode = new FocusNode();
     return showDialog<void>(
@@ -541,6 +543,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   controller:dialogText,
                   focusNode: focusNode,
                   keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(10.0),
+                    helperText: '${remarks==null?'':remarks}',
+                  ),
                 ),
               ],
             ),
@@ -602,8 +608,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   //备注输入框
-  void _showRemarksDialog(ProductionProgressModel model,String type){
-    _neverRemarks(context,model,type);
+  void _showRemarksDialog(ProductionProgressModel model,String type,String remakrs){
+    _neverRemarks(context,model,type,remakrs);
   }
 
 //确认是否完成动作
@@ -742,22 +748,25 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           model.balance = balance;
                           model.skipPayBalance = false;
                           try {
-                            await PurchaseOrderRepository()
+                            result =  await PurchaseOrderRepository()
                                 .purchaseOrderBalanceUpdate(model.code, model);
                           } catch (e) {
                             print(e);
                           }
-                          if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
-                            try {
-                              for (int i = 0; i < order.progresses.length; i++) {
-                                if (order.currentPhase == order.progresses[i].phase) {
-                                  result = await PurchaseOrderRepository() .productionProgressUpload(order.code,
-                                      order.progresses[i].id.toString(),
-                                      order.progresses[i]);
+                          if(result) {
+                            if (model.status ==
+                                PurchaseOrderStatus.IN_PRODUCTION) {
+                              try {
+                                for (int i = 0; i < order.progresses.length; i++) {
+                                  if (order.currentPhase == order.progresses[i].phase) {
+                                    result = await PurchaseOrderRepository() .productionProgressUpload(order.code,
+                                        order.progresses[i].id.toString(),
+                                        order.progresses[i]);
+                                  }
                                 }
+                              } catch (e) {
+                                print(e);
                               }
-                            } catch (e) {
-                              print(e);
                             }
                           }
                           Navigator.of(context).pop();

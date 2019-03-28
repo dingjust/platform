@@ -650,9 +650,14 @@ class SampleProductModel extends ItemModel {
 
 @JsonSerializable()
 class SampleBorrowReturnHistoryModel extends ItemModel {
-  //样衣产品
-  @JsonKey(toJson: _sampleProductToJson)
-  SampleProductModel sampleProduct;
+
+  //样衣名
+  String name;
+  //样衣货号
+  String code;
+  //样衣图片
+  @JsonKey(toJson: _mediasToJson)
+  List<MediaModel> images;
 
   //借的类型
   LendBorrowType type;
@@ -673,24 +678,23 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
   String relatedParty;
 
   //联系方式
-  String contactWay;
+  String contact;
 
   //备注
-  String remake;
+  String remakes;
 
   DateTime creationDate;
 
   SampleBorrowReturnHistoryModel({
-    this.sampleProduct,
     this.type,
     this.quantity,
     this.expectedReturnDate,
     this.returnedDate,
     this.relatedParty,
-    this.contactWay,
+    this.contact,
     this.state,
     this.creationDate,
-    this.remake,
+    this.remakes,
   });
 
   factory SampleBorrowReturnHistoryModel.fromJson(Map<String, dynamic> json) =>
@@ -698,8 +702,9 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
 
   static Map<String, dynamic> toJson(SampleBorrowReturnHistoryModel model) =>
       _$SampleBorrowReturnHistoryModelToJson(model);
-  static Map<String, dynamic> _sampleProductToJson(SampleProductModel model) =>
-      SampleProductModel.toJson(model);
+
+  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
 }
 
 @JsonSerializable()

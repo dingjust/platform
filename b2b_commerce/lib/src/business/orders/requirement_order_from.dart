@@ -102,6 +102,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 widget.product = result;
                 if (result != null) {
                   setState(() {
+                    model.details.pictures = widget.product.images;
                     model.details.productName = widget.product.name;
                     model.details.productSkuID = widget.product.skuID;
                     if (widget.product.category != null) {
@@ -153,7 +154,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               offstage: widget.product == null,
               child: ProductField(widget.product),
             ),
-            CategoryField(model),
+            CategoryField(model,product: widget.product,),
             new Divider(height: 0),
             MajorCategoryField(model),
             new Divider(height: 0),

@@ -160,7 +160,7 @@ class RequirementPoolBLoC extends BLoCBase {
 
   /// 生成查询条件信息
   Map generateConditionsMap(RequirementFilterCondition conditions) {
-    Map data = {};
+    Map data = {"private": 0};
     // 计算时间范围
     DateTime expectedDeliveryDateTo = DateTime.now();
     DateTime expectedDeliveryDateFrom;
@@ -193,12 +193,9 @@ class RequirementPoolBLoC extends BLoCBase {
     }
 
     if (conditions.categories != null) {
-      print(conditions.categories);
       data['majorCategories'] =
           conditions.categories.map((category) => category.code).toList();
     }
-
-    print(data['majorCategories']);
 
     return data;
   }

@@ -47,10 +47,10 @@ class _RequirementOrderDetailPageState
           style: TextStyle(color: Colors.black),
         ),
         actions: <Widget>[
-          widget.order.status == RequirementOrderStatus.PENDING_QUOTE
+          widget.order.editable
               ? FlatButton(
                   onPressed: onEdit,
-                  child: Text('编辑'),
+                  child: Text('修改'),
                 )
               : Container()
         ],
@@ -152,7 +152,7 @@ class _RequirementOrderDetailPageState
               InfoRow(
                 label: '联系人',
                 value: Text(
-                  '${widget.order.belongTo.contactPerson}',
+                  '${widget.order.details.contactPerson}',
                   style: TextStyle(
                       color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 ),
@@ -163,7 +163,7 @@ class _RequirementOrderDetailPageState
                   value: Row(
                     children: <Widget>[
                       Text(
-                        '${widget.order.belongTo.contactPhone}',
+                        '${widget.order.details.contactPhone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),

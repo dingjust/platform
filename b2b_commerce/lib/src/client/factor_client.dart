@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/index_factory.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/index_factory.dart';
 import 'package:b2b_commerce/src/my/index.dart';
@@ -80,12 +79,23 @@ class BottomNavigation extends StatelessWidget {
         margin: EdgeInsets.only(right: 12),
         child: const Icon(B2BIcons.home),
       ),
+      activeIcon: Container(
+        margin: EdgeInsets.only(right: 12),
+        child: const Icon(
+          B2BIcons.home_active,
+        ),
+      ),
+      backgroundColor: Colors.white,
       title: const Text('商机'),
     ),
     BottomNavigationBarItem(
       icon: Container(
         margin: EdgeInsets.only(right: 15),
         child: const Icon(B2BIcons.production),
+      ),
+      activeIcon: Container(
+        margin: EdgeInsets.only(right: 15),
+        child: const Icon(B2BIcons.production_active),
       ),
       title: const Text('生产'),
     ),
@@ -94,12 +104,20 @@ class BottomNavigation extends StatelessWidget {
         margin: EdgeInsets.only(right: 10),
         child: const Icon(B2BIcons.business),
       ),
-      title: const Text('统计'),
+      activeIcon: Container(
+        margin: EdgeInsets.only(right: 10),
+        child: const Icon(B2BIcons.business_active),
+      ),
+      title: const Text('工作'),
     ),
     BottomNavigationBarItem(
       icon: Container(
         margin: EdgeInsets.only(right: 10),
         child: const Icon(B2BIcons.my),
+      ),
+      activeIcon: Container(
+        margin: EdgeInsets.only(right: 10),
+        child: const Icon(B2BIcons.my_active),
       ),
       title: const Text('我的'),
     )
@@ -118,7 +136,7 @@ class BottomNavigation extends StatelessWidget {
       currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
       onTap: _handleTap,
-      fixedColor: themeData.accentColor,
+      fixedColor: Color.fromRGBO(51, 51, 51, 1),
     );
   }
 }

@@ -70,4 +70,23 @@ class ProofingOrderRepository {
       return null;
     }
   }
+
+  //确认发货
+  Future<bool> proofingDelivering(String code , ProofingModel form) async {
+    Response response;
+    try{
+      response =  await http$.put(
+        OrderApis.proofingDelivering(code),
+        data: ProofingModel.toJson(form),
+      );
+    }on DioError catch(e){
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

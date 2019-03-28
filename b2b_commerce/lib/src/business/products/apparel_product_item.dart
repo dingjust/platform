@@ -9,23 +9,21 @@ import '../orders/requirement_order_from.dart';
 
 class ApparelProductItem extends StatefulWidget {
   ApparelProductItem(this.item,
-      {this.isRequirement = false, this.isSelectItem = false});
+      {this.isRequirement = false, this.isSelectItem = false,this.status,});
 
   final ApparelProductModel item;
   final bool isRequirement;
   final bool isSelectItem;
+  String status;
 
   ApparelProductItemState createState() => ApparelProductItemState();
 }
 
 class ApparelProductItemState extends State<ApparelProductItem> {
-  bool _isRecommend;
-  String _approvalStatusText;
+  String _approvalStatusText = '上架';
 
   @override
   void initState() {
-    _isRecommend = widget.item.isRecommend;
-
     if (widget.item.approvalStatus == ArticleApprovalStatus.approved) {
       _approvalStatusText = '下架';
     } else if (widget.item.approvalStatus == ArticleApprovalStatus.unapproved) {
@@ -236,16 +234,17 @@ class ApparelProductItemState extends State<ApparelProductItem> {
               labelStyle: TextStyle(color: Colors.grey),
               onPressed: () async {
                 await ProductRepositoryImpl().delete(widget.item.code);
-                ApparelProductBLoC.instance.filterByStatuses();
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text('删除商品成功'),duration: Duration(seconds: 2,),));
+                ApparelProductBLoC.instance.filterByStatuses(widget.status);
               },
             ),
             ActionChip(
               shape: StadiumBorder(
-                  side: BorderSide(color: Color.fromRGBO(255, 214, 12, 1))),
+                  side: BorderSide()),
               labelPadding: EdgeInsets.symmetric(horizontal: 15),
               backgroundColor: Colors.white,
               label: Text('编辑'),
-              labelStyle: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+              labelStyle: TextStyle(color: Colors.black),
               onPressed: () {
                 ProductRepositoryImpl()
                     .detail(widget.item.code)
@@ -272,19 +271,38 @@ class ApparelProductItemState extends State<ApparelProductItem> {
 //            labelStyle: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
 //            onPressed: () {},
 //          ),
+            UserBLoC.instance.currentUser.type != UserType.FACTORY ?
+              ActionChip(
+                labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
+                backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+                label: Text('生产'),
+                labelStyle: TextStyle(color: Colors.black),
+                onPressed: () {
+                  // TODO: 带到商品，跳到需求页面
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RequirementOrderFrom(
+                            product: widget.item,
+                          )));
+                },
+              ):
             ActionChip(
               labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
               backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-              label: Text('生产'),
+              label: Text(_approvalStatusText),
               labelStyle: TextStyle(color: Colors.black),
               onPressed: () {
-                // TODO: 带到商品，跳到需求页面
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RequirementOrderFrom(
-                              product: widget.item,
-                            )));
+                //TODO:商品上下架
+                if(widget.item.approvalStatus == ArticleApprovalStatus.approved){
+                  ProductRepositoryImpl().off(widget.item.code).then((a){
+                    ApparelProductBLoC.instance.filterByStatuses(widget.status);
+                  });
+                }else if(widget.item.approvalStatus == ArticleApprovalStatus.unapproved){
+                  ProductRepositoryImpl().on(widget.item.code).then((a){
+                    ApparelProductBLoC.instance.filterByStatuses(widget.status);
+                  });
+                }
               },
             ),
           ],

@@ -1,14 +1,7 @@
 import http from '@/common/js/http';
 
 const state = {
-  statusOptions: [
-    {text: '待付款', value: 'PENDING_PAYMENT'},
-    {text: '生产中', value: 'IN_PRODUCTION'},
-    {text: '待出库', value: 'WAIT_FOR_OUT_OF_STORE'},
-    {text: '已出库', value: 'OUT_OF_STORE'},
-    {text: '已完成', value: 'COMPLETED'},
-    {text: '已取消', value: 'CANCELLED'}
-  ],
+  url: '',
   keyword: '',
   statuses: [],
   isAdvancedSearch: false,
@@ -98,6 +91,7 @@ const state = {
 };
 
 const mutations = {
+  url: (state, url) => state.url = url,
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
@@ -109,6 +103,7 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
+    commit('url', url);
     commit('keyword', keyword);
     commit('statuses', statuses);
     if (page) {
@@ -154,16 +149,16 @@ const actions = {
     const statuses = state.statuses;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
-    let url = this.apis().getProductionProgressReports();
-    dispatch('search', {url,keyword, statuses, page: currentPageNumber, size: currentPageSize});
+
+    dispatch('search', {url: state.url, keyword, statuses, page: currentPageNumber, size: currentPageSize});
   }
 };
 
 const getters = {
+  url: state => state.url,
   keyword: state => state.keyword,
   statuses: state => state.statuses,
   isAdvancedSearch: state => state.isAdvancedSearch,
-  statusOptions: state => state.statusOptions,
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,

@@ -151,7 +151,7 @@ class _QuoteItemState extends State<QuoteItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '${widget.model.belongTo.name}',
+                  '${widget.model?.supplier.name}',
                   style: TextStyle(fontSize: 15),
                 ),
                 Text(
@@ -331,9 +331,6 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
             _buildEntries(),
             Row(
               children: <Widget>[
-                Container(
-                  width: 80,
-                ),
                 Expanded(
                   flex: 1,
                   child: _buildSummary(),
@@ -383,7 +380,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '${widget.model.belongTo.name}',
+                  '${widget.model?.supplier?.name}',
                   style: TextStyle(fontSize: 15),
                 ),
                 Text(
@@ -537,8 +534,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '创建打样订单',
-                style: TextStyle(
-                    color: Colors.black, fontSize: 16),
+                style: TextStyle(color: Colors.black, fontSize: 16),
               )),
           FlatButton(
               onPressed: onCreateProduction,
@@ -548,8 +544,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '创建生产订单',
-                style: TextStyle(
-                    color: Colors.black, fontSize: 16),
+                style: TextStyle(color: Colors.black, fontSize: 16),
               )),
         ];
       } else {
@@ -702,5 +697,4 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   quoteModel: widget.model,
                 )));
   }
-
 }
