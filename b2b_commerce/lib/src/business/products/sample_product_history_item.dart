@@ -34,8 +34,8 @@ class SampleProductHistoryItem extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     image: DecorationImage(
-                      image: item.sampleProduct.thumbnail != null
-                          ? NetworkImage(item.sampleProduct.thumbnail.url)
+                      image: item.images != null && item.images.length > 0
+                          ? NetworkImage(item.images[0].url)
                           : AssetImage(
                         'temp/picture.png',
                         package: "assets",
@@ -142,7 +142,7 @@ class SampleProductHistoryItem extends StatelessWidget {
                           ),
                         ],
                       ):
-                      Text('备注：${item.remake ?? ''}')
+                      Text('备注：${item.remakes ?? ''}')
                     ],
                   ),
                 ),

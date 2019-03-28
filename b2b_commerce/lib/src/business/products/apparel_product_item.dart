@@ -20,7 +20,7 @@ class ApparelProductItem extends StatefulWidget {
 
 class ApparelProductItemState extends State<ApparelProductItem> {
   bool _isRecommend;
-  String _approvalStatusText;
+  String _approvalStatusText = '上架';
 
   @override
   void initState() {
@@ -241,11 +241,11 @@ class ApparelProductItemState extends State<ApparelProductItem> {
             ),
             ActionChip(
               shape: StadiumBorder(
-                  side: BorderSide(color: Color.fromRGBO(255, 214, 12, 1))),
+                  side: BorderSide()),
               labelPadding: EdgeInsets.symmetric(horizontal: 15),
               backgroundColor: Colors.white,
               label: Text('编辑'),
-              labelStyle: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+              labelStyle: TextStyle(color: Colors.black),
               onPressed: () {
                 ProductRepositoryImpl()
                     .detail(widget.item.code)
@@ -272,19 +272,29 @@ class ApparelProductItemState extends State<ApparelProductItem> {
 //            labelStyle: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
 //            onPressed: () {},
 //          ),
+            UserBLoC.instance.currentUser.type != UserType.FACTORY ?
+              ActionChip(
+                labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
+                backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+                label: Text('生产'),
+                labelStyle: TextStyle(color: Colors.black),
+                onPressed: () {
+                  // TODO: 带到商品，跳到需求页面
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RequirementOrderFrom(
+                            product: widget.item,
+                          )));
+                },
+              ):
             ActionChip(
               labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
               backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-              label: Text('生产'),
+              label: Text(_approvalStatusText),
               labelStyle: TextStyle(color: Colors.black),
               onPressed: () {
-                // TODO: 带到商品，跳到需求页面
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RequirementOrderFrom(
-                              product: widget.item,
-                            )));
+                //TODO:商品上下架
               },
             ),
           ],

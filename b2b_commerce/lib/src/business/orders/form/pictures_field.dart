@@ -6,8 +6,9 @@ import 'package:widgets/widgets.dart';
 
 class PicturesField extends StatefulWidget {
   RequirementOrderModel model;
+  ApparelProductModel product;
 
-  PicturesField({this.model});
+  PicturesField({this.model,this.product});
 
   PicturesFieldState createState() => PicturesFieldState();
 }
@@ -44,7 +45,8 @@ class PicturesFieldState extends State<PicturesField> {
 //        PhotoPicker(images: widget.normalImages, width: 350),
         EditableAttachments(
           list: widget.model.details.pictures,
-          maxNum: 5,
+          maxNum: widget.product == null ? 5 : widget.model.details.pictures.length,
+          editable: widget.product == null,
         )
       ],
     );
