@@ -1,4 +1,7 @@
+import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
+import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -64,7 +67,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           _buildAttachment(),
           _buildRemark(),
           _buildOrderState(),
-          _buildActionChip(context),
+          _buildSummary()
         ],
       ),
     );
@@ -590,120 +593,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     );
   }
 
-  Widget _buildActionChip(BuildContext pageContext) {
-    //品牌端显示
-    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-      return Offstage(
-        offstage: pageItem.state != QuoteState.SELLER_SUBMITTED &&
-                UserBLoC.instance.currentUser.type == UserType.BRAND
-            ? true
-            : false,
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: ActionChip(
-                  backgroundColor: Colors.red,
-                  labelPadding:
-                      EdgeInsets.symmetric(vertical: 4, horizontal: 22),
-                  labelStyle: TextStyle(fontSize: 16),
-                  label: Text('拒绝报价'),
-                  onPressed: () {
-                    showDialog<void>(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text('请输入拒绝原因'),
-                          content: TextField(
-                            controller: rejectController,
-                            autofocus: true,
-                            decoration: InputDecoration(
-                              labelText: '请输入数量',
-                            ),
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('取消'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            FlatButton(
-                              child: Text('确定'),
-                              onPressed: () async {
-                                int statusCode = await QuoteOrderRepository()
-                                    .quoteReject(
-                                        pageItem.code, rejectController.text);
-                                Navigator.of(context).pop();
-                                if (statusCode == 200) {
-                                  alertMessage('拒绝成功!');
-                                  //触发刷新
-                                  refreshData();
-                                } else {
-                                  alertMessage('拒绝失败');
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                child: ActionChip(
-                  backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-                  labelPadding:
-                      EdgeInsets.symmetric(vertical: 4, horizontal: 22),
-                  labelStyle: TextStyle(fontSize: 16),
-                  label: Text('确认报价'),
-                  onPressed: () async {
-                    showDialog<void>(
-                      context: context,
-                      barrierDismissible: false, // user must tap button!
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text('是否确认?'),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('否'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            FlatButton(
-                              child: Text('是'),
-                              onPressed: () async {
-                                int statusCode = await QuoteOrderRepository()
-                                    .quoteApprove(pageItem.code);
-                                Navigator.of(context).pop();
-                                if (statusCode == 200) {
-                                  alertMessage('确认成功!');
-                                  //触发刷新
-                                  refreshData();
-                                } else {
-                                  alertMessage('确认失败');
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
-      );
-    } else {
-      return Container();
-    }
-  }
-
   void refreshData() async {
     //查询明细
     QuoteModel detailModel =
@@ -713,6 +602,127 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         pageItem = detailModel;
       });
     }
+  }
+
+  Widget _buildSummary() {
+    List<Widget> buttons;
+
+    //品牌端显示
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      if (pageItem.state == QuoteState.SELLER_SUBMITTED) {
+        buttons = <Widget>[
+          Container(
+            height: 40,
+            width: 150,
+            margin: EdgeInsets.only(right: 20),
+            child: FlatButton(
+                onPressed: onReject,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Colors.red,
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '拒绝报价',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                )),
+          ),
+          Container(
+            width: 150,
+            height: 40,
+            child: FlatButton(
+                onPressed: onApprove,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '确认报价',
+                  style: TextStyle(
+                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                )),
+          )
+        ];
+      }
+    } //工厂端显示
+    else {
+      if (pageItem.state == QuoteState.SELLER_SUBMITTED) {
+        buttons = [
+          Container(
+            width: 250,
+            height: 40,
+            child: FlatButton(
+                onPressed: onUpdateQuote,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
+                    borderRadius: BorderRadius.circular(20)),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '修改报价',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                )),
+          ),
+        ];
+      } else if (pageItem.state == QuoteState.BUYER_APPROVED) {
+        buttons = <Widget>[
+          Container(
+            width: 150,
+            height: 40,
+            margin: EdgeInsets.only(right: 20),
+            child: FlatButton(
+                onPressed: onCreateProofings,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Color.fromRGBO(255, 245, 193, 1),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '打样订单',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+                )),
+          ),
+          Container(
+            width: 150,
+            height: 40,
+            child: FlatButton(
+                onPressed: onCreateProduction,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '生产订单',
+                  style: TextStyle(
+                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                )),
+          )
+        ];
+      } else {
+        buttons = [
+          Container(
+            width: 250,
+            height: 40,
+            child: FlatButton(
+                onPressed: onQuoteAgain,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Color.fromRGBO(255, 70, 70, 1),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '重新报价',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                )),
+          )
+        ];
+      }
+    }
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+      // color: Colors.green,
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.center, children: buttons ?? []),
+    );
   }
 
   void alertMessage(String message) {
@@ -725,5 +735,119 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             ),
           ),
     );
+  }
+
+  void onReject() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('请输入拒绝原因?'),
+          content: TextField(
+            controller: rejectController,
+            autofocus: true,
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定'),
+              onPressed: () async {
+                int statusCode = await QuoteOrderRepository()
+                    .quoteReject(pageItem.code, rejectController.text);
+                Navigator.of(context).pop();
+                if (statusCode == 200) {
+                  //触发刷新
+                  refreshData();
+                } else {
+                  alertMessage('拒绝失败');
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onApprove() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('是否确认?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('否'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('是'),
+              onPressed: () async {
+                int statusCode =
+                    await QuoteOrderRepository().quoteApprove(pageItem.code);
+                Navigator.of(context).pop();
+                if (statusCode == 200) {
+                  //触发刷新
+                  refreshData();
+                } else {
+                  alertMessage('确认失败');
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onQuoteAgain() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RequirementQuoteOrderFrom(
+              model: pageItem.requirementOrder,
+              quoteModel: pageItem,
+            )));
+  }
+
+  void onUpdateQuote() async {
+    //等待操作回调
+    bool isSuccessfule = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RequirementQuoteOrderFrom(
+              model: pageItem.requirementOrder,
+              quoteModel: pageItem,
+              update: true,
+            )));
+    //成功调用列表页传递的更新函数刷新页面
+    if (isSuccessfule != null && isSuccessfule) {
+      refreshData();
+    }
+  }
+
+  void onCreateProofings() async {
+    //查询明细
+    QuoteModel detailModel =
+        await QuoteOrderRepository().getquoteDetail(pageItem.code);
+
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProofingOrderForm(
+              quoteModel: detailModel,
+            )));
+  }
+
+  void onCreateProduction() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductionOnlineOrderFrom(
+                  quoteModel: pageItem,
+                )));
   }
 }

@@ -77,6 +77,9 @@ const COMMON_APIS = {
   createLabel() {
     return '/djwebservices/labels/create';
   },
+  getGroupAllLabels(group) {
+    return '/djwebservices/labels/'+group+'/all';
+  },
   getAllLabels() {
     return '/djwebservices/labels/all';
   },
@@ -210,11 +213,23 @@ const COMMON_APIS = {
   createApparelProduct() {
     return '/b2b/products/apparel/create';
   },
+  updateBasicOfApparelProduct(code) {
+    return '/b2b/products/apparel/' + code + '/basic';
+  },
+  updateVariantsOfApparelProduct(code) {
+    return '/b2b/products/apparel/' + code + '/variants';
+  },
+  updateAttributesOfApparelProduct(code) {
+    return '/b2b/products/apparel/' + code + '/attributes';
+  },
   getRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code;
   },
   createRequirementOrder() {
     return '/b2b/orders/requirement/new';
+  },
+  updateRequirementOrder(code) {
+    return '/b2b/orders/requirement/'+code+'/request';
   },
   getQuote(code) {
     return '/b2b/orders/quote/' + code;

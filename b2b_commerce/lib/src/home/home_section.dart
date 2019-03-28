@@ -128,7 +128,8 @@ class HomeTabSection extends StatelessWidget {
       ),
       AdvanceIconButton(
         onPressed: () async {
-          List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
+          List<LabelModel> labels =
+              await UserRepositoryImpl().industrialClustersFromLabels();
 
           Navigator.push(
               context,
@@ -146,6 +147,7 @@ class HomeTabSection extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => FactoryPage(
+                    FactoryCondition(starLevel: 0, adeptAtCategory: []),
                     route: '品牌工厂',
                   )));
         },
@@ -162,6 +164,7 @@ class HomeTabSection extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => FactoryPage(
+                      FactoryCondition(starLevel: 0, adeptAtCategory: []),
                       route: '全部工厂',
                     )),
           );

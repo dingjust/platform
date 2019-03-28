@@ -1,7 +1,9 @@
+import 'dart:math';
+
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'dart:math';
+import 'package:services/services.dart';
 
 class IndustrialClusterPage extends StatefulWidget {
   List<LabelModel> labels;
@@ -183,7 +185,9 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
               child: Center(
                 child: Text(
                   item.name,
-                  style: TextStyle(fontSize: 18,),
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ),
@@ -199,7 +203,13 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
         ),
       ),
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => FactoryPage(route: item.name,)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FactoryPage(
+                      FactoryCondition(starLevel: 0, adeptAtCategory: []),
+                      route: item.name,
+                    )));
       },
     );
   }

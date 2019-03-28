@@ -32,8 +32,6 @@
       return {
         keyword: this.$store.state.QuotesModule.keyword,
         formData: this.$store.state.QuotesModule.formData,
-        queryFormData: this.$store.state.QuotesModule.queryFormData,
-        statusOptions: this.$store.state.QuotesModule.statusOptions,
       }
     }
   }

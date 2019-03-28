@@ -2,7 +2,10 @@
   <div class="animated fadeIn content">
     <el-card>
       <proofing-toolbar @onSearch="onSearch"/>
-      <proofing-search-result-list :page="page" @onDetails="onDetails" @onShowQuote="onShowQuote"/>
+      <proofing-search-result-list :page="page"
+                                   @onDetails="onDetails"
+                                   @onShowQuote="onShowQuote"
+                                   @onShowRequirement="onShowRequirement"/>
     </el-card>
   </div>
 </template>
@@ -17,6 +20,7 @@
   import ProofingDetailsPage from "./details/ProofingDetailsPage";
 
   import QuoteDetailsPage from "../quote/details/QuoteDetailsPage";
+  import RequirementOrderDetailsPage from "../requirement/details/RequirementOrderDetailsPage";
 
   export default {
     name: 'ProofingPage',
@@ -59,7 +63,17 @@
           return;
         }
 
-        this.fn.openSlider('报价单:' + row.code, QuoteDetailsPage, result);
+        this.fn.openSlider('报价单:' + result.code, QuoteDetailsPage, result);
+      },
+      async onShowRequirement(row) {
+        const url = this.apis().getRequirementOrder(row.requirementOrderRef);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.fn.openSlider('需求订单:' + result.code, RequirementOrderDetailsPage, result);
       }
     },
     data() {

@@ -2,11 +2,6 @@ import http from '@/common/js/http';
 
 const state = {
   url: '',
-  statusOptions: [
-    {text: '报价中', value: 'PENDING_QUOTE'},
-    {text: '已完成', value: 'COMPLETED'},
-    {text: '已失效', value: 'CANCELLED'},
-  ],
   keyword: '',
   statuses: [],
   isAdvancedSearch: false,
@@ -43,7 +38,8 @@ const state = {
       contactPhone: '',
       productiveOrientations: []
     },
-    attachments: []
+    attachments: [],
+    labels: []
   },
   queryFormData: {
     code: '',
@@ -104,6 +100,7 @@ const actions = {
     }
   },
   async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
+    commit('url', url);
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
@@ -135,7 +132,6 @@ const getters = {
   keyword: state => state.keyword,
   statuses: state => state.statuses,
   isAdvancedSearch: state => state.isAdvancedSearch,
-  statusOptions: state => state.statusOptions,
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,

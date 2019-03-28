@@ -533,12 +533,12 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               onPressed: onCreateProofings,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 245, 193, 1),
+              color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
-                '打样订单',
+                '创建打样订单',
                 style: TextStyle(
-                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+                    color: Colors.black, fontSize: 16),
               )),
           FlatButton(
               onPressed: onCreateProduction,
@@ -547,9 +547,9 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
-                '生产订单',
+                '创建生产订单',
                 style: TextStyle(
-                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                    color: Colors.black, fontSize: 16),
               )),
         ];
       } else {
@@ -678,7 +678,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               update: true,
             )));
     //成功调用列表页传递的更新函数刷新页面
-    if (isSuccessfule) {
+    if (isSuccessfule != null && isSuccessfule) {
       widget.onRefresh();
     }
   }
@@ -702,4 +702,5 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   quoteModel: widget.model,
                 )));
   }
+
 }

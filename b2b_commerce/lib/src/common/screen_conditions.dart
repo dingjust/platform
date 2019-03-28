@@ -3,39 +3,111 @@ import 'package:b2b_commerce/src/common/find_factory_by_map.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-
 
 List<CategoryModel> _categorys;
 final List<Map<CategoryModel, List<CategoryModel>>> _category = [
   {
     CategoryModel(code: 'C01', name: '男装'): [
-      CategoryModel(code: 'C001', name: 'T恤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C002', name: '衬衫',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C003', name: '卫衣',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C004', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C005', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C006', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C007', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C008', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C009', name: '羽绒服',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C010', name: '绒服地方',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C011', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(code: 'C012', name: '卫裤',parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C001',
+          name: 'T恤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C002',
+          name: '衬衫',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C003',
+          name: '卫衣',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C004',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C005',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C006',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C007',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C008',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C009',
+          name: '羽绒服',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C010',
+          name: '绒服地方',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C011',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
+      CategoryModel(
+          code: 'C012',
+          name: '卫裤',
+          parent: CategoryModel(code: 'C01', name: '男装')),
     ],
     CategoryModel(code: 'C02', name: '女装'): [
-      CategoryModel(code: 'C013', name: '棉服服',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C014', name: '羽绒服地方',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C015', name: '背带裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C016', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C017', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C018', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C019', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C020', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C021', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C022', name: '牛仔裤裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C023', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(code: 'C024', name: '牛仔裤',parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C013',
+          name: '棉服服',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C014',
+          name: '羽绒服地方',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C015',
+          name: '背带裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C016',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C017',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C018',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C019',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C020',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C021',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C022',
+          name: '牛仔裤裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C023',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
+      CategoryModel(
+          code: 'C024',
+          name: '牛仔裤',
+          parent: CategoryModel(code: 'C02', name: '女装')),
     ],
   },
 ];
@@ -47,53 +119,24 @@ final List<CategoryModel> _majorCategory = [
 ];
 
 final List<EnumModel> processingTypeList = [
-  EnumModel.fromJson({
-    'code':'FOB',
-    'name':'FOB'
-  }),
-  EnumModel.fromJson({
-    'code':'PURE_PROCESSING',
-    'name':'PURE_PROCESSING'
-  }),
-  EnumModel.fromJson({
-    'code':'ODM',
-    'name':'ODM'
-  }),
-  EnumModel.fromJson({
-    'code':'OEM',
-    'name':'OEM'
-  }),
+  EnumModel.fromJson({'code': 'FOB', 'name': 'FOB'}),
+  EnumModel.fromJson({'code': 'PURE_PROCESSING', 'name': 'PURE_PROCESSING'}),
+  EnumModel.fromJson({'code': 'ODM', 'name': 'ODM'}),
+  EnumModel.fromJson({'code': 'OEM', 'name': 'OEM'}),
 ];
 
 final List<EnumModel> technologyList = [
-  EnumModel.fromJson({
-    'code':'全工艺',
-    'name':'全工艺'
-  }),
-  EnumModel.fromJson({
-    'code':'打板',
-    'name':'打板'
-  }),
-  EnumModel.fromJson({
-    'code':'车缝',
-    'name':'车缝'
-  }),
-  EnumModel.fromJson({
-    'code':'裁剪',
-    'name':'裁剪'
-  }),
-  EnumModel.fromJson({
-    'code':'印花',
-    'name':'印花'
-  }),
-  EnumModel.fromJson({
-    'code':'后枕',
-    'name':'后枕'
-  }),
+  EnumModel.fromJson({'code': '全工艺', 'name': '全工艺'}),
+  EnumModel.fromJson({'code': '打板', 'name': '打板'}),
+  EnumModel.fromJson({'code': '车缝', 'name': '车缝'}),
+  EnumModel.fromJson({'code': '裁剪', 'name': '裁剪'}),
+  EnumModel.fromJson({'code': '印花', 'name': '印花'}),
+  EnumModel.fromJson({'code': '后枕', 'name': '后枕'}),
 ];
 
 class ScreenConditions extends StatefulWidget {
-  @required String route;
+  @required
+  String route;
 
   ScreenConditions({this.route});
 
@@ -139,14 +182,12 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         ),
         body: Container(
             child: ListView(
-              children: <Widget>[
-                _buildBody(context),
-                _buildHideBody(context),
-                _buildCommitButton(context),
-              ],
-            )
-        )
-    );
+          children: <Widget>[
+            _buildBody(context),
+            _buildHideBody(context),
+            _buildCommitButton(context),
+          ],
+        )));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -200,28 +241,24 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         child: Container(
           margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: ListTile(
-            leading: Text(
-              "大类",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+              leading: Text(
+                "大类",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            trailing: Container(
-                width: 150,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                      mojar,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis
-                  ),
-                )
-            )
-          ),
+              trailing: Container(
+                  width: 150,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(mojar,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis),
+                  ))),
           decoration: BoxDecoration(
             color: Colors.black12,
             borderRadius: BorderRadius.circular(16),
@@ -237,33 +274,28 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         child: Container(
             margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
             child: ListTile(
-              leading: Text(
-                "小类",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              trailing: Container(
-                width: 150,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                      category,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis
+                leading: Text(
+                  "小类",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                )
-              )
-            ),
+                ),
+                trailing: Container(
+                    width: 150,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(category,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.ellipsis),
+                    ))),
             decoration: BoxDecoration(
               color: Colors.black12,
               borderRadius: BorderRadius.circular(16),
-            )
-        ),
+            )),
         onTap: () {
           _showCategorySelect();
         });
@@ -325,8 +357,8 @@ class _ScreenConditionsState extends State<ScreenConditions> {
           ),
         ),
         onTap: () {
-          address='';
-          AddressPicker(cacel:(){
+          address = '';
+          AddressPicker(cacel: () {
             Navigator.pop(context);
           }).showAddressPicker(
             context,
@@ -346,11 +378,10 @@ class _ScreenConditionsState extends State<ScreenConditions> {
           setState(() {
             address = address;
           });
-        }
-    );
+        });
   }
 
-  Widget _buildHideTips(BuildContext context){
+  Widget _buildHideTips(BuildContext context) {
     return GestureDetector(
         child: Container(
           margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -365,17 +396,18 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                     "更多条件",
                     style: TextStyle(
                       fontSize: 16,
-                      color: Color.fromRGBO(255,214,12, 1),
+                      color: Color.fromRGBO(255, 214, 12, 1),
                     ),
                   ),
                   Icon(
-                    _isShowMore?Icons.keyboard_arrow_up:Icons.keyboard_arrow_down,
-                    color: Color.fromRGBO(255,214,12, 1),
+                    _isShowMore
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: Color.fromRGBO(255, 214, 12, 1),
                     size: 28,
                   ),
                 ],
-              )
-          ),
+              )),
         ),
         onTap: () {
           setState(() {
@@ -384,11 +416,10 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         });
   }
 
-
   Widget _buildScreenFactory(BuildContext context) {
-    return  Container(
-      margin: EdgeInsets.fromLTRB(20,10,20,10),
-      height:90,
+    return Container(
+      margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      height: 90,
       child: GridView.count(
         childAspectRatio: 10 / 2.5,
         physics: NeverScrollableScrollPhysics(),
@@ -433,7 +464,6 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         ],
       ),
     );
-
   }
 
   Widget _buildCooperationModes(BuildContext context) {
@@ -496,13 +526,12 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         });
   }
 
-
   Widget _buildCommitButton(BuildContext context) {
     return Container(
         height: 50,
         margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
         child: RaisedButton(
-          color: Color.fromRGBO(255,214,12, 1),
+          color: Color.fromRGBO(255, 214, 12, 1),
           child: Text(
             '确定',
             style: TextStyle(
@@ -512,44 +541,55 @@ class _ScreenConditionsState extends State<ScreenConditions> {
             ),
           ),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(20))),
           onPressed: () {
             String _selected = '';
-            if(_isShowA){
+            if (_isShowA) {
               _selected += '品牌工厂,';
             }
-            if(_isShowB){
+            if (_isShowB) {
               _selected += '担保交易,';
             }
-            if(_isShowC){
+            if (_isShowC) {
               _selected += '免费打样,';
             }
-            if(_isShowD){
+            if (_isShowD) {
               _selected += '认证工厂,';
             }
-            print('大类：'+mojar+'\n小类：'+category+
-                '\n需求数量：'+requestCount+'\n生产地区：'+address+
-            '\n勾选条件：'+_selected+'\n加工类型：'+processingType+'\n工艺：'+technology);
+            print('大类：' +
+                mojar +
+                '\n小类：' +
+                category +
+                '\n需求数量：' +
+                requestCount +
+                '\n生产地区：' +
+                address +
+                '\n勾选条件：' +
+                _selected +
+                '\n加工类型：' +
+                processingType +
+                '\n工艺：' +
+                technology);
 
-            if(widget.route == '地图找厂'){
+            if (widget.route == '地图找厂') {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => FindFactoryByMap()),
               );
-            }else{
+            } else {
               Navigator.push(
                 context,
 //                  MaterialPageRoute(builder: (context) => RequirementPoolAll()),
-                MaterialPageRoute(builder: (context) => FactoryPage(route: widget.route,)),
+                MaterialPageRoute(
+                    builder: (context) => FactoryPage(
+                          FactoryCondition(starLevel: 0, adeptAtCategory: []),
+                          route: widget.route,
+                        )),
               );
             }
-
           },
-        )
-    );
+        ));
   }
-
 
   //大类
   void _showMajorCategorySelect() async {
@@ -558,17 +598,22 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       builder: (BuildContext context) {
         return Container(
           child: EnumSelection(
-            enumModels: _majorCategory.map((category) => EnumModel(category.code, category.name)).toList(),
+            enumModels: _majorCategory
+                .map((category) => EnumModel(category.code, category.name))
+                .toList(),
             multiple: false,
             enumSelect: _mojarEnumSelected,
           ),
         );
       },
-    ).then((val){
+    ).then((val) {
       mojar = '';
-      _mojarSelected = _mojarEnumSelected.map((enumModel) => CategoryModel(code: enumModel.code,name: enumModel.name)).toList();
-      if(_mojarSelected.isNotEmpty){
-        for(int i=0;i<_mojarSelected.length;i++){
+      _mojarSelected = _mojarEnumSelected
+          .map((enumModel) =>
+              CategoryModel(code: enumModel.code, name: enumModel.name))
+          .toList();
+      if (_mojarSelected.isNotEmpty) {
+        for (int i = 0; i < _mojarSelected.length; i++) {
           mojar += _mojarSelected[i].name + ',';
         }
       }
@@ -576,8 +621,6 @@ class _ScreenConditionsState extends State<ScreenConditions> {
         mojar = mojar;
       });
     });
-
-
   }
 
   //小类
@@ -594,10 +637,10 @@ class _ScreenConditionsState extends State<ScreenConditions> {
           ),
         );
       },
-    ).then((val){
+    ).then((val) {
       category = '';
-      if(_categorySelected.isNotEmpty){
-        for(int i=0;i<_categorySelected.length;i++){
+      if (_categorySelected.isNotEmpty) {
+        for (int i = 0; i < _categorySelected.length; i++) {
           category += _categorySelected[i].name + ',';
         }
       }
@@ -621,10 +664,10 @@ class _ScreenConditionsState extends State<ScreenConditions> {
           ),
         );
       },
-    ).then((val){
+    ).then((val) {
       processingType = '';
-      if(_processingTypeSelected.isNotEmpty){
-        for(int i=0;i<_processingTypeSelected.length;i++){
+      if (_processingTypeSelected.isNotEmpty) {
+        for (int i = 0; i < _processingTypeSelected.length; i++) {
           processingType += _processingTypeSelected[i].name + ',';
         }
       }
@@ -648,10 +691,10 @@ class _ScreenConditionsState extends State<ScreenConditions> {
           ),
         );
       },
-    ).then((val){
+    ).then((val) {
       technology = '';
-      if(_technologySelected.isNotEmpty){
-        for(int i=0;i<_technologySelected.length;i++){
+      if (_technologySelected.isNotEmpty) {
+        for (int i = 0; i < _technologySelected.length; i++) {
           technology += _technologySelected[i].name + ',';
         }
       }
@@ -674,7 +717,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
             child: ListBody(
               children: <Widget>[
                 TextField(
-                  controller:inputNumber,
+                  controller: inputNumber,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: '请输入数量',
@@ -687,7 +730,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
             FlatButton(
               child: Text('确定'),
               onPressed: () {
-                if(inputNumber.text != null){
+                if (inputNumber.text != null) {
                   print(inputNumber.text);
                   setState(() {
                     requestCount = inputNumber.text;
@@ -715,7 +758,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
             child: ListBody(
               children: <Widget>[
                 TextField(
-                  controller:inputNumber,
+                  controller: inputNumber,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: '请输入数量',
@@ -736,5 +779,4 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       },
     );
   }
-
 }

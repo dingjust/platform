@@ -55,8 +55,8 @@ class _ProductionPageState extends State<ProductionPage> {
                 FilterConditionEntry(
                     label: '延期预警',
                     value: 'delayWarning',
-                    onRemind: false,
-//                    remindNum: 12
+//                    onRemind: true,
+//                    remindNum: ''
                 ),
 //                FilterConditionEntry(
 //                  label: '已完成',
@@ -108,7 +108,8 @@ class _ProductionPageState extends State<ProductionPage> {
             // backgroundColor: Color.fromRGBO(255,214,12, 1),
             foregroundColor: Colors.black,
             elevation: 8.0,
-            shape: CircleBorder(),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
             children: [
               SpeedDialChild(
                 child: Center(
@@ -126,23 +127,28 @@ class _ProductionPageState extends State<ProductionPage> {
                     ),
                   );
                 },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
               ),
               SpeedDialChild(
-                  child: Center(
-                    child: Text(
-                      '创建',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
+                child: Center(
+                  child: Text(
+                    '创建',
+                    style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
-                  backgroundColor: Colors.red,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductionOfflineOrder(),
-                      ),
-                    );
-                  }),
+                ),
+                backgroundColor: Colors.red,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductionOfflineOrder(),
+                    ),
+                  );
+                },
+                shape: new RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+              ),
             ],
           ),
         ));
