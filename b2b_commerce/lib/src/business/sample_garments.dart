@@ -234,12 +234,13 @@ class SampleProductHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _widgets = [];
     var bloc = BLoCProvider.of<SampleProductHistoryBLoC>(context);
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses();
+        bloc.loadingMoreByStatuses(state);
       }
     });
 
@@ -284,14 +285,16 @@ class SampleProductHistoryList extends StatelessWidget {
                     );
                   }
                   if (snapshot.hasData) {
-                    widgets.addAll(snapshot.data
+                    _widgets.clear();
+                    _widgets.addAll(widgets);
+                        _widgets.addAll(snapshot.data
                         .map((borrowHistory) =>
                         SampleProductHistoryItem(
                           item: borrowHistory,
                         ))
                         .toList());
                     return Column(
-                        children: widgets,
+                        children: _widgets,
                     );
                   } else if (snapshot.hasError) {
                     return Text('${snapshot.error}');

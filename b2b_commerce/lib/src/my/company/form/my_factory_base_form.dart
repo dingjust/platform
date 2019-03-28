@@ -47,7 +47,11 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         elevation: 0.5,
         actions: <Widget>[
           IconButton(icon: Text('确定',style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),), onPressed: (){
-            if(medias.length > 0) widget.factory.profilePicture = medias[0];
+            if(medias.length > 0){
+              widget.factory.profilePicture = medias[0];
+            }else{
+              widget.factory.profilePicture = null;
+            }
             widget.factory.name = _nameController.text == '' ? null : _nameController.text;
             widget.factory.cooperativeBrand = _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
 //            widget.factory.cooperativeBrand
@@ -73,7 +77,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 ),
               ),
             ),
-            EditableAttachments(list: medias,maxNum: medias.length,),
+            EditableAttachments(list: medias,maxNum: 1,),
             Container(
               color: Colors.white,
               child: TextFieldComponent(

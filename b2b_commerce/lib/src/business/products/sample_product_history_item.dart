@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -89,7 +90,7 @@ class SampleProductHistoryItem extends StatelessWidget {
                       Row(
                         children: <Widget>[
                           Text(
-                            '借出日期：' + item.creationDate.toString().substring(0, 10),
+                            '借出日期：'+ (DateFormatUtil.formatYMD(item.creationDate) ?? ''),
                           ),
                           Offstage(
                             offstage: !isSampleProductHistory,
@@ -103,15 +104,11 @@ class SampleProductHistoryItem extends StatelessWidget {
                       item.state == ReturnState.RETURNED
                           ? Text(
                         '归还日期：' +
-                            item.returnedDate
-                                .toString()
-                                .substring(0, 10),
+                            (DateFormatUtil.formatYMD(item.returnedDate) ?? ''),
                       )
                           : Text(
                         '预计归还日期：' +
-                            item.expectedReturnDate
-                                .toString()
-                                .substring(0, 10),
+                            (DateFormatUtil.formatYMD(item.expectedReturnDate) ?? ''),
                       ),
                       !isSampleProductHistory?
                       Row(
