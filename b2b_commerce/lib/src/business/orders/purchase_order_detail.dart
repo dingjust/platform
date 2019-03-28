@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
+import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
@@ -568,7 +569,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color: isCurrentStatus == true ? Color(0xFFFFD600) : Colors.black45,
+            color: Colors.black45,
           ),
         ),
         Positioned(
@@ -583,9 +584,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               width: 16.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isCurrentStatus == true
-                      ? Color(0xFFFFD600)
-                      : Colors.black),
+                  color: Colors.black),
             ),
           ),
         )
@@ -610,9 +609,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   child: Text('${ProductionProgressPhaseLocalizedMap[productionProgress.phase]} ' ,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: isCurrentStatus == true
-                              ? Color(0xFFFFD600)
-                              : Colors.black54,
+                          color: Colors.black54,
                           fontSize: 18)
                   ),
                 ),
@@ -810,6 +807,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                               ),
                             ):
                             Container(
+                              margin: EdgeInsets.only(right: 20),
                               child: Text(
                                 '${progress.remarks}',
                                 softWrap: true,
@@ -824,7 +822,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           onTap: () async {
             userType != null && userType == 'factory' && isCurrentStatus == true ?
-            _showRemarksDialog(progress,'备注') : null;
+            _showRemarksDialog(progress,'备注',progress.remarks) : null;
           },
         )
     );
@@ -978,7 +976,16 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     shape: RoundedRectangleBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(20))),
-                    onPressed: () {
+                    onPressed: () async {
+                      //查询明细
+                      if(order.quoteRef != null){
+                        QuoteModel detailModel =
+                        await QuoteOrderRepository().getquoteDetail(order.quoteRef);
+                        if (detailModel != null) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => QuoteOrderDetailPage(item: detailModel)));
+                        }
+                      }
                     },
                   ),
                 ),
@@ -1791,11 +1798,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   //备注输入框
-  void _showRemarksDialog(ProductionProgressModel model,String type){
-    _neverRemarks(context,model,type);
+  void _showRemarksDialog(ProductionProgressModel model,String type,String remarks){
+    _neverRemarks(context,model,type,remarks);
   }
 
-  Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type) async {
+  Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type,String remarks) async {
     dialogText = TextEditingController();
     return showDialog<void>(
       context: context,
@@ -1809,6 +1816,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 TextField(
                   controller:dialogText,
                   keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(10.0),
+                    helperText: '${remarks==null?'':remarks}',
+                  ),
                 ),
               ],
             ),
