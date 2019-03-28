@@ -80,8 +80,9 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         padding: EdgeInsets.all(10),
         color: Color.fromRGBO(255, 245, 169, 1),
         child: Text(
-          '拒绝理由：该订单已经被确定工厂。',
-          style: TextStyle(color: Color.fromRGBO(255, 70, 70, 1)),
+          '拒绝理由：${widget.item.comment}',
+          style: TextStyle(color: Color.fromRGBO(255, 70, 70, 1), fontSize: 16),
+          overflow: TextOverflow.ellipsis,
         ),
       );
     } else {

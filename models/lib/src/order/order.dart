@@ -915,6 +915,9 @@ class QuoteModel extends AbstractOrderModel {
   @JsonKey(toJson: _attachmentsToJson)
   List<MediaModel> attachments;
 
+  /// 拒绝报价理由
+  String comment;
+
   QuoteModel({
     String code,
     int totalQuantity,
@@ -934,6 +937,7 @@ class QuoteModel extends AbstractOrderModel {
     this.costOfSamples,
     this.costOfOther,
     this.expectedDeliveryDate,
+    this.comment
   }) : super(
             code: code,
             totalQuantity: totalQuantity,
