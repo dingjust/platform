@@ -1,8 +1,11 @@
 import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
 import 'package:b2b_commerce/src/business/supplier/provider/suppliers_provider.dart';
 import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class SuppliersPage extends StatefulWidget{
@@ -78,11 +81,11 @@ class SuppliersList extends StatelessWidget {
       physics: const AlwaysScrollableScrollPhysics(),
       controller: _scrollController,
       children: <Widget>[
-        StreamBuilder<List<SupplierModel>>(
+        StreamBuilder<List<FactoryModel>>(
           stream: bloc.stream,
           initialData: null,
           builder: (BuildContext context,
-              AsyncSnapshot<List<SupplierModel>> snapshot) {
+              AsyncSnapshot<List<FactoryModel>> snapshot) {
             if (snapshot.data == null) {
               bloc.filter();
               return Padding(
@@ -146,7 +149,7 @@ class SuppliersList extends StatelessWidget {
 }
 
 class SuppliersItem extends StatelessWidget {
-  final SupplierModel supplierModel;
+  final FactoryModel supplierModel;
 
   SuppliersItem(this.supplierModel);
 
@@ -162,11 +165,29 @@ class SuppliersItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
       ),
-      onTap: () {
+      onTap: () async{
+        Response response = await http$.post(OrderApis.quotes,
+          data: {
+            "belongTos" : supplierModel.uid,
+          },
+          queryParameters: {
+            'size': 1,
+          });
+
+        QuoteModel quoteModel;
+        if (response != null && response.statusCode == 200) {
+         QuoteOrdersResponse quoteResponse = QuoteOrdersResponse.fromJson(response.data);
+         if(quoteResponse != null && quoteResponse.content.length > 0){
+           quoteModel = quoteResponse.content[0];
+         }
+        }
+
+        ProductsResponse productsResponse = await ProductRepositoryImpl().list({}, {'size': 3});
+
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SuppliersDetail(supplierModel: supplierModel,isSupplier: true,),
+            builder: (context) => MyFactoryPage(supplierModel,quoteModel: quoteModel,products: productsResponse.content,),
           ),
         );
       },
@@ -176,22 +197,22 @@ class SuppliersItem extends StatelessWidget {
   Widget _buildList(BuildContext context) {
     return ListTile(
       title: Text(
-        supplierModel.factory.name,
+        supplierModel.name,
         style: TextStyle(
           fontSize: 18,
         ),
       ),
-      subtitle: Text('合作单数：' + supplierModel.orderCount.toString(),
-          style: TextStyle(fontSize: 18, color: Color(0xFFFF9516))),
+//      subtitle: Text('合作单数：' + supplierModel.orderCount.toString(),
+//          style: TextStyle(fontSize: 18, color: Color(0xFFFF9516))),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text(
-                supplierModel.factory.contactAddress.region.name +
-                supplierModel.factory.contactAddress.city.name +
-                supplierModel.factory.contactAddress.cityDistrict.name,
-            style: TextStyle(fontSize: 16, color: Colors.black26),
-          ),
+//          Text(
+//                supplierModel.contactAddress.region.name +
+//                supplierModel.contactAddress.city.name +
+//                supplierModel.contactAddress.cityDistrict.name,
+//            style: TextStyle(fontSize: 16, color: Colors.black26),
+//          ),
           Icon(
             Icons.chevron_right,
             color: Colors.black26,

@@ -54,10 +54,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             }
             widget.factory.name = _nameController.text == '' ? null : _nameController.text;
             widget.factory.cooperativeBrand = _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
-//            widget.factory.cooperativeBrand
-
-            print(widget.factory.monthlyCapacityRange);
-            print(FactoryModel.toJson(widget.factory));
 
             UserRepositoryImpl().factoryUpdate(widget.factory).then((a)=>Navigator.pop(context));
           })
