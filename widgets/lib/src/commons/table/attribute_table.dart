@@ -8,8 +8,8 @@ class AttributeTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Set<String> colorSet = {};
-    Set<String> sizeSet = {};
+    Set<String> colorSet = Set();
+    Set<String> sizeSet = Set();
     String colorString = '';
     String sizeString = '';
 

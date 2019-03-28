@@ -12,12 +12,8 @@ import 'factory/industrial_cluster_factory.dart';
 class HomeBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
-      url: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/head.jpg',
-    ),
-    MediaModel(
-      url:
-          'http://dingjust.oss-cn-shenzhen.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190126151855.jpg',
-    ),
+      url: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/banner.png',
+    )
   ];
 
   @override

@@ -118,7 +118,7 @@ class EnumSelectPageState extends State<EnumSelectPage> {
           elevation: 0.5,
           centerTitle: true,
           title: Text(widget.title),
-          leading: IconButton(icon: Text('取消'), onPressed: () {
+          leading: IconButton(icon: Text('取消',style: TextStyle(color: Colors.grey,),), onPressed: () {
             if(widget.models != null){
               Navigator.pop(context,_beforModifyModels);
             }else{
@@ -127,7 +127,7 @@ class EnumSelectPageState extends State<EnumSelectPage> {
           }),
           actions: <Widget>[
             IconButton(
-              icon: Text('确定',style: TextStyle(color: Color(0xffFF9516)),),
+              icon: Text('确定',style: TextStyle(),),
               onPressed: () {
                 print(widget.models);
                 print(widget.codes);

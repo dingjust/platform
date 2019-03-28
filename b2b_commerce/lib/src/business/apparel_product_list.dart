@@ -6,11 +6,12 @@ import 'package:widgets/widgets.dart';
 
 class ApparelProductList extends StatelessWidget {
   final bool isRequirement;
+  String status;
 
   //是否选择项
   bool selectProduct;
 
-  ApparelProductList({this.isRequirement = false, this.selectProduct = false});
+  ApparelProductList({this.isRequirement = false, this.selectProduct = false,this.status});
 
   ScrollController _scrollController = new ScrollController();
 
@@ -22,7 +23,7 @@ class ApparelProductList extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses();
+        bloc.loadingMoreByStatuses(status);
       }
     });
 
@@ -49,7 +50,7 @@ class ApparelProductList extends StatelessWidget {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.filterByStatuses();
+            return await bloc.filterByStatuses(status);
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -61,7 +62,7 @@ class ApparelProductList extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByStatuses();
+                    bloc.filterByStatuses(status);
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
                       child: Center(child: CircularProgressIndicator()),
@@ -73,6 +74,7 @@ class ApparelProductList extends StatelessWidget {
                         return ApparelProductItem(
                           product,
                           isRequirement: isRequirement,
+                          status: status,
                         );
                       }).toList(),
                     );

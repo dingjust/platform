@@ -234,20 +234,20 @@ class _LoginPageState extends State<LoginPage> {
               }),
           _isPasswordLogin ? _passwordField : _smsCaptchaField,
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isPasswordLogin = !_isPasswordLogin;
-                  });
-                },
-                child: Text(
-                  _isPasswordLogin ? '短信验证码登陆' : '密码登陆',
-                  style: TextStyle(
-                      color: Color.fromRGBO(255, 214, 12, 1), fontSize: 15),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     setState(() {
+              //       _isPasswordLogin = !_isPasswordLogin;
+              //     });
+              //   },
+              //   child: Text(
+              //     _isPasswordLogin ? '短信验证码登陆' : '密码登陆',
+              //     style: TextStyle(
+              //         color: Color.fromRGBO(255, 214, 12, 1), fontSize: 15),
+              //   ),
+              // ),
               Row(
                 children: <Widget>[
                   Text(

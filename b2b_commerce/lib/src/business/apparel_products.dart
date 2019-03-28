@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -15,10 +16,11 @@ class ApparelProductsPage extends StatelessWidget {
 
   ApparelProductsPage({this.isRequirement = false, this.item});
 
-  List<EnumModel> _statuses = <EnumModel>[
-    EnumModel('APPROVED', '全部商品'),
-//    EnumModel('APPROVED', '上架商品'),
-//    EnumModel('UNAPPROVED', '下架商品'),
+  List<EnumModel> _statuses = UserBLoC.instance.currentUser.type == UserType.FACTORY ? <EnumModel>[
+    EnumModel('approved', '上架商品'),
+    EnumModel('unapproved', '下架商品'),
+  ]:[
+    EnumModel('ALL', '全部商品'),
   ];
 
   @override
@@ -72,6 +74,7 @@ class ApparelProductsPage extends StatelessWidget {
                 children: _statuses
                     .map((status) => ApparelProductList(
                   isRequirement: isRequirement,
+                  status:status.code,
                 ),)
                     .toList(),
               ),

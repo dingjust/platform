@@ -43,20 +43,30 @@ class ApparelProductBLoC extends BLoCBase {
 
   Stream<ApparelProductModel> get detailStream => _detailController.stream;
 
-  filterByStatuses() async {
+  filterByStatuses(String status) async {
+    print(status);
+    Map<String,dynamic> data = {};
+    if(status != 'ALL'){
+      data = {
+        'approvalStatuses':[status]
+      };
+    }
     products.clear();
-    productsResponse = await ProductRepositoryImpl().list({},{
-      'approvalStatuses':['approved']
-    });
+    print(data);
+    productsResponse = await ProductRepositoryImpl().list({},data);
     products.addAll(productsResponse.content);
     _controller.sink.add(products);
   }
 
-  loadingMoreByStatuses() async {
+  loadingMoreByStatuses(String status) async {
+    Map<String,dynamic> data = {};
+    if(status != 'ALL'){
+      data = {
+        'approvalStatuses':[status]
+      };
+    }
     if(productsResponse.number < productsResponse.totalPages-1){
-      productsResponse = await ProductRepositoryImpl().list({},{
-        'page':productsResponse.number+1,
-      });
+      productsResponse = await ProductRepositoryImpl().list({},data);
       products.addAll(productsResponse.content);
     }else{
       _bottomController.sink.add(true);

@@ -663,7 +663,13 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('确认'),
+              child: Text('取消',style: TextStyle(color: Colors.grey,),),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text('确认',style: TextStyle(color: Colors.black,),),
               onPressed: () async {
                 //TODO :调用删除接口,暂时隐藏
                 // try {
@@ -683,12 +689,6 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                 // }
               },
             ),
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
           ],
         );
       },

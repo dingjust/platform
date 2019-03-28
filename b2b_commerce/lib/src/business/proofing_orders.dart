@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/proofing_search.dart';
+import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -248,7 +249,7 @@ class ProofingOrderItem extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 1,
-                  child: _buildSummary(),
+                  child: _buildSummary(context),
                 )
               ],
             )
@@ -397,7 +398,7 @@ class ProofingOrderItem extends StatelessWidget {
     );
   }
 
-  Widget _buildSummary() {
+  Widget _buildSummary(BuildContext context) {
     List<Widget> buttons;
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
@@ -475,7 +476,11 @@ class ProofingOrderItem extends StatelessWidget {
         buttons = <Widget>[
           Container(),
           FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => LogisticsInputPage(isProductionOrder: false,proofingModel: model,))
+                );
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 245, 193, 1),
