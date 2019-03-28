@@ -267,7 +267,7 @@ class MyHomePage extends StatelessWidget {
           child: user.profilePicture != null
               ? CircleAvatar(
                   backgroundImage: NetworkImage(
-                    user.profilePicture.url,
+                    '${GlobalConfigs.IMAGE_BASIC_URL}${user.profilePicture.url}',
                   ),
                   radius: 40.0,
                 )
