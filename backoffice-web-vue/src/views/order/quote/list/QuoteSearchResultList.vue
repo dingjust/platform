@@ -4,7 +4,7 @@
       <el-table-column type="expand" fixed>
         <template slot-scope="props">
           <requirement-order-request-form :read-only="true"
-                                          :slot-data="props.row.requirementOrder">
+                                          :slot-data="props.row.requirementOrder.details">
           </requirement-order-request-form>
         </template>
       </el-table-column>
@@ -24,6 +24,7 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="需求订单编号" prop="requirementOrder.code"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <slot name="operations" :item="scope.row"></slot>

@@ -52,7 +52,6 @@
       },
       async update() {
         const url = this.apis().updateFactory(this.item.uid);
-        console.log(this.item.labels+"testlhj");
         const result = await this.$http.put(url, this.item);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

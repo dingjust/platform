@@ -92,7 +92,6 @@
         keyword: '',
         formData: this.$store.state.ApparelProductsModule.formData,
         queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
-        statusOptions: this.$store.state.ApparelProductsModule.statusOptions,
         categories: [],
       }
     },

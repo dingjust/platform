@@ -1,12 +1,7 @@
 import http from '@/common/js/http';
 
 const state = {
-  statusOptions: [
-    {code: 'PENDING_PAYMENT', name: '待付款'},
-    {code: 'PENDING_DELIVERY', name: '待发货'},
-    {code: 'SHIPPED', name: '已发货'},
-    {code: 'COMPLETED', name: '已完成'},
-  ],
+  url: '',
   keyword: '',
   statuses: [],
   currentPageNumber: 0,
@@ -95,6 +90,7 @@ const state = {
 };
 
 const mutations = {
+  url: (state, url) => state.url = url,
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
@@ -104,6 +100,7 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {url, keyword, page, size}) {
+    commit('url', url);
     commit('keyword', keyword);
     if (page) {
       commit('currentPageNumber', page);
@@ -126,6 +123,7 @@ const actions = {
     }
   },
   async searchAdvanced({dispatch, commit, state}, {query, page, size}) {
+    commit('url', url);
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
@@ -147,13 +145,13 @@ const actions = {
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {url: state.url, keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 
 const getters = {
+  url: state => state.url,
   keyword: state => state.keyword,
-  statusOptions: state => state.statusOptions,
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,

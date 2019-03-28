@@ -68,7 +68,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
             IconButton(
               icon: Text(
                 '确定',
-                style: TextStyle(color: Color(0xffFF9516)),
+                style: TextStyle(),
               ),
               onPressed: () async {
                 if (widget.item.name == null) {

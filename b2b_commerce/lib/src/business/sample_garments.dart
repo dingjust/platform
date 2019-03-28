@@ -125,7 +125,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
           child: Scaffold(
             appBar: TabBar(
               unselectedLabelColor: Colors.black26,
-              labelColor: Color.fromRGBO(255,214,12, 1),
+//              labelColor: Color.fromRGBO(255,214,12, 1),
+              labelColor: Colors.black,
               indicatorSize: TabBarIndicatorSize.label,
               tabs: _states.map((status) {
                 return Tab(text: status.name);

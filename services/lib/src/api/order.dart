@@ -93,6 +93,11 @@ class OrderApis {
     return '/{baseSiteId}/b2b/orders/purchase/$code/production';
   };
 
+  //品牌更新地址
+  static get updateAddress => (code) {
+    return '/{baseSiteId}/b2b/orders/purchase/$code/deliveryAddress';
+  };
+
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/b2b/orders/quote';
 

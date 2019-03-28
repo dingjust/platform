@@ -6,10 +6,10 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 List<EnumModel> statuses = <EnumModel>[
+  EnumModel('ALL', '全部'),
   EnumModel('SELLER_SUBMITTED', '待处理'),
   EnumModel('BUYER_APPROVED', '通过'),
   EnumModel('BUYER_REJECTED', '拒绝'),
-  EnumModel('ALL', '全部'),
 ];
 
 class QuoteOrdersPage extends StatefulWidget {
@@ -49,7 +49,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
             child: Scaffold(
               appBar: TabBar(
                 unselectedLabelColor: Colors.black26,
-                labelColor: Color.fromRGBO(255,214,12, 1),
+                labelColor: Colors.black,
                 indicatorSize: TabBarIndicatorSize.label,
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);

@@ -99,7 +99,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   widget.update ? '修改订单' : '提交订单',
                   style: TextStyle(
                     fontSize: 20,
-                    color: Color.fromRGBO(36, 38, 41, 1),
+                    color: Colors.black,
                   ),
                 ),
               )),
@@ -107,7 +107,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           backgroundColor: Colors.amberAccent,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        backgroundColor: Colors.white);
+        );
   }
 
   Widget _buildCompanyInfo() {

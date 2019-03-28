@@ -1,6 +1,7 @@
 import http from '@/common/js/http';
 
 const state = {
+  url: '',
   keyword: '',
   statuses: [],
   currentPageNumber: 0,
@@ -16,6 +17,7 @@ const state = {
 };
 
 const mutations = {
+  url: (state, url) => state.url = url,
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
@@ -25,6 +27,7 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {url, keyword, page, size}) {
+    commit('url', url);
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
@@ -48,11 +51,12 @@ const actions = {
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {url: state.url, keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 
 const getters = {
+  url: state => state.url,
   keyword: state => state.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,

@@ -22,11 +22,6 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
-    String companyRoute = '';
-    if (bloc.currentUser.type == UserType.BRAND)
-      companyRoute = AppRoutes.ROUTE_MY_BRAND;
-    if (bloc.currentUser.type == UserType.FACTORY)
-      companyRoute = AppRoutes.ROUTE_MY_FACTORY;
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
@@ -49,9 +44,9 @@ class MyHomePage extends StatelessWidget {
                 ),
                 Expanded(
                     child: Text(
-                      '公司介绍',
-                      style: TextStyle(fontSize: 17),
-                    )),
+                  '公司介绍',
+                  style: TextStyle(fontSize: 17),
+                )),
                 Icon(
                   Icons.chevron_right,
                   color: Colors.grey,
@@ -61,8 +56,10 @@ class MyHomePage extends StatelessWidget {
           ),
           onTap: () {
             //品牌详情
-            if (bloc.currentUser.type == UserType.BRAND){
-              UserRepositoryImpl().getBrand(UserBLoC.instance.currentUser.companyCode).then((brand){
+            if (bloc.currentUser.type == UserType.BRAND) {
+              UserRepositoryImpl()
+                  .getBrand(bloc.currentUser.companyCode)
+                  .then((brand) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -71,11 +68,21 @@ class MyHomePage extends StatelessWidget {
             }
             //工厂详情
             if (bloc.currentUser.type == UserType.FACTORY) {
-              UserRepositoryImpl().getFactory(UserBLoC.instance.currentUser.companyCode).then((factory){
-                Navigator.push(
+              UserRepositoryImpl()
+                  .getFactory(bloc.currentUser.companyCode)
+                  .then((factory) {
+                ProductRepositoryImpl().list({}, {'size': 3}).then((products) {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyFactoryPage(factory,isCompanyIntroduction: true,)));
+                      builder: (context) => MyFactoryPage(
+                            factory,
+                            products: products.content,
+                            isCompanyIntroduction: true,
+                          ),
+                    ),
+                  );
+                });
               });
             }
           },
@@ -115,21 +122,27 @@ class MyHomePage extends StatelessWidget {
           ),
           onTap: () {
             //品牌认证
-            if (bloc.currentUser.type == UserType.BRAND){
-              UserRepositoryImpl().getBrand(UserBLoC.instance.currentUser.companyCode).then((brand){
+            if (bloc.currentUser.type == UserType.BRAND) {
+              UserRepositoryImpl()
+                  .getBrand(bloc.currentUser.companyCode)
+                  .then((brand) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyCompanyCertificateSelectPage(brand)));
+                        builder: (context) =>
+                            MyCompanyCertificateSelectPage(brand)));
               });
             }
             //工厂认证
             if (bloc.currentUser.type == UserType.FACTORY) {
-              UserRepositoryImpl().getFactory(UserBLoC.instance.currentUser.companyCode).then((factory){
+              UserRepositoryImpl()
+                  .getFactory(bloc.currentUser.companyCode)
+                  .then((factory) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyCompanyCertificateSelectPage(factory)));
+                        builder: (context) =>
+                            MyCompanyCertificateSelectPage(factory)));
               });
             }
           },
@@ -217,7 +230,7 @@ class MyHomePage extends StatelessWidget {
                 background: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    _buildTopBackgroud(context,UserBLoC.instance.currentUser),
+                    _buildTopBackgroud(context, bloc.currentUser),
                   ],
                 ),
               ),
@@ -231,13 +244,13 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildTopBackgroud(BuildContext context,UserModel user) {
+  Widget _buildTopBackgroud(BuildContext context, UserModel user) {
     return Container(
 //      constraints: BoxConstraints.expand(width: 300.0, height: 300.0,),
       child: Row(
         children: <Widget>[
-          _buildPortrait(context,user),
-          _buildInfomation(context,user),
+          _buildPortrait(context, user),
+          _buildInfomation(context, user),
         ],
       ),
       decoration: BoxDecoration(
@@ -246,21 +259,22 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildPortrait(BuildContext context,UserModel user) {
+  Widget _buildPortrait(BuildContext context, UserModel user) {
     return Container(
       height: 80,
       margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
       child: Container(
-          child: user.profilePicture != null ?
-          CircleAvatar(
-            backgroundImage: NetworkImage(
-              user.profilePicture.url,
-            ),
-            radius: 40.0,
-          ):CircleAvatar(
-            child: Icon(B2BIcons.noPicture),
-            radius: 40.0,
-          ),
+          child: user.profilePicture != null
+              ? CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    user.profilePicture.url,
+                  ),
+                  radius: 40.0,
+                )
+              : CircleAvatar(
+                  child: Icon(B2BIcons.noPicture),
+                  radius: 40.0,
+                ),
           decoration: BoxDecoration(
             border: new Border.all(color: Colors.white, width: 0.5),
             color: Colors.white,
@@ -270,7 +284,7 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfomation(BuildContext context,UserModel user) {
+  Widget _buildInfomation(BuildContext context, UserModel user) {
     return Container(
       height: 80,
       child: Column(
