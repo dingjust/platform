@@ -157,7 +157,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(widget
-                                              .item.belongTo.profilePicture !=
+                                              .item.supplier?.profilePicture !=
                                           null
                                       ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.item.belongTo.profilePicture}'
                                       : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
@@ -171,7 +171,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                '${widget.item.belongTo.name}',
+                                '${widget.item.supplier?.name}',
                                 style: TextStyle(
                                     color: Color.fromRGBO(36, 38, 41, 1)),
                               ),
@@ -203,7 +203,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               InfoRow(
                 label: '联系人',
                 value: Text(
-                  '${widget.item.belongTo.contactPerson}',
+                  '${widget.item.supplier?.contactPerson}',
                   style: TextStyle(
                       color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 ),
@@ -214,7 +214,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   value: Row(
                     children: <Widget>[
                       Text(
-                        '${widget.item.belongTo.contactPhone}',
+                        '${widget.item.supplier?.contactPhone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),

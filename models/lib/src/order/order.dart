@@ -733,7 +733,8 @@ class PurchaseOrderModel extends OrderModel {
       this.balancePaidDate,
       this.depositPaidDate,
       this.uniqueCode,
-      this.delayed, this.modifiedtime,
+      this.delayed,
+      this.modifiedtime,
       SalesApplication salesApplication})
       : super(
             code: code,
@@ -900,6 +901,9 @@ class QuoteModel extends AbstractOrderModel {
   @JsonKey(toJson: _factoryToJson)
   FactoryModel belongTo;
 
+  ///合作商信息
+  CompanyModel supplier;
+
   /// 面料单价
   double unitPriceOfFabric;
 
@@ -922,27 +926,28 @@ class QuoteModel extends AbstractOrderModel {
   /// 拒绝报价理由
   String comment;
 
-  QuoteModel({
-    String code,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-    double unitPrice,
-    this.state,
-    this.requirementOrder,
-    this.purchaseOrderCode,
-    this.belongTo,
-    this.attachments,
-    this.unitPriceOfFabric,
-    this.unitPriceOfExcipients,
-    this.unitPriceOfProcessing,
-    this.costOfSamples,
-    this.costOfOther,
-    this.expectedDeliveryDate,
-    this.comment
-  }) : super(
+  QuoteModel(
+      {String code,
+      int totalQuantity,
+      double totalPrice,
+      DateTime creationTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      double unitPrice,
+      this.state,
+      this.requirementOrder,
+      this.purchaseOrderCode,
+      this.belongTo,
+      this.attachments,
+      this.unitPriceOfFabric,
+      this.unitPriceOfExcipients,
+      this.unitPriceOfProcessing,
+      this.costOfSamples,
+      this.costOfOther,
+      this.expectedDeliveryDate,
+      this.supplier,
+      this.comment})
+      : super(
             code: code,
             totalQuantity: totalQuantity,
             totalPrice: totalPrice,

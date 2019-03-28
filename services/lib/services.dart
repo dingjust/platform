@@ -52,6 +52,7 @@ export 'src/user/response/address_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/wechat/wechat_service_impl.dart';
+export 'src/user/repository/reports_repository.dart';
 
 abstract class BLoCBase {
   void dispose();
