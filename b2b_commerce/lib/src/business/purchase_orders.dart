@@ -259,8 +259,6 @@ class PurchaseOrderItem extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 (order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ) ||
                     (order.salesApplication == SalesApplication.ONLINE && order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ) ?
@@ -306,13 +304,21 @@ class PurchaseOrderItem extends StatelessWidget {
                     )
                 ),
                 order.status == null ? Container() :
-                Text(
-                  '${PurchaseOrderStatusLocalizedMap[order.status]}',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color:  _statusColors[order.status],
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '${PurchaseOrderStatusLocalizedMap[order.status]}',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color:  _statusColors[order.status],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -343,24 +349,34 @@ class PurchaseOrderItem extends StatelessWidget {
 
   Widget _buildHeaderText(BuildContext context){
     if(order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ){
-      return Text(
-        '（待付定金）',
-        textAlign: TextAlign.start,
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.red,
-          fontWeight: FontWeight.w500,
+      return  Container(
+        padding: EdgeInsets.only(left: 7),
+        margin: EdgeInsets.only(left: 5),
+        color: Color.fromRGBO(255, 243, 243, 1),
+        child: Text(
+          '待付定金',
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.red,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       );
     }
     else if(order.salesApplication == SalesApplication.ONLINE && order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ){
-      return Text(
-        '（待付尾款）',
-        textAlign: TextAlign.start,
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.red,
-          fontWeight: FontWeight.w500,
+      return Container(
+        padding: EdgeInsets.only(left: 7),
+        margin: EdgeInsets.only(left: 5),
+        color: Color.fromRGBO(255, 243, 243, 1),
+        child: Text(
+          '待付尾款',
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.red,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       );
     }
