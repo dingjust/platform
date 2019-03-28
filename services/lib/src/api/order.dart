@@ -26,6 +26,9 @@ class OrderApis {
         return '/{baseSiteId}/b2b/orders/requirement/$code/quotes';
       };
 
+  //获取所有物流公司名称和Code GET
+  static get getCarriersAll => '/{baseSiteId}/carriers';
+
   /// 根据条件获取采购订单列表 POST
   static get purchaseOrders => '/{baseSiteId}/b2b/orders/purchase';
 
@@ -146,6 +149,11 @@ class OrderApis {
   static get proofingUpdate => (code) {
         return '/{baseSiteId}/b2b/orders/proofing/$code/balance';
       };
+
+  //确认发货
+  static get proofingDelivering => (code) {
+    return '/{baseSiteId}/b2b/orders/proofing/$code/delivering';
+  };
 
   /// 更新需求信息
   static get requirementUpdate => (code) {
