@@ -587,6 +587,9 @@ class RequirementOrderModel extends OrderModel {
   ///延期天数
   int delayDays;
 
+  /// 是否可修改
+  bool editable;
+
   RequirementOrderModel(
       {this.status,
       this.belongTo,
@@ -600,6 +603,7 @@ class RequirementOrderModel extends OrderModel {
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
+      this.editable,
       this.attachments})
       : super(
           code: code,
@@ -935,6 +939,9 @@ class QuoteModel extends AbstractOrderModel {
   @JsonKey(toJson: _attachmentsToJson)
   List<MediaModel> attachments;
 
+  /// 拒绝报价理由
+  String comment;
+
   QuoteModel({
     String code,
     int totalQuantity,
@@ -954,6 +961,7 @@ class QuoteModel extends AbstractOrderModel {
     this.costOfSamples,
     this.costOfOther,
     this.expectedDeliveryDate,
+    this.comment
   }) : super(
             code: code,
             totalQuantity: totalQuantity,

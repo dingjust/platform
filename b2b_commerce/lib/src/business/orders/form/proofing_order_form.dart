@@ -55,6 +55,11 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
       });
       totalQuantity = sum;
       totalPrice = sum * widget.model.unitPrice;
+    } else {
+      if (widget.quoteModel.unitPrice != null &&
+          widget.quoteModel.unitPrice >= 0) {
+        _unitPriceController.text = widget.quoteModel.unitPrice.toString();
+      }
     }
     super.initState();
   }
@@ -310,27 +315,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   Widget _buildSampleNum() {
     if (product != null) {
       return GestureDetector(
-        onTap: () async {
-          if (widget.update) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProductSizeColorNum(
-                      update: true,
-                      data: widget.model.entries
-                          .map((entry) => ApparelSizeVariantProductEntry(
-                              model: entry.product, quantity: entry.quantity))
-                          .toList(),
-                    )));
-          } else {
-            List<EditApparelSizeVariantProductEntry> returnEntries =
-                await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ProductSizeColorNum(
-                          editData: productEntries,
-                        )));
-            if (returnEntries != null) {
-              productEntries = returnEntries;
-            }
-          }
-        },
+        onTap: onSampleNumTap,
         child: Container(
           padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
           decoration: BoxDecoration(
@@ -345,6 +330,10 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 '样衣数量',
                 style: TextStyle(
                     color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+              ),
+              Text(
+                '${totalQuantity}件',
+                style: TextStyle(color: Colors.grey),
               ),
               Icon(
                 Icons.chevron_right,
@@ -407,18 +396,18 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 onPressed: () async {
                   //拼装数据
                   ProofingModel model = ProofingModel();
-                  model.entries = productEntries.map((entry) {
+                  model.entries = productEntries.where((entry) {
+                    return entry.controller.text != '';
+                  }).map((entry) {
                     ApparelSizeVariantProductModel variantProduct = entry.model;
                     variantProduct
                       ..thumbnail = product.thumbnail
                       ..thumbnails = product.thumbnails
                       ..images = product.images;
-                    if (entry.controller.text != '') {
-                      return ProofingEntryModel(
-                        quantity: int.parse(entry.controller.text),
-                        product: variantProduct,
-                      );
-                    }
+                    return ProofingEntryModel(
+                      quantity: int.parse(entry.controller.text),
+                      product: variantProduct,
+                    );
                   }).toList();
                   model
                     ..unitPrice = double.parse(_unitPriceController.text)
@@ -428,7 +417,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   String response = await ProofingOrderRepository()
                       .proofingCreate(widget.quoteModel.code, model);
                   //TODOS:跳转到打样订单详情
-
                   if (response != null && response != '') {
                     //查询明细
                     ProofingModel detailModel = await ProofingOrderRepository()
@@ -504,6 +492,41 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         );
       },
     );
+  }
+
+  void onSampleNumTap() async {
+    if (widget.update) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ProductSizeColorNum(
+                update: true,
+                data: widget.model.entries
+                    .map((entry) => ApparelSizeVariantProductEntry(
+                        model: entry.product, quantity: entry.quantity))
+                    .toList(),
+              )));
+    } else {
+      List<EditApparelSizeVariantProductEntry> returnEntries =
+          await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ProductSizeColorNum(
+                    editData: productEntries,
+                  )));
+      if (returnEntries != null) {
+        productEntries = returnEntries;
+      }
+    }
+
+    int sum = 0;
+    productEntries.forEach((entry) {
+      if (entry.controller.text != '') {
+        sum = sum + int.parse(entry.controller.text);
+      }
+    });
+    setState(() {
+      totalQuantity = sum;
+      if (_unitPriceController.text != '') {
+        totalPrice = sum * double.parse(_unitPriceController.text);
+      }
+    });
   }
 }
 

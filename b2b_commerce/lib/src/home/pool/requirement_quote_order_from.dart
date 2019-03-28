@@ -549,9 +549,6 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
     model.expectedDeliveryDate = expectedDeliveryDate;
     model.attachments = attachments;
     model.unitPrice = double.parse(_unitPriceController.text);
-
-    print(QuoteModel.toJson(model));
-
     String response;
     if (widget.update) {
       model.code = widget.quoteModel.code;

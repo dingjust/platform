@@ -35,7 +35,7 @@
     },
     methods: {
       async getLabels() {
-        const url = this.apis().getAllLabels();
+        const url = this.apis().getGroupAllLabels('FACTORY');
         const results = await this.$http.get(url);
         if (results["errors"]) {
           this.$message.error(results["errors"][0].message);

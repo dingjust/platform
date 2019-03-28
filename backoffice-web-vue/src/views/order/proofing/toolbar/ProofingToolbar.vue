@@ -14,15 +14,11 @@
 
   const {mapMutations} = createNamespacedHelpers('ProofingsModule');
 
-  import ProofingAdvancedSearchForm from '../form/ProofingAdvancedSearchForm';
-
   export default {
     name: 'PurchaseOrderToolbar',
     props: [],
     mixins: [],
-    components: {
-      ProofingAdvancedSearchForm
-    },
+    components: {},
     computed: {},
     methods: {
       ...mapMutations({

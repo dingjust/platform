@@ -57,8 +57,9 @@ const state = {
     {code: 'LIGHT_PROCESSING', name: '清加工'}
   ],
   labelGroups: [
-    {code: 'FACTORY', name: '工厂打标'},
-    {code: 'PLATFORM', name: '平台打标'}
+    {code: 'FACTORY', name: '工厂标签'},
+    {code: 'PLATFORM', name: '平台标签'},
+    {code: 'ORDER', name: '订单标签'}
   ],
   // 产品风格
   productStyles: [

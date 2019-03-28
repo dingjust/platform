@@ -14,13 +14,24 @@ import 'package:widgets/widgets.dart';
 /// 认证信息
 class MyFactoryPage extends StatefulWidget {
   FactoryModel factory;
+  List<ApparelProductModel> products;
+  PurchaseOrderModel purchaseOrder;
   bool isCompanyIntroduction;
-  MyFactoryPage(this.factory,{this.isCompanyIntroduction = false});
+  MyFactoryPage(this.factory,{this.products,this.purchaseOrder,this.isCompanyIntroduction = false});
 
   _MyFactoryPageState createState() => _MyFactoryPageState();
 }
 
 class _MyFactoryPageState extends State<MyFactoryPage> {
+  Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
+    PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
+    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
+    PurchaseOrderStatus.OUT_OF_STORE: Colors.yellow,
+    PurchaseOrderStatus.IN_PRODUCTION: Colors.yellow,
+    PurchaseOrderStatus.COMPLETED: Colors.green,
+    PurchaseOrderStatus.CANCELLED: Colors.grey,
+  };
+
   @override
   void initState() {
     // TODO: implement initState
@@ -29,91 +40,57 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _widgets = [
+      _buildBaseInfo(),
+    ];
+    if(widget.purchaseOrder != null){
+      _widgets.add(_buildOrderHeader());
+      _widgets.add(_buildContent());
+    }
+    _widgets.add(_buildCashProducts());
+    _widgets.add(_buildFactoryWorkPicInfo());
+    _widgets.add(_buildCompanyCertificate());
+    _widgets.add(_buildRegisterDate());
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text('公司介绍'),
         elevation: 0.5,
         actions: <Widget>[
-          Container(
-            width: 80,
-            child: IconButton(
-              icon: Text(
-                '联系方式',
-                style: TextStyle(),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyCompanyContactWayPage(widget.factory,isCompanyIntroduction: true,)),
-                );
-              },
-            ),
-          ),
+          buildContactWay(context),
         ],
       ),
-      body: _buildFactory(context),
+      body:  Container(
+        color: Colors.grey[200],
+        child: ListView(
+          children: _widgets,
+        ),
+      ),
     );
   }
 
-  Widget _buildFactory(BuildContext context) {
+  //联系方式
+  Container buildContactWay(BuildContext context) {
     return Container(
-      color: Colors.grey[200],
-      child: ListView(
-        children: <Widget>[
-          _buildBaseInfo(),
-          FutureBuilder<dynamic>(
-            future: ProductRepositoryImpl().list({}, {'size': 3}),
-            // initialData: null,
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.data == null) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 200),
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-              if (snapshot.hasData) {
-                return _buildCashProducts(context, snapshot.data.content);
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
+          width: 80,
+          child: IconButton(
+            icon: Text(
+              '联系方式',
+              style: TextStyle(),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyCompanyContactWayPage(widget.factory,isCompanyIntroduction: true,)),
+              );
             },
           ),
-          _buildFactoryWorkPicInfo(context),
-          Card(
-            elevation: 0,
-            margin: EdgeInsets.only(top: 10),
-            child: ListTile(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              title: Text('公司认证信息'),
-              trailing: Icon(Icons.chevron_right),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyCompanyCertificatePage(
-                              widget.factory,
-                              onlyRead: true,
-                            )));
-              },
-            ),
-          ),
-          Card(
-            elevation: 0,
-            margin: EdgeInsets.only(top: 10),
-            child: ListTile(
-              title: Text('注册时间'),
-              trailing: Text(
-                  DateFormatUtil.formatYMD(widget.factory.registrationDate) ?? ''),
-            ),
-          ),
-        ],
-      ),
-    );
+        );
   }
 
+  //基本资料
   Card _buildBaseInfo() {
     List<Widget> _buildFactoryHeaderRow = [
       widget.factory.approvalStatus == ArticleApprovalStatus.approved ?
@@ -348,7 +325,198 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     );
   }
 
-  Card _buildCashProducts(BuildContext context, List<ProductModel> products) {
+  //生产订单
+  Widget _buildOrderHeader() {
+    return Container(
+        padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.depositPaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT ) ||
+                    (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.balancePaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ) ?
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      '￥',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      '${widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.depositPaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT ?
+                      widget.purchaseOrder.deposit : widget.purchaseOrder.balance}',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )
+                  ],
+                ):
+                Container(
+                    child:widget.purchaseOrder.delayed ?
+                    Text(
+                        '已延期',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w500,
+                        )
+                    ) : Container()
+                ),
+                Expanded(
+                    child: Container(
+                      child: _buildHeaderText(),
+                    )
+                ),
+                widget.purchaseOrder.status == null ? Container() :
+                Text(
+                  '${PurchaseOrderStatusLocalizedMap[widget.purchaseOrder.status]}',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color:  _statusColors[widget.purchaseOrder.status],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Text(
+                      '${widget.purchaseOrder.belongTo == null ? widget.purchaseOrder.companyOfSeller : widget.purchaseOrder
+                          .belongTo.name}',
+                      style: TextStyle(
+                          fontSize: 16
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  '${widget.purchaseOrder.salesApplication == null ? '' : SalesApplicationLocalizedMap[widget.purchaseOrder.salesApplication]}',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(fontSize: 16),
+                )
+              ],
+            )
+          ],
+        ));
+  }
+  Widget _buildContent() {
+    //计算总数
+    int sum = 0;
+    widget.purchaseOrder.entries.forEach((entry) {
+      sum = sum + entry.quantity;
+    });
+    return Container(
+        padding: EdgeInsets.fromLTRB(10,0,10,0),
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image:  widget.purchaseOrder.product == null ||  widget.purchaseOrder.product.thumbnail == null?
+                    AssetImage(
+                      'temp/picture.png',
+                      package: "assets",
+                    ):
+                    NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.purchaseOrder.product.thumbnail.url}'),
+                    fit: BoxFit.cover,
+                  )),
+            ),
+            Expanded(
+                child: Container(
+                    padding: EdgeInsets.all(5),
+                    height: 100,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: widget.purchaseOrder.product == null || widget.purchaseOrder.product.name == null?
+                            Container():
+                            Text(
+                              '${widget.purchaseOrder.product.name}',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            )),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Text(
+                                '货号：${widget.purchaseOrder.product == null ? '' : widget.purchaseOrder.product.skuID}',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey),
+                              ),
+                            )),
+                        widget.purchaseOrder.product == null || widget.purchaseOrder.product.category == null?
+                        Container() :
+                        Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 243, 243, 1),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            "${widget.purchaseOrder.product.category.name}  ${sum}件",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromRGBO(255, 133, 148, 1)),
+                          ),
+                        )
+                      ],
+                    )))
+          ],
+        ));
+  }
+  Widget _buildHeaderText(){
+    if(widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.depositPaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT ){
+      return Text(
+        '（待付定金）',
+        textAlign: TextAlign.start,
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.red,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    }
+    else if(widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.balancePaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ){
+      return Text(
+        '（待付尾款）',
+        textAlign: TextAlign.start,
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.red,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    }
+    else{
+      return Container();
+    }
+  }
+
+  //现款商品
+  Card _buildCashProducts() {
     return Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 10),
@@ -390,8 +558,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                       physics: new NeverScrollableScrollPhysics(),
                       crossAxisCount: 3,
                       childAspectRatio: 2.5 / 5,
-                      children: List.generate(products.length, (index) {
-                        return ExistingProductItem(products[index],isFactoryDetail: true,);
+                      children: List.generate(widget.products.length, (index) {
+                        return ExistingProductItem(widget.products[index],isFactoryDetail: true,);
                       })),
                 )
               ],
@@ -416,8 +584,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     );
   }
 
-  //工厂生产环境
-  Widget _buildFactoryWorkPicInfo(BuildContext context) {
+  //图文详情
+  Widget _buildFactoryWorkPicInfo() {
     return Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 10),
@@ -504,6 +672,41 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     );
   }
 
+  Card _buildCompanyCertificate() {
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.only(top: 10),
+      child: ListTile(
+        contentPadding:
+        EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        title: Text('公司认证信息'),
+        trailing: Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyCompanyCertificatePage(
+                    widget.factory,
+                    onlyRead: true,
+                  )));
+        },
+      ),
+    );
+  }
+
+  Card _buildRegisterDate() {
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.only(top: 10),
+      child: ListTile(
+        title: Text('注册时间'),
+        trailing: Text(
+            DateFormatUtil.formatYMD(widget.factory.registrationDate) ?? ''),
+      ),
+    );
+  }
+
+  //格式化类别
   String formatCategorysSelectText(List<CategoryModel> categorys,int count) {
     String text = '';
 
@@ -526,6 +729,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     return text;
   }
 
+  //格式化标签
   String formatLabelsSelectText(List<LabelModel> labels) {
     String text = '';
 
@@ -548,6 +752,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     return text;
   }
 
+  //格式化年龄段
   String formatAgeRangesText(List<AgeRanges> ageRanges) {
     String text = '';
     if (ageRanges != null && ageRanges.isNotEmpty) {
@@ -558,6 +763,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     return text;
   }
 
+  //格式化价格段
   String formatPriceRangesText(List<PriceRanges> priceRanges) {
     String text = '';
     if (priceRanges != null && priceRanges.isNotEmpty) {
