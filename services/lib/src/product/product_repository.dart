@@ -18,6 +18,11 @@ abstract class ProductRepository {
   //删除商品
   Future<String> delete(String code);
 
+  //商品上架
+  Future<String> on(String code);
+  //商品下架
+  Future<String> off(String code);
+
   //获取商品小类
   Future<List<CategoryModel>> cascadedCategories();
 
