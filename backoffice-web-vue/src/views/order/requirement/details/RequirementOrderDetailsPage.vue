@@ -78,8 +78,6 @@
         this.reviewVisible = false;
       },
       onUpdate() {
-        console.log(this.slotData);
-        console.log("testlhj111");
         this.reviewVisible = false;
         this.updateVisible = true;
       },

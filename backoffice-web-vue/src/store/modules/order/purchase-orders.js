@@ -154,8 +154,8 @@ const actions = {
     const statuses = state.statuses;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
-
-    dispatch('search', {keyword, statuses, page: currentPageNumber, size: currentPageSize});
+    let url = this.apis().getProductionProgressReports();
+    dispatch('search', {url,keyword, statuses, page: currentPageNumber, size: currentPageSize});
   }
 };
 
