@@ -403,8 +403,8 @@ class ConsignmentModel extends ItemModel {
   CarrierModel carrierModel;
 
   ConsignmentModel({
-    @required this.code,
-    @required this.status,
+    this.code,
+    this.status,
     this.trackingID,
     this.consignmentEntries,
   });
