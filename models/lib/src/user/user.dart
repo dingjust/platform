@@ -238,3 +238,5 @@ class RoleModel extends ItemModel {
   static Map<String, dynamic> toJson(RoleModel model) =>
       _$RoleModelToJson(model);
 }
+
+
