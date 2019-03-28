@@ -422,7 +422,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: Text('当前阶段是否完成？'),
           actions: <Widget>[
             FlatButton(
@@ -650,7 +653,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: SingleChildScrollView(
               child: Text(
                 '${message}',
@@ -692,7 +698,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -808,7 +817,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: Text('是否无需付款直接跳过？'),
           actions: <Widget>[
             FlatButton(

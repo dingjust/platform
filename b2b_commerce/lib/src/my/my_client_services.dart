@@ -54,7 +54,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
               ),
             ),
             trailing:
-            Text('020-12345678',
+            Text('020-81682620',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -63,7 +63,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
           ),
         ),
         onTap:() {
-          _selectActionButton('020-12345678');
+          _selectActionButton('020-81682620');
         });
   }
 
@@ -108,7 +108,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
               ),
             ),
             trailing:
-            Text('2995225588',
+            Text('1498868394',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -117,7 +117,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
           ),
         ),
         onTap : () {
-          copyToClipboard('2995225588');
+          copyToClipboard('1498868394');
         });
   }
 
@@ -135,7 +135,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
               ),
             ),
             trailing:
-            Text('2995225588@qq.com',
+            Text('xiaoyongkuang@nbyjy.net',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -144,7 +144,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
           ),
         ),
         onTap : () {
-          copyToClipboard('2995225588@qq.com');
+          copyToClipboard('xiaoyongkuang@nbyjy.net');
         });
   }
 
@@ -202,17 +202,18 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
   Future<void> _neverCopyContent(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (context) {
-        return AlertDialog(
-          title: Text('消息'),
-          content: Text('复制成功'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+        return SimpleDialog(
+          title: const Text(
+            '提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('复制成功'),
             ),
           ],
         );
