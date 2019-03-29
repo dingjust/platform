@@ -8,9 +8,8 @@ part 'report.g.dart';
 class SiteStatisticsModel extends ItemModel {
   String label;
   String value;
-  String unit;
 
-  SiteStatisticsModel({this.label, this.value, this.unit});
+  SiteStatisticsModel({this.label, this.value});
 
   factory SiteStatisticsModel.fromJson(Map<String, dynamic> json) =>
       _$SiteStatisticsModelFromJson(json);

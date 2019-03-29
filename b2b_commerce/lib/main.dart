@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/index.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,6 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'src/home/_shared/widgets/bottom_navigation.dart';
-import 'src/business/index_brand.dart';
-import 'src/business/index_factory.dart';
 import 'src/business/orders/requirement_order_from.dart';
 import 'src/common/app_bloc.dart';
 import 'src/common/app_constants.dart';
@@ -112,141 +111,73 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   /// 获取导航菜单
   List<NavigationMenu> _getNavigationMenus() {
-    List<NavigationMenu> menus;
-
-    if (widget.userType == UserType.BRAND) {
-      menus = <NavigationMenu>[
-        NavigationMenu(
-          BottomNavigationBarItem(
-            icon: Container(
-              margin: const EdgeInsets.only(right: 5),
-              child: const Icon(B2BIcons.home),
-            ),
-            activeIcon: Container(
-              margin: const EdgeInsets.only(right: 5),
-              child: const Icon(B2BIcons.home_active),
-            ),
-            title: const Text('商机'),
+    List<NavigationMenu> menus = <NavigationMenu>[
+      NavigationMenu(
+        BottomNavigationBarItem(
+          icon: Container(
+            margin: const EdgeInsets.only(right: 5),
+            child: const Icon(B2BIcons.home),
           ),
-          HomePage(userType: UserType.BRAND),
-        ),
-        NavigationMenu(
-          BottomNavigationBarItem(
-            icon: Container(
-              margin: const EdgeInsets.only(right: 35),
-              child: const Icon(B2BIcons.production),
-            ),
-            activeIcon: Container(
-              margin: const EdgeInsets.only(right: 35),
-              child: const Icon(B2BIcons.production_active),
-            ),
-            title: Container(
-              margin: const EdgeInsets.only(right: 30),
-              child: const Text('生产'),
-            ),
+          activeIcon: Container(
+            margin: const EdgeInsets.only(right: 5),
+            child: const Icon(B2BIcons.home_active),
           ),
-          ProductionPage(),
+          title: const Text('商机'),
         ),
-        NavigationMenu(
-          BottomNavigationBarItem(
-              icon: Container(
-                margin: const EdgeInsets.only(left: 35),
-                child: const Icon(B2BIcons.business),
-              ),
-              activeIcon: Container(
-                margin: const EdgeInsets.only(left: 35),
-                child: const Icon(B2BIcons.business_active),
-              ),
-              title: Container(
-                margin: const EdgeInsets.only(left: 45),
-                child: const Text('工作'),
-              )),
-          BrandBusinessHomePage(),
-        ),
-        NavigationMenu(
-          BottomNavigationBarItem(
-            icon: Container(
-              margin: const EdgeInsets.only(right: 5),
-              child: const Icon(
-                B2BIcons.my,
-              ),
-            ),
-            activeIcon: Container(
-              margin: const EdgeInsets.only(right: 5),
-              child: const Icon(
-                B2BIcons.my_active,
-              ),
-            ),
-            title: const Text('我的'),
+        HomePage(userType: widget.userType),
+      ),
+      NavigationMenu(
+        BottomNavigationBarItem(
+          icon: Container(
+            margin: const EdgeInsets.only(right: 35),
+            child: const Icon(B2BIcons.production),
           ),
-          MyHomePage(),
-        ),
-      ];
-    }
-
-    if (widget.userType == UserType.FACTORY) {
-      return <NavigationMenu>[
-        NavigationMenu(
-          BottomNavigationBarItem(
-            icon: Container(
-              margin: EdgeInsets.only(right: 12),
-              child: const Icon(B2BIcons.home),
-            ),
-            activeIcon: Container(
-              margin: EdgeInsets.only(right: 12),
-              child: const Icon(
-                B2BIcons.home_active,
-              ),
-            ),
-            backgroundColor: Colors.white,
-            title: const Text('商机'),
+          activeIcon: Container(
+            margin: const EdgeInsets.only(right: 35),
+            child: const Icon(B2BIcons.production_active),
           ),
-          HomePage(userType: UserType.FACTORY),
-        ),
-        NavigationMenu(
-          BottomNavigationBarItem(
-            icon: Container(
-              margin: EdgeInsets.only(right: 15),
-              child: const Icon(B2BIcons.production),
-            ),
-            activeIcon: Container(
-              margin: EdgeInsets.only(right: 15),
-              child: const Icon(B2BIcons.production_active),
-            ),
-            title: const Text('生产'),
+          title: Container(
+            margin: const EdgeInsets.only(right: 30),
+            child: const Text('生产'),
           ),
-          ProductionPage(),
         ),
-        NavigationMenu(
-          BottomNavigationBarItem(
+        ProductionPage(),
+      ),
+      NavigationMenu(
+        BottomNavigationBarItem(
             icon: Container(
-              margin: EdgeInsets.only(right: 10),
+              margin: const EdgeInsets.only(left: 35),
               child: const Icon(B2BIcons.business),
             ),
             activeIcon: Container(
-              margin: EdgeInsets.only(right: 10),
+              margin: const EdgeInsets.only(left: 35),
               child: const Icon(B2BIcons.business_active),
             ),
-            title: const Text('工作'),
-          ),
-          FactoryBusinessHomePage(),
-        ),
-        NavigationMenu(
-          BottomNavigationBarItem(
-            icon: Container(
-              margin: EdgeInsets.only(right: 10),
-              child: const Icon(B2BIcons.my),
+            title: Container(
+              margin: const EdgeInsets.only(left: 45),
+              child: const Text('工作'),
+            )),
+        BusinessHomePage(userType: widget.userType),
+      ),
+      NavigationMenu(
+        BottomNavigationBarItem(
+          icon: Container(
+            margin: const EdgeInsets.only(right: 5),
+            child: const Icon(
+              B2BIcons.my,
             ),
-            activeIcon: Container(
-              margin: EdgeInsets.only(right: 10),
-              child: const Icon(B2BIcons.my_active),
-            ),
-            title: const Text('我的'),
           ),
-          MyHomePage(),
+          activeIcon: Container(
+            margin: const EdgeInsets.only(right: 5),
+            child: const Icon(
+              B2BIcons.my_active,
+            ),
+          ),
+          title: const Text('我的'),
         ),
-      ];
-    }
+        MyHomePage(),
+      ),
+    ];
 
     return menus;
   }

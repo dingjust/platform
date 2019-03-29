@@ -19,7 +19,7 @@ import '../home/requirement/fast_publish_requirement.dart';
 import '../production/production_offline_order_from.dart';
 import '../production/production_unique_code.dart';
 
-/// 网站主页 - 品牌
+/// 网站主页
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.userType}) : super(key: AppKeys.homePage);
 
