@@ -5,7 +5,7 @@ import 'package:widgets/widgets.dart';
 
 import 'apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
-import 'search/apparel_product_search.dart';
+import '../_shared/widgets/product_search_delegate_page.dart';
 
 class OffTheShelfApparelProductsPage extends StatelessWidget {
   @override
@@ -24,7 +24,7 @@ class OffTheShelfApparelProductsPage extends StatelessWidget {
                 size: 20,
               ),
               onPressed: () => showSearch(
-                  context: context, delegate: ApparelProductSearchDelegate()),
+                  context: context, delegate: ProductSearchDelegatePage()),
             ),
           ],
         ),

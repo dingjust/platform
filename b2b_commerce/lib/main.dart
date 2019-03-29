@@ -16,8 +16,7 @@ import 'src/common/app_keys.dart';
 import 'src/common/app_routes.dart';
 import 'src/home/_shared/models/navigation_menu.dart';
 import 'src/home/account/login.dart';
-import 'src/home/index_brand.dart';
-import 'src/home/index_factory.dart';
+import 'src/home/index.dart';
 import 'src/my/index.dart';
 import 'src/production/index.dart';
 
@@ -129,7 +128,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
             ),
             title: const Text('商机'),
           ),
-          BrandHomePage(),
+          HomePage(userType: UserType.BRAND),
         ),
         NavigationMenu(
           BottomNavigationBarItem(
@@ -202,7 +201,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
             backgroundColor: Colors.white,
             title: const Text('商机'),
           ),
-          FactoryHomePage(),
+          HomePage(userType: UserType.FACTORY),
         ),
         NavigationMenu(
           BottomNavigationBarItem(

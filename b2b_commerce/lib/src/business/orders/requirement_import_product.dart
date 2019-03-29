@@ -1,8 +1,7 @@
 import 'dart:io';
 
-import 'package:b2b_commerce/src/home/home_section.dart';
+import 'package:b2b_commerce/src/_shared/widgets/product_search_input.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 List<File> _BOMList = [];
@@ -12,7 +11,6 @@ class RequirementImportProduct extends StatefulWidget {
 }
 
 class _RequirementImportProductState extends State<RequirementImportProduct> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,40 +21,37 @@ class _RequirementImportProductState extends State<RequirementImportProduct> {
           centerTitle: true,
           actions: <Widget>[
             GestureDetector(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: Center(
-                  child: Text(
-                    '确定',
-                    style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Center(
+                    child: Text(
+                      '确定',
+                      style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                    ),
                   ),
                 ),
-              ),
                 onTap: () {
                   Navigator.pop(context);
-                }
-            )
+                })
           ],
         ),
         body: Container(
             child: ListView(
-              children: <Widget>[
-                _buildFindProduct(context),
-                _buildBOM(context),
-              ],
-            )
-        )
-    );
+          children: <Widget>[
+            _buildFindProduct(context),
+            _buildBOM(context),
+          ],
+        )));
   }
 
-  Widget _buildFindProduct(BuildContext context){
+  Widget _buildFindProduct(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0,0, 0, 10),
-      padding: EdgeInsets.fromLTRB(0,10, 0, 10),
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       height: 270,
       child: Column(
         children: <Widget>[
-          _buildTips(context,'按照现有商品生产'),
+          _buildTips(context, '按照现有商品生产'),
           _buildSearch(context),
         ],
       ),
@@ -67,56 +62,53 @@ class _RequirementImportProductState extends State<RequirementImportProduct> {
     );
   }
 
-  Widget _buildTips(BuildContext context,String tips){
+  Widget _buildTips(BuildContext context, String tips) {
     return Center(
       child: Text(
         tips,
-        style: TextStyle(
-          fontSize: 14,
-          color: Colors.black26
-        ),
+        style: TextStyle(fontSize: 14, color: Colors.black26),
       ),
     );
   }
 
-  Widget _buildSearch(BuildContext context){
+  Widget _buildSearch(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Row(
         children: <Widget>[
-          HomeSearchInputBox(width:300,tips: '请输入商品名或货号',),
+          ProductSearchInput(
+            width: 300,
+            tips: '请输入商品名或货号',
+          ),
           Expanded(
               child: Container(
-                width: 30,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: RaisedButton(
-                    color: Color(0xFFFF9516),
-                    child: Text(
-                      '查询',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    onPressed: () {}
+            width: 30,
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: RaisedButton(
+                color: Color(0xFFFF9516),
+                child: Text(
+                  '查询',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
                 ),
-              )
-          )
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                onPressed: () {}),
+          ))
         ],
       ),
     );
   }
 
-  Widget _buildBOM(BuildContext context){
+  Widget _buildBOM(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0,10, 0, 10),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       height: 200,
       child: Column(
         children: <Widget>[
-          _buildTips(context,'BOM表'),
+          _buildTips(context, 'BOM表'),
           _buildBOMPicker(context),
         ],
       ),
@@ -126,8 +118,8 @@ class _RequirementImportProductState extends State<RequirementImportProduct> {
       ),
     );
   }
-  
-  Widget _buildBOMPicker(BuildContext context){
+
+  Widget _buildBOMPicker(BuildContext context) {
     return Container(
       child: PhotoPicker(
         images: _BOMList,
@@ -136,5 +128,4 @@ class _RequirementImportProductState extends State<RequirementImportProduct> {
       ),
     );
   }
-
 }
