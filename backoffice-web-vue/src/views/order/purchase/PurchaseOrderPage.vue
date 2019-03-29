@@ -29,7 +29,9 @@
     },
     computed: {
       ...mapGetters({
-        page: 'page'
+        page: 'page',
+        keyword: 'keyword',
+        queryFormData: 'queryFormData',
       })
     },
     methods: {
@@ -66,9 +68,7 @@
     },
     data() {
       return {
-        keyword: this.$store.state.PurchaseOrdersModule.keyword,
         formData: this.$store.state.PurchaseOrdersModule.formData,
-        queryFormData: this.$store.state.PurchaseOrdersModule.queryFormData,
         isAdvancedSearch: this.$store.state.PurchaseOrdersModule.isAdvancedSearch,
       }
     },
