@@ -6,6 +6,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'src/home/_shared/widgets/bottom_navigation.dart';
 import 'src/business/index_brand.dart';
 import 'src/business/index_factory.dart';
 import 'src/business/orders/requirement_order_from.dart';
@@ -17,7 +18,6 @@ import 'src/home/_shared/models/navigation_menu.dart';
 import 'src/home/account/login.dart';
 import 'src/home/index_brand.dart';
 import 'src/home/index_factory.dart';
-import 'src/home/navigation/bottom_navigation.dart';
 import 'src/my/index.dart';
 import 'src/production/index.dart';
 
@@ -91,7 +91,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     MessageBLoC.instance.errorMessageStream.listen((value) {
       final appContext = _navigatorKey.currentState.overlay.context;
       final dialog = AlertDialog(
-        content: Text('${value}'),
+        content: Text('$value'),
       );
       showDialog(context: appContext, builder: (x) => dialog);
     });
@@ -280,8 +280,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
                       onPublish: () => _onPublish(context),
                     )
                   : null,
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
             ),
       ),
       routes: AppRoutes.allRoutes,
@@ -302,7 +301,7 @@ class PublishRequirementButton extends StatelessWidget {
     @required this.onPublish,
   }) : super(key: key);
 
-  final Function onPublish;
+  final VoidCallback onPublish;
 
   @override
   Widget build(BuildContext context) {

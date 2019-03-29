@@ -75,4 +75,32 @@ class QuoteOrderRepository {
       return null;
     }
   }
+
+  //工厂获取与该品牌的报价单列表
+  Future<QuoteOrdersResponse> getQuotesByBrand(String uid,Map<String,Object> params) async {
+    Response response = await http$.post(OrderApis.quotes,
+        data: {
+          "requirementOrderBelongTos" : uid,
+        },
+        queryParameters: params,
+    );
+
+    QuoteOrdersResponse quoteResponse = QuoteOrdersResponse.fromJson(response.data);
+    return quoteResponse;
+  }
+
+  //品牌获取与该工厂的报价单列表
+  Future<QuoteOrdersResponse> getQuotesByFactory(String uid,Map<String,Object> params) async {
+    Response response = await http$.post(OrderApis.quotes,
+        data: {
+          "belongTos" : uid,
+        },
+        queryParameters: params,
+    );
+
+    QuoteOrdersResponse quoteResponse = QuoteOrdersResponse.fromJson(response.data);
+    return quoteResponse;
+  }
+
+
 }

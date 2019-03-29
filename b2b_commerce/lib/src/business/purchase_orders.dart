@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/purchase_order_search.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
+import 'package:b2b_commerce/src/production/production_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -20,7 +21,7 @@ class PurchaseOrdersPage extends StatefulWidget {
   _PurchaseOrdersPageState createState() => _PurchaseOrdersPageState();
 }
 
-class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
+class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticKeepAliveClientMixin{
   String showText;
   String statusColor;
   String userType;
@@ -50,7 +51,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
               IconButton(
                 icon: Icon(B2BIcons.search,size: 20,),
                 onPressed: () => showSearch(
-                    context: context, delegate: PurchaseOrderSearchDelegate()),
+                    context: context, delegate: ProductionSearchDelegate()),
               ),
             ],
           ),
@@ -61,6 +62,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
                 unselectedLabelColor: Colors.black26,
                 labelColor: Colors.black,
                 indicatorSize: TabBarIndicatorSize.label,
+                indicatorColor: Colors.black,
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);
                 }).toList(),
@@ -82,15 +84,28 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> {
         ));
   }
 
+  @override
+  bool get wantKeepAlive => false;
+
 }
 
-class PurchaseOrderList extends StatelessWidget {
-  PurchaseOrderList({Key key, this.status}) : super(key: key);
-
+class PurchaseOrderList extends StatefulWidget {
   final EnumModel status;
+
+  PurchaseOrderList({Key key, this.status});
+
+  _PurchaseOrderListState createState() => _PurchaseOrderListState();
+}
+
+
+class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKeepAliveClientMixin{
 
   ScrollController _scrollController = new ScrollController();
 
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +115,7 @@ class PurchaseOrderList extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(status.code);
+        bloc.loadingMoreByStatuses(widget.status.code);
       }
     });
 
@@ -112,6 +127,7 @@ class PurchaseOrderList extends StatelessWidget {
         bloc.showToTopBtn();
       }
     });
+
 
     //状态管理触发的返回顶部
     bloc.returnToTopStream.listen((data) {
@@ -126,7 +142,7 @@ class PurchaseOrderList extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.grey[100]),
         child: RefreshIndicator(
             onRefresh: () async {
-              return await bloc.refreshData(status.code);
+              return await bloc.refreshData(widget.status.code);
             },
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -138,7 +154,7 @@ class PurchaseOrderList extends StatelessWidget {
                   builder: (BuildContext context,
                       AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                     if (snapshot.data == null) {
-                      bloc.filterByStatuses(status.code);
+                      bloc.filterByStatuses(widget.status.code);
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 200),
                         child: Center(child: CircularProgressIndicator()),
@@ -201,12 +217,23 @@ class PurchaseOrderList extends StatelessWidget {
         )
     );
   }
+
+  @override
+  bool get wantKeepAlive => false;
 }
 
-class PurchaseOrderItem extends StatelessWidget {
+
+class PurchaseOrderItem extends StatefulWidget {
+
   PurchaseOrderItem({Key key, this.order}) : super(key: key);
 
   final PurchaseOrderModel order;
+
+  _PurchaseOrderItemState createState() => _PurchaseOrderItemState();
+}
+
+class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKeepAliveClientMixin{
+
 
   static Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
@@ -216,6 +243,12 @@ class PurchaseOrderItem extends StatelessWidget {
     PurchaseOrderStatus.COMPLETED: Colors.green,
     PurchaseOrderStatus.CANCELLED: Colors.grey,
   };
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +273,7 @@ class PurchaseOrderItem extends StatelessWidget {
       ),
       onTap: () async {
         //根据code查询
-        PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+        PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(widget.order.code);
 
         if (model != null) {
           Navigator.of(context).push(MaterialPageRoute(
@@ -260,8 +293,8 @@ class PurchaseOrderItem extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                (order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ) ||
-                    (order.salesApplication == SalesApplication.ONLINE && order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ) ?
+                (widget.order.salesApplication == SalesApplication.ONLINE && widget.order.depositPaid == false && widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT ) ||
+                    (widget.order.salesApplication == SalesApplication.ONLINE && widget.order.balancePaid == false && widget.order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ) ?
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -275,19 +308,22 @@ class PurchaseOrderItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ?
-                      order.deposit == null? '' : order.deposit : order.balance == null ? '' : order.balance}',
+                      '${widget.order.salesApplication == SalesApplication.ONLINE && widget.order.depositPaid == false
+                          && widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT ?
+                      widget.order.deposit == null? '' : widget.order.deposit : widget.order.balance == null ? ''
+                          : widget.order.balance}',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.red,
                         fontWeight: FontWeight.w500,
                       ),
-                    )
+                    ),
+                    _buildHeaderText(context),
                   ],
                 ):
                 Container(
-                    child:order.delayed ?
+                    child:widget.order.delayed ?
                     Text(
                         '已延期',
                         textAlign: TextAlign.start,
@@ -298,23 +334,18 @@ class PurchaseOrderItem extends StatelessWidget {
                         )
                     ) : Container()
                 ),
-                Expanded(
-                    child: Container(
-                      child: _buildHeaderText(context),
-                    )
-                ),
-                order.status == null ? Container() :
+                widget.order.status == null ? Container() :
                 Expanded(
                   flex: 3,
                   child: Container(
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${PurchaseOrderStatusLocalizedMap[order.status]}',
+                        '${PurchaseOrderStatusLocalizedMap[widget.order.status]}',
                         textAlign: TextAlign.end,
                         style: TextStyle(
                           fontSize: 18,
-                          color:  _statusColors[order.status],
+                          color:  _statusColors[widget.order.status],
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -328,7 +359,7 @@ class PurchaseOrderItem extends StatelessWidget {
                 Expanded(
                   child: Container(
                     child: Text(
-                      '${order.belongTo == null ? order.companyOfSeller : order
+                      '${widget.order.belongTo == null ? widget.order.companyOfSeller : widget.order
                           .belongTo.name}',
                       style: TextStyle(
                           fontSize: 16
@@ -337,7 +368,7 @@ class PurchaseOrderItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${order.salesApplication == null ? '' : SalesApplicationLocalizedMap[order.salesApplication]}',
+                  '${widget.order.salesApplication == null ? '' : SalesApplicationLocalizedMap[widget.order.salesApplication]}',
                   textAlign: TextAlign.end,
                   style: TextStyle(fontSize: 16),
                 )
@@ -348,32 +379,32 @@ class PurchaseOrderItem extends StatelessWidget {
   }
 
   Widget _buildHeaderText(BuildContext context){
-    if(order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ){
+    if(widget.order.salesApplication == SalesApplication.ONLINE && widget.order.depositPaid == false
+        && widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT ){
       return  Container(
-        padding: EdgeInsets.only(left: 7),
         margin: EdgeInsets.only(left: 5),
         color: Color.fromRGBO(255, 243, 243, 1),
         child: Text(
           '待付定金',
           textAlign: TextAlign.start,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             color: Colors.red,
             fontWeight: FontWeight.w500,
           ),
         ),
       );
     }
-    else if(order.salesApplication == SalesApplication.ONLINE && order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ){
+    else if(widget.order.salesApplication == SalesApplication.ONLINE && widget.order.balancePaid == false
+        && widget.order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ){
       return Container(
-        padding: EdgeInsets.only(left: 7),
         margin: EdgeInsets.only(left: 5),
         color: Color.fromRGBO(255, 243, 243, 1),
         child: Text(
           '待付尾款',
           textAlign: TextAlign.start,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 14,
             color: Colors.red,
             fontWeight: FontWeight.w500,
           ),
@@ -388,7 +419,7 @@ class PurchaseOrderItem extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     //计算总数
     int sum = 0;
-    order.entries.forEach((entry) {
+    widget.order.entries.forEach((entry) {
       sum = sum + entry.quantity;
     });
     return Container(
@@ -401,12 +432,12 @@ class PurchaseOrderItem extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                    image:  order.product == null ||  order.product.thumbnail == null?
+                    image:  widget.order.product == null ||  widget.order.product.thumbnail == null?
                     AssetImage(
                       'temp/picture.png',
                       package: "assets",
                     ):
-                    NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}'),
+                    NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.product.thumbnail.url}'),
                     fit: BoxFit.cover,
                   )),
             ),
@@ -420,10 +451,10 @@ class PurchaseOrderItem extends StatelessWidget {
                       children: <Widget>[
                         Align(
                             alignment: Alignment.topLeft,
-                            child: order.product == null || order.product.name == null?
+                            child: widget.order.product == null || widget.order.product.name == null?
                             Container():
                             Text(
-                              '${order.product.name}',
+                              '${widget.order.product.name}',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             )),
@@ -435,12 +466,12 @@ class PurchaseOrderItem extends StatelessWidget {
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(5)),
                               child: Text(
-                                '货号：${order.product == null ? '' : order.product.skuID}',
+                                '货号：${widget.order.product == null ? '' : widget.order.product.skuID}',
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.grey),
                               ),
                             )),
-                        order.product == null || order.product.category == null?
+                        widget.order.product == null || widget.order.product.category == null?
                         Container() :
                         Container(
                           padding: EdgeInsets.all(3),
@@ -448,7 +479,7 @@ class PurchaseOrderItem extends StatelessWidget {
                               color: Color.fromRGBO(255, 243, 243, 1),
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
-                            "${order.product.category.name}  ${sum}件",
+                            "${widget.order.product.category.name}  ${sum}件",
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromRGBO(255, 133, 148, 1)),
@@ -461,9 +492,9 @@ class PurchaseOrderItem extends StatelessWidget {
   }
 
   Widget _buildBrandButton(BuildContext context){
-    if(order.salesApplication == SalesApplication.ONLINE){
-      if(order.status == PurchaseOrderStatus.PENDING_PAYMENT){
-        if(order.depositPaid == false && order.deposit != null && order.deposit > 0) {
+    if(widget.order.salesApplication == SalesApplication.ONLINE){
+      if(widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT){
+        if(widget.order.depositPaid == false && widget.order.deposit != null && widget.order.deposit > 0) {
           return Container(
             margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
             child: Row(
@@ -474,7 +505,7 @@ class PurchaseOrderItem extends StatelessWidget {
                       margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       height: 40,
-                      child: order.status == PurchaseOrderStatus.PENDING_PAYMENT ?
+                      child: widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT ?
                       RaisedButton(
                           color: Colors.red,
                           child: Text(
@@ -519,7 +550,7 @@ class PurchaseOrderItem extends StatelessWidget {
                                         ),
                                       ),
                                       onPressed: () async {
-                                        bool result = await PurchaseOrderRepository().purchaseOrderCancelling(order.code);
+                                        bool result = await PurchaseOrderRepository().purchaseOrderCancelling(widget.order.code);
                                         _showMessage(context, result, '订单取消');
                                       },
                                     ),
@@ -555,7 +586,7 @@ class PurchaseOrderItem extends StatelessWidget {
                               barrierDismissible: true,
                               // user must tap button!
                               builder: (context) {
-                                return  order.deliveryAddress == null ?
+                                return  widget.order.deliveryAddress == null ?
                                 SimpleDialog(
                                   title: const Text('提示',
                                     style: TextStyle(
@@ -575,15 +606,15 @@ class PurchaseOrderItem extends StatelessWidget {
                                         GestureDetector(
                                           child: ListTile(
                                             title: Text(
-                                              '${order.deliveryAddress.fullname ==
-                                                  null ? '' : order.deliveryAddress.fullname}  '
-                                                  '${order.deliveryAddress.cellphone == null ? '' :
-                                              order.deliveryAddress.cellphone}',
+                                              '${widget.order.deliveryAddress.fullname ==
+                                                  null ? '' : widget.order.deliveryAddress.fullname}  '
+                                                  '${widget.order.deliveryAddress.cellphone == null ? '' :
+                                              widget.order.deliveryAddress.cellphone}',
                                             ),
                                             subtitle: Text(
-                                              '${order.deliveryAddress == null  ? '':
-                                              order.deliveryAddress.region.name} ${order.deliveryAddress.city.name} '
-                                                  '${order.deliveryAddress.cityDistrict.name} ${order.deliveryAddress.line1}',
+                                              '${widget.order.deliveryAddress == null  ? '':
+                                              widget.order.deliveryAddress.region.name} ${widget.order.deliveryAddress.city.name} '
+                                                  '${widget.order.deliveryAddress.cityDistrict.name} ${widget.order.deliveryAddress.line1}',
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontSize: 16,
@@ -601,8 +632,8 @@ class PurchaseOrderItem extends StatelessWidget {
                                               //接收返回数据并处理
                                             ).then((value) async{
                                               if(value != null){
-                                                order.deliveryAddress = value;
-                                                bool result = await PurchaseOrderRepository().updateAddress(order.code,order);
+                                                widget.order.deliveryAddress = value;
+                                                bool result = await PurchaseOrderRepository().updateAddress(widget.order.code,widget.order);
                                                 Navigator.of(context).pop();
                                                 _showMessage(context, result, '地址修改');
                                               }
@@ -698,7 +729,7 @@ class PurchaseOrderItem extends StatelessWidget {
                           borderRadius:
                           BorderRadius.all(Radius.circular(20))),
                       onPressed: () async {
-                        bool result = await PurchaseOrderRepository().confirmProduction(order.code);
+                        bool result = await PurchaseOrderRepository().confirmProduction(widget.order.code,widget.order);
                         _showMessage(context, result, '确认生产');
                       }
                   ),
@@ -708,8 +739,8 @@ class PurchaseOrderItem extends StatelessWidget {
         }
       }
       //支付尾款
-      else if(order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE){
-        if(order.balancePaid == false && order.balance != null && order.balance > 0){
+      else if(widget.order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE){
+        if(widget.order.balancePaid == false && widget.order.balance != null && widget.order.balance > 0){
           return Container(
               child: Align(
                 alignment: Alignment.bottomRight,
@@ -737,7 +768,7 @@ class PurchaseOrderItem extends StatelessWidget {
         }
       }
       //确认收货
-      if (order.status == PurchaseOrderStatus.OUT_OF_STORE) {
+      if (widget.order.status == PurchaseOrderStatus.OUT_OF_STORE) {
         return Container(
             child: Align(
               alignment: Alignment.bottomRight,
@@ -759,7 +790,7 @@ class PurchaseOrderItem extends StatelessWidget {
                         BorderRadius.all(Radius.circular(20))),
                     onPressed: () async{
                       bool result = false;
-                      result = await PurchaseOrderRepository().purchaseOrderShipped(order.code, order);
+                      result = await PurchaseOrderRepository().purchaseOrderShipped(widget.order.code, widget.order);
                       _showMessage(context, result, '确认收货');
                     }
                 ),
@@ -777,7 +808,7 @@ class PurchaseOrderItem extends StatelessWidget {
 
   Widget _buildFactoryButton(BuildContext context){
     //流程是待付款状态并定金未付的情况下能修改订单金额
-    if (order.status == PurchaseOrderStatus.PENDING_PAYMENT && order.depositPaid == false) {
+    if (widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT && widget.order.depositPaid == false) {
       return Container(
           child: Align(
             alignment: Alignment.bottomRight,
@@ -798,7 +829,7 @@ class PurchaseOrderItem extends StatelessWidget {
                       borderRadius:
                       BorderRadius.all(Radius.circular(20))),
                   onPressed: () {
-                    _showDepositDialog(context,order);
+                    _showDepositDialog(context,widget.order);
                   }
               ),
             ),
@@ -836,9 +867,9 @@ class PurchaseOrderItem extends StatelessWidget {
 //   }
     //当流程是待出库状态下
 
-    else if(order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE){
+    else if(widget.order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE){
       //尾款已付时，出现确认发货
-      if(order.balancePaid || order.salesApplication == SalesApplication.BELOW_THE_LINE){
+      if(widget.order.balancePaid || widget.order.salesApplication == SalesApplication.BELOW_THE_LINE){
         return Container(
             child:
             Align(
@@ -861,14 +892,14 @@ class PurchaseOrderItem extends StatelessWidget {
                         BorderRadius.all(Radius.circular(20))),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => LogisticsInputPage(isProductionOrder: true,purchaseOrderModel: order,))
+                          builder: (context) => LogisticsInputPage(isProductionOrder: true,purchaseOrderModel: widget.order,))
                       );
                     }
                 ),
               ),
             )
         );
-      }else if(order.salesApplication == SalesApplication.ONLINE && !order.balancePaid){ //未付尾款时可以修改金额
+      }else if(widget.order.salesApplication == SalesApplication.ONLINE && !widget.order.balancePaid){ //未付尾款时可以修改金额
         return Container(
             child: Align(
               alignment: Alignment.bottomRight,
@@ -889,7 +920,7 @@ class PurchaseOrderItem extends StatelessWidget {
                         borderRadius:
                         BorderRadius.all(Radius.circular(20))),
                     onPressed: () {
-                      _showBalanceDialog(context, order);
+                      _showBalanceDialog(context, widget.order);
                     }
                 ),
               ),
@@ -898,7 +929,7 @@ class PurchaseOrderItem extends StatelessWidget {
       }
     }
     //当流程是已出库时，可以查看物流
-    else if(order.status == PurchaseOrderStatus.OUT_OF_STORE){
+    else if(widget.order.status == PurchaseOrderStatus.OUT_OF_STORE){
       return Container(
 //          child: Align(
 //            alignment: Alignment.bottomRight,
@@ -1003,9 +1034,10 @@ class PurchaseOrderItem extends StatelessWidget {
                         }
                         if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
                           try {
-                            for(int i=0;i<order.progresses.length;i++){
-                              if(order.currentPhase == order.progresses[i].phase){
-                                result = await PurchaseOrderRepository().productionProgressUpload(order.code,order.progresses[i].id.toString(),order.progresses[i]);
+                            for(int i=0;i<widget.order.progresses.length;i++){
+                              if(widget.order.currentPhase == widget.order.progresses[i].phase){
+                                result = await PurchaseOrderRepository().productionProgressUpload(widget.order.code
+                                    ,widget.order.progresses[i].id.toString(),widget.order.progresses[i]);
                               }
                             }
                           } catch (e) {
@@ -1169,9 +1201,10 @@ class PurchaseOrderItem extends StatelessWidget {
                   await PurchaseOrderRepository().purchaseOrderBalanceUpdate(model.code , model);
                   if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
                     try {
-                      for(int i=0;i<order.progresses.length;i++){
-                        if(order.currentPhase == order.progresses[i].phase){
-                          result = await PurchaseOrderRepository().productionProgressUpload(order.code,order.progresses[i].id.toString(),order.progresses[i]);
+                      for(int i=0;i<widget.order.progresses.length;i++){
+                        if(widget.order.currentPhase == widget.order.progresses[i].phase){
+                          result = await PurchaseOrderRepository().productionProgressUpload(widget.order.code,
+                              widget.order.progresses[i].id.toString(),widget.order.progresses[i]);
                         }
                       }
                     } catch (e) {
@@ -1210,6 +1243,9 @@ class PurchaseOrderItem extends StatelessWidget {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => false;
 
 
 }

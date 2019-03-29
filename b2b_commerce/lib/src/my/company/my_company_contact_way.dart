@@ -171,6 +171,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                 ),
                 InkWell(
                     child: TextFieldComponent(
+                      style: TextStyle(color: Colors.grey,fontSize: 16,),
                       enabled: isEditing,
                       focusNode: _phoneFocusNode,
                       leadingText: '座机号码',
@@ -190,6 +191,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                     }),
                 InkWell(
                   child: TextFieldComponent(
+                    style: TextStyle(color: Colors.grey,fontSize: 16,),
                     enabled: isEditing,
                     focusNode: _emailFocusNode,
                     leadingText: '邮箱地址',
@@ -209,6 +211,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                 ),
                 InkWell(
                   child: TextFieldComponent(
+                    style: TextStyle(color: Colors.grey,fontSize: 16,),
                     enabled: isEditing,
                     focusNode: _qqFocusNode,
                     leadingText: 'QQ号',
@@ -228,6 +231,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                 ),
                 InkWell(
                   child: TextFieldComponent(
+                    style: TextStyle(color: Colors.grey,fontSize: 16,),
                     enabled: isEditing,
                     focusNode: _wechatFocusNode,
                     leadingText: '微信号',
