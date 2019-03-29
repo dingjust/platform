@@ -7,4 +7,11 @@ class DividerFactory {
       child: const Divider(height: 1.0),
     );
   }
+
+  static Widget buildDivider(double height, {Color color = const Color.fromRGBO(246, 247, 249, 1)}) {
+    return Container(
+      color: color,
+      height: height,
+    );
+  }
 }

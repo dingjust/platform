@@ -7,18 +7,20 @@ class AdvanceIconButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool isHot;
 
-  const AdvanceIconButton(
-      {Key key,
-      @required this.icon,
-      @required this.title,
-      this.onPressed,
-      this.isHot = false})
-      : super(key: key);
+  const AdvanceIconButton({
+    Key key,
+    @required this.icon,
+    @required this.title,
+    this.onPressed,
+    this.isHot = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onPressed, child: isHot ? _buildHot() : _buildNormal());
+      onTap: onPressed,
+      child: isHot ? _buildHot() : _buildNormal(),
+    );
   }
 
   Widget _buildHot() {

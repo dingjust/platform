@@ -91,7 +91,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     MessageBLoC.instance.errorMessageStream.listen((value) {
       final appContext = _navigatorKey.currentState.overlay.context;
       final dialog = AlertDialog(
-        content: Text('${value}'),
+        content: Text('$value'),
       );
       showDialog(context: appContext, builder: (x) => dialog);
     });
@@ -280,8 +280,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
                       onPublish: () => _onPublish(context),
                     )
                   : null,
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
             ),
       ),
       routes: AppRoutes.allRoutes,
@@ -302,7 +301,7 @@ class PublishRequirementButton extends StatelessWidget {
     @required this.onPublish,
   }) : super(key: key);
 
-  final Function onPublish;
+  final VoidCallback onPublish;
 
   @override
   Widget build(BuildContext context) {
