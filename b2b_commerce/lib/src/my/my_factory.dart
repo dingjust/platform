@@ -27,6 +27,7 @@ class MyFactoryPage extends StatefulWidget {
 }
 
 class _MyFactoryPageState extends State<MyFactoryPage> {
+  RequirementOrderModel orderModel = RequirementOrderModel(details: RequirementInfoModel());
   Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
     PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
@@ -85,7 +86,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           children: _widgets,
         ),
       ),
-      floatingActionButton: _buildRequestOrderButton(context),
+      floatingActionButton: Offstage(child: _buildRequestOrderButton(context),offstage: !widget.isFactoryDetail,),
     );
   }
 
@@ -106,7 +107,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => RequirementOrderFrom(),
+            builder: (context) => RequirementOrderFrom(factoryUid: widget.factory.uid,order: orderModel,),
           ),
         );
       },
