@@ -33,7 +33,7 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _appBarHeight = 150.0;
+    final double _appBarHeight = 188.0;
     ScrollController _scrollController = ScrollController();
 
     // 监听滚动变化该表图标颜色, _appBarHeight - kToolbarHeight为顶部标题栏底部与轮播图底部之间高度
@@ -121,7 +121,7 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
             ),
           ),
           Text(
-            '进入蕉衣请优先注册并提交认证资料',
+            '进入钉单请优先注册并提交认证资料',
             style: TextStyle(color: Color.fromRGBO(247, 114, 47, 1)),
           ),
         ],
@@ -176,7 +176,7 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '• 使用蕉衣APP统一管理生产订单;',
+                    '• 使用钉单APP统一管理生产订单;',
                     style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
                   ),
                   Text(

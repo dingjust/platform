@@ -96,17 +96,16 @@ class CategorySelectPageState extends State<CategorySelectPage> {
           elevation: widget.hasNextPage ? 0 : 0.5,
           centerTitle: true,
           title: Text('选择分类'),
-          leading: IconButton(
-              icon: Text(
-                '取消',
-                style: TextStyle(
-                    color: widget.hasNextPage
-                        ? Color.fromRGBO(255, 214, 12, 1)
-                        : Colors.grey),
-              ),
-              onPressed: () {
-                Navigator.pop(context, _beforeMinCategorySelect);
-              }),
+          leading: widget.hasNextPage
+              ? IconButton(
+                  icon: Text(
+                    '取消',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context, _beforeMinCategorySelect);
+                  })
+              : Container(),
           actions: <Widget>[
             widget.hasNextPage
                 ? FlatButton(
@@ -130,7 +129,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                     },
                     child: Text(
                       '下一步',
-                      style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                      style: TextStyle(color: Colors.black),
                     ),
                   )
                 : IconButton(

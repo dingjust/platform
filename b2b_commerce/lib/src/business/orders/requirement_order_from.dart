@@ -41,11 +41,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   void initState() {
     if (widget.order != null) {
       model = widget.order;
-      if(model.attachments==null){
-        model.attachments=[];
+      if (model.attachments == null) {
+        model.attachments = [];
       }
-      if(model.details.pictures==null){
-        model.details.pictures=[];
+      if (model.details.pictures == null) {
+        model.details.pictures = [];
       }
     } else {
       model = RequirementOrderModel(
@@ -85,7 +85,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 child: Center(
                   child: Text(
                     '导入商品',
-                    style: TextStyle(color: Color.fromRGBO(255, 149, 22, 1)),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -125,13 +125,12 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         Container(
           width: MediaQuery.of(context).size.width - 16,
           child: ActionChip(
-            shape: StadiumBorder(side: BorderSide(color: Color(0xffFF9516))),
             labelPadding: EdgeInsets.symmetric(
                 horizontal: MediaQuery.of(context).size.width / 2.8,
                 vertical: 8),
-            backgroundColor: Color(0xffFF9516),
+            backgroundColor: Color.fromRGBO(255, 214, 12, 1),
             label: Text(widget.order != null ? '修改需求' : '确定发布'),
-            labelStyle: TextStyle(color: Colors.white, fontSize: 20),
+            labelStyle: TextStyle(color: Colors.black, fontSize: 20),
             onPressed: () {
               widget.order != null ? onUpdate() : onPublish();
             },
@@ -155,7 +154,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               offstage: widget.product == null,
               child: ProductField(widget.product),
             ),
-            CategoryField(model,product: widget.product,),
+            CategoryField(
+              model,
+              product: widget.product,
+            ),
             new Divider(height: 0),
             MajorCategoryField(model),
             new Divider(height: 0),

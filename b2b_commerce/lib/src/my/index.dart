@@ -288,10 +288,10 @@ class MyHomePage extends StatelessWidget {
     return Container(
       height: 80,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            width: 210,
+            margin: EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
                 Container(
@@ -321,7 +321,6 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           Container(
-            width: 210,
             child: Text(
               '${UserBLoC.instance.currentUser.companyName}',
               style: TextStyle(

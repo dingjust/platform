@@ -25,7 +25,12 @@
         refresh: 'refresh'
       }),
       async onSubmit() {
-        // console.log("submitted data: " + JSON.stringify(this.slotData));
+
+        if (this.compareDate(new Date(), new Date(this.slotData.expectedDeliveryDate))) {
+          this.$message.error('确认交货时间不能小于当前时间');
+
+          return false;
+        }
         const url = this.apis().createQuote();
         const result = await this.$http.post(url, this.slotData);
         if (result['errors']) {

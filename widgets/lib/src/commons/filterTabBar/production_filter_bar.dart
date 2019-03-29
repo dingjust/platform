@@ -12,7 +12,7 @@ class ProductionFilterBar extends StatefulWidget
       this.itemWidth = 75,
       @required this.entries,
       this.unselectedColor = Colors.black54,
-      this.color =const Color.fromRGBO(255,214,12, 1),
+      this.color = Colors.black,
       @required this.streamController,
       @required this.action,
       @required this.leading,
@@ -89,7 +89,6 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                   ProductionBLoC().getData();
                   //stream通知状态更改
                   widget.streamController.add(entry);
-
                 });
               },
               child: Container(
@@ -122,7 +121,7 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                                     width: widget.indicatorWidth,
                                     margin: EdgeInsets.only(top: 3),
                                     decoration: BoxDecoration(
-                                        color: widget.color,
+                                        color: Color.fromRGBO(255, 214, 12, 1),
                                         borderRadius: BorderRadius.circular(2)),
                                   )
                                 : Container(

@@ -101,7 +101,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
   List<GridItem> _gridItemList() {
     return [
       GridItem(
-          title: '当季快反',
+          title: '快反工厂',
           onPressed: () async {
             // 加载条
             showDialog(

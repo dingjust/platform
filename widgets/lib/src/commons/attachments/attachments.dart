@@ -170,6 +170,7 @@ class _AttachmentsState extends State<Attachments> {
   //图片预览
   void onPreview(BuildContext context, String url) {
     showDialog(
+      barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
         return Container(

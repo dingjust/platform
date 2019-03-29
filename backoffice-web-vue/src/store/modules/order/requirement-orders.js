@@ -87,7 +87,7 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      code: state.keyword,
+      keyword: state.keyword,
       statuses: state.statuses
     }, {
       page: state.currentPageNumber,
