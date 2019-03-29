@@ -267,49 +267,60 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Text(
-                        pageItem.belongTo.name,
-                        style: TextStyle(fontSize: 18),
+                    Expanded(
+                      child: Container(
+                        child: Text(
+                          pageItem.belongTo.name,
+                          style: TextStyle(fontSize: 18),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
-                    Stars(
-                      starLevel: pageItem.belongTo.starLevel ?? 1,
-                      highlightOnly: false,
-                    )
+                    Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Stars(
+                              starLevel: pageItem.belongTo.starLevel ?? 1,
+                              highlightOnly: false,
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Colors.grey,
+                            )
+                          ],
+                        ))
                   ],
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    '${pageItem.belongTo.contactAddress?.city?.name} ${pageItem.belongTo.contactAddress?.cityDistrict?.name}',
-                    style: TextStyle(color: Colors.grey),
+                  Container(
+                    child: Row(
+                      children: <Widget>[
+                        Text('历史接单'),
+                        Text(
+                          pageItem.belongTo.historyOrdersCount.toString(),
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text('单')
+                      ],
+                    ),
                   ),
-                  Icon(
-                    Icons.chevron_right,
-                    size: 22,
-                    color: Colors.grey,
-                  )
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Text('历史接单'),
-                  Text(
-                    pageItem.belongTo.historyOrdersCount.toString(),
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  Text('单，报价成功率'),
-                  Text(
-                    (pageItem.belongTo.orderedSuccessRate ?? 0 * 100)
-                            .round()
-                            .toString() +
-                        '%',
-                    style: TextStyle(color: Colors.red),
+                  Container(
+                    margin: EdgeInsets.only(right: 20),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          '${pageItem.belongTo.contactAddress?.city?.name} ${pageItem.belongTo.contactAddress?.cityDistrict?.name}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),

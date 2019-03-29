@@ -25,7 +25,7 @@
     "bootstrap": "4.1.0",
     "bootstrap-vue": "2.0.0-rc.1",
     "chart.js": "^2.7.1",
-    "element-ui": "^2.4.5",
+    "element-ui": "^2.7.0",
     "font-awesome": "^4.7.0",
     "simple-line-icons": "^2.4.1",
     "style-loader": "^0.22.0",

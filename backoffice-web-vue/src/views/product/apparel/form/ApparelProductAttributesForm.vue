@@ -16,7 +16,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="面料" prop="fabricComposition">
-            <el-select v-model="slotData.attributes.fabricComposition" class="w-100" placeholder="请选择">
+            <el-select v-model="slotData.attributes.fabricCompositions" class="w-100" multiple placeholder="请选择">
               <el-option
                 v-for="item in fabricCompositions"
                 :key="item.code"

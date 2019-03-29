@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
 import 'package:b2b_commerce/src/business/supplier/provider/suppliers_provider.dart';
-import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';

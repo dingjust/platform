@@ -33,7 +33,7 @@ const state = {
     sizes: [],
     attributes: {
       styles: [],
-      fabricComposition: '',
+      fabricCompositions: [],
       editionType: '',
       pattern: '',
       sleeveType: '',
@@ -91,6 +91,7 @@ const actions = {
     }
   },
   async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
+    commit('url', url);
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
@@ -112,7 +113,7 @@ const actions = {
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {url: state.url, keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 
