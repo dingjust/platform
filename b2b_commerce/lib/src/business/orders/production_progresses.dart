@@ -45,20 +45,20 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         centerTitle: true,
         elevation: 0.5,
         title: Text('生产进度明细'),
-        actions: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: Center(
-              child: Text(
-                '${ProductionProgressPhaseLocalizedMap[order.currentPhase]}',
-                style: TextStyle(
-                  color: Color(0xFFFFD600),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-        ],
+//        actions: <Widget>[
+//          Container(
+//            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+//            child: Center(
+//              child: Text(
+//                '${ProductionProgressPhaseLocalizedMap[order.currentPhase]}',
+//                style: TextStyle(
+//                  color: Color(0xFFFFD600),
+//                  fontWeight: FontWeight.w500,
+//                ),
+//              ),
+//            ),
+//          ),
+//        ],
       ),
       body: Container(
         margin: EdgeInsets.only(bottom: 10),
@@ -111,7 +111,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color: sequence < _index ? Color(0xFFFFD600) : Colors.black45,
+            color: sequence == _index ? Color(0xFFFFD600) : Colors.black45,
           ),
         ),
         Positioned(
@@ -126,7 +126,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               width: 16.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: sequence < _index ? Color(0xFFFFD600) : Colors.black
+                  color: sequence == _index ? Color(0xFFFFD600) : Colors.black
               ),
             ),
           ),
@@ -150,7 +150,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   child: Text('${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index ? '（当前进行中）':''}' ,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: sequence < _index ? Color(0xFFFFD600) : Colors.black54,
+                          color: sequence == _index ? Color(0xFFFFD600) : Colors.black54,
                           fontSize: 18)
                   ),
                 ),

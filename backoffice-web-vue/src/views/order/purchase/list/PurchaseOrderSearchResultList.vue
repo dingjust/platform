@@ -14,8 +14,17 @@
           <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工厂" prop="belongTo.name"></el-table-column>
-      <el-table-column label="订单生成时间" prop="creationtime">
+      <el-table-column label="品牌" v-if="!isBrand()" prop="belongTo.name">
+        <template slot-scope="scope">
+          <span v-if="scope.row.purchaser">{{scope.row.purchaser.name}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="工厂" v-if="!isFactory()" prop="belongTo.name">
+        <template slot-scope="scope">
+          <span v-if="scope.row.belongTo">{{scope.row.belongTo.name}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="订单生成时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>

@@ -899,7 +899,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                '填写',
+                                '${userType=='brand'? '':'填写'}',
                                 style: TextStyle(
                                   color: Colors.grey,
                                 ),

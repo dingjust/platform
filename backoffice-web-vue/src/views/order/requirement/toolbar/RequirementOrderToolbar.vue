@@ -93,7 +93,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters,mapMutations} = createNamespacedHelpers('RequirementOrdersModule');
+  const {mapMutations} = createNamespacedHelpers('RequirementOrdersModule');
 
   export default {
     name: 'RequirementOrderToolbar',
