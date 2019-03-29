@@ -1,6 +1,8 @@
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class FactoryItem extends StatelessWidget {
@@ -22,19 +24,23 @@ class FactoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async{
+        //获取该工厂的现款商品
+        ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
+          'factory':model.uid,
+        }, {'size': 3});
+
         //TODO 工厂跳转
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => SuppliersDetail(
-        //           supplierModel: SupplierModel(
-        //             factory: model,
-        //           ),
-        //           isSupplier: false,
-        //         ),
-        //   ),
-        // );
+         Navigator.push(
+           context,
+           MaterialPageRoute(
+             builder: (context) => MyFactoryPage(
+                   model,
+                  isFactoryDetail:true,
+                  products: productsResponse.content,
+                 ),
+           ),
+         );
       },
       child: Container(
         color: Colors.white,
