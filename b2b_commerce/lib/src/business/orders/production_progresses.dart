@@ -21,11 +21,13 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   PurchaseOrderModel order;
   String phase;
   String remarks;
+  DateTime nowTime;
 
   _ProductionProgressesPageState({this.order});
 
   @override
   void initState() {
+    nowTime = DateTime.now();
     final bloc = BLoCProvider.of<UserBLoC>(context);
     if(bloc.isBrandUser){
       userType = 'brand';
@@ -197,8 +199,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => PicturePickPreviewWidget(
                         medias: progress.medias,
-                        isUpload: userType != null && userType == 'factory'
-                            && (sequence >= _index && phase == currentPhase) ? true : false,
+                        isUpload: userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ? true : false,
                       ))
                   ).then((value){
                     if(value != null){
@@ -226,7 +227,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     borderRadius:
                     BorderRadius.all(Radius.circular(20))),
                 onPressed: () {
-                  if(phase == currentPhase && (progress.phase == ProductionProgressPhase.INSPECTION) && order.salesApplication == SalesApplication.ONLINE){
+                  if((sequence > _index || phase == currentPhase) && (progress.phase == ProductionProgressPhase.INSPECTION) && order.salesApplication == SalesApplication.ONLINE){
                     _showBalanceDialog(context, order);
                   }else{
                     _showTipsDialog(progress);
@@ -249,7 +250,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 child: Text('预计完成时间',
                     style: TextStyle(fontWeight: FontWeight.w500)),
                 onTap: () {
-                  userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
+                  userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
                   _showDatePicker(progress) : null;
                 }),
           ),
@@ -263,7 +264,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     style: TextStyle(fontWeight: FontWeight.w500)),
               ),
               onTap: () {
-                userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
+                userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
                 _showDatePicker(progress) : null;
               }),
           Align(
@@ -271,7 +272,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             child: IconButton(
                 icon: Icon(Icons.date_range),
                 onPressed: () {
-                  userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
+                  userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
                   _showDatePicker(progress) : null;
                 }
             ),
@@ -313,7 +314,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       child: Text('数量',
                           style: TextStyle(fontWeight: FontWeight.w500)),
                       onTap: () {
-                        userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
+                        userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
                         _showDialog(progress,'数量'): null;
                       }),
                 ),
@@ -324,7 +325,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           style: TextStyle(fontWeight: FontWeight.w500)),
                     ),
                     onTap: () {
-                      userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
+                      userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
                       _showDialog(progress,'数量')
                           : null;
                     }
@@ -334,7 +335,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   child: IconButton(
                       icon: Icon(Icons.keyboard_arrow_right),
                       onPressed: (){
-                        userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
+                        userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
                         _showDialog(progress,'数量') : null;
                       }
                   ),
@@ -383,7 +384,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 ])
         ),
         onTap: () async {
-          userType != null && userType == 'factory' && (sequence >= _index && phase == currentPhase) ?
+          userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
           _showRemarksDialog(progress,'备注',remarks) : null;
         },
       )
@@ -395,7 +396,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: new DateTime(1990),
+        firstDate: nowTime,
         lastDate: new DateTime(2999)
     );
 
