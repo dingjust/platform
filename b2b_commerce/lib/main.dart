@@ -1,6 +1,3 @@
-import 'package:b2b_commerce/src/client/brand_client.dart';
-import 'package:b2b_commerce/src/client/factor_client.dart';
-import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +6,9 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'src/common/app_bloc.dart';
+import 'src/client/brand_client.dart';
+import 'src/client/factory_client.dart';
+import 'src/home/account/login.dart';
 
 void main() async {
   debugInstrumentationEnabled = true;
@@ -36,19 +36,19 @@ class _MyAppState extends State<MyApp> {
           initialData: UserBLoC.instance.currentUser,
           stream: UserBLoC.instance.stream,
           builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-            //品牌
-            if (snapshot.data.type == UserType.BRAND) {
-              return BrandClient();
-            } else if (snapshot.data.type == UserType.FACTORY) {
-              //TODO 工厂
-              return FactoryClient();
-            }
-            //TODO:工厂
-            //未登陆
-            else {
+            // 未登陆
+            if (snapshot.data.type == UserType.ANONYMOUS) {
               return MaterialApp(
                 home: B2BLoginPage(),
               );
+            } else {
+              if (snapshot.data.type == UserType.BRAND) {
+                // 品牌
+                return BrandClient();
+              } else if (snapshot.data.type == UserType.FACTORY) {
+                // 工厂
+                return FactoryClient();
+              }
             }
           }),
     );

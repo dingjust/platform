@@ -44,8 +44,7 @@ class UserBLoC extends BLoCBase {
 
   Stream<UserModel> get stream => _controller.stream;
 
-  StreamController _loginResultController =
-      StreamController<DioError>.broadcast();
+  StreamController _loginResultController = StreamController<DioError>.broadcast();
 
   Stream<DioError> get loginStream => _loginResultController.stream;
 
@@ -53,8 +52,7 @@ class UserBLoC extends BLoCBase {
     // // login service
     Response loginResponse;
     try {
-      loginResponse = await http$
-          .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+      loginResponse = await http$.post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
         'username': username,
         'password': password,
         'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
@@ -88,8 +86,7 @@ class UserBLoC extends BLoCBase {
 
       //  记录登陆用户信息
       if (remember) {
-        LocalStorage.save(
-            GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
+        LocalStorage.save(GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
         LocalStorage.save(GlobalConfigs.USER_KEY, username);
       }
       _controller.sink.add(_user);
@@ -111,19 +108,17 @@ class UserBLoC extends BLoCBase {
   //检测本地用户记录
   Future<void> checkLocalUser() async {
     // 检测本地是否有refresh_token
-    String local_refresh_token =
-        await LocalStorage.get(GlobalConfigs.REFRESH_TOKEN_KEY);
+    String localRefreshToken = await LocalStorage.get(GlobalConfigs.REFRESH_TOKEN_KEY);
 
-    if (local_refresh_token != null && local_refresh_token != '') {
+    if (localRefreshToken != null && localRefreshToken != '') {
       //调用刷新token接口
       Response loginResponse;
       try {
-        loginResponse = await http$.post(
-            HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+        loginResponse = await http$.post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
           'grant_type': GlobalConfigs.GRANT_TYPE_REFRESH_TOKEN,
           'client_id': 'asm',
           'client_secret': 'password',
-          'refresh_token': local_refresh_token
+          'refresh_token': localRefreshToken
         }));
       } on DioError catch (e) {
         print(e);
@@ -149,8 +144,7 @@ class UserBLoC extends BLoCBase {
         }
 
         //  记录refresh_token
-        LocalStorage.save(
-            GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
+        LocalStorage.save(GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
       }
     }
   }
@@ -158,5 +152,6 @@ class UserBLoC extends BLoCBase {
   @override
   dispose() {
     _controller.close();
+    _loginResultController.close();
   }
 }
