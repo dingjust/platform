@@ -90,7 +90,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                   child: Icon(
                     B2BIcons.noPicture,
                     color: Color.fromRGBO(200, 200, 200, 1),
-                    size: 25,
+                    size: 60
                   ),
                 ),
           Expanded(
@@ -377,12 +377,6 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                           ),
                         ),
                       ),
-                      Text(
-                        '拨打',
-                        style: TextStyle(
-                            color: Color.fromRGBO(86, 194, 117, 1),
-                            fontSize: 16),
-                      ),
                     ],
                   )),
             ],
@@ -563,18 +557,21 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       if (widget.model.status == ProofingStatus.PENDING_PAYMENT) {
         buttons = [
-          Container(),
-          FlatButton(
-              onPressed: onUpdate,
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
-                  borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '修改订单',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
-              )),
+          Container(
+            height: 40,
+            width: 250,
+            child: FlatButton(
+                onPressed: onUpdate,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
+                    borderRadius: BorderRadius.circular(20)),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '修改订单',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                )),
+          )
         ];
       } else if (widget.model.status == ProofingStatus.PENDING_DELIVERY) {
         buttons = <Widget>[

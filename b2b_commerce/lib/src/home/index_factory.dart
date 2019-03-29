@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/_shared/widgets/broadcast.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 
@@ -25,15 +26,13 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
   ///图标颜色
   Color iconColor = white;
 
-  TextEditingController _uniqueCodeTextController = TextEditingController();
-
   void initState() {
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final double _appBarHeight = 150.0;
+    final double _appBarHeight = 188.0;
     ScrollController _scrollController = ScrollController();
 
     // 监听滚动变化该表图标颜色, _appBarHeight - kToolbarHeight为顶部标题栏底部与轮播图底部之间高度
@@ -67,22 +66,6 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
                 height: 35,
               ),
               brightness: Brightness.dark,
-              actions: <Widget>[
-                // IconButton(
-                //   padding: EdgeInsets.only(right: 20),
-                //   icon: const Icon(B2BIcons.message),
-                //   color: iconColor,
-                //   tooltip: 'message',
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => MyClientServicesPage(),
-                //       ),
-                //     );
-                //   },
-                // ),
-              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   fit: StackFit.expand,
@@ -93,38 +76,16 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
               ),
             ),
             SliverList(
-                delegate: SliverChildListDelegate(<Widget>[RequirementPool(), _buildBroadcast(), _buildManagement()])),
+              delegate: SliverChildListDelegate(
+                <Widget>[
+                  RequirementPool(),
+                  BroadcastFactory.buildBroadcast('进入钉单请优先注册并提交认证资料'),
+                  _buildManagement(),
+                ],
+              ),
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildSpacing(double height) {
-    return Container(
-      color: Color.fromRGBO(246, 247, 249, 1),
-      height: height,
-    );
-  }
-
-  Widget _buildBroadcast() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      color: Color.fromRGBO(254, 252, 235, 1),
-      child: Row(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            child: Icon(
-              Icons.volume_up,
-              color: Color.fromRGBO(247, 114, 47, 1),
-            ),
-          ),
-          Text(
-            '进入蕉衣请优先注册并提交认证资料',
-            style: TextStyle(color: Color.fromRGBO(247, 114, 47, 1)),
-          ),
-        ],
       ),
     );
   }
@@ -176,7 +137,7 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '• 使用蕉衣APP统一管理生产订单;',
+                    '• 使用钉单APP统一管理生产订单;',
                     style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
                   ),
                   Text(

@@ -13,6 +13,9 @@ class HomeBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
       url: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/banner.png',
+    ),
+    MediaModel(
+      url: 'https://dingjust.oss-cn-shenzhen.aliyuncs.com/banner2.png',
     )
   ];
 
@@ -29,20 +32,24 @@ class HomeSearchInputBox extends StatelessWidget {
   final double height;
   final String tips;
 
-  const HomeSearchInputBox({Key key, this.width = 400, this.height = 30, this.tips}) : super(key: key);
+  const HomeSearchInputBox(
+      {Key key, this.width = 400, this.height = 30, this.tips})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
+      onTap: () => showSearch(
+          context: context, delegate: ApparelProductSearchDelegate()),
       child: Container(
         width: width,
         height: height,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey[300], width: 0.5)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.grey[300], width: 0.5),
+        ),
         child: Row(
           children: <Widget>[
             Icon(
@@ -56,122 +63,6 @@ class HomeSearchInputBox extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-///首页衣报送信息Item项
-class HomeInfoItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final String end;
-
-  const HomeInfoItem({Key key, this.label, this.value, this.end}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-          text: label,
-          style: TextStyle(
-            fontSize: 13,
-            color: Color.fromRGBO(32, 32, 32, 1),
-          ),
-          children: <TextSpan>[
-            TextSpan(text: value, style: TextStyle(fontSize: 13, color: Colors.red, fontWeight: FontWeight.bold)),
-            TextSpan(text: '$end')
-          ]),
-    );
-  }
-}
-
-///首页Tab部分
-class HomeTabSection extends StatelessWidget {
-  final double height;
-
-  const HomeTabSection({Key key, @required this.height}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    List<AdvanceIconButton> iconList = <AdvanceIconButton>[
-      AdvanceIconButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => FindFactoryByMap()),
-          );
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) => ScreenConditions(
-          //           route: '地图找厂',
-          //         )));
-        },
-        title: '地图找厂',
-        isHot: true,
-        icon: Icon(
-          B2BIcons.factory_map,
-          color: Color.fromRGBO(97, 164, 251, 1.0),
-          size: 30,
-        ),
-      ),
-      AdvanceIconButton(
-        onPressed: () async {
-          List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
-
-          Navigator.push(context, MaterialPageRoute(builder: (context) => IndustrialClusterPage(labels)));
-        },
-        title: '产业集群',
-        icon: Icon(
-          B2BIcons.industrial_cluster,
-          color: Color.fromRGBO(5, 202, 150, 1.0),
-          size: 30,
-        ),
-      ),
-      AdvanceIconButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => FactoryPage(
-                    FactoryCondition(starLevel: 0, adeptAtCategory: []),
-                    route: '品牌工厂',
-                  )));
-        },
-        title: '品牌工厂',
-        icon: Icon(
-          B2BIcons.factory_brand,
-          color: Color.fromRGBO(255, 189, 82, 1.0),
-          size: 30,
-        ),
-      ),
-      AdvanceIconButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FactoryPage(
-                      FactoryCondition(starLevel: 0, adeptAtCategory: []),
-                      route: '全部工厂',
-                    )),
-          );
-        },
-        title: '全部工厂',
-        icon: Icon(
-          B2BIcons.factory_all,
-          color: Color.fromRGBO(148, 161, 246, 1.0),
-          size: 30,
-        ),
-      )
-    ];
-
-    return Container(
-      height: height,
-      color: Colors.white,
-      child: Container(
-        color: Colors.white,
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: iconList),
       ),
     );
   }

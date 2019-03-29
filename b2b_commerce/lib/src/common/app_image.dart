@@ -294,4 +294,13 @@ class B2BImage {
       height: height,
     );
   }
+
+  static Image company_introduce({double width, double height}) {
+    return Image.asset(
+      'temp/my/company_introduce.png',
+      package: _package,
+      width: width,
+      height: height,
+    );
+  }
 }

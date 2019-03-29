@@ -76,6 +76,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(10),
             child: TextFieldComponent(
+              textAlign: TextAlign.left,
               focusNode: _factoryFocusNode,
               controller: _factoryController,
               autofocus: true,
@@ -92,6 +93,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(10),
             child: TextFieldComponent(
+              textAlign: TextAlign.left,
               focusNode: _nameFocusNode,
               controller: _nameController,
               leadingText: '联系人名',
@@ -107,6 +109,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(10),
             child: TextFieldComponent(
+              textAlign: TextAlign.left,
               focusNode: _phoneFocusNode,
               controller: _phoneController,
               leadingText: '联系电话',

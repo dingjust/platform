@@ -4,38 +4,66 @@ import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/home/factory/response/factory_response.dart';
+import 'package:services/src/supplier/brands_response.dart';
 
 class SuppliersBloc {
   SuppliersBloc();
   FactoriesResponse factoriesResponse;
-  List<FactoryModel> _list = new List();
+  BrandsResponse brandsResponse;
 
-  var _controller = StreamController<List<FactoryModel>>.broadcast();
+  List<FactoryModel> _factories = new List();
+  List<BrandModel> _brands = new List();
 
-  Stream<List<FactoryModel>> get stream => _controller.stream;
+  var _factoryController = StreamController<List<FactoryModel>>.broadcast();
+  var _brandController = StreamController<List<BrandModel>>.broadcast();
 
-  filter() async {
-    Response response = await http$.post(Apis.factories, data:{}, queryParameters: {});
-    factoriesResponse = FactoriesResponse.fromJson(response.data);
-    _list.clear();
-    _list.addAll(factoriesResponse.content);
-    _controller.sink.add(_list);
+  Stream<List<FactoryModel>> get factoryStream => _factoryController.stream;
+  Stream<List<BrandModel>> get brandStream => _brandController.stream;
+
+  filterfactories() async {
+    factoriesResponse = await UserRepositoryImpl().factorySuppliers({});
+    _factories.clear();
+    _factories.addAll(factoriesResponse.content);
+    _factoryController.sink.add(_factories);
   }
 
-  loadingMore() async {
+  filterbrands() async {
+    brandsResponse = await UserRepositoryImpl().brandSuppliers({});
+    _brands.clear();
+    _brands.addAll(brandsResponse.content);
+    _brandController.sink.add(_brands);
+  }
+
+  loadingMoreByFactories() async {
     //模拟数据到底
     if (factoriesResponse.number < factoriesResponse.totalPages - 1) {
-      Response response = await http$.post(Apis.factories, data:{}, queryParameters: {
+      Response response = await http$.get(Apis.factorySuppliers, data:{
         'page':factoriesResponse.number + 1,
-      });
+      }, );
       factoriesResponse = FactoriesResponse.fromJson(response.data);
-      _list.addAll(factoriesResponse.content);
+      _factories.addAll(factoriesResponse.content);
     } else {
       //通知显示已经到底部
       _bottomController.sink.add(true);
     }
     _loadingController.sink.add(false);
-    _controller.sink.add(this._list);
+    _factoryController.sink.add(this._factories);
+  }
+
+  loadingMoreByBrands() async {
+    //模拟数据到底
+    if (brandsResponse.number < brandsResponse.totalPages - 1) {
+      Response response = await http$.get(Apis.brandsSuppliers, data:{
+        'page':brandsResponse.number + 1,
+      },);
+      brandsResponse = BrandsResponse.fromJson(response.data);
+      _brands.addAll(brandsResponse.content);
+    } else {
+      //通知显示已经到底部
+      _bottomController.sink.add(true);
+    }
+    _loadingController.sink.add(false);
+    _brandController.sink.add(this._brands);
   }
 
   //页面控制
@@ -77,6 +105,7 @@ class SuppliersBloc {
   }
 
   dispose() {
-    _controller.close();
+    _factoryController.close();
+    _brandController.close();
   }
 }

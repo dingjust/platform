@@ -22,7 +22,7 @@ class QuoteItem extends StatefulWidget {
   QuoteItem(
       {Key key,
       this.model,
-        this.isSupplier = false,
+      this.isSupplier = false,
       @required this.onRefresh,
       @required this.pageContext})
       : super(key: key);
@@ -158,7 +158,7 @@ class _QuoteItemState extends State<QuoteItem> {
 //                  style: TextStyle(fontSize: 15),
 //                ),
                 Text(
-                  '报价时间：${DateFormatUtil.format(widget.model.creationTime)}',
+                  '${DateFormatUtil.format(widget.model.creationTime)}',
                   style: TextStyle(fontSize: 15),
                 ),
               ],
@@ -395,7 +395,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   style: TextStyle(fontSize: 15),
                 ),
                 Text(
-                  '报价时间：${DateFormatUtil.format(widget.model.creationTime)}',
+                  '${DateFormatUtil.format(widget.model.creationTime)}',
                   style: TextStyle(fontSize: 15),
                 ),
               ],
@@ -433,7 +433,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   child: Icon(
                     B2BIcons.noPicture,
                     color: Color.fromRGBO(200, 200, 200, 1),
-                    size: 25,
+                    size: 60
                   ),
                 ),
           Expanded(

@@ -1,4 +1,9 @@
+import 'package:b2b_commerce/src/_shared/widgets/broadcast.dart';
+import 'package:b2b_commerce/src/common/find_factory_by_map.dart';
+import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'package:b2b_commerce/src/home/factory/industrial_cluster_factory.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -25,8 +30,6 @@ class _BrandHomePageState extends State<BrandHomePage> {
 
   ///图标颜色
   Color iconColor = white;
-
-  TextEditingController _uniqueCodeTextController = TextEditingController();
 
   void initState() {
     super.initState();
@@ -68,22 +71,6 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 height: 35,
               ),
               brightness: Brightness.dark,
-              actions: <Widget>[
-                // IconButton(
-                //   padding: EdgeInsets.only(right: 20),
-                //   icon: const Icon(B2BIcons.message),
-                //   color: iconColor,
-                //   tooltip: 'message',
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => MyClientServicesPage(),
-                //       ),
-                //     );
-                //   },
-                // ),
-              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   fit: StackFit.expand,
@@ -94,109 +81,176 @@ class _BrandHomePageState extends State<BrandHomePage> {
               ),
             ),
             SliverList(
-                delegate: SliverChildListDelegate(<Widget>[
-              EasyGrid(
-                height: 90,
-                dataList: _gridItemList(),
-              ),
-              HomeTabSection(
-                height: 100,
-              ),
-              _buildBroadcast(),
-              FastPublishRequirement(),
-              _buildSpacing(15),
-              _buildTrackingProgress(),
-              _buildSpacing(40),
-            ])),
+              delegate: SliverChildListDelegate(<Widget>[
+                FirstMenuSection(),
+                SecondMenuSection(),
+                BroadcastSection(),
+                FastPublishRequirement(),
+                DividerFactory.buildDivider(15),
+                TrackingProgressSection(),
+                DividerFactory.buildDivider(40),
+              ]),
+            ),
           ],
         ),
       ),
     );
   }
+}
 
-  List<GridItem> _gridItemList() {
-    return [
+/// 首页Tab部分1
+class FirstMenuSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final List<GridItem> items = <GridItem>[
       GridItem(
-          title: '当季快反',
+          title: '快反工厂',
           onPressed: () async {
-            //加载条
+            // 加载条
             showDialog(
-                context: context,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ));
-            await ProductRepositoryImpl().cascadedCategories().then((categorys) {
+              context: context,
+              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+            );
+            await ProductRepositoryImpl().cascadedCategories().then((categories) {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).push(
+                MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: [],
-                        categorys: categorys,
+                        categorys: categories,
                         categoryActionType: CategoryActionType.TO_FACTORIES,
-                      )));
+                      ),
+                ),
+              );
             });
           },
-          pic: B2BImage.fast_factory(width: 60, height: 80)),
+          icon: B2BImage.fast_factory(width: 60, height: 80)),
       GridItem(
           title: '看款下单',
           onPressed: () async {
-            //加载条
+            // 加载条
             showDialog(
-                context: context,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ));
-            await ProductRepositoryImpl().cascadedCategories().then((categorys) {
+              context: context,
+              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+            );
+            await ProductRepositoryImpl().cascadedCategories().then((categories) {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).push(
+                MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: [],
-                        categorys: categorys,
+                        categorys: categories,
                         categoryActionType: CategoryActionType.TO_PRODUCTS,
-                      )));
+                      ),
+                ),
+              );
             });
           },
-          pic: B2BImage.order(width: 60, height: 80)),
-      // GridItem(
-      //     title: '空闲产能',
-      //     onPressed: () {},
-      //     pic: B2BImage.idle_capacity(width: 60, height: 80)),
-      // GridItem(
-      //     title: '电商找厂',
-      //     onPressed: () {},
-      //     pic: B2BImage.find_factory(width: 60, height: 60)),
+          icon: B2BImage.order(width: 60, height: 80)),
     ];
-  }
 
-  Widget _buildSpacing(double height) {
-    return Container(
-      color: Color.fromRGBO(246, 247, 249, 1),
-      height: height,
-    );
+    return EasyGrid(items: items);
   }
+}
 
-  Widget _buildBroadcast() {
+/// 首页Tab部分2
+class SecondMenuSection extends StatelessWidget {
+  const SecondMenuSection({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> iconList = <Widget>[
+      AdvanceIconButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FindFactoryByMap()),
+          );
+        },
+        title: '地图找厂',
+        isHot: true,
+        icon: Icon(
+          B2BIcons.factory_map,
+          color: Color.fromRGBO(97, 164, 251, 1.0),
+          size: 30,
+        ),
+      ),
+      AdvanceIconButton(
+        onPressed: () async {
+          List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
+
+          Navigator.push(context, MaterialPageRoute(builder: (context) => IndustrialClusterPage(labels)));
+        },
+        title: '产业集群',
+        icon: Icon(
+          B2BIcons.industrial_cluster,
+          color: Color.fromRGBO(5, 202, 150, 1.0),
+          size: 30,
+        ),
+      ),
+      AdvanceIconButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => FactoryPage(
+                    FactoryCondition(starLevel: 0, adeptAtCategory: []),
+                    route: '品牌工厂',
+                  )));
+        },
+        title: '品牌工厂',
+        icon: Icon(
+          B2BIcons.factory_brand,
+          color: Color.fromRGBO(255, 189, 82, 1.0),
+          size: 30,
+        ),
+      ),
+      AdvanceIconButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FactoryPage(
+                      FactoryCondition(starLevel: 0, adeptAtCategory: []),
+                      route: '全部工厂',
+                    )),
+          );
+        },
+        title: '全部工厂',
+        icon: Icon(
+          B2BIcons.factory_all,
+          color: Color.fromRGBO(148, 161, 246, 1.0),
+          size: 30,
+        ),
+      )
+    ];
+
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      color: Color.fromRGBO(254, 252, 235, 1),
-      child: Row(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            child: Icon(
-              Icons.volume_up,
-              color: Color.fromRGBO(247, 114, 47, 1),
-            ),
-          ),
-          Text(
-            '进入蕉衣请优先注册并提交认证资料',
-            style: TextStyle(color: Color.fromRGBO(247, 114, 47, 1)),
-          ),
-        ],
+      height: 100,
+      color: Colors.white,
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: iconList,
+        ),
       ),
     );
   }
+}
 
-  Widget _buildTrackingProgress() {
+/// 广播部分
+class BroadcastSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BroadcastFactory.buildBroadcast('进入钉单请优先注册并提交认证资料');
+  }
+}
+
+/// 跟踪进度版块
+class TrackingProgressSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
@@ -207,7 +261,11 @@ class _BrandHomePageState extends State<BrandHomePage> {
             children: <Widget>[
               Text(
                 '跟踪进度',
-                style: TextStyle(fontSize: 18, color: Color.fromRGBO(100, 100, 100, 1), fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color.fromRGBO(100, 100, 100, 1),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               Text(
                 '线下订单',

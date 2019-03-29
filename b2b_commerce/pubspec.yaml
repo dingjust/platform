@@ -50,6 +50,7 @@ dependencies:
   #  flutter_location_picker: 0.0.6
   city_pickers: 0.1.12
   autocomplete_textfield: ^1.6.4
+  flutter_spinkit: "^2.1.0"
 
 dev_dependencies:
   flutter_test:
@@ -123,6 +124,7 @@ flutter:
     - packages/assets/temp/business/product_manage_factory.png
     - packages/assets/temp/business/production_order_factory.png
     - packages/assets/temp/business/quote_manage_factory.png
+    - packages/assets/temp/my/company_introduce.png
 
   fonts:
     - family: b2bIcons

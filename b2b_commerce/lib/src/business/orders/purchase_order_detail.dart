@@ -53,6 +53,7 @@ class PurchaseOrderDetailPage extends StatefulWidget {
 
 class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   TextEditingController dialogText;
+  FocusNode _dialogFocusNode;
   List<ApparelSizeVariantProductEntry> mockData = new List();
   DateTime _blDate;
   bool isShowButton = false;
@@ -203,7 +204,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             child: Icon(
               B2BIcons.noPicture,
               color: Color.fromRGBO(200, 200, 200, 1),
-              size: 25,
+              size: 60
             ),
           ),
           Expanded(
@@ -355,17 +356,35 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           Divider(
             height: 1,
           ),
-          ListTile(
-            title: Text('加工类型'),
-            trailing: order.machiningType == null ? Container():Text(MachiningTypeLocalizedMap[order.machiningType]),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Text('加工类型'),
+                ),
+                Container(
+                  child: order.machiningType == null ? Container():Text(MachiningTypeLocalizedMap[order.machiningType]),
+                ),
+              ],
+            ),
           ),
           Divider(
             height: 1,
           ),
-          ListTile(
-            title: Text('是否开具发票'),
-            trailing: order.invoiceNeeded == null ? Container():Text(order.invoiceNeeded == true ? '是' : '否'),
-          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Text('是否开具发票'),
+                ),
+                Container(
+                  child: order.invoiceNeeded == null ? Container():Text(order.invoiceNeeded == true ? '是' : '否'),
+                ),
+              ],
+            ),
+          )
         ],
       ),
       decoration: BoxDecoration(
@@ -384,8 +403,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           Row(
             children: <Widget>[
               Container(
-                width: 100,
-                height: 100,
+                margin: EdgeInsets.all(10),
+                width: 80,
+                height: 80,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
@@ -394,14 +414,45 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         'temp/picture.png',
                         package: "assets",
                       ):
-                      NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.purchaser.profilePicture}'),
+                      NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.purchaser.profilePicture.url}'),
                       fit: BoxFit.cover,
                     )),
               ),
-              Text(
-                '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller : order.purchaser.name}',
-                textScaleFactor: 1.3,
-              ),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller : order.purchaser.name}',
+                        textScaleFactor: 1.3,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 5),
+                        color: Color.fromRGBO(254, 252, 235,1),
+                      child: order.purchaser.approvalStatus == ArticleApprovalStatus.approved ?
+                      Text(
+                          '  已认证  ',
+                          style: TextStyle(
+                            color:
+                            Color.fromRGBO(255, 133, 148, 1),
+                          )
+                      )
+                          :
+                      Text(
+                        '  未认证  ',
+                        style: TextStyle(
+                          color: Color.
+                          fromRGBO(255, 133, 148, 1)
+                          ,
+                        ),
+                      )
+                    )
+                  ],
+                )
+              )
             ],
           ),
           Divider(
@@ -638,7 +689,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildProgressTimeLine(BuildContext context,
       ProductionProgressModel productionProgress, bool isCurrentStatus) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.0),
       width: double.infinity,
       child: Column(
@@ -681,8 +731,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               GestureDetector(
                 child: Container(
                   margin: EdgeInsets.only(right: 15),
-                  width: 100,
-                  height: 100,
+                  width: 80,
+                  height: 80,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
@@ -734,28 +784,31 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 }),
           ),
           GestureDetector(
-              child:Align(
-                alignment: Alignment.centerRight,
-                child:
-                progress.estimatedDate == null? Container():
-                Text('${DateFormatUtil.formatYMD(
-                    progress.estimatedDate)}',
-                    style: TextStyle(fontWeight: FontWeight.w500)),
+              child:Container(
+                padding: EdgeInsets.only(right: 15),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: progress.estimatedDate == null? Container():
+                  Text('${DateFormatUtil.formatYMD(
+                      progress.estimatedDate)}',
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                ),
               ),
               onTap: () {
                 userType != null && userType == 'factory' && isCurrentStatus == true ?
                 _showDatePicker(progress) : null;
               }),
+          progress.estimatedDate == null || progress.estimatedDate == ''?
           Align(
             alignment: Alignment.centerRight,
-            child: IconButton(
+            child: userType=='brand'?Container():IconButton(
                 icon: Icon(Icons.date_range),
                 onPressed: () {
                   userType != null && userType == 'factory' && isCurrentStatus == true ?
                   _showDatePicker(progress) : null;
                 }
             ),
-          )
+          ):Container()
         ],
       ),
     );
@@ -798,10 +851,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   }),
             ),
             GestureDetector(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text('${progress.quantity}',
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                child: Container(
+                  padding: EdgeInsets.only(right: 15),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('${progress.quantity}',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
+                  ),
                 ),
                 onTap: () {
                   userType != null && userType == 'factory' && isCurrentStatus == true ?
@@ -809,16 +865,17 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       : null;
                 }
             ),
+            progress.quantity == null || progress.quantity == ''?
             Align(
               alignment: Alignment.centerRight,
-              child: IconButton(
+              child: userType=='brand'?Container():IconButton(
                   icon: Icon(Icons.keyboard_arrow_right),
                   onPressed: (){
                     userType != null && userType == 'factory' && isCurrentStatus == true ?
                     _showDialog(progress) : null;
                   }
               ),
-            )
+            ):Container()
           ],
         ),
       ),
@@ -1200,7 +1257,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //品牌端支付按钮
   Widget _buildShowBrandButton(BuildContext context){
-    return isShowButton == true?
+    return isShowButton == true && widget.order.depositPaid == false
+        && widget.order.deposit != null && widget.order.deposit > 0
+        && widget.order.salesApplication == SalesApplication.ONLINE?
     Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
       child: Row(
@@ -1772,6 +1831,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 //生成Dialog控件
   Future<void> _neverSatisfied(BuildContext context,ProductionProgressModel model) async {
     dialogText = TextEditingController();
+    _dialogFocusNode = FocusNode();
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -1781,9 +1841,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextField(
-                  controller:dialogText,
-                  keyboardType: TextInputType.number,
+                TextFieldComponent(
+                  textAlign: TextAlign.left,
+                  focusNode: _dialogFocusNode,
+                  controller: dialogText,
+                  autofocus: true,
+                  inputType: TextInputType.number,
                 ),
               ],
             ),
@@ -1852,6 +1915,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type,String remarks) async {
     dialogText = TextEditingController();
+    _dialogFocusNode = FocusNode();
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -1861,13 +1925,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextField(
-                  controller:dialogText,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10.0),
-                    helperText: '${remarks==null?'':remarks}',
-                  ),
+                TextFieldComponent(
+                  textAlign: TextAlign.left,
+                  focusNode: _dialogFocusNode,
+                  controller: dialogText,
+                  autofocus: true,
+                  inputType: TextInputType.text,
+                  helperText: '${remarks==null?'':remarks}',
                 ),
               ],
             ),

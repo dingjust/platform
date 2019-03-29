@@ -1,6 +1,8 @@
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class FactoryItem extends StatelessWidget {
@@ -22,19 +24,26 @@ class FactoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        //获取该工厂的现款商品
+        ProductsResponse productsResponse =
+            await ProductRepositoryImpl().getProductsOfFactories({
+          'factory': model.uid,
+        }, {
+          'size': 3
+        });
+
         //TODO 工厂跳转
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => SuppliersDetail(
-        //           supplierModel: SupplierModel(
-        //             factory: model,
-        //           ),
-        //           isSupplier: false,
-        //         ),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyFactoryPage(
+                  model,
+                  isFactoryDetail: true,
+                  products: productsResponse.content,
+                ),
+          ),
+        );
       },
       child: Container(
         color: Colors.white,
@@ -59,23 +68,30 @@ class FactoryItem extends StatelessWidget {
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          image: DecorationImage(
-                            image: model.profilePicture == null
-                                ? AssetImage(
-                                    'temp/picture.png',
-                                    package: "assets",
-                                  )
-                                : NetworkImage(
-                                    '${GlobalConfigs.IMAGE_BASIC_URL}${model.profilePicture.url}'),
-                            fit: BoxFit.fill,
-                          )),
-                    ),
+                    model.profilePicture != null
+                        ? Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      '${GlobalConfigs.IMAGE_BASIC_URL}${model.profilePicture.url}'),
+                                  fit: BoxFit.fill,
+                                )),
+                          )
+                        : Container(
+                            width: 80,
+                            height: 80,
+                            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color.fromRGBO(243, 243, 243, 1)),
+                            child: Icon(B2BIcons.noPicture,
+                                color: Color.fromRGBO(200, 200, 200, 1),
+                                size: 60),
+                          ),
                     Expanded(
                       flex: 1,
                       child: Container(
@@ -85,29 +101,11 @@ class FactoryItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              '${ScaleRangesLocalizedMap[model.scaleRange]}',
+                              '${PopulationScaleLocalizedMap[model.populationScale]}',
                               style: TextStyle(
                                   color: Color.fromRGBO(180, 180, 180, 1)),
                             ),
-                            Container(
-                                child: Row(
-                              children: <Widget>[
-                                Tag(
-                                  color: Colors.grey,
-                                  label: '快反工厂',
-                                ),
-                                Tag(
-                                  color: Colors.grey,
-                                  label: '免费打样',
-                                ),
-                                Tag(
-                                  label: '  已认证  ',
-                                  color: Colors.grey,
-                                  backgroundColor:
-                                      Color.fromRGBO(254, 252, 235, 1),
-                                )
-                              ],
-                            )),
+                            Container(child: Row(children: _buildTags())),
                             Container(
                               padding: EdgeInsets.only(bottom: 5),
                               // color: Colors.green,
@@ -235,6 +233,29 @@ class FactoryItem extends StatelessWidget {
     } else {
       return Container();
     }
+  }
+
+  List<Widget> _buildTags() {
+    List<Widget> tags = [
+      model.approvalStatus == ArticleApprovalStatus.approved
+          ? Tag(
+              label: '  已认证  ',
+              backgroundColor: Color.fromRGBO(254, 252, 235, 1),
+            )
+          : Tag(
+              label: '  未认证  ',
+              color: Colors.black,
+              backgroundColor: Colors.grey[300],
+            )
+    ];
+    model.labels.forEach((label) {
+      tags.add(Tag(
+        label: label.name,
+        color: Colors.grey,
+      ));
+    });
+
+    return tags;
   }
 }
 

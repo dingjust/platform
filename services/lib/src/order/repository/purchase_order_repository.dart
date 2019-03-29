@@ -221,12 +221,13 @@ class PurchaseOrderRepository {
   }
 
   //确认生产
-  Future<bool> confirmProduction(String code) async {
+  Future<bool> confirmProduction(String code,PurchaseOrderModel form) async {
     Response<String> response;
     try{
       response =  await http$.put(
-          OrderApis.confirmProduction(code),
-          options: Options(responseType: ResponseType.plain));
+        OrderApis.confirmProduction(code),
+        data: PurchaseOrderModel.toJson(form),
+      );
     }on DioError catch(e){
       print(e);
     }
@@ -255,6 +256,32 @@ class PurchaseOrderRepository {
     } else {
       return false;
     }
+  }
+
+//工厂获取与该品牌的生产订单列表
+  Future<PurchaseOrdersResponse> getPurchaseOrdersByBrand(String uid,Map<String,Object> params)async{
+    Response response = await http$.post(OrderApis.purchaseOrders,
+      data: {
+        "purchasers" : uid,
+      },
+      queryParameters: params,
+    );
+
+    PurchaseOrdersResponse purchaseResponse = PurchaseOrdersResponse.fromJson(response.data);
+    return purchaseResponse;
+  }
+
+//品牌获取与该工厂的生产订单列表
+  Future<PurchaseOrdersResponse> getPurchaseOrdersByFactory(String uid,Map<String,Object> params)async{
+    Response response = await http$.post(OrderApis.purchaseOrders,
+      data: {
+        "belongTos" : uid,
+      },
+      queryParameters: params,
+    );
+
+    PurchaseOrdersResponse purchaseResponse = PurchaseOrdersResponse.fromJson(response.data);
+    return purchaseResponse;
   }
 
 }

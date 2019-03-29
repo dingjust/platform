@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/home/factory/response/factory_response.dart';
+import 'package:services/src/supplier/brands_response.dart';
+
 import 'user_repository.dart';
-import 'package:dio/dio.dart';
 
 class UserRepositoryImpl implements UserRepository {
   const UserRepositoryImpl();
@@ -91,4 +94,17 @@ class UserRepositoryImpl implements UserRepository {
       return null;
     }
   }
+
+  @override
+  Future<BrandsResponse> brandSuppliers(Map<String,Object> params) async{
+    Response response = await http$.get(Apis.brandsSuppliers, data:params,);
+    return BrandsResponse.fromJson(response.data);
+  }
+
+  @override
+  Future<FactoriesResponse> factorySuppliers(Map<String,Object> params) async{
+    Response response = await http$.get(Apis.factorySuppliers, data:params,);
+    return FactoriesResponse.fromJson(response.data);
+  }
+
 }

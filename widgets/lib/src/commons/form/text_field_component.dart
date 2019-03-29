@@ -20,6 +20,7 @@ class TextFieldComponent extends StatefulWidget {
   TextAlign textAlign;
   Color leadingColor;
   bool hideDivider;
+  TextStyle style;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -42,6 +43,7 @@ class TextFieldComponent extends StatefulWidget {
     this.textAlign = TextAlign.right,
     this.leadingColor = Colors.black,
     this.hideDivider = false,
+    this.style,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
@@ -109,6 +111,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
               ),
               Expanded(
                 child: TextField(
+                  style: widget.style,
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
