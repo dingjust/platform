@@ -24,4 +24,7 @@ abstract class UserRepository {
 
   //获取所有标签
   Future<List<LabelModel>> labels();
+
+  /// 手机号是否注册
+  Future<bool> phoneExist(String phone);
 }
