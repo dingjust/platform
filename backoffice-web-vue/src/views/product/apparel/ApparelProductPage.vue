@@ -4,10 +4,12 @@
       <apparel-product-toolbar @onNew="onNew"
                                @onSearch="onSearch"
                                @onAdvancedSearch="onAdvancedSearch"/>
-      <apparel-product-search-result-list :page="page"
-                                          @onDetails="onDetails"
-                                          @onSearch="onSearch"
-                                          @onAdvancedSearch="onAdvancedSearch"/>
+      <apparel-product-list :page="page"
+                             @onDetails="onDetails"
+                             @onSearch="onSearch"
+                             @onAdvancedSearch="onAdvancedSearch"
+                             @onShelf="onShelf"
+                             @onOffShelf="onOffShelf"/>
     </el-card>
   </div>
 </template>
@@ -18,14 +20,14 @@
   const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('ApparelProductsModule');
 
   import ApparelProductToolbar from "./toolbar/ApparelProductToolbar";
-  import ApparelProductSearchResultList from './list/ApparelProductSearchResultList';
+  import ApparelProductList from './list/ApparelProductList';
   import ApparelProductDetailsPage from './details/ApparelProductDetailsPage';
 
   export default {
     name: 'ApparelProductPage',
     components: {
       ApparelProductToolbar,
-      ApparelProductSearchResultList
+      ApparelProductList
     },
     computed: {
       ...mapGetters({
@@ -37,7 +39,8 @@
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        refresh: 'refresh'
       }),
       ...mapMutations({
         setAdvancedSearch: 'isAdvancedSearch'
@@ -63,6 +66,26 @@
         }
 
         this.fn.openSlider('产品：' + item.code, ApparelProductDetailsPage, result);
+      },
+      async onShelf(item) {
+        const url = this.apis().onShelfProduct(item.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.refresh();
+      },
+      async onOffShelf(item) {
+        const url = this.apis().offShelfProduct(item.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.refresh();
       },
       onNew(formData) {
         this.fn.openSlider('创建产品', ApparelProductDetailsPage, formData);
