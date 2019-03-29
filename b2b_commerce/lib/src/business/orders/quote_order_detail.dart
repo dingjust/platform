@@ -229,12 +229,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                           ),
                         ),
                       ),
-                      Text(
-                        '拨打',
-                        style: TextStyle(
-                            color: Color.fromRGBO(86, 194, 117, 1),
-                            fontSize: 16),
-                      ),
                     ],
                   )),
             ],

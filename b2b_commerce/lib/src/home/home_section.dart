@@ -29,22 +29,21 @@ class HomeSearchInputBox extends StatelessWidget {
   final double height;
   final String tips;
 
-  const HomeSearchInputBox(
-      {Key key, this.width = 400, this.height = 30, this.tips})
-      : super(key: key);
+  const HomeSearchInputBox({Key key, this.width = 400, this.height = 30, this.tips}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showSearch(
-          context: context, delegate: ApparelProductSearchDelegate()),
+      onTap: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
       child: Container(
         width: width,
         height: height,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey[300], width: 0.5)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.grey[300], width: 0.5),
+        ),
         child: Row(
           children: <Widget>[
             Icon(
@@ -63,37 +62,6 @@ class HomeSearchInputBox extends StatelessWidget {
   }
 }
 
-///首页衣报送信息Item项
-class HomeInfoItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final String end;
-
-  const HomeInfoItem({Key key, this.label, this.value, this.end})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-          text: label,
-          style: TextStyle(
-            fontSize: 13,
-            color: Color.fromRGBO(32, 32, 32, 1),
-          ),
-          children: <TextSpan>[
-            TextSpan(
-                text: value,
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold)),
-            TextSpan(text: '${end}')
-          ]),
-    );
-  }
-}
-
 ///首页Tab部分
 class HomeTabSection extends StatelessWidget {
   final double height;
@@ -102,7 +70,7 @@ class HomeTabSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<AdvanceIconButton> iconList = <AdvanceIconButton>[
+    List<Widget> iconList = <Widget>[
       AdvanceIconButton(
         onPressed: () {
           Navigator.push(
@@ -124,13 +92,9 @@ class HomeTabSection extends StatelessWidget {
       ),
       AdvanceIconButton(
         onPressed: () async {
-          List<LabelModel> labels =
-              await UserRepositoryImpl().industrialClustersFromLabels();
+          List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
 
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => IndustrialClusterPage(labels)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => IndustrialClusterPage(labels)));
         },
         title: '产业集群',
         icon: Icon(
@@ -181,9 +145,10 @@ class HomeTabSection extends StatelessWidget {
         color: Colors.white,
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: iconList),
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: iconList,
+        ),
       ),
     );
   }

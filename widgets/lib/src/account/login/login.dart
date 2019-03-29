@@ -88,23 +88,23 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          _isPasswordLogin
-              ? GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => widget.forgetPasswordPage));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
-                    child: Text(
-                      '忘记密码',
-                      style: TextStyle(color: Colors.red, fontSize: 15),
-                    ),
-                  ),
-                )
-              : Container(),
+          // _isPasswordLogin
+          //     ? GestureDetector(
+          //         onTap: () {
+          //           Navigator.of(context).push(MaterialPageRoute(
+          //               builder: (context) => widget.forgetPasswordPage));
+          //         },
+          //         child: Container(
+          //           margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
+          //           child: Text(
+          //             '忘记密码',
+          //             style: TextStyle(color: Colors.red, fontSize: 15),
+          //           ),
+          //         ),
+          //       )
+          //     : Container(),
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(
@@ -186,8 +186,7 @@ class _LoginPageState extends State<LoginPage> {
             color: Color.fromRGBO(255, 214, 12, 1),
             child: Text(
               '$_verifyStr',
-              style: TextStyle(
-                  color: (_seconds == 0) ? Colors.white : Colors.black45),
+              style: TextStyle(color: Colors.black),
             ),
           ),
         ),
@@ -346,7 +345,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 '登陆',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(color: Colors.black, fontSize: 18),
               ),
             ),
           ),

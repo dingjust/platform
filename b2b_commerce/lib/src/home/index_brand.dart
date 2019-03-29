@@ -1,31 +1,31 @@
-import 'package:b2b_commerce/src/business/products/product_category.dart';
-import 'package:b2b_commerce/src/common/app_image.dart';
-import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/home/home_section.dart';
-import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
-import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
-import 'package:b2b_commerce/src/production/production_unique_code.dart';
+import 'package:b2b_commerce/src/_shared/widgets/broadcast.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-/// 网站主页
-class HomePage extends StatefulWidget {
-  HomePage() : super(key: AppKeys.homePage);
+import '../business/products/product_category.dart';
+import '../common/app_image.dart';
+import '../common/app_keys.dart';
+import '../home/home_section.dart';
+import '../home/requirement/fast_publish_requirement.dart';
+import '../production/production_offline_order_from.dart';
+import '../production/production_unique_code.dart';
+
+/// 网站主页 - 品牌
+class BrandHomePage extends StatefulWidget {
+  BrandHomePage() : super(key: AppKeys.homePage);
 
   @override
-  _HomePageState createState() => new _HomePageState();
+  _BrandHomePageState createState() => new _BrandHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _BrandHomePageState extends State<BrandHomePage> {
   //TODO:调用接口查询推荐工厂,mock数据待删除
   static Color orange = Color.fromRGBO(255, 214, 12, 1);
   static Color white = Colors.white;
 
   ///图标颜色
   Color iconColor = white;
-
-  TextEditingController _uniqueCodeTextController = TextEditingController();
 
   void initState() {
     super.initState();
@@ -67,22 +67,6 @@ class _HomePageState extends State<HomePage> {
                 height: 35,
               ),
               brightness: Brightness.dark,
-              actions: <Widget>[
-                // IconButton(
-                //   padding: EdgeInsets.only(right: 20),
-                //   icon: const Icon(B2BIcons.message),
-                //   color: iconColor,
-                //   tooltip: 'message',
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => MyClientServicesPage(),
-                //       ),
-                //     );
-                //   },
-                // ),
-              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   fit: StackFit.expand,
@@ -93,20 +77,21 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SliverList(
-                delegate: SliverChildListDelegate(<Widget>[
-              EasyGrid(
-                height: 90,
-                dataList: _gridItemList(),
-              ),
-              HomeTabSection(
-                height: 100,
-              ),
-              _buildBroadcast(),
-              FastPublishRequirement(),
-              _buildSpacing(15),
-              _buildTrackingProgress(),
-              _buildSpacing(40),
-            ])),
+              delegate: SliverChildListDelegate(<Widget>[
+                EasyGrid(
+                  height: 90,
+                  dataList: _gridItemList(),
+                ),
+                HomeTabSection(
+                  height: 100,
+                ),
+                BroadcastFactory.buildBroadcast('进入钉单请优先注册并提交认证资料'),
+                FastPublishRequirement(),
+                DividerFactory.buildDivider(15),
+                TrackingProgressSection(),
+                DividerFactory.buildDivider(40),
+              ]),
+            ),
           ],
         ),
       ),
@@ -116,90 +101,54 @@ class _HomePageState extends State<HomePage> {
   List<GridItem> _gridItemList() {
     return [
       GridItem(
-          title: '当季快反',
+          title: '快反工厂',
           onPressed: () async {
-            //加载条
+            // 加载条
             showDialog(
-                context: context,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ));
-            await ProductRepositoryImpl()
-                .cascadedCategories()
-                .then((categorys) {
+              context: context,
+              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+            );
+            await ProductRepositoryImpl().cascadedCategories().then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: [],
-                        categorys: categorys,
+                        categorys: categories,
                         categoryActionType: CategoryActionType.TO_FACTORIES,
                       )));
             });
           },
-          pic: B2BImage.fast_factory(width: 60, height: 80)),
+          picture: B2BImage.fast_factory(width: 60, height: 80)),
       GridItem(
           title: '看款下单',
           onPressed: () async {
-            //加载条
+            // 加载条
             showDialog(
-                context: context,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ));
-            await ProductRepositoryImpl()
-                .cascadedCategories()
-                .then((categorys) {
+              context: context,
+              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+            );
+            await ProductRepositoryImpl().cascadedCategories().then((categories) {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).push(
+                MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: [],
-                        categorys: categorys,
+                        categorys: categories,
                         categoryActionType: CategoryActionType.TO_PRODUCTS,
-                      )));
+                      ),
+                ),
+              );
             });
           },
-          pic: B2BImage.order(width: 60, height: 80)),
-      // GridItem(
-      //     title: '空闲产能',
-      //     onPressed: () {},
-      //     pic: B2BImage.idle_capacity(width: 60, height: 80)),
-      // GridItem(
-      //     title: '电商找厂',
-      //     onPressed: () {},
-      //     pic: B2BImage.find_factory(width: 60, height: 60)),
+          picture: B2BImage.order(width: 60, height: 80)),
     ];
   }
+}
 
-  Widget _buildSpacing(double height) {
-    return Container(
-      color: Color.fromRGBO(246, 247, 249, 1),
-      height: height,
-    );
-  }
-
-  Widget _buildBroadcast() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      color: Color.fromRGBO(254, 252, 235, 1),
-      child: Row(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            child: Icon(
-              Icons.volume_up,
-              color: Color.fromRGBO(247, 114, 47, 1),
-            ),
-          ),
-          Text(
-            '进入蕉衣请优先注册并提交认证资料',
-            style: TextStyle(color: Color.fromRGBO(247, 114, 47, 1)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTrackingProgress() {
+/// 跟踪进度版块
+class TrackingProgressSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
@@ -210,10 +159,7 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Text(
                 '跟踪进度',
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Color.fromRGBO(100, 100, 100, 1),
-                    fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 18, color: Color.fromRGBO(100, 100, 100, 1), fontWeight: FontWeight.w500),
               ),
               Text(
                 '线下订单',
@@ -236,9 +182,8 @@ class _HomePageState extends State<HomePage> {
             child: Container(
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
                 padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Color.fromRGBO(248, 248, 248, 1),
-                    borderRadius: BorderRadius.circular(20)),
+                decoration:
+                    BoxDecoration(color: Color.fromRGBO(248, 248, 248, 1), borderRadius: BorderRadius.circular(20)),
                 child: Row(
                   children: <Widget>[
                     Text(
@@ -250,20 +195,14 @@ class _HomePageState extends State<HomePage> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,MaterialPageRoute(
-                  builder: (context) =>
-                      ProductionOfflineOrder()
-              )
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ProductionOfflineOrder()));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
                   '没有唯一码？点击这里',
-                  style: TextStyle(
-                      color: Color.fromRGBO(180, 180, 180, 1), fontSize: 15),
+                  style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1), fontSize: 15),
                 ),
                 Icon(
                   B2BIcons.arrow_right,

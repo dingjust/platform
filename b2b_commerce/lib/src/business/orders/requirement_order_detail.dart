@@ -178,12 +178,6 @@ class _RequirementOrderDetailPageState
                           ),
                         ),
                       ),
-                      Text(
-                        '拨打',
-                        style: TextStyle(
-                            color: Color.fromRGBO(86, 194, 117, 1),
-                            fontSize: 16),
-                      ),
                     ],
                   )),
             ],
@@ -580,11 +574,11 @@ class _RequirementOrderDetailPageState
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                color: Color.fromRGBO(255, 149, 22, 1),
+                color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                 child: Text(
                   '邀请工厂报价',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 )),
           )
         ],

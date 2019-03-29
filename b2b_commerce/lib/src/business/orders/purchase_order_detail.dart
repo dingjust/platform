@@ -355,17 +355,35 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           Divider(
             height: 1,
           ),
-          ListTile(
-            title: Text('加工类型'),
-            trailing: order.machiningType == null ? Container():Text(MachiningTypeLocalizedMap[order.machiningType]),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Text('加工类型'),
+                ),
+                Container(
+                  child: order.machiningType == null ? Container():Text(MachiningTypeLocalizedMap[order.machiningType]),
+                ),
+              ],
+            ),
           ),
           Divider(
             height: 1,
           ),
-          ListTile(
-            title: Text('是否开具发票'),
-            trailing: order.invoiceNeeded == null ? Container():Text(order.invoiceNeeded == true ? '是' : '否'),
-          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Text('是否开具发票'),
+                ),
+                Container(
+                  child: order.invoiceNeeded == null ? Container():Text(order.invoiceNeeded == true ? '是' : '否'),
+                ),
+              ],
+            ),
+          )
         ],
       ),
       decoration: BoxDecoration(
@@ -384,8 +402,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           Row(
             children: <Widget>[
               Container(
-                width: 100,
-                height: 100,
+                margin: EdgeInsets.all(10),
+                width: 80,
+                height: 80,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
@@ -394,14 +413,45 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         'temp/picture.png',
                         package: "assets",
                       ):
-                      NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.purchaser.profilePicture}'),
+                      NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.purchaser.profilePicture.url}'),
                       fit: BoxFit.cover,
                     )),
               ),
-              Text(
-                '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller : order.purchaser.name}',
-                textScaleFactor: 1.3,
-              ),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller : order.purchaser.name}',
+                        textScaleFactor: 1.3,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 5),
+                        color: Color.fromRGBO(254, 252, 235,1),
+                      child: order.purchaser.approvalStatus == ArticleApprovalStatus.approved ?
+                      Text(
+                          '  已认证  ',
+                          style: TextStyle(
+                            color:
+                            Color.fromRGBO(255, 133, 148, 1),
+                          )
+                      )
+                          :
+                      Text(
+                        '  未认证  ',
+                        style: TextStyle(
+                          color: Color.
+                          fromRGBO(255, 133, 148, 1)
+                          ,
+                        ),
+                      )
+                    )
+                  ],
+                )
+              )
             ],
           ),
           Divider(
@@ -1200,7 +1250,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //品牌端支付按钮
   Widget _buildShowBrandButton(BuildContext context){
-    return isShowButton == true?
+    return isShowButton == true && widget.order.depositPaid == false
+        && widget.order.deposit != null && widget.order.deposit > 0
+        && widget.order.salesApplication == SalesApplication.ONLINE?
     Container(
       margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
       child: Row(

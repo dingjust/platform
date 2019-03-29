@@ -93,17 +93,23 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters} = createNamespacedHelpers('RequirementOrdersModule');
+  const {mapGetters,mapMutations} = createNamespacedHelpers('RequirementOrdersModule');
 
   export default {
     name: 'RequirementOrderToolbar',
     components: {},
     computed: {},
     methods: {
+      ...mapMutations({
+        setKeyword: 'keyword',
+        setQueryFormData:'queryFormData',
+      }),
       onSearch() {
+        this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
+        this.setKeyword(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
       onNew() {

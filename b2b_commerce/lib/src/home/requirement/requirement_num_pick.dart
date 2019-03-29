@@ -121,10 +121,6 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
             style: TextStyle(
                 color: Color.fromRGBO(150, 150, 150, 1), fontSize: 18),
           ),
-          Text(
-            '（必填）',
-            style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
-          ),
         ],
       ),
     );
@@ -200,7 +196,7 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
               );
             })),
         Text(
-          '蕉衣会尽快与您联系',
+          '钉单会尽快与您联系',
           style: TextStyle(color: Color.fromRGBO(255, 68, 68, 1)),
         )
       ],

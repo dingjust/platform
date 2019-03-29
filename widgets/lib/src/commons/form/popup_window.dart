@@ -49,7 +49,7 @@ class _PopupWindowPageState extends State<PopupWindowPage>{
                         child: Text(
                           '确定',
                           style: TextStyle(
-                              color: Color.fromRGBO(255, 149, 22, 1)),
+                              color: Colors.black),
                         ),
                       ),
                     ),

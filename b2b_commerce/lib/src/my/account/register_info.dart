@@ -178,7 +178,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Text(
               '注册',
-              style: TextStyle(color: Colors.white, fontSize: 18),
+              style: TextStyle(color: Colors.black, fontSize: 18),
             ),
           ),
         ],

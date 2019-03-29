@@ -38,16 +38,18 @@ class _EasyGridState extends State<EasyGrid> {
         height: widget.height,
         margin: EdgeInsets.all(5),
         child: GridView(
-          physics:
-              widget.primary == false ? NeverScrollableScrollPhysics() : null,
+          physics: !widget.primary ? NeverScrollableScrollPhysics() : null,
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: widget.itemWidth,
-              childAspectRatio: 2.35, //宽高比为2
-              crossAxisSpacing: 10),
-          children: List.generate(widget.dataList.length, (index) {
-            return GestureDetector(
-                child: Container(
+            maxCrossAxisExtent: widget.itemWidth,
+            childAspectRatio: 2.35, //宽高比为2
+            crossAxisSpacing: 10,
+          ),
+          children: List.generate(
+            widget.dataList.length,
+            (index) {
+              return GestureDetector(
+                  child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(5),
@@ -66,38 +68,39 @@ class _EasyGridState extends State<EasyGrid> {
                         child: Row(
                           children: <Widget>[
                             Expanded(
-                                child: ListTile(
-                              title: Text(
-                                widget.dataList[index].title,
-                                style: widget.titleFont == null
-                                    ? TextStyle(
-                                        fontSize: 16,
-                                        color: Color.fromRGBO(32, 32, 32, 1),
-                                        fontWeight: FontWeight.bold)
-                                    : widget.titleFont,
+                              child: ListTile(
+                                title: Text(
+                                  widget.dataList[index].title,
+                                  style: widget.titleFont == null
+                                      ? TextStyle(
+                                          fontSize: 16,
+                                          color: Color.fromRGBO(32, 32, 32, 1),
+                                          fontWeight: FontWeight.bold)
+                                      : widget.titleFont,
+                                ),
+                                subtitle: widget.dataList[index].subtitle != null
+                                    ? Text(
+                                        widget.dataList[index].subtitle,
+                                        style: widget.subtitleFont == null
+                                            ? TextStyle(fontSize: 14, color: Colors.grey)
+                                            : widget.subtitleFont,
+                                      )
+                                    : null,
                               ),
-                              subtitle: widget.dataList[index].subtitle != null
-                                  ? Text(
-                                      widget.dataList[index].subtitle,
-                                      style: widget.subtitleFont == null
-                                          ? TextStyle(
-                                              fontSize: 14, color: Colors.grey)
-                                          : widget.subtitleFont,
-                                    )
-                                  : null,
-                            )),
-                            widget.dataList[index].pic,
+                            ),
+                            widget.dataList[index].picture,
                           ],
                         ),
                       ),
-                    )
+                    ),
                     // decoration: BoxDecoration(
                     //   color: Colors.white,
                     //   borderRadius: BorderRadius.circular(5),
                     // ),
-                    ),
-                onTap: widget.dataList[index].onPressed);
-          }),
+                  ),
+                  onTap: widget.dataList[index].onPressed);
+            },
+          ),
         ));
   }
 }
@@ -110,14 +113,10 @@ class GridItem {
   final String subtitle;
 
   ///图片
-  final Image pic;
+  final Image picture;
 
   ///触发函数
   final VoidCallback onPressed;
 
-  GridItem(
-      {@required this.title,
-      this.subtitle,
-      @required this.pic,
-      @required this.onPressed});
+  GridItem({@required this.title, this.subtitle, @required this.picture, @required this.onPressed});
 }

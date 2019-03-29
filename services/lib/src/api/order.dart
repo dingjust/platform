@@ -98,7 +98,7 @@ class OrderApis {
 
   //确认生产
   static get confirmProduction => (code) {
-        return '/{baseSiteId}/b2b/orders/purchase/$code/production';
+    return '/{baseSiteId}/b2b/orders/purchase/$code/production';
       };
 
   //品牌更新地址
