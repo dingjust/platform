@@ -23,11 +23,12 @@ import 'form/production_areas_field.dart';
 
 // TODO: change to RequirementOrderForm
 class RequirementOrderFrom extends StatefulWidget {
+  String factoryUid;
   ApparelProductModel product;
 
   RequirementOrderModel order;
 
-  RequirementOrderFrom({this.product, this.order});
+  RequirementOrderFrom({this.product, this.order,this.factoryUid,});
 
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }

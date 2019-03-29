@@ -258,4 +258,30 @@ class PurchaseOrderRepository {
     }
   }
 
+//工厂获取与该品牌的生产订单列表
+  Future<PurchaseOrdersResponse> getPurchaseOrdersByBrand(String uid,Map<String,Object> params)async{
+    Response response = await http$.post(OrderApis.purchaseOrders,
+      data: {
+        "purchasers" : uid,
+      },
+      queryParameters: params,
+    );
+
+    PurchaseOrdersResponse purchaseResponse = PurchaseOrdersResponse.fromJson(response.data);
+    return purchaseResponse;
+  }
+
+//品牌获取与该工厂的生产订单列表
+  Future<PurchaseOrdersResponse> getPurchaseOrdersByFactory(String uid,Map<String,Object> params)async{
+    Response response = await http$.post(OrderApis.purchaseOrders,
+      data: {
+        "belongTos" : uid,
+      },
+      queryParameters: params,
+    );
+
+    PurchaseOrdersResponse purchaseResponse = PurchaseOrdersResponse.fromJson(response.data);
+    return purchaseResponse;
+  }
+
 }
