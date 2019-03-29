@@ -38,7 +38,7 @@ let http = {
       axios.get(url, {
         params: params
       }).then((response) => resolve(response.data))
-        .catch((error) => resolve(error.response.data));
+        .catch((error) => resolve(error.response || error.response.data));
     });
   },
   /** post 请求
@@ -52,7 +52,7 @@ let http = {
       axios.post(url, data, {
         params: params
       }).then((response) => resolve(response.data))
-        .catch((error) => resolve(error.response.data));
+        .catch((error) => resolve(error.response || error.response.data));
     });
   },
   /** post 请求
@@ -65,7 +65,7 @@ let http = {
       axios.put(url, data, {
         params: params
       }).then((response) => resolve(response.data))
-        .catch((error) => resolve(error.response.data));
+        .catch((error) => resolve(error.response || error.response.data));
     });
   },
   /** post 请求
@@ -78,7 +78,7 @@ let http = {
       axios.delete(url, {
         params: params
       }).then((response) => resolve(response.data))
-        .catch((error) => resolve(error.response.data));
+        .catch((error) => resolve(error.response || error.response.data));
     });
   }
 };

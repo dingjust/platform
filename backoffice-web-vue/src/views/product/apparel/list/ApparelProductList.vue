@@ -9,9 +9,22 @@
       <el-table-column label="产品货号" prop="skuID" width="120" fixed></el-table-column>
       <el-table-column label="产品名称" prop="name" width="480"></el-table-column>
       <el-table-column label="供货价" prop="price" :formatter="numberFormatter"></el-table-column>
-      <el-table-column label="操作" width="120">
+      <el-table-column label="上/下架状态" prop="approvalStatus">
+        <template slot-scope="scope">
+          <span>{{getEnum('approvalStatuses', scope.row.approvalStatus)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="240">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <el-button v-if="isFactory() && scope.row.approvalStatus==='unapproved'" type="text" icon="el-icon-edit"
+                     @click="onShelf(scope.row)">
+            上架
+          </el-button>
+          <el-button v-if="isFactory() && scope.row.approvalStatus==='approved'" type="text" icon="el-icon-edit"
+                     @click="onOffShelf(scope.row)">
+            下架
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -28,7 +41,7 @@
 
 <script>
   export default {
-    name: 'ApparelProductSearchResultList',
+    name: 'ApparelProductList',
     props: ["page"],
     computed: {},
     methods: {
@@ -57,6 +70,12 @@
       },
       onDetails(row) {
         this.$emit('onDetails', row);
+      },
+      onShelf(row) {
+        this.$emit('onShelf', row);
+      },
+      onOffShelf(row) {
+        this.$emit('onOffShelf', row);
       },
       numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {

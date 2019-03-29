@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/my/account/register_info.dart';
 import 'package:b2b_commerce/src/my/account/reset_password.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:services/services.dart';
 
 class RegisterPage extends StatefulWidget {
   _RegisterPageState createState() => _RegisterPageState();
@@ -20,6 +22,8 @@ class _RegisterPageState extends State<RegisterPage> {
   int _seconds = 0;
   Timer _timer;
   bool validate = false;
+
+  String phoneValidateStr = "";
 
   @override
   void initState() {
@@ -80,7 +84,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   label: '手机号',
                   field: TextField(
                     autofocus: false,
-                    onChanged: (value) {
+                    onChanged: (value) async {
+                      validatePhone();
                       formValidate();
                     },
                     keyboardType: TextInputType.phone,
@@ -91,6 +96,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _phoneController,
                     decoration: InputDecoration(
                         hintText: '请输入', border: InputBorder.none),
+                  ),
+                  surfix: Container(
+                    child: Text(
+                      phoneValidateStr,
+                      style: TextStyle(color: Colors.red),
+                    ),
                   ),
                 ),
                 InputRow(
@@ -181,6 +192,31 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
     );
+  }
+
+  void validatePhone() async {
+    String result = "";
+
+    if (_phoneController.text == '') {
+      result = '';
+    } else {
+      if (RegexUtil.isMobile(_phoneController.text)) {
+        bool exist =
+            await UserRepositoryImpl().phoneExist(_phoneController.text);
+
+        if (exist != null && exist) {
+          result = "账号已存在";
+        } else {
+          result = "";
+        }
+      } else {
+        result = "输入正确手机号";
+      }
+    }
+
+    setState(() {
+      phoneValidateStr = result;
+    });
   }
 
   void formValidate() {

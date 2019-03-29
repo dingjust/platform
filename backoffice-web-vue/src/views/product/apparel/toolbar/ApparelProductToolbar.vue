@@ -9,17 +9,17 @@
     </el-button-group>
     <el-popover placement="bottom" width="800" trigger="click">
       <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="产品货号">
             <el-input v-model="queryFormData.skuID"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="产品名称">
             <el-input v-model="queryFormData.name"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="产品分类">
             <el-select v-model="queryFormData.categories" placeholder="请选择" class="w-100"
                        filterable reserve-keyword clearable
@@ -35,6 +35,17 @@
                   :value="level2.code">
                 </el-option>
               </el-option-group>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="产品分类">
+            <el-select v-model="queryFormData.approvalStatuses" placeholder="请选择" class="w-100" multiple>
+              <el-option v-for="item in approvalStatuses"
+                         :key="item.code"
+                         :label="item.name"
+                         :value="item.code">
+              </el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -92,6 +103,7 @@
         keyword: '',
         formData: this.$store.state.ApparelProductsModule.formData,
         queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
+        approvalStatuses: this.$store.state.EnumsModule.approvalStatuses,
         categories: [],
       }
     },
