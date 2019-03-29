@@ -210,6 +210,12 @@ const COMMON_APIS = {
   getApparelProduct(code) {
     return '/b2b/products/apparel/' + code;
   },
+  onShelfProduct(code) {
+    return '/b2b/products/apparel/' + code + '/on';
+  },
+  offShelfProduct(code) {
+    return '/b2b/products/apparel/' + code + '/off';
+  },
   createApparelProduct() {
     return '/b2b/products/apparel/create';
   },

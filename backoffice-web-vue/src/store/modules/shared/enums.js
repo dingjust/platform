@@ -49,8 +49,9 @@ const state = {
     {code: 'BUYER_REJECTED', name: '拒绝'}
   ],
   approvalStatuses: [
-    {code: 'approved', name: '上架'},
-    {code: 'unapproved', name: '下架'}
+    {code: 'approved', name: '已上架'},
+    {code: 'unapproved', name: '已下架'},
+    {code: 'deleted', name: '已删除'}
   ],
   machiningTypes: [
     {code: 'LABOR_AND_MATERIAL', name: '包工包料'},
@@ -259,15 +260,9 @@ const state = {
 
 const mutations = {};
 
-const actions = {
-  getEnumByCode({dispatch, commit, state}, {enumsName, code}) {
-    return state[enumsName].find(e => e.code === code);
-  }
-};
+const actions = {};
 
-const getters = {
-  approvalStatuses: state => state.approvalStatuses,
-};
+const getters = {};
 
 export default {
   namespaced: true,
