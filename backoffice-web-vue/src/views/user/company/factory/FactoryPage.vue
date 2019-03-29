@@ -42,7 +42,6 @@
         page: 'page',
         keyword: 'keyword',
         queryFormData: 'queryFormData',
-        query:'query',
       })
     },
     methods: {

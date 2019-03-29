@@ -32,7 +32,11 @@
         if (!deliveryAddress.region || !deliveryAddress.region.isocode) {
           delete this.slotData.deliveryAddress;
         }
-
+        const expectedDeliveryDate = this.slotData.expectedDeliveryDate;
+        if (this.compareDate(new Date(), new Date(expectedDeliveryDate))) {
+          this.$message.error('交货日期不能小于当前时间');
+          return false;
+        }
         let url = this.apis().createPurchaseOrder();
         const quoteRef = this.slotData.quoteRef;
         // 根据报价单创建生产订单
