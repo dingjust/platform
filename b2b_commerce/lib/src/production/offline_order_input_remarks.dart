@@ -6,8 +6,9 @@ class OfflineOrderInputRemarksPage extends StatefulWidget {
   String field;
   String fieldText;
   TextInputType inputType;
+  String content;
 
-  OfflineOrderInputRemarksPage({this.field, this.fieldText, this.inputType});
+  OfflineOrderInputRemarksPage({this.field, this.fieldText, this.inputType, this.content});
 
   _OfflineOrderInputRemarksPageState createState() => _OfflineOrderInputRemarksPageState();
 }
@@ -16,6 +17,12 @@ class _OfflineOrderInputRemarksPageState extends State<OfflineOrderInputRemarksP
   FocusNode _focusNode = FocusNode();
   final TextEditingController _controller = TextEditingController();
   String result;
+
+  @override
+  void initState() {
+    _controller.text = widget.content;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +46,7 @@ class _OfflineOrderInputRemarksPageState extends State<OfflineOrderInputRemarksP
                   ),
                   onTap: () async {
                     //带值返回上一页
+                    result = _controller.text;
                     Navigator.of(context).pop(result);
                   }
               )
