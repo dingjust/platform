@@ -11,11 +11,12 @@ import 'form/minor_category_field.dart';
 import 'form/normal_picture_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
-  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false})
+  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false,this.status,})
       : super(key: const Key('__apparelProductFormPage__'));
 
   final ApparelProductModel item;
   final bool isCreate;
+  String status;
 
   ApparelProductFormState createState() => ApparelProductFormState();
 }
@@ -113,7 +114,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   await ProductRepositoryImpl().update(widget.item);
                 }
 
-                ApparelProductBLoC.instance.filterByStatuses('');
+                ApparelProductBLoC.instance.filterByStatuses(widget.status);
 //              print(widget.item.attributes.styles[0]);
                 Navigator.pop(context);
               },

@@ -347,6 +347,23 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
+                  '合作方式',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  formatCooperationModesSelectText(widget.factory.cooperationModes),
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
                   '生产大类',
                   style: TextStyle(
                     color: Colors.grey,
@@ -849,25 +866,27 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     return text;
   }
 
-  //格式化年龄段
-  String formatAgeRangesText(List<AgeRanges> ageRanges) {
+  //格式化合作方式
+  String formatCooperationModesSelectText(List<CooperationModes> cooperationModes) {
     String text = '';
-    if (ageRanges != null && ageRanges.isNotEmpty) {
-      ageRanges.forEach((ageRange) {
-        text += '  ' + AgeRangesLocalizedMap[ageRange];
-      });
+
+    if (cooperationModes != null) {
+      text = '';
+      for (int i = 0; i < cooperationModes.length; i++) {
+        if (i > 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == cooperationModes.length - 1) {
+          text += CooperationModesLocalizedMap[cooperationModes[i]];
+        } else {
+          text += CooperationModesLocalizedMap[cooperationModes[i]] + '、';
+        }
+      }
     }
+
     return text;
   }
 
-  //格式化价格段
-  String formatPriceRangesText(List<PriceRanges> priceRanges) {
-    String text = '';
-    if (priceRanges != null && priceRanges.isNotEmpty) {
-      priceRanges.forEach((priceRange) {
-        text += '  ￥' + PriceRangesLocalizedMap[priceRange];
-      });
-    }
-    return text;
-  }
 }
