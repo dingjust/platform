@@ -15,6 +15,16 @@
           <el-tab-pane label="送货地址" name="deliveryAddress">
             <purchase-order-delivery-address-form :slot-data="slotData" :read-only="readOnly"/>
           </el-tab-pane>
+          <el-tab-pane label="生产进度" name="progress">
+            <el-timeline>
+              <template v-for="progress in slotData.progresses">
+                <el-card>
+                  <purchase-order-progress-form :slot-data="progress" :read-only="readOnly"/>
+                </el-card>
+              </template>
+            </el-timeline>
+
+          </el-tab-pane>
         </el-tabs>
       </el-card>
     </template>
@@ -46,6 +56,21 @@
         </div>
         <purchase-order-delivery-address-form :slot-data="slotData" :read-only="readOnly"/>
       </el-card>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>生产进度</span>
+          </div>
+        <el-timeline>
+          <template v-for="progress in slotData.progresses">
+            <el-timeline-item color="#0bbd87" size="large">
+            <el-card>
+              <purchase-order-progress-form :slot-data="progress" :read-only="readOnly" @onSubmit="progressSubmit"/>
+            </el-card>
+            </el-timeline-item>
+          </template>
+        </el-timeline>
+
+        </el-card>
     </template>
   </div>
 </template>
@@ -55,6 +80,7 @@
   import PurchaseOrderSellerForm from "./PurchaseOrderSellerForm";
   import PurchaseOrderDeliveryAddressForm from "./PurchaseOrderDeliveryAddressForm";
   import PurchaseOrderEntriesForm from "./PurchaseOrderEntriesForm";
+  import PurchaseOrderProgressForm from "./PurchaseOrderProgressForm";
 
   export default {
     name: 'PurchaseOrderForm',
@@ -64,6 +90,7 @@
       PurchaseOrderSellerForm,
       PurchaseOrderEntriesForm,
       PurchaseOrderDeliveryAddressForm,
+      PurchaseOrderProgressForm,
     },
     mixins: [],
     computed: {
@@ -72,7 +99,27 @@
         return !this.readOnly && this.isFactory();
       }
     },
-    methods: {},
+    methods: {
+      async progressSubmit(data){
+        let formData = data;
+        console.log(formData);
+
+        const estimatedDate = formData.estimatedDate;
+        if (this.compareDate(new Date(), new Date(estimatedDate))) {
+          this.$message.error('预计完成时间不能小于当前时间');
+          return false;
+        }
+        const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code,formData.id);
+        const result = await this.$http.put(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('更新成功');
+
+      }
+    },
     data() {
       return {}
     },

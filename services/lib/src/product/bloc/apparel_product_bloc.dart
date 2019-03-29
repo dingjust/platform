@@ -53,7 +53,8 @@ class ApparelProductBLoC extends BLoCBase {
     }
     products.clear();
     print(data);
-    productsResponse = await ProductRepositoryImpl().list({},data);
+    productsResponse = await ProductRepositoryImpl().list(data,{});
+    print(productsResponse.content);
     products.addAll(productsResponse.content);
     _controller.sink.add(products);
   }

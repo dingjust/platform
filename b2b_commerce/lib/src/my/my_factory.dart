@@ -46,11 +46,22 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       _buildBaseInfo(),
     ];
     if(widget.quoteModel != null){
-      _widgets.add( QuoteItem(model: widget.quoteModel,isSupplier: widget.quoteModel != null,));
+      _widgets.add( QuoteManageItem(model: widget.quoteModel,isSupplier: widget.quoteModel != null,));
     }
     if(widget.purchaseOrder != null){
-      _widgets.add(_buildOrderHeader());
-      _widgets.add(_buildContent());
+      _widgets.add(Card(
+        elevation: 0,
+        margin: EdgeInsets.only(top: 10),
+        child: Column(
+          children: <Widget>[
+            _buildOrderHeader(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _buildContent(),
+            ),
+          ],
+        ),
+      ));
     }
     _widgets.add(_buildCashProducts());
     _widgets.add(_buildFactoryWorkPicInfo());

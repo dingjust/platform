@@ -249,6 +249,9 @@ const COMMON_APIS = {
   updateDeliveryAddressOfPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code + '/deliveryAddress';
   },
+  updateProgressOfPurchaseOrder(code,id) {
+    return '/b2b/orders/purchase/' + code + '/progress/'+id;
+  },
   createPurchaseOrder() {
     return '/b2b/orders/purchase/create';
   },

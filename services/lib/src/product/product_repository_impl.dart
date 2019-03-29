@@ -14,6 +14,12 @@ class ProductRepositoryImpl extends ProductRepository{
   }
 
   @override
+  Future<ProductsResponse> getProductsOfFactories(dynamic data,Map<String,dynamic> params) async{
+    Response response = await http$.post(ProductApis.getProductsOfFactories,data: data,queryParameters: params);
+    return ProductsResponse.fromJson(response.data);
+  }
+
+  @override
   Future<ApparelProductModel> detail(String code) async{
     Response response = await http$.get(ProductApis.detail(code));
     return ApparelProductModel.fromJson(response.data);
