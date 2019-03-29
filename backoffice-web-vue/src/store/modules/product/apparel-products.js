@@ -33,7 +33,7 @@ const state = {
     sizes: [],
     attributes: {
       styles: [],
-      fabricComposition: '',
+      fabricCompositions: [],
       editionType: '',
       pattern: '',
       sleeveType: '',
