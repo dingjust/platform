@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 /// 导航菜单
 class NavigationMenu {
-  const NavigationMenu({@required this.item, @required this.page});
+  const NavigationMenu(this.item, this.page);
 
   final BottomNavigationBarItem item;
   final Widget page;
