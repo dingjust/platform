@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/products/existing_product_item.dart';
 import 'package:b2b_commerce/src/home/factory/factory.dart';
@@ -19,7 +20,8 @@ class MyFactoryPage extends StatefulWidget {
   PurchaseOrderModel purchaseOrder;
   QuoteModel quoteModel;
   bool isCompanyIntroduction;
-  MyFactoryPage(this.factory,{this.products,this.purchaseOrder,this.quoteModel,this.isCompanyIntroduction = false});
+  bool isFactoryDetail;
+  MyFactoryPage(this.factory,{this.products,this.purchaseOrder,this.quoteModel,this.isCompanyIntroduction = false,this.isFactoryDetail = false,});
 
   _MyFactoryPageState createState() => _MyFactoryPageState();
 }
@@ -83,6 +85,32 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           children: _widgets,
         ),
       ),
+      floatingActionButton: _buildRequestOrderButton(context),
+    );
+  }
+
+  //发布需求按钮
+  Widget _buildRequestOrderButton(BuildContext context) {
+    return FloatingActionButton.extended(
+      icon: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+      label: Text(
+        '发布需求',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RequirementOrderFrom(),
+          ),
+        );
+      },
+      backgroundColor: Color.fromRGBO(255, 214, 12, 1),
     );
   }
 

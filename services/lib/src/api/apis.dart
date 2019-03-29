@@ -57,4 +57,8 @@ class Apis {
 
   /// 全部工厂列表
   static get factories => '/{baseSiteId}/b2b/factories';
+  /// 获取品牌的供应商列表
+  static get factorySuppliers => '/{baseSiteId}/b2b/factories/getSuppliers';
+  /// 获取工厂的供应商列表
+  static get brandsSuppliers => '/{baseSiteId}/b2b/brands/getSuppliers';
 }

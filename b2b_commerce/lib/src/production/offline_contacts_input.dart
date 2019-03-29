@@ -83,6 +83,7 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(10),
             child: TextFieldComponent(
+              style: TextStyle(color: Colors.grey,fontSize: 16,),
               focusNode: _nameFocusNode,
               controller: _nameController,
               leadingText: '联系人名',
@@ -93,6 +94,7 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(10),
             child: TextFieldComponent(
+              style: TextStyle(color: Colors.grey,fontSize: 16,),
               focusNode: _phoneFocusNode,
               controller: _phoneController,
               leadingText: '联系电话',
@@ -146,6 +148,7 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(10),
             child: TextFieldComponent(
+                style: TextStyle(color: Colors.grey,fontSize: 16,),
                 focusNode: _lineFocusNode,
                 controller: _lineController,
                 leadingText: '详细地址',
