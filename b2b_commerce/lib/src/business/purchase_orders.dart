@@ -259,8 +259,6 @@ class PurchaseOrderItem extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 (order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ) ||
                     (order.salesApplication == SalesApplication.ONLINE && order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ) ?
@@ -306,13 +304,21 @@ class PurchaseOrderItem extends StatelessWidget {
                     )
                 ),
                 order.status == null ? Container() :
-                Text(
-                  '${PurchaseOrderStatusLocalizedMap[order.status]}',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color:  _statusColors[order.status],
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '${PurchaseOrderStatusLocalizedMap[order.status]}',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color:  _statusColors[order.status],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -343,24 +349,34 @@ class PurchaseOrderItem extends StatelessWidget {
 
   Widget _buildHeaderText(BuildContext context){
     if(order.salesApplication == SalesApplication.ONLINE && order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT ){
-      return Text(
-        '（待付定金）',
-        textAlign: TextAlign.start,
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.red,
-          fontWeight: FontWeight.w500,
+      return  Container(
+        padding: EdgeInsets.only(left: 7),
+        margin: EdgeInsets.only(left: 5),
+        color: Color.fromRGBO(255, 243, 243, 1),
+        child: Text(
+          '待付定金',
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.red,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       );
     }
     else if(order.salesApplication == SalesApplication.ONLINE && order.balancePaid == false && order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ){
-      return Text(
-        '（待付尾款）',
-        textAlign: TextAlign.start,
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.red,
-          fontWeight: FontWeight.w500,
+      return Container(
+        padding: EdgeInsets.only(left: 7),
+        margin: EdgeInsets.only(left: 5),
+        color: Color.fromRGBO(255, 243, 243, 1),
+        child: Text(
+          '待付尾款',
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.red,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       );
     }
@@ -478,7 +494,10 @@ class PurchaseOrderItem extends StatelessWidget {
                               barrierDismissible: true, // user must tap button!
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text('提示'),
+                                  title: Text('提示',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),),
                                   content: Text('是否要取消订单？'),
                                   actions: <Widget>[
                                     FlatButton(
@@ -538,7 +557,10 @@ class PurchaseOrderItem extends StatelessWidget {
                               builder: (context) {
                                 return  order.deliveryAddress == null ?
                                 SimpleDialog(
-                                  title: const Text('提示'),
+                                  title: const Text('提示',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),),
                                   children: <Widget>[
                                     SimpleDialogOption(
                                       child: Text('送货地址为空，请先添加'),
@@ -917,7 +939,10 @@ class PurchaseOrderItem extends StatelessWidget {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -1021,7 +1046,10 @@ class PurchaseOrderItem extends StatelessWidget {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -1119,7 +1147,10 @@ class PurchaseOrderItem extends StatelessWidget {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: Text('是否无需付款直接跳过？'),
           actions: <Widget>[
             FlatButton(
@@ -1166,7 +1197,10 @@ class PurchaseOrderItem extends StatelessWidget {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return SimpleDialog(
-          title: const Text('提示'),
+          title: const Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           children: <Widget>[
             SimpleDialogOption(
               child: Text('${message}'),

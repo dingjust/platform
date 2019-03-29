@@ -17,9 +17,12 @@ class QuoteItem extends StatefulWidget {
   /// 顶级页面context
   final BuildContext pageContext;
 
+  bool isSupplier;
+
   QuoteItem(
       {Key key,
       this.model,
+        this.isSupplier = false,
       @required this.onRefresh,
       @required this.pageContext})
       : super(key: key);
@@ -150,10 +153,10 @@ class _QuoteItemState extends State<QuoteItem> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  '${widget.model?.supplier.name}',
-                  style: TextStyle(fontSize: 15),
-                ),
+//                Text(
+//                  '${widget.model?.supplier.name}',
+//                  style: TextStyle(fontSize: 15),
+//                ),
                 Text(
                   '报价时间：${DateFormatUtil.format(widget.model.creationTime)}',
                   style: TextStyle(fontSize: 15),
@@ -167,32 +170,35 @@ class _QuoteItemState extends State<QuoteItem> {
   }
 
   Widget _buildSummary() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          FlatButton(
-              onPressed: onReject,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Colors.red,
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '拒绝报价',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              )),
-          FlatButton(
-              onPressed: onApprove,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '确认报价',
-                style: TextStyle(
-                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-              )),
-        ],
+    return Offstage(
+      offstage: widget.isSupplier,
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            FlatButton(
+                onPressed: onReject,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Colors.red,
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '拒绝报价',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                )),
+            FlatButton(
+                onPressed: onApprove,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '确认报价',
+                  style: TextStyle(
+                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                )),
+          ],
+        ),
       ),
     );
   }

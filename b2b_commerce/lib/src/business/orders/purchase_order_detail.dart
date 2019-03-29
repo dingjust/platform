@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -472,8 +473,49 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 fit: BoxFit.fitWidth,
               ),
             ),
-            ListTile(
-              title: Text("物流信息"),
+            GestureDetector(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      '物流信息',
+                      style: TextStyle(
+                          fontSize: 16
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          '${order.consignmentModel!=null && order.consignmentModel.carrierModel!=null?order.consignmentModel.carrierModel.name:''}',
+                          style: TextStyle(
+                              fontSize: 16
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Text(
+                          '${order.consignmentModel!=null && order.consignmentModel.carrierModel!=null?order.consignmentModel.trackingID:''}',
+                          style: TextStyle(
+                              fontSize: 16
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              onTap: (){
+                if (order.consignmentModel != null &&
+                    order.consignmentModel.carrierModel != null &&
+                    order.consignmentModel.trackingID != null &&
+                    order.consignmentModel.carrierModel.name != null) {
+                  copyToClipboard(order.consignmentModel.trackingID);
+                }
+              },
             )
           ],
         ),
@@ -1189,7 +1231,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         barrierDismissible: true, // user must tap button!
                         builder: (context) {
                           return AlertDialog(
-                            title: Text('提示'),
+                            title: Text('提示',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),),
                             content: Text('是否要取消订单？'),
                             actions: <Widget>[
                               FlatButton(
@@ -1249,7 +1294,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         builder: (context) {
                           return  order.deliveryAddress == null ?
                           SimpleDialog(
-                            title: const Text('提示'),
+                            title: const Text('提示',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),),
                             children: <Widget>[
                               SimpleDialogOption(
                                 child: Text('送货地址为空，请先添加'),
@@ -1875,7 +1923,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -1979,7 +2030,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -2076,7 +2130,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           content: Text('是否无需付款直接跳过？'),
           actions: <Widget>[
             FlatButton(
@@ -2137,7 +2194,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return SimpleDialog(
-          title: const Text('提示'),
+          title: const Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
           children: <Widget>[
             SimpleDialogOption(
               child: Text('${message}'),
@@ -2146,6 +2206,33 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         );
       },
     );
+  }
+
+  copyToClipboard(final String text) {
+    if (text != null) {
+      Clipboard.setData(
+          ClipboardData(text: text)
+      );
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text(
+                '提示',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            children: <Widget>[
+              SimpleDialogOption(
+                child: Text('复制成功'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
 }
