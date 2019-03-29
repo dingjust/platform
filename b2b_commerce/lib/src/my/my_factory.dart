@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/products/existing_product_item.dart';
 import 'package:b2b_commerce/src/home/factory/factory.dart';
@@ -16,8 +17,9 @@ class MyFactoryPage extends StatefulWidget {
   FactoryModel factory;
   List<ApparelProductModel> products;
   PurchaseOrderModel purchaseOrder;
+  QuoteModel quoteModel;
   bool isCompanyIntroduction;
-  MyFactoryPage(this.factory,{this.products,this.purchaseOrder,this.isCompanyIntroduction = false});
+  MyFactoryPage(this.factory,{this.products,this.purchaseOrder,this.quoteModel,this.isCompanyIntroduction = false});
 
   _MyFactoryPageState createState() => _MyFactoryPageState();
 }
@@ -43,6 +45,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     List<Widget> _widgets = [
       _buildBaseInfo(),
     ];
+    if(widget.quoteModel != null){
+      _widgets.add( QuoteItem(model: widget.quoteModel,isSupplier: widget.quoteModel != null,));
+    }
     if(widget.purchaseOrder != null){
       _widgets.add(_buildOrderHeader());
       _widgets.add(_buildContent());
@@ -83,7 +88,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MyCompanyContactWayPage(widget.factory,isCompanyIntroduction: true,)),
+                    builder: (context) => MyCompanyContactWayPage(widget.factory,isCompanyIntroduction: widget.isCompanyIntroduction,)),
               );
             },
           ),
@@ -207,12 +212,13 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                     '${widget.factory.historyOrdersCount ?? 0}',
                     style: TextStyle(color: Colors.red),
                   ),
-                  Text('单，响应报价时间：'),
-                  Text(
-                    '${widget.factory.responseQuotedTime ?? 0}',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  Text('小时（平均）'),
+                  Text('单')
+//                  Text('单，响应报价时间：'),
+//                  Text(
+//                    '${widget.factory.responseQuotedTime ?? 0}',
+//                    style: TextStyle(color: Colors.red),
+//                  ),
+//                  Text('小时（平均）'),
                 ],
               ),
             ),
@@ -595,13 +601,13 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top: 5, right: 5,bottom: 5),
-              child: Offstage(
-                offstage: !widget.isCompanyIntroduction,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('图文详情',style: TextStyle(fontSize: 16),),
-                    GestureDetector(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('图文详情',style: TextStyle(fontSize: 16),),
+                  Offstage(
+                    offstage: !widget.isCompanyIntroduction,
+                    child: GestureDetector(
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -620,9 +626,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                                 builder: (context) =>
                                     MyCompanyProfileFormPage(widget.factory)));
                       },
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
             Container(

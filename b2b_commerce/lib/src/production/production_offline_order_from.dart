@@ -955,7 +955,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return SimpleDialog(
-          title: const Text('提示'),
+          title: const Text('提示',
+            style: TextStyle(
+              fontSize: 16
+            ),
+          ),
           children: <Widget>[
             SimpleDialogOption(
               child: Text('${message}'),
@@ -972,7 +976,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text('提示',
+            style: TextStyle(
+                fontSize: 16
+            ),),
           content: SingleChildScrollView(
               child: Text(
                 '${message}',
@@ -983,7 +990,12 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('确定'),
+              child: Text(
+                  '确定',
+                style: TextStyle(
+                  color: Colors.black
+                ),
+              ),
               onPressed: () async {
                 PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
                 ProductionBLoC.instance.refreshData();
