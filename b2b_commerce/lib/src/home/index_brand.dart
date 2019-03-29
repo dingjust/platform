@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/broadcast.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -25,8 +26,6 @@ class _BrandHomePageState extends State<BrandHomePage> {
 
   ///图标颜色
   Color iconColor = white;
-
-  TextEditingController _uniqueCodeTextController = TextEditingController();
 
   void initState() {
     super.initState();
@@ -68,22 +67,6 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 height: 35,
               ),
               brightness: Brightness.dark,
-              actions: <Widget>[
-                // IconButton(
-                //   padding: EdgeInsets.only(right: 20),
-                //   icon: const Icon(B2BIcons.message),
-                //   color: iconColor,
-                //   tooltip: 'message',
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => MyClientServicesPage(),
-                //       ),
-                //     );
-                //   },
-                // ),
-              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   fit: StackFit.expand,
@@ -94,20 +77,21 @@ class _BrandHomePageState extends State<BrandHomePage> {
               ),
             ),
             SliverList(
-                delegate: SliverChildListDelegate(<Widget>[
-              EasyGrid(
-                height: 90,
-                dataList: _gridItemList(),
-              ),
-              HomeTabSection(
-                height: 100,
-              ),
-              _buildBroadcast(),
-              FastPublishRequirement(),
-              _buildSpacing(15),
-              _buildTrackingProgress(),
-              _buildSpacing(40),
-            ])),
+              delegate: SliverChildListDelegate(<Widget>[
+                EasyGrid(
+                  height: 90,
+                  dataList: _gridItemList(),
+                ),
+                HomeTabSection(
+                  height: 100,
+                ),
+                BroadcastFactory.buildBroadcast('进入蕉衣请优先注册并提交认证资料'),
+                FastPublishRequirement(),
+                DividerFactory.buildDivider(15),
+                TrackingProgressSection(),
+                DividerFactory.buildDivider(40),
+              ]),
+            ),
           ],
         ),
       ),
@@ -119,18 +103,17 @@ class _BrandHomePageState extends State<BrandHomePage> {
       GridItem(
           title: '当季快反',
           onPressed: () async {
-            //加载条
+            // 加载条
             showDialog(
-                context: context,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ));
-            await ProductRepositoryImpl().cascadedCategories().then((categorys) {
+              context: context,
+              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+            );
+            await ProductRepositoryImpl().cascadedCategories().then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: [],
-                        categorys: categorys,
+                        categorys: categories,
                         categoryActionType: CategoryActionType.TO_FACTORIES,
                       )));
             });
@@ -139,64 +122,33 @@ class _BrandHomePageState extends State<BrandHomePage> {
       GridItem(
           title: '看款下单',
           onPressed: () async {
-            //加载条
+            // 加载条
             showDialog(
-                context: context,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ));
-            await ProductRepositoryImpl().cascadedCategories().then((categorys) {
+              context: context,
+              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+            );
+            await ProductRepositoryImpl().cascadedCategories().then((categories) {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).push(
+                MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: [],
-                        categorys: categorys,
+                        categorys: categories,
                         categoryActionType: CategoryActionType.TO_PRODUCTS,
-                      )));
+                      ),
+                ),
+              );
             });
           },
           pic: B2BImage.order(width: 60, height: 80)),
-      // GridItem(
-      //     title: '空闲产能',
-      //     onPressed: () {},
-      //     pic: B2BImage.idle_capacity(width: 60, height: 80)),
-      // GridItem(
-      //     title: '电商找厂',
-      //     onPressed: () {},
-      //     pic: B2BImage.find_factory(width: 60, height: 60)),
     ];
   }
+}
 
-  Widget _buildSpacing(double height) {
-    return Container(
-      color: Color.fromRGBO(246, 247, 249, 1),
-      height: height,
-    );
-  }
-
-  Widget _buildBroadcast() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      color: Color.fromRGBO(254, 252, 235, 1),
-      child: Row(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            child: Icon(
-              Icons.volume_up,
-              color: Color.fromRGBO(247, 114, 47, 1),
-            ),
-          ),
-          Text(
-            '进入蕉衣请优先注册并提交认证资料',
-            style: TextStyle(color: Color.fromRGBO(247, 114, 47, 1)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTrackingProgress() {
+/// 跟踪进度版块
+class TrackingProgressSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(15, 15, 15, 15),

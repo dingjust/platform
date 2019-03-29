@@ -281,7 +281,7 @@ class PublishRequirementButton extends StatelessWidget {
     @required this.onPublish,
   }) : super(key: key);
 
-  final Function onPublish;
+  final VoidCallback onPublish;
 
   @override
   Widget build(BuildContext context) {
