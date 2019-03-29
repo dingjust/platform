@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/common/app_constants.dart';
+import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,61 +16,66 @@ import '../production/index.dart';
 class FactoryClient extends StatefulWidget {
   FactoryClient({Key key}) : super(key: key);
 
-  final List<Widget> modules = <Widget>[
-    FactoryHomePage(),
-    ProductionPage(),
-    BusinessHomePage(),
-    MyHomePage(),
-  ];
-
-  final List<BottomNavigationBarItem> items = [
-    BottomNavigationBarItem(
-      icon: Container(
-        margin: EdgeInsets.only(right: 12),
-        child: const Icon(B2BIcons.home),
-      ),
-      activeIcon: Container(
-        margin: EdgeInsets.only(right: 12),
-        child: const Icon(
-          B2BIcons.home_active,
+  final List<NavigationMenu> menus = <NavigationMenu>[
+    NavigationMenu(
+      item: BottomNavigationBarItem(
+        icon: Container(
+          margin: EdgeInsets.only(right: 12),
+          child: const Icon(B2BIcons.home),
         ),
+        activeIcon: Container(
+          margin: EdgeInsets.only(right: 12),
+          child: const Icon(
+            B2BIcons.home_active,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        title: const Text('商机'),
       ),
-      backgroundColor: Colors.white,
-      title: const Text('商机'),
+      page: FactoryHomePage(),
     ),
-    BottomNavigationBarItem(
-      icon: Container(
-        margin: EdgeInsets.only(right: 15),
-        child: const Icon(B2BIcons.production),
+    NavigationMenu(
+      item: BottomNavigationBarItem(
+        icon: Container(
+          margin: EdgeInsets.only(right: 15),
+          child: const Icon(B2BIcons.production),
+        ),
+        activeIcon: Container(
+          margin: EdgeInsets.only(right: 15),
+          child: const Icon(B2BIcons.production_active),
+        ),
+        title: const Text('生产'),
       ),
-      activeIcon: Container(
-        margin: EdgeInsets.only(right: 15),
-        child: const Icon(B2BIcons.production_active),
-      ),
-      title: const Text('生产'),
+      page: ProductionPage(),
     ),
-    BottomNavigationBarItem(
-      icon: Container(
-        margin: EdgeInsets.only(right: 10),
-        child: const Icon(B2BIcons.business),
+    NavigationMenu(
+      item: BottomNavigationBarItem(
+        icon: Container(
+          margin: EdgeInsets.only(right: 10),
+          child: const Icon(B2BIcons.business),
+        ),
+        activeIcon: Container(
+          margin: EdgeInsets.only(right: 10),
+          child: const Icon(B2BIcons.business_active),
+        ),
+        title: const Text('工作'),
       ),
-      activeIcon: Container(
-        margin: EdgeInsets.only(right: 10),
-        child: const Icon(B2BIcons.business_active),
-      ),
-      title: const Text('工作'),
+      page: FactoryBusinessHomePage(),
     ),
-    BottomNavigationBarItem(
-      icon: Container(
-        margin: EdgeInsets.only(right: 10),
-        child: const Icon(B2BIcons.my),
+    NavigationMenu(
+      item: BottomNavigationBarItem(
+        icon: Container(
+          margin: EdgeInsets.only(right: 10),
+          child: const Icon(B2BIcons.my),
+        ),
+        activeIcon: Container(
+          margin: EdgeInsets.only(right: 10),
+          child: const Icon(B2BIcons.my_active),
+        ),
+        title: const Text('我的'),
       ),
-      activeIcon: Container(
-        margin: EdgeInsets.only(right: 10),
-        child: const Icon(B2BIcons.my_active),
-      ),
-      title: const Text('我的'),
-    )
+      page: MyHomePage(),
+    ),
   ];
 
   _FactoryClientState createState() => _FactoryClientState();
@@ -98,11 +104,11 @@ class _FactoryClientState extends State<FactoryClient> {
       home: Builder(
         builder: (context) => Scaffold(
               key: AppKeys.appPage,
-              body: widget.modules[_currentIndex],
+              body: widget.menus[_currentIndex].page,
               bottomNavigationBar: BottomNavigation(
                 currentIndex: _currentIndex,
                 onChanged: _handleNavigation,
-                items: widget.items,
+                items: widget.menus.map((menu) => menu.item).toList(),
               ),
             ),
       ),

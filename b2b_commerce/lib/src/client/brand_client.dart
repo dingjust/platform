@@ -1,10 +1,11 @@
 import 'package:b2b_commerce/src/common/app_constants.dart';
+import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:widgets/widgets.dart';
 
-import '../business/index.dart';
+import '../business/index_brand.dart';
 import '../business/orders/requirement_order_from.dart';
 import '../common/app_keys.dart';
 import '../common/app_routes.dart';
@@ -16,67 +17,72 @@ import '../production/index.dart';
 class BrandClient extends StatefulWidget {
   BrandClient({Key key}) : super(key: key);
 
-  final List<Widget> modules = <Widget>[
-    BrandHomePage(),
-    ProductionPage(),
-    BusinessHomePage(),
-    MyHomePage(),
-  ];
-
-  final List<BottomNavigationBarItem> items = [
-    BottomNavigationBarItem(
-      icon: Container(
-        margin: EdgeInsets.only(right: 5),
-        child: const Icon(B2BIcons.home),
-      ),
-      activeIcon: Container(
-        margin: EdgeInsets.only(right: 5),
-        child: const Icon(B2BIcons.home_active),
-      ),
-      title: const Text('商机'),
-    ),
-    BottomNavigationBarItem(
-      icon: Container(
-        margin: EdgeInsets.only(right: 35),
-        child: const Icon(B2BIcons.production),
-      ),
-      activeIcon: Container(
-        margin: EdgeInsets.only(right: 35),
-        child: const Icon(B2BIcons.production_active),
-      ),
-      title: Container(
-        margin: EdgeInsets.only(right: 30),
-        child: const Text('生产'),
-      ),
-    ),
-    BottomNavigationBarItem(
+  final List<NavigationMenu> menus = <NavigationMenu>[
+    NavigationMenu(
+      item: BottomNavigationBarItem(
         icon: Container(
-          margin: EdgeInsets.only(left: 35),
-          child: const Icon(B2BIcons.business),
+          margin: const EdgeInsets.only(right: 5),
+          child: const Icon(B2BIcons.home),
         ),
         activeIcon: Container(
-          margin: EdgeInsets.only(left: 35),
-          child: const Icon(B2BIcons.business_active),
+          margin: const EdgeInsets.only(right: 5),
+          child: const Icon(B2BIcons.home_active),
+        ),
+        title: const Text('商机'),
+      ),
+      page: BrandHomePage(),
+    ),
+    NavigationMenu(
+      item: BottomNavigationBarItem(
+        icon: Container(
+          margin: const EdgeInsets.only(right: 35),
+          child: const Icon(B2BIcons.production),
+        ),
+        activeIcon: Container(
+          margin: const EdgeInsets.only(right: 35),
+          child: const Icon(B2BIcons.production_active),
         ),
         title: Container(
-          margin: EdgeInsets.only(left: 45),
-          child: const Text('工作'),
-        )),
-    BottomNavigationBarItem(
-      icon: Container(
-        margin: EdgeInsets.only(right: 5),
-        child: const Icon(
-          B2BIcons.my,
+          margin: const EdgeInsets.only(right: 30),
+          child: const Text('生产'),
         ),
       ),
-      activeIcon: Container(
-        margin: EdgeInsets.only(right: 5),
-        child: const Icon(
-          B2BIcons.my_active,
+      page: ProductionPage(),
+    ),
+    NavigationMenu(
+      item: BottomNavigationBarItem(
+          icon: Container(
+            margin: const EdgeInsets.only(left: 35),
+            child: const Icon(B2BIcons.business),
+          ),
+          activeIcon: Container(
+            margin: const EdgeInsets.only(left: 35),
+            child: const Icon(B2BIcons.business_active),
+          ),
+          title: Container(
+            margin: const EdgeInsets.only(left: 45),
+            child: const Text('工作'),
+          )),
+      page: BrandBusinessHomePage(),
+    ),
+    NavigationMenu(
+      item: BottomNavigationBarItem(
+        icon: Container(
+          margin: const EdgeInsets.only(right: 5),
+          child: const Icon(
+            B2BIcons.my,
+          ),
         ),
+        activeIcon: Container(
+          margin: const EdgeInsets.only(right: 5),
+          child: const Icon(
+            B2BIcons.my_active,
+          ),
+        ),
+        title: const Text('我的'),
       ),
-      title: const Text('我的'),
-    )
+      page: MyHomePage(),
+    ),
   ];
 
   _BrandClientState createState() => _BrandClientState();
@@ -114,11 +120,11 @@ class _BrandClientState extends State<BrandClient> {
       home: Builder(
         builder: (context) => Scaffold(
               key: AppKeys.appPage,
-              body: widget.modules[_currentIndex],
+              body: widget.menus[_currentIndex].page,
               bottomNavigationBar: BottomNavigation(
                 currentIndex: _currentIndex,
                 onChanged: _handleNavigation,
-                items: widget.items,
+                items: widget.menus.map((menu) => menu.item).toList(),
               ),
               floatingActionButton: PublishRequirementButton(
                 onPublish: () => _onPublish(context),
