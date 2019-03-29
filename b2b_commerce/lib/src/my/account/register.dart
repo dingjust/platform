@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/my/account/register_info.dart';
 import 'package:b2b_commerce/src/my/account/reset_password.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -92,6 +93,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                         hintText: '请输入', border: InputBorder.none),
                   ),
+                  surfix: Container(
+                    child: Text(
+                      validatePhone() ? '' : '输入正确手机号',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
                 ),
                 InputRow(
                   label: '验证码',
@@ -181,6 +188,14 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
     );
+  }
+
+  bool validatePhone() {
+    if (_phoneController.text == '') {
+      return true;
+    } else {
+      return RegexUtil.isMobile(_phoneController.text);
+    }
   }
 
   void formValidate() {

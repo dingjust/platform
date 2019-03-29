@@ -1095,7 +1095,7 @@ class ProofingModel extends OrderModel {
   ProofingStatus status;
 
   ///发布者
-  CompanyModel belongTo;
+  FactoryModel belongTo;
 
   ///合作商信息
   CompanyModel supplier;
