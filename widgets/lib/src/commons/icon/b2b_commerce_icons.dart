@@ -42,7 +42,7 @@ class B2BIcons {
   static const IconData add =
       const IconData(0xe68d, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData noPicture =
-      const IconData(0xe689, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6c7, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData condition =
       const IconData(0xe6b1, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData more =

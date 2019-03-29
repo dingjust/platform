@@ -47,7 +47,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   List<FilterConditionEntry> machiningTypeConditionEntries =
       <FilterConditionEntry>[
-    FilterConditionEntry(label: '全部', value: null, checked: true),
+    FilterConditionEntry(label: '全部', value: "ALL1", checked: true),
     FilterConditionEntry(
         label: '包工包料', value: MachiningType.LABOR_AND_MATERIAL),
     FilterConditionEntry(label: '清加工', value: MachiningType.LIGHT_PROCESSING),
@@ -55,7 +55,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   List<FilterConditionEntry> categoriesConditionEntries =
       <FilterConditionEntry>[
-    FilterConditionEntry(label: '全部', value: null, checked: true),
+    FilterConditionEntry(label: '全部', value: "ALL2", checked: true),
   ];
 
   @override
@@ -70,8 +70,6 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(categoriesConditionEntries);
-
     return BLoCProvider<RequirementPoolBLoC>(
         key: _FactoryBLoCProviderKey,
         bloc: RequirementPoolBLoC.instance,
@@ -214,9 +212,12 @@ class OrdersListView extends StatelessWidget {
         }
       }
 
-      //品类全部
-      if (condition.value == null) {
+      if (condition.value == "ALL2") {
         currentCodition.categories.clear();
+      }
+
+      if (condition.value == "ALL1") {
+        currentCodition.machiningType = null;
       }
 
       // bloc.filterByCondition(currentCodition);
@@ -363,7 +364,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
         child: Icon(
           B2BIcons.noPicture,
           color: Color.fromRGBO(200, 200, 200, 1),
-          size: 25,
+          size: 60,
         ),
       );
     } else {
@@ -377,7 +378,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
           child: Icon(
             B2BIcons.noPicture,
             color: Color.fromRGBO(200, 200, 200, 1),
-            size: 25,
+            size: 60,
           ),
         );
       } else {
@@ -449,7 +450,8 @@ class RequirementPoolOrderItem extends StatelessWidget {
               style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
               children: <TextSpan>[
                 TextSpan(
-                    text: '${order.details.maxExpectedPrice??0}', style: TextStyle(fontSize: 18))
+                    text: '${order.details.maxExpectedPrice ?? 0}',
+                    style: TextStyle(fontSize: 18))
               ]),
         )
       ],

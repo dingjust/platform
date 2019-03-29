@@ -15,7 +15,7 @@ class MyHomePage extends StatelessWidget {
   static const String ROUTE_SETTINGS = '/settings';
   static final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>();
-  final double _appBarHeight = 200.0;
+  final double _appBarHeight = 160.0;
 
   MyHomePage() : super(key: AppKeys.myHomePage);
 
@@ -40,7 +40,7 @@ class MyHomePage extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(right: 32),
-                  child: B2BImage.certicate_info(width: 26, height: 19),
+                  child: B2BImage.company_introduce(height: 27, width: 23),
                 ),
                 Expanded(
                     child: Text(
@@ -246,7 +246,7 @@ class MyHomePage extends StatelessWidget {
 
   Widget _buildTopBackgroud(BuildContext context, UserModel user) {
     return Container(
-//      constraints: BoxConstraints.expand(width: 300.0, height: 300.0,),
+      padding: EdgeInsets.only(top: 50),
       child: Row(
         children: <Widget>[
           _buildPortrait(context, user),
@@ -272,7 +272,10 @@ class MyHomePage extends StatelessWidget {
                   radius: 40.0,
                 )
               : CircleAvatar(
-                  child: Icon(B2BIcons.noPicture),
+                  child: Icon(
+                    B2BIcons.noPicture,
+                    size: 40,
+                  ),
                   radius: 40.0,
                 ),
           decoration: BoxDecoration(
