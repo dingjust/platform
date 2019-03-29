@@ -41,7 +41,7 @@ class _RequirementDatePickState extends State<RequirementDatePick> {
             },
             child: Text(
               '下一步',
-              style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+              style: TextStyle(color: Colors.black),
             ),
           )
         ],

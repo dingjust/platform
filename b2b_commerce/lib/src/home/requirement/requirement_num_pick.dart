@@ -121,10 +121,6 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
             style: TextStyle(
                 color: Color.fromRGBO(150, 150, 150, 1), fontSize: 18),
           ),
-          Text(
-            '（必填）',
-            style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
-          ),
         ],
       ),
     );
