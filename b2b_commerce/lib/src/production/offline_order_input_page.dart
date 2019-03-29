@@ -62,6 +62,7 @@ class _OfflineOrderInputPageState extends State<OfflineOrderInputPage>{
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(10),
             child: TextFieldComponent(
+              textAlign: TextAlign.left,
               focusNode: _focusNode,
               controller: _controller,
               inputType: widget.inputType,
