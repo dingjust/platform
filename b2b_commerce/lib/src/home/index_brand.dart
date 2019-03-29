@@ -117,7 +117,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
   List<GridItem> _gridItemList() {
     return [
       GridItem(
-          title: '当季快反',
+          title: '快反工厂',
           onPressed: () async {
             //加载条
             showDialog(
@@ -188,7 +188,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
             ),
           ),
           Text(
-            '进入蕉衣请优先注册并提交认证资料',
+            '进入钉单请优先注册并提交认证资料',
             style: TextStyle(color: Color.fromRGBO(247, 114, 47, 1)),
           ),
         ],

@@ -148,8 +148,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               color: Color.fromRGBO(255, 214, 12, 1),
               child: Text(
                 '$_verifyStr',
-                style: TextStyle(
-                    color: (_seconds == 0) ? Colors.white : Colors.black45),
+                style: TextStyle(color: Colors.black),
               ),
             ),
           ),
@@ -233,7 +232,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 '提交',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(color: Colors.black, fontSize: 18),
               ),
             ),
           ),

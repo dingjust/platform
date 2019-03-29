@@ -200,7 +200,7 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
               );
             })),
         Text(
-          '蕉衣会尽快与您联系',
+          '钉单会尽快与您联系',
           style: TextStyle(color: Color.fromRGBO(255, 68, 68, 1)),
         )
       ],

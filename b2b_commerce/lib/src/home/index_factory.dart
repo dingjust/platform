@@ -121,7 +121,7 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
             ),
           ),
           Text(
-            '进入蕉衣请优先注册并提交认证资料',
+            '进入钉单请优先注册并提交认证资料',
             style: TextStyle(color: Color.fromRGBO(247, 114, 47, 1)),
           ),
         ],
@@ -176,7 +176,7 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '• 使用蕉衣APP统一管理生产订单;',
+                    '• 使用钉单APP统一管理生产订单;',
                     style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
                   ),
                   Text(
