@@ -111,11 +111,8 @@ class _PublishRequirementSuccessDialogState
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Color.fromRGBO(243, 243, 243, 1)),
-        child: Icon(
-          B2BIcons.noPicture,
-          color: Color.fromRGBO(200, 200, 200, 1),
-          size: 25,
-        ),
+        child: Icon(B2BIcons.noPicture,
+            color: Color.fromRGBO(200, 200, 200, 1), size: 60),
       );
     } else {
       if (widget.model.details.pictures.isEmpty) {
@@ -125,11 +122,8 @@ class _PublishRequirementSuccessDialogState
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Color.fromRGBO(243, 243, 243, 1)),
-          child: Icon(
-            B2BIcons.noPicture,
-            color: Color.fromRGBO(200, 200, 200, 1),
-            size: 25,
-          ),
+          child: Icon(B2BIcons.noPicture,
+              color: Color.fromRGBO(200, 200, 200, 1), size: 60),
         );
       } else {
         _pictureWidget = Container(

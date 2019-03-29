@@ -13,6 +13,9 @@ class HomeBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
       url: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/banner.png',
+    ),
+    MediaModel(
+      url: 'https://dingjust.oss-cn-shenzhen.aliyuncs.com/banner2.png',
     )
   ];
 
@@ -29,12 +32,15 @@ class HomeSearchInputBox extends StatelessWidget {
   final double height;
   final String tips;
 
-  const HomeSearchInputBox({Key key, this.width = 400, this.height = 30, this.tips}) : super(key: key);
+  const HomeSearchInputBox(
+      {Key key, this.width = 400, this.height = 30, this.tips})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
+      onTap: () => showSearch(
+          context: context, delegate: ApparelProductSearchDelegate()),
       child: Container(
         width: width,
         height: height,
@@ -92,9 +98,13 @@ class HomeTabSection extends StatelessWidget {
       ),
       AdvanceIconButton(
         onPressed: () async {
-          List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
+          List<LabelModel> labels =
+              await UserRepositoryImpl().industrialClustersFromLabels();
 
-          Navigator.push(context, MaterialPageRoute(builder: (context) => IndustrialClusterPage(labels)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IndustrialClusterPage(labels)));
         },
         title: '产业集群',
         icon: Icon(

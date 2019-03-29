@@ -328,7 +328,7 @@ class _RequirementOrderDetailPageState
         child: Icon(
           B2BIcons.noPicture,
           color: Color.fromRGBO(200, 200, 200, 1),
-          size: 25,
+          size: 60
         ),
       );
     } else {
@@ -342,7 +342,7 @@ class _RequirementOrderDetailPageState
           child: Icon(
             B2BIcons.noPicture,
             color: Color.fromRGBO(200, 200, 200, 1),
-            size: 25,
+            size: 60
           ),
         );
       } else {
