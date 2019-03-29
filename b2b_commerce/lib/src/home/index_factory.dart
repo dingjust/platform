@@ -33,7 +33,7 @@ class _FactoryHomePageState extends State<FactoryHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _appBarHeight = 150.0;
+    final double _appBarHeight = 188.0;
     ScrollController _scrollController = ScrollController();
 
     // 监听滚动变化该表图标颜色, _appBarHeight - kToolbarHeight为顶部标题栏底部与轮播图底部之间高度

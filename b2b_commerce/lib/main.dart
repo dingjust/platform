@@ -69,12 +69,31 @@ class MyAppHomeDelegate extends StatefulWidget {
 }
 
 class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
+  GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   int _currentIndex = 0;
 
   /// 处理底部导航
   void _handleNavigation(int index) {
     setState(() {
       _currentIndex = index;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => listenMessage());
+  }
+
+  //异常消息dialog
+  void listenMessage() {
+    MessageBLoC.instance.errorMessageStream.listen((value) {
+      final appContext = _navigatorKey.currentState.overlay.context;
+      final dialog = AlertDialog(
+        content: Text('${value}'),
+      );
+      showDialog(context: appContext, builder: (x) => dialog);
     });
   }
 
@@ -238,6 +257,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     final List<NavigationMenu> menus = _getNavigationMenus();
 
     return MaterialApp(
+      navigatorKey: _navigatorKey,
       title: AppConstants.appTitle,
       theme: ThemeData(
         // primarySwatch: Colors.blue,
@@ -260,7 +280,8 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
                       onPublish: () => _onPublish(context),
                     )
                   : null,
-              floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
             ),
       ),
       routes: AppRoutes.allRoutes,
