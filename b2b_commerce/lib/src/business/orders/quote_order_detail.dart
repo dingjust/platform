@@ -448,7 +448,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               color: Colors.grey,
             ),
             Container(
-              padding: EdgeInsets.only(left: 20),
+//              padding: EdgeInsets.only(left: 20),
               child: Column(
                 children: <Widget>[
                   Padding(

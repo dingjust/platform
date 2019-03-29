@@ -1,22 +1,23 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/home/home_section.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
-import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
-import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 
+import '../common/app_keys.dart';
+import '../home/home_section.dart';
+import '../home/pool/requirement_pool_all.dart';
+import '../production/production_offline_order_from.dart';
+import '../production/production_unique_code.dart';
+
 /// 网站主页
-class HomePage extends StatefulWidget {
-  HomePage() : super(key: AppKeys.homePage);
+class FactoryHomePage extends StatefulWidget {
+  FactoryHomePage() : super(key: AppKeys.homePage);
 
   @override
-  _HomePageState createState() => new _HomePageState();
+  _FactoryHomePageState createState() => _FactoryHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _FactoryHomePageState extends State<FactoryHomePage> {
   //TODO:调用接口查询推荐工厂,mock数据待删除
   static Color orange = Color.fromRGBO(255, 214, 12, 1);
   static Color white = Colors.white;
@@ -92,11 +93,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SliverList(
-                delegate: SliverChildListDelegate(<Widget>[
-              RequirementPool(),
-              _buildBroadcast(),
-              _buildManagement()
-            ])),
+                delegate: SliverChildListDelegate(<Widget>[RequirementPool(), _buildBroadcast(), _buildManagement()])),
           ],
         ),
       ),
@@ -142,10 +139,7 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Text(
                 '协同管理',
-                style: TextStyle(
-                    color: Color.fromRGBO(100, 100, 100, 1),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18),
+                style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1), fontWeight: FontWeight.w600, fontSize: 18),
               ),
               Text(
                 '线下订单',
@@ -159,8 +153,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: FlatButton(
               color: Color.fromRGBO(255, 214, 12, 1),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -171,9 +164,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: Text(
                 '创建线下订单',
-                style: TextStyle(
-                    color: Color.fromRGBO(36, 38, 41, 1),
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -197,10 +188,8 @@ class _HomePageState extends State<HomePage> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             width: double.infinity,
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                        width: 0.8, color: Color.fromRGBO(200, 200, 200, 1)))),
+            decoration:
+                BoxDecoration(border: Border(bottom: BorderSide(width: 0.8, color: Color.fromRGBO(200, 200, 200, 1)))),
           ),
           GestureDetector(
               onTap: () {
@@ -215,12 +204,12 @@ class _HomePageState extends State<HomePage> {
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                decoration: BoxDecoration(
-                    color: Color.fromRGBO(240, 240, 240, 1),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Text('请输入品牌发来的唯一码',),
-              )
-          ),
+                decoration:
+                    BoxDecoration(color: Color.fromRGBO(240, 240, 240, 1), borderRadius: BorderRadius.circular(20)),
+                child: Text(
+                  '请输入品牌发来的唯一码',
+                ),
+              )),
           Container(
               width: double.infinity,
               margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
@@ -237,12 +226,10 @@ class _HomePageState extends State<HomePage> {
 
 class RequirementPool extends StatelessWidget {
   /// 全部需求streamController
-  final StreamController _allRequirementStreamController =
-      StreamController<int>.broadcast();
+  final StreamController _allRequirementStreamController = StreamController<int>.broadcast();
 
   /// 推荐需求streamController
-  final StreamController _recommendRequirementStreamController =
-      StreamController<int>.broadcast();
+  final StreamController _recommendRequirementStreamController = StreamController<int>.broadcast();
 
   @override
   Widget build(BuildContext context) {
@@ -259,9 +246,7 @@ class RequirementPool extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return GestureDetector(
                 onTap: () async {
-                  await ProductRepositoryImpl()
-                      .majorCategories()
-                      .then((categories) {
+                  await ProductRepositoryImpl().majorCategories().then((categories) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => RequirementPoolAllPage(
                               categories: categories,
@@ -275,10 +260,8 @@ class RequirementPool extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         '全部需求',
-                        style: TextStyle(
-                            color: Color.fromRGBO(36, 38, 41, 1),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600),
+                        style:
+                            TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18, fontWeight: FontWeight.w600),
                       ),
                       RichText(
                         text: TextSpan(
@@ -287,10 +270,7 @@ class RequirementPool extends StatelessWidget {
                               color: Color.fromRGBO(255, 45, 45, 1),
                             ),
                             children: <TextSpan>[
-                              TextSpan(
-                                  text: '需求等待回复',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(100, 100, 100, 1)))
+                              TextSpan(text: '需求等待回复', style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)))
                             ]),
                       )
                     ],
@@ -301,10 +281,8 @@ class RequirementPool extends StatelessWidget {
           ),
           Container(
             height: 35,
-            decoration: BoxDecoration(
-                border: Border(
-                    left: BorderSide(
-                        width: 1, color: Color.fromRGBO(220, 220, 220, 1)))),
+            decoration:
+                BoxDecoration(border: Border(left: BorderSide(width: 1, color: Color.fromRGBO(220, 220, 220, 1)))),
           ),
           StreamBuilder<int>(
             stream: _recommendRequirementStreamController.stream,
@@ -313,8 +291,7 @@ class RequirementPool extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   //TODO推荐需求
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RequirementPoolAllPage()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequirementPoolAllPage()));
                 },
                 child: Container(
                   height: 50,
@@ -329,9 +306,7 @@ class RequirementPool extends StatelessWidget {
                             Text(
                               '推荐需求',
                               style: TextStyle(
-                                  color: Color.fromRGBO(36, 38, 41, 1),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600),
+                                  color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18, fontWeight: FontWeight.w600),
                             ),
                             Positioned(
                               right: 0,
@@ -361,14 +336,8 @@ class RequirementPool extends StatelessWidget {
                               color: Color.fromRGBO(100, 100, 100, 1),
                             ),
                             children: <TextSpan>[
-                              TextSpan(
-                                  text: '报价',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(255, 45, 45, 1))),
-                              TextSpan(
-                                  text: '的需求',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(100, 100, 100, 1)))
+                              TextSpan(text: '报价', style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1))),
+                              TextSpan(text: '的需求', style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)))
                             ]),
                       )
                     ],

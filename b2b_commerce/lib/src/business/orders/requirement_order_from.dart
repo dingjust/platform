@@ -21,6 +21,7 @@ import 'form/pictures_field.dart';
 import 'form/product_field.dart';
 import 'form/production_areas_field.dart';
 
+// TODO: change to RequirementOrderForm
 class RequirementOrderFrom extends StatefulWidget {
   ApparelProductModel product;
 
