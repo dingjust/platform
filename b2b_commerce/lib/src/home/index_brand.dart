@@ -85,7 +85,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 HomeTabSection(
                   height: 100,
                 ),
-                BroadcastFactory.buildBroadcast('进入蕉衣请优先注册并提交认证资料'),
+                BroadcastFactory.buildBroadcast('进入钉单请优先注册并提交认证资料'),
                 FastPublishRequirement(),
                 DividerFactory.buildDivider(15),
                 TrackingProgressSection(),
@@ -118,7 +118,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       )));
             });
           },
-          pic: B2BImage.fast_factory(width: 60, height: 80)),
+          picture: B2BImage.fast_factory(width: 60, height: 80)),
       GridItem(
           title: '看款下单',
           onPressed: () async {
@@ -140,7 +140,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
               );
             });
           },
-          pic: B2BImage.order(width: 60, height: 80)),
+          picture: B2BImage.order(width: 60, height: 80)),
     ];
   }
 }

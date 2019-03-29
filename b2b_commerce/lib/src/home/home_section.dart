@@ -40,9 +40,10 @@ class HomeSearchInputBox extends StatelessWidget {
         height: height,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey[300], width: 0.5)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.grey[300], width: 0.5),
+        ),
         child: Row(
           children: <Widget>[
             Icon(
