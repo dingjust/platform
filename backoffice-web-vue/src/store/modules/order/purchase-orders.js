@@ -60,7 +60,7 @@ const state = {
     }
   },
   queryFormData: {
-    productionOrderCode: '',
+    code: '',
     requirementOrderCode: '',
     skuID: '',
     statuses: [],
@@ -69,6 +69,7 @@ const state = {
     createdDateFrom: null,
     createdDateTo: null,
     belongTos: [],
+    purchasers:[],
   },
   addressFormData: {
     id: null,
@@ -115,7 +116,7 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      skuID: state.keyword,
+      keyword: state.keyword,
       statuses: state.statuses
     }, {
       page: state.currentPageNumber,
