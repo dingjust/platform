@@ -221,12 +221,13 @@ class PurchaseOrderRepository {
   }
 
   //确认生产
-  Future<bool> confirmProduction(String code) async {
+  Future<bool> confirmProduction(String code,PurchaseOrderModel form) async {
     Response<String> response;
     try{
       response =  await http$.put(
-          OrderApis.confirmProduction(code),
-          options: Options(responseType: ResponseType.plain));
+        OrderApis.confirmProduction(code),
+        data: PurchaseOrderModel.toJson(form),
+      );
     }on DioError catch(e){
       print(e);
     }
