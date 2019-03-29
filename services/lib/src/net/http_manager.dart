@@ -5,6 +5,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:services/src/message/message_bloc.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
 
 /// HTTP请求
@@ -71,6 +72,8 @@ class HttpManager {
       _clearContext();
       return response; // continue
     }, onError: (DioError e) {
+      //消息流推送
+      MessageBLoC.instance.errorMessageController.add(e.toString());
       // 当请求失败时做一些预处理
       if (GlobalConfigs.DEBUG) {
         print(e.toString());

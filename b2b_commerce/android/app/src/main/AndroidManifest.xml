@@ -21,7 +21,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="b2b_commerce"
+        android:label="钉单"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

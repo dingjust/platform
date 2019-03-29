@@ -7,6 +7,7 @@ export 'src/api/user.dart';
 export 'src/home/factory/bloc/factory_bloc.dart';
 export 'src/home/factory/response/factory_condition.dart';
 export 'src/home/product/bloc/order_product_bloc.dart';
+export 'src/message/message_bloc.dart';
 export 'src/my/bloc/my_bill_bloc.dart';
 export 'src/net/http_manager.dart';
 export 'src/order/bloc/proofing_orders_bloc.dart';
@@ -48,11 +49,11 @@ export 'src/user/district_repository.dart';
 export 'src/user/district_repository_impl.dart';
 export 'src/user/region_repository.dart';
 export 'src/user/region_repository_impl.dart';
+export 'src/user/repository/reports_repository.dart';
 export 'src/user/response/address_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/wechat/wechat_service_impl.dart';
-export 'src/user/repository/reports_repository.dart';
 
 abstract class BLoCBase {
   void dispose();

@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <factory-toolbar @onNew="onNew" @onSearch="onSearch"/>
+      <factory-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
       <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onLabels="onLabels">
         <template slot="operations" slot-scope="props">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
@@ -41,11 +41,13 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
+        queryFormData: 'queryFormData',
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
+        advancedSearch:'advancedSearch',
       }),
       handleClose(done) {
        this.dialogFormVisible = false;
@@ -68,6 +70,11 @@
         const url = this.apis().getFactories();
         this.search({url, keyword, page, size});
       },
+      onAdvancedSearch(page, size) {
+        const queryFormData = this.queryFormData;
+        const url = this.apis().getFactories();
+        this.advancedSearch({url,queryFormData, page, size});
+      },
       async onDetails(item) {
         const url = this.apis().getFactory(item.uid);
         const result = await this.$http.get(url);
@@ -76,7 +83,7 @@
           return;
         }
 
-        this.fn.openSlider('品牌：' + item.name, FactoryDetailsPage, result);
+        this.fn.openSlider('工厂：' + item.name, FactoryDetailsPage, result);
       },
       async onLabels(item) {
         const url = this.apis().getFactory(item.uid);
@@ -94,6 +101,7 @@
       },
     },
     data() {
+
       return {
         dialogFormVisible: false,
         item:{},

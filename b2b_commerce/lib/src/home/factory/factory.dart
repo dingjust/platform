@@ -85,7 +85,7 @@ class FactoryItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              '${ScaleRangesLocalizedMap[model.scaleRange]}',
+                              '${PopulationScaleLocalizedMap[model.populationScale]}',
                               style: TextStyle(
                                   color: Color.fromRGBO(180, 180, 180, 1)),
                             ),

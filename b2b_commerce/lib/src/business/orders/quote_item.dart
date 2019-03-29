@@ -22,7 +22,7 @@ class QuoteItem extends StatefulWidget {
   QuoteItem(
       {Key key,
       this.model,
-        this.isSupplier = false,
+      this.isSupplier = false,
       @required this.onRefresh,
       @required this.pageContext})
       : super(key: key);
@@ -158,7 +158,7 @@ class _QuoteItemState extends State<QuoteItem> {
 //                  style: TextStyle(fontSize: 15),
 //                ),
                 Text(
-                  '报价时间：${DateFormatUtil.format(widget.model.creationTime)}',
+                  '${DateFormatUtil.format(widget.model.creationTime)}',
                   style: TextStyle(fontSize: 15),
                 ),
               ],
@@ -290,6 +290,7 @@ class _QuoteItemState extends State<QuoteItem> {
 
 class QuoteManageItem extends StatefulWidget {
   final QuoteModel model;
+  bool isSupplier;
 
   /// 更新方法
   final VoidCallback onRefresh;
@@ -300,6 +301,7 @@ class QuoteManageItem extends StatefulWidget {
   QuoteManageItem(
       {Key key,
       this.model,
+      this.isSupplier = false,
       @required this.onRefresh,
       @required this.pageContext})
       : super(key: key);
@@ -335,13 +337,16 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
           children: <Widget>[
             _buildHeader(),
             _buildEntries(),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: _buildSummary(),
-                )
-              ],
+            Offstage(
+              offstage: widget.isSupplier,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: _buildSummary(),
+                  )
+                ],
+              ),
             )
           ],
         ),
@@ -390,7 +395,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   style: TextStyle(fontSize: 15),
                 ),
                 Text(
-                  '报价时间：${DateFormatUtil.format(widget.model.creationTime)}',
+                  '${DateFormatUtil.format(widget.model.creationTime)}',
                   style: TextStyle(fontSize: 15),
                 ),
               ],

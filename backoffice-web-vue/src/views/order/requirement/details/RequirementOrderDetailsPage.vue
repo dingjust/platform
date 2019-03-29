@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <requirement-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
-    <requirement-order-operate-toolbar :read-only="!isNewlyCreated" @onUpdate="onUpdate" @onReview="onReview"/>
+    <requirement-order-operate-toolbar :read-only="slotData.editable" @onUpdate="onUpdate" @onReview="onReview"/>
     <div class="pt-2"></div>
     <requirement-order-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
     <div class="pt-2"></div>
@@ -78,8 +78,6 @@
         this.reviewVisible = false;
       },
       onUpdate() {
-        console.log(this.slotData);
-        console.log("testlhj111");
         this.reviewVisible = false;
         this.updateVisible = true;
       },

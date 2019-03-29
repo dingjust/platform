@@ -101,7 +101,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        '   点击填写三步，剩下的工作交给蕉衣   ',
+                        '   点击填写三步，剩下的工作交给钉单   ',
                         style: TextStyle(
                           color: Color.fromRGBO(180, 180, 180, 1),
                           fontSize: 15,

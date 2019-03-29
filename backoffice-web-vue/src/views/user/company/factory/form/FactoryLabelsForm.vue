@@ -16,7 +16,7 @@
         </el-form-item>
       </el-row>
       <el-row :gutter="10">
-        <el-form-item label="评级" prop="roles">
+        <el-form-item label="评级" prop="starLevel">
           <el-rate
             v-model="slotData.starLevel"
             :colors="['#99A9BF', '#F7BA2A', '#FF9900']">

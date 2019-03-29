@@ -48,7 +48,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             _buildCostRow(),
             _buildRemarks(),
             _buildDeliveryAddress(context),
-            _buildFactoryRow(),
+            _buildFactory(),
             _buildOrderInfoRow(),
             _buildButtonGroup(),
           ],
@@ -377,12 +377,6 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                           ),
                         ),
                       ),
-                      Text(
-                        '拨打',
-                        style: TextStyle(
-                            color: Color.fromRGBO(86, 194, 117, 1),
-                            fontSize: 16),
-                      ),
                     ],
                   )),
             ],
@@ -394,82 +388,78 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     }
   }
 
-  Widget _buildFactoryRow() {
+  _buildFactory() {
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return Container(
         color: Colors.white,
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-        padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
-        child: InkWell(
-          onTap: () {},
+        margin: EdgeInsets.only(top: 15),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    width: 140,
-                    child: Text(
-                      widget.model.belongTo.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  Expanded(
-                      flex: 1,
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
                       child: Container(
+                        child: Text(
+                          widget.model.belongTo.name,
+                          style: TextStyle(fontSize: 18),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(right: 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             Stars(
                               starLevel: widget.model.belongTo.starLevel ?? 1,
-                              color: Color.fromRGBO(255, 183, 0, 1),
                               highlightOnly: false,
                             ),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Colors.grey,
+                            )
                           ],
-                        ),
-                      )),
-                ],
+                        ))
+                  ],
+                ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
                     child: Row(
                       children: <Widget>[
+                        Text('历史接单'),
                         Text(
-                          '${widget.model.belongTo.address}',
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                          widget.model.belongTo.historyOrdersCount.toString(),
+                          style: TextStyle(color: Colors.red),
                         ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Colors.grey,
-                        )
+                        Text('单')
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right: 20),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          '${widget.model.belongTo.contactAddress?.city?.name} ${widget.model.belongTo.contactAddress?.cityDistrict?.name}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
                       ],
                     ),
                   )
                 ],
               ),
-              Row(
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                        text: '历史接单',
-                        style: TextStyle(color: Colors.black54),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: '214', style: TextStyle(color: Colors.red)),
-                          TextSpan(
-                              text: '单,报价成功率',
-                              style: TextStyle(color: Colors.black54)),
-                          TextSpan(
-                              text: '34%', style: TextStyle(color: Colors.red))
-                        ]),
-                  )
-                ],
-              )
             ],
           ),
         ),
@@ -567,18 +557,21 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       if (widget.model.status == ProofingStatus.PENDING_PAYMENT) {
         buttons = [
-          Container(),
-          FlatButton(
-              onPressed: onUpdate,
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
-                  borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '修改订单',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
-              )),
+          Container(
+            height: 40,
+            width: 250,
+            child: FlatButton(
+                onPressed: onUpdate,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
+                    borderRadius: BorderRadius.circular(20)),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '修改订单',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                )),
+          )
         ];
       } else if (widget.model.status == ProofingStatus.PENDING_DELIVERY) {
         buttons = <Widget>[
