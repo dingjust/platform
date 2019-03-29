@@ -4,7 +4,7 @@ import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 import '../common/app_routes.dart';
-import 'search/apparel_product_search.dart';
+import '../_shared/widgets/product_search_delegate_page.dart';
 
 class ApparelProductStocksPage extends StatelessWidget {
   final List<ApparelProductModel> items = <ApparelProductModel>[
@@ -40,7 +40,7 @@ class ApparelProductStocksPage extends StatelessWidget {
               size: 20,
             ),
             onPressed: () => showSearch(
-                context: context, delegate: ApparelProductSearchDelegate()),
+                context: context, delegate: ProductSearchDelegatePage()),
           ),
         ],
       ),

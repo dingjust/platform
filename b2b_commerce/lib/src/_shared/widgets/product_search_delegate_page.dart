@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 /// 产品搜索页
-class ApparelProductSearchDelegate extends SearchDelegate<ApparelProductModel> {
+class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
