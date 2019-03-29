@@ -34,7 +34,9 @@
     },
     computed: {
       ...mapGetters({
-        page: 'page'
+        page: 'page',
+        keyword: 'keyword',
+        queryFormData: 'queryFormData',
       })
     },
     methods: {
@@ -43,8 +45,10 @@
         searchAdvanced: 'searchAdvanced'
       }),
       onSearch(page, size) {
+        console.log(this.keyword);
         const keyword = this.keyword;
         const statuses = this.statuses;
+
         const url = this.apis().getRequirementOrders();
         this.search({url, keyword, statuses, page, size});
       },
@@ -74,9 +78,6 @@
     },
     data() {
       return {
-        keyword: this.$store.state.RequirementOrdersModule.keyword,
-        formData: this.$store.state.RequirementOrdersModule.formData,
-        queryFormData: this.$store.state.RequirementOrdersModule.queryFormData,
         isAdvancedSearch: this.$store.state.RequirementOrdersModule.isAdvancedSearch,
       };
     },
