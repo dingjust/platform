@@ -214,6 +214,14 @@ class _LoginPageState extends State<LoginPage> {
                 WhitelistingTextInputFormatter.digitsOnly,
               ],
               decoration: InputDecoration(
+                  suffixIcon:IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: (){
+                        setState(() {
+                          _phoneController.clear();
+                        });
+                      }
+                  ),
                   hintText: '请输入手机号码',
                   focusedErrorBorder: UnderlineInputBorder(
                       borderSide:

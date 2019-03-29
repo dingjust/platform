@@ -408,7 +408,7 @@ class FactoryModel extends B2BUnitModel {
   List<CategoryModel> adeptAtCategories;
 
   //合作方式
-  List<String> cooperationModes;
+  List<CooperationModes> cooperationModes;
 
   //开发能力
   bool developmentCapacity;

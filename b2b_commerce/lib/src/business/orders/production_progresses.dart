@@ -147,7 +147,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index ? '（当前进行中）':''}' ,
+                  child: Text('${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index   && order.status == PurchaseOrderStatus.IN_PRODUCTION ?'（当前进行中）':''}' ,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: sequence == _index ? Color(0xFFFFD600) : Colors.black54,
@@ -200,7 +200,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => PicturePickPreviewWidget(
                         medias: progress.medias,
-                        isUpload: userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ? true : false,
+                        isUpload: userType != null && userType == 'factory' && (sequence >= _index)  && order.status == PurchaseOrderStatus.IN_PRODUCTION? true : false,
                       ))
                   ).then((value){
                     if(value != null){
@@ -228,7 +228,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     borderRadius:
                     BorderRadius.all(Radius.circular(20))),
                 onPressed: () {
-                  if((sequence > _index || phase == currentPhase) && (progress.phase == ProductionProgressPhase.INSPECTION) && order.salesApplication == SalesApplication.ONLINE){
+                  if((phase == currentPhase) && (progress.phase == ProductionProgressPhase.INSPECTION) && order.salesApplication == SalesApplication.ONLINE){
                     _showBalanceDialog(context, order);
                   }else{
                     _showTipsDialog(progress);
@@ -253,7 +253,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 child: Text('预计完成时间',
                     style: TextStyle(fontWeight: FontWeight.w500)),
                 onTap: () {
-                  userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                  userType != null && userType == 'factory' && (sequence >= _index)  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                   _showDatePicker(progress) : null;
                 }),
           ),
@@ -270,16 +270,16 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 ),
               ),
               onTap: () {
-                userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                userType != null && userType == 'factory' && (sequence >= _index)  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                 _showDatePicker(progress) : null;
               }),
-          progress.estimatedDate == null || progress.estimatedDate == ''?
+          progress.estimatedDate == null?
           Align(
             alignment: Alignment.centerRight,
             child: userType=='brand'?Container():IconButton(
                 icon: Icon(Icons.date_range),
                 onPressed: () {
-                  userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                  userType != null && userType == 'factory' && (sequence >= _index)  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                   _showDatePicker(progress) : null;
                 }
             ),
@@ -322,7 +322,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       child: Text('数量',
                           style: TextStyle(fontWeight: FontWeight.w500)),
                       onTap: () {
-                        userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                        userType != null && userType == 'factory' && (sequence >= _index )  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                         _showDialog(progress,'数量'): null;
                       }),
                 ),
@@ -336,7 +336,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       ),
                     ),
                     onTap: () {
-                      userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                      userType != null && userType == 'factory' && (sequence >= _index )  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                       _showDialog(progress,'数量')
                           : null;
                     }
@@ -347,7 +347,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   child: userType=='brand'?Container():IconButton(
                       icon: Icon(Icons.keyboard_arrow_right),
                       onPressed: (){
-                        userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+                        userType != null && userType == 'factory' && (sequence >= _index )  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                         _showDialog(progress,'数量') : null;
                       }
                   ),
@@ -396,7 +396,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 ])
         ),
         onTap: () async {
-          userType != null && userType == 'factory' && (sequence >= _index || phase == currentPhase) ?
+          userType != null && userType == 'factory' && (sequence >= _index) && order.status == PurchaseOrderStatus.IN_PRODUCTION?
           _showRemarksDialog(progress,'备注',remarks) : null;
         },
       )

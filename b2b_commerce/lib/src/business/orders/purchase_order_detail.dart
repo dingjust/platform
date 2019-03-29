@@ -560,11 +560,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 ],
               ),
               onTap: (){
-                if (order.consignmentModel != null &&
-                    order.consignmentModel.carrierModel != null &&
-                    order.consignmentModel.trackingID != null &&
-                    order.consignmentModel.carrierModel.name != null) {
+                if (order.consignmentModel != null && order.consignmentModel.carrierModel != null &&
+                    order.consignmentModel.trackingID != null && order.consignmentModel.carrierModel.name != null) {
                   copyToClipboard(order.consignmentModel.trackingID);
+                }else{
+                  null;
                 }
               },
             )
@@ -749,7 +749,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => PicturePickPreviewWidget(
                         medias: productionProgress.medias,
-                        isUpload: isCurrentStatus == true ? true : false,
+                        isUpload: isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION? true : false,
                       ))
                   ).then((value){
                     if(value != null){
@@ -779,7 +779,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 child: Text('预计完成时间',
                     style: TextStyle(fontWeight: FontWeight.w500)),
                 onTap: () {
-                  userType != null && userType == 'factory' && isCurrentStatus == true ?
+                  userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                   _showDatePicker(progress) : null;
                 }),
           ),
@@ -795,7 +795,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 ),
               ),
               onTap: () {
-                userType != null && userType == 'factory' && isCurrentStatus == true ?
+                userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                 _showDatePicker(progress) : null;
               }),
           progress.estimatedDate == null || progress.estimatedDate == ''?
@@ -804,7 +804,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             child: userType=='brand'?Container():IconButton(
                 icon: Icon(Icons.date_range),
                 onPressed: () {
-                  userType != null && userType == 'factory' && isCurrentStatus == true ?
+                  userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                   _showDatePicker(progress) : null;
                 }
             ),
@@ -846,7 +846,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   child: Text('数量',
                       style: TextStyle(fontWeight: FontWeight.w500)),
                   onTap: () {
-                    userType != null && userType == 'factory' && isCurrentStatus == true ?
+                    userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                     _showDialog(progress): null;
                   }),
             ),
@@ -860,7 +860,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   ),
                 ),
                 onTap: () {
-                  userType != null && userType == 'factory' && isCurrentStatus == true ?
+                  userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                   _showDialog(progress)
                       : null;
                 }
@@ -871,7 +871,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               child: userType=='brand'?Container():IconButton(
                   icon: Icon(Icons.keyboard_arrow_right),
                   onPressed: (){
-                    userType != null && userType == 'factory' && isCurrentStatus == true ?
+                    userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                     _showDialog(progress) : null;
                   }
               ),
@@ -920,7 +920,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   ])
           ),
           onTap: () async {
-            userType != null && userType == 'factory' && isCurrentStatus == true ?
+            userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
             _showRemarksDialog(progress,'备注',progress.remarks) : null;
           },
         )

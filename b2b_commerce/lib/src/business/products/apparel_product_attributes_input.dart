@@ -34,8 +34,8 @@ class ApparelProductAttributesInputPageState
       _decorativePatternCodes.addAll(widget.item?.decorativePatterns);
     if (widget.item?.popularElements != null)
       _popularElementsCodes.addAll(widget.item?.popularElements);
-    if (widget.item?.fabricComposition != null)
-      _fabricCompositionCode.add(widget.item?.fabricComposition);
+    if (widget.item?.fabricCompositions != null)
+      _fabricCompositionCode.addAll(widget.item?.fabricCompositions);
     if (widget.item?.editionType != null)
       _editionTypeCode.add(widget.item?.editionType);
     if (widget.item?.pattern != null) _patternCode.add(widget.item?.pattern);
@@ -59,8 +59,7 @@ class ApparelProductAttributesInputPageState
     ApparelProductAttributesModel attributesModel =
         ApparelProductAttributesModel(
       styles: _styleCodes,
-      fabricComposition:
-          _fabricCompositionCode.length > 0 ? _fabricCompositionCode[0] : null,
+      fabricCompositions:_fabricCompositionCode,
       editionType: _editionTypeCode.length > 0 ? _editionTypeCode[0] : null,
       pattern: _patternCode.length > 0 ? _patternCode[0] : null,
       placket: _placketCode.length > 0 ? _placketCode[0] : null,
@@ -123,6 +122,7 @@ class ApparelProductAttributesInputPageState
                           title: '选择面料',
                           items: FabricCompositionEnum,
                           codes: _fabricCompositionCode,
+                          multiple: true,
                         ),
                   ),
                 );
@@ -131,9 +131,10 @@ class ApparelProductAttributesInputPageState
               },
               child: ShowSelectTile(
                 leadingText: '面料',
-                tralingText: formatEnumSelectText(
-                  FabricCompositionEnum,
+                tralingText: formatEnumSelectsText(
                   _fabricCompositionCode,
+                  FabricCompositionEnum,
+                  3,
                 ),
               ),
             ),

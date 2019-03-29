@@ -48,7 +48,7 @@ class AttributeTable extends StatelessWidget {
               _buildRow(label: '风格', values: product.attributes.styles ?? []),
               _buildRow(
                   label: '面料成分',
-                  value: product.attributes.fabricComposition ?? ''),
+                  values: product.attributes.fabricCompositions ?? []),
               _buildRow(
                   label: '版型', value: product.attributes.editionType ?? ''),
               _buildRow(label: '款式', value: product.attributes.pattern ?? ''),
