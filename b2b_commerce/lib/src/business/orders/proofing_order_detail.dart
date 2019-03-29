@@ -90,7 +90,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                   child: Icon(
                     B2BIcons.noPicture,
                     color: Color.fromRGBO(200, 200, 200, 1),
-                    size: 25,
+                    size: 60
                   ),
                 ),
           Expanded(

@@ -53,6 +53,7 @@ class PurchaseOrderDetailPage extends StatefulWidget {
 
 class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   TextEditingController dialogText;
+  FocusNode _dialogFocusNode;
   List<ApparelSizeVariantProductEntry> mockData = new List();
   DateTime _blDate;
   bool isShowButton = false;
@@ -203,7 +204,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             child: Icon(
               B2BIcons.noPicture,
               color: Color.fromRGBO(200, 200, 200, 1),
-              size: 25,
+              size: 60
             ),
           ),
           Expanded(
@@ -559,11 +560,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 ],
               ),
               onTap: (){
-                if (order.consignmentModel != null &&
-                    order.consignmentModel.carrierModel != null &&
-                    order.consignmentModel.trackingID != null &&
-                    order.consignmentModel.carrierModel.name != null) {
+                if (order.consignmentModel != null && order.consignmentModel.carrierModel != null &&
+                    order.consignmentModel.trackingID != null && order.consignmentModel.carrierModel.name != null) {
                   copyToClipboard(order.consignmentModel.trackingID);
+                }else{
+                  null;
                 }
               },
             )
@@ -688,7 +689,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildProgressTimeLine(BuildContext context,
       ProductionProgressModel productionProgress, bool isCurrentStatus) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.0),
       width: double.infinity,
       child: Column(
@@ -731,8 +731,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               GestureDetector(
                 child: Container(
                   margin: EdgeInsets.only(right: 15),
-                  width: 100,
-                  height: 100,
+                  width: 80,
+                  height: 80,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
@@ -749,7 +749,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => PicturePickPreviewWidget(
                         medias: productionProgress.medias,
-                        isUpload: isCurrentStatus == true ? true : false,
+                        isUpload: isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION? true : false,
                       ))
                   ).then((value){
                     if(value != null){
@@ -779,33 +779,36 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 child: Text('预计完成时间',
                     style: TextStyle(fontWeight: FontWeight.w500)),
                 onTap: () {
-                  userType != null && userType == 'factory' && isCurrentStatus == true ?
+                  userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                   _showDatePicker(progress) : null;
                 }),
           ),
           GestureDetector(
-              child:Align(
-                alignment: Alignment.centerRight,
-                child:
-                progress.estimatedDate == null? Container():
-                Text('${DateFormatUtil.formatYMD(
-                    progress.estimatedDate)}',
-                    style: TextStyle(fontWeight: FontWeight.w500)),
+              child:Container(
+                padding: EdgeInsets.only(right: 15),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: progress.estimatedDate == null? Container():
+                  Text('${DateFormatUtil.formatYMD(
+                      progress.estimatedDate)}',
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                ),
               ),
               onTap: () {
-                userType != null && userType == 'factory' && isCurrentStatus == true ?
+                userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                 _showDatePicker(progress) : null;
               }),
+          progress.estimatedDate == null || progress.estimatedDate == ''?
           Align(
             alignment: Alignment.centerRight,
-            child: IconButton(
+            child: userType=='brand'?Container():IconButton(
                 icon: Icon(Icons.date_range),
                 onPressed: () {
-                  userType != null && userType == 'factory' && isCurrentStatus == true ?
+                  userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                   _showDatePicker(progress) : null;
                 }
             ),
-          )
+          ):Container()
         ],
       ),
     );
@@ -843,32 +846,36 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   child: Text('数量',
                       style: TextStyle(fontWeight: FontWeight.w500)),
                   onTap: () {
-                    userType != null && userType == 'factory' && isCurrentStatus == true ?
+                    userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                     _showDialog(progress): null;
                   }),
             ),
             GestureDetector(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text('${progress.quantity}',
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                child: Container(
+                  padding: EdgeInsets.only(right: 15),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('${progress.quantity}',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
+                  ),
                 ),
                 onTap: () {
-                  userType != null && userType == 'factory' && isCurrentStatus == true ?
+                  userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                   _showDialog(progress)
                       : null;
                 }
             ),
+            progress.quantity == null || progress.quantity == ''?
             Align(
               alignment: Alignment.centerRight,
-              child: IconButton(
+              child: userType=='brand'?Container():IconButton(
                   icon: Icon(Icons.keyboard_arrow_right),
                   onPressed: (){
-                    userType != null && userType == 'factory' && isCurrentStatus == true ?
+                    userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                     _showDialog(progress) : null;
                   }
               ),
-            )
+            ):Container()
           ],
         ),
       ),
@@ -892,7 +899,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                '填写',
+                                '${userType=='brand'? '':'填写'}',
                                 style: TextStyle(
                                   color: Colors.grey,
                                 ),
@@ -913,7 +920,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   ])
           ),
           onTap: () async {
-            userType != null && userType == 'factory' && isCurrentStatus == true ?
+            userType != null && userType == 'factory' && isCurrentStatus == true  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
             _showRemarksDialog(progress,'备注',progress.remarks) : null;
           },
         )
@@ -1824,6 +1831,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 //生成Dialog控件
   Future<void> _neverSatisfied(BuildContext context,ProductionProgressModel model) async {
     dialogText = TextEditingController();
+    _dialogFocusNode = FocusNode();
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -1833,9 +1841,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextField(
-                  controller:dialogText,
-                  keyboardType: TextInputType.number,
+                TextFieldComponent(
+                  textAlign: TextAlign.left,
+                  focusNode: _dialogFocusNode,
+                  controller: dialogText,
+                  autofocus: true,
+                  inputType: TextInputType.number,
                 ),
               ],
             ),
@@ -1904,6 +1915,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type,String remarks) async {
     dialogText = TextEditingController();
+    _dialogFocusNode = FocusNode();
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -1913,13 +1925,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextField(
-                  controller:dialogText,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10.0),
-                    helperText: '${remarks==null?'':remarks}',
-                  ),
+                TextFieldComponent(
+                  textAlign: TextAlign.left,
+                  focusNode: _dialogFocusNode,
+                  controller: dialogText,
+                  autofocus: true,
+                  inputType: TextInputType.text,
+                  helperText: '${remarks==null?'':remarks}',
                 ),
               ],
             ),

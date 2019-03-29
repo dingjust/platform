@@ -415,8 +415,15 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                       : item.quantityController.text);
                 });
               });
+              if(price != null && price != ''){
+                totalPrice = double.parse(price) * _totalQuantity;
+              }else if(price == null && widget.quoteModel != null && widget.quoteModel.unitPrice != null){
+                totalPrice = widget.quoteModel.unitPrice * _totalQuantity;
+              }
+
             });
           });
+
         });
   }
 

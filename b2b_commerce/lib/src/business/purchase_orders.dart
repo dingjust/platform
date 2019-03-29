@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/business/search/purchase_order_search.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/production/production_search.dart';
@@ -235,11 +234,11 @@ class PurchaseOrderItem extends StatefulWidget {
 class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKeepAliveClientMixin{
 
 
-  static Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
+  static Map<PurchaseOrderStatus, Color> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
-    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
-    PurchaseOrderStatus.OUT_OF_STORE: Colors.yellow,
-    PurchaseOrderStatus.IN_PRODUCTION: Colors.yellow,
+    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Color(0xFFFFD600),
+    PurchaseOrderStatus.OUT_OF_STORE: Color(0xFFFFD600),
+    PurchaseOrderStatus.IN_PRODUCTION: Color(0xFFFFD600),
     PurchaseOrderStatus.COMPLETED: Colors.green,
     PurchaseOrderStatus.CANCELLED: Colors.grey,
   };

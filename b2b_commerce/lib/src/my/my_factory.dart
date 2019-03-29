@@ -21,13 +21,21 @@ class MyFactoryPage extends StatefulWidget {
   QuoteModel quoteModel;
   bool isCompanyIntroduction;
   bool isFactoryDetail;
-  MyFactoryPage(this.factory,{this.products,this.purchaseOrder,this.quoteModel,this.isCompanyIntroduction = false,this.isFactoryDetail = false,});
+  MyFactoryPage(
+    this.factory, {
+    this.products,
+    this.purchaseOrder,
+    this.quoteModel,
+    this.isCompanyIntroduction = false,
+    this.isFactoryDetail = false,
+  });
 
   _MyFactoryPageState createState() => _MyFactoryPageState();
 }
 
 class _MyFactoryPageState extends State<MyFactoryPage> {
-  RequirementOrderModel orderModel = RequirementOrderModel(details: RequirementInfoModel());
+  RequirementOrderModel orderModel =
+      RequirementOrderModel(details: RequirementInfoModel());
   Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
     PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
@@ -48,10 +56,13 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     List<Widget> _widgets = [
       _buildBaseInfo(),
     ];
-    if(widget.quoteModel != null){
-      _widgets.add( QuoteManageItem(model: widget.quoteModel,isSupplier: widget.quoteModel != null,));
+    if (widget.quoteModel != null) {
+      _widgets.add(QuoteManageItem(
+        model: widget.quoteModel,
+        isSupplier: widget.quoteModel != null,
+      ));
     }
-    if(widget.purchaseOrder != null){
+    if (widget.purchaseOrder != null) {
       _widgets.add(Card(
         elevation: 0,
         margin: EdgeInsets.only(top: 10),
@@ -80,13 +91,16 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           buildContactWay(context),
         ],
       ),
-      body:  Container(
+      body: Container(
         color: Colors.grey[200],
         child: ListView(
           children: _widgets,
         ),
       ),
-      floatingActionButton: Offstage(child: _buildRequestOrderButton(context),offstage: !widget.isFactoryDetail,),
+      floatingActionButton: Offstage(
+        child: _buildRequestOrderButton(context),
+        offstage: !widget.isFactoryDetail,
+      ),
     );
   }
 
@@ -107,7 +121,10 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => RequirementOrderFrom(factoryUid: widget.factory.uid,order: orderModel,),
+            builder: (context) => RequirementOrderFrom(
+                  factoryUid: widget.factory.uid,
+                  order: orderModel,
+                ),
           ),
         );
       },
@@ -118,43 +135,47 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
   //联系方式
   Container buildContactWay(BuildContext context) {
     return Container(
-          width: 80,
-          child: IconButton(
-            icon: Text(
-              '联系方式',
-              style: TextStyle(),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyCompanyContactWayPage(widget.factory,isCompanyIntroduction: widget.isCompanyIntroduction,)),
-              );
-            },
-          ),
-        );
+      width: 80,
+      child: IconButton(
+        icon: Text(
+          '联系方式',
+          style: TextStyle(),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MyCompanyContactWayPage(
+                      widget.factory,
+                      isCompanyIntroduction: widget.isCompanyIntroduction,
+                    )),
+          );
+        },
+      ),
+    );
   }
 
   //基本资料
   Card _buildBaseInfo() {
     List<Widget> _buildFactoryHeaderRow = [
-      widget.factory.approvalStatus == ArticleApprovalStatus.approved ?
-      Tag(
-        label: '  已认证  ',
-        backgroundColor:
-        Color.fromRGBO(254, 252, 235, 1),
-
-      ):Tag(
-        label: '  未认证  ',
-        color: Colors.black,
-        backgroundColor:
-        Colors.grey[300],
-      )
+      widget.factory.approvalStatus == ArticleApprovalStatus.approved
+          ? Tag(
+              label: '  已认证  ',
+              backgroundColor: Color.fromRGBO(254, 252, 235, 1),
+            )
+          : Tag(
+              label: '  未认证  ',
+              color: Colors.black,
+              backgroundColor: Colors.grey[300],
+            )
     ];
-    widget.factory.labels.forEach((label){
+    widget.factory.labels.forEach((label) {
       return _buildFactoryHeaderRow.add(Padding(
-        padding: const EdgeInsets.only(right:5.0),
-        child: Tag(label: label.name,color: Colors.grey,),
+        padding: const EdgeInsets.only(right: 5.0),
+        child: Tag(
+          label: label.name,
+          color: Colors.grey,
+        ),
       ));
     });
 
@@ -199,22 +220,27 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
             ),
             Row(
               children: <Widget>[
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: widget.factory.profilePicture != null
-                            ? NetworkImage(
-                                '${GlobalConfigs.IMAGE_BASIC_URL}${widget.factory.profilePicture.url}')
-                            : AssetImage(
-                                'temp/picture.png',
-                                package: "assets",
-                              ),
-                        fit: BoxFit.cover,
-                      )),
-                ),
+                widget.factory.profilePicture != null
+                    ? Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  '${GlobalConfigs.IMAGE_BASIC_URL}${widget.factory.profilePicture.url}'),
+                              fit: BoxFit.cover,
+                            )),
+                      )
+                    : Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Color.fromRGBO(243, 243, 243, 1)),
+                        child: Icon(B2BIcons.noPicture,
+                            color: Color.fromRGBO(200, 200, 200, 1), size: 60),
+                      ),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
@@ -274,7 +300,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  MonthlyCapacityRangesLocalizedMap[widget.factory.monthlyCapacityRange] ?? '',
+                  MonthlyCapacityRangesLocalizedMap[
+                          widget.factory.monthlyCapacityRange] ??
+                      '',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -291,7 +319,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  ScaleRangesLocalizedMap[widget.factory.scaleRange],
+                  "${ScaleRangesLocalizedMap[widget.factory.scaleRange]}",
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -308,7 +336,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  PopulationScaleLocalizedMap[widget.factory.populationScale] ?? '',
+                  PopulationScaleLocalizedMap[widget.factory.populationScale] ??
+                      '',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -342,7 +371,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  formatCategorysSelectText(widget.factory.categories,5),
+                  formatCategorysSelectText(widget.factory.categories, 5),
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -359,7 +388,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   ),
                 ),
                 Text(
-                  formatCategorysSelectText(widget.factory.adeptAtCategories,2),
+                  formatCategorysSelectText(
+                      widget.factory.adeptAtCategories, 2),
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -398,59 +428,64 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.depositPaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT ) ||
-                    (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.balancePaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ) ?
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      '￥',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.red,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      '${widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.depositPaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT ?
-                      widget.purchaseOrder.deposit : widget.purchaseOrder.balance}',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.red,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
-                ):
-                Container(
-                    child:widget.purchaseOrder.delayed ?
-                    Text(
-                        '已延期',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.red,
-                          fontWeight: FontWeight.w500,
-                        )
-                    ) : Container()
-                ),
+                (widget.purchaseOrder.salesApplication ==
+                                SalesApplication.ONLINE &&
+                            widget.purchaseOrder.depositPaid == false &&
+                            widget.purchaseOrder.status ==
+                                PurchaseOrderStatus.PENDING_PAYMENT) ||
+                        (widget.purchaseOrder.salesApplication ==
+                                SalesApplication.ONLINE &&
+                            widget.purchaseOrder.balancePaid == false &&
+                            widget.purchaseOrder.status ==
+                                PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            '￥',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.red,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            '${widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.depositPaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT ? widget.purchaseOrder.deposit : widget.purchaseOrder.balance}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.red,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        ],
+                      )
+                    : Container(
+                        child: widget.purchaseOrder.delayed
+                            ? Text('已延期',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w500,
+                                ))
+                            : Container()),
                 Expanded(
                     child: Container(
-                      child: _buildHeaderText(),
-                    )
-                ),
-                widget.purchaseOrder.status == null ? Container() :
-                Text(
-                  '${PurchaseOrderStatusLocalizedMap[widget.purchaseOrder.status]}',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color:  _statusColors[widget.purchaseOrder.status],
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                  child: _buildHeaderText(),
+                )),
+                widget.purchaseOrder.status == null
+                    ? Container()
+                    : Text(
+                        '${PurchaseOrderStatusLocalizedMap[widget.purchaseOrder.status]}',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: _statusColors[widget.purchaseOrder.status],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
               ],
             ),
             Row(
@@ -458,11 +493,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 Expanded(
                   child: Container(
                     child: Text(
-                      '${widget.purchaseOrder.belongTo == null ? widget.purchaseOrder.companyOfSeller : widget.purchaseOrder
-                          .belongTo.name}',
-                      style: TextStyle(
-                          fontSize: 16
-                      ),
+                      '${widget.purchaseOrder.belongTo == null ? widget.purchaseOrder.companyOfSeller : widget.purchaseOrder.belongTo.name}',
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                 ),
@@ -476,6 +508,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           ],
         ));
   }
+
   Widget _buildContent() {
     //计算总数
     int sum = 0;
@@ -483,7 +516,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       sum = sum + entry.quantity;
     });
     return Container(
-        padding: EdgeInsets.fromLTRB(10,0,10,0),
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Row(
           children: <Widget>[
             Container(
@@ -492,12 +525,14 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                    image:  widget.purchaseOrder.product == null ||  widget.purchaseOrder.product.thumbnail == null?
-                    AssetImage(
-                      'temp/picture.png',
-                      package: "assets",
-                    ):
-                    NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.purchaseOrder.product.thumbnail.url}'),
+                    image: widget.purchaseOrder.product == null ||
+                            widget.purchaseOrder.product.thumbnail == null
+                        ? AssetImage(
+                            'temp/picture.png',
+                            package: "assets",
+                          )
+                        : NetworkImage(
+                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.purchaseOrder.product.thumbnail.url}'),
                     fit: BoxFit.cover,
                   )),
             ),
@@ -511,13 +546,15 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                       children: <Widget>[
                         Align(
                             alignment: Alignment.topLeft,
-                            child: widget.purchaseOrder.product == null || widget.purchaseOrder.product.name == null?
-                            Container():
-                            Text(
-                              '${widget.purchaseOrder.product.name}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            )),
+                            child: widget.purchaseOrder.product == null ||
+                                    widget.purchaseOrder.product.name == null
+                                ? Container()
+                                : Text(
+                                    '${widget.purchaseOrder.product.name}',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  )),
                         Align(
                             alignment: Alignment.topLeft,
                             child: Container(
@@ -527,31 +564,35 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                                   borderRadius: BorderRadius.circular(5)),
                               child: Text(
                                 '货号：${widget.purchaseOrder.product == null ? '' : widget.purchaseOrder.product.skuID}',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.grey),
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
                               ),
                             )),
-                        widget.purchaseOrder.product == null || widget.purchaseOrder.product.category == null?
-                        Container() :
-                        Container(
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(255, 243, 243, 1),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Text(
-                            "${widget.purchaseOrder.product.category.name}  ${sum}件",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Color.fromRGBO(255, 133, 148, 1)),
-                          ),
-                        )
+                        widget.purchaseOrder.product == null ||
+                                widget.purchaseOrder.product.category == null
+                            ? Container()
+                            : Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(255, 243, 243, 1),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Text(
+                                  "${widget.purchaseOrder.product.category.name}  ${sum}件",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Color.fromRGBO(255, 133, 148, 1)),
+                                ),
+                              )
                       ],
                     )))
           ],
         ));
   }
-  Widget _buildHeaderText(){
-    if(widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.depositPaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT ){
+
+  Widget _buildHeaderText() {
+    if (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE &&
+        widget.purchaseOrder.depositPaid == false &&
+        widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT) {
       return Text(
         '（待付定金）',
         textAlign: TextAlign.start,
@@ -561,8 +602,11 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           fontWeight: FontWeight.w500,
         ),
       );
-    }
-    else if(widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.balancePaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ){
+    } else if (widget.purchaseOrder.salesApplication ==
+            SalesApplication.ONLINE &&
+        widget.purchaseOrder.balancePaid == false &&
+        widget.purchaseOrder.status ==
+            PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
       return Text(
         '（待付尾款）',
         textAlign: TextAlign.start,
@@ -572,8 +616,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           fontWeight: FontWeight.w500,
         ),
       );
-    }
-    else{
+    } else {
       return Container();
     }
   }
@@ -622,7 +665,10 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                       crossAxisCount: 3,
                       childAspectRatio: 2.5 / 5,
                       children: List.generate(widget.products.length, (index) {
-                        return ExistingProductItem(widget.products[index],isFactoryDetail: true,);
+                        return ExistingProductItem(
+                          widget.products[index],
+                          isFactoryDetail: true,
+                        );
                       })),
                 )
               ],
@@ -639,8 +685,10 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    ExistingProductsPage(productsResponse.content,isFactoryDetail: true,),
+                builder: (context) => ExistingProductsPage(
+                      productsResponse.content,
+                      isFactoryDetail: true,
+                    ),
               ),
             );
           }),
@@ -657,11 +705,14 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 5, right: 5,bottom: 5),
+              padding: const EdgeInsets.only(top: 5, right: 5, bottom: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('图文详情',style: TextStyle(fontSize: 16),),
+                  Text(
+                    '图文详情',
+                    style: TextStyle(fontSize: 16),
+                  ),
                   Offstage(
                     offstage: !widget.isCompanyIntroduction,
                     child: GestureDetector(
@@ -692,21 +743,22 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 width: double.infinity,
                 child: Container(
                   child: Column(
-                    children: widget.factory.profiles.map((profile){
+                    children: widget.factory.profiles.map((profile) {
                       return Column(
                         children: <Widget>[
-                          profile.medias != null && profile.medias.length > 0 ?
-                          Container(
-                            margin: EdgeInsets.all(5),
-                            child: Image.network(
-                              '${GlobalConfigs.IMAGE_BASIC_URL}${profile.medias[0].url}',
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.fill,
-                            ),
-                          ):Container(
-                            height: 50,
-                          ),
+                          profile.medias != null && profile.medias.length > 0
+                              ? Container(
+                                  margin: EdgeInsets.all(5),
+                                  child: Image.network(
+                                    '${GlobalConfigs.IMAGE_BASIC_URL}${profile.medias[0].url}',
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.fill,
+                                  ),
+                                )
+                              : Container(
+                                  height: 50,
+                                ),
                           Container(
                             margin: EdgeInsets.all(5),
                             child: Align(
@@ -740,8 +792,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       elevation: 0,
       margin: EdgeInsets.only(top: 10),
       child: ListTile(
-        contentPadding:
-        EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         title: Text('公司认证信息'),
         trailing: Icon(Icons.chevron_right),
         onTap: () {
@@ -749,9 +800,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => MyCompanyCertificatePage(
-                    widget.factory,
-                    onlyRead: true,
-                  )));
+                        widget.factory,
+                        onlyRead: true,
+                      )));
         },
       ),
     );
@@ -770,13 +821,13 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
   }
 
   //格式化类别
-  String formatCategorysSelectText(List<CategoryModel> categorys,int count) {
+  String formatCategorysSelectText(List<CategoryModel> categorys, int count) {
     String text = '';
 
     if (categorys != null) {
       text = '';
       for (int i = 0; i < categorys.length; i++) {
-        if (i > count-1) {
+        if (i > count - 1) {
           text += '...';
           break;
         }

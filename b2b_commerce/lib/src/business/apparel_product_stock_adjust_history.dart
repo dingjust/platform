@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
+import '../_shared/widgets/product_search_delegate_page.dart';
+
 import 'products/apparel_product_stock_adjust_history_item.dart';
-import 'search/apparel_product_search.dart';
 
 class ApparelProductStockAdjustHistoryPage extends StatelessWidget {
   final List<ApparelProductModel> items = <ApparelProductModel>[
@@ -34,8 +35,11 @@ class ApparelProductStockAdjustHistoryPage extends StatelessWidget {
         title: Text('库存调整记录'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(B2BIcons.search,size: 20,),
-            onPressed: () => showSearch(context: context, delegate: ApparelProductSearchDelegate()),
+            icon: Icon(
+              B2BIcons.search,
+              size: 20,
+            ),
+            onPressed: () => showSearch(context: context, delegate: ProductSearchDelegatePage()),
           ),
         ],
       ),
