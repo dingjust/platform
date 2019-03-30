@@ -60,7 +60,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
           IconButton(
               icon: Text(
                 '确定',
-                style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                style: TextStyle(),
               ),
               onPressed: () {
                 if(medias.length > 0){
