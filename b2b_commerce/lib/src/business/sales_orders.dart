@@ -155,7 +155,7 @@ class SalesOrderList extends StatelessWidget {
                       padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                       child: Center(
                         child: Text(
-                          "┑(￣Д ￣)┍ 已经到底了",
+                          "(￢_￢) 已经到底了",
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
