@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -26,22 +28,19 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<String> brandUpdate(BrandModel brand) async {
-    Response response = await http$.put(Apis.brandUpdate(brand.uid),
-        data: BrandModel.toJson(brand));
+    Response response = await http$.put(Apis.brandUpdate(brand.uid), data: BrandModel.toJson(brand));
     return response.data;
   }
 
   @override
   Future<String> factoryUpdate(FactoryModel factory) async {
-    Response response = await http$.put(Apis.factoryUpdate(factory.uid),
-        data: FactoryModel.toJson(factory));
+    Response response = await http$.put(Apis.factoryUpdate(factory.uid), data: FactoryModel.toJson(factory));
     return response.data;
   }
 
   @override
   Future<String> applyCertification(CompanyModel form) async {
-    Response response = await http$.put(Apis.applyCertification,
-        data: CompanyModel.toJson(form));
+    Response response = await http$.put(Apis.applyCertification, data: CompanyModel.toJson(form));
     return response.data;
   }
 
@@ -49,8 +48,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<String> register({String type, CompanyRegisterDTO form}) async {
     Response response;
     try {
-      response = await http$.post(UserApis.register(type),
-          data: CompanyRegisterDTO.toJson(form));
+      response = await http$.post(UserApis.register(type), data: CompanyRegisterDTO.toJson(form));
     } on DioError catch (e) {
       print(e);
     }
@@ -63,19 +61,14 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<List<LabelModel>> industrialClustersFromLabels() async {
-    Response response =
-        await http$.get(UserApis.getIndustrialClusterFromLabels);
-    return response.data
-        .map<LabelModel>((label) => LabelModel.fromJson(label))
-        .toList();
+    Response response = await http$.get(UserApis.getIndustrialClusterFromLabels);
+    return response.data.map<LabelModel>((label) => LabelModel.fromJson(label)).toList();
   }
 
   @override
   Future<List<LabelModel>> labels() async {
     Response response = await http$.get(UserApis.labels);
-    return response.data
-        .map<LabelModel>((label) => LabelModel.fromJson(label))
-        .toList();
+    return response.data.map<LabelModel>((label) => LabelModel.fromJson(label)).toList();
   }
 
   @override
@@ -96,15 +89,20 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<BrandsResponse> brandSuppliers(Map<String,Object> params) async{
-    Response response = await http$.get(Apis.brandsSuppliers, data:params,);
+  Future<BrandsResponse> brandSuppliers(Map<String, Object> params) async {
+    Response response = await http$.get(
+      Apis.brandsSuppliers,
+      data: params,
+    );
     return BrandsResponse.fromJson(response.data);
   }
 
   @override
-  Future<FactoriesResponse> factorySuppliers(Map<String,Object> params) async{
-    Response response = await http$.get(Apis.factorySuppliers, data:params,);
+  Future<FactoriesResponse> factorySuppliers(Map<String, Object> params) async {
+    Response response = await http$.get(
+      Apis.factorySuppliers,
+      data: params,
+    );
     return FactoriesResponse.fromJson(response.data);
   }
-
 }

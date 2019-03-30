@@ -243,6 +243,15 @@ const COMMON_APIS = {
   createQuote() {
     return '/b2b/orders/quote/create';
   },
+  updateQuote(code) {
+    return '/b2b/orders/quote/'+code;
+  },
+  updateApprove(code) {
+    return '/b2b/orders/quote/'+code+'/approve';
+  },
+  updateReject(code) {
+    return '/b2b/orders/quote/'+code+'reject';
+  },
   getPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code;
   },
