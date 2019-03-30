@@ -31,6 +31,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     if(widget.factory.scaleRange != null) _scaleRange.add(widget.factory.scaleRange.toString().split('.')[1]);
     if(widget.factory.monthlyCapacityRange != null) _monthlyCapacityRanges.add(widget.factory.monthlyCapacityRange.toString().split('.')[1]);
     if(widget.factory.populationScale != null) _populationScale.add(widget.factory.populationScale.toString().split('.')[1]);
+    if(widget.factory.cooperationModes != null) _cooperationModes.addAll(widget.factory.cooperationModes.map((cooperationMode)=>cooperationMode.toString().split('.')[1]));
     if(widget.factory.profilePicture != null) medias = [widget.factory.profilePicture];
 
 
@@ -250,7 +251,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         items: CooperationModesEnum,
                         title: '合作方式',
                         codes: _cooperationModes,
-                        count: 3,
+                        multiple: true,
+                        count: 4,
                       ),
                     ));
 
@@ -462,7 +464,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     if (cooperationModes != null) {
       text = '';
       for (int i = 0; i < cooperationModes.length; i++) {
-        if (i > 1) {
+        if (i > 2) {
           text += '...';
           break;
         }

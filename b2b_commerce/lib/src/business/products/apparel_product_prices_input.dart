@@ -39,8 +39,7 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
                     child: Center(
                       child: Text(
                         '确定',
-                        style: TextStyle(
-                            color: Color.fromRGBO(255, 149, 22, 1)),
+                        style: TextStyle(),
                       ),
                     ),
                   ),
@@ -75,6 +74,7 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
               autofocus: true,
               leadingText: '价格下限',
               hintText: '请输入价格下限',
+              inputType: TextInputType.number,
             ),
           ),
           Container(
@@ -85,7 +85,7 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
               controller: _maxPriceController,
               leadingText: '价格上限',
               hintText: '请输入价格上限',
-              inputType: TextInputType.phone,
+              inputType: TextInputType.number,
             ),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -115,15 +116,33 @@ class AddressFormState extends State<AddressFormPage> {
       widgets.add(
         ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 0),
-          title: RaisedButton(
-            child: Text('删除地址',style: TextStyle(color: Colors.white),),
-            color: Colors.red,
-            onPressed: () async{
-              AddressRepositoryImpl().delete(widget.address.id.toString()).then((a){
-                Navigator.pop(context);
-              });
-              AddressBLoC.instance.filterByStatuses();
-            },
+          title: FlatButton(
+              color: Colors.white,
+              child: Text(
+                '删除地址',
+                style: TextStyle(
+                  color: Colors.red[200],
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  side: BorderSide(
+                      color:  Colors.red[200],
+                      style: BorderStyle.solid,
+                      width: 1)),
+              clipBehavior: Clip.antiAlias,
+              materialTapTargetSize: MaterialTapTargetSize.padded,
+              onPressed: () {
+                ShowDialogUtil.showAlertDialog(context, '是否要删除地址', (){
+                  Navigator.pop(context);
+                  AddressRepositoryImpl().delete(widget.address.id.toString()).then((a){
+                    Navigator.pop(context);
+                    AddressBLoC.instance.filterByStatuses();
+                  });
+                });
+              }
           ),
         ),
       );
@@ -136,7 +155,7 @@ class AddressFormState extends State<AddressFormPage> {
         title: Text("编辑地址"),
         actions: <Widget>[
           IconButton(
-            icon: Text('确定',style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1),),),
+            icon: Text('保存',style: TextStyle(),),
             onPressed: () async{
               if(_fullnameController.text == '' && _cellphoneController.text == ''){
                 showDialog(

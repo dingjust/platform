@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -391,76 +392,87 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
   _buildFactory() {
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-      return Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(top: 15),
+      return GestureDetector(
+        onTap: ()async{
+          //获取该工厂的现款商品
+          ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
+            'factory':widget.model.belongTo.uid,
+          }, {'size': 3});
+
+          //TODO跳转详细页
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>MyFactoryPage(widget.model.belongTo,products: productsResponse.content,)));
+        },
         child: Container(
-          padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        child: Text(
-                          widget.model.belongTo.name,
-                          style: TextStyle(fontSize: 18),
-                          overflow: TextOverflow.ellipsis,
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 15),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          child: Text(
+                            widget.model.belongTo.name,
+                            style: TextStyle(fontSize: 18),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(right: 10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Stars(
+                                starLevel: widget.model.belongTo.starLevel ?? 1,
+                                highlightOnly: false,
+                              ),
+                              Icon(
+                                Icons.chevron_right,
+                                color: Colors.grey,
+                              )
+                            ],
+                          ))
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          Text('历史接单'),
+                          Text(
+                            '${widget.model.belongTo.historyOrdersCount ?? 0}',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          Text('单')
+                        ],
                       ),
                     ),
                     Container(
-                        margin: EdgeInsets.only(right: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Stars(
-                              starLevel: widget.model.belongTo.starLevel ?? 1,
-                              highlightOnly: false,
-                            ),
-                            Icon(
-                              Icons.chevron_right,
-                              color: Colors.grey,
-                            )
-                          ],
-                        ))
+                      margin: EdgeInsets.only(right: 20),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            '${widget.model.belongTo.contactAddress?.city?.name} ${widget.model.belongTo.contactAddress?.cityDistrict?.name}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    child: Row(
-                      children: <Widget>[
-                        Text('历史接单'),
-                        Text(
-                          widget.model.belongTo.historyOrdersCount.toString(),
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        Text('单')
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 20),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          '${widget.model.belongTo.contactAddress?.city?.name} ${widget.model.belongTo.contactAddress?.cityDistrict?.name}',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );

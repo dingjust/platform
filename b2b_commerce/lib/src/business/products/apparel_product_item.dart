@@ -233,9 +233,12 @@ class ApparelProductItemState extends State<ApparelProductItem> {
               label: Text('删除'),
               labelStyle: TextStyle(color: Colors.grey),
               onPressed: () async {
-                await ProductRepositoryImpl().delete(widget.item.code);
-                Scaffold.of(context).showSnackBar(SnackBar(content: Text('删除商品成功'),duration: Duration(seconds: 2,),));
-                ApparelProductBLoC.instance.filterByStatuses(widget.status);
+                ShowDialogUtil.showAlertDialog(context, '是否要删除商品', ()async{
+                  await ProductRepositoryImpl().delete(widget.item.code);
+                  Navigator.of(context).pop();
+                  Scaffold.of(context).showSnackBar(SnackBar(content: Text('删除商品成功'),duration: Duration(seconds: 2,),));
+                  ApparelProductBLoC.instance.filterByStatuses(widget.status);
+                });
               },
             ),
             ActionChip(
@@ -256,6 +259,7 @@ class ApparelProductItemState extends State<ApparelProductItem> {
                             bloc: ApparelProductBLoC.instance,
                             child: ApparelProductFormPage(
                               item: product,
+                              status: widget.status,
                             ),
                           ),
                     ),
@@ -312,4 +316,5 @@ class ApparelProductItemState extends State<ApparelProductItem> {
       return Container();
     }
   }
+
 }
