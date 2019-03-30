@@ -602,7 +602,7 @@ enum CooperationModes {
 }
 
 const CooperationModesLocalizedMap = {
-  CooperationModes.PURE_PROCESSING: "PURE_PROCESSING",
+  CooperationModes.PURE_PROCESSING: "纯加工",
   CooperationModes.FOB: "FOB",
   CooperationModes.ODM: "ODM",
   CooperationModes.OEM: "OEM",

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/products/form/prices_field.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import 'form/minor_category_field.dart';
 import 'form/normal_picture_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
-  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false,this.status,})
+  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false,this.status = 'ALL',})
       : super(key: const Key('__apparelProductFormPage__'));
 
   final ApparelProductModel item;
@@ -114,9 +115,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   await ProductRepositoryImpl().update(widget.item);
                 }
 
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => ApparelProductsPage()
+                    ), ModalRoute.withName('/'));
                 ApparelProductBLoC.instance.filterByStatuses(widget.status);
 //              print(widget.item.attributes.styles[0]);
-                Navigator.pop(context);
               },
             )
           ],
@@ -202,7 +205,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 focusNode: _gramWeightFocusNode,
                 controller: _gramWeightController,
                 inputType: TextInputType.number,
-                leadingText: '重量',
+                leadingText: '重量（kg）',
                 hintText: '请输入重量',
                 onChanged: (value) {
                   widget.item.gramWeight = double.parse(value);

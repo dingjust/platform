@@ -6,7 +6,7 @@ import 'package:widgets/widgets.dart';
 
 class OfflineContactsInput extends StatefulWidget{
   AddressModel model;
-  OfflineContactsInput({this.model});
+  OfflineContactsInput({this.model,});
   _OfflineContactsInputState createState() => _OfflineContactsInputState();
 }
 
