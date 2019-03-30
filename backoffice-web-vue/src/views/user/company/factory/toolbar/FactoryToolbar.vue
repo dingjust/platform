@@ -5,9 +5,9 @@
     </el-form-item>
     <el-button-group>
       <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-      <el-button v-if="isTenant()"  type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
+      <el-button v-if="isTenant()" type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
     </el-button-group>
-    <el-popover placement="bottom" width="800" trigger="click" v-model="visible" >
+    <el-popover placement="bottom" width="800" trigger="click" v-model="visible">
       <el-row :gutter="10">
         <el-col :span="8">
           <el-form-item label="标签" prop="labels">
@@ -75,15 +75,13 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="评级" prop="starLevel">
-            <el-rate
-              v-model="queryFormData.starLevel"
-              :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+        <el-col :span="8">
+          <div class="block">
+            <div style="margin-top: 5px;margin-bottom: 20px;">评级</div>
+            <el-rate v-model="queryFormData.starLevel"
+                     :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
             </el-rate>
-          </el-form-item>
+          </div>
         </el-col>
       </el-row>
       <el-row :gutter="10">
@@ -111,14 +109,14 @@
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
-        setQueryFormData:'queryFormData',
+        setQueryFormData: 'queryFormData',
       }),
       onSearch() {
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
-        if(this.queryFormData.starLevel == 0){
+        if (this.queryFormData.starLevel == 0) {
           this.queryFormData.starLevel = null;
         }
         this.setQueryFormData(this.queryFormData);
@@ -132,7 +130,7 @@
         this.$emit('onNew', formData);
       },
       async getLabels() {
-        const url = this.apis().getGroupAllLabels('FACTORY');
+        const url = this.apis().getGroupLabels('FACTORY');
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -174,12 +172,12 @@
     },
     data() {
       return {
-        visible:false,
+        visible: false,
         keyword: '',
         labels: [],
         regions: [],
-        categories:[],
-        adeptAtCategories:[],
+        categories: [],
+        adeptAtCategories: [],
         formData: this.$store.state.FactoriesModule.formData,
         queryFormData: this.$store.state.FactoriesModule.queryFormData,
         populationScales: this.$store.state.EnumsModule.populationScales,
