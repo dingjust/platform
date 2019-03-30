@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -270,82 +271,93 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   _buildFactory() {
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-      return Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(top: 15),
+      return GestureDetector(
+        onTap: ()async{
+          //获取该工厂的现款商品
+          ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
+            'factory':pageItem.belongTo.uid,
+          }, {'size': 3});
+
+          //TODO跳转详细页
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>MyFactoryPage(pageItem.belongTo,products: productsResponse.content,)));
+        },
         child: Container(
-          padding: EdgeInsets.fromLTRB(10,15,0,15),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child:
-                          pageItem.belongTo == null ||
-                              pageItem.belongTo.name == null ?
-                          Text(
-                            '',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500),
-                          ) :
-                          Text(
-                            pageItem.belongTo.name,
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        pageItem.belongTo == null ||
-                            pageItem.belongTo.starLevel == null ?
-                        Container() :
-                        Stars(
-                          size: 14,
-                          color: Color.fromRGBO(255, 183, 0, 1),
-                          highlightOnly: false,
-                          starLevel: pageItem.belongTo.starLevel,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            '历史接单${pageItem.belongTo == null || pageItem.belongTo.historyOrdersCount == null ? '0' : pageItem.belongTo.historyOrdersCount}单',
-                            style: TextStyle(
-                                color: Colors.grey
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 15),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(10,15,0,15),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child:
+                            pageItem.belongTo == null ||
+                                pageItem.belongTo.name == null ?
+                            Text(
+                              '',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500),
+                            ) :
+                            Text(
+                              pageItem.belongTo.name,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500),
                             ),
                           ),
-                        ),
-                        Container(
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                '${pageItem.belongTo.contactAddress?.city
-                                    ?.name} ${pageItem.belongTo.contactAddress
-                                    ?.cityDistrict?.name}',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
+                          pageItem.belongTo == null ||
+                              pageItem.belongTo.starLevel == null ?
+                          Container() :
+                          Stars(
+                            size: 14,
+                            color: Color.fromRGBO(255, 183, 0, 1),
+                            highlightOnly: false,
+                            starLevel: pageItem.belongTo.starLevel,
                           ),
-                        )
-                      ],
-                    )
-                  ],
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              '历史接单${pageItem.belongTo == null || pageItem.belongTo.historyOrdersCount == null ? '0' : pageItem.belongTo.historyOrdersCount}单',
+                              style: TextStyle(
+                                  color: Colors.grey
+                              ),
+                            ),
+                          ),
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  '${pageItem.belongTo.contactAddress?.city
+                                      ?.name} ${pageItem.belongTo.contactAddress
+                                      ?.cityDistrict?.name}',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                child: Icon(
-                  Icons.keyboard_arrow_right,
-                  size: 40,
-                  color: Colors.grey,
-                ),
-              )
-            ],
+                Container(
+                  child: Icon(
+                    Icons.keyboard_arrow_right,
+                    size: 40,
+                    color: Colors.grey,
+                  ),
+                )
+              ],
+            )
           )
-        )
+        ),
       );
     } else {
       return Container();
