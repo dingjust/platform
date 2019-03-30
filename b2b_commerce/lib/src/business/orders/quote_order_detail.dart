@@ -6,6 +6,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 class QuoteOrderDetailPage extends StatefulWidget {
@@ -135,102 +136,166 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           //TODO跳转详细页
         },
         child: Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+//          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           margin: EdgeInsets.only(bottom: 10),
           color: Colors.white,
           child: Column(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(width: 1, color: Colors.grey[300]))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(widget
-                                              .item.supplier?.profilePicture !=
-                                          null
-                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.item.belongTo.profilePicture}'
-                                      : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 10),
-                          height: 70,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: widget
+                              .item.supplier?.profilePicture == null?
+                          AssetImage(
+                            'temp/picture.png',
+                            package: "assets",
+                          ):
+                          NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.item.supplier.profilePicture.url}'),
+                          fit: BoxFit.cover,
+                        )),
+                  ),
+                  Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              widget.item.supplier == null ||
+                                  widget.item.supplier.name == null ?
+                              '' :
+                              '${widget.item.supplier?.name}',
+                              textScaleFactor: 1.3,
+                            ),
+                          ),
+                          widget.item.supplier == null ||
+                              widget.item.supplier.approvalStatus == null ?
+                          Container() :
+                          Container(
+                              margin: EdgeInsets.only(top: 5),
+                              color: Color.fromRGBO(254, 252, 235, 1),
+                              child: widget.item.supplier.approvalStatus !=
+                                  ArticleApprovalStatus.approved ?
                               Text(
-                                '${widget.item.supplier?.name}',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(36, 38, 41, 1)),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Color.fromRGBO(229, 242, 255, 1),
-                                ),
-                                padding: EdgeInsets.all(2),
-                                child: Text(
-                                  '已认证',
+                                  '  未认证  ',
                                   style: TextStyle(
-                                      color: Color.fromRGBO(22, 141, 255, 1)),
+                                    color:
+                                    Color.fromRGBO(255, 133, 148, 1),
+                                  )
+                              )
+                                  :
+                              Text(
+                                '  已认证  ',
+                                style: TextStyle(
+                                  color: Color.
+                                  fromRGBO(255, 133, 148, 1)
+                                  ,
                                 ),
                               )
-                            ],
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      )
+                  )
+                ],
+              ),
+              Divider(
+                height: 1,
+              ),
+              Container(
+                padding: EdgeInsets.all(15),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: Text(
+                            '联系人'
+                        ),
+                      ),
                     ),
-                    Icon(
-                      Icons.chevron_right,
-                      size: 35,
-                      color: Color.fromRGBO(180, 180, 180, 1),
+                    Container(
+                      child: Text(
+                        widget.item.supplier.contactAddress == null ||
+                            widget.item.supplier.contactAddress.fullname == null ?
+                        '' :
+                        '${widget.item.supplier.contactAddress.fullname}',
+                        style: TextStyle(
+                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                      ),
                     )
                   ],
                 ),
               ),
-              InfoRow(
-                label: '联系人',
-                value: Text(
-                  '${widget.item.supplier?.contactPerson}',
-                  style: TextStyle(
-                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                ),
-              ),
-              InfoRow(
-                  label: '联系手机',
-                  hasBottomBorder: false,
-                  value: Row(
+              Divider(height: 2,),
+              GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  child: Row(
                     children: <Widget>[
-                      Text(
-                        '${widget.item.supplier?.contactPhone}',
-                        style: TextStyle(
-                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                      ),
-                      Container(
-                        child: IconButton(
-                          onPressed: () {
-                            //TODO调用拨打电话API
-                          },
-                          icon: Icon(
-                            Icons.phone,
-                            color: Color.fromRGBO(86, 194, 117, 1),
+                      Expanded(
+                        child: Container(
+                          child: Text(
+                              '联系手机'
                           ),
                         ),
                       ),
+                      Container(
+                        child: Text(
+                          widget.item.supplier.contactAddress == null ||
+                              widget.item.supplier.contactAddress.cellphone == null ?
+                          '' :
+                          '${widget.item.supplier.contactAddress.cellphone}',
+                          style: TextStyle(
+                              color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                        ),
+                      ),
                     ],
-                  )),
+                  ),
+                ),
+                onTap: (){
+                  widget.item.supplier.contactAddress == null ||
+                      widget.item.supplier.contactAddress.cellphone == null ?
+                  null:
+                  _selectActionButton(widget.item.supplier.contactAddress.cellphone);
+                },
+              ),
+//              InfoRow(
+//                label: '联系人',
+//                value: Text(
+//                  '${widget.item.supplier?.contactPerson}',
+//                  style: TextStyle(
+//                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+//                ),
+//              ),
+  //              InfoRow(
+  //                  label: '联系手机',
+  //                  hasBottomBorder: false,
+  //                  value: Row(
+  //                    children: <Widget>[
+  //                      Text(
+  //                        '${widget.item.supplier?.contactPhone}',
+  //                        style: TextStyle(
+  //                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+  //                      ),
+  //                      Container(
+  //                        child: IconButton(
+  //                          onPressed: () {
+  //                            //TODO调用拨打电话API
+  //                          },
+  //                          icon: Icon(
+  //                            Icons.phone,
+  //                            color: Color.fromRGBO(86, 194, 117, 1),
+  //                          ),
+  //                        ),
+  //                      ),
+  //                    ],
+  //                  )
+  //              ),
             ],
           ),
         ),
@@ -247,80 +312,54 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         color: Colors.white,
         margin: EdgeInsets.only(top: 15),
         child: Container(
-          padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
+          padding: EdgeInsets.all(15),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Text(
-                '报价工厂',
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        child: Text(
-                          pageItem.belongTo.name,
-                          style: TextStyle(fontSize: 18),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    Container(
-                        margin: EdgeInsets.only(right: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Stars(
-                              starLevel: pageItem.belongTo.starLevel ?? 1,
-                              highlightOnly: false,
-                            ),
-                            Icon(
-                              Icons.chevron_right,
-                              color: Colors.grey,
-                            )
-                          ],
-                        ))
-                  ],
-                ),
-              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Container(
-                    child: Row(
-                      children: <Widget>[
-                        Text('历史接单'),
-                        Text(
-                          pageItem.belongTo.historyOrdersCount.toString(),
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        Text('单')
-                      ],
+                  Expanded(
+                    child:
+                    pageItem.belongTo == null ||
+                        pageItem.belongTo.name == null ?
+                    Text(
+                      '',
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w500),
+                    ) :
+                    Text(
+                      pageItem.belongTo.name,
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(right: 20),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          '${pageItem.belongTo.contactAddress?.city?.name} ${pageItem.belongTo.contactAddress?.cityDistrict?.name}',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  )
+                  pageItem.belongTo == null ||
+                      pageItem.belongTo.starLevel == null ?
+                  Container() :
+                  Stars(
+                    size: 14,
+                    color: Color.fromRGBO(255, 183, 0, 1),
+                    highlightOnly: false,
+                    starLevel: pageItem.belongTo.starLevel,
+                  ),
                 ],
               ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      '历史接单${pageItem.belongTo == null || pageItem.belongTo.historyOrdersCount == null ? '0' : pageItem.belongTo.historyOrdersCount}单',
+                      style: TextStyle(
+                          color: Colors.grey
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_right)
+                ],
+              )
             ],
           ),
-        ),
+        )
       );
     } else {
       return Container();
@@ -392,7 +431,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    '${pageItem.requirementOrder.details.majorCategoryName()},${pageItem.requirementOrder.details?.category.name},${pageItem.requirementOrder.totalQuantity}件',
+                    '${pageItem.requirementOrder.details.majorCategoryName()} ${pageItem.requirementOrder.details?.category.name}  ${pageItem.requirementOrder.totalQuantity == null? '0' : pageItem.requirementOrder.totalQuantity}件',
                     style: TextStyle(
                       color: Color.fromRGBO(255, 133, 148, 1),
                       fontSize: 15,
@@ -855,5 +894,35 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             builder: (context) => ProductionOnlineOrderFrom(
                   quoteModel: pageItem,
                 )));
+  }
+
+  //拨打电话或发短信
+  void _selectActionButton(String tel) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text('拨打电话'),
+              onTap: () async {
+                var url = 'tel:' + tel;
+                await launch(url);
+              },
+            ),
+            tel.indexOf('-')>-1?Container():ListTile(
+              leading: Icon(Icons.message),
+              title: Text('发送短信'),
+              onTap: () async {
+                var url = 'sms:' + tel;
+                await launch(url);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

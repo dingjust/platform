@@ -61,7 +61,6 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
                 unselectedLabelColor: Colors.black26,
                 labelColor: Colors.black,
                 indicatorSize: TabBarIndicatorSize.label,
-                indicatorColor: Colors.black,
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);
                 }).toList(),

@@ -100,7 +100,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                                   .belongTo
                                   ?.profilePicture !=
                                   null
-                                  ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo}'
+                                  ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo.profilePicture.url}'
                                   : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
                           borderRadius: BorderRadius.circular(10)),
                     ),
@@ -654,7 +654,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             context,
             MaterialPageRoute(
                 builder: (context) => OfflineOrderInputRemarksPage(
-                    fieldText: '订单备注', inputType: TextInputType.text)),
+                    fieldText: '订单备注', inputType: TextInputType.text,content: remarks,)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
