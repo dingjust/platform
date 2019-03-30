@@ -26,22 +26,23 @@ class FactoryCondition {
   /// 规模
   PopulationScale populationScale;
 
-  FactoryCondition(
-      {this.starLevel,
-      this.historyOrdersCount,
-      this.category,
-      this.adeptAtCategory,
-      this.productiveOrientations,
-      this.populationScale});
+  IndustrialClusterModel industrialCuster;
 
-  factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
-      _$FactoryConditionFromJson(json);
+  FactoryCondition({
+    this.starLevel,
+    this.historyOrdersCount,
+    this.category,
+    this.adeptAtCategory,
+    this.productiveOrientations,
+    this.populationScale,
+    this.industrialCuster
+  });
 
-  static Map<String, dynamic> toJson(FactoryCondition model) =>
-      _$FactoryConditionToJson(model);
+  factory FactoryCondition.fromJson(Map<String, dynamic> json) => _$FactoryConditionFromJson(json);
 
-  static Map<String, dynamic> _regionToJson(
-          RegionModel productiveOrientations) =>
+  static Map<String, dynamic> toJson(FactoryCondition model) => _$FactoryConditionToJson(model);
+
+  static Map<String, dynamic> _regionToJson(RegionModel productiveOrientations) =>
       RegionModel.toJson(productiveOrientations);
 
   Map<String, dynamic> toDataJson() {
