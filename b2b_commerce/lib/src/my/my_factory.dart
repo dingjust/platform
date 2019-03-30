@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
@@ -63,18 +64,31 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       ));
     }
     if (widget.purchaseOrder != null) {
-      _widgets.add(Card(
-        elevation: 0,
-        margin: EdgeInsets.only(top: 10),
-        child: Column(
-          children: <Widget>[
-            _buildOrderHeader(),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _buildContent(),
-            ),
-          ],
+      _widgets.add(GestureDetector(
+        child: Card(
+          elevation: 0,
+          margin: EdgeInsets.only(top: 10),
+          child: Column(
+            children: <Widget>[
+              _buildOrderHeader(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _buildContent(),
+              ),
+            ],
+          ),
         ),
+        onTap: ()async{
+          PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(widget.purchaseOrder.code);
+
+          if (model != null) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PurchaseOrderDetailPage(
+                  order: model,
+                ))
+            );
+          }
+        },
       ));
     }
     _widgets.add(_buildCashProducts());
