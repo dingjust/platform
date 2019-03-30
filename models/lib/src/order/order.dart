@@ -930,6 +930,7 @@ class QuoteModel extends AbstractOrderModel {
   FactoryModel belongTo;
 
   ///合作商信息
+  @JsonKey(toJson: _supplierToJson)
   CompanyModel supplier;
 
   /// 面料单价
@@ -1003,6 +1004,9 @@ class QuoteModel extends AbstractOrderModel {
 
   static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
       FactoryModel.toJson(model);
+
+  static Map<String, dynamic> _supplierToJson(CompanyModel model) =>
+      CompanyModel.toJson(model);
 }
 
 /// 生产进度

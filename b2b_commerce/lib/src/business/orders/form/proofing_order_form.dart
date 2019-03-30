@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
+import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +22,7 @@ class ProofingOrderForm extends StatefulWidget {
 class _ProofingOrderFormState extends State<ProofingOrderForm> {
   TextEditingController _remarksController = TextEditingController();
   TextEditingController _unitPriceController = TextEditingController();
+  String remarks;
 
   GlobalKey _scaffoldKey = GlobalKey();
 
@@ -243,18 +245,72 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 ],
               ),
             ),
-            InputRow(
-                hasBottom: false,
-                label: '备注',
-                field: TextField(
-                  autofocus: false,
-                  textAlign: TextAlign.right,
-                  controller: _remarksController,
-                  decoration:
-                      InputDecoration(hintText: '填写', border: InputBorder.none),
-                )),
+            _buildRemarks(context),
+//            InputRow(
+//                hasBottom: false,
+//                label: '备注',
+//                field: TextField(
+//                  autofocus: false,
+//                  textAlign: TextAlign.right,
+//                  controller: _remarksController,
+//                  decoration:
+//                      InputDecoration(hintText: '填写', border: InputBorder.none),
+//                )),
           ],
         ));
+  }
+
+  //订单备注
+  Widget _buildRemarks(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+            color: Colors.white,
+            padding: EdgeInsets.fromLTRB(0,15,0,15),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Text(
+                      '订单备注',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+                remarks == null || remarks == ''
+                    ? Icon(Icons.keyboard_arrow_right)
+                    : Container(
+                    width: 150,
+                    child: Text(
+                      remarks,
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey),
+                    )
+                )
+              ],
+            )
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    OfflineOrderInputRemarksPage(
+                      fieldText: '订单备注',
+                      inputType: TextInputType.text,
+                      content: remarks,)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              remarks = value;
+            });
+          });
+        });
   }
 
   Widget _buildProductSelect() {
@@ -583,7 +639,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   ..code = widget.model.code
                   ..unitPrice = double.parse(_unitPriceController.text)
                   ..totalPrice = totalPrice
-                  ..remarks = _remarksController.text;
+                  ..remarks = remarks;
                 String response =
                     await ProofingOrderRepository().proofingUpdate(model);
                 //TODOS:跳转到打样订单详情

@@ -31,6 +31,7 @@ class ColorSizeNumTable extends StatelessWidget {
         ),
         TableCell(
           child: Table(
+            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: [
               TableRow(children: [
@@ -128,6 +129,7 @@ class ColorSizeNumTable extends StatelessWidget {
         ),
         TableCell(
           child: Table(
+            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: _sizeRowList,
           ),
@@ -148,7 +150,7 @@ class ColorSizeNumTable extends StatelessWidget {
             //   1: FixedColumnWidth(255),
             // },
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: TableBorder.all(width: 1.0, color: Colors.transparent),
+            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             children: tableRowList,
           ),
         ],
@@ -204,6 +206,7 @@ class EditColorSizeNumTable extends StatelessWidget {
         ),
         TableCell(
           child: Table(
+            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: [
               TableRow(children: [
@@ -309,6 +312,7 @@ class EditColorSizeNumTable extends StatelessWidget {
         ),
         TableCell(
           child: Table(
+            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: _sizeRowList,
           ),
@@ -329,7 +333,7 @@ class EditColorSizeNumTable extends StatelessWidget {
             //   1: FixedColumnWidth(255),
             // },
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: TableBorder.all(width: 1.0, color: Colors.transparent),
+            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             children: tableRowList,
           ),
         ],

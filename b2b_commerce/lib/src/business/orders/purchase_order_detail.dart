@@ -344,14 +344,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        '历史接单${order.belongTo == null || order.belongTo.historyOrdersCount == null ? '0' : order.belongTo.historyOrdersCount}单，报价成功率0%',
+                        '历史接单${order.belongTo == null || order.belongTo.historyOrdersCount == null ? '0' : order.belongTo.historyOrdersCount}单',
                         style: TextStyle(
                             color: Colors.grey
                         ),
                       ),
                     ),
                     Icon(Icons.keyboard_arrow_right)
-
                   ],
                 )
               ],
