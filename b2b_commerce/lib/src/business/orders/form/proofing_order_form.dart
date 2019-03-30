@@ -256,45 +256,68 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   }
 
   Widget _buildProductSelect() {
-    return GestureDetector(
-      onTap: _onProductSelect,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 30),
+    return Container(
         color: Colors.white,
-        child: product == null
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '商品选择/创建',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Icon(
-                    Icons.chevron_right,
-                    size: 35,
-                    color: Color.fromRGBO(180, 180, 180, 1),
-                  )
-                ],
-              )
-            : Column(
-                children: <Widget>[
-                  ApparelProductItem(
-                    product,
-                    isRequirement: false,
-                    isSelectItem: true,
-                  ),
-                  widget.update
-                      ? Container()
-                      : FlatButton(
-                          onPressed: _onProductSelect,
-                          child: Text('重新选择'),
-                        )
-                ],
-              ),
-      ),
+        margin: EdgeInsets.only(top: 5),
+        child: GestureDetector(
+            child: product == null ? Container(
+              height: 100,
+              child: Card(
+                  elevation: 0,
+                  color: Colors.white10,
+                  child: Center(child: Text('商品选择/创建'))),
+            ) : ApparelProductItem(
+              product,
+              isRequirement: false,
+              isSelectItem: true,
+            ),
+            onTap: () {
+              _onProductSelect();
+            }
+        )
     );
   }
+
+//  Widget _buildProductSelect() {
+//    return GestureDetector(
+//      onTap: _onProductSelect,
+//      child: Container(
+//        width: double.infinity,
+//        padding: EdgeInsets.symmetric(vertical: 30),
+//        color: Colors.white,
+//        child: product == null
+//            ? Row(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  Text(
+//                    '商品选择/创建',
+//                    style: TextStyle(fontSize: 20),
+//                  ),
+//                  Icon(
+//                    Icons.chevron_right,
+//                    size: 35,
+//                    color: Color.fromRGBO(180, 180, 180, 1),
+//                  )
+//                ],
+//              )
+//            : Column(
+//                children: <Widget>[
+//                  ApparelProductItem(
+//                    product,
+//                    isRequirement: false,
+//                    isSelectItem: true,
+//                  ),
+//                  widget.update
+//                      ? Container()
+//                      : FlatButton(
+//                          onPressed: _onProductSelect,
+//                          child: Text('重新选择'),
+//                        )
+//                ],
+//              ),
+//      ),
+//    );
+//  }
 
   void _onProductSelect() async {
     ApparelProductModel selectProduct =
@@ -392,7 +415,20 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             title: Text('确定提交？'),
             actions: <Widget>[
               FlatButton(
-                child: Text('确定'),
+                child: Text('取消',
+                    style: TextStyle(
+                        color: Colors.grey
+                    )
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('确定',
+                style: TextStyle(
+                  color: Colors.black
+                ),),
                 onPressed: () async {
                   //拼装数据
                   ProofingModel model = ProofingModel();
@@ -433,12 +469,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   }
                 },
               ),
-              FlatButton(
-                child: Text('取消'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
             ],
           );
         },
@@ -455,7 +485,20 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           title: Text('确定修改？'),
           actions: <Widget>[
             FlatButton(
-              child: Text('确定'),
+              child: Text('取消',
+                  style: TextStyle(
+                      color: Colors.grey
+                  )),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定',
+                  style: TextStyle(
+                  color: Colors.black
+                  )
+              ),
               onPressed: () async {
                 //拼装数据
                 ProofingModel model = ProofingModel();
@@ -480,12 +523,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                         ModalRoute.withName('/'));
                   }
                 }
-              },
-            ),
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
               },
             ),
           ],
