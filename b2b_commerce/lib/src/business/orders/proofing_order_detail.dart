@@ -1,7 +1,9 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -32,7 +34,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
         color: Color.fromRGBO(245, 245, 245, 1),
         child: ListView(
           children: <Widget>[
-            _buildCompanyInfo(),
+//            _buildCompanyInfo(),
             _buildEntries(),
             _buildNumRow(),
             Container(
@@ -48,6 +50,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             _buildCostRow(),
             _buildRemarks(),
             _buildDeliveryAddress(context),
+            _buildBrandInfo(context),
             _buildFactory(),
             _buildOrderInfoRow(),
             _buildButtonGroup(),
@@ -230,160 +233,200 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
 
   //构建收货信息UI
   Widget _buildDeliveryAddress(BuildContext context) {
-    return Container(
-      // padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            leading: Icon(
-              B2BIcons.location,
-              color: Colors.black,
-            ),
-            title: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('${widget.model.deliveryAddress?.fullname}'),
-                ),
-                Expanded(
-                    child: Text('${widget.model.deliveryAddress?.cellphone}'))
-              ],
-            ),
-            subtitle: Text(
-                '${widget.model.deliveryAddress?.region?.name}${widget.model.deliveryAddress?.city?.name}${widget.model.deliveryAddress?.cityDistrict?.name}${widget.model.deliveryAddress?.line1}',
-                style: TextStyle(
-                  color: Colors.black,
-                )),
-            trailing: Icon(Icons.chevron_right),
-          ),
-          SizedBox(
-            child: Image.asset(
-              'temp/common/address_under_line.png',
-              package: 'assets',
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-          ListTile(
-            title: Text("物流信息"),
-          )
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-    );
-  }
-
-  Widget _buildCompanyInfo() {
-    /// 工厂端显示
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return GestureDetector(
-        onTap: () {
-          //TODO跳转详细页
-        },
-        child: Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          margin: EdgeInsets.only(bottom: 10),
-          color: Colors.white,
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(width: 1, color: Colors.grey[300]))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(widget
-                                              .model.supplier?.profilePicture !=
-                                          null
-                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.supplier?.profilePicture}'
-                                      : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 10),
-                          height: 70,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                '${widget.model.supplier?.name}',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(36, 38, 41, 1)),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Color.fromRGBO(229, 242, 255, 1),
-                                ),
-                                padding: EdgeInsets.all(2),
-                                child: Text(
-                                  '已认证',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(22, 141, 255, 1)),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    Icon(
-                      Icons.chevron_right,
-                      size: 35,
-                      color: Color.fromRGBO(180, 180, 180, 1),
-                    )
-                  ],
-                ),
+    return GestureDetector(
+      child: Container(
+//      padding: EdgeInsets.all(10),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(
+                B2BIcons.location,
+                color: Colors.black,
               ),
-              InfoRow(
-                label: '联系人',
-                value: Text(
-                  '${widget.model.supplier?.contactPerson}',
+              title: Row(
+                children: <Widget>[
+                  widget.model.deliveryAddress == null ||
+                      widget.model.deliveryAddress.fullname == null ?
+                  Container() :
+                  Text(widget.model.deliveryAddress.fullname),
+                  widget.model.deliveryAddress == null ||
+                      widget.model.deliveryAddress.cellphone == null ?
+                  Container() :
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text(widget.model.deliveryAddress.cellphone),
+                  )
+                ],
+              ),
+              subtitle: widget.model.deliveryAddress == null ||
+                  widget.model.deliveryAddress.region == null ||
+                  widget.model.deliveryAddress.city == null ||
+                  widget.model.deliveryAddress.cityDistrict == null ||
+                  widget.model.deliveryAddress.line1 == null ?
+              Container() :
+              Text(
+                  widget.model.deliveryAddress.region.name +
+                      widget.model.deliveryAddress.city.name +
+                      widget.model.deliveryAddress.cityDistrict.name +
+                      widget.model.deliveryAddress.line1,
                   style: TextStyle(
-                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                ),
+                    color: Colors.black,
+                  )),
+            ),
+            SizedBox(
+              child: Image.asset(
+                'temp/common/address_under_line.png',
+                package: 'assets',
+                fit: BoxFit.fitWidth,
               ),
-              InfoRow(
-                  label: '联系手机',
-                  hasBottomBorder: false,
-                  value: Row(
+            ),
+            GestureDetector(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      '物流信息',
+                      style: TextStyle(
+                          fontSize: 16
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        '${widget.model.supplier?.contactPhone}',
-                        style: TextStyle(
-                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                      Container(
+                        child: Text(
+                          '${widget.model.consignmentModel!=null && widget.model.consignmentModel.carrierModel!=null?
+                          widget.model.consignmentModel.carrierModel.name:''}',
+                          style: TextStyle(
+                              fontSize: 16
+                          ),
+                        ),
                       ),
                       Container(
-                        child: IconButton(
-                          onPressed: () {
-                            //TODO调用拨打电话API
-                          },
-                          icon: Icon(
-                            Icons.phone,
-                            color: Color.fromRGBO(86, 194, 117, 1),
+                        child: Text(
+                          '${widget.model.consignmentModel!=null && widget.model.consignmentModel.carrierModel!=null?
+                          widget.model.consignmentModel.trackingID:''}',
+                          style: TextStyle(
+                              fontSize: 16
                           ),
                         ),
                       ),
                     ],
-                  )),
-            ],
-          ),
+                  )
+                ],
+              ),
+              onTap: (){
+                if (widget.model.consignmentModel != null && widget.model.consignmentModel.carrierModel != null &&
+                    widget.model.consignmentModel.trackingID != null && widget.model.consignmentModel.carrierModel.name != null) {
+                  copyToClipboard(widget.model.consignmentModel.trackingID);
+                }else{
+                  null;
+                }
+              },
+            )
+          ],
         ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ),
+      onTap: () async {
+        UserBLoC.instance.currentUser.type == UserType.BRAND ?
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyAddressesPage(isJumpSourec: true)),
+          //接收返回数据并处理
+        ).then((value) async{
+          if(value != null){
+            setState(() {
+              widget.model.deliveryAddress = value;
+            });
+            bool result = await ProofingOrderRepository().updateAddress( widget.model.code,  widget.model);
+            _showMessage(context, result, '地址修改');
+          }
+        }):null;
+      },
+    );
+  }
+
+  //品牌信息UI
+  Widget _buildBrandInfo(BuildContext context){
+    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      return Container(
+          margin: EdgeInsets.only(top: 10),
+          color: Colors.white,
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: widget
+                              .model.supplier == null || widget
+                              .model.supplier.profilePicture == null ?
+                          AssetImage(
+                            'temp/picture.png',
+                            package: "assets",
+                          ) :
+                          NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget
+                              .model.supplier.profilePicture.url}'),
+                          fit: BoxFit.cover,
+                        )),
+                  ),
+                  Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              '${widget.model.supplier == null ||
+                                  widget.model.supplier.name == null ?
+                              '' : widget.model.supplier.name}',
+                              textScaleFactor: 1.3,
+                            ),
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(top: 5),
+                              color: Color.fromRGBO(254, 252, 235, 1),
+                              child: widget.model.supplier.approvalStatus ==
+                                  ArticleApprovalStatus.approved ?
+                              Text(
+                                  '  已认证  ',
+                                  style: TextStyle(
+                                    color:
+                                    Color.fromRGBO(255, 133, 148, 1),
+                                  )
+                              )
+                                  :
+                              Text(
+                                '  未认证  ',
+                                style: TextStyle(
+                                  color: Color.
+                                  fromRGBO(255, 133, 148, 1)
+                                  ,
+                                ),
+                              )
+                          )
+                        ],
+                      )
+                  )
+                ],
+              ),
+            ],
+          )
       );
-    } else {
+    }else{
       return Container();
     }
   }
@@ -617,6 +660,33 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     );
   }
 
+  copyToClipboard(final String text) {
+    if (text != null) {
+      Clipboard.setData(
+          ClipboardData(text: text)
+      );
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text(
+              '提示',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            children: <Widget>[
+              SimpleDialogOption(
+                child: Text('复制成功'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   void onCancelling() {
     showDialog<void>(
       context: context,
@@ -672,5 +742,29 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               model: detailModel,
               update: true,
             )));
+  }
+
+  void _showMessage(BuildContext context,bool result,String message){
+    _requestMessage(context,result == true? '${message}成功' : '${message}失败');
+  }
+
+  Future<void> _requestMessage(BuildContext context,String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('提示',
+            style: TextStyle(
+              fontSize: 16,
+            ),),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('${message}'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

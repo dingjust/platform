@@ -89,4 +89,22 @@ class ProofingOrderRepository {
       return false;
     }
   }
+
+  Future<bool> updateAddress(String code , ProofingModel form) async {
+    Response<String> response;
+    try{
+      response =  await http$.put(
+          OrderApis.updateProofAddress(code),
+          data: ProofingModel.toJson(form),
+          options: Options(responseType: ResponseType.plain));
+    }on DioError catch(e){
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
