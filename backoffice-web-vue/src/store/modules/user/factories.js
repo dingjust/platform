@@ -52,7 +52,8 @@ const state = {
     businessRegistrationNo: '',
     legalRepresentative: '',
     certificateOfLegal: '',
-    labels: []
+    labels: [],
+    industrialCluster: null
   },
   queryFormData: {
     labels: [],

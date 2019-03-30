@@ -77,11 +77,14 @@ const COMMON_APIS = {
   createLabel() {
     return '/djwebservices/labels/create';
   },
-  getGroupAllLabels(group) {
-    return '/djwebservices/labels/'+group+'/all';
-  },
   getAllLabels() {
     return '/djwebservices/labels/all';
+  },
+  getGroupLabels(group) {
+    return '/djwebservices/labels/' + group + '/all';
+  },
+  getIndustrialClusterLabels() {
+    return '/b2b/industrialClusters/labels';
   },
   getLabels() {
     return '/djwebservices/labels';
