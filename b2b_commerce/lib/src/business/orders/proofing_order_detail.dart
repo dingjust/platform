@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
 
 class ProofingOrderDetailPage extends StatefulWidget {
   const ProofingOrderDetailPage({Key key, this.model}) : super(key: key);
@@ -87,11 +88,8 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Color.fromRGBO(243, 243, 243, 1)),
-                  child: Icon(
-                    B2BIcons.noPicture,
-                    color: Color.fromRGBO(200, 200, 200, 1),
-                    size: 60
-                  ),
+                  child: Icon(B2BIcons.noPicture,
+                      color: Color.fromRGBO(200, 200, 200, 1), size: 60),
                 ),
           Expanded(
             flex: 1,
@@ -513,7 +511,10 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               )),
           FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                WechatServiceImpl.instance.pay(widget.model.code);
+                // WechatServiceImpl.instance.shareText('asdad');
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
@@ -575,18 +576,21 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
         ];
       } else if (widget.model.status == ProofingStatus.PENDING_DELIVERY) {
         buttons = <Widget>[
-          Container(),
-          FlatButton(
-              onPressed: () {},
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 245, 193, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '确认发货',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
-              )),
+          Container(
+            height: 40,
+            width: 250,
+            child: FlatButton(
+                onPressed: () {},
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Color.fromRGBO(255, 245, 193, 1),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Text(
+                  '确认发货',
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+                )),
+          ),
         ];
       }
       // else if (model.status == ProofingStatus.SHIPPED) {
