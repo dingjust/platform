@@ -43,7 +43,7 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
     if (widget.company.approvalStatus == null)
       _statusText = Text(
         '未认证',
-        style: TextStyle(
+          style: TextStyle(
           color: Color.fromRGBO(255, 214, 12, 1),
         ),
       );
@@ -94,6 +94,7 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
 
                       if(result != null){
                         setState(() {
+                          _onlyRead = true;
                           widget.company = result;
                         });
                       }
@@ -109,16 +110,9 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
                               style: TextStyle(fontSize: 17),
                             ),
                           ),
-                          Offstage(
-                              offstage: widget.company.type != CompanyType.BRAND,
-                              child: Container(
-                                  padding: EdgeInsets.only(right: 15),
-                                  child: _statusText)),
-                          Offstage(
-                              offstage: widget.company.type != CompanyType.FACTORY,
-                              child: Container(
-                                  padding: EdgeInsets.only(right: 15),
-                                  child: _statusText)),
+                          Container(
+                              padding: EdgeInsets.only(right: 15),
+                              child: _statusText),
                           Text(
                             '企业四要素认证',
                             style: TextStyle(color: Colors.grey),

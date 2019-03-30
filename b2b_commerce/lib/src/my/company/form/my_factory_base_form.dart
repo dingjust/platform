@@ -47,7 +47,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          IconButton(icon: Text('确定',style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),), onPressed: (){
+          IconButton(icon: Text('确定',style: TextStyle(),), onPressed: (){
             if(medias.length > 0){
               widget.factory.profilePicture = medias[0];
             }else{

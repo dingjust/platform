@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/app_keys.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../common/app_keys.dart';
 import '../common/app_image.dart';
 import '../common/app_routes.dart';
 import '_shared/widgets/site_statistics.dart';
@@ -51,13 +51,10 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
 class BrandSiteStatisticsSection extends StatelessWidget {
   final StreamController _reportsStreamController = StreamController<Reports>.broadcast();
 
-  Reports companyReports = Reports();
-
   void queryReports() async {
     Reports response = await ReportsRepository().report();
     if (response != null) {
-      companyReports = response;
-      _reportsStreamController.add(companyReports);
+      _reportsStreamController.add(response);
     }
   }
 
@@ -67,7 +64,7 @@ class BrandSiteStatisticsSection extends StatelessWidget {
 
     return StreamBuilder<Reports>(
       stream: _reportsStreamController.stream,
-      initialData: companyReports,
+      initialData: new Reports(),
       builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
         return SiteStatistics(<SiteStatisticsModel>[
           SiteStatisticsModel(label: '需求报价中', value: '${snapshot.data?.ordersCount1 ?? 0}'),
@@ -84,21 +81,25 @@ class BrandSiteStatisticsSection extends StatelessWidget {
 class BrandMenusSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        AdvanceMenu('订单管理', <AdvanceMenuItem>[
-          AdvanceMenuItem(MenuItemImage.requirement_order, '需求订单', AppRoutes.ROUTE_REQUIREMENT_ORDERS),
-          AdvanceMenuItem(MenuItemImage.price_manage, '报价管理', AppRoutes.ROUTE_QUOTES),
-          AdvanceMenuItem(MenuItemImage.proofing_order, '打样订单', AppRoutes.ROUTE_PROOFING_ORDERS),
-          AdvanceMenuItem(MenuItemImage.purchase_order, '生产订单', AppRoutes.ROUTE_PURCHASE_ORDERS),
-        ]),
-        AdvanceMenu('店铺管理', <AdvanceMenuItem>[
-          AdvanceMenuItem(MenuItemImage.product_manage, '商品管理', AppRoutes.ROUTE_PRODUCTS),
-          AdvanceMenuItem(MenuItemImage.employee_manage, '员工管理', AppRoutes.ROUTE_EMPLOYEES),
-          AdvanceMenuItem(MenuItemImage.supplier_manage, '供应商管理', AppRoutes.ROUTE_SUPPLIERS),
-          AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣借还', AppRoutes.ROUTE_SAMPLE_GARMENTS),
-        ])
+        Row(children: <Widget>[
+          AdvanceMenu('订单管理', <AdvanceMenuItem>[
+            AdvanceMenuItem(MenuItemImage.requirement_order, '需求订单', AppRoutes.ROUTE_REQUIREMENT_ORDERS),
+            AdvanceMenuItem(MenuItemImage.price_manage, '报价管理', AppRoutes.ROUTE_QUOTES),
+            AdvanceMenuItem(MenuItemImage.proofing_order, '打样订单', AppRoutes.ROUTE_PROOFING_ORDERS),
+            AdvanceMenuItem(MenuItemImage.purchase_order, '生产订单', AppRoutes.ROUTE_PURCHASE_ORDERS),
+          ])
+        ],),
+        Row(children: <Widget>[
+          AdvanceMenu('店铺管理', <AdvanceMenuItem>[
+            AdvanceMenuItem(MenuItemImage.product_manage, '商品管理', AppRoutes.ROUTE_PRODUCTS),
+            AdvanceMenuItem(MenuItemImage.employee_manage, '员工管理', AppRoutes.ROUTE_EMPLOYEES),
+            AdvanceMenuItem(MenuItemImage.supplier_manage, '供应商管理', AppRoutes.ROUTE_SUPPLIERS),
+            AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣借还', AppRoutes.ROUTE_SAMPLE_GARMENTS),
+          ])
+        ],)
       ],
     );
   }
@@ -107,13 +108,10 @@ class BrandMenusSection extends StatelessWidget {
 class FactorySiteStatisticsSection extends StatelessWidget {
   final StreamController _reportsStreamController = StreamController<Reports>.broadcast();
 
-  Reports companyReports = Reports();
-
   void queryReports() async {
     Reports response = await ReportsRepository().report();
     if (response != null) {
-      companyReports = response;
-      _reportsStreamController.add(companyReports);
+      _reportsStreamController.add(response);
     }
   }
 
@@ -123,7 +121,7 @@ class FactorySiteStatisticsSection extends StatelessWidget {
 
     return StreamBuilder<Reports>(
       stream: _reportsStreamController.stream,
-      initialData: companyReports,
+      initialData: Reports(),
       builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
         return SiteStatistics(<SiteStatisticsModel>[
           SiteStatisticsModel(label: '报价中', value: '${snapshot.data?.ordersCount1 ?? 0}'),
