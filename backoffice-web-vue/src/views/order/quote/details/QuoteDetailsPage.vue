@@ -2,7 +2,9 @@
   <div class="animated fadeIn">
     <quote-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
     <div class="pt-2"></div>
+    <el-card>
     <quote-form :slot-data="slotData" :read-only="!isNewlyCreated"/>
+    </el-card>
     <div class="pt-2"></div>
     <quote-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
   </div>
