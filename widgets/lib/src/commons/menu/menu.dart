@@ -59,6 +59,7 @@ class AdvanceMenu extends StatelessWidget {
     }).toList();
 
     return Container(
+      width: double.infinity,
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(color: Colors.white),

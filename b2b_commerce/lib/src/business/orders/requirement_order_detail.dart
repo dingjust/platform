@@ -325,11 +325,8 @@ class _RequirementOrderDetailPageState
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Color.fromRGBO(243, 243, 243, 1)),
-        child: Icon(
-          B2BIcons.noPicture,
-          color: Color.fromRGBO(200, 200, 200, 1),
-          size: 60
-        ),
+        child: Icon(B2BIcons.noPicture,
+            color: Color.fromRGBO(200, 200, 200, 1), size: 60),
       );
     } else {
       if (widget.order.details.pictures.isEmpty) {
@@ -339,11 +336,8 @@ class _RequirementOrderDetailPageState
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Color.fromRGBO(243, 243, 243, 1)),
-          child: Icon(
-            B2BIcons.noPicture,
-            color: Color.fromRGBO(200, 200, 200, 1),
-            size: 60
-          ),
+          child: Icon(B2BIcons.noPicture,
+              color: Color.fromRGBO(200, 200, 200, 1), size: 60),
         );
       } else {
         _pictureWidget = Container(
@@ -569,6 +563,7 @@ class _RequirementOrderDetailPageState
                               FactoryCondition(
                                   starLevel: 0, adeptAtCategory: []),
                               route: '全部工厂',
+                              requirementCode: widget.order.code,
                             )),
                   );
                 },

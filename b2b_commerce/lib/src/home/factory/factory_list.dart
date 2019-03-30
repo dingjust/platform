@@ -14,7 +14,7 @@ class FactoryPage extends StatefulWidget {
 
   FactoryCondition factoryCondition;
 
-  FactoryPage(this.factoryCondition, {this.route});
+  FactoryPage(this.factoryCondition, {this.route, this.requirementCode});
 
   _FactoryPageState createState() => _FactoryPageState();
 }
