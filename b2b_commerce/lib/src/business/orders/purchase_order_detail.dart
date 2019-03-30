@@ -306,55 +306,67 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child:
-                      order.belongTo == null ||
-                          order.belongTo.name == null ?
-                      Text(
-                        '${order.companyOfSeller == null ? '' : order
-                            .companyOfSeller}',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
-                      ) :
-                      Text(
-                        order.belongTo.name,
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child:
+                            order.belongTo == null ||
+                                order.belongTo.name == null ?
+                            Text(
+                              '${order.companyOfSeller == null ? '' : order
+                                  .companyOfSeller}',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500),
+                            ) :
+                            Text(
+                              order.belongTo.name,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          order.belongTo == null ||
+                              order.belongTo.starLevel == null ?
+                          Container() :
+                          Stars(
+                            size: 14,
+                            color: Color.fromRGBO(255, 183, 0, 1),
+                            highlightOnly: false,
+                            starLevel: order.belongTo.starLevel,
+                          ),
+                        ],
                       ),
-                    ),
-                    order.belongTo == null ||
-                        order.belongTo.starLevel == null ?
-                    Container() :
-                    Stars(
-                      size: 14,
-                      color: Color.fromRGBO(255, 183, 0, 1),
-                      highlightOnly: false,
-                      starLevel: order.belongTo.starLevel,
-                    ),
-                  ],
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              '历史接单${order.belongTo == null || order.belongTo.historyOrdersCount == null ? '0' : order.belongTo.historyOrdersCount}单',
+                              style: TextStyle(
+                                  color: Colors.grey
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        '历史接单${order.belongTo == null || order.belongTo.historyOrdersCount == null ? '0' : order.belongTo.historyOrdersCount}单',
-                        style: TextStyle(
-                            color: Colors.grey
-                        ),
-                      ),
-                    ),
-                    Icon(Icons.keyboard_arrow_right)
-                  ],
-                )
-              ],
-            ),
+              ),
+              Container(
+                child: Icon(
+                  Icons.keyboard_arrow_right,
+                  size: 40,
+                  color: Colors.grey,
+                ),
+              )
+            ],
           ),
           Divider(
             height: 1,

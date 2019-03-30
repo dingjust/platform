@@ -312,53 +312,77 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         color: Colors.white,
         margin: EdgeInsets.only(top: 15),
         child: Container(
-          padding: EdgeInsets.all(15),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
+          padding: EdgeInsets.fromLTRB(10,15,0,15),
+          child: Row(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child:
-                    pageItem.belongTo == null ||
-                        pageItem.belongTo.name == null ?
-                    Text(
-                      '',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w500),
-                    ) :
-                    Text(
-                      pageItem.belongTo.name,
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w500),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child:
+                          pageItem.belongTo == null ||
+                              pageItem.belongTo.name == null ?
+                          Text(
+                            '',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w500),
+                          ) :
+                          Text(
+                            pageItem.belongTo.name,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        pageItem.belongTo == null ||
+                            pageItem.belongTo.starLevel == null ?
+                        Container() :
+                        Stars(
+                          size: 14,
+                          color: Color.fromRGBO(255, 183, 0, 1),
+                          highlightOnly: false,
+                          starLevel: pageItem.belongTo.starLevel,
+                        ),
+                      ],
                     ),
-                  ),
-                  pageItem.belongTo == null ||
-                      pageItem.belongTo.starLevel == null ?
-                  Container() :
-                  Stars(
-                    size: 14,
-                    color: Color.fromRGBO(255, 183, 0, 1),
-                    highlightOnly: false,
-                    starLevel: pageItem.belongTo.starLevel,
-                  ),
-                ],
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            '历史接单${pageItem.belongTo == null || pageItem.belongTo.historyOrdersCount == null ? '0' : pageItem.belongTo.historyOrdersCount}单',
+                            style: TextStyle(
+                                color: Colors.grey
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                '${pageItem.belongTo.contactAddress?.city
+                                    ?.name} ${pageItem.belongTo.contactAddress
+                                    ?.cityDistrict?.name}',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      '历史接单${pageItem.belongTo == null || pageItem.belongTo.historyOrdersCount == null ? '0' : pageItem.belongTo.historyOrdersCount}单',
-                      style: TextStyle(
-                          color: Colors.grey
-                      ),
-                    ),
-                  ),
-                  Icon(Icons.keyboard_arrow_right)
-                ],
+              Container(
+                child: Icon(
+                  Icons.keyboard_arrow_right,
+                  size: 40,
+                  color: Colors.grey,
+                ),
               )
             ],
-          ),
+          )
         )
       );
     } else {
