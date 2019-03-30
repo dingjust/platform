@@ -10,14 +10,19 @@
                      @click="onDetails(props.item)">
             明细
           </el-button>
-          <el-button v-if="isFactory()" type="text" icon="el-icon-edit"
+          <el-button v-if="isFactory()&&props.item.state=='BUYER_APPROVED'" type="text" icon="el-icon-edit"
                      @click="onCreatePurchaseOrder(props.item)">
             生成生产订单
           </el-button>
-          <el-button v-if="isFactory()" type="text" icon="el-icon-edit"
+          <el-button v-if="isFactory()&&props.item.state=='BUYER_APPROVED'" type="text" icon="el-icon-edit"
                      @click="onCreateProofing(props.item)">
             生成打样单
           </el-button>
+          <el-button v-if="isFactory()&&props.item.state=='BUYER_REJECTED'&&props.item.requirementOrder.status!='COMPLETED'" type="text" icon="el-icon-edit"
+                     @click="onReQuote(props.item)">
+            重新报价
+          </el-button>
+
         </template>
       </quote-search-result-list>
     </el-card>
@@ -88,6 +93,14 @@
         formData.quoteRef = item.code;
 
         this.fn.openSlider('创建打样订单，报价单号：' + item.code, ProofingDetailsPage, formData);
+      },
+      onReQuote(item) {
+        let formData = {};
+        Object.assign(formData, item);
+        // formData.quoteRef = item.code;
+        formData.id = null;
+
+        this.fn.openSlider('重新报价，需求单号：' + item.requirementOrder.details.code, QuoteDetailsPage, formData);
       }
     },
     data() {
