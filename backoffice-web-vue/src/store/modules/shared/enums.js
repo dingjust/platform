@@ -60,7 +60,8 @@ const state = {
   labelGroups: [
     {code: 'FACTORY', name: '工厂标签'},
     {code: 'PLATFORM', name: '平台标签'},
-    {code: 'ORDER', name: '订单标签'}
+    {code: 'ORDER', name: '订单标签'},
+    {code: 'INDUSTRIAL_CLUSTER', name: '产业集群标签'}
   ],
   // 产品风格
   productStyles: [

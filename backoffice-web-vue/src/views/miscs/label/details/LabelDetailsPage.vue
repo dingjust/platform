@@ -25,9 +25,13 @@
         refresh: 'refresh'
       }),
       onSubmit() {
-        if (this.$refs['form'].validate()) {
-          this._onSubmit();
-        }
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this._onSubmit();
+            return true;
+          }
+          return false;
+        });
       },
       onCancel() {
         this.fn.closeSlider();
@@ -36,7 +40,6 @@
         let formData = this.slotData;
 
         const url = this.apis().createLabel();
-        console.log(url);
         const result = await this.$http.post(url, formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

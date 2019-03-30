@@ -38,7 +38,6 @@
         this.search({url, keyword, page, size});
       },
       async onDetails(item) {
-        console.log(item);
         const url = this.apis().getLabel(item.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
