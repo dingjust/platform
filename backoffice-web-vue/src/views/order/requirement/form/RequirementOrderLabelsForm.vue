@@ -28,7 +28,7 @@
     },
     methods: {
       async getLabels() {
-        const url = this.apis().getGroupAllLabels('ORDER');
+        const url = this.apis().getGroupLabels('ORDER');
         const results = await this.$http.get(url);
         if (results["errors"]) {
           this.$message.error(results["errors"][0].message);

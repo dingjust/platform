@@ -5,13 +5,33 @@
       <el-row :gutter="10">
         <el-form-item label="标签" prop="roles">
           <el-select class="w-100" v-model="slotData.labels" multiple placeholder="请选择"
-            value-key="id">
+                     value-key="id">
             <el-option
               v-for="item in labels"
               :key="item.id"
               :label="item.name"
               :value="item">
             </el-option>
+          </el-select>
+        </el-form-item>
+      </el-row>
+      <el-row :gutter="10">
+        <el-form-item label="产业集群" prop="industrialCluster">
+          <el-select class="w-100"
+                     placeholder="请选择"
+                     v-model="slotData.industrialCluster"
+                     value-key="code">
+            <el-option-group
+              v-for="label in industrialClusterLabels"
+              :key="label.id"
+              :label="label.name">
+              <el-option
+                v-for="cluster in label.clusters"
+                :key="cluster.code"
+                :label="cluster.name"
+                :value="cluster">
+              </el-option>
+            </el-option-group>
           </el-select>
         </el-form-item>
       </el-row>
@@ -31,30 +51,39 @@
   export default {
     name: 'FactoryLabelsForm',
     props: ['slotData', 'readOnly'],
-    computed: {
-
-    },
+    computed: {},
     methods: {
       async getLabels() {
-        const url = this.apis().getGroupAllLabels('FACTORY');
+        const url = this.apis().getGroupLabels('FACTORY');
         const results = await this.$http.get(url);
         if (results["errors"]) {
           this.$message.error(results["errors"][0].message);
           return;
         }
+
         this.labels = results;
-        console.log(this.slotData.labels);
-        console.log(this.labels);
-      }
+      },
+      async getIndustrialClusterLabels() {
+        const url = this.apis().getIndustrialClusterLabels();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.industrialClusterLabels = result;
+      },
     },
     data() {
       return {
         labels: [],
-        starLevel:0,
+        industrialClusterLabels: [],
+        starLevel: 0,
       };
     },
     created() {
       this.getLabels();
+      this.getIndustrialClusterLabels();
     }
   };
 </script>

@@ -78,7 +78,7 @@
 
         this.fn.openSlider('品牌：' + item.name, BrandDetailsPage, result);
       },
-      async onLabels(item) {
+      async onEdit(item) {
         const url = this.apis().getBrand(item.uid);
         const result = await this.$http.get(url);
         if (result['errors']) {
