@@ -6,4 +6,6 @@ class AppKeys {
   // Home Page
   static final homePage = const Key('__homePage__');
   static final myHomePage = const Key('__myHomePage__');
+  // Business Page
+  static final businessHomePage = const Key('__businessHomePage__');
 }

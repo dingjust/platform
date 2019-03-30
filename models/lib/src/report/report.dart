@@ -8,15 +8,12 @@ part 'report.g.dart';
 class SiteStatisticsModel extends ItemModel {
   String label;
   String value;
-  String unit;
 
-  SiteStatisticsModel({this.label, this.value, this.unit});
+  SiteStatisticsModel({this.label, this.value});
 
-  factory SiteStatisticsModel.fromJson(Map<String, dynamic> json) =>
-      _$SiteStatisticsModelFromJson(json);
+  factory SiteStatisticsModel.fromJson(Map<String, dynamic> json) => _$SiteStatisticsModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SiteStatisticsModel model) =>
-      _$SiteStatisticsModelToJson(model);
+  static Map<String, dynamic> toJson(SiteStatisticsModel model) => _$SiteStatisticsModelToJson(model);
 }
 
 /// 公司订单报表
@@ -43,17 +40,17 @@ class Reports {
   /// 工厂：生产待出库
   final int ordersCount7;
 
-  Reports(
-      {this.ordersCount1,
-      this.ordersCount2,
-      this.ordersCount3,
-      this.ordersCount4,
-      this.ordersCount5,
-      this.ordersCount6,
-      this.ordersCount7});
+  Reports({
+    this.ordersCount1 = 0,
+    this.ordersCount2 = 0,
+    this.ordersCount3 = 0,
+    this.ordersCount4 = 0,
+    this.ordersCount5 = 0,
+    this.ordersCount6 = 0,
+    this.ordersCount7 = 0,
+  });
 
-  factory Reports.fromJson(Map<String, dynamic> json) =>
-      _$ReportsFromJson(json);
+  factory Reports.fromJson(Map<String, dynamic> json) => _$ReportsFromJson(json);
 
   static Map<String, dynamic> toJson(Reports model) => _$ReportsToJson(model);
 }

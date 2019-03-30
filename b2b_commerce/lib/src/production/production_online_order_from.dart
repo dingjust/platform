@@ -538,7 +538,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
         });
   }
 
-  //加工类型
+  //合作方式
   Widget _buildCooperationModes(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -546,7 +546,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           margin: EdgeInsets.only(top: 3),
           child: ListTile(
             leading: Text(
-              '加工类型',
+              '合作方式',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -694,7 +694,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     );
   }
 
-  //加工类型
+  //合作方式
   void _showTypeSelect() async {
     showModalBottomSheet(
       context: context,

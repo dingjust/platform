@@ -85,6 +85,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       isShowButton = true;
     }
 
+    if(order.status == PurchaseOrderStatus.PENDING_PAYMENT && order.salesApplication == SalesApplication.ONLINE){
+      isHide = false;
+    }
+
     final bloc = BLoCProvider.of<UserBLoC>(context);
     if(bloc.isBrandUser){
       userType = 'brand';
@@ -360,8 +364,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             padding: EdgeInsets.all(20),
             child: Row(
               children: <Widget>[
-                Container(
-                  child: Text('加工类型'),
+                Expanded(
+                  child: Container(
+                    child: Text('合作方式'),
+                  ),
                 ),
                 Container(
                   child: order.machiningType == null ? Container():Text(MachiningTypeLocalizedMap[order.machiningType]),
@@ -376,8 +382,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             padding: EdgeInsets.all(20),
             child: Row(
               children: <Widget>[
-                Container(
-                  child: Text('是否开具发票'),
+                Expanded(
+                  child: Container(
+                    child: Text('是否开具发票'),
+                  ),
                 ),
                 Container(
                   child: order.invoiceNeeded == null ? Container():Text(order.invoiceNeeded == true ? '是' : '否'),
@@ -458,17 +466,39 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           Divider(
             height: 1,
           ),
-          ListTile(
-            title: Text('加工类型'),
-            trailing: order.machiningType == null ? Container():Text(MachiningTypeLocalizedMap[order.machiningType]),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Text('合作方式'),
+                  ),
+                ),
+                Container(
+                  child: order.machiningType == null ? Container():Text(MachiningTypeLocalizedMap[order.machiningType]),
+                ),
+              ],
+            ),
           ),
           Divider(
             height: 1,
           ),
-          ListTile(
-            title: Text('是否开具发票'),
-            trailing: order.invoiceNeeded == null ? Container():Text(order.invoiceNeeded == true ? '是' : '否'),
-          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Text('是否开具发票'),
+                  ),
+                ),
+                Container(
+                  child: order.invoiceNeeded == null ? Container():Text(order.invoiceNeeded == true ? '是' : '否'),
+                ),
+              ],
+            ),
+          )
         ],
       )
     );
@@ -1058,38 +1088,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   )
               ),
             ),
-            order.salesApplication != SalesApplication.BELOW_THE_LINE ?
-            Container(
-              child: ListTile(
-                trailing: Container(
-                  child: RaisedButton(
-                    elevation: 0,
-                    color: Color(0xFFFFD600),
-                    child: Text(
-                      '查看报价',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(20))),
-                    onPressed: () async {
-                      //查询明细
-                      if(order.quoteRef != null){
-                        QuoteModel detailModel =
-                        await QuoteOrderRepository().getquoteDetail(order.quoteRef);
-                        if (detailModel != null) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => QuoteOrderDetailPage(item: detailModel)));
-                        }
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ):Container(),
             Divider(
               height: 1,
             ),

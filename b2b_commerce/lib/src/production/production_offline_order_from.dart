@@ -592,13 +592,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         });
   }
 
-  //加工类型
+  //合作方式
   Widget _buildCooperationModes(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
             leading: Text(
-              '加工类型',
+              '合作方式',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -684,7 +684,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderInputRemarksPage(fieldText: '订单备注',inputType: TextInputType.text)),
+                builder: (context) => OfflineOrderInputRemarksPage(fieldText: '订单备注',inputType: TextInputType.text,content: remarks)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
@@ -827,7 +827,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         isSubmit = _showValidateMsg(context, '请输入定金');
       }
       else if(purchaseOrder.machiningType == null){
-        isSubmit = _showValidateMsg(context, '请选择加工类型');
+        isSubmit = _showValidateMsg(context, '请选择合作方式');
       }
       else if(purchaseOrder.invoiceNeeded == null){
         isSubmit = _showValidateMsg(context, '请选择是否开具发票');
@@ -868,7 +868,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     }
   }
 
-  //加工类型
+  //合作方式
   void _showTypeSelect() async {
     showModalBottomSheet(
       context: context,
