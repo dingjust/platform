@@ -28,7 +28,11 @@
   export default {
     name: 'LabelBasicForm',
     props: ['slotData', 'readOnly'],
-    methods: {},
+    methods: {
+      validate(callback) {
+        this.$refs['form'].validate(callback);
+      }
+    },
     data() {
       return {
         rules: {

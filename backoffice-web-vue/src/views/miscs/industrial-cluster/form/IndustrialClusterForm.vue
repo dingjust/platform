@@ -5,8 +5,8 @@
         <span>基本信息</span>
       </div>
       <industrial-cluster-basic-form ref="basicForm"
-                           :slot-data="slotData"
-                           :read-only="readOnly">
+                                     :slot-data="slotData"
+                                     :read-only="readOnly">
       </industrial-cluster-basic-form>
     </el-card>
     <div class="pt-2"></div>
@@ -24,9 +24,7 @@
     props: ['slotData', 'readOnly'],
     methods: {
       validate(callback) {
-        // TODO: validation
-        return true;
-        // return this.$refs['basicForm'].validate(callback);
+        return this.$refs['basicForm'].validate(callback);
       }
     },
     computed: {},
