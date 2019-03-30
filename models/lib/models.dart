@@ -28,7 +28,7 @@ abstract class ItemModel {
 /// 枚举
 @JsonSerializable()
 class EnumModel {
-  final String code;
+  final dynamic code;
   final String name;
 
   const EnumModel(this.code, this.name);
@@ -325,6 +325,14 @@ const PopulationScaleEnum = <EnumModel>[
   EnumModel('N02', '51~100人'),
   EnumModel('N03', '101到200人'),
   EnumModel('N04', '200人以下'),
+];
+
+//合作方式枚举
+const CooperationModesEnum  = <EnumModel>[
+  EnumModel('PURE_PROCESSING', '纯加工'),
+  EnumModel('FOB', 'FOB'),
+  EnumModel('ODM', 'ODM'),
+  EnumModel('OEM', 'OEM'),
 ];
 
 

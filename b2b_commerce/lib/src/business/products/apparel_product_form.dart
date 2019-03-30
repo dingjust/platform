@@ -11,11 +11,12 @@ import 'form/minor_category_field.dart';
 import 'form/normal_picture_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
-  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false})
+  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false,this.status,})
       : super(key: const Key('__apparelProductFormPage__'));
 
   final ApparelProductModel item;
   final bool isCreate;
+  String status;
 
   ApparelProductFormState createState() => ApparelProductFormState();
 }
@@ -113,7 +114,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   await ProductRepositoryImpl().update(widget.item);
                 }
 
-                ApparelProductBLoC.instance.filterByStatuses('');
+                ApparelProductBLoC.instance.filterByStatuses(widget.status);
 //              print(widget.item.attributes.styles[0]);
                 Navigator.pop(context);
               },
@@ -127,44 +128,68 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               NormalPictureField(widget.item),
 //            DetailPictureField(widget.item),
               TextFieldComponent(
+                style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _nameFocusNode,
                 controller: _nameController,
                 leadingText: '商品名称',
                 hintText: '请输入商品名称',
+                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   widget.item.name = value;
                 },
+                onEditingComplete: (){
+                  FocusScope.of(context).requestFocus(_skuIDFocusNode);
+                },
               ),
               TextFieldComponent(
+                style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _skuIDFocusNode,
                 controller: _skuIDController,
                 leadingText: '商品货号',
                 hintText: '请输入商品货号',
+                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   widget.item.skuID = value;
+                },
+                onEditingComplete: (){
+                  FocusScope.of(context).requestFocus(_brandFocusNode);
                 },
               ),
               MinorCategoryField(widget.item),
               ColorSizeStockField(widget.item),
               TextFieldComponent(
+                style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _brandFocusNode,
                 controller: _brandController,
                 leadingText: '品牌',
                 hintText: '请输入品牌',
+                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   widget.item.brand = value;
+                },
+                onEditingComplete: (){
+                  if(UserBLoC.instance.currentUser.type == UserType.BRAND) {
+                    FocusScope.of(context).requestFocus(_priceFocusNode);
+                  }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+                    FocusScope.of(context).requestFocus(_gramWeightFocusNode);
+                  }
                 },
               ),
               Offstage(
                 offstage: UserBLoC.instance.currentUser.type != UserType.BRAND,
                 child: TextFieldComponent(
+                  style: TextStyle(fontSize: 16,color: Colors.grey,),
                   focusNode: _priceFocusNode,
                   controller: _priceController,
                   inputType: TextInputType.number,
                   leadingText: '供货价',
                   hintText: '请输入供货价',
+                  textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     widget.item.price = double.parse(value);
+                  },
+                  onEditingComplete: (){
+                    FocusScope.of(context).requestFocus(_gramWeightFocusNode);
                   },
                 ),
               ),
@@ -173,6 +198,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 child: PricesField(widget.item),
               ),
               TextFieldComponent(
+                style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _gramWeightFocusNode,
                 controller: _gramWeightController,
                 inputType: TextInputType.number,

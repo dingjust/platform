@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
@@ -63,18 +64,31 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       ));
     }
     if (widget.purchaseOrder != null) {
-      _widgets.add(Card(
-        elevation: 0,
-        margin: EdgeInsets.only(top: 10),
-        child: Column(
-          children: <Widget>[
-            _buildOrderHeader(),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _buildContent(),
-            ),
-          ],
+      _widgets.add(GestureDetector(
+        child: Card(
+          elevation: 0,
+          margin: EdgeInsets.only(top: 10),
+          child: Column(
+            children: <Widget>[
+              _buildOrderHeader(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _buildContent(),
+              ),
+            ],
+          ),
         ),
+        onTap: ()async{
+          PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(widget.purchaseOrder.code);
+
+          if (model != null) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PurchaseOrderDetailPage(
+                  order: model,
+                ))
+            );
+          }
+        },
       ));
     }
     _widgets.add(_buildCashProducts());
@@ -338,6 +352,23 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 Text(
                   PopulationScaleLocalizedMap[widget.factory.populationScale] ??
                       '',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '合作方式',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  formatCooperationModesSelectText(widget.factory.cooperationModes),
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -849,25 +880,27 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     return text;
   }
 
-  //格式化年龄段
-  String formatAgeRangesText(List<AgeRanges> ageRanges) {
+  //格式化合作方式
+  String formatCooperationModesSelectText(List<CooperationModes> cooperationModes) {
     String text = '';
-    if (ageRanges != null && ageRanges.isNotEmpty) {
-      ageRanges.forEach((ageRange) {
-        text += '  ' + AgeRangesLocalizedMap[ageRange];
-      });
+
+    if (cooperationModes != null) {
+      text = '';
+      for (int i = 0; i < cooperationModes.length; i++) {
+        if (i > 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == cooperationModes.length - 1) {
+          text += CooperationModesLocalizedMap[cooperationModes[i]];
+        } else {
+          text += CooperationModesLocalizedMap[cooperationModes[i]] + '、';
+        }
+      }
     }
+
     return text;
   }
 
-  //格式化价格段
-  String formatPriceRangesText(List<PriceRanges> priceRanges) {
-    String text = '';
-    if (priceRanges != null && priceRanges.isNotEmpty) {
-      priceRanges.forEach((priceRange) {
-        text += '  ￥' + PriceRangesLocalizedMap[priceRange];
-      });
-    }
-    return text;
-  }
 }

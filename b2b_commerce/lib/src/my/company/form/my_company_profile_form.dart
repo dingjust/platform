@@ -45,7 +45,6 @@ class MyCompanyProfileFormPageState extends State<MyCompanyProfileFormPage> {
             icon: Text(
               '确定',
               style: TextStyle(
-                color: Color.fromRGBO(255, 214, 12, 1),
               ),
             ),
             onPressed: () {

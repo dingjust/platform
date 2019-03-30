@@ -99,7 +99,7 @@ class ApparelProductAttributesModel extends ItemModel {
   List<String> styles;
 
   /// 面料成分
-  String fabricComposition;
+  List<String> fabricCompositions;
 
   /// 版型
   String editionType;
@@ -136,7 +136,7 @@ class ApparelProductAttributesModel extends ItemModel {
 
   ApparelProductAttributesModel({
     this.styles,
-    this.fabricComposition,
+    this.fabricCompositions,
     this.editionType,
     this.pattern,
     this.sleeveType,
@@ -152,7 +152,6 @@ class ApparelProductAttributesModel extends ItemModel {
 
   ApparelProductAttributesModel.empty() {
     this.styles = [];
-    this.fabricComposition = '';
   }
 
   factory ApparelProductAttributesModel.fromJson(Map<String, dynamic> json) =>

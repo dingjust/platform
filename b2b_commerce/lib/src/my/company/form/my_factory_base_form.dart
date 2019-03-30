@@ -22,6 +22,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   List<String> _scaleRange = [];
   List<String> _monthlyCapacityRanges = [];
   List<String> _populationScale = [];
+  List<String> _cooperationModes = [];
 
   @override
   void initState() {
@@ -46,7 +47,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          IconButton(icon: Text('确定',style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),), onPressed: (){
+          IconButton(icon: Text('确定',style: TextStyle(),), onPressed: (){
             if(medias.length > 0){
               widget.factory.profilePicture = medias[0];
             }else{
@@ -218,6 +219,52 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       orElse: () => null);
 
                   widget.factory.populationScale = populationScale;
+                }
+              },
+            ),
+            SizedBox(height: 2,),
+            InkWell(
+              child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Text(
+                          '合作方式',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
+                          ),
+                        )),
+                    Text(formatCooperationModesSelectText(widget.factory.cooperationModes)),
+                    Icon(Icons.chevron_right),
+                  ],
+                ),
+              ),
+              onTap: () async {
+                dynamic result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EnumSelectPage(
+                        items: CooperationModesEnum,
+                        title: '合作方式',
+                        codes: _cooperationModes,
+                        count: 3,
+                      ),
+                    ));
+
+                if (result != null) _cooperationModes = result;
+
+                if (_cooperationModes.length > 0) {
+                  List<CooperationModes> cooperationModes = _cooperationModes.map((mode){
+                    return CooperationModes.values.singleWhere(
+                            (cooperationMode) =>
+                            cooperationMode.toString().split('.')[1] == mode,
+                        orElse: () => null);
+                  }).toList();
+
+                  widget.factory.cooperationModes = cooperationModes;
                 }
               },
             ),
@@ -407,22 +454,27 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
     return text;
   }
-  String formatAgeRangesText(List<AgeRanges> ageRanges) {
+
+  //格式化合作方式
+  String formatCooperationModesSelectText(List<CooperationModes> cooperationModes) {
     String text = '';
-    if (ageRanges != null && ageRanges.isNotEmpty) {
-      ageRanges.forEach((ageRange) {
-        text += '  '+AgeRangesLocalizedMap[ageRange];
-      });
+
+    if (cooperationModes != null) {
+      text = '';
+      for (int i = 0; i < cooperationModes.length; i++) {
+        if (i > 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == cooperationModes.length - 1) {
+          text += CooperationModesLocalizedMap[cooperationModes[i]];
+        } else {
+          text += CooperationModesLocalizedMap[cooperationModes[i]] + '、';
+        }
+      }
     }
-    return text;
-  }
-  String formatPriceRangesText(List<PriceRanges> priceRanges) {
-    String text = '';
-    if (priceRanges != null && priceRanges.isNotEmpty) {
-      priceRanges.forEach((priceRange) {
-        text += '  ￥'+PriceRangesLocalizedMap[priceRange];
-      });
-    }
+
     return text;
   }
 }

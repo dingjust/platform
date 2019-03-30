@@ -7,7 +7,7 @@ class ShowSelectTile extends StatelessWidget{
   TextStyle tralingTextStyle;
   ShowSelectTile({this.leadingText,this.tralingText,this.leadingTextStyle,this.tralingTextStyle,}){
     leadingTextStyle = TextStyle(fontSize: 16,);
-    tralingTextStyle = TextStyle(fontSize: 16,color: Color(0xffFF9516));
+    tralingTextStyle = TextStyle(fontSize: 16,color:Colors.grey,);
   }
 
 
