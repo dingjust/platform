@@ -1,7 +1,3 @@
-import 'package:b2b_commerce/src/business/search/suppliers_search.dart';
-import 'package:b2b_commerce/src/business/supplier/provider/suppliers_provider.dart';
-import 'package:b2b_commerce/src/my/my_brand.dart';
-import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +5,12 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class SuppliersPage extends StatefulWidget{
+import './search/suppliers_search.dart';
+import './supplier/provider/suppliers_provider.dart';
+import '../my/my_brand.dart';
+import '../my/my_factory.dart';
+
+class SuppliersPage extends StatefulWidget {
   _SuppliersPageState createState() => _SuppliersPageState();
 }
 
@@ -18,25 +19,26 @@ class _SuppliersPageState extends State<SuppliersPage> {
   Widget build(BuildContext context) {
     return SuppliersBlocProvider(
         child: Scaffold(
-          appBar: AppBar(
-            brightness: Brightness.light,
-            centerTitle: true,
-            elevation: 0.5,
-            title: Text('供应商管理'),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(B2BIcons.search,size: 20,),
-                onPressed: () =>
-                    showSearch(
-                        context: context, delegate: SuppliersSearchDelegate()),
-              ),
-            ],
+      appBar: AppBar(
+        brightness: Brightness.light,
+        centerTitle: true,
+        elevation: 0.5,
+        title: Text('供应商管理'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              B2BIcons.search,
+              size: 20,
+            ),
+            onPressed: () => showSearch(context: context, delegate: SuppliersSearchDelegate()),
           ),
-          body: Container(
-            child: SuppliersList(),
-          ),
-          floatingActionButton: ToTopBtn(),
-        ));
+        ],
+      ),
+      body: Container(
+        child: SuppliersList(),
+      ),
+      floatingActionButton: ToTopBtn(),
+    ));
   }
 }
 
@@ -50,12 +52,11 @@ class SuppliersList extends StatelessWidget {
     final bloc = SuppliersBlocProvider.of(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        UserBLoC.instance.currentUser.type == UserType.BRAND ?
-        bloc.loadingMoreByFactories():
-        bloc.loadingMoreByBrands();
+        UserBLoC.instance.currentUser.type == UserType.BRAND
+            ? bloc.loadingMoreByFactories()
+            : bloc.loadingMoreByBrands();
       }
     });
 
@@ -72,82 +73,81 @@ class SuppliersList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
-    return UserBLoC.instance.currentUser.type == UserType.BRAND ? _buildFactoryContainer(bloc) : _buildBrandContainer(bloc);
+    return UserBLoC.instance.currentUser.type == UserType.BRAND
+        ? _buildFactoryContainer(bloc)
+        : _buildBrandContainer(bloc);
   }
 
   Container _buildFactoryContainer(SuppliersBloc bloc) {
     return Container(
-      decoration: BoxDecoration(color: Colors.grey[100]),
-  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-  child: RefreshIndicator(
-    onRefresh: (){
-      return bloc.filterfactories();
-    },
-    child: ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      controller: _scrollController,
-      children: <Widget>[
-        StreamBuilder<List<FactoryModel>>(
-          stream: bloc.factoryStream,
-          initialData: null,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<FactoryModel>> snapshot) {
-            if (snapshot.data == null) {
-              bloc.filterfactories();
-              return ProgressIndicatorFactory.buildPaddedProgressIndicator();
-            }
-            if (snapshot.hasData) {
-              return Column(
-                children: snapshot.data.map((supplierModel) {
-                  return SuppliersItem(
-                    supplierModel,
-                  );
-                }).toList(),
-              );
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
+        decoration: BoxDecoration(color: Colors.grey[100]),
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: RefreshIndicator(
+          onRefresh: () {
+            return bloc.filterfactories();
           },
-        ),
-        StreamBuilder<bool>(
-          stream: bloc.bottomStream,
-          initialData: false,
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (snapshot.data) {
-              _scrollController.animateTo(_scrollController.offset - 70,
-                  duration: new Duration(milliseconds: 500),
-                  curve: Curves.easeOut);
-            }
-            return snapshot.data
-                ? Container(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-              child: Center(
-                child: Text(
-                  "人家可是有底线的。。。",
-                  style: TextStyle(color: Colors.grey),
-                ),
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _scrollController,
+            children: <Widget>[
+              StreamBuilder<List<FactoryModel>>(
+                stream: bloc.factoryStream,
+                initialData: null,
+                builder: (BuildContext context, AsyncSnapshot<List<FactoryModel>> snapshot) {
+                  if (snapshot.data == null) {
+                    bloc.filterfactories();
+                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                  }
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: snapshot.data.map((supplierModel) {
+                        return SuppliersItem(
+                          supplierModel,
+                        );
+                      }).toList(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                },
               ),
-            )
-                : Container();
-          },
-        ),
-        StreamBuilder<bool>(
-          stream: bloc.loadingStream,
-          initialData: false,
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-              opacity: snapshot.data ? 1.0 : 0,
-            );
-          },
-        ),
-      ],
-    ),
-  ));
+              StreamBuilder<bool>(
+                stream: bloc.bottomStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  if (snapshot.data) {
+                    _scrollController.animateTo(_scrollController.offset - 70,
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                  }
+                  return snapshot.data
+                      ? Container(
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                          child: Center(
+                            child: Text(
+                              "人家可是有底线的。。。",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        )
+                      : Container();
+                },
+              ),
+              StreamBuilder<bool>(
+                stream: bloc.loadingStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                    opacity: snapshot.data ? 1.0 : 0,
+                  );
+                },
+              ),
+            ],
+          ),
+        ));
   }
 
   Container _buildBrandContainer(SuppliersBloc bloc) {
@@ -155,7 +155,7 @@ class SuppliersList extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.grey[100]),
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
-          onRefresh: (){
+          onRefresh: () {
             return bloc.filterbrands();
           },
           child: ListView(
@@ -165,8 +165,7 @@ class SuppliersList extends StatelessWidget {
               StreamBuilder<List<BrandModel>>(
                 stream: bloc.brandStream,
                 initialData: null,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<BrandModel>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<BrandModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterbrands();
                     return Padding(
@@ -193,19 +192,18 @@ class SuppliersList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data) {
                     _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
                   return snapshot.data
                       ? Container(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                    child: Center(
-                      child: Text(
-                        "人家可是有底线的。。。",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  )
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                          child: Center(
+                            child: Text(
+                              "人家可是有底线的。。。",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        )
                       : Container();
                 },
               ),
@@ -241,30 +239,38 @@ class SuppliersItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
       ),
-      onTap: () async{
+      onTap: () async {
         //获取与该工厂最新的报价单
         QuoteModel quoteModel;
         QuoteOrdersResponse quoteResponse = await QuoteOrderRepository().getQuotesByFactory(supplierModel.uid, {
-          'size':1,
+          'size': 1,
         });
-        if(quoteResponse.content.length > 0) quoteModel = quoteResponse.content[0];
+        if (quoteResponse.content.length > 0) quoteModel = quoteResponse.content[0];
 
         //获取与该工厂最新的生产订单
         PurchaseOrderModel purchaseOrderModel;
-        PurchaseOrdersResponse ordersResponse = await PurchaseOrderRepository().getPurchaseOrdersByFactory(supplierModel.uid, {
-          'size':1,
+        PurchaseOrdersResponse ordersResponse =
+            await PurchaseOrderRepository().getPurchaseOrdersByFactory(supplierModel.uid, {
+          'size': 1,
         });
-        if(ordersResponse.content.length > 0) purchaseOrderModel = ordersResponse.content[0];
+        if (ordersResponse.content.length > 0) purchaseOrderModel = ordersResponse.content[0];
 
         //获取该工厂的现款商品
         ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
-          'factory':supplierModel.uid,
-        }, {'size': 3});
+          'factory': supplierModel.uid,
+        }, {
+          'size': 3
+        });
 
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MyFactoryPage(supplierModel,quoteModel: quoteModel,purchaseOrder:purchaseOrderModel,products: productsResponse.content,),
+            builder: (context) => MyFactoryPage(
+                  supplierModel,
+                  quoteModel: quoteModel,
+                  purchaseOrder: purchaseOrderModel,
+                  products: productsResponse.content,
+                ),
           ),
         );
       },
@@ -317,27 +323,25 @@ class BrandSuppliersItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
       ),
-      onTap: () async{
+      onTap: () async {
         //获取与该品牌最新的报价单
         QuoteModel quoteModel;
         QuoteOrdersResponse quoteResponse = await QuoteOrderRepository().getQuotesByBrand(supplierModel.uid, {
-          'size':1,
+          'size': 1,
         });
-        if(quoteResponse.content.length > 0) quoteModel = quoteResponse.content[0];
+        if (quoteResponse.content.length > 0) quoteModel = quoteResponse.content[0];
 
         //获取与该品牌最新的生产订单
-        Response<Map<String, dynamic>> response1 = await http$.post(OrderApis.purchaseOrders,
-            data: {
-              'purchasers':supplierModel.uid,
-            },
-            queryParameters: {
-              'size': 1,
-            });
+        Response<Map<String, dynamic>> response1 = await http$.post(OrderApis.purchaseOrders, data: {
+          'purchasers': supplierModel.uid,
+        }, queryParameters: {
+          'size': 1,
+        });
 
         PurchaseOrderModel purchaseOrderModel;
         if (response1 != null && response1.statusCode == 200) {
           PurchaseOrdersResponse ordersResponse = PurchaseOrdersResponse.fromJson(response1.data);
-          if(ordersResponse != null && ordersResponse.content.length > 0){
+          if (ordersResponse != null && ordersResponse.content.length > 0) {
             purchaseOrderModel = ordersResponse.content[0];
           }
         }
@@ -345,7 +349,11 @@ class BrandSuppliersItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MyBrandPage(supplierModel,quoteModel: quoteModel,purchaseOrder:purchaseOrderModel,),
+            builder: (context) => MyBrandPage(
+                  supplierModel,
+                  quoteModel: quoteModel,
+                  purchaseOrder: purchaseOrderModel,
+                ),
           ),
         );
       },
@@ -392,12 +400,15 @@ class ToTopBtn extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return snapshot.data
               ? FloatingActionButton(
-            child: Icon(Icons.arrow_upward,color: Colors.white,),
-            onPressed: () {
-              bloc.returnToTop();
-            },
-            backgroundColor: Colors.blue,
-          )
+                  child: Icon(
+                    Icons.arrow_upward,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    bloc.returnToTop();
+                  },
+                  backgroundColor: Colors.blue,
+                )
               : Container();
         });
   }

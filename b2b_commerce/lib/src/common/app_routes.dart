@@ -4,11 +4,8 @@ import 'package:b2b_commerce/src/my/my_bill.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import '../business/apparel_product_stock_adjust_history.dart';
-import '../business/apparel_product_stocks.dart';
 import '../business/apparel_products.dart';
 import '../business/apparel_products_off_the_shelf.dart';
-import '../business/delivery.dart';
 import '../business/employees.dart';
 import '../business/purchase_orders.dart';
 import '../business/quote_orders.dart';
@@ -68,10 +65,8 @@ class AppRoutes with GlobalRoutes {
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
-    ROUTE_PRODUCT_STOCKS: (context) => ApparelProductStocksPage(),
     ROUTE_PRODUCTS: (context) => ApparelProductsPage(),
     ROUTE_PRODUCTS_OFF_THE_SHELF: (context) => OffTheShelfApparelProductsPage(),
-    ROUTE_PRODUCT_STOCK_ADJUST_HISTORY: (context) => ApparelProductStockAdjustHistoryPage(),
     ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),
@@ -88,7 +83,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),
     ROUTE_MY_SETTINGS: (context) => MySettingsPage(),
     ROUTE_MY_REGISTER: (context) => RegisterPage(),
-    ROUTE_DELIVERY: (context) => DeliveryPage(),
     // ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
     ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage(),
     ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage(),
