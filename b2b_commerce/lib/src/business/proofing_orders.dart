@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -54,16 +55,7 @@ class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
           body: DefaultTabController(
             length: statuses.length,
             child: Scaffold(
-              appBar: TabBar(
-                unselectedLabelColor: Colors.black26,
-                labelColor: Colors.black,
-                indicatorSize: TabBarIndicatorSize.label,
-                tabs: statuses.map((status) {
-                  return Tab(text: status.name);
-                }).toList(),
-                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-                isScrollable: true,
-              ),
+              appBar: TabFactory.buildDefaultTabBar(statuses),
               body: TabBarView(
                 children: statuses
                     .map((status) => ProofingOrdersList(
@@ -188,11 +180,11 @@ class ProofingOrderItem extends StatelessWidget {
   /// 顶级页面context
   final BuildContext pageContext;
 
-  static Map<ProofingStatus, MaterialColor> _statusColors = {
-    ProofingStatus.PENDING_DELIVERY: Colors.green,
-    ProofingStatus.SHIPPED: Colors.blue,
+  static Map<ProofingStatus, Color> _statusColors = {
     ProofingStatus.PENDING_PAYMENT: Colors.red,
-    ProofingStatus.COMPLETED: Colors.orange,
+    ProofingStatus.PENDING_DELIVERY: Color(0xFFFFD600),
+    ProofingStatus.SHIPPED: Color(0xFFFFD600),
+    ProofingStatus.COMPLETED: Colors.green,
     ProofingStatus.CANCELLED: Colors.grey
   };
 
@@ -438,13 +430,16 @@ class ProofingOrderItem extends StatelessWidget {
                           proofingModel: model,
                         )));
               },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 245, 193, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '确认发货',
-                style: TextStyle(color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
-              )),
+            color: Color(0xFFFFD600),
+            child: Text(
+              '确认发货',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),),
         ];
       }
       // else if (model.status == ProofingStatus.SHIPPED) {

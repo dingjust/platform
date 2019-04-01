@@ -74,7 +74,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   Widget _buildProgresses(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 5),
-      child: ListView(children: _buildPurchaseProductionProgresses(context)),
+      child: ListView(
+        children:
+      _buildPurchaseProductionProgresses(context),
+      ),
     );
   }
 
@@ -95,6 +98,15 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         ),
       ));
     }
+    _list.add(Container(
+      padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
+      child: Center(
+        child: Text(
+          "(￢_￢)已经到底了",
+          style: TextStyle(color: Colors.grey),
+        ),
+      ),
+    ));
     return _list;
   }
 
