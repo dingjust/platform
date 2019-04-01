@@ -1,30 +1,34 @@
-import 'package:b2b_commerce/src/home/factory/factory_list.dart';
-import 'package:b2b_commerce/src/home/product/order_product.dart';
-import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
-import 'package:b2b_commerce/src/home/requirement/requirement_date_pick.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../../home/factory/factory_list.dart';
+import '../../home/product/order_product.dart';
+import '../../home/requirement/fast_publish_requirement.dart';
+import '../../home/requirement/requirement_date_pick.dart';
+
+/// 产品分类选择页
 class CategorySelectPage extends StatefulWidget {
-  FastRequirementForm fastRequirementForm;
-  List<CategoryModel> minCategorySelect;
-  List<CategoryModel> categorys;
-  bool hasNextPage;
-  bool multiple;
-
-  ///分类选择动作类型
-  final CategoryActionType categoryActionType;
-
   CategorySelectPage({
     this.minCategorySelect,
     this.fastRequirementForm,
-    this.categorys,
+    this.categories,
     this.hasNextPage = false,
     this.multiple = false,
     this.categoryActionType = CategoryActionType.none,
   });
+
+  final FastRequirementForm fastRequirementForm;
+  final List<CategoryModel> minCategorySelect;
+  final List<CategoryModel> categories;
+  final bool hasNextPage;
+  final bool multiple;
+
+  ///分类选择动作类型
+  final CategoryActionType categoryActionType;
 
   CategorySelectPageState createState() => CategorySelectPageState();
 }
@@ -40,17 +44,23 @@ class CategorySelectPageState extends State<CategorySelectPage> {
   }
 
   void _jumpToFactories(CategoryModel category) {
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).push(
+      MaterialPageRoute(
         builder: (context) => FactoryPage(
               FactoryCondition(starLevel: 0, adeptAtCategory: [category]),
-            )));
+            ),
+      ),
+    );
   }
 
   void _jumpToProducts(CategoryModel category) {
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).push(
+      MaterialPageRoute(
         builder: (context) => ProductsPage(
               categoryModel: category,
-            )));
+            ),
+      ),
+    );
   }
 
   @override
@@ -60,25 +70,27 @@ class CategorySelectPageState extends State<CategorySelectPage> {
     switch (widget.categoryActionType) {
       case CategoryActionType.TO_FACTORIES:
         categorySelect = CategorySelect(
-            categorys: widget.categorys,
-            categorySelect: widget.minCategorySelect,
-            multiple: false,
-            hasButton: false,
-            categoryActionType: widget.categoryActionType,
-            onJumpToFactories: _jumpToFactories);
+          categories: widget.categories,
+          categorySelect: widget.minCategorySelect,
+          multiple: false,
+          hasButton: false,
+          categoryActionType: widget.categoryActionType,
+          onJumpToFactories: _jumpToFactories,
+        );
         break;
       case CategoryActionType.TO_PRODUCTS:
         categorySelect = CategorySelect(
-            categorys: widget.categorys,
-            categorySelect: widget.minCategorySelect,
-            multiple: false,
-            hasButton: false,
-            categoryActionType: widget.categoryActionType,
-            onJumpToProducts: _jumpToProducts);
+          categories: widget.categories,
+          categorySelect: widget.minCategorySelect,
+          multiple: false,
+          hasButton: false,
+          categoryActionType: widget.categoryActionType,
+          onJumpToProducts: _jumpToProducts,
+        );
         break;
       default:
         categorySelect = CategorySelect(
-          categorys: widget.categorys,
+          categories: widget.categories,
           categorySelect: widget.minCategorySelect,
           multiple: widget.multiple,
           hasButton: false,
@@ -97,32 +109,34 @@ class CategorySelectPageState extends State<CategorySelectPage> {
           centerTitle: true,
           title: Text('选择分类'),
           leading: IconButton(
-                  icon: Text(
-                    '取消',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context, _beforeMinCategorySelect);
-                  }),
+            icon: Text(
+              '取消',
+              style: TextStyle(color: Colors.grey),
+            ),
+            onPressed: () {
+              Navigator.pop(context, _beforeMinCategorySelect);
+            },
+          ),
           actions: <Widget>[
             widget.hasNextPage
                 ? FlatButton(
                     onPressed: () {
                       if (widget.fastRequirementForm.categories.isEmpty) {
-                        (_scaffoldKey.currentState as ScaffoldState)
-                            .showSnackBar(
+                        (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
                           SnackBar(
                             content: Text('请选择品类'),
                             duration: Duration(seconds: 1),
                           ),
                         );
                       } else {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (context) => RequirementDatePick(
-                                  fastRequirementForm:
-                                      widget.fastRequirementForm,
+                                  fastRequirementForm: widget.fastRequirementForm,
                                   nowTime: DateTime.now(),
-                                )));
+                                ),
+                          ),
+                        );
                       }
                     },
                     child: Text(
@@ -138,7 +152,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-            ),
+                  ),
           ],
         ),
         body: Column(

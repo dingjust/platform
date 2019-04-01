@@ -5,8 +5,9 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class MyFactoryBaseFormPage extends StatefulWidget {
-  FactoryModel factory;
   MyFactoryBaseFormPage(this.factory);
+
+  final FactoryModel factory;
 
   @override
   State createState() => MyFactoryBaseFormPageState();
@@ -28,14 +29,22 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   void initState() {
     _nameController.text = widget.factory.name ?? '';
     _cooperativeBrandController.text = widget.factory.cooperativeBrand ?? '';
-    if(widget.factory.scaleRange != null) _scaleRange.add(widget.factory.scaleRange.toString().split('.')[1]);
-    if(widget.factory.monthlyCapacityRange != null) _monthlyCapacityRanges.add(widget.factory.monthlyCapacityRange.toString().split('.')[1]);
-    if(widget.factory.populationScale != null) _populationScale.add(widget.factory.populationScale.toString().split('.')[1]);
-    if(widget.factory.cooperationModes != null) _cooperationModes.addAll(widget.factory.cooperationModes.map((cooperationMode)=>cooperationMode.toString().split('.')[1]));
-    if(widget.factory.profilePicture != null) medias = [widget.factory.profilePicture];
+    if (widget.factory.scaleRange != null) {
+      _scaleRange.add(widget.factory.scaleRange.toString().split('.')[1]);
+    }
+    if (widget.factory.monthlyCapacityRange != null) {
+      _monthlyCapacityRanges.add(widget.factory.monthlyCapacityRange.toString().split('.')[1]);
+    }
+    if (widget.factory.populationScale != null) {
+      _populationScale.add(widget.factory.populationScale.toString().split('.')[1]);
+    }
+    if (widget.factory.cooperationModes != null) {
+      _cooperationModes.addAll(
+        widget.factory.cooperationModes.map((cooperationMode) => cooperationMode.toString().split('.')[1]),
+      );
+    }
+    if (widget.factory.profilePicture != null) medias = [widget.factory.profilePicture];
 
-
-    // TODO: implement initState
     super.initState();
   }
 
@@ -48,17 +57,23 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          IconButton(icon: Text('确定',style: TextStyle(),), onPressed: (){
-            if(medias.length > 0){
-              widget.factory.profilePicture = medias[0];
-            }else{
-              widget.factory.profilePicture = null;
-            }
-            widget.factory.name = _nameController.text == '' ? null : _nameController.text;
-            widget.factory.cooperativeBrand = _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
+          IconButton(
+              icon: Text(
+                '确定',
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                if (medias.length > 0) {
+                  widget.factory.profilePicture = medias[0];
+                } else {
+                  widget.factory.profilePicture = null;
+                }
+                widget.factory.name = _nameController.text == '' ? null : _nameController.text;
+                widget.factory.cooperativeBrand =
+                    _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
 
-            UserRepositoryImpl().factoryUpdate(widget.factory).then((a)=>Navigator.pop(context));
-          })
+                UserRepositoryImpl().factoryUpdate(widget.factory).then((a) => Navigator.pop(context));
+              })
         ],
       ),
       body: Container(
@@ -66,7 +81,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         child: ListView(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: Text(
                 '上传图片',
                 style: TextStyle(
@@ -75,7 +90,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 ),
               ),
             ),
-            EditableAttachments(list: medias,maxNum: 1,),
+            EditableAttachments(
+              list: medias,
+              maxNum: 1,
+            ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
@@ -85,7 +103,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 leadingColor: Colors.grey,
               ),
             ),
-            SizedBox(height:2),
+            SizedBox(height: 2),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -94,12 +112,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          '月均产能',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        )),
+                      '月均产能',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    )),
                     Text(widget.factory.monthlyCapacityRange == null
                         ? ''
                         : MonthlyCapacityRangesLocalizedMap[widget.factory.monthlyCapacityRange]),
@@ -112,18 +130,18 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnumSelectPage(
-                        items: MonthlyCapacityRangesEnum,
-                        title: '月均产能',
-                        codes: _monthlyCapacityRanges,
-                        count: 3,
-                      ),
+                            items: MonthlyCapacityRangesEnum,
+                            title: '月均产能',
+                            codes: _monthlyCapacityRanges,
+                            count: 3,
+                          ),
                     ));
 
                 if (result != null) _monthlyCapacityRanges = result;
 
                 if (_monthlyCapacityRanges.length > 0) {
                   MonthlyCapacityRange monthlyCapacityRanges = MonthlyCapacityRange.values.singleWhere(
-                          (monthlyCapacityRanges) =>
+                      (monthlyCapacityRanges) =>
                           monthlyCapacityRanges.toString().split('.')[1] == _monthlyCapacityRanges[0],
                       orElse: () => null);
 
@@ -131,7 +149,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 }
               },
             ),
-            SizedBox(height: 2,),
+            SizedBox(
+              height: 2,
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -140,15 +160,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          '产值规模',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        )),
-                    Text(widget.factory.scaleRange == null
-                        ? ''
-                        : ScaleRangesLocalizedMap[widget.factory.scaleRange]),
+                      '产值规模',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    )),
+                    Text(widget.factory.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.factory.scaleRange]),
                     Icon(Icons.chevron_right),
                   ],
                 ),
@@ -158,26 +176,27 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnumSelectPage(
-                        items: ScaleRangesEnum,
-                        title: '产值规模',
-                        codes: _scaleRange,
-                        count: 3,
-                      ),
+                            items: ScaleRangesEnum,
+                            title: '产值规模',
+                            codes: _scaleRange,
+                            count: 3,
+                          ),
                     ));
 
                 if (result != null) _scaleRange = result;
 
                 if (_scaleRange.length > 0) {
                   ScaleRanges scaleRange = ScaleRanges.values.singleWhere(
-                          (scaleRange) =>
-                      scaleRange.toString().split('.')[1] == _scaleRange[0],
+                      (scaleRange) => scaleRange.toString().split('.')[1] == _scaleRange[0],
                       orElse: () => null);
 
                   widget.factory.scaleRange = scaleRange;
                 }
               },
             ),
-            SizedBox(height: 2,),
+            SizedBox(
+              height: 2,
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -186,12 +205,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          '工厂规模',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        )),
+                      '工厂规模',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    )),
                     Text(widget.factory.populationScale == null
                         ? ''
                         : PopulationScaleLocalizedMap[widget.factory.populationScale]),
@@ -204,26 +223,27 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnumSelectPage(
-                        items: PopulationScaleEnum,
-                        title: '工厂规模',
-                        codes: _populationScale,
-                        count: 3,
-                      ),
+                            items: PopulationScaleEnum,
+                            title: '工厂规模',
+                            codes: _populationScale,
+                            count: 3,
+                          ),
                     ));
 
                 if (result != null) _scaleRange = result;
 
                 if (_scaleRange.length > 0) {
                   PopulationScale populationScale = PopulationScale.values.singleWhere(
-                          (populationScale) =>
-                          populationScale.toString().split('.')[1] == _populationScale[0],
+                      (populationScale) => populationScale.toString().split('.')[1] == _populationScale[0],
                       orElse: () => null);
 
                   widget.factory.populationScale = populationScale;
                 }
               },
             ),
-            SizedBox(height: 2,),
+            SizedBox(
+              height: 2,
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -232,12 +252,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          '合作方式',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        )),
+                      '合作方式',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    )),
                     Text(formatCooperationModesSelectText(widget.factory.cooperationModes)),
                     Icon(Icons.chevron_right),
                   ],
@@ -248,21 +268,20 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnumSelectPage(
-                        items: CooperationModesEnum,
-                        title: '合作方式',
-                        codes: _cooperationModes,
-                        multiple: true,
-                        count: 4,
-                      ),
+                            items: CooperationModesEnum,
+                            title: '合作方式',
+                            codes: _cooperationModes,
+                            multiple: true,
+                            count: 4,
+                          ),
                     ));
 
                 if (result != null) _cooperationModes = result;
 
                 if (_cooperationModes.length > 0) {
-                  List<CooperationModes> cooperationModes = _cooperationModes.map((mode){
+                  List<CooperationModes> cooperationModes = _cooperationModes.map((mode) {
                     return CooperationModes.values.singleWhere(
-                            (cooperationMode) =>
-                            cooperationMode.toString().split('.')[1] == mode,
+                        (cooperationMode) => cooperationMode.toString().split('.')[1] == mode,
                         orElse: () => null);
                   }).toList();
 
@@ -270,7 +289,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 }
               },
             ),
-            SizedBox(height: 2,),
+            SizedBox(
+              height: 2,
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -279,32 +300,31 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          '生产大类',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        )),
+                      '生产大类',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    )),
                     Text(
-                      formatCategorySelectText(widget.factory.categories,5),
+                      formatCategorySelectText(widget.factory.categories, 5),
                     ),
                     Icon(Icons.chevron_right),
                   ],
                 ),
               ),
-              onTap: ()async{
-                List<CategoryModel> categorys =
-                await ProductRepositoryImpl().majorCategories();
+              onTap: () async {
+                List<CategoryModel> categorys = await ProductRepositoryImpl().majorCategories();
 
                 dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EnumSelectPage(
-                      title: '生产大类',
-                      items: categorys,
-                      models: widget.factory.categories,
-                      multiple: true,
-                    ),
+                          title: '生产大类',
+                          items: categorys,
+                          models: widget.factory.categories,
+                          multiple: true,
+                        ),
                   ),
                 );
 
@@ -313,7 +333,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 }
               },
             ),
-            SizedBox(height: 2,),
+            SizedBox(
+              height: 2,
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -322,39 +344,40 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          '优势类目',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        )),
+                      '优势类目',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    )),
                     Text(
-                      formatCategorySelectText(widget.factory.adeptAtCategories,2),
+                      formatCategorySelectText(widget.factory.adeptAtCategories, 2),
                     ),
                     Icon(Icons.chevron_right),
                   ],
                 ),
               ),
               onTap: () async {
-                List<CategoryModel> categorys =
-                await ProductRepositoryImpl().cascadedCategories();
+                List<CategoryModel> categories = await ProductRepositoryImpl().cascadedCategories();
                 dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
-                      categorys: categorys,
-                      minCategorySelect: widget.factory.adeptAtCategories,
-                      multiple: true,
-                    ),
+                          categories: categories,
+                          minCategorySelect: widget.factory.adeptAtCategories,
+                          multiple: true,
+                        ),
                   ),
                 );
 
-                if(result != null){
+                if (result != null) {
                   widget.factory.adeptAtCategories = result;
                 }
               },
             ),
-            SizedBox(height: 2,),
+            SizedBox(
+              height: 2,
+            ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
@@ -364,7 +387,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 leadingColor: Colors.grey,
               ),
             ),
-            SizedBox(height: 2,),
+            SizedBox(
+              height: 2,
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -373,12 +398,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          '我的标签',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        )),
+                      '我的标签',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    )),
                     Text(
                       formatLabelsSelectText(widget.factory.labels),
                     ),
@@ -386,19 +411,19 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   ],
                 ),
               ),
-              onTap: ()async{
+              onTap: () async {
                 List<LabelModel> labels = await UserRepositoryImpl().labels();
 
-                if(widget.factory.labels == null) widget.factory.labels = [];
+                if (widget.factory.labels == null) widget.factory.labels = [];
                 dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EnumSelectPage(
-                      title: '选择标签',
-                      items: labels,
-                      models: widget.factory.labels,
-                      multiple: true,
-                    ),
+                          title: '选择标签',
+                          items: labels,
+                          models: widget.factory.labels,
+                          multiple: true,
+                        ),
                   ),
                 );
 
@@ -413,13 +438,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     );
   }
 
-  String formatCategorySelectText(List<CategoryModel> categorys,int count) {
+  String formatCategorySelectText(List<CategoryModel> categorys, int count) {
     String text = '';
 
     if (categorys != null) {
       text = '';
       for (int i = 0; i < categorys.length; i++) {
-        if (i > count-1) {
+        if (i > count - 1) {
           text += '...';
           break;
         }

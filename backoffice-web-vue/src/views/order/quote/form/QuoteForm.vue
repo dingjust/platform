@@ -8,9 +8,9 @@
     </el-card>
     <div class="pt-2"></div>
     <el-card class="box-card">
-      <el-button type="primary" v-if="isFactory()&&readOnly" @click="onUpdate">修改</el-button>
-      <el-button type="primary" v-if="isBrand()" @click="onApprove">通过</el-button>
-      <el-button type="danger" v-if="isBrand()" @click="onRefuse">拒绝</el-button>
+      <el-button type="primary" v-if="isFactory()&&readOnly&&slotData.state=='SELLER_SUBMITTED'" @click="onUpdate">修改</el-button>
+      <el-button type="primary" v-if="isBrand()&&slotData.state=='SELLER_SUBMITTED'" @click="onApprove">通过</el-button>
+      <el-button type="danger" v-if="isBrand()&&slotData.state=='SELLER_SUBMITTED'" @click="onRefuse">拒绝</el-button>
       <div slot="header" class="clearfix">
         <span>报价明细</span>
       </div>
@@ -80,7 +80,7 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-
+        this.slotData.state = 'BUYER_APPROVED';
         this.$message.success('通过成功，订单编号： ' + formData.code);
       },
       async onRefuse(){
@@ -91,8 +91,8 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-
-        this.$message.success('解决成功，订单编号： ' + formData.code);
+        this.slotData.state = 'BUYER_REJECTED';
+        this.$message.success('拒绝成功，订单编号： ' + formData.code);
       },
     },
     computed: {},

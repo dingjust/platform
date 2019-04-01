@@ -5,8 +5,9 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class MyBrandBaseFormPage extends StatefulWidget {
-  BrandModel brand;
   MyBrandBaseFormPage(this.brand);
+
+  final BrandModel brand;
 
   @override
   State createState() => MyBrandBaseFormPageState();
@@ -29,21 +30,23 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
 
   @override
   void initState() {
-    if(widget.brand.profilePicture != null) medias = [widget.brand.profilePicture];
+    if (widget.brand.profilePicture != null) medias = [widget.brand.profilePicture];
     _nameController.text = widget.brand.name ?? '';
     _brandController.text = widget.brand.brand ?? '';
-    _cooperativeBrandController.text = widget.brand.cooperativeBrand ??'';
-    if(widget.brand.scaleRange != null) _scaleRange.add(widget.brand.scaleRange.toString().split('.')[1]);
+    _cooperativeBrandController.text = widget.brand.cooperativeBrand ?? '';
+    if (widget.brand.scaleRange != null) {
+      _scaleRange.add(widget.brand.scaleRange.toString().split('.')[1]);
+    }
     _styleCodes.addAll(widget.brand.styles ?? []);
-    _ageRanges.addAll(widget.brand.ageRanges
-        .map((ageRange) => ageRange.toString().split('.')[1])
-        .toList() ?? []);
-    _priceRange1s.addAll(widget.brand.priceRange1s
-        .map((priceRange1s) => priceRange1s.toString().split('.')[1])
-        .toList() ?? []);
-    _priceRange2s.addAll(widget.brand.priceRange2s
-        .map((priceRange2s) => priceRange2s.toString().split('.')[1])
-        .toList() ?? []);
+    _ageRanges.addAll(
+      widget.brand.ageRanges.map((ageRange) => ageRange.toString().split('.')[1]).toList() ?? [],
+    );
+    _priceRange1s.addAll(
+      widget.brand.priceRange1s.map((priceRange1s) => priceRange1s.toString().split('.')[1]).toList() ?? [],
+    );
+    _priceRange2s.addAll(
+      widget.brand.priceRange2s.map((priceRange2s) => priceRange2s.toString().split('.')[1]).toList() ?? [],
+    );
 
     // TODO: implement initState
     super.initState();
@@ -58,26 +61,19 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
         elevation: 0.5,
         actions: <Widget>[
           IconButton(
-              icon: Text(
-                '确定',
-                style: TextStyle(),
-              ),
+              icon: Text('确定', style: TextStyle()),
               onPressed: () {
-                if(medias.length > 0){
+                if (medias.length > 0) {
                   widget.brand.profilePicture = medias[0];
-                }else{
+                } else {
                   widget.brand.profilePicture = null;
                 }
-                widget.brand.name =
-                    _nameController.text == '' ? null : _nameController.text;
-                widget.brand.brand =
-                    _brandController.text == '' ? null : _brandController.text;
+                widget.brand.name = _nameController.text == '' ? null : _nameController.text;
+                widget.brand.brand = _brandController.text == '' ? null : _brandController.text;
                 widget.brand.cooperativeBrand =
-                    _cooperativeBrandController.text == ''
-                        ? null
-                        : _cooperativeBrandController.text;
+                    _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
 
-                UserRepositoryImpl().brandUpdate(widget.brand).then((a)=>Navigator.pop(context));
+                UserRepositoryImpl().brandUpdate(widget.brand).then((a) => Navigator.pop(context));
               })
         ],
       ),
@@ -95,7 +91,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 ),
               ),
             ),
-            EditableAttachments(list: medias,maxNum: 1,),
+            EditableAttachments(
+              list: medias,
+              maxNum: 1,
+            ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
@@ -143,9 +142,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         fontSize: 16,
                       ),
                     )),
-                    Text(widget.brand.scaleRange == null
-                        ? ''
-                        : ScaleRangesLocalizedMap[widget.brand.scaleRange]),
+                    Text(widget.brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.brand.scaleRange]),
                     Icon(Icons.chevron_right),
                   ],
                 ),
@@ -166,8 +163,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
 
                 if (_scaleRange.length > 0) {
                   ScaleRanges scaleRange = ScaleRanges.values.singleWhere(
-                      (scaleRange) =>
-                          scaleRange.toString().split('.')[1] == _scaleRange[0],
+                      (scaleRange) => scaleRange.toString().split('.')[1] == _scaleRange[0],
                       orElse: () => null);
 
                   widget.brand.scaleRange = scaleRange;
@@ -197,20 +193,19 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 ),
               ),
               onTap: () async {
-                List<CategoryModel> categorys =
-                    await ProductRepositoryImpl().cascadedCategories();
+                List<CategoryModel> categories = await ProductRepositoryImpl().cascadedCategories();
                 dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
-                          categorys: categorys,
+                          categories: categories,
                           minCategorySelect: widget.brand.adeptAtCategories,
                           multiple: true,
                         ),
                   ),
                 );
 
-                if(result != null){
+                if (result != null) {
                   widget.brand.adeptAtCategories = result;
                 }
               },
@@ -237,16 +232,16 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   ],
                 ),
               ),
-              onTap: ()async{
+              onTap: () async {
                 dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EnumSelectPage(
-                      title: '选择风格',
-                      items: StyleEnum,
-                      codes: widget.brand.styles,
-                      multiple: true,
-                    ),
+                          title: '选择风格',
+                          items: StyleEnum,
+                          codes: widget.brand.styles,
+                          multiple: true,
+                        ),
                   ),
                 );
 
@@ -271,32 +266,30 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatEnumSelectsText(_ageRanges,AgeRangesEnum,3),
+                      formatEnumSelectsText(_ageRanges, AgeRangesEnum, 3),
                     ),
                     Icon(Icons.chevron_right),
                   ],
                 ),
               ),
-              onTap: ()async{
+              onTap: () async {
                 dynamic result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnumSelectPage(
-                        items: AgeRangesEnum,
-                        title: '年龄段',
-                        codes: _ageRanges,
-                        count: 3,
-                        multiple: true,
-                      ),
+                            items: AgeRangesEnum,
+                            title: '年龄段',
+                            codes: _ageRanges,
+                            count: 3,
+                            multiple: true,
+                          ),
                     ));
 
                 if (result != null) _ageRanges = result;
 
                 if (_ageRanges.length > 0) {
-                  List<AgeRanges> ageRanges = _ageRanges.map((ageRange){
-                    return AgeRanges.values.singleWhere(
-                            (scaleRange) =>
-                        scaleRange.toString().split('.')[1] == ageRange,
+                  List<AgeRanges> ageRanges = _ageRanges.map((ageRange) {
+                    return AgeRanges.values.singleWhere((scaleRange) => scaleRange.toString().split('.')[1] == ageRange,
                         orElse: () => null);
                   }).toList();
 
@@ -320,32 +313,31 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatEnumSelectsText(_priceRange1s,PriceRangesEnum,3),
+                      formatEnumSelectsText(_priceRange1s, PriceRangesEnum, 3),
                     ),
                     Icon(Icons.chevron_right),
                   ],
                 ),
               ),
-              onTap: ()async{
+              onTap: () async {
                 dynamic result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnumSelectPage(
-                        items: PriceRangesEnum,
-                        title: '春夏款价格段',
-                        codes: _priceRange1s,
-                        count: 3,
-                        multiple: true,
-                      ),
+                            items: PriceRangesEnum,
+                            title: '春夏款价格段',
+                            codes: _priceRange1s,
+                            count: 3,
+                            multiple: true,
+                          ),
                     ));
 
                 if (result != null) _priceRange1s = result;
 
                 if (_priceRange1s.length > 0) {
-                  List<PriceRanges> priceRange1s = _priceRange1s.map((priceRange1s){
+                  List<PriceRanges> priceRange1s = _priceRange1s.map((priceRange1s) {
                     return PriceRanges.values.singleWhere(
-                            (priceRange) =>
-                            priceRange.toString().split('.')[1] == priceRange1s,
+                        (priceRange) => priceRange.toString().split('.')[1] == priceRange1s,
                         orElse: () => null);
                   }).toList();
 
@@ -369,32 +361,31 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatEnumSelectsText(_priceRange2s,PriceRangesEnum,3),
+                      formatEnumSelectsText(_priceRange2s, PriceRangesEnum, 3),
                     ),
                     Icon(Icons.chevron_right),
                   ],
                 ),
               ),
-              onTap: ()async{
+              onTap: () async {
                 dynamic result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EnumSelectPage(
-                        items: PriceRangesEnum,
-                        title: '秋冬款价格段',
-                        codes: _priceRange2s,
-                        count: 3,
-                        multiple: true,
-                      ),
+                            items: PriceRangesEnum,
+                            title: '秋冬款价格段',
+                            codes: _priceRange2s,
+                            count: 3,
+                            multiple: true,
+                          ),
                     ));
 
                 if (result != null) _priceRange2s = result;
 
                 if (_priceRange2s.length > 0) {
-                  List<PriceRanges> priceRange2s = _priceRange2s.map((priceRange2s){
+                  List<PriceRanges> priceRange2s = _priceRange2s.map((priceRange2s) {
                     return PriceRanges.values.singleWhere(
-                            (priceRange) =>
-                        priceRange.toString().split('.')[1] == priceRange2s,
+                        (priceRange) => priceRange.toString().split('.')[1] == priceRange2s,
                         orElse: () => null);
                   }).toList();
 

@@ -59,7 +59,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: fastRequirementForm.categories,
                         fastRequirementForm: fastRequirementForm,
-                        categorys: categorys,
+                        categories: categorys,
                         hasNextPage: true,
                       )));
             });
