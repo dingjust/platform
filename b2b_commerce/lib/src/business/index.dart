@@ -9,7 +9,8 @@ import 'package:widgets/widgets.dart';
 import '../common/app_keys.dart';
 import '../common/app_image.dart';
 import '../common/app_routes.dart';
-import '_shared/widgets/site_statistics.dart';
+
+import './_shared/widgets/site_statistics.dart';
 
 /// 生意
 class BusinessHomePage extends StatefulWidget {

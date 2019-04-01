@@ -5,7 +5,7 @@ import 'package:models/models.dart';
 
 /// Image工厂类， 用于存放最通用的组件生成样式
 class ImageFactory {
-  static Widget buildDefaultThumbnailImage() {
+  static Widget buildDefaultThumbnailImage({double size = 60}) {
     return Container(
       width: 80,
       height: 80,
@@ -17,14 +17,18 @@ class ImageFactory {
       child: Icon(
         B2BIcons.noPicture,
         color: Color.fromRGBO(200, 200, 200, 1),
-        size: 60,
+        size: size,
       ),
     );
   }
 
-  static Widget buildThumbnailImage(MediaModel media, {BoxFit fit}) {
+  static Widget buildThumbnailImage(
+    MediaModel media, {
+    double size = 60,
+    BoxFit fit = BoxFit.fill,
+  }) {
     if (media == null) {
-      return buildDefaultThumbnailImage();
+      return buildDefaultThumbnailImage(size: size);
     }
 
     // TODO：拿media format为Thumbnail的converted图片
@@ -36,13 +40,17 @@ class ImageFactory {
         borderRadius: BorderRadius.circular(5),
         image: DecorationImage(
           image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${media.url}'),
-          fit: fit ?? BoxFit.fill,
+          fit: fit,
         ),
       ),
     );
   }
 
-  static Widget buildThumbnailImageForList(List<MediaModel> medias, {BoxFit fit}) {
+  static Widget buildThumbnailImageForList(
+    List<MediaModel> medias, {
+    double size = 60,
+    BoxFit fit = BoxFit.fill,
+  }) {
     if (medias == null || medias.isEmpty) {
       return buildDefaultThumbnailImage();
     }
