@@ -11,30 +11,30 @@
       <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item label="样衣编号">
-            <el-input v-model="queryFormData.code" clearable="true"></el-input>
+            <el-input v-model="queryFormData.code" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="样衣名称">
-            <el-input v-model="queryFormData.name" clearable="true"></el-input>
+            <el-input v-model="queryFormData.name" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="关联人">
-            <el-input v-model="queryFormData.relatedParty" clearable="true"></el-input>
+            <el-input v-model="queryFormData.relatedParty" clearable></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item label="联系方式">
-            <el-input v-model="queryFormData.contact" clearable="true"></el-input>
+            <el-input v-model="queryFormData.contact" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="类型">
             <el-select v-model="queryFormData.type" placeholder="请选择"
-                       class="w-100" clearable="true">
+                       class="w-100" clearable>
               <el-option
                 v-for="item in sampleCheckoutTypes"
                 :key="item.code"
@@ -47,7 +47,7 @@
         <el-col :span="6">
           <el-form-item label="状态">
             <el-select v-model="queryFormData.state" placeholder="请选择"
-                       class="w-100" clearable="true">
+                       class="w-100" clearable>
               <el-option
                 v-for="item in returnStates"
                 :key="item.code"
