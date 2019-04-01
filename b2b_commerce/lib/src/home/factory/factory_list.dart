@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
-import 'package:b2b_commerce/src/home/factory/factory.dart';
+import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/search/quick_reaction_factory_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
