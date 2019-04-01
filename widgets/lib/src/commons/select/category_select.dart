@@ -2,11 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class CategorySelect extends StatefulWidget {
-  List<CategoryModel> categorys;
+  CategorySelect({
+    @required this.categories,
+    this.multiple = true,
+    this.verticalDividerOpacity = 1,
+    this.categorySelect,
+    this.hasButton = false,
+    this.categoryActionType,
+    this.onJumpToFactories,
+    this.onJumpToProducts,
+  });
+
+  final List<CategoryModel> categories;
   final bool multiple;
   final double verticalDividerOpacity;
   final bool hasButton;
-  List<CategoryModel> categorySelect;
+  final List<CategoryModel> categorySelect;
 
   ///分类选择动作
   final CategoryActionType categoryActionType;
@@ -17,24 +28,10 @@ class CategorySelect extends StatefulWidget {
   /// 跳转到产品列表
   final ValueChanged<CategoryModel> onJumpToProducts;
 
-  CategorySelect({
-    @required this.categorys,
-    this.multiple = true,
-    this.verticalDividerOpacity = 1,
-    this.categorySelect,
-    this.hasButton = false,
-    this.categoryActionType,
-    this.onJumpToFactories,
-    this.onJumpToProducts,
-  });
-
   CategorySelectState createState() => CategorySelectState();
 }
 
 class CategorySelectState extends State<CategorySelect> {
-  //透明度0到1
-  double _verticalDivider;
-
   //是否多选
   bool _multiple;
   List<Widget> _keyItem;
@@ -42,8 +39,6 @@ class CategorySelectState extends State<CategorySelect> {
   String _selectLeft;
   Color _color;
   List<String> _selectRights = [];
-
-//  List<CategoryModel> _selectRights;
 
   void _handleJumpToFactories(CategoryModel model) {
     widget.onJumpToFactories(model);
@@ -55,20 +50,17 @@ class CategorySelectState extends State<CategorySelect> {
 
   @override
   void initState() {
-    _verticalDivider = widget.verticalDividerOpacity;
     _multiple = widget.multiple;
     if (widget.categorySelect.isNotEmpty) {
       _selectLeft = widget.categorySelect[0].parent?.code;
-      _selectRights =
-          widget.categorySelect.map((category) => category.code).toList();
-//      _valueItem = widget.categorySelect[0].parent.children;
-      _valueItem = widget.categorys[0].children;
+      _selectRights = widget.categorySelect.map((category) => category.code).toList();
+      _valueItem = widget.categories[0].children;
     } else {
-      _selectLeft = widget.categorys[0].code;
-      _valueItem = widget.categorys[0].children;
+      _selectLeft = widget.categories[0].code;
+      _valueItem = widget.categories[0].children;
     }
     _color = Colors.black;
-    // TODO: implement initState
+
     super.initState();
   }
 
@@ -86,7 +78,7 @@ class CategorySelectState extends State<CategorySelect> {
             if (_selectRights.contains(category.code)) {
               setState(() {
                 _selectRights.remove(category.code);
-                widget.categorySelect.clear();
+                widget.categorySelect.removeWhere((category1) => category1.code == category.code);
               });
             } else {
               if (_multiple) {
@@ -109,9 +101,7 @@ class CategorySelectState extends State<CategorySelect> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-                color: _selectRights.contains(category.code)
-                    ? Color.fromRGBO(255, 219, 0, 1)
-                    : Colors.white)),
+                color: _selectRights.contains(category.code) ? Color.fromRGBO(255, 219, 0, 1) : Colors.white)),
         child: Column(
           children: <Widget>[
             Container(
@@ -134,7 +124,7 @@ class CategorySelectState extends State<CategorySelect> {
 
   @override
   Widget build(BuildContext context) {
-    _keyItem = widget.categorys.map((category) {
+    _keyItem = widget.categories.map((category) {
       if (_selectLeft == category.code) {
         _color = Color.fromRGBO(255, 214, 12, 1);
       } else {
@@ -144,7 +134,6 @@ class CategorySelectState extends State<CategorySelect> {
         onTap: () {
           if (_selectLeft != category.code) {
             setState(() {
-//                widget.categorySelect.clear();
               _selectLeft = category.code;
             });
           }
@@ -153,9 +142,7 @@ class CategorySelectState extends State<CategorySelect> {
         },
         child: Container(
           width: 60,
-          color: _selectLeft == category.code
-              ? Colors.white
-              : Color.fromRGBO(245, 244, 243, 1),
+          color: _selectLeft == category.code ? Colors.white : Color.fromRGBO(245, 244, 243, 1),
           padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Container(
             padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
