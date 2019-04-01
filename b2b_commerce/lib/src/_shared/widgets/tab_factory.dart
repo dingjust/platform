@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 
 /// 默认的Tab Bar
 class TabFactory {
-  static Widget buildDefaultTabBar(List<EnumModel> tabs) {
+  static Widget buildDefaultTabBar(List<EnumModel> tabs, {bool scrollable = false}) {
     return TabBar(
       unselectedLabelColor: Colors.black26,
       labelColor: Colors.black,
@@ -12,7 +12,7 @@ class TabFactory {
         return Tab(text: tab.name);
       }).toList(),
       labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-      isScrollable: false,
+      isScrollable: scrollable,
     );
   }
 }

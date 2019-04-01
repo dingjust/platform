@@ -55,7 +55,7 @@ class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
           body: DefaultTabController(
             length: statuses.length,
             child: Scaffold(
-              appBar: TabFactory.buildDefaultTabBar(statuses),
+              appBar: TabFactory.buildDefaultTabBar(statuses,scrollable: true),
               body: TabBarView(
                 children: statuses
                     .map((status) => ProofingOrdersList(
