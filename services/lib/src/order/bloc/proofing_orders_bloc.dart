@@ -26,15 +26,11 @@ class ProofingOrdersBLoC extends BLoCBase {
 
   static final Map<String, PageEntry> _quotesMap = {
     'ALL': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
-    'PENDING_PAYMENT':
-        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
-    'PENDING_DELIVERY':
-        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'PENDING_PAYMENT': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'PENDING_DELIVERY': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
     'SHIPPED': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
-    'COMPLETED':
-        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
-    'CANCELLED':
-        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>())
+    'COMPLETED': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'CANCELLED': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>())
   };
 
   List<ProofingModel> quotes(String status) => _quotesMap[status].data;
@@ -62,18 +58,13 @@ class ProofingOrdersBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.proofing,
-              data: data,
-              queryParameters: {
-                'page': _quotesMap[status].currentPage,
-                'size': _quotesMap[status].size
-              });
+              data: data, queryParameters: {'page': _quotesMap[status].currentPage, 'size': _quotesMap[status].size});
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          ProofingOrdersResponse ordersResponse =
-              ProofingOrdersResponse.fromJson(response.data);
+          ProofingOrdersResponse ordersResponse = ProofingOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.clear();
@@ -91,7 +82,7 @@ class ProofingOrdersBLoC extends BLoCBase {
       //数据到底
       if (_quotesMap[status].currentPage + 1 == _quotesMap[status].totalPages) {
         //通知显示已经到底部
-        _bottomController.sink.add(true);
+        bottomController.sink.add(true);
       } else {
         Map data = {};
         if (status != 'ALL') {
@@ -101,25 +92,23 @@ class ProofingOrdersBLoC extends BLoCBase {
         }
         Response<Map<String, dynamic>> response;
         try {
-          response = await http$.post(OrderApis.proofing,
-              data: data,
-              queryParameters: {
-                'page': ++_quotesMap[status].currentPage,
-                'size': _quotesMap[status].size
-              });
+          response = await http$.post(
+            OrderApis.proofing,
+            data: data,
+            queryParameters: {'page': ++_quotesMap[status].currentPage, 'size': _quotesMap[status].size},
+          );
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          ProofingOrdersResponse ordersResponse =
-              ProofingOrdersResponse.fromJson(response.data);
+          ProofingOrdersResponse ordersResponse = ProofingOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.addAll(ordersResponse.content);
         }
       }
-//    _loadingController.sink.add(false);
+//    loadingController.sink.add(false);
       _controller.sink.add(_quotesMap[status].data);
       lock = false;
     }
@@ -133,42 +122,9 @@ class ProofingOrdersBLoC extends BLoCBase {
     await filterByStatuses(status);
   }
 
-  //页面控制
-
-  var _loadingController = StreamController<bool>.broadcast();
-  var _bottomController = StreamController<bool>.broadcast();
-  var _toTopBtnController = StreamController<bool>.broadcast();
-  var _returnToTopController = StreamController<bool>.broadcast();
-
-  Stream<bool> get loadingStream => _loadingController.stream;
-
-  Stream<bool> get bottomStream => _bottomController.stream;
-
-  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
-
-  Stream<bool> get returnToTopStream => _returnToTopController.stream;
-
-  loadingStart() async {
-    _loadingController.sink.add(true);
-  }
-
-  loadingEnd() async {
-    _loadingController.sink.add(false);
-  }
-
-  showToTopBtn() async {
-    _toTopBtnController.sink.add(true);
-  }
-
-  hideToTopBtn() async {
-    _toTopBtnController.sink.add(false);
-  }
-
-  returnToTop() async {
-    _returnToTopController.sink.add(true);
-  }
-
   dispose() {
     _controller.close();
+
+    super.dispose();
   }
 }
