@@ -5,14 +5,20 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class ApparelProductList extends StatelessWidget {
+class ApparelProductList extends StatefulWidget {
   final bool isRequirement;
   String status;
 
   //是否选择项
   bool selectProduct;
 
-  ApparelProductList({this.isRequirement = false, this.selectProduct = false, this.status});
+  ApparelProductList(
+      {this.isRequirement = false, this.selectProduct = false, this.status});
+
+  ApparelProductListState createState() => ApparelProductListState();
+}
+
+class ApparelProductListState extends State<ApparelProductList>{
 
   ScrollController _scrollController = new ScrollController();
 
@@ -21,9 +27,10 @@ class ApparelProductList extends StatelessWidget {
     var bloc = BLoCProvider.of<ApparelProductBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(status);
+        bloc.loadingMoreByStatuses(widget.status);
       }
     });
 
@@ -40,7 +47,8 @@ class ApparelProductList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -49,7 +57,7 @@ class ApparelProductList extends StatelessWidget {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.filterByStatuses(status);
+            return await bloc.filterByStatuses(widget.status);
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -58,18 +66,22 @@ class ApparelProductList extends StatelessWidget {
               StreamBuilder<List<ApparelProductModel>>(
                 stream: bloc.stream,
                 // initialData: null,
-                builder: (BuildContext context, AsyncSnapshot<List<ApparelProductModel>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByStatuses(status);
-                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                    bloc.filterByStatuses(widget.status);
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 200),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
                   }
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((product) {
                         return ApparelProductItem(
                           product,
-                          isRequirement: isRequirement,
-                          status: status,
+                          isRequirement: widget.isRequirement,
+                          status: widget.status,
                         );
                       }).toList(),
                     );
@@ -84,7 +96,8 @@ class ApparelProductList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data) {
                     _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                        duration: new Duration(milliseconds: 500),
+                        curve: Curves.easeOut);
                   }
                   return ScrolledToEndTips(hasContent: snapshot.data);
                 },
@@ -93,8 +106,14 @@ class ApparelProductList extends StatelessWidget {
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-                    opacity: snapshot.data ? 1.0 : 0,
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: new Center(
+                      child: new Opacity(
+                        opacity: snapshot.data ? 1.0 : 0,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
                   );
                 },
               ),

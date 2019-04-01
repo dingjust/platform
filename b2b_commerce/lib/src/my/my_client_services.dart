@@ -81,7 +81,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
               ),
             ),
             trailing:
-            Text('13123465789',
+            Text('',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
