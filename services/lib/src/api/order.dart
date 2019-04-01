@@ -106,6 +106,11 @@ class OrderApis {
         return '/{baseSiteId}/b2b/orders/purchase/$code/deliveryAddress';
       };
 
+  //品牌更新地址（打样订单）
+  static get updateProofAddress => (code) {
+    return '/{baseSiteId}/b2b/orders/proofing/$code/deliveryAddress';
+  };
+
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/b2b/orders/quote';
 

@@ -172,7 +172,7 @@ class QuoteOrdersList extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
                           child: Center(
                             child: Text(
-                              "┑(￣Д ￣)┍ 已经到底了",
+                              "(￢_￢)已经到底了",
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),

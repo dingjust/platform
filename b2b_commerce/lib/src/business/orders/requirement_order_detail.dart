@@ -8,6 +8,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
@@ -79,109 +80,132 @@ class _RequirementOrderDetailPageState
   Widget _buildCompanyInfo() {
     /// 工厂端显示
     if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return GestureDetector(
-        onTap: () {
-          //TODO跳转详细页
-        },
-        child: Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          margin: EdgeInsets.only(bottom: 10),
-          color: Colors.white,
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(width: 1, color: Colors.grey[300]))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
+      return Container(
+        margin: EdgeInsets.only(bottom: 10),
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.all(10),
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: widget
+                            .order.belongTo.profilePicture == null?
+                        AssetImage(
+                          'temp/picture.png',
+                          package: "assets",
+                        ):
+                        NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.belongTo.profilePicture.url}'),
+                        fit: BoxFit.cover,
+                      )),
+                ),
+                Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(widget
-                                              .order.belongTo.profilePicture !=
-                                          null
-                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.belongTo.profilePicture}'
-                                      : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 10),
-                          height: 70,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                '${widget.order.belongTo.name}',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(36, 38, 41, 1)),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Color.fromRGBO(229, 242, 255, 1),
-                                ),
-                                padding: EdgeInsets.all(2),
-                                child: Text(
-                                  '已认证',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(22, 141, 255, 1)),
-                                ),
-                              )
-                            ],
+                          margin: EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            widget.order.belongTo == null ||
+                                widget.order.belongTo == null ?
+                            '' :
+                            '${widget.order.belongTo.name}',
+                            textScaleFactor: 1.3,
                           ),
+                        ),
+                        widget.order.belongTo == null ||
+                            widget.order.belongTo.approvalStatus == null ?
+                        Container() :
+                        Container(
+                            margin: EdgeInsets.only(top: 5),
+                            color: Color.fromRGBO(254, 252, 235, 1),
+                            child: widget.order.belongTo.approvalStatus !=
+                                ArticleApprovalStatus.approved ?
+                            Text(
+                                '  未认证  ',
+                                style: TextStyle(
+                                  color:
+                                  Color.fromRGBO(255, 133, 148, 1),
+                                )
+                            )
+                                :
+                            Text(
+                              '  已认证  ',
+                              style: TextStyle(
+                                color: Color.
+                                fromRGBO(255, 133, 148, 1)
+                                ,
+                              ),
+                            )
                         )
                       ],
-                    ),
-                    Icon(
-                      Icons.chevron_right,
-                      size: 35,
-                      color: Color.fromRGBO(180, 180, 180, 1),
                     )
-                  ],
-                ),
+                )
+              ],
+            ),
+            Divider(
+              height: 1,
+            ),
+            Container(
+              padding: EdgeInsets.all(15),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      child: Text(
+                          '联系人'
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                      widget.order.belongTo.contactAddress.fullname  == null ?
+                      '' :
+                      '${widget.order.belongTo.contactAddress.fullname}',
+                      style: TextStyle(
+                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                    ),
+                  )
+                ],
               ),
-              InfoRow(
-                label: '联系人',
-                value: Text(
-                  '${widget.order.details.contactPerson}',
-                  style: TextStyle(
-                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                ),
-              ),
-              InfoRow(
-                  label: '联系手机',
-                  hasBottomBorder: false,
-                  value: Row(
-                    children: <Widget>[
-                      Text(
-                        '${widget.order.details.contactPhone}',
+            ),
+            Divider(height: 2,),
+            GestureDetector(
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: Text(
+                            '联系手机'
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Text(
+                        widget.order.belongTo.contactAddress.cellphone == null  ?
+                        '' :
+                        '${widget.order.belongTo.contactAddress.cellphone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
-                      Container(
-                        child: IconButton(
-                          onPressed: () {
-                            //TODO调用拨打电话API
-                          },
-                          icon: Icon(
-                            Icons.phone,
-                            color: Color.fromRGBO(86, 194, 117, 1),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            ],
-          ),
+                    ),
+                  ],
+                ),
+              ),
+              onTap: (){
+                widget.order.belongTo.contactAddress.cellphone == null?
+                null:
+                _selectActionButton(widget.order.belongTo.contactAddress.cellphone);
+              },
+            ),
+          ],
         ),
       );
     } else {
@@ -624,6 +648,36 @@ class _RequirementOrderDetailPageState
         builder: (context) => RequirementOrderFrom(
               order: widget.order,
             )));
+  }
+
+  //拨打电话或发短信
+  void _selectActionButton(String tel) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text('拨打电话'),
+              onTap: () async {
+                var url = 'tel:' + tel;
+                await launch(url);
+              },
+            ),
+            tel.indexOf('-')>-1?Container():ListTile(
+              leading: Icon(Icons.message),
+              title: Text('发送短信'),
+              onTap: () async {
+                var url = 'sms:' + tel;
+                await launch(url);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

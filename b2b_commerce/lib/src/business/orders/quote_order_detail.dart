@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
-import 'package:b2b_commerce/src/my/my_brand.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:core/core.dart';
@@ -133,12 +132,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   Widget _buildCompanyInfo() {
     /// 工厂端显示
     if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return GestureDetector(
-        onTap: () async{
-          //TODO跳转详细页
-        },
-        child: Container(
-//          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      return  Container(
           margin: EdgeInsets.only(bottom: 10),
           color: Colors.white,
           child: Column(
@@ -266,41 +260,8 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   _selectActionButton(widget.item.supplier.contactAddress.cellphone);
                 },
               ),
-//              InfoRow(
-//                label: '联系人',
-//                value: Text(
-//                  '${widget.item.supplier?.contactPerson}',
-//                  style: TextStyle(
-//                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-//                ),
-//              ),
-  //              InfoRow(
-  //                  label: '联系手机',
-  //                  hasBottomBorder: false,
-  //                  value: Row(
-  //                    children: <Widget>[
-  //                      Text(
-  //                        '${widget.item.supplier?.contactPhone}',
-  //                        style: TextStyle(
-  //                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-  //                      ),
-  //                      Container(
-  //                        child: IconButton(
-  //                          onPressed: () {
-  //                            //TODO调用拨打电话API
-  //                          },
-  //                          icon: Icon(
-  //                            Icons.phone,
-  //                            color: Color.fromRGBO(86, 194, 117, 1),
-  //                          ),
-  //                        ),
-  //                      ),
-  //                    ],
-  //                  )
-  //              ),
             ],
           ),
-        ),
       );
     } else {
       return Container();
@@ -468,7 +429,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    '${pageItem.requirementOrder.details.majorCategoryName()} ${pageItem.requirementOrder.details?.category.name}  ${pageItem.requirementOrder.totalQuantity == null? '0' : pageItem.requirementOrder.totalQuantity ?? 0}件',
+                    '${pageItem.requirementOrder.details.majorCategoryName()} ${pageItem.requirementOrder.details?.category.name}  ${pageItem.requirementOrder.totalQuantity == null? '0' : pageItem.requirementOrder.totalQuantity}件',
                     style: TextStyle(
                       color: Color.fromRGBO(255, 133, 148, 1),
                       fontSize: 15,

@@ -1099,9 +1099,11 @@ class ProofingModel extends OrderModel {
   ProofingStatus status;
 
   ///发布者
+  @JsonKey(toJson: _factoryToJson)
   FactoryModel belongTo;
 
   ///合作商信息
+  @JsonKey(toJson: _supplierToJson)
   CompanyModel supplier;
 
   // ApparelProductModel product;
@@ -1159,6 +1161,12 @@ class ProofingModel extends OrderModel {
 
   static ProductModel _productFromJson(Map<String, dynamic> json) =>
       ProductModel.fromJson(json);
+
+  static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
+      FactoryModel.toJson(model);
+
+  static Map<String, dynamic> _supplierToJson(CompanyModel model) =>
+      CompanyModel.toJson(model);
 }
 
 /// 打样订单行
