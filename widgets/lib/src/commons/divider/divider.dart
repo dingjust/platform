@@ -14,4 +14,33 @@ class DividerFactory {
       height: height,
     );
   }
+
+  static Widget buildVerticalSeparator(double height, {double borderWidth = 1}) {
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(
+            width: borderWidth,
+            color: Color.fromRGBO(220, 220, 220, 1),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Widget buildHorizontalSeparator(double horizontalWidth, double verticalWidth, {double borderWidth = 0.8}) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: horizontalWidth, vertical: verticalWidth),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: borderWidth,
+            color: Color.fromRGBO(200, 200, 200, 1),
+          ),
+        ),
+      ),
+    );
+  }
 }
