@@ -51,6 +51,7 @@ dependencies:
   city_pickers: 0.1.12
   autocomplete_textfield: ^1.6.4
   flutter_spinkit: "^2.1.0"
+  pulltorefresh_flutter: "^0.1.9"
 
 dev_dependencies:
   flutter_test:

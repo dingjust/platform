@@ -592,7 +592,7 @@ class _RequirementOrderDetailPageState
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: widget.order.status == RequirementOrderStatus.COMPLETED ? MainAxisAlignment.center : MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -608,7 +608,7 @@ class _RequirementOrderDetailPageState
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 )),
           ),
-          Container(
+          widget.order.status == RequirementOrderStatus.COMPLETED ? Container(): Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
             width: 180,
             child: FlatButton(
@@ -631,7 +631,7 @@ class _RequirementOrderDetailPageState
                   '邀请工厂报价',
                   style: TextStyle(color: Colors.black, fontSize: 16),
                 )),
-          )
+          ),
         ],
       );
     } else {

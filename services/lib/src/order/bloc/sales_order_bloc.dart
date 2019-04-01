@@ -260,5 +260,9 @@ class SalesOrderBLoC extends BLoCBase {
 
   dispose() {
     _controller.close();
+    _loadingController.close();
+    _returnToTopController.close();
+    _bottomController.close();
+    _toTopBtnController.close();
   }
 }

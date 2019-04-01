@@ -71,6 +71,7 @@ class ApparelProductBLoC extends BLoCBase {
       products.addAll(productsResponse.content);
     }else{
       _bottomController.sink.add(true);
+      _loadingController.sink.add(false);
     }
     _loadingController.sink.add(false);
     _controller.sink.add(products);
