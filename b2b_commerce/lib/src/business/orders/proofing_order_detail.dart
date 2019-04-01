@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
@@ -667,16 +668,24 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
         buttons = <Widget>[
           Container(),
           FlatButton(
-              onPressed: () {},
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 245, 193, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '确认发货',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
-              )),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => LogisticsInputPage(
+                      isProductionOrder: false,
+                      proofingModel: widget.model,
+                    )));
+              },
+            color: Color(0xFFFFD600),
+            child: Text(
+              '确认发货',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+          ),
         ];
       }
       // else if (model.status == ProofingStatus.SHIPPED) {

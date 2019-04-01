@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -409,11 +410,13 @@ class FactoryRequirementPoolSection extends StatelessWidget {
             initialData: 0,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return GestureDetector(
-                onTap: () {
-                  // TODO 推荐需求
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => RequirementPoolAllPage()),
-                  );
+                onTap: () async{
+                  await ProductRepositoryImpl().majorCategories().then((categories) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RequirementPoolRecommend(
+                          categories: categories,
+                        )));
+                  });
                 },
                 child: RecommendedRequirementMenuItem(count: snapshot.data),
               );
