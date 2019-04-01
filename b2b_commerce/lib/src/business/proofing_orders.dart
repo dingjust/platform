@@ -1,12 +1,15 @@
-import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
-import 'package:b2b_commerce/src/business/search/proofing_search.dart';
-import 'package:b2b_commerce/src/common/logistics_input_page.dart';
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import '../_shared/widgets/scroll_to_top_button.dart';
+import '../business/orders/form/proofing_order_form.dart';
+import '../business/orders/proofing_order_detail.dart';
+import '../business/search/proofing_search.dart';
+import '../common/logistics_input_page.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -44,8 +47,7 @@ class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
                   B2BIcons.search,
                   size: 20,
                 ),
-                onPressed: () => showSearch(
-                    context: context, delegate: ProofingSearchDelegate()),
+                onPressed: () => showSearch(context: context, delegate: ProofingSearchDelegate()),
               ),
             ],
           ),
@@ -59,10 +61,7 @@ class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);
                 }).toList(),
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black),
+                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
                 isScrollable: true,
               ),
               body: TabBarView(
@@ -74,7 +73,7 @@ class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
               ),
             ),
           ),
-          floatingActionButton: _ToTopBtn(),
+          floatingActionButton: ScrollToTopButton<ProofingOrdersBLoC>(),
         ));
   }
 }
@@ -96,8 +95,7 @@ class ProofingOrdersList extends StatelessWidget {
     }
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(status.code);
       }
@@ -116,8 +114,7 @@ class ProofingOrdersList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -134,8 +131,7 @@ class ProofingOrdersList extends StatelessWidget {
             children: <Widget>[
               StreamBuilder<List<ProofingModel>>(
                 stream: bloc.stream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<ProofingModel>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<ProofingModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses(status.code);
                     return ProgressIndicatorFactory.buildPaddedProgressIndicator();
@@ -161,20 +157,9 @@ class ProofingOrdersList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data) {
                     _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
-                  return snapshot.data
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                          child: Center(
-                            child: Text(
-                              "(￢_￢)已经到底了",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        )
-                      : Container();
+                  return ScrolledToEndTips(hasContent: snapshot.data);
                 },
               ),
               StreamBuilder<bool>(
@@ -193,9 +178,7 @@ class ProofingOrdersList extends StatelessWidget {
 }
 
 class ProofingOrderItem extends StatelessWidget {
-  const ProofingOrderItem(
-      {Key key, @required this.model, this.onRefresh, this.pageContext})
-      : super(key: key);
+  const ProofingOrderItem({Key key, @required this.model, this.onRefresh, this.pageContext}) : super(key: key);
 
   final ProofingModel model;
 
@@ -218,8 +201,7 @@ class ProofingOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         //查询明细
-        ProofingModel detailModel =
-            await ProofingOrderRepository().proofingDetail(model.code);
+        ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(model.code);
 
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ProofingOrderDetailPage(
@@ -266,19 +248,15 @@ class ProofingOrderItem extends StatelessWidget {
               RichText(
                 text: TextSpan(
                     text: '￥',
-                    style: TextStyle(
-                        fontSize: 16, color: Color.fromRGBO(255, 45, 45, 1)),
+                    style: TextStyle(fontSize: 16, color: Color.fromRGBO(255, 45, 45, 1)),
                     children: <TextSpan>[
                       TextSpan(
                           text: '${model.totalPrice}',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Color.fromRGBO(255, 45, 45, 1))),
+                          style: TextStyle(fontSize: 20, color: Color.fromRGBO(255, 45, 45, 1))),
                     ]),
               ),
               Text(ProofingStatusLocalizedMap[model.status],
-                  style: TextStyle(
-                      color: _statusColors[model.status], fontSize: 18))
+                  style: TextStyle(color: _statusColors[model.status], fontSize: 18))
             ],
           ),
           Container(
@@ -325,17 +303,15 @@ class ProofingOrderItem extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
-                        image: NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${model.product.thumbnail.url}'),
+                        image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${model.product.thumbnail.url}'),
                         fit: BoxFit.cover,
                       )),
                 )
               : Container(
                   width: 80,
                   height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color.fromRGBO(243, 243, 243, 1)),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(5), color: Color.fromRGBO(243, 243, 243, 1)),
                   child: Icon(
                     B2BIcons.noPicture,
                     color: Color.fromRGBO(200, 200, 200, 1),
@@ -359,9 +335,7 @@ class ProofingOrderItem extends StatelessWidget {
                   model.product.skuID != null
                       ? Container(
                           padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                          decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10)),
+                          decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
                           child: Text(
                             '货号：${model.product.skuID}',
                             style: TextStyle(fontSize: 12, color: Colors.grey),
@@ -370,14 +344,11 @@ class ProofingOrderItem extends StatelessWidget {
                       : Container(),
                   Container(
                     padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(10)),
+                    decoration:
+                        BoxDecoration(color: Color.fromRGBO(255, 243, 243, 1), borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       "${model.product.category.name}   ${sum}件",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Color.fromRGBO(255, 133, 148, 1)),
+                      style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
                     ),
                   )
                 ],
@@ -397,8 +368,7 @@ class ProofingOrderItem extends StatelessWidget {
         buttons = <Widget>[
           FlatButton(
               onPressed: onCancelling,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 70, 70, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -407,14 +377,12 @@ class ProofingOrderItem extends StatelessWidget {
               )),
           FlatButton(
               onPressed: () {},
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '  去支付  ',
-                style: TextStyle(
-                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
               )),
         ];
       } else if (model.status == ProofingStatus.SHIPPED) {
@@ -433,14 +401,12 @@ class ProofingOrderItem extends StatelessWidget {
           Container(),
           FlatButton(
               onPressed: () {},
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color(0xFFFFD600),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '确认收货',
-                style: TextStyle(
-                    color: Colors.black, fontSize: 16),
+                style: TextStyle(color: Colors.black, fontSize: 16),
               )),
         ];
       } else {
@@ -454,13 +420,11 @@ class ProofingOrderItem extends StatelessWidget {
           FlatButton(
               onPressed: onUpdate,
               shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
-                  borderRadius: BorderRadius.circular(20)),
+                  side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)), borderRadius: BorderRadius.circular(20)),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '修改订单',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
               )),
         ];
       } else if (model.status == ProofingStatus.PENDING_DELIVERY) {
@@ -469,17 +433,17 @@ class ProofingOrderItem extends StatelessWidget {
           FlatButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => LogisticsInputPage(isProductionOrder: false,proofingModel: model,))
-                );
+                    builder: (context) => LogisticsInputPage(
+                          isProductionOrder: false,
+                          proofingModel: model,
+                        )));
               },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 245, 193, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '确认发货',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+                style: TextStyle(color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
               )),
         ];
       }
@@ -506,8 +470,7 @@ class ProofingOrderItem extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, children: buttons),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: buttons),
     );
   }
 
@@ -528,8 +491,7 @@ class ProofingOrderItem extends StatelessWidget {
             FlatButton(
               child: Text('确定'),
               onPressed: () async {
-                String response = await ProofingOrderRepository()
-                    .proofingCancelling(model.code);
+                String response = await ProofingOrderRepository().proofingCancelling(model.code);
                 if (response != null) {
                   onRefresh();
                   Navigator.of(context).pop();
@@ -555,11 +517,9 @@ class ProofingOrderItem extends StatelessWidget {
 
   void onUpdate() async {
     //查询明细
-    ProofingModel detailModel =
-        await ProofingOrderRepository().proofingDetail(model.code);
+    ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(model.code);
 
-    QuoteModel quoteModel =
-        await QuoteOrderRepository().getquoteDetail(detailModel.quoteRef);
+    QuoteModel quoteModel = await QuoteOrderRepository().getquoteDetail(detailModel.quoteRef);
 
     Navigator.of(pageContext).push(MaterialPageRoute(
         builder: (context) => ProofingOrderForm(
@@ -567,30 +527,5 @@ class ProofingOrderItem extends StatelessWidget {
               model: detailModel,
               update: true,
             )));
-  }
-}
-
-class _ToTopBtn extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<ProofingOrdersBLoC>(context);
-
-    return StreamBuilder<bool>(
-        stream: bloc.toTopBtnStream,
-        initialData: false,
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          return snapshot.data
-              ? FloatingActionButton(
-                  child: Icon(
-                    Icons.arrow_upward,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    bloc.returnToTop();
-                  },
-                  backgroundColor: Colors.blue,
-                )
-              : Container();
-        });
   }
 }

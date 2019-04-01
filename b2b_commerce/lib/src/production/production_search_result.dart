@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/production/production.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -29,7 +31,7 @@ class _ProductionResultPageState extends State<ProductionResultPage> {
           body: ProductionListView(
             keyword: widget.keyword,
           ),
-          floatingActionButton: _ToTopBtn(),
+          floatingActionButton: ScrollToTopButton<ProductionSearchResultBLoC>(),
         ));
   }
 }
@@ -106,17 +108,8 @@ class ProductionListView extends StatelessWidget {
                   _scrollController.animateTo(_scrollController.offset - 70,
                       duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                 }
-                return snapshot.data
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                        child: Center(
-                          child: Text(
-                            "(￢_￢)已经到底了",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      )
-                    : Container();
+
+                return ScrolledToEndTips(hasContent: snapshot.data);
               },
             ),
             StreamBuilder<bool>(
@@ -128,30 +121,5 @@ class ProductionListView extends StatelessWidget {
             ),
           ],
         ));
-  }
-}
-
-class _ToTopBtn extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<ProductionSearchResultBLoC>(context);
-
-    return StreamBuilder<bool>(
-        stream: bloc.toTopBtnStream,
-        initialData: false,
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          return snapshot.data
-              ? FloatingActionButton(
-                  child: Icon(
-                    Icons.arrow_upward,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    bloc.returnToTop();
-                  },
-                  backgroundColor: Colors.blue,
-                )
-              : Container();
-        });
   }
 }

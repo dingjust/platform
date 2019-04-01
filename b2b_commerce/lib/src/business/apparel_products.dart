@@ -71,10 +71,12 @@ class ApparelProductsPage extends StatelessWidget {
               ),
               body: TabBarView(
                 children: _statuses
-                    .map((status) => ApparelProductList(
+                    .map((status) => Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child:ApparelProductList(
                   isRequirement: isRequirement,
                   status:status.code,
-                ),)
+                ),))
                     .toList(),
               ),
             ),

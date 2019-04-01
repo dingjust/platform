@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:core/core.dart';
@@ -257,17 +258,7 @@ class OrdersListView extends StatelessWidget {
                     _scrollController.animateTo(_scrollController.offset - 70,
                         duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
-                  return snapshot.data
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                          child: Center(
-                            child: Text(
-                              "(￢_￢) 已经到底了",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        )
-                      : Container();
+                  return ScrolledToEndTips(hasContent: snapshot.data);
                 },
               ),
               StreamBuilder<bool>(
