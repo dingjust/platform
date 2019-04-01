@@ -47,6 +47,9 @@ const COMMON_APIS = {
   createSampleCheckoutHist() {
     return '/b2b/products/sampleCheckoutHist/create';
   },
+  updateSampleCheckoutHist(id) {
+    return '/b2b/products/sampleCheckoutHist/update/'+id;
+  },
   getSampleCheckoutHists() {
     return '/b2b/products/sampleCheckoutHist';
   },
