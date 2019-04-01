@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -54,16 +55,7 @@ class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
           body: DefaultTabController(
             length: statuses.length,
             child: Scaffold(
-              appBar: TabBar(
-                unselectedLabelColor: Colors.black26,
-                labelColor: Colors.black,
-                indicatorSize: TabBarIndicatorSize.label,
-                tabs: statuses.map((status) {
-                  return Tab(text: status.name);
-                }).toList(),
-                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-                isScrollable: true,
-              ),
+              appBar: TabFactory.buildDefaultTabBar(statuses),
               body: TabBarView(
                 children: statuses
                     .map((status) => ProofingOrdersList(

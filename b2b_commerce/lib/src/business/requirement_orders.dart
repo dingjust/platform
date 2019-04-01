@@ -1,12 +1,14 @@
-import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
-import 'package:b2b_commerce/src/_shared/widgets/text_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../_shared/widgets/app_bar_factory.dart';
+import '../_shared/widgets/image_factory.dart';
+import '../_shared/widgets/scrolled_to_end_tips.dart';
+import '../_shared/widgets/tab_factory.dart';
+import '../_shared/widgets/text_factory.dart';
 import '../_shared/widgets/scroll_to_top_button.dart';
 
 import './orders/requirement_order_detail.dart';
@@ -26,10 +28,6 @@ class RequirementOrdersPage extends StatefulWidget {
 class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
   GlobalKey _globalKey = GlobalKey<_RequirementOrdersPageState>();
 
-  Widget _buildTitle() {
-    return const Text('需求订单管理', style: TextStyle(color: Colors.black));
-  }
-
   Widget _buildSearchButton(BuildContext context) {
     return IconButton(
       icon: Icon(B2BIcons.search, size: 20),
@@ -43,28 +41,13 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
       key: _globalKey,
       bloc: RequirementOrderBLoC.instance,
       child: Scaffold(
-        appBar: AppBar(
-          brightness: Brightness.light,
-          centerTitle: true,
-          elevation: 0.5,
-          title: _buildTitle(),
-          actions: <Widget>[
-            _buildSearchButton(context),
-          ],
-        ),
+        appBar: AppBarFactory.buildDefaultAppBar('需求订单管理', actions: <Widget>[
+          _buildSearchButton(context),
+        ]),
         body: DefaultTabController(
           length: statuses.length,
           child: Scaffold(
-            appBar: TabBar(
-              unselectedLabelColor: Colors.black26,
-              labelColor: Colors.black,
-              indicatorSize: TabBarIndicatorSize.label,
-              tabs: statuses.map((status) {
-                return Tab(text: status.name);
-              }).toList(),
-              labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-              isScrollable: false,
-            ),
+            appBar: TabFactory.buildDefaultTabBar(statuses),
             body: TabBarView(
               children: statuses
                   .map(
