@@ -371,19 +371,32 @@ class _RequirementOrderDetailPageState
         );
       } else {
         _pictureWidget = GestureDetector(
-          child: Container(
-            margin: EdgeInsets.only(right: 15),
-            padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image:
-                  NetworkImage(
-                      '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.details.pictures[0].url}'),
-                  fit: BoxFit.cover,
-                )),
+          child: Stack(
+              alignment: const Alignment(0.6, 1.1),
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: 15),
+                  padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image:
+                        NetworkImage(
+                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order
+                                .details.pictures[0].url}'),
+                        fit: BoxFit.cover,
+                      )),
+                ),
+                Container(
+                  child: Icon(
+                    Icons.photo_size_select_actual,
+                    color: Colors.black38,
+                    size: 20,
+                  ),
+                )
+              ],
           ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(

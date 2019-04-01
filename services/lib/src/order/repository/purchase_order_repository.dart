@@ -60,11 +60,15 @@ class PurchaseOrderRepository {
     try {
       response = await http$.get(OrderApis.getDetailsForUniqueCode(code));
     } on DioError catch (e) {
-      print(e);
+      return null;
     }
     if (response != null && response.statusCode == 200) {
-      PurchaseOrderModel model = PurchaseOrderModel.fromJson(response.data);
-      return model;
+      try {
+        PurchaseOrderModel model = PurchaseOrderModel.fromJson(response.data);
+        return model;
+      } on Exception catch (e) {
+        return null;
+      }
     } else
       return null;
   }
