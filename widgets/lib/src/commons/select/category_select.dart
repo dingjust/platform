@@ -86,7 +86,7 @@ class CategorySelectState extends State<CategorySelect> {
             if (_selectRights.contains(category.code)) {
               setState(() {
                 _selectRights.remove(category.code);
-                widget.categorySelect.clear();
+                widget.categorySelect.removeWhere((category1) => category1.code == category.code);
               });
             } else {
               if (_multiple) {
