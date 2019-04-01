@@ -1,4 +1,6 @@
+import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/_shared/widgets/text_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -22,7 +24,7 @@ class RequirementOrdersPage extends StatefulWidget {
 }
 
 class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
-  GlobalKey _requirementOrderBlocProviderKey = GlobalKey();
+  GlobalKey _globalKey = GlobalKey<_RequirementOrdersPageState>();
 
   Widget _buildTitle() {
     return const Text('需求订单管理', style: TextStyle(color: Colors.black));
@@ -38,7 +40,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
   @override
   Widget build(BuildContext context) {
     return BLoCProvider<RequirementOrderBLoC>(
-      key: _requirementOrderBlocProviderKey,
+      key: _globalKey,
       bloc: RequirementOrderBLoC.instance,
       child: Scaffold(
         appBar: AppBar(
@@ -79,7 +81,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
 }
 
 class RequirementOrderList extends StatelessWidget {
-  RequirementOrderList({Key key, this.status}) : super(key: key);
+  RequirementOrderList({Key key, @required this.status}) : super(key: key);
 
   final EnumModel status;
 
@@ -114,67 +116,72 @@ class RequirementOrderList extends StatelessWidget {
     });
 
     return Container(
-        decoration: BoxDecoration(color: Colors.grey[100]),
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: RefreshIndicator(
-          onRefresh: () async {
-            if (!bloc.lock) bloc.refreshData(status.code);
-          },
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: _scrollController,
-            children: <Widget>[
-              StreamBuilder<List<RequirementOrderModel>>(
-                stream: bloc.stream,
-                // initialData: null,
-                builder: (BuildContext context, AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
-                  if (snapshot.data == null) {
-                    bloc.filterByStatuses(status.code);
-                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
-                  }
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: snapshot.data.map((order) {
-                        return RequirementOrderItem(
-                          order: order,
-                        );
-                      }).toList(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                },
-              ),
-              StreamBuilder<bool>(
-                stream: bloc.bottomStream,
-                initialData: false,
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                  }
-                  return ScrolledToEndTips(hasContent: snapshot.data);
-                },
-              ),
-              StreamBuilder<bool>(
-                stream: bloc.loadingStream,
-                initialData: false,
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-                    opacity: snapshot.data ? 1.0 : 0,
+      decoration: BoxDecoration(color: Colors.grey[100]),
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          if (!bloc.lock) bloc.refreshData(status.code);
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _scrollController,
+          children: <Widget>[
+            StreamBuilder<List<RequirementOrderModel>>(
+              stream: bloc.stream,
+              // initialData: null,
+              builder: (BuildContext context, AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
+                if (snapshot.data == null) {
+                  bloc.filterByStatuses(status.code);
+                  return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                }
+                if (snapshot.hasData) {
+                  return Column(
+                    children: snapshot.data.map((order) {
+                      return RequirementOrderItem(
+                        item: order,
+                      );
+                    }).toList(),
                   );
-                },
-              ),
-            ],
-          ),
-        ));
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: bloc.bottomStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.data) {
+                  _scrollController.animateTo(
+                    _scrollController.offset - 70,
+                    duration: new Duration(milliseconds: 500),
+                    curve: Curves.easeOut,
+                  );
+                }
+
+                return ScrolledToEndTips(hasContent: snapshot.data);
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: bloc.loadingStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                  opacity: snapshot.data ? 1.0 : 0,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
 class RequirementOrderItem extends StatelessWidget {
-  const RequirementOrderItem({Key key, this.order}) : super(key: key);
+  const RequirementOrderItem({Key key, @required this.item}) : super(key: key);
 
-  final RequirementOrderModel order;
+  final RequirementOrderModel item;
 
   static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
     RequirementOrderStatus.PENDING_QUOTE: Colors.green,
@@ -186,25 +193,32 @@ class RequirementOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        //根据code查询明
-        RequirementOrderModel model = await RequirementOrderRepository().getRequirementOrderDetail(order.code);
+        // 根据code查询明
+        RequirementOrderModel model = await RequirementOrderRepository().getRequirementOrderDetail(item.code);
 
-        List<QuoteModel> quotes =
-            await RequirementOrderRepository().getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
+        List<QuoteModel> quotes = await RequirementOrderRepository().getRequirementOrderQuotes(
+          code: model.code,
+          page: 0,
+          size: 1,
+        );
 
         if (model != null) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => RequirementOrderDetailPage(
-                    order: model,
-                    quotes: quotes,
-                  )));
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => RequirementOrderDetailPage(order: model, quotes: quotes),
+            ),
+          );
         }
       },
       child: Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
-          children: <Widget>[_buildHeader(), _buildEntries(), _buildSummary()],
+          children: <Widget>[
+            _buildHeader(),
+            _buildEntries(),
+            _buildSummary(item.totalQuotesCount),
+          ],
         ),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -216,7 +230,7 @@ class RequirementOrderItem extends StatelessWidget {
 
   Widget _buildHeader() {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -224,17 +238,22 @@ class RequirementOrderItem extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Text('需求订单号：' + order.code, style: TextStyle(fontSize: 16)),
+                child: Text(
+                  '需求订单号：${item.code}',
+                  style: const TextStyle(fontSize: 16),
+                ),
               ),
-              Text(RequirementOrderStatusLocalizedMap[order.status],
-                  style: TextStyle(color: _statusColors[order.status], fontSize: 18))
+              Text(
+                RequirementOrderStatusLocalizedMap[item.status],
+                style: TextStyle(color: _statusColors[item.status], fontSize: 18),
+              )
             ],
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
-              '发布时间: ${DateFormatUtil.format(order.creationTime)}',
-              style: TextStyle(fontSize: 14),
+              '发布时间: ${DateFormatUtil.format(item.creationTime)}',
+              style: const TextStyle(fontSize: 14),
             ),
           ),
         ],
@@ -243,42 +262,52 @@ class RequirementOrderItem extends StatelessWidget {
   }
 
   Widget _buildEntries() {
-    Widget _pictureWidget;
-
-    if (order.details.pictures == null) {
-      _pictureWidget = Container(
-        width: 80,
-        height: 80,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Color.fromRGBO(243, 243, 243, 1)),
-        child: Icon(B2BIcons.noPicture, color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-      );
-    } else {
-      if (order.details.pictures.isEmpty) {
-        _pictureWidget = Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Color.fromRGBO(243, 243, 243, 1)),
-          child: Icon(B2BIcons.noPicture, color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-        );
-      } else {
-        _pictureWidget = Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: DecorationImage(
-                image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
-                fit: BoxFit.cover,
-              )),
-        );
+    Widget _buildProductName(String productName) {
+      if (productName == null) {
+        return TextFactory.buildEmptyText();
       }
+
+      return Text(productName, style: TextStyle(fontSize: 15), overflow: TextOverflow.ellipsis);
+    }
+
+    Widget _buildProductSkuID(String productSkuID) {
+      if (productSkuID == null) {
+        return Container();
+      }
+
+      return Container(
+        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text('货号：$productSkuID', style: TextStyle(fontSize: 12, color: Colors.grey)),
+      );
+    }
+
+    Widget _buildCategoriesAndQuantity({
+      String majorCategory = '',
+      String category = '',
+      int expectedMachiningQuantity = 0,
+    }) {
+      return Container(
+        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(255, 243, 243, 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text(
+          "$majorCategory   $category   $expectedMachiningQuantity件",
+          style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
+        ),
+      );
     }
 
     return Container(
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          _pictureWidget,
+          ImageFactory.buildThumbnailImageForList(item.details.pictures, fit: BoxFit.cover),
           Expanded(
             flex: 1,
             child: Container(
@@ -288,37 +317,12 @@ class RequirementOrderItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  order.details.productName != null
-                      ? Text(
-                          order.details.productName,
-                          style: TextStyle(fontSize: 15),
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      : Text(
-                          ' ',
-                          style: TextStyle(fontSize: 15, color: Colors.red),
-                        ),
-                  order.details.productSkuID != null
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '货号：${order.details.productSkuID}',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                        )
-                      : Container(),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration:
-                        BoxDecoration(color: Color.fromRGBO(255, 243, 243, 1), borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      "${order.details.majorCategoryName()}   ${order.details.category?.name}   ${order.details.expectedMachiningQuantity}件",
-                      style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
-                    ),
+                  _buildProductName(item.details.productName),
+                  _buildProductSkuID(item.details.productSkuID),
+                  _buildCategoriesAndQuantity(
+                    majorCategory: item.details.majorCategoryName(),
+                    category: item.details.category?.name,
+                    expectedMachiningQuantity: item.details.expectedMachiningQuantity,
                   )
                 ],
               ),
@@ -329,16 +333,11 @@ class RequirementOrderItem extends StatelessWidget {
     );
   }
 
-  Widget _buildSummary() {
+  Widget _buildSummary(int totalQuotesCount) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Text(
-            '已报价 ${order.totalQuotesCount}',
-            style: TextStyle(color: Colors.red),
-          )
-        ],
+        children: <Widget>[Text('已报价 $totalQuotesCount', style: TextStyle(color: Colors.red))],
       ),
     );
   }
