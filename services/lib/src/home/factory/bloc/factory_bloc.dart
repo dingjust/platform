@@ -33,8 +33,7 @@ class FactoryBLoC extends BLoCBase {
 
   var conditionController = StreamController<FilterConditionEntry>.broadcast();
 
-  Stream<FilterConditionEntry> get conditionStream =>
-      conditionController.stream;
+  Stream<FilterConditionEntry> get conditionStream => conditionController.stream;
 
   int pageSize = 10;
   int currentPage = 0;
@@ -44,8 +43,7 @@ class FactoryBLoC extends BLoCBase {
   //锁
   bool lock = false;
 
-  filterByCondition(FactoryCondition factoryCondition,
-      {String condition, bool isDESC}) async {
+  filterByCondition(FactoryCondition factoryCondition, {String condition, bool isDESC}) async {
     if (!lock) {
       lock = true;
       //重置参数
@@ -53,15 +51,13 @@ class FactoryBLoC extends BLoCBase {
       Response<Map<String, dynamic>> response;
       try {
         response = await http$.post(Apis.factories,
-            data: factoryCondition.toDataJson(),
-            queryParameters: {'page': currentPage, 'size': pageSize});
+            data: factoryCondition.toDataJson(), queryParameters: {'page': currentPage, 'size': pageSize});
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        FactoriesResponse factoriesResponse =
-            FactoriesResponse.fromJson(response.data);
+        FactoriesResponse factoriesResponse = FactoriesResponse.fromJson(response.data);
         totalPages = factoriesResponse.totalPages;
         totalElements = factoriesResponse.totalElements;
         _factories.clear();
@@ -72,35 +68,32 @@ class FactoryBLoC extends BLoCBase {
     }
   }
 
-  loadingMoreByCondition(FactoryCondition factoryCondition,
-      {String condition, bool isDESC}) async {
+  loadingMoreByCondition(FactoryCondition factoryCondition, {String condition, bool isDESC}) async {
     if (!lock) {
       lock = true;
 
       //数据到底
       if (currentPage + 1 == totalPages) {
         //通知显示已经到底部
-        _bottomController.sink.add(true);
+        bottomController.sink.add(true);
       } else {
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
           response = await http$.post(Apis.factories,
-              data: factoryCondition.toDataJson(),
-              queryParameters: {'page': currentPage, 'size': pageSize});
+              data: factoryCondition.toDataJson(), queryParameters: {'page': currentPage, 'size': pageSize});
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          FactoriesResponse factoriesResponse =
-              FactoriesResponse.fromJson(response.data);
+          FactoriesResponse factoriesResponse = FactoriesResponse.fromJson(response.data);
           totalPages = factoriesResponse.totalPages;
           totalElements = factoriesResponse.totalElements;
           _factories.addAll(factoriesResponse.content);
         }
       }
-      _loadingController.sink.add(false);
+      loadingController.sink.add(false);
       _controller.sink.add(_factories);
       lock = false;
     }
@@ -122,42 +115,10 @@ class FactoryBLoC extends BLoCBase {
   //下拉刷新
   Future refreshData({String condition, bool isDESC}) async {}
 
-  //页面控制
-
-  var _loadingController = StreamController<bool>.broadcast();
-  var _bottomController = StreamController<bool>.broadcast();
-  var _toTopBtnController = StreamController<bool>.broadcast();
-  var _returnToTopController = StreamController<bool>.broadcast();
-
-  Stream<bool> get loadingStream => _loadingController.stream;
-
-  Stream<bool> get bottomStream => _bottomController.stream;
-
-  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
-
-  Stream<bool> get returnToTopStream => _returnToTopController.stream;
-
-  loadingStart() async {
-    _loadingController.sink.add(true);
-  }
-
-  loadingEnd() async {
-    _loadingController.sink.add(false);
-  }
-
-  showToTopBtn() async {
-    _toTopBtnController.sink.add(true);
-  }
-
-  hideToTopBtn() async {
-    _toTopBtnController.sink.add(false);
-  }
-
-  returnToTop() async {
-    _returnToTopController.sink.add(true);
-  }
-
   dispose() {
     _controller.close();
+    conditionController.close();
+
+    super.dispose();
   }
 }

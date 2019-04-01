@@ -65,9 +65,9 @@ class MyBillBLoC extends BLoCBase {
       }));
     } else {
       //通知显示已经到底部
-      _bottomController.sink.add(true);
+      bottomController.sink.add(true);
     }
-    _loadingController.sink.add(false);
+    loadingController.sink.add(false);
     _controller.sink.add(_bills);
   }
 
@@ -86,7 +86,7 @@ class MyBillBLoC extends BLoCBase {
         BillModel model = BillModel.fromJson(mockBill);
         model.type = BillType.WITHDRAWAL;
         model.date = date;
-        model.order=null;
+        model.order = null;
         model.balance = model.balance + 100000;
         list.add(model);
       }
@@ -96,43 +96,11 @@ class MyBillBLoC extends BLoCBase {
     _controller.sink.add(_bills);
   }
 
-  //页面控制
-
-  var _loadingController = StreamController<bool>.broadcast();
-  var _bottomController = StreamController<bool>.broadcast();
-  var _toTopBtnController = StreamController<bool>.broadcast();
-  var _returnToTopController = StreamController<bool>.broadcast();
-
-  Stream<bool> get loadingStream => _loadingController.stream;
-
-  Stream<bool> get bottomStream => _bottomController.stream;
-
-  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
-
-  Stream<bool> get returnToTopStream => _returnToTopController.stream;
-
-  loadingStart() async {
-    _loadingController.sink.add(true);
-  }
-
-  loadingEnd() async {
-    _loadingController.sink.add(false);
-  }
-
-  showToTopBtn() async {
-    _toTopBtnController.sink.add(true);
-  }
-
-  hideToTopBtn() async {
-    _toTopBtnController.sink.add(false);
-  }
-
-  returnToTop() async {
-    _returnToTopController.sink.add(true);
-  }
-
   dispose() {
     _controller.close();
+    conditionController.close();
+
+    super.dispose();
   }
 
   ///TODO：mock数据待删除

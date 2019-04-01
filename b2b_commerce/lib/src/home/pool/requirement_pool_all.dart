@@ -15,10 +15,8 @@ class RequirementPoolAllPage extends StatefulWidget {
   });
 
   ///当前选中条件
-  final RequirementFilterCondition currentCodition = RequirementFilterCondition(
-      categories: [],
-      dateRange: RequirementOrderDateRange.ALL,
-      machiningType: null);
+  final RequirementFilterCondition currentCodition =
+      RequirementFilterCondition(categories: [], dateRange: RequirementOrderDateRange.ALL, machiningType: null);
 
   _RequirementPoolAllPageState createState() => _RequirementPoolAllPageState();
 }
@@ -35,36 +33,27 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   String filterBarLabel = '综合排序';
 
   List<FilterConditionEntry> dateRangeConditionEntries = <FilterConditionEntry>[
-    FilterConditionEntry(
-        label: '全部', value: RequirementOrderDateRange.ALL, checked: true),
-    FilterConditionEntry(
-        label: '3天内', value: RequirementOrderDateRange.RANGE_3),
-    FilterConditionEntry(
-        label: '7天内', value: RequirementOrderDateRange.RANGE_7),
-    FilterConditionEntry(
-        label: '15天内', value: RequirementOrderDateRange.RANGE_15),
+    FilterConditionEntry(label: '全部', value: RequirementOrderDateRange.ALL, checked: true),
+    FilterConditionEntry(label: '3天内', value: RequirementOrderDateRange.RANGE_3),
+    FilterConditionEntry(label: '7天内', value: RequirementOrderDateRange.RANGE_7),
+    FilterConditionEntry(label: '15天内', value: RequirementOrderDateRange.RANGE_15),
   ];
 
-  List<FilterConditionEntry> machiningTypeConditionEntries =
-      <FilterConditionEntry>[
+  List<FilterConditionEntry> machiningTypeConditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(label: '全部', value: "ALL1", checked: true),
-    FilterConditionEntry(
-        label: '包工包料', value: MachiningType.LABOR_AND_MATERIAL),
+    FilterConditionEntry(label: '包工包料', value: MachiningType.LABOR_AND_MATERIAL),
     FilterConditionEntry(label: '清加工', value: MachiningType.LIGHT_PROCESSING),
   ];
 
-  List<FilterConditionEntry> categoriesConditionEntries =
-      <FilterConditionEntry>[
+  List<FilterConditionEntry> categoriesConditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(label: '全部', value: "ALL2", checked: true),
   ];
 
   @override
   void initState() {
     // TODO: implement initState
-    categoriesConditionEntries.addAll(widget.categories
-        .map((category) =>
-            FilterConditionEntry(label: category.name, value: category))
-        .toList());
+    categoriesConditionEntries.addAll(
+        widget.categories.map((category) => FilterConditionEntry(label: category.name, value: category)).toList());
     super.initState();
   }
 
@@ -88,9 +77,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                   B2BIcons.search,
                   size: 22,
                 ),
-                onPressed: () => showSearch(
-                    context: context,
-                    delegate: RequirementOrderSearchDelegate()),
+                onPressed: () => showSearch(context: context, delegate: RequirementOrderSearchDelegate()),
               ),
             ],
           ),
@@ -136,8 +123,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                   color: Color.fromRGBO(255, 214, 12, 1),
                   height: showDateFilterMenu ? 150 : 0,
                   entries: dateRangeConditionEntries,
-                  streamController:
-                      RequirementPoolBLoC.instance.conditionController,
+                  streamController: RequirementPoolBLoC.instance.conditionController,
                   afterPressed: (String str) {
                     setState(() {
                       showDateFilterMenu = !showDateFilterMenu;
@@ -148,8 +134,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                   color: Color.fromRGBO(255, 214, 12, 1),
                   height: showMachineTypeFilterMenu ? 150 : 0,
                   entries: machiningTypeConditionEntries,
-                  streamController:
-                      RequirementPoolBLoC.instance.conditionController,
+                  streamController: RequirementPoolBLoC.instance.conditionController,
                   afterPressed: (String str) {
                     setState(() {
                       showMachineTypeFilterMenu = !showMachineTypeFilterMenu;
@@ -161,8 +146,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                   height: showCategoriesFilterMenu ? 250 : 0,
                   entries: categoriesConditionEntries,
                   multipeSelect: true,
-                  streamController:
-                      RequirementPoolBLoC.instance.conditionController,
+                  streamController: RequirementPoolBLoC.instance.conditionController,
                   afterPressed: (String str) {
                     setState(() {
                       showCategoriesFilterMenu = !showCategoriesFilterMenu;
@@ -225,8 +209,7 @@ class OrdersListView extends StatelessWidget {
     });
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByCondition(currentCodition);
       }
@@ -247,15 +230,11 @@ class OrdersListView extends StatelessWidget {
               StreamBuilder<List<RequirementOrderModel>>(
                 stream: bloc.stream,
                 initialData: null,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
                   if (snapshot.data == null) {
                     //默认条件查询
                     bloc.filterByCondition(currentCodition);
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 200),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
+                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
@@ -276,8 +255,7 @@ class OrdersListView extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data) {
                     _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
                   return snapshot.data
                       ? Container(
@@ -296,14 +274,8 @@ class OrdersListView extends StatelessWidget {
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Center(
-                      child: new Opacity(
-                        opacity: snapshot.data ? 1.0 : 0,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
+                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                    opacity: snapshot.data ? 1.0 : 0,
                   );
                 },
               ),
@@ -323,11 +295,10 @@ class RequirementPoolOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         //根据code查询明
-        RequirementOrderModel model = await RequirementOrderRepository()
-            .getRequirementOrderDetail(order.code);
+        RequirementOrderModel model = await RequirementOrderRepository().getRequirementOrderDetail(order.code);
 
-        List<QuoteModel> quotes = await RequirementOrderRepository()
-            .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
+        List<QuoteModel> quotes =
+            await RequirementOrderRepository().getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
 
         if (model != null) {
           Navigator.of(context).push(MaterialPageRoute(
@@ -344,9 +315,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
         ),
         decoration: BoxDecoration(
             color: Colors.white,
-            border: Border(
-                bottom: BorderSide(
-                    width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))),
+            border: Border(bottom: BorderSide(width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))),
       ),
     );
   }
@@ -358,9 +327,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
       _pictureWidget = Container(
         width: 100,
         height: 100,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Color.fromRGBO(243, 243, 243, 1)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Color.fromRGBO(243, 243, 243, 1)),
         child: Icon(
           B2BIcons.noPicture,
           color: Color.fromRGBO(200, 200, 200, 1),
@@ -372,9 +339,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
         _pictureWidget = Container(
           width: 100,
           height: 100,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Color.fromRGBO(243, 243, 243, 1)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Color.fromRGBO(243, 243, 243, 1)),
           child: Icon(
             B2BIcons.noPicture,
             color: Color.fromRGBO(200, 200, 200, 1),
@@ -388,8 +353,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               image: DecorationImage(
-                image: NetworkImage(
-                    '${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
+                image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
                 fit: BoxFit.cover,
               )),
         );
@@ -432,27 +396,20 @@ class RequirementPoolOrderItem extends StatelessWidget {
                 child: Text(
                   '${order.details.category?.name}',
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 15, color: Color.fromRGBO(50, 50, 50, 1)),
+                  style: TextStyle(fontSize: 15, color: Color.fromRGBO(50, 50, 50, 1)),
                 ),
               ),
               Text(
                 '${order.details.expectedMachiningQuantity ?? 0}件',
-                style: TextStyle(
-                    fontSize: 15, color: Color.fromRGBO(255, 149, 22, 1)),
+                style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 149, 22, 1)),
               ),
             ],
           ),
         ),
         RichText(
-          text: TextSpan(
-              text: '￥',
-              style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
-              children: <TextSpan>[
-                TextSpan(
-                    text: '${order.details.maxExpectedPrice ?? 0}',
-                    style: TextStyle(fontSize: 18))
-              ]),
+          text: TextSpan(text: '￥', style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)), children: <TextSpan>[
+            TextSpan(text: '${order.details.maxExpectedPrice ?? 0}', style: TextStyle(fontSize: 18))
+          ]),
         )
       ],
     );
@@ -471,9 +428,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
           child: Container(
             height: 25,
             width: 65,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Color.fromRGBO(255, 214, 12, 1)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Color.fromRGBO(255, 214, 12, 1)),
             child: Center(
               child: Text('去报价'),
             ),
@@ -508,13 +463,10 @@ class RequirementPoolOrderItem extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(left: 10),
           padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-          decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 243, 243, 1),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Color.fromRGBO(255, 243, 243, 1), borderRadius: BorderRadius.circular(10)),
           child: Text(
             "已认证",
-            style: TextStyle(
-                fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
+            style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
           ),
         )
       ],

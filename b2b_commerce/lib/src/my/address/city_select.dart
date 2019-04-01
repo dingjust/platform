@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import 'city_district_select.dart';
 
@@ -53,7 +54,7 @@ class CitySelectPage extends StatelessWidget {
             return Text('${snapshot.error}');
           }
 
-          return Center(child: CircularProgressIndicator());
+          return ProgressIndicatorFactory.buildDefaultProgressIndicator();
         },
       ),
     );

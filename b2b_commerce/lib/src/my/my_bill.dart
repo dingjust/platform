@@ -68,8 +68,7 @@ class BillListView extends StatelessWidget {
     });
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByDate(date: selectDate);
       }
@@ -95,14 +94,13 @@ class BillListView extends StatelessWidget {
               StreamBuilder<List<BillModel>>(
                 stream: bloc.stream,
                 initialData: null,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<BillModel>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<BillModel>> snapshot) {
                   if (snapshot.data == null) {
                     //默认条件查询
                     bloc.filterByDate(date: selectDate);
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
-                      child: Center(child: CircularProgressIndicator()),
+                      child: ProgressIndicatorFactory.buildDefaultProgressIndicator(),
                     );
                   }
                   if (snapshot.hasData) {
@@ -124,8 +122,7 @@ class BillListView extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data) {
                     _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
                   return snapshot.data
                       ? Container(
@@ -144,15 +141,7 @@ class BillListView extends StatelessWidget {
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Center(
-                      child: new Opacity(
-                        opacity: snapshot.data ? 1.0 : 0,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  );
+                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(opacity: snapshot.data ? 1.0 : 0);
                 },
               ),
             ],
@@ -174,18 +163,14 @@ class BillCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(
-            model.date.day == DateTime.now().day
-                ? '今日'
-                : '${model.date.month}-${model.date.day}',
-            style: TextStyle(
-                color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
+            model.date.day == DateTime.now().day ? '今日' : '${model.date.month}-${model.date.day}',
+            style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
           ),
           Container(
             height: height,
             margin: EdgeInsets.only(top: 10),
             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,9 +179,7 @@ class BillCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '${BillTypeLocalizedMap[model.type]}',
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Color.fromRGBO(100, 100, 100, 1)),
+                      style: TextStyle(fontSize: 18, color: Color.fromRGBO(100, 100, 100, 1)),
                     )
                   ],
                 ),
@@ -204,17 +187,14 @@ class BillCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '- ￥ ${model.amount}',
-                      style: TextStyle(
-                          fontSize: 20, color: Color.fromRGBO(255, 68, 68, 1)),
+                      style: TextStyle(fontSize: 20, color: Color.fromRGBO(255, 68, 68, 1)),
                     )
                   ],
                 ),
                 Row(
                   children: <Widget>[
                     Text(
-                      model.order != null
-                          ? '生产订单${model.order.code}'
-                          : '提现到银行卡${model.bankAccount}',
+                      model.order != null ? '生产订单${model.order.code}' : '提现到银行卡${model.bankAccount}',
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     )
                   ],
