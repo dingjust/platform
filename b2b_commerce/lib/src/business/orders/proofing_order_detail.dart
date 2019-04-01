@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:fluwx/fluwx.dart' as fluwx;
 
 class ProofingOrderDetailPage extends StatefulWidget {
   const ProofingOrderDetailPage({Key key, this.model}) : super(key: key);

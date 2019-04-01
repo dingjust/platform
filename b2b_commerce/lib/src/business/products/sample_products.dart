@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
-import 'sample_product_item.dart';
-import 'sample_product_form.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
+
+import 'sample_product_form.dart';
+import 'sample_product_item.dart';
 
 class SampleProductsPage extends StatelessWidget {
   bool isHistoryCreate;

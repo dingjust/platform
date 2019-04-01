@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_online_order_from.dart';

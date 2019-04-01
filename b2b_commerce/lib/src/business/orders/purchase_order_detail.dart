@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
-import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';

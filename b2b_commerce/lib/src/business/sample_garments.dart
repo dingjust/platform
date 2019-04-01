@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/product_search_delegate_page.dart';
 import 'package:b2b_commerce/src/business/products/sample_product_history_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -6,7 +7,6 @@ import 'package:widgets/widgets.dart';
 
 import 'products/sample_product_history_form.dart';
 import 'products/sample_products.dart';
-import 'package:b2b_commerce/src/_shared/widgets/product_search_delegate_page.dart';
 
 List<EnumModel> _states = <EnumModel>[
   EnumModel('ALL', '全部'),

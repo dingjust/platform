@@ -4,9 +4,9 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../_shared/widgets/product_search_delegate_page.dart';
 import 'apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
-import '../_shared/widgets/product_search_delegate_page.dart';
 
 
 class ApparelProductsPage extends StatelessWidget {
