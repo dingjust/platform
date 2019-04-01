@@ -24,6 +24,13 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
   TextEditingController _remarksController = TextEditingController();
   TextEditingController _sampleController = TextEditingController();
   TextEditingController _unitPriceController = TextEditingController();
+  FocusNode _fabricFocusNode = FocusNode();
+  FocusNode _excipientsFocusNode = FocusNode();
+  FocusNode _processingFocusNode = FocusNode();
+  FocusNode _otherFocusNode = FocusNode();
+  FocusNode _remarksFocusNode = FocusNode();
+  FocusNode _sampleFocusNode = FocusNode();
+  FocusNode _unitPriceFocusNode = FocusNode();
   List<MediaModel> attachments = [];
   DateTime expectedDeliveryDate = DateTime.now();
 
@@ -258,85 +265,81 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
               ),
             ),
           ),
-          InputRow(
-              label: '生产单价',
-              field: TextField(
-                autofocus: false,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.right,
-                controller: _unitPriceController,
-                //只能输入数字
-                inputFormatters: <TextInputFormatter>[
-                  WhitelistingTextInputFormatter.digitsOnly,
-                ],
-                decoration:
-                    InputDecoration(hintText: '填写', border: InputBorder.none),
-              )),
-          Container(
-            padding: EdgeInsets.only(left: 20),
-            child: Column(
-              children: <Widget>[
-                InputRow(
-                    label: '面料单价',
-                    field: TextField(
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.right,
-                      controller: _fabricController,
-
-                      //只能输入数字
-                      decoration: InputDecoration(
-                        hintText: '填写',
-                        border: InputBorder.none,
-                      ),
-                    )),
-                InputRow(
-                    label: '辅料单价',
-                    field: TextField(
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.right,
-                      controller: _excipientsController,
-
-                      //只能输入数字
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      decoration: InputDecoration(
-                          hintText: '填写', border: InputBorder.none),
-                    )),
-                InputRow(
-                    label: '加工单价',
-                    field: TextField(
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.right,
-                      controller: _processingController,
-                      //只能输入数字
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      decoration: InputDecoration(
-                          hintText: '填写', border: InputBorder.none),
-                    )),
-                InputRow(
-                    label: '其他单价',
-                    hasBottom: false,
-                    field: TextField(
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.right,
-                      controller: _otherController,
-                      //只能输入数字
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      decoration: InputDecoration(
-                          hintText: '填写', border: InputBorder.none),
-                    )),
-              ],
-            ),
-          )
+          TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: _unitPriceFocusNode,
+            leadingText: '生产单价',
+            hintText: '填写',
+            autofocus: false,
+            inputType: TextInputType.number,
+            textAlign: TextAlign.right,
+            controller: _unitPriceController,
+            //只能输入数字
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly,
+            ],
+          ),
+          TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: _fabricFocusNode,
+            leadingText: '面料单价',
+            hintText: '填写',
+            autofocus: false,
+            inputType: TextInputType.number,
+            textAlign: TextAlign.right,
+            controller: _fabricController,
+            //只能输入数字
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly,
+            ],
+          ),
+          TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: _excipientsFocusNode,
+            leadingText: '辅料单价',
+            hintText: '填写',
+            autofocus: false,
+            inputType: TextInputType.number,
+            textAlign: TextAlign.right,
+            controller: _excipientsController,
+            //只能输入数字
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly,
+            ],
+          ),
+          TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: _processingFocusNode,
+            leadingText: '加工单价',
+            hintText: '填写',
+            autofocus: false,
+            inputType: TextInputType.number,
+            textAlign: TextAlign.right,
+            controller: _processingController,
+            //只能输入数字
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly,
+            ],
+          ),
+          TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: _otherFocusNode,
+            leadingText: '其他单价',
+            hintText: '填写',
+            autofocus: false,
+            inputType: TextInputType.number,
+            textAlign: TextAlign.right,
+            controller: _otherController,
+            //只能输入数字
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly,
+            ],
+          ),
         ],
       ),
     );
@@ -347,21 +350,21 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
       color: Colors.white,
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: InputRow(
-          hasBottom: false,
-          label: '打样费',
-          field: TextField(
-            autofocus: false,
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.right,
-            controller: _sampleController,
-            //只能输入数字
-            inputFormatters: <TextInputFormatter>[
-              WhitelistingTextInputFormatter.digitsOnly,
-            ],
-            decoration:
-                InputDecoration(hintText: '填写', border: InputBorder.none),
-          )),
+      child: TextFieldComponent(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        dividerPadding: EdgeInsets.only(),
+        focusNode: _sampleFocusNode,
+        leadingText: '打样费',
+        hintText: '填写',
+        autofocus: false,
+        inputType: TextInputType.number,
+        textAlign: TextAlign.right,
+        controller: _sampleController,
+        //只能输入数字
+        inputFormatters: <TextInputFormatter>[
+          WhitelistingTextInputFormatter.digitsOnly,
+        ],
+      ),
     );
   }
 
@@ -431,16 +434,21 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
       color: Colors.white,
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: InputRow(
-          hasBottom: false,
-          label: '备注',
-          field: TextField(
-            autofocus: false,
-            textAlign: TextAlign.right,
-            controller: _remarksController,
-            decoration:
-                InputDecoration(hintText: '填写', border: InputBorder.none),
-          )),
+      child: TextFieldComponent(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        dividerPadding: EdgeInsets.only(),
+        focusNode: _remarksFocusNode,
+        leadingText: '备注',
+        hintText: '填写',
+        autofocus: false,
+        inputType: TextInputType.number,
+        textAlign: TextAlign.right,
+        controller: _remarksController,
+        //只能输入数字
+        inputFormatters: <TextInputFormatter>[
+          WhitelistingTextInputFormatter.digitsOnly,
+        ],
+      ),
     );
   }
 
@@ -559,7 +567,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
         barrierDismissible: true, // user must tap button!
         builder: (context) {
           return AlertDialog(
-            title: Text(widget.update ? '修改成功' : '报价失败'),
+            title: Text(widget.update ? '修改成功' : '报价成功'),
             actions: <Widget>[
               FlatButton(
                 child: Text('确定'),

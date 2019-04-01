@@ -33,7 +33,8 @@ class FactoryBLoC extends BLoCBase {
 
   var conditionController = StreamController<FilterConditionEntry>.broadcast();
 
-  Stream<FilterConditionEntry> get conditionStream => conditionController.stream;
+  Stream<FilterConditionEntry> get conditionStream =>
+      conditionController.stream;
 
   int pageSize = 10;
   int currentPage = 0;
@@ -43,21 +44,35 @@ class FactoryBLoC extends BLoCBase {
   //锁
   bool lock = false;
 
-  filterByCondition(FactoryCondition factoryCondition, {String condition, bool isDESC}) async {
+  //查询所有工厂列表
+  filterByCondition(FactoryCondition factoryCondition,
+      {String condition, bool isDESC ,String requirementCode}) async {
     if (!lock) {
       lock = true;
       //重置参数
       reset();
       Response<Map<String, dynamic>> response;
-      try {
-        response = await http$.post(Apis.factories,
-            data: factoryCondition.toDataJson(), queryParameters: {'page': currentPage, 'size': pageSize});
-      } on DioError catch (e) {
-        print(e);
+      if(requirementCode != null && requirementCode != ''){
+        try {
+          response = await http$.post(Apis.requestQuoteFactories(requirementCode),
+              data: factoryCondition.toDataJson(),
+              queryParameters: {'page': currentPage, 'size': pageSize});
+        } on DioError catch (e) {
+          print(e);
+        }
+      }else{
+        try {
+          response = await http$.post(Apis.factories,
+              data: factoryCondition.toDataJson(),
+              queryParameters: {'page': currentPage, 'size': pageSize});
+        } on DioError catch (e) {
+          print(e);
+        }
       }
 
       if (response != null && response.statusCode == 200) {
-        FactoriesResponse factoriesResponse = FactoriesResponse.fromJson(response.data);
+        FactoriesResponse factoriesResponse =
+            FactoriesResponse.fromJson(response.data);
         totalPages = factoriesResponse.totalPages;
         totalElements = factoriesResponse.totalElements;
         _factories.clear();
@@ -68,32 +83,112 @@ class FactoryBLoC extends BLoCBase {
     }
   }
 
-  loadingMoreByCondition(FactoryCondition factoryCondition, {String condition, bool isDESC}) async {
+  //邀请报价的工厂列表
+  filterRequestQuoteByCondition(FactoryCondition factoryCondition,
+      {String condition, bool isDESC ,String requirementCode}) async {
+    if (!lock) {
+      lock = true;
+      //重置参数
+      reset();
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$.post(Apis.requestQuoteFactories(requirementCode),
+            data: factoryCondition.toDataJson(),
+            queryParameters: {'page': currentPage, 'size': pageSize});
+      } on DioError catch (e) {
+        print(e);
+      }
+
+      if (response != null && response.statusCode == 200) {
+        FactoriesResponse factoriesResponse =
+        FactoriesResponse.fromJson(response.data);
+        totalPages = factoriesResponse.totalPages;
+        totalElements = factoriesResponse.totalElements;
+        _factories.clear();
+        _factories.addAll(factoriesResponse.content);
+      }
+      _controller.sink.add(_factories);
+      lock = false;
+    }
+  }
+
+
+  loadingMoreByCondition(FactoryCondition factoryCondition,
+      {String condition, bool isDESC, String requirementCode}) async {
     if (!lock) {
       lock = true;
 
       //数据到底
       if (currentPage + 1 == totalPages) {
         //通知显示已经到底部
-        bottomController.sink.add(true);
+        _bottomController.sink.add(true);
       } else {
         Response<Map<String, dynamic>> response;
-        try {
-          currentPage++;
-          response = await http$.post(Apis.factories,
-              data: factoryCondition.toDataJson(), queryParameters: {'page': currentPage, 'size': pageSize});
-        } on DioError catch (e) {
-          print(e);
+        if(requirementCode != null && requirementCode != ''){
+          try {
+            currentPage++;
+            response = await http$.post(Apis.requestQuoteFactories(requirementCode),
+                data: factoryCondition.toDataJson(),
+                queryParameters: {'page': currentPage, 'size': pageSize});
+          } on DioError catch (e) {
+            print(e);
+          }
+        }else{
+          try {
+            currentPage++;
+            response = await http$.post(Apis.factories,
+                data: factoryCondition.toDataJson(),
+                queryParameters: {'page': currentPage, 'size': pageSize});
+          } on DioError catch (e) {
+            print(e);
+          }
         }
 
+
         if (response != null && response.statusCode == 200) {
-          FactoriesResponse factoriesResponse = FactoriesResponse.fromJson(response.data);
+          FactoriesResponse factoriesResponse =
+              FactoriesResponse.fromJson(response.data);
           totalPages = factoriesResponse.totalPages;
           totalElements = factoriesResponse.totalElements;
           _factories.addAll(factoriesResponse.content);
         }
       }
-      loadingController.sink.add(false);
+      _loadingController.sink.add(false);
+      _controller.sink.add(_factories);
+      lock = false;
+    }
+  }
+
+  //邀请报价的工厂列表
+  loadingMoreRequestQuoteByCondition(FactoryCondition factoryCondition,
+      {String condition, bool isDESC, String requirementCode}) async {
+    if (!lock) {
+      lock = true;
+
+      //数据到底
+      if (currentPage + 1 == totalPages) {
+        //通知显示已经到底部
+        _bottomController.sink.add(true);
+      } else {
+        Response<Map<String, dynamic>> response;
+        try {
+          currentPage++;
+          response = await http$.post(Apis.requestQuoteFactories(requirementCode),
+              data: factoryCondition.toDataJson(),
+              queryParameters: {'page': currentPage, 'size': pageSize});
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          FactoriesResponse factoriesResponse =
+          FactoriesResponse.fromJson(response.data);
+          totalPages = factoriesResponse.totalPages;
+          totalElements = factoriesResponse.totalElements;
+          _factories.addAll(factoriesResponse.content);
+        }
+      }
+      _loadingController.sink.add(false);
       _controller.sink.add(_factories);
       lock = false;
     }
@@ -115,10 +210,42 @@ class FactoryBLoC extends BLoCBase {
   //下拉刷新
   Future refreshData({String condition, bool isDESC}) async {}
 
+  //页面控制
+
+  var _loadingController = StreamController<bool>.broadcast();
+  var _bottomController = StreamController<bool>.broadcast();
+  var _toTopBtnController = StreamController<bool>.broadcast();
+  var _returnToTopController = StreamController<bool>.broadcast();
+
+  Stream<bool> get loadingStream => _loadingController.stream;
+
+  Stream<bool> get bottomStream => _bottomController.stream;
+
+  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
+
+  Stream<bool> get returnToTopStream => _returnToTopController.stream;
+
+  loadingStart() async {
+    _loadingController.sink.add(true);
+  }
+
+  loadingEnd() async {
+    _loadingController.sink.add(false);
+  }
+
+  showToTopBtn() async {
+    _toTopBtnController.sink.add(true);
+  }
+
+  hideToTopBtn() async {
+    _toTopBtnController.sink.add(false);
+  }
+
+  returnToTop() async {
+    _returnToTopController.sink.add(true);
+  }
+
   dispose() {
     _controller.close();
-    conditionController.close();
-
-    super.dispose();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextFieldComponent extends StatefulWidget {
   final String leadingText;
@@ -21,6 +22,7 @@ class TextFieldComponent extends StatefulWidget {
   Color leadingColor;
   bool hideDivider;
   TextStyle style;
+  List<TextInputFormatter> inputFormatters;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -44,6 +46,7 @@ class TextFieldComponent extends StatefulWidget {
     this.leadingColor = Colors.black,
     this.hideDivider = false,
     this.style,
+    this.inputFormatters,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
@@ -126,6 +129,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   onEditingComplete: widget.onEditingComplete,
                   textInputAction: widget.textInputAction,
                   textAlign: widget.textAlign,
+                  inputFormatters: widget.inputFormatters,
                 ),
               ),
               Offstage(

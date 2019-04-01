@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
@@ -60,16 +61,7 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
           body: DefaultTabController(
             length: statuses.length,
             child: Scaffold(
-              appBar: TabBar(
-                unselectedLabelColor: Colors.black26,
-                labelColor: Colors.black,
-                indicatorSize: TabBarIndicatorSize.label,
-                tabs: statuses.map((status) {
-                  return Tab(text: status.name);
-                }).toList(),
-                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-                isScrollable: true,
-              ),
+              appBar: TabFactory.buildDefaultTabBar(statuses,scrollable: true),
               body: TabBarView(
                 children: statuses
                     .map((status) => PurchaseOrderList(
