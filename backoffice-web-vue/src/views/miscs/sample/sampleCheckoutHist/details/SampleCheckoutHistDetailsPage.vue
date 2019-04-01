@@ -16,7 +16,7 @@
     <div class="pt-2"></div>
     <el-card class="box-card">
       <div class="animated fadeIn">
-        <el-button-group v-if="!canNotUpdate">
+        <el-button-group>
           <el-button size="mini" type="primary" @click="onSubmit()">提交</el-button>
           <el-button size="mini" @click="onCancel">取消</el-button>
         </el-button-group>
@@ -43,7 +43,9 @@
     },
     methods: {
       async onSubmit() {
-        const result = await this.$http.put('/b2b/products/sampleCheckoutHist/'+this.slotData.id, this.slotData);
+        console.log(this.slotData);
+        const url = this.apis().updateSampleCheckoutHist(this.slotData.id);
+        const result = await this.$http.put(url, this.slotData);
         if (result['errors']) {
           this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
           return;

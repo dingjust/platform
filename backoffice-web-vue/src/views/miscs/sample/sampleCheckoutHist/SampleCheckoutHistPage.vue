@@ -39,7 +39,8 @@
         this.search({url, keyword, page, size});
       },
       async onDetails(row) {
-        const url = this.apis().getSampleCheckoutHist(item.id);
+        console.log(row);
+        const url = this.apis().getSampleCheckoutHist(row.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
