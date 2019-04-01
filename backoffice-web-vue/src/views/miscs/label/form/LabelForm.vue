@@ -24,9 +24,7 @@
     props: ['slotData', 'readOnly'],
     methods: {
       validate(callback) {
-        // TODO: validation
-        return true;
-        // return this.$refs['basicForm'].validate(callback);
+        return this.$refs['basicForm'].validate(callback);
       }
     },
     computed: {},

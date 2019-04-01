@@ -24,11 +24,9 @@ class UserGroupModel extends PrincipalGroupModel {
           members: members,
         );
 
-  factory UserGroupModel.fromJson(Map<String, dynamic> json) =>
-      _$UserGroupModelFromJson(json);
+  factory UserGroupModel.fromJson(Map<String, dynamic> json) => _$UserGroupModelFromJson(json);
 
-  static Map<String, dynamic> toJson(UserGroupModel model) =>
-      _$UserGroupModelToJson(model);
+  static Map<String, dynamic> toJson(UserGroupModel model) => _$UserGroupModelToJson(model);
 }
 
 /// 公司
@@ -124,26 +122,20 @@ class CompanyModel extends UserGroupModel {
           members: members,
         );
 
-  factory CompanyModel.fromJson(Map<String, dynamic> json) =>
-      _$CompanyModelFromJson(json);
+  factory CompanyModel.fromJson(Map<String, dynamic> json) => _$CompanyModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CompanyModel model) =>
-      _$CompanyModelToJson(model);
+  static Map<String, dynamic> toJson(CompanyModel model) => _$CompanyModelToJson(model);
 
-  static Map<String, dynamic> _addressToJson(AddressModel model) =>
-      AddressModel.toJson(model);
+  static Map<String, dynamic> _addressToJson(AddressModel model) => AddressModel.toJson(model);
 
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
       models.map((model) => MediaModel.toJson(model)).toList();
 
-  static List<Map<String, dynamic>> _companyProfilesToJson(
-          List<CompanyProfileModel> models) =>
+  static List<Map<String, dynamic>> _companyProfilesToJson(List<CompanyProfileModel> models) =>
       models.map((model) => CompanyProfileModel.toJson(model)).toList();
 
   static List<Map<String, dynamic>> _labelsToJson(List<LabelModel> models) =>
       models.map((model) => LabelModel.toJson(model)).toList();
-
-
 }
 
 @JsonSerializable()
@@ -203,11 +195,9 @@ class OrgUnitModel extends CompanyModel {
           labels: labels,
         );
 
-  factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
-      _$OrgUnitModelFromJson(json);
+  factory OrgUnitModel.fromJson(Map<String, dynamic> json) => _$OrgUnitModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrgUnitModel model) =>
-      _$OrgUnitModelToJson(model);
+  static Map<String, dynamic> toJson(OrgUnitModel model) => _$OrgUnitModelToJson(model);
 }
 
 @JsonSerializable()
@@ -273,11 +263,9 @@ class B2BUnitModel extends OrgUnitModel {
           labels: labels,
         );
 
-  factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
-      _$B2BUnitModelFromJson(json);
+  factory B2BUnitModel.fromJson(Map<String, dynamic> json) => _$B2BUnitModelFromJson(json);
 
-  static Map<String, dynamic> toJson(B2BUnitModel model) =>
-      _$B2BUnitModelToJson(model);
+  static Map<String, dynamic> toJson(B2BUnitModel model) => _$B2BUnitModelToJson(model);
 }
 
 @JsonSerializable()
@@ -374,14 +362,11 @@ class BrandModel extends B2BUnitModel {
           labels: labels,
         );
 
-  factory BrandModel.fromJson(Map<String, dynamic> json) =>
-      _$BrandModelFromJson(json);
+  factory BrandModel.fromJson(Map<String, dynamic> json) => _$BrandModelFromJson(json);
 
-  static Map<String, dynamic> toJson(BrandModel model) =>
-      _$BrandModelToJson(model);
+  static Map<String, dynamic> toJson(BrandModel model) => _$BrandModelToJson(model);
 
-  static List<Map<String, dynamic>> _categorysToJson(
-          List<CategoryModel> models) =>
+  static List<Map<String, dynamic>> _categorysToJson(List<CategoryModel> models) =>
       models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
@@ -505,22 +490,17 @@ class FactoryModel extends B2BUnitModel {
           labels: labels,
         );
 
-  factory FactoryModel.fromJson(Map<String, dynamic> json) =>
-      _$FactoryModelFromJson(json);
+  factory FactoryModel.fromJson(Map<String, dynamic> json) => _$FactoryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(FactoryModel model) =>
-      _$FactoryModelToJson(model);
+  static Map<String, dynamic> toJson(FactoryModel model) => _$FactoryModelToJson(model);
 
-  static List<Map<String, dynamic>> _categoriesToJson(
-          List<CategoryModel> categories) =>
+  static List<Map<String, dynamic>> _categoriesToJson(List<CategoryModel> categories) =>
       categories.map((category) => CategoryModel.toJson(category)).toList();
 
-  static List<Map<String, dynamic>> _productToJson(
-          List<ProductModel> products) =>
+  static List<Map<String, dynamic>> _productToJson(List<ProductModel> products) =>
       products.map((product) => ProductModel.toJson(product)).toList();
 
-  static Map<String, dynamic> _industrialClusterToJson(
-          IndustrialClusterModel model) =>
+  static Map<String, dynamic> _industrialClusterToJson(IndustrialClusterModel model) =>
       IndustrialClusterModel.toJson(model);
 }
 
@@ -536,11 +516,9 @@ class LabelModel extends ItemModel {
     this.clusters,
   });
 
-  factory LabelModel.fromJson(Map<String, dynamic> json) =>
-      _$LabelModelFromJson(json);
+  factory LabelModel.fromJson(Map<String, dynamic> json) => _$LabelModelFromJson(json);
 
-  static Map<String, dynamic> toJson(LabelModel model) =>
-      _$LabelModelToJson(model);
+  static Map<String, dynamic> toJson(LabelModel model) => _$LabelModelToJson(model);
 }
 
 //产业集群
@@ -549,18 +527,18 @@ class IndustrialClusterModel extends ItemModel {
   String code;
   String name;
   List<LabelModel> labels;
+  int companiesCount;
 
-  IndustrialClusterModel({
+  IndustrialClusterModel(
     this.code,
-    this.name,
+    this.name, {
     this.labels,
+    this.companiesCount = 0,
   });
 
-  factory IndustrialClusterModel.fromJson(Map<String, dynamic> json) =>
-      _$IndustrialClusterModelFromJson(json);
+  factory IndustrialClusterModel.fromJson(Map<String, dynamic> json) => _$IndustrialClusterModelFromJson(json);
 
-  static Map<String, dynamic> toJson(IndustrialClusterModel model) =>
-      _$IndustrialClusterModelToJson(model);
+  static Map<String, dynamic> toJson(IndustrialClusterModel model) => _$IndustrialClusterModelToJson(model);
 }
 
 //工厂图文详情
@@ -575,11 +553,9 @@ class CompanyProfileModel extends ItemModel {
     this.description,
   });
 
-  factory CompanyProfileModel.fromJson(Map<String, dynamic> json) =>
-      _$CompanyProfileModelFromJson(json);
+  factory CompanyProfileModel.fromJson(Map<String, dynamic> json) => _$CompanyProfileModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CompanyProfileModel model) =>
-      _$CompanyProfileModelToJson(model);
+  static Map<String, dynamic> toJson(CompanyProfileModel model) => _$CompanyProfileModelToJson(model);
 
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
       models.map((model) => MediaModel.toJson(model)).toList();
@@ -603,18 +579,11 @@ class SupplierModel extends ItemModel {
   //采购订单信息（取最新一条）
   PurchaseOrderModel purchaseOrder;
 
-  SupplierModel(
-      {this.factory,
-      this.orderCount,
-      this.quoteOrder,
-      this.purchaseOrder,
-      this.quoteCount});
+  SupplierModel({this.factory, this.orderCount, this.quoteOrder, this.purchaseOrder, this.quoteCount});
 
-  factory SupplierModel.fromJson(Map<String, dynamic> json) =>
-      _$SupplierModelFromJson(json);
+  factory SupplierModel.fromJson(Map<String, dynamic> json) => _$SupplierModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SupplierModel model) =>
-      _$SupplierModelToJson(model);
+  static Map<String, dynamic> toJson(SupplierModel model) => _$SupplierModelToJson(model);
 }
 
 //合作方式枚举
@@ -633,7 +602,7 @@ enum CooperationModes {
 }
 
 const CooperationModesLocalizedMap = {
-  CooperationModes.PURE_PROCESSING: "PURE_PROCESSING",
+  CooperationModes.PURE_PROCESSING: "纯加工",
   CooperationModes.FOB: "FOB",
   CooperationModes.ODM: "ODM",
   CooperationModes.OEM: "OEM",

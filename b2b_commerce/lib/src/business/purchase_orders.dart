@@ -61,7 +61,6 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
                 unselectedLabelColor: Colors.black26,
                 labelColor: Colors.black,
                 indicatorSize: TabBarIndicatorSize.label,
-                indicatorColor: Colors.black,
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);
                 }).toList(),
@@ -187,7 +186,7 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
                       padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
                       child: Center(
                         child: Text(
-                          "人家可是有底线的。。。",
+                          " (￢_￢)已经到底了",
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),

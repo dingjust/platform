@@ -56,6 +56,9 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
             child: Container(
                 width: 80,
                 child: ActionChip(
+                  shape:  RoundedRectangleBorder(
+                      side: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
                   label: Text(btnText),
                   onPressed: () async{
                       if (!isEditing) {

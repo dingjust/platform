@@ -3,6 +3,11 @@
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="编码" prop="code"></el-table-column>
       <el-table-column label="名称" prop="name"></el-table-column>
+      <el-table-column label="分类" prop="labels">
+        <template slot-scope="scope">
+          <span v-for="label in scope.row.labels">{{label.name + ' '}} </span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>

@@ -2,15 +2,15 @@
   <div class="animated fadeIn content">
     <el-card>
       <factory-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
-      <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onLabels="onLabels">
+      <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch">
         <template slot="operations" slot-scope="props">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
-          <el-button type="text" icon="el-icon-edit" @click="onLabels(props.item)">标签评级</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">更新</el-button>
         </template>
       </factory-list>
     </el-card>
-    <el-dialog title="修改标签和评分" width="450px" :visible.sync="this.dialogFormVisible" :before-close="handleClose">
-      <factory-labels-form :slotData = "this.item"></factory-labels-form>
+    <el-dialog title="更新" width="30%" :visible.sync="dialogFormVisible" :before-close="handleClose">
+      <factory-labels-form :slotData="item"></factory-labels-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="update()">确 定</el-button>
@@ -47,10 +47,10 @@
     methods: {
       ...mapActions({
         search: 'search',
-        advancedSearch:'advancedSearch',
+        advancedSearch: 'advancedSearch',
       }),
       handleClose(done) {
-       this.dialogFormVisible = false;
+        this.dialogFormVisible = false;
       },
       async update() {
         const url = this.apis().updateFactory(this.item.uid);
@@ -73,7 +73,7 @@
       onAdvancedSearch(page, size) {
         const queryFormData = this.queryFormData;
         const url = this.apis().getFactories();
-        this.advancedSearch({url,queryFormData, page, size});
+        this.advancedSearch({url, queryFormData, page, size});
       },
       async onDetails(item) {
         const url = this.apis().getFactory(item.uid);
@@ -85,7 +85,7 @@
 
         this.fn.openSlider('工厂：' + item.name, FactoryDetailsPage, result);
       },
-      async onLabels(item) {
+      async onEdit(item) {
         const url = this.apis().getFactory(item.uid);
         let result = await this.$http.get(url);
 
@@ -97,14 +97,14 @@
         this.dialogFormVisible = true;
       },
       onNew(formData) {
-        this.fn.openSlider('创建工厂', FactoryLabelsPage, formData);
+        this.fn.openSlider('创建工厂', FactoryDetailsPage, formData);
       },
     },
     data() {
 
       return {
         dialogFormVisible: false,
-        item:{},
+        item: {},
       };
     },
     created() {

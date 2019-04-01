@@ -5,20 +5,19 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class CondtionPage extends StatefulWidget {
-  FactoryCondition factoryCondition;
+class ConditionPage extends StatefulWidget {
+  final FactoryCondition factoryCondition;
 
   /// 大类
   final List<CategoryModel> categories;
 
-  CondtionPage({Key key, @required this.categories, this.factoryCondition})
-      : super(key: key);
+  ConditionPage({Key key, @required this.categories, this.factoryCondition}) : super(key: key);
 
   @override
-  _CondtionPageState createState() => _CondtionPageState();
+  _ConditionPageState createState() => _ConditionPageState();
 }
 
-class _CondtionPageState extends State<CondtionPage> {
+class _ConditionPageState extends State<ConditionPage> {
   PopulationScale populationScale;
 
   @override
@@ -58,23 +57,22 @@ class _CondtionPageState extends State<CondtionPage> {
         height: 100,
         child: GestureDetector(
             onTap: () async {
-              //加载条
+              // 加载条
               showDialog(
-                  context: context,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ));
-              await ProductRepositoryImpl()
-                  .cascadedCategories()
-                  .then((categorys) {
+                context: context,
+                builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              );
+              await ProductRepositoryImpl().cascadedCategories().then((categories) {
                 Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context).push(
+                  MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
-                          minCategorySelect:
-                              widget.factoryCondition.adeptAtCategory,
-                          categorys: categorys,
+                          minCategorySelect: widget.factoryCondition.adeptAtCategory,
+                          categorys: categories,
                           categoryActionType: CategoryActionType.none,
-                        )));
+                        ),
+                  ),
+                );
               });
             },
             child: Container(
@@ -214,8 +212,7 @@ class ConditionBlock extends StatelessWidget {
 
   final Widget child;
 
-  const ConditionBlock({Key key, this.height = 100, this.label, this.child})
-      : super(key: key);
+  const ConditionBlock({Key key, this.height = 100, this.label, this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -232,22 +229,16 @@ class ConditionBlock extends StatelessWidget {
               Container(
                 width: 50,
                 height: 1,
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom:
-                            BorderSide(color: Colors.grey[300], width: 0.5))),
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
               ),
               Text(
-                '${label}',
+                '$label',
                 style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
               ),
               Container(
                 width: 50,
                 height: 1,
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom:
-                            BorderSide(color: Colors.grey[300], width: 0.5))),
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
               )
             ],
           ),
@@ -277,12 +268,7 @@ class FactoryCondtions {
   //生产大类
   List<CategoryModel> categories;
 
-  FactoryCondtions(
-      {this.scaleRange,
-      this.region,
-      this.starLevel,
-      this.machiningType,
-      this.categories});
+  FactoryCondtions({this.scaleRange, this.region, this.starLevel, this.machiningType, this.categories});
 }
 
 class CondtionItem {

@@ -25,9 +25,14 @@
         refresh: 'refresh'
       }),
       onSubmit() {
-        if (this.$refs['form'].validate()) {
-          this._onSubmit();
-        }
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            // this._onSubmit();
+            return true;
+          }
+
+          return false;
+        });
       },
       onCancel() {
         this.fn.closeSlider();

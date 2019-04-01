@@ -15,7 +15,7 @@ class FilterBar extends StatefulWidget implements PreferredSizeWidget {
 
   _FilterBarState createState() => _FilterBarState();
 
-  double itemHeight;
+  final double itemHeight;
   final double itemWidth;
   final Color unselectedColor;
   final Color color;

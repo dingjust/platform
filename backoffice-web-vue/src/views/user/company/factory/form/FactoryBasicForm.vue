@@ -133,6 +133,28 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row :gutter="10">
+        <el-col :span="6">
+          <el-form-item label="产业集群" prop="industrialCluster">
+            <el-select class="w-100"
+                       placeholder="请选择"
+                       v-model="slotData.industrialCluster"
+                       value-key="code">
+              <el-option-group
+                v-for="label in industrialClusterLabels"
+                :key="label.id"
+                :label="label.name">
+                <el-option
+                  v-for="cluster in label.clusters"
+                  :key="cluster.code"
+                  :label="cluster.name"
+                  :value="cluster">
+                </el-option>
+              </el-option-group>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
                :show-close="false" append-to-body width="50%">
@@ -215,7 +237,7 @@
         this.categories = result;
       },
       async getLabels() {
-        const url = this.apis().getAllLabels();
+        const url = this.apis().getGroupLabels('FACTORY');
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -223,6 +245,16 @@
         }
 
         this.labels = result;
+      },
+      async getIndustrialClusterLabels() {
+        const url = this.apis().getIndustrialClusterLabels();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.industrialClusterLabels = result;
       },
       _copyContactAddress() {
         if (this.slotData.contactAddress) {
@@ -235,6 +267,7 @@
     data() {
       return {
         labels: [],
+        industrialClusterLabels: [],
         categories: [],
         adeptAtCategories: [],
         addressFormData: this.$store.state.FactoriesModule.addressFormData,
@@ -264,6 +297,7 @@
       this.getCategories();
       this.getMinorCategories();
       this.getLabels();
+      this.getIndustrialClusterLabels();
       this._copyContactAddress();
     }
   };

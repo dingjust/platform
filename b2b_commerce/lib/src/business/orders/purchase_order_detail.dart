@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -301,103 +302,125 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
 //构建工厂信息UI
   Widget _buildFactoryInfo(BuildContext context) {
-    return Container(
-//      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child:
-                      order.belongTo == null ||
-                          order.belongTo.name == null ?
-                      Text(
-                        '${order.companyOfSeller == null ? '' : order
-                            .companyOfSeller}',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
-                      ) :
-                      Text(
-                        order.belongTo.name,
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    order.belongTo == null ||
-                        order.belongTo.starLevel == null ?
-                    Container() :
-                    Stars(
-                      size: 14,
-                      color: Color.fromRGBO(255, 183, 0, 1),
-                      highlightOnly: false,
-                      starLevel: order.belongTo.starLevel,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        '历史接单${order.belongTo == null || order.belongTo.historyOrdersCount == null ? '0' : order.belongTo.historyOrdersCount}单，报价成功率0%',
-                        style: TextStyle(
-                            color: Colors.grey
-                        ),
-                      ),
-                    ),
-                    Icon(Icons.keyboard_arrow_right)
+    return GestureDetector(
+      onTap: ()async{
+        //获取该工厂的现款商品
+        ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
+          'factory':order.belongTo.uid,
+        }, {'size': 3});
 
-                  ],
+        //TODO跳转详细页
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>MyFactoryPage(order.belongTo,products: productsResponse.content,)));
+      },
+      child: Container(
+//      padding: EdgeInsets.all(10),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child:
+                              order.belongTo == null ||
+                                  order.belongTo.name == null ?
+                              Text(
+                                '${order.companyOfSeller == null ? '' : order
+                                    .companyOfSeller}',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w500),
+                              ) :
+                              Text(
+                                order.belongTo.name,
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            order.belongTo == null ||
+                                order.belongTo.starLevel == null ?
+                            Container() :
+                            Stars(
+                              size: 14,
+                              color: Color.fromRGBO(255, 183, 0, 1),
+                              highlightOnly: false,
+                              starLevel: order.belongTo.starLevel,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                '历史接单${order.belongTo == null || order.belongTo.historyOrdersCount == null ? '0' : order.belongTo.historyOrdersCount}单',
+                                style: TextStyle(
+                                    color: Colors.grey
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Icon(
+                    Icons.keyboard_arrow_right,
+                    size: 40,
+                    color: Colors.grey,
+                  ),
                 )
               ],
             ),
-          ),
-          Divider(
-            height: 1,
-          ),
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    child: Text('合作方式'),
-                  ),
-                ),
-                Container(
-                  child: order.machiningType == null ? Container():Text(MachiningTypeLocalizedMap[order.machiningType]),
-                ),
-              ],
+            Divider(
+              height: 1,
             ),
-          ),
-          Divider(
-            height: 1,
-          ),
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    child: Text('是否开具发票'),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      child: Text('合作方式'),
+                    ),
                   ),
-                ),
-                Container(
-                  child: order.invoiceNeeded == null ? Container():Text(order.invoiceNeeded == true ? '是' : '否'),
-                ),
-              ],
+                  Container(
+                    child: order.machiningType == null ? Container():Text(MachiningTypeLocalizedMap[order.machiningType]),
+                  ),
+                ],
+              ),
             ),
-          )
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
+            Divider(
+              height: 1,
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      child: Text('是否开具发票'),
+                    ),
+                  ),
+                  Container(
+                    child: order.invoiceNeeded == null ? Container():Text(order.invoiceNeeded == true ? '是' : '否'),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
       ),
     );
   }

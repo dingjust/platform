@@ -77,11 +77,14 @@ const COMMON_APIS = {
   createLabel() {
     return '/djwebservices/labels/create';
   },
-  getGroupAllLabels(group) {
-    return '/djwebservices/labels/'+group+'/all';
-  },
   getAllLabels() {
     return '/djwebservices/labels/all';
+  },
+  getGroupLabels(group) {
+    return '/djwebservices/labels/' + group + '/all';
+  },
+  getIndustrialClusterLabels() {
+    return '/b2b/industrialClusters/labels';
   },
   getLabels() {
     return '/djwebservices/labels';
@@ -242,6 +245,15 @@ const COMMON_APIS = {
   },
   createQuote() {
     return '/b2b/orders/quote/create';
+  },
+  updateQuote(code) {
+    return '/b2b/orders/quote/'+code;
+  },
+  updateApprove(code) {
+    return '/b2b/orders/quote/'+code+'/approve';
+  },
+  updateReject(code) {
+    return '/b2b/orders/quote/'+code+'reject';
   },
   getPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code;

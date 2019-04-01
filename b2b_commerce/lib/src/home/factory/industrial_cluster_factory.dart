@@ -1,239 +1,52 @@
-import 'dart:math';
-
-import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-class IndustrialClusterPage extends StatefulWidget {
-  List<LabelModel> labels;
-  IndustrialClusterPage(this.labels);
+import './factory_list.dart';
 
-  IndustrialClusterPageState createState() => IndustrialClusterPageState();
+class IndustrialClusterPage extends StatefulWidget {
+  IndustrialClusterPage({Key key, this.labels}) : super(key: key);
+
+  final List<LabelModel> labels;
+
+  _IndustrialClusterPageState createState() => _IndustrialClusterPageState();
 }
 
-class IndustrialClusterPageState extends State<IndustrialClusterPage> {
+class _IndustrialClusterPageState extends State<IndustrialClusterPage> {
   List<Widget> _keyItem;
   List<IndustrialClusterModel> _valueItem = [];
-  String _selectLeft;
-  Color _color;
-
-//  List<LabelModel> widget.labels = [
-//    LabelModel(
-//      name:  '牛仔',
-//      group: 'FACTORY',
-//      clusters: [
-//        IndustrialClusterModel(
-//          code: 'IC001',
-//          name: '广州新塘',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC002',
-//          name: '中山大涌',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC003',
-//          name: '顺德均安',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC004',
-//          name: '开平三埠',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC005',
-//          name: '山东淮坊',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC006',
-//          name: '江苏常州',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC007',
-//          name: '江苏杭州',
-//        ),
-//      ],
-//    ),
-//    LabelModel(
-//      name:  '羽绒服',
-//      group: 'FACTORY',
-//      clusters: [
-//        IndustrialClusterModel(
-//          code: 'IC001',
-//          name: '广州新塘',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC002',
-//          name: '中山大涌',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC003',
-//          name: '顺德均安',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC004',
-//          name: '开平三埠',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC005',
-//          name: '山东淮坊',
-//        ),
-//      ],
-//    ),
-//    LabelModel(
-//      name:  '风衣',
-//      group: 'FACTORY',
-//      clusters: [
-//        IndustrialClusterModel(
-//          code: 'IC001',
-//          name: '广州新塘',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC002',
-//          name: '中山大涌',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC005',
-//          name: '山东淮坊',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC006',
-//          name: '江苏常州',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC007',
-//          name: '江苏杭州',
-//        ),
-//      ],
-//    ),
-//    LabelModel(
-//      name:  '棉服',
-//      group: 'FACTORY',
-//      clusters: [
-//        IndustrialClusterModel(
-//          code: 'IC002',
-//          name: '中山大涌',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC003',
-//          name: '顺德均安',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC004',
-//          name: '开平三埠',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC005',
-//          name: '山东淮坊',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC006',
-//          name: '江苏常州',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC007',
-//          name: '江苏杭州',
-//        ),
-//      ],
-//    ),
-//    LabelModel(
-//      name:  '毛呢大衣',
-//      group: 'FACTORY',
-//      clusters: [
-//        IndustrialClusterModel(
-//          code: 'IC001',
-//          name: '广州新塘',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC002',
-//          name: '中山大涌',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC003',
-//          name: '顺德均安',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC004',
-//          name: '开平三埠',
-//        ),
-//        IndustrialClusterModel(
-//          code: 'IC007',
-//          name: '江苏杭州',
-//        ),
-//      ],
-//    ),
-//  ];
+  String _selectedLabel;
+  Color _highlightColorWhenSelected;
 
   @override
   void initState() {
     if (widget.labels.isNotEmpty) {
-      _selectLeft = widget.labels[0].name;
+      _selectedLabel = widget.labels[0].name;
       _valueItem = widget.labels[0].clusters;
     }
 
-    // TODO: implement initState
     super.initState();
-  }
-
-  Widget createIndustrialClusterItem(IndustrialClusterModel item) {
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.fromLTRB(5, 5, 15, 5),
-        margin: EdgeInsets.all(3),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Center(
-                child: Text(
-                  item.name,
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ),
-            Text(
-              Random().nextInt(100).toString() + '家工厂',
-              style: TextStyle(color: Color(0xFFFF9516)),
-            ),
-          ],
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FactoryPage(
-                      FactoryCondition(starLevel: 0, adeptAtCategory: []),
-                      route: item.name,
-                    )));
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     _keyItem = widget.labels.map((label) {
-      if (_selectLeft == label.name) {
-        _color = Color(0xFFFF9516);
-      } else {
-        _color = Colors.black;
+      _highlightColorWhenSelected = Colors.black;
+      if (_selectedLabel == label.name) {
+        _highlightColorWhenSelected = Color(0xFFFF9516);
       }
+
       return GestureDetector(
         onTap: () {
-          if (_selectLeft != label.name) {
+          if (_selectedLabel != label.name) {
             setState(() {
-              _selectLeft = label.name;
+              _selectedLabel = label.name;
             });
           }
 
           _valueItem = label.clusters;
         },
         child: Container(
-//            width: 60,
           color: Colors.white10,
           padding: EdgeInsets.only(
             left: 10,
@@ -244,7 +57,7 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
             height: 40,
             child: Text(
               label.name,
-              style: TextStyle(color: _color),
+              style: TextStyle(color: _highlightColorWhenSelected),
             ),
           ),
         ),
@@ -268,17 +81,74 @@ class IndustrialClusterPageState extends State<IndustrialClusterPage> {
           ),
           VerticalDivider(width: 0),
           Expanded(
-              child: GridView(
-            padding: EdgeInsets.zero,
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 250, childAspectRatio: 2 //宽高比为2
-                ),
-            children: List.generate(_valueItem.length, (index) {
-              return createIndustrialClusterItem(_valueItem[index]);
-            }),
-          )),
+            child: GridView(
+              padding: EdgeInsets.zero,
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 250,
+                childAspectRatio: 2,
+              ),
+              children: List.generate(_valueItem.length, (index) {
+                return IndustrialClusterItem(item: _valueItem[index]);
+              }),
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class IndustrialClusterItem extends StatelessWidget {
+  const IndustrialClusterItem({Key key, this.item}) : super(key: key);
+
+  final IndustrialClusterModel item;
+
+  void _onTap(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FactoryPage(
+              FactoryCondition(
+                starLevel: 0,
+                adeptAtCategory: [],
+                industrialCuster: item,
+              ),
+              route: item.name,
+            ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.fromLTRB(5, 5, 15, 5),
+        margin: EdgeInsets.all(3),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Center(
+                child: Text(
+                  item.name,
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+            Text(
+              '${item.companiesCount ?? 0} 家工厂',
+              style: TextStyle(color: Color(0xFFFF9516)),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ),
+      onTap: () => _onTap(context),
     );
   }
 }

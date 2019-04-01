@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
+import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +22,7 @@ class ProofingOrderForm extends StatefulWidget {
 class _ProofingOrderFormState extends State<ProofingOrderForm> {
   TextEditingController _remarksController = TextEditingController();
   TextEditingController _unitPriceController = TextEditingController();
+  String remarks;
 
   GlobalKey _scaffoldKey = GlobalKey();
 
@@ -80,7 +82,9 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             child: ListView(
               children: <Widget>[
                 _buildCompanyInfo(),
-                _buildProductSelect(),
+                product == null ?
+                _buildProductSelect()
+                :_buildProduct(),
                 _buildProofingInfo(),
               ],
             )),
@@ -142,7 +146,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                                               .belongTo
                                               ?.profilePicture !=
                                           null
-                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo}'
+                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo.profilePicture.url}'
                                       : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
                               borderRadius: BorderRadius.circular(10)),
                         ),
@@ -241,60 +245,210 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 ],
               ),
             ),
-            InputRow(
-                hasBottom: false,
-                label: '备注',
-                field: TextField(
-                  autofocus: false,
-                  textAlign: TextAlign.right,
-                  controller: _remarksController,
-                  decoration:
-                      InputDecoration(hintText: '填写', border: InputBorder.none),
-                )),
+            _buildRemarks(context),
+//            InputRow(
+//                hasBottom: false,
+//                label: '备注',
+//                field: TextField(
+//                  autofocus: false,
+//                  textAlign: TextAlign.right,
+//                  controller: _remarksController,
+//                  decoration:
+//                      InputDecoration(hintText: '填写', border: InputBorder.none),
+//                )),
           ],
         ));
   }
 
-  Widget _buildProductSelect() {
+  //订单备注
+  Widget _buildRemarks(BuildContext context) {
     return GestureDetector(
-      onTap: _onProductSelect,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 30),
+        child: Container(
+            color: Colors.white,
+            padding: EdgeInsets.fromLTRB(0,15,0,15),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Text(
+                      '订单备注',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+                remarks == null || remarks == ''
+                    ? Icon(Icons.keyboard_arrow_right)
+                    : Container(
+                    width: 150,
+                    child: Text(
+                      remarks,
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey),
+                    )
+                )
+              ],
+            )
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    OfflineOrderInputRemarksPage(
+                      fieldText: '订单备注',
+                      inputType: TextInputType.text,
+                      content: remarks,)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              remarks = value;
+            });
+          });
+        });
+  }
+
+  Widget _buildProductSelect() {
+    return Container(
         color: Colors.white,
-        child: product == null
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '商品选择/创建',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Icon(
-                    Icons.chevron_right,
-                    size: 35,
-                    color: Color.fromRGBO(180, 180, 180, 1),
-                  )
-                ],
-              )
-            : Column(
-                children: <Widget>[
-                  ApparelProductItem(
-                    product,
-                    isRequirement: false,
-                    isSelectItem: true,
-                  ),
-                  widget.update
-                      ? Container()
-                      : FlatButton(
-                          onPressed: _onProductSelect,
-                          child: Text('重新选择'),
-                        )
-                ],
-              ),
-      ),
+        margin: EdgeInsets.only(top: 5),
+        child: GestureDetector(
+            child: Container(
+              height: 100,
+              child: Card(
+                  elevation: 0,
+                  color: Colors.white10,
+                  child: Center(child: Text('商品选择/创建'))),
+            ),
+            onTap: () {
+              _onProductSelect();
+            }
+        )
     );
   }
+
+  Widget _buildProduct() {
+    return GestureDetector(
+        child: Container(
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 5),
+          padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: product.thumbnail != null
+                          ? NetworkImage(
+                          '${GlobalConfigs.IMAGE_BASIC_URL}${product.thumbnail.url}')
+                          : AssetImage(
+                        'temp/picture.png',
+                        package: "assets",
+                      ),
+                      fit: BoxFit.cover,
+                    )),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '${product != null && product.name != null ? product.name : ''}',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          '货号：${product != null && product.skuID != null ? product.skuID : ''}',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(255, 243, 243, 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "${product != null && product.category != null ? product.category.name : ''}",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Color.fromRGBO(255, 133, 148, 1)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        onTap: () async {
+          _onProductSelect();
+        }
+    );
+  }
+
+//  Widget _buildProductSelect() {
+//    return GestureDetector(
+//      onTap: _onProductSelect,
+//      child: Container(
+//        width: double.infinity,
+//        padding: EdgeInsets.symmetric(vertical: 30),
+//        color: Colors.white,
+//        child: product == null
+//            ? Row(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  Text(
+//                    '商品选择/创建',
+//                    style: TextStyle(fontSize: 20),
+//                  ),
+//                  Icon(
+//                    Icons.chevron_right,
+//                    size: 35,
+//                    color: Color.fromRGBO(180, 180, 180, 1),
+//                  )
+//                ],
+//              )
+//            : Column(
+//                children: <Widget>[
+//                  ApparelProductItem(
+//                    product,
+//                    isRequirement: false,
+//                    isSelectItem: true,
+//                  ),
+//                  widget.update
+//                      ? Container()
+//                      : FlatButton(
+//                          onPressed: _onProductSelect,
+//                          child: Text('重新选择'),
+//                        )
+//                ],
+//              ),
+//      ),
+//    );
+//  }
 
   void _onProductSelect() async {
     ApparelProductModel selectProduct =
@@ -326,10 +480,12 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                '样衣数量',
-                style: TextStyle(
-                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+              Expanded(
+                child: Text(
+                  '样衣数量',
+                  style: TextStyle(
+                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                ),
               ),
               Text(
                 '${totalQuantity}件',
@@ -392,7 +548,20 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             title: Text('确定提交？'),
             actions: <Widget>[
               FlatButton(
-                child: Text('确定'),
+                child: Text('取消',
+                    style: TextStyle(
+                        color: Colors.grey
+                    )
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('确定',
+                style: TextStyle(
+                  color: Colors.black
+                ),),
                 onPressed: () async {
                   //拼装数据
                   ProofingModel model = ProofingModel();
@@ -433,12 +602,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   }
                 },
               ),
-              FlatButton(
-                child: Text('取消'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
             ],
           );
         },
@@ -455,7 +618,20 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           title: Text('确定修改？'),
           actions: <Widget>[
             FlatButton(
-              child: Text('确定'),
+              child: Text('取消',
+                  style: TextStyle(
+                      color: Colors.grey
+                  )),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('确定',
+                  style: TextStyle(
+                  color: Colors.black
+                  )
+              ),
               onPressed: () async {
                 //拼装数据
                 ProofingModel model = ProofingModel();
@@ -463,7 +639,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   ..code = widget.model.code
                   ..unitPrice = double.parse(_unitPriceController.text)
                   ..totalPrice = totalPrice
-                  ..remarks = _remarksController.text;
+                  ..remarks = remarks;
                 String response =
                     await ProofingOrderRepository().proofingUpdate(model);
                 //TODOS:跳转到打样订单详情
@@ -480,12 +656,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                         ModalRoute.withName('/'));
                   }
                 }
-              },
-            ),
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
               },
             ),
           ],

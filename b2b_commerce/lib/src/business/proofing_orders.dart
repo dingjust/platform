@@ -172,7 +172,7 @@ class ProofingOrdersList extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
                           child: Center(
                             child: Text(
-                              "┑(￣Д ￣)┍ 已经到底了",
+                              "(￢_￢)已经到底了",
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),
@@ -444,12 +444,12 @@ class ProofingOrderItem extends StatelessWidget {
               onPressed: () {},
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 245, 193, 1),
+              color: Color(0xFFFFD600),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '确认收货',
                 style: TextStyle(
-                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+                    color: Colors.black, fontSize: 16),
               )),
         ];
       } else {

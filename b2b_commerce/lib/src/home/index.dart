@@ -184,7 +184,7 @@ class BrandSecondMenuSection extends StatelessWidget {
         onPressed: () async {
           List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
 
-          Navigator.push(context, MaterialPageRoute(builder: (context) => IndustrialClusterPage(labels)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => IndustrialClusterPage(labels: labels)));
         },
         title: '产业集群',
         icon: Icon(
