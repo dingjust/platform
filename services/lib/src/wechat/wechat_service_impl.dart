@@ -1,7 +1,8 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:models/models.dart';
+import 'package:services/src/api/wechat.dart';
+import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/wechat/wechat_pay_helper.dart';
 import 'package:services/src/wechat/wechat_service.dart';
 import 'package:services/src/wechat/wechatpay_constants.dart';
@@ -17,14 +18,12 @@ class WechatServiceImpl implements WechatService {
   WechatServiceImpl._internal() {
     // 初始化
     // //注册微信信息
-    // fluwx.register(
-    //     appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: false);
+    fluwx.register(
+        appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: false);
 
-    //监听微信回调
+    //全局监听微信回调
     fluwx.responseFromPayment.listen((WeChatPaymentResponse data) {
-      WeChatPaymentResponse result = data;
-      var a = 1;
-      print('>>>>> ${result.errStr}');
+      print('>>>>> ${data.errStr}');
     });
   }
 
@@ -50,16 +49,6 @@ class WechatServiceImpl implements WechatService {
           timeStamp: prepayModel.timeStamp,
           sign: prepayModel.sign,
           signType: prepayModel.signType);
-      // fluwx.pay(
-      //     appId: 'wxf72ddd003c54363c',
-      //     partnerId: '1521483781',
-      //     prepayId: 'wx30173631929990e371a39eda4196971050',
-      //     packageValue: 'Sign=WXPay',
-      //     nonceStr: 'EluEZ2LH8mUOcT1TLLOihiYT17mE0Fnf',
-      //     timeStamp: 1553938591,
-      //     sign:
-      //         '1662737662E2BB099CA15769D4B54CDBAC7DAD31D5B4801688C3ABDD956C310E',
-      //     signType: 'HMAC-SHA256');
     } else {
       print('error get prepay');
     }
@@ -80,5 +69,37 @@ class WechatServiceImpl implements WechatService {
     fluwx.responseFromShare.listen((data) {
       print('>>>>>' + data.toString());
     });
+  }
+
+  @override
+  Future<bool> isWeChatInstalled() async {
+    return await fluwx.isWeChatInstalled() as bool;
+  }
+
+  @override
+  Future<String> paymentConfirm(OrderModel order) async {
+    Response response;
+
+    String apiUrl;
+
+    //按类型调用不同接口
+    if (order is ProofingModel) {
+      apiUrl = WechatApis.proofingPaidConfirm(order.code);
+    } else if (order is PurchaseOrderModel) {
+    } else {
+      return null;
+    }
+
+    try {
+      response = await http$.put(apiUrl);
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return "success";
+    } else {
+      return null;
+    }
   }
 }

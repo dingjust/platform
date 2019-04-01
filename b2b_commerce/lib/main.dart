@@ -20,17 +20,11 @@ import 'src/home/index.dart';
 import 'src/my/index.dart';
 import 'src/production/index.dart';
 
-import 'package:fluwx/fluwx.dart' as fluwx;
-
 void main() async {
   debugInstrumentationEnabled = true;
 
   // 初始化,检测是否有用户登陆信息
   await UserBLoC.instance.checkLocalUser();
-
-  //注册微信信息
-  fluwx.register(
-      appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: false);
 
   runApp(BLoCProvider<AppBLoC>(
     bloc: AppBLoC(),
@@ -122,11 +116,9 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
-            // margin: EdgeInsets.only(right: _isBrand() ? 5 : 0),
             child: const Icon(B2BIcons.home),
           ),
           activeIcon: Container(
-            // margin: EdgeInsets.only(right: _isBrand() ? 5 : 0),
             child: const Icon(B2BIcons.home_active),
           ),
           title: const Text('商机'),
@@ -144,7 +136,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
             child: const Icon(B2BIcons.production_active),
           ),
           title: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 30 : 0),
+            margin: EdgeInsets.only(right: _isBrand() ? 25 : 0),
             child: const Text('生产'),
           ),
         ),
@@ -153,11 +145,11 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
             icon: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 35 : 0),
+              margin: EdgeInsets.only(left: _isBrand() ? 30 : 0),
               child: const Icon(B2BIcons.business),
             ),
             activeIcon: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 35 : 0),
+              margin: EdgeInsets.only(left: _isBrand() ? 30 : 0),
               child: const Icon(B2BIcons.business_active),
             ),
             title: Container(
@@ -169,13 +161,13 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 5 : 0),
+            margin: EdgeInsets.only(right: _isBrand() ? 10 : 0),
             child: const Icon(
               B2BIcons.my,
             ),
           ),
           activeIcon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 5 : 0),
+            margin: EdgeInsets.only(right: _isBrand() ? 10 : 0),
             child: const Icon(
               B2BIcons.my_active,
             ),

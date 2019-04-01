@@ -29,3 +29,5 @@ class WechatPrepayModel {
   static Map<String, dynamic> toJson(WechatPrepayModel model) =>
       _$WechatPrepayModelToJson(model);
 }
+
+
