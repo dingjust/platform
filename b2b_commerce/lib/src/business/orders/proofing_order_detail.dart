@@ -73,35 +73,48 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
         children: <Widget>[
-          widget.model.entries[0].product.thumbnail != null
-              ? GestureDetector(
-            child: Container(
-              margin: EdgeInsets.only(right: 15),
-              padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: widget.model.entries[0].product != null &&
-                        widget.model.entries[0].product.thumbnail != null
-                        && widget.model.entries[0].product.thumbnail.url != null
-                        ?
-                    NetworkImage(
-                        '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model
-                            .entries[0].product.thumbnail.url}')
-                        : AssetImage(
-                      'temp/picture.png',
-                      package: "assets",
-                    ),
-                    fit: BoxFit.cover,
-                  )),
+          widget.model.product.thumbnail != null?
+          GestureDetector(
+            child: Stack(
+              alignment: const Alignment(0.6, 1.1),
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: 15),
+                  padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: widget.model.product != null &&
+                            widget.model.product.thumbnail != null
+                            && widget.model.product.thumbnail.url !=
+                                null
+                            ?
+                        NetworkImage(
+                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model
+                                .product.thumbnail.url}')
+                            : AssetImage(
+                          'temp/picture.png',
+                          package: "assets",
+                        ),
+                        fit: BoxFit.cover,
+                      )),
+                ),
+                Container(
+                  child: Icon(
+                    Icons.photo_size_select_actual,
+                    color: Colors.black38,
+                    size: 20,
+                  ),
+                )
+              ],
             ),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
                       PicturePickPreviewWidget(
-                        medias: widget.model.entries[0].product.thumbnails,
+                        medias: widget.model.product.thumbnails,
                         isUpload: false,
                       ))
               );
