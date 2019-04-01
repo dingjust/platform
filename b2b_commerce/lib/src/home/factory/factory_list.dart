@@ -59,16 +59,7 @@ class _FactoryPageState extends State<FactoryPage> {
               style: TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  B2BIcons.search,
-                  size: 22,
-                ),
-                onPressed: () => showSearch(
-                      context: context,
-                      delegate: QuickReactionFactorySearchDelegate(),
-                    ),
-              ),
+              QuickReactionFactoryButton(),
             ],
           ),
           body: Scaffold(
@@ -77,23 +68,8 @@ class _FactoryPageState extends State<FactoryPage> {
                 bottom: FilterBar(
                   onChanged: (condition) => changeCondition(condition),
                   filterConditionEntries: filterConditionEntries,
-                  action: IconButton(
-                    icon: Icon(Icons.menu),
-                    onPressed: () async {
-                      await ProductRepositoryImpl().majorCategories().then((categories) async {
-                        FactoryCondition newFactoryCondition = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => CondtionPage(
-                                  categories: categories,
-                                  factoryCondition: widget.factoryCondition,
-                                ),
-                          ),
-                        );
-
-                        ///条件更新数据
-                        FactoryBLoC.instance.filterByCondition(newFactoryCondition);
-                      });
-                    },
+                  action: ConditionPageButton(
+                    factoryCondition: widget.factoryCondition,
                   ),
                 ),
               ),
@@ -102,6 +78,53 @@ class _FactoryPageState extends State<FactoryPage> {
                 showButton: widget.requirementCode != null,
               )),
         ));
+  }
+}
+
+class QuickReactionFactoryButton extends StatelessWidget {
+  const QuickReactionFactoryButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        B2BIcons.search,
+        size: 22,
+      ),
+      onPressed: () => showSearch(
+            context: context,
+            delegate: QuickReactionFactorySearchDelegate(),
+          ),
+    );
+  }
+}
+
+class ConditionPageButton extends StatelessWidget {
+  const ConditionPageButton({Key key, @required this.factoryCondition}) : super(key: key);
+
+  final FactoryCondition factoryCondition;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.menu),
+      onPressed: () async {
+        await ProductRepositoryImpl().majorCategories().then((categories) async {
+          FactoryCondition newFactoryCondition = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>
+                  ConditionPage(
+                    categories: categories,
+                    factoryCondition: factoryCondition,
+                  ),
+            ),
+          );
+
+          ///条件更新数据
+          FactoryBLoC.instance.filterByCondition(newFactoryCondition);
+        });
+      },
+    );
   }
 }
 

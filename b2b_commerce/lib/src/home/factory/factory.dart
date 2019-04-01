@@ -6,12 +6,12 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class FactoryItem extends StatelessWidget {
-  const FactoryItem(
-      {Key key,
-      @required this.model,
-      this.showButton = false,
-      this.hasInvited = false})
-      : super(key: key);
+  const FactoryItem({
+    Key key,
+    @required this.model,
+    this.showButton = false,
+    this.hasInvited = false,
+  }) : super(key: key);
 
   final FactoryModel model;
 
@@ -26,8 +26,7 @@ class FactoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         //获取该工厂的现款商品
-        ProductsResponse productsResponse =
-            await ProductRepositoryImpl().getProductsOfFactories({
+        ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
           'factory': model.uid,
         }, {
           'size': 3
@@ -76,8 +75,7 @@ class FactoryItem extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 image: DecorationImage(
-                                  image: NetworkImage(
-                                      '${GlobalConfigs.IMAGE_BASIC_URL}${model.profilePicture.url}'),
+                                  image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${model.profilePicture.url}'),
                                   fit: BoxFit.fill,
                                 )),
                           )
@@ -86,11 +84,8 @@ class FactoryItem extends StatelessWidget {
                             height: 80,
                             margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Color.fromRGBO(243, 243, 243, 1)),
-                            child: Icon(B2BIcons.noPicture,
-                                color: Color.fromRGBO(200, 200, 200, 1),
-                                size: 60),
+                                borderRadius: BorderRadius.circular(5), color: Color.fromRGBO(243, 243, 243, 1)),
+                            child: Icon(B2BIcons.noPicture, color: Color.fromRGBO(200, 200, 200, 1), size: 60),
                           ),
                     Expanded(
                       flex: 1,
@@ -102,8 +97,7 @@ class FactoryItem extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               '${PopulationScaleLocalizedMap[model.populationScale]}',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(180, 180, 180, 1)),
+                              style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
                             ),
                             Container(child: Row(children: _buildTags())),
                             Container(
@@ -123,18 +117,13 @@ class FactoryItem extends StatelessWidget {
                                     ),
                                   ),
                                   RichText(
-                                    text: TextSpan(
-                                        text: '已接',
-                                        style: TextStyle(color: Colors.grey),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                              text:
-                                                  '${model.historyOrdersCount}',
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontWeight: FontWeight.bold)),
-                                          TextSpan(text: '单')
-                                        ]),
+                                    text:
+                                        TextSpan(text: '已接', style: TextStyle(color: Colors.grey), children: <TextSpan>[
+                                      TextSpan(
+                                          text: '${model.historyOrdersCount}',
+                                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                      TextSpan(text: '单')
+                                    ]),
                                   ),
                                 ],
                               ),
@@ -157,9 +146,7 @@ class FactoryItem extends StatelessWidget {
             ],
           ),
           decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                  bottom: BorderSide(color: Colors.grey[300], width: 0.6))),
+              color: Colors.white, border: Border(bottom: BorderSide(color: Colors.grey[300], width: 0.6))),
         ),
       ),
     );
@@ -210,8 +197,7 @@ class FactoryItem extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 12),
             ),
           ),
-          decoration: BoxDecoration(
-              color: Colors.grey, borderRadius: BorderRadius.circular(20)),
+          decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(20)),
         );
       } else {
         return Container(
@@ -225,8 +211,7 @@ class FactoryItem extends StatelessWidget {
               '邀请报价',
               style: TextStyle(color: Colors.black, fontSize: 12),
             ),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
         );
       }
@@ -287,8 +272,7 @@ class Tag extends StatelessWidget {
           style: TextStyle(color: color, fontSize: 14),
         ),
       ),
-      decoration: BoxDecoration(
-          color: backgroundColor, borderRadius: BorderRadius.circular(2)),
+      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(2)),
     );
   }
 }
