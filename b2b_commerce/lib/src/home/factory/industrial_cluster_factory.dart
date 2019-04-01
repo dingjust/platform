@@ -15,13 +15,13 @@ class IndustrialClusterPage extends StatefulWidget {
 class _IndustrialClusterPageState extends State<IndustrialClusterPage> {
   List<Widget> _keyItem;
   List<IndustrialClusterModel> _valueItem = [];
-  String _selectLeft;
-  Color _color;
+  String _selectedLabel;
+  Color _highlightColorWhenSelected;
 
   @override
   void initState() {
     if (widget.labels.isNotEmpty) {
-      _selectLeft = widget.labels[0].name;
+      _selectedLabel = widget.labels[0].name;
       _valueItem = widget.labels[0].clusters;
     }
 
@@ -31,23 +31,22 @@ class _IndustrialClusterPageState extends State<IndustrialClusterPage> {
   @override
   Widget build(BuildContext context) {
     _keyItem = widget.labels.map((label) {
-      if (_selectLeft == label.name) {
-        _color = Color(0xFFFF9516);
-      } else {
-        _color = Colors.black;
+      _highlightColorWhenSelected = Colors.black;
+      if (_selectedLabel == label.name) {
+        _highlightColorWhenSelected = Color(0xFFFF9516);
       }
+
       return GestureDetector(
         onTap: () {
-          if (_selectLeft != label.name) {
+          if (_selectedLabel != label.name) {
             setState(() {
-              _selectLeft = label.name;
+              _selectedLabel = label.name;
             });
           }
 
           _valueItem = label.clusters;
         },
         child: Container(
-//            width: 60,
           color: Colors.white10,
           padding: EdgeInsets.only(
             left: 10,
@@ -58,7 +57,7 @@ class _IndustrialClusterPageState extends State<IndustrialClusterPage> {
             height: 40,
             child: Text(
               label.name,
-              style: TextStyle(color: _color),
+              style: TextStyle(color: _highlightColorWhenSelected),
             ),
           ),
         ),
