@@ -19,10 +19,7 @@ class BusinessHomePage extends StatefulWidget {
 
   final Map<UserType, List<Widget>> widgets = <UserType, List<Widget>>{
     UserType.BRAND: <Widget>[BrandSiteStatisticsSection(), BrandMenusSection()],
-    UserType.FACTORY: <Widget>[
-      FactorySiteStatisticsSection(),
-      FactoryMenusSection(),
-    ]
+    UserType.FACTORY: <Widget>[FactorySiteStatisticsSection(), FactoryMenusSection()]
   };
 
   get widgetsByUserType => widgets[userType];
@@ -79,45 +76,47 @@ class BrandSiteStatisticsSection extends StatelessWidget {
 }
 
 class BrandMenusSection extends StatelessWidget {
+  Widget _buildOrderMenu() {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          AdvanceMenu('订单管理', <AdvanceMenuItem>[
+            AdvanceMenuItem(MenuItemImage.requirement_order, '需求订单', AppRoutes.ROUTE_REQUIREMENT_ORDERS),
+            AdvanceMenuItem(MenuItemImage.price_manage, '报价管理', AppRoutes.ROUTE_QUOTES),
+            AdvanceMenuItem(MenuItemImage.proofing_order, '打样订单', AppRoutes.ROUTE_PROOFING_ORDERS),
+            AdvanceMenuItem(MenuItemImage.purchase_order, '生产订单', AppRoutes.ROUTE_PURCHASE_ORDERS),
+          ])
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompanyMenu() {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          AdvanceMenu('店铺管理', <AdvanceMenuItem>[
+            AdvanceMenuItem(MenuItemImage.product_manage, '商品管理', AppRoutes.ROUTE_PRODUCTS),
+            AdvanceMenuItem(MenuItemImage.employee_manage, '员工管理', AppRoutes.ROUTE_EMPLOYEES),
+            AdvanceMenuItem(MenuItemImage.supplier_manage, '供应商管理', AppRoutes.ROUTE_SUPPLIERS),
+            AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣借还', AppRoutes.ROUTE_SAMPLE_GARMENTS),
+          ])
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(top: 10),
-            color: Colors.white,
-            child:
-            Row(children: <Widget>[
-              AdvanceMenu('订单管理', <AdvanceMenuItem>[
-                AdvanceMenuItem(MenuItemImage.requirement_order, '需求订单',
-                    AppRoutes.ROUTE_REQUIREMENT_ORDERS),
-                AdvanceMenuItem(
-                    MenuItemImage.price_manage, '报价管理', AppRoutes.ROUTE_QUOTES),
-                AdvanceMenuItem(MenuItemImage.proofing_order, '打样订单',
-                    AppRoutes.ROUTE_PROOFING_ORDERS),
-                AdvanceMenuItem(MenuItemImage.purchase_order, '生产订单',
-                    AppRoutes.ROUTE_PURCHASE_ORDERS),
-              ])
-            ],)
-        ),
-        Container(
-            margin: EdgeInsets.only(top: 10),
-            color: Colors.white,
-            child:
-            Row(children: <Widget>[
-              AdvanceMenu('店铺管理', <AdvanceMenuItem>[
-                AdvanceMenuItem(MenuItemImage.product_manage, '商品管理',
-                    AppRoutes.ROUTE_PRODUCTS),
-                AdvanceMenuItem(MenuItemImage.employee_manage, '员工管理',
-                    AppRoutes.ROUTE_EMPLOYEES),
-                AdvanceMenuItem(MenuItemImage.supplier_manage, '供应商管理',
-                    AppRoutes.ROUTE_SUPPLIERS),
-                AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣借还',
-                    AppRoutes.ROUTE_SAMPLE_GARMENTS),
-              ])
-            ],)
-        )
+        _buildOrderMenu(),
+        _buildCompanyMenu(),
       ],
     );
   }
@@ -152,50 +151,46 @@ class FactorySiteStatisticsSection extends StatelessWidget {
 }
 
 class FactoryMenusSection extends StatelessWidget {
+  Widget _buildOrderMenu() {
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10),
+      child: Row(
+        children: <Widget>[
+          AdvanceMenu('订单管理', <AdvanceMenuItem>[
+            AdvanceMenuItem(MenuItemImage.quote_factory, '报价管理', AppRoutes.ROUTE_QUOTES),
+            AdvanceMenuItem(MenuItemImage.proofing_order, '打样订单', AppRoutes.ROUTE_PROOFING_ORDERS),
+            AdvanceMenuItem(MenuItemImage.purchase_order, '生产订单', AppRoutes.ROUTE_PURCHASE_ORDERS),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompanyMenu() {
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10),
+      child: Row(
+        children: <Widget>[
+          AdvanceMenu('工厂管理', <AdvanceMenuItem>[
+            AdvanceMenuItem(MenuItemImage.employee_manage, '员工管理', AppRoutes.ROUTE_EMPLOYEES),
+            AdvanceMenuItem(MenuItemImage.product_factory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
+            AdvanceMenuItem(MenuItemImage.partner_factory, '合作商管理', AppRoutes.ROUTE_SUPPLIERS),
+            AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣管理', AppRoutes.ROUTE_SAMPLE_GARMENTS),
+          ])
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(top: 10),
-          child: Row(
-            children: <Widget>[
-              AdvanceMenu('订单管理', <AdvanceMenuItem>[
-                AdvanceMenuItem(MenuItemImage.quote_factory, '报价管理',
-                    AppRoutes.ROUTE_QUOTES),
-                AdvanceMenuItem(MenuItemImage.proofing_order, '打样订单',
-                    AppRoutes.ROUTE_PROOFING_ORDERS),
-                AdvanceMenuItem(MenuItemImage.purchase_order, '生产订单',
-                    AppRoutes.ROUTE_PURCHASE_ORDERS),
-              ]),
-            ],
-          ),
-        ),
-        Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(top: 10),
-            child:
-            Row(
-              children: <Widget>[
-                AdvanceMenu('工厂管理', <AdvanceMenuItem>[
-                  // AdvanceMenuItem(MenuItemImage.member_manage, '产能管理',
-                  //     AppRoutes.ROUTE_MEMBERSHIPS),
-                  AdvanceMenuItem(MenuItemImage.employee_manage, '员工管理',
-                      AppRoutes.ROUTE_EMPLOYEES),
-                  AdvanceMenuItem(MenuItemImage.product_factory, '产品管理',
-                      AppRoutes.ROUTE_PRODUCTS),
-                  AdvanceMenuItem(MenuItemImage.partner_factory, '合作商管理',
-                      AppRoutes.ROUTE_SUPPLIERS),
-                  AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣管理',
-                      AppRoutes.ROUTE_SAMPLE_GARMENTS),
-                  // AdvanceMenuItem(MenuItemImage.inventory_manage, '面辅料管理',
-                  //     AppRoutes.ROUTE_PRODUCT_STOCKS),
-                ])
-              ],
-            )
-        )
+        _buildOrderMenu(),
+        _buildCompanyMenu(),
       ],
     );
   }

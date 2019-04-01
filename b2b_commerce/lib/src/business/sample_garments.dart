@@ -279,10 +279,7 @@ class SampleProductHistoryList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<List<SampleBorrowReturnHistoryModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses(state);
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 200),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
+                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     _widgets.clear();
@@ -326,14 +323,8 @@ class SampleProductHistoryList extends StatelessWidget {
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Center(
-                      child: new Opacity(
-                        opacity: snapshot.data ? 1.0 : 0,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
+                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                    opacity: snapshot.data ? 1.0 : 0,
                   );
                 },
               ),

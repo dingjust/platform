@@ -107,15 +107,13 @@ class _LoginPageState extends State<LoginPage> {
           //     : Container(),
           GestureDetector(
             onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => widget.registerPage));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => widget.registerPage));
             },
             child: Container(
               margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
               child: Text(
                 '注册',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 214, 12, 1), fontSize: 15),
+                style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1), fontSize: 15),
               ),
             ),
           ),
@@ -131,18 +129,10 @@ class _LoginPageState extends State<LoginPage> {
         obscureText: _isPasswordHide,
         decoration: InputDecoration(
             hintText: '请输入密码',
-            focusedErrorBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-            errorBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-            focusedBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-            border: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+            focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+            errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+            border: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
             suffixIcon: GestureDetector(
               onTap: () {
                 setState(() {
@@ -165,17 +155,12 @@ class _LoginPageState extends State<LoginPage> {
         decoration: InputDecoration(
           labelText: '验证码',
           hintText: '请输入',
-          focusedErrorBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-          errorBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-          border: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+          focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+          errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+          border: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
           suffixIcon: FlatButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
             onPressed: (_seconds == 0)
                 ? () {
                     setState(() {
@@ -214,27 +199,19 @@ class _LoginPageState extends State<LoginPage> {
                 WhitelistingTextInputFormatter.digitsOnly,
               ],
               decoration: InputDecoration(
-                  suffixIcon:IconButton(
+                  suffixIcon: IconButton(
                       icon: Icon(Icons.clear),
-                      onPressed: (){
+                      onPressed: () {
                         setState(() {
                           _phoneController.clear();
                         });
-                      }
-                  ),
+                      }),
                   hintText: '请输入手机号码',
-                  focusedErrorBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-                  errorBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-                  border: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1)))),
+                  focusedErrorBorder:
+                      UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+                  errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+                  border: UnderlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1)))),
               // 校验用户名
               validator: (v) {
                 return v.trim().length > 0 ? null : '手机号不能为空';
@@ -259,11 +236,8 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   Text(
                     '记住账号',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: _isRemember
-                            ? Color.fromRGBO(255, 214, 12, 1)
-                            : Colors.black54),
+                    style:
+                        TextStyle(fontSize: 15, color: _isRemember ? Color.fromRGBO(255, 214, 12, 1) : Colors.black54),
                   ),
                   Checkbox(
                     onChanged: (v) {
@@ -284,8 +258,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLogo() {
-    return Container(
-        padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20), child: widget.logo);
+    return Container(padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20), child: widget.logo);
   }
 
   Widget _buildBody(BuildContext context) {
@@ -334,11 +307,9 @@ class _LoginPageState extends State<LoginPage> {
                       ? () {
                           //加载条
                           showDialog(
-                              context: context,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ));
-
+                            context: context,
+                            builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+                          );
                           bloc
                               .login(
                                   username: _phoneController.text,
@@ -347,8 +318,7 @@ class _LoginPageState extends State<LoginPage> {
                               .then((result) {});
                         }
                       : null,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(

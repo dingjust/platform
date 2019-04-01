@@ -9,8 +9,7 @@ class FastPublishRequirement extends StatefulWidget {
 }
 
 class _FastPublishRequirementState extends State<FastPublishRequirement> {
-  RequirementOrderModel model =
-      RequirementOrderModel(details: RequirementInfoModel());
+  RequirementOrderModel model = RequirementOrderModel(details: RequirementInfoModel());
   GlobalKey _formKey = new GlobalKey<FormState>();
   TextEditingController _requirementNumController = TextEditingController();
 
@@ -47,19 +46,16 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
           onTap: () async {
             //加载条
             showDialog(
-                context: context,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ));
-            await ProductRepositoryImpl()
-                .cascadedCategories()
-                .then((categorys) {
+              context: context,
+              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+            );
+            await ProductRepositoryImpl().cascadedCategories().then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: fastRequirementForm.categories,
                         fastRequirementForm: fastRequirementForm,
-                        categories: categorys,
+                        categories: categories,
                         hasNextPage: true,
                       )));
             });
@@ -82,10 +78,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                       ),
                       Text(
                         '   急速发布需求   ',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       Icon(
                         B2BIcons.right_quotation,
@@ -261,9 +254,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: expectedDeliveryDate == null
-            ? DateTime.now()
-            : expectedDeliveryDate,
+        initialDate: expectedDeliveryDate == null ? DateTime.now() : expectedDeliveryDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     setState(() {
@@ -299,8 +290,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                 style: TextStyle(color: Color(0xffFF9516)),
               ),
               onPressed: () {
-                if (_requirementNumController.text != '' &&
-                    _requirementNumController.text != null) {
+                if (_requirementNumController.text != '' && _requirementNumController.text != null) {
                   setState(() {
                     requirementNum = int.parse(_requirementNumController.text);
                   });
@@ -315,34 +305,34 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
     );
   }
 
-  //小类
-  // void _showCategorySelect() async {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return Container(
-  //         child: CategorySelect(
-  //           categorys: _categorys,
-  //           multiple: false,
-  //           verticalDividerOpacity: 1,
-  //           categorySelect: _categorySelected,
-  //         ),
-  //       );
-  //     },
-  //   ).then((val) {
-  //     category = '';
-  //     if (_categorySelected.isNotEmpty) {
-  //       for (int i = 0; i < _categorySelected.length; i++) {
-  //         category += _categorySelected[i].name + ',';
-  //       }
-  //     } else {
-  //       category = '点击选择分类';
-  //     }
-  //     setState(() {
-  //       category = category;
-  //     });
-  //   });
-  // }
+//小类
+// void _showCategorySelect() async {
+//   showModalBottomSheet(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return Container(
+//         child: CategorySelect(
+//           categorys: _categorys,
+//           multiple: false,
+//           verticalDividerOpacity: 1,
+//           categorySelect: _categorySelected,
+//         ),
+//       );
+//     },
+//   ).then((val) {
+//     category = '';
+//     if (_categorySelected.isNotEmpty) {
+//       for (int i = 0; i < _categorySelected.length; i++) {
+//         category += _categorySelected[i].name + ',';
+//       }
+//     } else {
+//       category = '点击选择分类';
+//     }
+//     setState(() {
+//       category = category;
+//     });
+//   });
+// }
 }
 
 class FastRequirementForm {
@@ -352,10 +342,5 @@ class FastRequirementForm {
   TextEditingController contactPerson;
   TextEditingController phone;
 
-  FastRequirementForm(
-      {this.categories,
-      this.contactPerson,
-      this.deliveryDate,
-      this.phone,
-      this.requirementNum});
+  FastRequirementForm({this.categories, this.contactPerson, this.deliveryDate, this.phone, this.requirementNum});
 }

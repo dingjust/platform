@@ -1,10 +1,11 @@
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
-import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import './orders/requirement_order_detail.dart';
+import './search/requirement_order_search.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -20,59 +21,57 @@ class RequirementOrdersPage extends StatefulWidget {
 class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
   GlobalKey _requirementOrderBlocProviderKey = GlobalKey();
 
+  Widget _buildTitle() {
+    return const Text('需求订单管理', style: TextStyle(color: Colors.black));
+  }
+
+  Widget _buildSearchButton(BuildContext context) {
+    return IconButton(
+      icon: Icon(B2BIcons.search, size: 20),
+      onPressed: () => showSearch(context: context, delegate: RequirementOrderSearchDelegate()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BLoCProvider<RequirementOrderBLoC>(
-        key: _requirementOrderBlocProviderKey,
-        bloc: RequirementOrderBLoC.instance,
-        child: Scaffold(
-          appBar: AppBar(
-            brightness: Brightness.light,
-            centerTitle: true,
-            elevation: 0.5,
-            title: Text(
-              '需求订单管理',
-              style: TextStyle(color: Colors.black),
+      key: _requirementOrderBlocProviderKey,
+      bloc: RequirementOrderBLoC.instance,
+      child: Scaffold(
+        appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
+          title: _buildTitle(),
+          actions: <Widget>[
+            _buildSearchButton(context),
+          ],
+        ),
+        body: DefaultTabController(
+          length: statuses.length,
+          child: Scaffold(
+            appBar: TabBar(
+              unselectedLabelColor: Colors.black26,
+              labelColor: Colors.black,
+              indicatorSize: TabBarIndicatorSize.label,
+              tabs: statuses.map((status) {
+                return Tab(text: status.name);
+              }).toList(),
+              labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+              isScrollable: false,
             ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  B2BIcons.search,
-                  size: 20,
-                ),
-                onPressed: () => showSearch(
-                    context: context,
-                    delegate: RequirementOrderSearchDelegate()),
-              ),
-            ],
-          ),
-          body: DefaultTabController(
-            length: statuses.length,
-            child: Scaffold(
-              appBar: TabBar(
-                unselectedLabelColor: Colors.black26,
-                labelColor: Colors.black,
-                indicatorSize: TabBarIndicatorSize.label,
-                tabs: statuses.map((status) {
-                  return Tab(text: status.name);
-                }).toList(),
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black),
-                isScrollable: false,
-              ),
-              body: TabBarView(
-                children: statuses
-                    .map((status) => RequirementOrderList(
-                          status: status,
-                        ))
-                    .toList(),
-              ),
+            body: TabBarView(
+              children: statuses
+                  .map(
+                    (status) => RequirementOrderList(status: status),
+                  )
+                  .toList(),
             ),
           ),
-          floatingActionButton: _ToTopBtn(),
-        ));
+        ),
+        floatingActionButton: _ToTopBtn(),
+      ),
+    );
   }
 }
 
@@ -81,21 +80,20 @@ class RequirementOrderList extends StatelessWidget {
 
   final EnumModel status;
 
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<RequirementOrderBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(status.code);
       }
     });
 
-    //监听滚动事件，打印滚动位置
+    // 监听滚动事件，打印滚动位置
     _scrollController.addListener(() {
       if (_scrollController.offset < 500) {
         bloc.hideToTopBtn();
@@ -104,12 +102,11 @@ class RequirementOrderList extends StatelessWidget {
       }
     });
 
-    //状态管理触发的返回顶部
+    // 状态管理触发的返回顶部
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -127,14 +124,10 @@ class RequirementOrderList extends StatelessWidget {
               StreamBuilder<List<RequirementOrderModel>>(
                 stream: bloc.stream,
                 // initialData: null,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses(status.code);
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 200),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
+                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
@@ -155,8 +148,7 @@ class RequirementOrderList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data) {
                     _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
                   return snapshot.data
                       ? Container(
@@ -175,14 +167,8 @@ class RequirementOrderList extends StatelessWidget {
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Center(
-                      child: new Opacity(
-                        opacity: snapshot.data ? 1.0 : 0,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
+                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                    opacity: snapshot.data ? 1.0 : 0,
                   );
                 },
               ),
@@ -208,11 +194,10 @@ class RequirementOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         //根据code查询明
-        RequirementOrderModel model = await RequirementOrderRepository()
-            .getRequirementOrderDetail(order.code);
+        RequirementOrderModel model = await RequirementOrderRepository().getRequirementOrderDetail(order.code);
 
-        List<QuoteModel> quotes = await RequirementOrderRepository()
-            .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
+        List<QuoteModel> quotes =
+            await RequirementOrderRepository().getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
 
         if (model != null) {
           Navigator.of(context).push(MaterialPageRoute(
@@ -246,12 +231,10 @@ class RequirementOrderItem extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child:
-                    Text('需求订单号：' + order.code, style: TextStyle(fontSize: 16)),
+                child: Text('需求订单号：' + order.code, style: TextStyle(fontSize: 16)),
               ),
               Text(RequirementOrderStatusLocalizedMap[order.status],
-                  style: TextStyle(
-                      color: _statusColors[order.status], fontSize: 18))
+                  style: TextStyle(color: _statusColors[order.status], fontSize: 18))
             ],
           ),
           Container(
@@ -273,28 +256,16 @@ class RequirementOrderItem extends StatelessWidget {
       _pictureWidget = Container(
         width: 80,
         height: 80,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Color.fromRGBO(243, 243, 243, 1)),
-        child: Icon(
-          B2BIcons.noPicture,
-          color: Color.fromRGBO(200, 200, 200, 1),
-          size: 60
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Color.fromRGBO(243, 243, 243, 1)),
+        child: Icon(B2BIcons.noPicture, color: Color.fromRGBO(200, 200, 200, 1), size: 60),
       );
     } else {
       if (order.details.pictures.isEmpty) {
         _pictureWidget = Container(
           width: 80,
           height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Color.fromRGBO(243, 243, 243, 1)),
-          child: Icon(
-            B2BIcons.noPicture,
-            color: Color.fromRGBO(200, 200, 200, 1),
-            size: 60
-          ),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Color.fromRGBO(243, 243, 243, 1)),
+          child: Icon(B2BIcons.noPicture, color: Color.fromRGBO(200, 200, 200, 1), size: 60),
         );
       } else {
         _pictureWidget = Container(
@@ -303,8 +274,7 @@ class RequirementOrderItem extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               image: DecorationImage(
-                image: NetworkImage(
-                    '${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
+                image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
                 fit: BoxFit.cover,
               )),
         );
@@ -350,14 +320,11 @@ class RequirementOrderItem extends StatelessWidget {
                       : Container(),
                   Container(
                     padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(10)),
+                    decoration:
+                        BoxDecoration(color: Color.fromRGBO(255, 243, 243, 1), borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       "${order.details.majorCategoryName()}   ${order.details.category?.name}   ${order.details.expectedMachiningQuantity}件",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Color.fromRGBO(255, 133, 148, 1)),
+                      style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
                     ),
                   )
                 ],
