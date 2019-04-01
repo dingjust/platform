@@ -188,29 +188,36 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       padding: EdgeInsets.all(15),
       child: Row(
         children: <Widget>[
-          order.product != null  && order.product.thumbnail != null
-              && order.product.thumbnail.name != null
-              ? Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                image: DecorationImage(
-                  image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}'),
-                  fit: BoxFit.cover,
-                )),
-          )
-              : Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Color.fromRGBO(243, 243, 243, 1)),
-            child: Icon(
-              B2BIcons.noPicture,
-              color: Color.fromRGBO(200, 200, 200, 1),
-              size: 60
+          GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(right: 15),
+              padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: order.product != null &&
+                        order.product.thumbnail != null
+                        && order.product.thumbnail.url != null ?
+                    NetworkImage(
+                        '${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}')
+                    :AssetImage(
+                      'temp/picture.png',
+                      package: "assets",
+                    ) ,
+                    fit: BoxFit.cover,
+                  )),
             ),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      PicturePickPreviewWidget(
+                        medias: order.product.thumbnails,
+                        isUpload: false,
+                      ))
+              );
+            },
           ),
           Expanded(
             flex: 1,

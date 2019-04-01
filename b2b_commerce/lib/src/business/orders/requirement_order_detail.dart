@@ -370,16 +370,30 @@ class _RequirementOrderDetailPageState
           ),
         );
       } else {
-        _pictureWidget = Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: DecorationImage(
-                image: NetworkImage(
-                    '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.details.pictures[0].url}'),
-                fit: BoxFit.cover,
-              )),
+        _pictureWidget = GestureDetector(
+          child: Container(
+            margin: EdgeInsets.only(right: 15),
+            padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  image:
+                  NetworkImage(
+                      '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.details.pictures[0].url}'),
+                  fit: BoxFit.cover,
+                )),
+          ),
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    PicturePickPreviewWidget(
+                      medias: widget.order.details.pictures,
+                      isUpload: false,
+                    ))
+            );
+          },
         );
       }
     }

@@ -74,29 +74,51 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       child: Row(
         children: <Widget>[
           widget.model.entries[0].product.thumbnail != null
-              ? Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            widget.model.entries[0].product.thumbnail.url),
-                        fit: BoxFit.cover,
-                      )),
-                )
+              ? GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(right: 15),
+              padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: widget.model.entries[0].product != null &&
+                        widget.model.entries[0].product.thumbnail != null
+                        && widget.model.entries[0].product.thumbnail.url != null
+                        ?
+                    NetworkImage(
+                        '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model
+                            .entries[0].product.thumbnail.url}')
+                        : AssetImage(
+                      'temp/picture.png',
+                      package: "assets",
+                    ),
+                    fit: BoxFit.cover,
+                  )),
+            ),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      PicturePickPreviewWidget(
+                        medias: widget.model.entries[0].product.thumbnails,
+                        isUpload: false,
+                      ))
+              );
+            },
+          )
               : Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color.fromRGBO(243, 243, 243, 1)),
-                  child: Icon(
-                    B2BIcons.noPicture,
-                    color: Color.fromRGBO(200, 200, 200, 1),
-                    size: 60
-                  ),
-                ),
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Color.fromRGBO(243, 243, 243, 1)),
+            child: Icon(
+                B2BIcons.noPicture,
+                color: Color.fromRGBO(200, 200, 200, 1),
+                size: 60
+            ),
+          ),
           Expanded(
             flex: 1,
             child: Container(
