@@ -26,9 +26,9 @@
                        multiple class="w-100">
               <el-option
                 v-for="item in requirementOrderStatuses"
-                :key="item.value"
-                :label="item.text"
-                :value="item.value">
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
               </el-option>
             </el-select>
           </el-form-item>
