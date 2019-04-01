@@ -122,7 +122,7 @@ class BrandFirstMenuSection extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: [],
-                        categorys: categories,
+                        categories: categories,
                         categoryActionType: CategoryActionType.TO_FACTORIES,
                       ),
                 ),
@@ -144,7 +144,7 @@ class BrandFirstMenuSection extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
                         minCategorySelect: [],
-                        categorys: categories,
+                        categories: categories,
                         categoryActionType: CategoryActionType.TO_PRODUCTS,
                       ),
                 ),

@@ -68,7 +68,7 @@ class _ConditionPageState extends State<ConditionPage> {
                   MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
                           minCategorySelect: widget.factoryCondition.adeptAtCategory,
-                          categorys: categories,
+                          categories: categories,
                           categoryActionType: CategoryActionType.none,
                         ),
                   ),

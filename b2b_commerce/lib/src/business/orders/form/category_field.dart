@@ -65,7 +65,7 @@ class CategoryFieldState extends State<CategoryField> {
             builder: (BuildContext context) {
               return Container(
                 child: CategorySelect(
-                  categorys: _category,
+                  categories: _category,
                   multiple: false,
                   verticalDividerOpacity: 1,
                   categorySelect: _categorySelected,
