@@ -22,7 +22,7 @@ class ImageFactory {
     );
   }
 
-  static Widget buildThumbnailImage(MediaModel media) {
+  static Widget buildThumbnailImage(MediaModel media, {BoxFit fit}) {
     if (media == null) {
       return buildDefaultThumbnailImage();
     }
@@ -36,9 +36,17 @@ class ImageFactory {
         borderRadius: BorderRadius.circular(5),
         image: DecorationImage(
           image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${media.url}'),
-          fit: BoxFit.fill,
+          fit: fit ?? BoxFit.fill,
         ),
       ),
     );
+  }
+
+  static Widget buildThumbnailImageForList(List<MediaModel> medias, {BoxFit fit}) {
+    if (medias == null || medias.isEmpty) {
+      return buildDefaultThumbnailImage();
+    }
+
+    return buildThumbnailImage(medias[0], fit: fit);
   }
 }
