@@ -53,6 +53,9 @@ const COMMON_APIS = {
   getSampleCheckoutHists() {
     return '/b2b/products/sampleCheckoutHist';
   },
+  getAdvanceSampleCheckoutHists() {
+    return '/b2b/products/sampleCheckoutHist/search';
+  },
   getSampleCheckoutHist(id) {
     return '/b2b/products/sampleCheckoutHist/' + id;
   },
