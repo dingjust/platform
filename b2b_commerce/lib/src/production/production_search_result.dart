@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/production/production.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -29,7 +31,7 @@ class _ProductionResultPageState extends State<ProductionResultPage> {
           body: ProductionListView(
             keyword: widget.keyword,
           ),
-          floatingActionButton: _ToTopBtn(),
+          floatingActionButton: ScrollToTopButton<ProductionSearchResultBLoC>(),
         ));
   }
 }
@@ -40,8 +42,7 @@ class ProductionListView extends StatelessWidget {
   ScrollController _scrollController = new ScrollController();
 
   ///当前选中条件
-  FilterConditionEntry currentCondition = FilterConditionEntry(
-      label: '当前生产', value: 'comprehensive', checked: true);
+  FilterConditionEntry currentCondition = FilterConditionEntry(label: '当前生产', value: 'comprehensive', checked: true);
 
   ProductionListView({Key key, @required this.keyword}) : super(key: key);
 
@@ -50,8 +51,7 @@ class ProductionListView extends StatelessWidget {
     var bloc = BLoCProvider.of<ProductionSearchResultBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMore(keyword);
       }
@@ -70,8 +70,7 @@ class ProductionListView extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -84,14 +83,10 @@ class ProductionListView extends StatelessWidget {
             StreamBuilder<List<PurchaseOrderModel>>(
                 initialData: null,
                 stream: bloc.stream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.getData(keyword);
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 200),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
+                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
@@ -111,63 +106,20 @@ class ProductionListView extends StatelessWidget {
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                 if (snapshot.data) {
                   _scrollController.animateTo(_scrollController.offset - 70,
-                      duration: new Duration(milliseconds: 500),
-                      curve: Curves.easeOut);
+                      duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                 }
-                return snapshot.data
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                        child: Center(
-                          child: Text(
-                            "(￢_￢)已经到底了",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      )
-                    : Container();
+
+                return ScrolledToEndTips(hasContent: snapshot.data);
               },
             ),
             StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Center(
-                    child: new Opacity(
-                      opacity: snapshot.data ? 1.0 : 0,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                );
+                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(opacity: snapshot.data ? 1.0 : 0);
               },
             ),
           ],
         ));
-  }
-}
-
-class _ToTopBtn extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<ProductionSearchResultBLoC>(context);
-
-    return StreamBuilder<bool>(
-        stream: bloc.toTopBtnStream,
-        initialData: false,
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          return snapshot.data
-              ? FloatingActionButton(
-                  child: Icon(
-                    Icons.arrow_upward,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    bloc.returnToTop();
-                  },
-                  backgroundColor: Colors.blue,
-                )
-              : Container();
-        });
   }
 }

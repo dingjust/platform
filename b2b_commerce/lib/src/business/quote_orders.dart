@@ -1,9 +1,12 @@
-import 'package:b2b_commerce/src/business/orders/quote_item.dart';
-import 'package:b2b_commerce/src/business/search/quotes_search.dart';
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import '../_shared/widgets/scroll_to_top_button.dart';
+import '../business/orders/quote_item.dart';
+import '../business/search/quotes_search.dart';
 
 List<EnumModel> statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -39,8 +42,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
                   B2BIcons.search,
                   size: 20,
                 ),
-                onPressed: () => showSearch(
-                    context: context, delegate: QuotesSearchDelegate()),
+                onPressed: () => showSearch(context: context, delegate: QuotesSearchDelegate()),
               ),
             ],
           ),
@@ -54,10 +56,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
                 tabs: statuses.map((status) {
                   return Tab(text: status.name);
                 }).toList(),
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black),
+                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
                 isScrollable: false,
               ),
               body: TabBarView(
@@ -70,14 +69,13 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
               ),
             ),
           ),
-          floatingActionButton: _ToTopBtn(),
+          floatingActionButton: ScrollToTopButton<QuoteOrdersBLoC>(),
         ));
   }
 }
 
 class QuoteOrdersList extends StatelessWidget {
-  QuoteOrdersList({Key key, @required this.status, @required this.pageContext})
-      : super(key: key);
+  QuoteOrdersList({Key key, @required this.status, @required this.pageContext}) : super(key: key);
 
   final EnumModel status;
 
@@ -95,8 +93,7 @@ class QuoteOrdersList extends StatelessWidget {
     }
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(status.code);
       }
@@ -115,8 +112,7 @@ class QuoteOrdersList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -126,7 +122,6 @@ class QuoteOrdersList extends StatelessWidget {
         child: RefreshIndicator(
           onRefresh: () async {
             return await bloc.refreshData(status.code);
-
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -134,14 +129,10 @@ class QuoteOrdersList extends StatelessWidget {
             children: <Widget>[
               StreamBuilder<List<QuoteModel>>(
                 stream: bloc.stream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<QuoteModel>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<QuoteModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses(status.code);
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 200),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
+                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
@@ -164,64 +155,22 @@ class QuoteOrdersList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data) {
                     _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
+                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
-                  return snapshot.data
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                          child: Center(
-                            child: Text(
-                              "(￢_￢)已经到底了",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        )
-                      : Container();
+                  return ScrolledToEndTips(hasContent: snapshot.data);
                 },
               ),
               StreamBuilder<bool>(
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Center(
-                      child: new Opacity(
-                        opacity: snapshot.data ? 1.0 : 0,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
+                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                    opacity: snapshot.data ? 1.0 : 0,
                   );
                 },
               ),
             ],
           ),
         ));
-  }
-}
-
-class _ToTopBtn extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
-
-    return StreamBuilder<bool>(
-        stream: bloc.toTopBtnStream,
-        initialData: false,
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          return snapshot.data
-              ? FloatingActionButton(
-                  child: Icon(
-                    Icons.arrow_upward,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    bloc.returnToTop();
-                  },
-                  backgroundColor: Colors.blue,
-                )
-              : Container();
-        });
   }
 }

@@ -115,8 +115,7 @@ class ConditionPageButton extends StatelessWidget {
         await ProductRepositoryImpl().majorCategories().then((categories) async {
           FactoryCondition newFactoryCondition = await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) =>
-                  ConditionPage(
+              builder: (context) => ConditionPage(
                     categories: categories,
                     factoryCondition: factoryCondition,
                   ),
@@ -233,21 +232,15 @@ class _FactoryListViewState extends State<FactoryListView> {
                   );
                 }
 
-                return snapshot.data ? ScrolledToEndTips() : Container();
+                return ScrolledToEndTips(hasContent: snapshot.data);
               },
             ),
             StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Center(
-                    child: new Opacity(
-                      opacity: snapshot.data ? 1.0 : 0,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
+                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                  opacity: snapshot.data ? 1.0 : 0,
                 );
               },
             ),

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -48,26 +49,31 @@ class MyAddressesPage extends StatelessWidget {
           centerTitle: true,
           title: Text('地址管理'),
         ),
-        body: AddressList(isJumpSourec: isJumpSourec,),
+        body: AddressList(
+          isJumpSourec: isJumpSourec,
+        ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddressFormPage(address: model,newlyCreated: true,)),
+              MaterialPageRoute(
+                  builder: (context) => AddressFormPage(
+                        address: model,
+                        newlyCreated: true,
+                      )),
             );
           },
         ),
       ),
     );
   }
-
-
 }
 
 class AddressList extends StatelessWidget {
   bool isJumpSourec = false;
   ScrollController _scrollController = new ScrollController();
+
   AddressList({this.isJumpSourec});
 
   @override
@@ -115,15 +121,12 @@ class AddressList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<List<AddressModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses();
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 200),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
+                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((address) {
-                        return AddressItem(address,isJumpSourec);
+                        return AddressItem(address, isJumpSourec);
                       }).toList(),
                     );
                   } else if (snapshot.hasError) {
@@ -139,32 +142,14 @@ class AddressList extends StatelessWidget {
                     _scrollController.animateTo(_scrollController.offset - 70,
                         duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
-                  return snapshot.data
-                      ? Container(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                    child: Center(
-                      child: Text(
-                        "(￢_￢)已经到底了",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  )
-                      : Container();
+                  return ScrolledToEndTips(hasContent: snapshot.data);
                 },
               ),
               StreamBuilder<bool>(
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Center(
-                      child: new Opacity(
-                        opacity: snapshot.data ? 1.0 : 0,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  );
+                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(opacity: snapshot.data ? 1.0 : 0);
                 },
               ),
             ],
@@ -173,10 +158,11 @@ class AddressList extends StatelessWidget {
   }
 }
 
-class AddressItem extends StatelessWidget{
+class AddressItem extends StatelessWidget {
   bool isJumpSourec = false;
   final AddressModel item;
-  AddressItem(this.item,this.isJumpSourec);
+
+  AddressItem(this.item, this.isJumpSourec);
 
   @override
   Widget build(BuildContext context) {
@@ -224,9 +210,9 @@ class AddressItem extends StatelessWidget{
 
     return ListTile(
       onTap: () {
-        if(isJumpSourec){
+        if (isJumpSourec) {
           Navigator.of(context).pop(item);
-        }else{
+        } else {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -234,7 +220,6 @@ class AddressItem extends StatelessWidget{
             ),
           );
         }
-
       },
       title: _buildRow(
         item.fullname,

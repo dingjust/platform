@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class CityDistrictSelectPage extends StatelessWidget {
   CityDistrictSelectPage(this.city, this.districtRepository);
@@ -36,7 +37,7 @@ class CityDistrictSelectPage extends StatelessWidget {
             return Text('${snapshot.error}');
           }
 
-          return Center(child: CircularProgressIndicator());
+          return ProgressIndicatorFactory.buildDefaultProgressIndicator();
         },
       ),
     );

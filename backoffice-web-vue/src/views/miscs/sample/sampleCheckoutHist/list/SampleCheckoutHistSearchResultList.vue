@@ -10,6 +10,7 @@
         </template>
       </el-table-column>
       <el-table-column label="关联人" prop="relatedParty"></el-table-column>
+      <el-table-column label="联系方式" prop="contact"></el-table-column>
       <el-table-column label="类型" prop="type">
         <template slot-scope="scope">
           {{getEnum('sampleCheckoutTypes', scope.row.type)}}
