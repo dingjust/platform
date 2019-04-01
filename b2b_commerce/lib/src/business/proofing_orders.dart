@@ -214,11 +214,11 @@ class ProofingOrderItem extends StatelessWidget {
   /// 顶级页面context
   final BuildContext pageContext;
 
-  static Map<ProofingStatus, MaterialColor> _statusColors = {
-    ProofingStatus.PENDING_DELIVERY: Colors.green,
-    ProofingStatus.SHIPPED: Colors.blue,
+  static Map<ProofingStatus, Color> _statusColors = {
     ProofingStatus.PENDING_PAYMENT: Colors.red,
-    ProofingStatus.COMPLETED: Colors.orange,
+    ProofingStatus.PENDING_DELIVERY: Color(0xFFFFD600),
+    ProofingStatus.SHIPPED: Color(0xFFFFD600),
+    ProofingStatus.COMPLETED: Colors.green,
     ProofingStatus.CANCELLED: Colors.grey
   };
 

@@ -197,10 +197,10 @@ class RequirementOrderItem extends StatelessWidget {
 
   final RequirementOrderModel order;
 
-  static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
-    RequirementOrderStatus.PENDING_QUOTE: Colors.green,
-    RequirementOrderStatus.COMPLETED: Colors.orange,
-    RequirementOrderStatus.CANCELLED: Colors.red,
+  static Map<RequirementOrderStatus, Color> _statusColors = {
+    RequirementOrderStatus.PENDING_QUOTE: Color(0xFFFFD600),
+    RequirementOrderStatus.COMPLETED: Colors.green,
+    RequirementOrderStatus.CANCELLED: Colors.grey,
   };
 
   @override

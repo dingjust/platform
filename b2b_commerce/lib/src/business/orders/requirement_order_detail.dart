@@ -619,6 +619,7 @@ class _RequirementOrderDetailPageState
                         builder: (context) => FactoryPage(
                               FactoryCondition(
                                   starLevel: 0, adeptAtCategory: []),
+                              requirementCode: widget.order.code,
                               route: '全部工厂',
                             )),
                   );
