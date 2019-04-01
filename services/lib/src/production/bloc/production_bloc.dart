@@ -34,11 +34,11 @@ class ProductionBLoC extends BLoCBase {
 
   List<FilterConditionEntry> _currentStatus = [
     FilterConditionEntry(label: '全部', value: 'ALL', checked: true),
-  FilterConditionEntry(label: '备料', value: 'MATERIAL_PREPARATION'),
-  FilterConditionEntry(label: '裁剪', value: 'CUTTING'),
-  FilterConditionEntry(label: '车缝', value: 'STITCHING'),
-  FilterConditionEntry(label: '后整', value: 'AFTER_FINISHING'),
-  FilterConditionEntry(label: '验货', value: 'INSPECTION'),
+    FilterConditionEntry(label: '备料', value: 'MATERIAL_PREPARATION'),
+    FilterConditionEntry(label: '裁剪', value: 'CUTTING'),
+    FilterConditionEntry(label: '车缝', value: 'STITCHING'),
+    FilterConditionEntry(label: '后整', value: 'AFTER_FINISHING'),
+    FilterConditionEntry(label: '验货', value: 'INSPECTION'),
   ];
 
   DateTime _startDate;
@@ -58,6 +58,7 @@ class ProductionBLoC extends BLoCBase {
   String get status => _status;
 
   DateTime get startDate => _startDate;
+
   DateTime get endDate => _endDate;
 
   void setOrderType(List<FilterConditionEntry> conditions) {
@@ -91,62 +92,54 @@ class ProductionBLoC extends BLoCBase {
   getData() async {
     //若没有数据则查询
     if (_purchaseOrders.isEmpty) {
-          //  分页拿数据，response.data;
-      if(orderType != null && orderType.length>0){
+      //  分页拿数据，response.data;
+      if (orderType != null && orderType.length > 0) {
         typeList.clear();
-        for(int i =0;i<orderType.length;i++){
-          if(orderType[i].checked && orderType[i].value != 'ALL'){
+        for (int i = 0; i < orderType.length; i++) {
+          if (orderType[i].checked && orderType[i].value != 'ALL') {
             typeList.add(orderType[i].value);
           }
         }
       }
-      if(currentStatus != null && currentStatus.length>0){
+      if (currentStatus != null && currentStatus.length > 0) {
         phasesList.clear();
-        for(int i =0;i<currentStatus.length;i++){
-          if(currentStatus[i].checked && currentStatus[i].value != 'ALL'){
+        for (int i = 0; i < currentStatus.length; i++) {
+          if (currentStatus[i].checked && currentStatus[i].value != 'ALL') {
             phasesList.add(currentStatus[i].value);
           }
         }
       }
-          //请求参数
-          Map data = {
-            'salesApplications': typeList,
-            'phases': phasesList,
-            'expectedDeliveryDateFrom': startDate == null ? null : startDate.millisecondsSinceEpoch,
-            'expectedDeliveryDateTo': endDate == null ? null : endDate.millisecondsSinceEpoch,
-            'statuses': 'IN_PRODUCTION',
-          };
-          Response<Map<String, dynamic>> response;
+      //请求参数
+      Map data = {
+        'salesApplications': typeList,
+        'phases': phasesList,
+        'expectedDeliveryDateFrom': startDate == null ? null : startDate.millisecondsSinceEpoch,
+        'expectedDeliveryDateTo': endDate == null ? null : endDate.millisecondsSinceEpoch,
+        'statuses': 'IN_PRODUCTION',
+      };
+      Response<Map<String, dynamic>> response;
 
-          try {
-            response = await http$.post(OrderApis.purchaseOrders,
-                data:data,
-                queryParameters: {
-                  'page': 0,
-                  'size': 100
-                }
-            );
-          } on DioError catch (e) {
-            print(e);
-          }
+      try {
+        response = await http$.post(OrderApis.purchaseOrders, data: data, queryParameters: {'page': 0, 'size': 100});
+      } on DioError catch (e) {
+        print(e);
+      }
 
-          if (response != null && response.statusCode == 200) {
-            PurchaseOrdersResponse ordersResponse =
-            PurchaseOrdersResponse.fromJson(response.data);
-            _purchaseOrders.clear();
-            _purchaseOrders.addAll(ordersResponse.content);
-          }
-
+      if (response != null && response.statusCode == 200) {
+        PurchaseOrdersResponse ordersResponse = PurchaseOrdersResponse.fromJson(response.data);
+        _purchaseOrders.clear();
+        _purchaseOrders.addAll(ordersResponse.content);
+      }
     }
-    if(status == 'delayWarning'){
+    if (status == 'delayWarning') {
       List<PurchaseOrderModel> orders = [];
-      for(int i =0;i<_purchaseOrders.length;i++){
-        if(_purchaseOrders[i].delayed){
+      for (int i = 0; i < _purchaseOrders.length; i++) {
+        if (_purchaseOrders[i].delayed) {
           orders.add(_purchaseOrders[i]);
         }
       }
       _controller.sink.add(orders);
-    }else{
+    } else {
       _controller.sink.add(_purchaseOrders);
     }
   }
@@ -161,16 +154,16 @@ class ProductionBLoC extends BLoCBase {
   Future refreshData() async {
     _purchaseOrders.clear();
 
-    if(orderType != null && orderType.length>0){
-      for(int i =0;i<orderType.length;i++){
-        if(orderType[i].checked && orderType[i].value != 'ALL'){
+    if (orderType != null && orderType.length > 0) {
+      for (int i = 0; i < orderType.length; i++) {
+        if (orderType[i].checked && orderType[i].value != 'ALL') {
           typeList.add(orderType[i].value);
         }
       }
     }
-    if(currentStatus != null && currentStatus.length>0){
-      for(int i =0;i<currentStatus.length;i++){
-        if(currentStatus[i].checked && currentStatus[i].value != 'ALL'){
+    if (currentStatus != null && currentStatus.length > 0) {
+      for (int i = 0; i < currentStatus.length; i++) {
+        if (currentStatus[i].checked && currentStatus[i].value != 'ALL') {
           phasesList.add(currentStatus[i].value);
         }
       }
@@ -186,76 +179,33 @@ class ProductionBLoC extends BLoCBase {
     Response<Map<String, dynamic>> response;
 
     try {
-      response = await http$.post(OrderApis.purchaseOrders,
-          data:data,
-          queryParameters: {
-            'page': 0,
-            'size': 100
-          }
-      );
+      response = await http$.post(OrderApis.purchaseOrders, data: data, queryParameters: {'page': 0, 'size': 100});
     } on DioError catch (e) {
       print(e);
     }
 
     if (response != null && response.statusCode == 200) {
-      PurchaseOrdersResponse ordersResponse =
-      PurchaseOrdersResponse.fromJson(response.data);
+      PurchaseOrdersResponse ordersResponse = PurchaseOrdersResponse.fromJson(response.data);
       _purchaseOrders.clear();
       _purchaseOrders.addAll(ordersResponse.content);
     }
-    if(status == 'delayWarning'){
+    if (status == 'delayWarning') {
       List<PurchaseOrderModel> orders = [];
-      for(int i =0;i<_purchaseOrders.length;i++){
-        if(_purchaseOrders[i].delayed){
+      for (int i = 0; i < _purchaseOrders.length; i++) {
+        if (_purchaseOrders[i].delayed) {
           orders.add(_purchaseOrders[i]);
         }
       }
       _controller.sink.add(orders);
-    }else{
+    } else {
       _controller.sink.add(_purchaseOrders);
     }
   }
 
-  //页面控制
-
-  var _loadingController = StreamController<bool>.broadcast();
-  var _bottomController = StreamController<bool>.broadcast();
-  var _toTopBtnController = StreamController<bool>.broadcast();
-  var _returnToTopController = StreamController<bool>.broadcast();
-
-  Stream<bool> get loadingStream => _loadingController.stream;
-
-  Stream<bool> get bottomStream => _bottomController.stream;
-
-  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
-
-  Stream<bool> get returnToTopStream => _returnToTopController.stream;
-
-  loadingStart() async {
-    _loadingController.sink.add(true);
-  }
-
-  loadingEnd() async {
-    _loadingController.sink.add(false);
-  }
-
-  showToTopBtn() async {
-    _toTopBtnController.sink.add(true);
-  }
-
-  hideToTopBtn() async {
-    _toTopBtnController.sink.add(false);
-  }
-
-  returnToTop() async {
-    _returnToTopController.sink.add(true);
-  }
-
   dispose() {
     _controller.close();
-    _loadingController.close();
-    _returnToTopController.close();
-    _bottomController.close();
-    _toTopBtnController.close();
+    conditionController.close();
+
+    super.dispose();
   }
 }

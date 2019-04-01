@@ -225,7 +225,7 @@ class _FactoryListViewState extends State<FactoryListView> {
                   );
                 }
 
-                return snapshot.data ? ScrolledToEndTips() : Container();
+                return ScrolledToEndTips(hasContent: snapshot.data);
               },
             ),
             StreamBuilder<bool>(

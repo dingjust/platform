@@ -1,9 +1,11 @@
-import 'package:b2b_commerce/src/home/product/product.dart';
-import 'package:b2b_commerce/src/home/search/order_product_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import '../../_shared/widgets/scroll_to_top_button.dart';
+import '../../home/product/product.dart';
+import '../../home/search/order_product_search.dart';
 
 class ProductsPage extends StatefulWidget {
   /// 品类
@@ -54,7 +56,7 @@ class _ProductsPageState extends State<ProductsPage> {
         body: ProductsView(
           categoryCode: widget.categoryModel.code,
         ),
-        floatingActionButton: _ToTopBtn(),
+        floatingActionButton: ScrollToTopButton<OrderByProductBLoc>(),
       ),
     );
   }
@@ -211,30 +213,5 @@ class ProductsView extends StatelessWidget {
             ],
           ),
         ));
-  }
-}
-
-class _ToTopBtn extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<OrderByProductBLoc>(context);
-
-    return StreamBuilder<bool>(
-        stream: bloc.toTopBtnStream,
-        initialData: false,
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          return snapshot.data
-              ? FloatingActionButton(
-                  child: Icon(
-                    Icons.arrow_upward,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    bloc.returnToTop();
-                  },
-                  backgroundColor: Colors.blue,
-                )
-              : Container();
-        });
   }
 }

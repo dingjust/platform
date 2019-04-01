@@ -47,15 +47,13 @@ class OrderByProductBLoc extends BLoCBase {
       Response<Map<String, dynamic>> response;
       try {
         response = await http$.post(ProductApis.factoriesApparel,
-            data: {"categories": categoryCode},
-            queryParameters: {'page': currentPage, 'size': pageSize});
+            data: {"categories": categoryCode}, queryParameters: {'page': currentPage, 'size': pageSize});
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        ApparelProductResponse productResponse =
-            ApparelProductResponse.fromJson(response.data);
+        ApparelProductResponse productResponse = ApparelProductResponse.fromJson(response.data);
         totalPages = productResponse.totalPages;
         totalElements = productResponse.totalElements;
         _products.clear();
@@ -73,27 +71,25 @@ class OrderByProductBLoc extends BLoCBase {
       //数据到底
       if (currentPage + 1 == totalPages) {
         //通知显示已经到底部
-        _bottomController.sink.add(true);
+        bottomController.sink.add(true);
       } else {
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
           response = await http$.post(ProductApis.factoriesApparel,
-              data: {"categories": categoryCode},
-              queryParameters: {'page': currentPage, 'size': pageSize});
+              data: {"categories": categoryCode}, queryParameters: {'page': currentPage, 'size': pageSize});
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          ApparelProductResponse productResponse =
-              ApparelProductResponse.fromJson(response.data);
+          ApparelProductResponse productResponse = ApparelProductResponse.fromJson(response.data);
           totalPages = productResponse.totalPages;
           totalElements = productResponse.totalElements;
           _products.addAll(productResponse.content);
         }
       }
-      _loadingController.sink.add(false);
+      loadingController.sink.add(false);
       _controller.sink.add(_products);
       lock = false;
     }
@@ -112,47 +108,9 @@ class OrderByProductBLoc extends BLoCBase {
     totalElements = 0;
   }
 
-  //页面控制
-
-  //记录是否已经到底
-  bool _isBottom = false;
-
-  bool get isBottom => _isBottom;
-
-  var _loadingController = StreamController<bool>.broadcast();
-  var _bottomController = StreamController<bool>.broadcast();
-  var _toTopBtnController = StreamController<bool>.broadcast();
-  var _returnToTopController = StreamController<bool>.broadcast();
-
-  Stream<bool> get loadingStream => _loadingController.stream;
-
-  Stream<bool> get bottomStream => _bottomController.stream;
-
-  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
-
-  Stream<bool> get returnToTopStream => _returnToTopController.stream;
-
-  loadingStart() async {
-    _loadingController.sink.add(true);
-  }
-
-  loadingEnd() async {
-    _loadingController.sink.add(false);
-  }
-
-  showToTopBtn() async {
-    _toTopBtnController.sink.add(true);
-  }
-
-  hideToTopBtn() async {
-    _toTopBtnController.sink.add(false);
-  }
-
-  returnToTop() async {
-    _returnToTopController.sink.add(true);
-  }
-
   dispose() {
     _controller.close();
+
+    super.dispose();
   }
 }

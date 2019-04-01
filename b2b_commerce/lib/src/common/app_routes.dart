@@ -18,7 +18,6 @@ import '../business/production_orders.dart';
 import '../business/purchase_orders.dart';
 import '../business/quote_orders.dart';
 import '../business/requirement_orders.dart';
-import '../business/sales_orders.dart';
 import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
 import '../home/account/login.dart';
@@ -89,7 +88,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS_DETAIL: (context) => RequirementOrderDetailPage(),
-    ROUTE_SALES_ORDERS: (context) => SalesOrdersPage(),
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),
     ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),

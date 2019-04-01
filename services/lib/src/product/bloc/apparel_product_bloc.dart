@@ -45,35 +45,34 @@ class ApparelProductBLoC extends BLoCBase {
 
   filterByStatuses(String status) async {
     print(status);
-    Map<String,dynamic> data = {};
-    if(status != 'ALL'){
+    Map<String, dynamic> data = {};
+    if (status != 'ALL') {
       data = {
-        'approvalStatuses':[status]
+        'approvalStatuses': [status]
       };
     }
     products.clear();
     print(data);
-    productsResponse = await ProductRepositoryImpl().list(data,{});
+    productsResponse = await ProductRepositoryImpl().list(data, {});
     print(productsResponse.content);
     products.addAll(productsResponse.content);
     _controller.sink.add(products);
   }
 
   loadingMoreByStatuses(String status) async {
-    Map<String,dynamic> data = {};
-    if(status != 'ALL'){
+    Map<String, dynamic> data = {};
+    if (status != 'ALL') {
       data = {
-        'approvalStatuses':[status]
+        'approvalStatuses': [status]
       };
     }
-    if(productsResponse.number < productsResponse.totalPages-1){
-      productsResponse = await ProductRepositoryImpl().list({},data);
+    if (productsResponse.number < productsResponse.totalPages - 1) {
+      productsResponse = await ProductRepositoryImpl().list({}, data);
       products.addAll(productsResponse.content);
-    }else{
-      _bottomController.sink.add(true);
-      _loadingController.sink.add(false);
+    } else {
+      bottomController.sink.add(true);
     }
-    _loadingController.sink.add(false);
+    loadingController.sink.add(false);
     _controller.sink.add(products);
   }
 
@@ -83,50 +82,10 @@ class ApparelProductBLoC extends BLoCBase {
 //    _controller.sink.add(productsResponse.content);
 //  }
 
-  //页面控制
-
-  var _loadingController = StreamController<bool>.broadcast();
-
-  var _bottomController = StreamController<bool>.broadcast();
-
-  var _toTopBtnController = StreamController<bool>.broadcast();
-
-  var _returnToTopController = StreamController<bool>.broadcast();
-
-  Stream<bool> get loadingStream => _loadingController.stream;
-
-  Stream<bool> get bottomStream => _bottomController.stream;
-
-  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
-
-  Stream<bool> get returnToTopStream => _returnToTopController.stream;
-
-  loadingStart() async {
-    _loadingController.sink.add(true);
-  }
-
-  loadingEnd() async {
-    _loadingController.sink.add(false);
-  }
-
-  showToTopBtn() async {
-    _toTopBtnController.sink.add(true);
-  }
-
-  hideToTopBtn() async {
-    _toTopBtnController.sink.add(false);
-  }
-
-  returnToTop() async {
-    _returnToTopController.sink.add(true);
-  }
-
   dispose() {
     _controller.close();
     _detailController.close();
-    _loadingController.close();
-    _bottomController.close();
-    _toTopBtnController.close();
-    _returnToTopController.close();
+
+    super.dispose();
   }
 }

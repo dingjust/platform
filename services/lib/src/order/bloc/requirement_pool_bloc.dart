@@ -41,8 +41,7 @@ class RequirementPoolBLoC extends BLoCBase {
 
   var conditionController = StreamController<FilterConditionEntry>.broadcast();
 
-  Stream<FilterConditionEntry> get conditionStream =>
-      conditionController.stream;
+  Stream<FilterConditionEntry> get conditionStream => conditionController.stream;
 
   filterByCondition(RequirementFilterCondition conditions) async {
     if (!lock) {
@@ -52,16 +51,14 @@ class RequirementPoolBLoC extends BLoCBase {
       Map data = generateConditionsMap(conditions);
       Response<Map<String, dynamic>> response;
       try {
-        response = await http$.post(OrderApis.requirementOrdersAll,
-            data: data,
-            queryParameters: {'page': currentPage, 'size': pageSize});
+        response = await http$
+            .post(OrderApis.requirementOrdersAll, data: data, queryParameters: {'page': currentPage, 'size': pageSize});
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        RequirementOrdersResponse ordersResponse =
-            RequirementOrdersResponse.fromJson(response.data);
+        RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
         totalPages = ordersResponse.totalPages;
         totalElements = ordersResponse.totalElements;
         _requirementOrders.clear();
@@ -79,28 +76,26 @@ class RequirementPoolBLoC extends BLoCBase {
       //数据到底
       if (currentPage + 1 == totalPages) {
         //通知显示已经到底部
-        _bottomController.sink.add(true);
+        bottomController.sink.add(true);
       } else {
         Map data = generateConditionsMap(conditions);
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
           response = await http$.post(OrderApis.requirementOrdersAll,
-              data: data,
-              queryParameters: {'page': currentPage, 'size': pageSize});
+              data: data, queryParameters: {'page': currentPage, 'size': pageSize});
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          RequirementOrdersResponse ordersResponse =
-              RequirementOrdersResponse.fromJson(response.data);
+          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
           totalPages = ordersResponse.totalPages;
           totalElements = ordersResponse.totalElements;
           _requirementOrders.addAll(ordersResponse.content);
         }
       }
-      _loadingController.sink.add(false);
+      loadingController.sink.add(false);
       _controller.sink.add(_requirementOrders);
       lock = false;
     }
@@ -119,47 +114,10 @@ class RequirementPoolBLoC extends BLoCBase {
     totalElements = 0;
   }
 
-  //页面控制
-
-  var _loadingController = StreamController<bool>.broadcast();
-  var _bottomController = StreamController<bool>.broadcast();
-  var _toTopBtnController = StreamController<bool>.broadcast();
-  var _returnToTopController = StreamController<bool>.broadcast();
-
-  Stream<bool> get loadingStream => _loadingController.stream;
-
-  Stream<bool> get bottomStream => _bottomController.stream;
-
-  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
-
-  Stream<bool> get returnToTopStream => _returnToTopController.stream;
-
-  loadingStart() async {
-    _loadingController.sink.add(true);
-  }
-
-  loadingEnd() async {
-    _loadingController.sink.add(false);
-  }
-
-  showToTopBtn() async {
-    _toTopBtnController.sink.add(true);
-  }
-
-  hideToTopBtn() async {
-    _toTopBtnController.sink.add(false);
-  }
-
-  returnToTop() async {
-    _returnToTopController.sink.add(true);
-  }
-
   dispose() {
     _controller.close();
-    _loadingController.close();
-    _returnToTopController.close();
-    _bottomController.close();
-    _toTopBtnController.close();
+
+    super.dispose();
   }
 
   /// 生成查询条件信息
@@ -170,26 +128,21 @@ class RequirementPoolBLoC extends BLoCBase {
     DateTime expectedDeliveryDateFrom;
     switch (conditions.dateRange) {
       case RequirementOrderDateRange.RANGE_3:
-        expectedDeliveryDateFrom =
-            expectedDeliveryDateTo.subtract(Duration(days: 3));
+        expectedDeliveryDateFrom = expectedDeliveryDateTo.subtract(Duration(days: 3));
         break;
       case RequirementOrderDateRange.RANGE_7:
-        expectedDeliveryDateFrom =
-            expectedDeliveryDateTo.subtract(Duration(days: 7));
+        expectedDeliveryDateFrom = expectedDeliveryDateTo.subtract(Duration(days: 7));
         break;
       case RequirementOrderDateRange.RANGE_15:
-        expectedDeliveryDateFrom =
-            expectedDeliveryDateTo.subtract(Duration(days: 15));
+        expectedDeliveryDateFrom = expectedDeliveryDateTo.subtract(Duration(days: 15));
         break;
       default:
         expectedDeliveryDateFrom = null;
     }
 
     if (expectedDeliveryDateFrom != null) {
-      data['expectedDeliveryDateFrom'] =
-          expectedDeliveryDateFrom.millisecondsSinceEpoch;
-      data['expectedDeliveryDateTo'] =
-          expectedDeliveryDateTo.millisecondsSinceEpoch;
+      data['expectedDeliveryDateFrom'] = expectedDeliveryDateFrom.millisecondsSinceEpoch;
+      data['expectedDeliveryDateTo'] = expectedDeliveryDateTo.millisecondsSinceEpoch;
     }
 
     if (conditions.machiningType != null) {
@@ -197,8 +150,7 @@ class RequirementPoolBLoC extends BLoCBase {
     }
 
     if (conditions.categories != null) {
-      data['majorCategories'] =
-          conditions.categories.map((category) => category.code).toList();
+      data['majorCategories'] = conditions.categories.map((category) => category.code).toList();
     }
 
     return data;
@@ -217,8 +169,7 @@ class RequirementFilterCondition {
 
   List<CategoryModel> categories;
 
-  RequirementFilterCondition(
-      {this.dateRange, this.machiningType, this.categories});
+  RequirementFilterCondition({this.dateRange, this.machiningType, this.categories});
 }
 
 enum RequirementOrderDateRange {
