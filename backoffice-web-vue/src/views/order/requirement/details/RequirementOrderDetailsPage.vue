@@ -109,9 +109,8 @@
         const url = this.apis().createRequirementOrder();
         const result = await this.$http.post(url, formData);
         console.log(result);
-        console.log("lhj");
-        if (result.data) {
-          this.$message.error(result.data['errors'][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 

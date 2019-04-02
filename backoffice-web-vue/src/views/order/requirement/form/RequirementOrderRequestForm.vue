@@ -269,7 +269,7 @@
           category: [{validator: checkCategory, trigger: 'change'},{required: true, message: '必填', trigger: 'change'}],
           expectedMachiningQuantity: [{required: true, message: '必填', trigger: 'blur'}],
           expectedDeliveryDate: [{required: true, message: '必填', trigger: 'blur'},{validator: expectedDeliveryDate, trigger: 'blur'}],
-          contactPhone: [{required: true, message: '必填', trigger: 'blur'},{validator: contactPhone, trigger: 'blur'}],
+          // contactPhone: [{required: true, message: '必填', trigger: 'blur'},{validator: contactPhone, trigger: 'blur'}],
           contactPerson: [{required: true, message: '必填', trigger: 'blur'}],
         },
       }
