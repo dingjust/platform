@@ -41,9 +41,10 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
       key: _globalKey,
       bloc: RequirementOrderBLoC.instance,
       child: Scaffold(
-        appBar: AppBarFactory.buildDefaultAppBar('需求订单管理', actions: <Widget>[
-          _buildSearchButton(context),
-        ]),
+        appBar: AppBarFactory.buildDefaultAppBar(
+          '需求订单管理',
+          actions: <Widget>[_buildSearchButton(context)],
+        ),
         body: DefaultTabController(
           length: statuses.length,
           child: Scaffold(

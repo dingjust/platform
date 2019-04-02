@@ -19,12 +19,7 @@ class QuoteItem extends StatefulWidget {
 
   bool isSupplier;
 
-  QuoteItem(
-      {Key key,
-      this.model,
-      this.isSupplier = false,
-      @required this.onRefresh,
-      @required this.pageContext})
+  QuoteItem({Key key, this.model, this.isSupplier = false, @required this.onRefresh, @required this.pageContext})
       : super(key: key);
 
   _QuoteItemState createState() => _QuoteItemState();
@@ -44,11 +39,9 @@ class _QuoteItemState extends State<QuoteItem> {
     return GestureDetector(
       onTap: () async {
         //查询明细
-        QuoteModel detailModel =
-            await QuoteOrderRepository().getquoteDetail(widget.model.code);
+        QuoteModel detailModel = await QuoteOrderRepository().getquoteDetail(widget.model.code);
         if (detailModel != null) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuoteOrderDetailPage(item: detailModel)));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuoteOrderDetailPage(item: detailModel)));
         }
       },
       child: Container(
@@ -58,8 +51,7 @@ class _QuoteItemState extends State<QuoteItem> {
           children: <Widget>[
             _buildHeader(),
             _buildMain(),
-            widget.model.state == QuoteState.SELLER_SUBMITTED &&
-                    UserBLoC.instance.currentUser.type == UserType.BRAND
+            widget.model.state == QuoteState.SELLER_SUBMITTED && UserBLoC.instance.currentUser.type == UserType.BRAND
                 ? _buildSummary()
                 : Container(),
           ],
@@ -93,17 +85,10 @@ class _QuoteItemState extends State<QuoteItem> {
                             highlightOnly: false,
                           ),
                           RichText(
-                            text: TextSpan(
-                                text: '历史接单',
-                                style: TextStyle(color: Colors.black54),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '214',
-                                      style: TextStyle(color: Colors.red)),
-                                  TextSpan(
-                                      text: '单',
-                                      style: TextStyle(color: Colors.black54)),
-                                ]),
+                            text: TextSpan(text: '历史接单', style: TextStyle(color: Colors.black54), children: <TextSpan>[
+                              TextSpan(text: '214', style: TextStyle(color: Colors.red)),
+                              TextSpan(text: '单', style: TextStyle(color: Colors.black54)),
+                            ]),
                           ),
                           Icon(
                             Icons.chevron_right,
@@ -130,22 +115,16 @@ class _QuoteItemState extends State<QuoteItem> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               RichText(
-                text: TextSpan(
-                    text: '报价：',
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: '￥',
-                          style: TextStyle(fontSize: 14, color: Colors.red)),
-                      TextSpan(
-                          text:
-                              '${widget.model.unitPriceOfFabric + widget.model.unitPriceOfExcipients + widget.model.unitPriceOfProcessing + widget.model.costOfSamples + widget.model.costOfOther}',
-                          style: TextStyle(color: Colors.red)),
-                    ]),
+                text: TextSpan(text: '报价：', style: TextStyle(fontSize: 18, color: Colors.black), children: <TextSpan>[
+                  TextSpan(text: '￥', style: TextStyle(fontSize: 14, color: Colors.red)),
+                  TextSpan(
+                      text:
+                          '${widget.model.unitPriceOfFabric + widget.model.unitPriceOfExcipients + widget.model.unitPriceOfProcessing + widget.model.costOfSamples + widget.model.costOfOther}',
+                      style: TextStyle(color: Colors.red)),
+                ]),
               ),
               Text(QuoteStateLocalizedMap[widget.model.state],
-                  style: TextStyle(
-                      color: _statusColors[widget.model.state], fontSize: 18))
+                  style: TextStyle(color: _statusColors[widget.model.state], fontSize: 18))
             ],
           ),
           Container(
@@ -178,8 +157,7 @@ class _QuoteItemState extends State<QuoteItem> {
           children: <Widget>[
             FlatButton(
                 onPressed: onReject,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: Colors.red,
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 child: Text(
@@ -188,14 +166,12 @@ class _QuoteItemState extends State<QuoteItem> {
                 )),
             FlatButton(
                 onPressed: onApprove,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 child: Text(
                   '确认报价',
-                  style: TextStyle(
-                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                  style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 )),
           ],
         ),
@@ -228,16 +204,18 @@ class _QuoteItemState extends State<QuoteItem> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text(
+                '取消',
+                style: TextStyle(color: Colors.grey),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text('确定', style: TextStyle(color: Colors.black)),
               onPressed: () async {
-                int statusCode = await QuoteOrderRepository()
-                    .quoteReject(widget.model.code, rejectController.text);
+                int statusCode = await QuoteOrderRepository().quoteReject(widget.model.code, rejectController.text);
                 Navigator.of(context).pop();
                 if (statusCode == 200) {
                   //触发刷新
@@ -262,16 +240,15 @@ class _QuoteItemState extends State<QuoteItem> {
           title: Text('是否确认?'),
           actions: <Widget>[
             FlatButton(
-              child: Text('否'),
+              child: Text('否', style: TextStyle(color: Colors.grey)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('是'),
+              child: Text('是', style: TextStyle(color: Colors.black)),
               onPressed: () async {
-                int statusCode = await QuoteOrderRepository()
-                    .quoteApprove(widget.model.code);
+                int statusCode = await QuoteOrderRepository().quoteApprove(widget.model.code);
                 Navigator.of(context).pop();
                 if (statusCode == 200) {
                   //触发刷新
@@ -289,22 +266,22 @@ class _QuoteItemState extends State<QuoteItem> {
 }
 
 class QuoteManageItem extends StatefulWidget {
+  QuoteManageItem({
+    Key key,
+    this.model,
+    this.isSupplier = false,
+    @required this.onRefresh,
+    @required this.pageContext,
+  }) : super(key: key);
+
   final QuoteModel model;
-  bool isSupplier;
+  final bool isSupplier;
 
   /// 更新方法
   final VoidCallback onRefresh;
 
   /// 顶级页面context
   final BuildContext pageContext;
-
-  QuoteManageItem(
-      {Key key,
-      this.model,
-      this.isSupplier = false,
-      @required this.onRefresh,
-      @required this.pageContext})
-      : super(key: key);
 
   _QuoteManageItemState createState() => _QuoteManageItemState();
 }
@@ -316,23 +293,21 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
     QuoteState.BUYER_REJECTED: Colors.grey
   };
 
-  TextEditingController rejectController = TextEditingController();
+  final TextEditingController rejectController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
         //查询明细
-        QuoteModel detailModel =
-            await QuoteOrderRepository().getquoteDetail(widget.model.code);
+        QuoteModel detailModel = await QuoteOrderRepository().getquoteDetail(widget.model.code);
         if (detailModel != null) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QuoteOrderDetailPage(item: detailModel)));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuoteOrderDetailPage(item: detailModel)));
         }
       },
       child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
           children: <Widget>[
             _buildHeader(),
@@ -369,34 +344,41 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
             children: <Widget>[
               RichText(
                 text: TextSpan(
-                    text: '报价：',
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: '￥',
-                          style: TextStyle(fontSize: 14, color: Colors.red)),
-                      TextSpan(
-                          text: '${widget.model.unitPrice}',
-                          style: TextStyle(color: Colors.red)),
-                    ]),
+                  text: '报价：',
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '￥',
+                      style: TextStyle(fontSize: 14, color: Colors.red),
+                    ),
+                    TextSpan(
+                      text: '${widget.model.unitPrice}',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
               ),
-              Text(QuoteStateLocalizedMap[widget.model.state],
-                  style: TextStyle(
-                      color: _statusColors[widget.model.state], fontSize: 18))
+              Text(
+                QuoteStateLocalizedMap[widget.model.state],
+                style: TextStyle(
+                  color: _statusColors[widget.model.state],
+                  fontSize: 18,
+                ),
+              )
             ],
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   '${widget.model?.supplier?.name}',
-                  style: TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                 ),
                 Text(
                   '${DateFormatUtil.format(widget.model.creationTime)}',
-                  style: TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ],
             ),
@@ -417,29 +399,31 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.requirementOrder.details.pictures[0].url}'),
-                        fit: BoxFit.cover,
-                      )),
+                    borderRadius: BorderRadius.circular(5),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.requirementOrder.details.pictures[0].url}'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 )
               : Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color.fromRGBO(243, 243, 243, 1)),
-                  child: Icon(
+                    borderRadius: BorderRadius.circular(5),
+                    color: const Color.fromRGBO(243, 243, 243, 1),
+                  ),
+                  child: const Icon(
                     B2BIcons.noPicture,
-                    color: Color.fromRGBO(200, 200, 200, 1),
-                    size: 60
+                    color: const Color.fromRGBO(200, 200, 200, 1),
+                    size: 60,
                   ),
                 ),
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
               height: 80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -448,19 +432,17 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                   widget.model.requirementOrder.details?.productName != null
                       ? Text(
                           widget.model.requirementOrder.details.productName,
-                          style: TextStyle(fontSize: 15),
+                          style: const TextStyle(fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         )
                       : Text(
                           ' ',
-                          style: TextStyle(fontSize: 15, color: Colors.red),
+                          style: const TextStyle(fontSize: 15, color: Colors.red),
                         ),
                   widget.model.requirementOrder.details?.productSkuID != null
                       ? Container(
-                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                          decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
+                          decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
                           child: Text(
                             '货号：${widget.model.requirementOrder.details.productSkuID}',
                             style: TextStyle(fontSize: 12, color: Colors.grey),
@@ -468,15 +450,17 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                         )
                       : Container(),
                   Container(
-                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(10)),
+                      color: const Color.fromRGBO(255, 243, 243, 1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Text(
                       "${widget.model.requirementOrder.details?.majorCategoryName()}   ${widget.model.requirementOrder.details?.category?.name}   ${widget.model.totalQuantity ?? 0}件",
                       style: TextStyle(
-                          fontSize: 15,
-                          color: Color.fromRGBO(255, 133, 148, 1)),
+                        fontSize: 15,
+                        color: Color.fromRGBO(255, 133, 148, 1),
+                      ),
                     ),
                   )
                 ],
@@ -497,8 +481,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
         buttons = <Widget>[
           FlatButton(
               onPressed: onReject,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Colors.red,
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -507,14 +490,12 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               )),
           FlatButton(
               onPressed: onApprove,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '确认报价',
-                style: TextStyle(
-                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
               )),
         ];
       }
@@ -526,21 +507,18 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
           FlatButton(
               onPressed: onUpdateQuote,
               shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
-                  borderRadius: BorderRadius.circular(20)),
+                  side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)), borderRadius: BorderRadius.circular(20)),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '修改报价',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
               )),
         ];
       } else if (widget.model.state == QuoteState.BUYER_APPROVED) {
         buttons = <Widget>[
           FlatButton(
               onPressed: onCreateProofings,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -549,8 +527,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
               )),
           FlatButton(
               onPressed: onCreateProduction,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -563,8 +540,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
           Container(),
           FlatButton(
               onPressed: onQuoteAgain,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 70, 70, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -577,9 +553,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
 
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: buttons ?? []),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: buttons ?? []),
     );
   }
 
@@ -608,16 +582,15 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text('取消', style: TextStyle(color: Colors.grey)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text('确定', style: TextStyle(color: Colors.black)),
               onPressed: () async {
-                int statusCode = await QuoteOrderRepository()
-                    .quoteReject(widget.model.code, rejectController.text);
+                int statusCode = await QuoteOrderRepository().quoteReject(widget.model.code, rejectController.text);
                 Navigator.of(context).pop();
                 if (statusCode == 200) {
                   //触发刷新
@@ -642,16 +615,15 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
           title: Text('是否确认?'),
           actions: <Widget>[
             FlatButton(
-              child: Text('否'),
+              child: Text('否', style: TextStyle(color: Colors.grey)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('是'),
+              child: Text('是', style: TextStyle(color: Colors.black)),
               onPressed: () async {
-                int statusCode = await QuoteOrderRepository()
-                    .quoteApprove(widget.model.code);
+                int statusCode = await QuoteOrderRepository().quoteApprove(widget.model.code);
                 Navigator.of(context).pop();
                 if (statusCode == 200) {
                   //触发刷新
@@ -691,8 +663,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
 
   void onCreateProofings() async {
     //查询明细
-    QuoteModel detailModel =
-        await QuoteOrderRepository().getquoteDetail(widget.model.code);
+    QuoteModel detailModel = await QuoteOrderRepository().getquoteDetail(widget.model.code);
 
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ProofingOrderForm(

@@ -26,10 +26,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
 
   Widget _buildSearchButton(BuildContext context) {
     return IconButton(
-      icon: Icon(
-        B2BIcons.search,
-        size: 20,
-      ),
+      icon: Icon(B2BIcons.search, size: 20),
       onPressed: () => showSearch(context: context, delegate: QuotesSearchDelegate()),
     );
   }
@@ -42,9 +39,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
       child: Scaffold(
         appBar: AppBarFactory.buildDefaultAppBar(
           '报价管理',
-          actions: <Widget>[
-            _buildSearchButton(context),
-          ],
+          actions: <Widget>[_buildSearchButton(context)],
         ),
         body: DefaultTabController(
           length: statuses.length,

@@ -48,7 +48,7 @@ class _RequirementOrderDetailPageState
           style: TextStyle(color: Colors.black),
         ),
         actions: <Widget>[
-          widget.order.editable
+          widget.order.editable && UserBLoC.instance.currentUser.type == UserType.BRAND
               ? FlatButton(
                   onPressed: onEdit,
                   child: Text('修改'),
@@ -164,7 +164,7 @@ class _RequirementOrderDetailPageState
                   ),
                   Container(
                     child: Text(
-                      widget.order.belongTo.contactAddress.fullname  == null ?
+                      widget.order.belongTo.contactAddress?.fullname  == null ?
                       '' :
                       '${widget.order.belongTo.contactAddress.fullname}',
                       style: TextStyle(
@@ -349,11 +349,8 @@ class _RequirementOrderDetailPageState
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Color.fromRGBO(243, 243, 243, 1)),
-        child: Icon(
-          B2BIcons.noPicture,
-          color: Color.fromRGBO(200, 200, 200, 1),
-          size: 60
-        ),
+        child: Icon(B2BIcons.noPicture,
+            color: Color.fromRGBO(200, 200, 200, 1), size: 60),
       );
     } else {
       if (widget.order.details.pictures.isEmpty) {
@@ -363,11 +360,8 @@ class _RequirementOrderDetailPageState
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Color.fromRGBO(243, 243, 243, 1)),
-          child: Icon(
-            B2BIcons.noPicture,
-            color: Color.fromRGBO(200, 200, 200, 1),
-            size: 60
-          ),
+          child: Icon(B2BIcons.noPicture,
+              color: Color.fromRGBO(200, 200, 200, 1), size: 60),
         );
       } else {
         _pictureWidget = GestureDetector(

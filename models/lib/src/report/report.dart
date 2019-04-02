@@ -40,6 +40,10 @@ class Reports {
   /// 工厂：生产待出库
   final int ordersCount7;
 
+  final int ordersCount8;
+
+  final int ordersCount9;
+
   Reports({
     this.ordersCount1 = 0,
     this.ordersCount2 = 0,
@@ -48,6 +52,8 @@ class Reports {
     this.ordersCount5 = 0,
     this.ordersCount6 = 0,
     this.ordersCount7 = 0,
+    this.ordersCount8 = 0,
+    this.ordersCount9 = 0,
   });
 
   factory Reports.fromJson(Map<String, dynamic> json) => _$ReportsFromJson(json);

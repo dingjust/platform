@@ -1,29 +1,31 @@
-import 'package:b2b_commerce/src/business/orders/quote_item.dart';
-import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
-import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
-import 'package:b2b_commerce/src/my/company/my_company_contact_way.dart';
-import 'package:b2b_commerce/src/my/company/my_personal_certificate.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
+import './company/form/my_brand_base_form.dart';
+import './company/my_company_certificate.dart';
+import './company/my_company_contact_way.dart';
+import './company/my_personal_certificate.dart';
+import '../business/orders/quote_item.dart';
+
 /// 认证信息
 class MyBrandPage extends StatefulWidget {
-  BrandModel brand;
-  PurchaseOrderModel purchaseOrder;
-  QuoteModel quoteModel;
   MyBrandPage(
     this.brand, {
     this.purchaseOrder,
     this.quoteModel,
   });
 
+  final BrandModel brand;
+  final PurchaseOrderModel purchaseOrder;
+  final QuoteModel quoteModel;
+
   _MyBrandPageState createState() => _MyBrandPageState();
 }
 
 class _MyBrandPageState extends State<MyBrandPage> {
-  Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
+  final Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
     PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
     PurchaseOrderStatus.OUT_OF_STORE: Colors.yellow,
@@ -32,9 +34,28 @@ class _MyBrandPageState extends State<MyBrandPage> {
     PurchaseOrderStatus.CANCELLED: Colors.grey,
   };
 
+  Widget _buildContact(BuildContext context) {
+    return Container(
+      width: 80,
+      child: IconButton(
+        icon: Text(
+          '联系方式',
+          style: TextStyle(),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MyCompanyContactWayPage(widget.brand, isCompanyIntroduction: true),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -43,12 +64,14 @@ class _MyBrandPageState extends State<MyBrandPage> {
     List<Widget> _widgets = [
       _buildBrandBaseInfo(context),
     ];
+
     if (widget.quoteModel != null) {
       _widgets.add(QuoteManageItem(
         model: widget.quoteModel,
         isSupplier: widget.quoteModel != null,
       ));
     }
+
     if (widget.purchaseOrder != null) {
       _widgets.add(Card(
         elevation: 0,
@@ -73,25 +96,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
         title: const Text('公司介绍'),
         elevation: 0.5,
         actions: <Widget>[
-          Container(
-            width: 80,
-            child: IconButton(
-              icon: Text(
-                '联系方式',
-                style: TextStyle(),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyCompanyContactWayPage(
-                            widget.brand,
-                            isCompanyIntroduction: true,
-                          )),
-                );
-              },
-            ),
-          ),
+          _buildContact(context),
         ],
       ),
       body: ListView(
@@ -103,92 +108,91 @@ class _MyBrandPageState extends State<MyBrandPage> {
   //生产订单
   Widget _buildOrderHeader() {
     return Container(
-        padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                (widget.purchaseOrder.salesApplication ==
-                                SalesApplication.ONLINE &&
-                            widget.purchaseOrder.depositPaid == false &&
-                            widget.purchaseOrder.status ==
-                                PurchaseOrderStatus.PENDING_PAYMENT) ||
-                        (widget.purchaseOrder.salesApplication ==
-                                SalesApplication.ONLINE &&
-                            widget.purchaseOrder.balancePaid == false &&
-                            widget.purchaseOrder.status ==
-                                PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            '￥',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.red,
-                              fontWeight: FontWeight.w500,
-                            ),
+      padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE &&
+                          widget.purchaseOrder.depositPaid == false &&
+                          widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT) ||
+                      (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE &&
+                          widget.purchaseOrder.balancePaid == false &&
+                          widget.purchaseOrder.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          '￥',
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
                           ),
-                          Text(
-                            '${widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.depositPaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT ? widget.purchaseOrder.deposit : widget.purchaseOrder.balance}',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.red,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )
-                        ],
-                      )
-                    : Container(
-                        child: widget.purchaseOrder.delayed
-                            ? Text('已延期',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w500,
-                                ))
-                            : Container()),
-                Expanded(
-                    child: Container(
-                  child: _buildHeaderText(),
-                )),
-                widget.purchaseOrder.status == null
-                    ? Container()
-                    : Text(
-                        '${PurchaseOrderStatusLocalizedMap[widget.purchaseOrder.status]}',
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: _statusColors[widget.purchaseOrder.status],
-                          fontWeight: FontWeight.w500,
                         ),
-                      ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    child: Text(
-                      '${widget.purchaseOrder.belongTo == null ? widget.purchaseOrder.companyOfSeller : widget.purchaseOrder.belongTo.name}',
-                      style: TextStyle(fontSize: 16),
+                        Text(
+                          '${widget.purchaseOrder.salesApplication == SalesApplication.ONLINE && widget.purchaseOrder.depositPaid == false && widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT ? widget.purchaseOrder.deposit : widget.purchaseOrder.balance}',
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      ],
+                    )
+                  : Container(
+                      child: widget.purchaseOrder.delayed
+                          ? Text('已延期',
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.red,
+                                fontWeight: FontWeight.w500,
+                              ))
+                          : Container(),
                     ),
+              Expanded(
+                child: Container(
+                  child: _buildHeaderText(),
+                ),
+              ),
+              widget.purchaseOrder.status == null
+                  ? Container()
+                  : Text(
+                      '${PurchaseOrderStatusLocalizedMap[widget.purchaseOrder.status]}',
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: _statusColors[widget.purchaseOrder.status],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  child: Text(
+                    '${widget.purchaseOrder.belongTo == null ? widget.purchaseOrder.companyOfSeller : widget.purchaseOrder.belongTo.name}',
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
-                Text(
-                  '${widget.purchaseOrder.salesApplication == null ? '' : SalesApplicationLocalizedMap[widget.purchaseOrder.salesApplication]}',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            )
-          ],
-        ));
+              ),
+              Text(
+                '${widget.purchaseOrder.salesApplication == null ? '' : SalesApplicationLocalizedMap[widget.purchaseOrder.salesApplication]}',
+                textAlign: TextAlign.end,
+                style: TextStyle(fontSize: 16),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildContent() {
@@ -197,8 +201,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
     widget.purchaseOrder.entries.forEach((entry) {
       sum = sum + entry.quantity;
     });
+
     return Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Row(
           children: <Widget>[
             Container(
@@ -207,20 +212,18 @@ class _MyBrandPageState extends State<MyBrandPage> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                    image: widget.purchaseOrder.product == null ||
-                            widget.purchaseOrder.product.thumbnail == null
+                    image: widget.purchaseOrder.product == null || widget.purchaseOrder.product.thumbnail == null
                         ? AssetImage(
                             'temp/picture.png',
                             package: "assets",
                           )
-                        : NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.purchaseOrder.product.thumbnail.url}'),
+                        : NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.purchaseOrder.product.thumbnail.url}'),
                     fit: BoxFit.cover,
                   )),
             ),
             Expanded(
                 child: Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     height: 100,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -228,41 +231,32 @@ class _MyBrandPageState extends State<MyBrandPage> {
                       children: <Widget>[
                         Align(
                             alignment: Alignment.topLeft,
-                            child: widget.purchaseOrder.product == null ||
-                                    widget.purchaseOrder.product.name == null
+                            child: widget.purchaseOrder.product == null || widget.purchaseOrder.product.name == null
                                 ? Container()
                                 : Text(
                                     '${widget.purchaseOrder.product.name}',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                                   )),
                         Align(
                             alignment: Alignment.topLeft,
                             child: Container(
                               padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(5)),
+                              decoration:
+                                  BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(5)),
                               child: Text(
                                 '货号：${widget.purchaseOrder.product == null ? '' : widget.purchaseOrder.product.skuID}',
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.grey),
+                                style: TextStyle(fontSize: 12, color: Colors.grey),
                               ),
                             )),
-                        widget.purchaseOrder.product == null ||
-                                widget.purchaseOrder.product.category == null
+                        widget.purchaseOrder.product == null || widget.purchaseOrder.product.category == null
                             ? Container()
                             : Container(
                                 padding: EdgeInsets.all(3),
                                 decoration: BoxDecoration(
-                                    color: Color.fromRGBO(255, 243, 243, 1),
-                                    borderRadius: BorderRadius.circular(10)),
+                                    color: Color.fromRGBO(255, 243, 243, 1), borderRadius: BorderRadius.circular(10)),
                                 child: Text(
                                   "${widget.purchaseOrder.product.category.name}  ${sum}件",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Color.fromRGBO(255, 133, 148, 1)),
+                                  style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
                                 ),
                               )
                       ],
@@ -284,11 +278,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
           fontWeight: FontWeight.w500,
         ),
       );
-    } else if (widget.purchaseOrder.salesApplication ==
-            SalesApplication.ONLINE &&
+    } else if (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE &&
         widget.purchaseOrder.balancePaid == false &&
-        widget.purchaseOrder.status ==
-            PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
+        widget.purchaseOrder.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
       return Text(
         '（待付尾款）',
         textAlign: TextAlign.start,
@@ -309,8 +301,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
       margin: EdgeInsets.only(top: 10),
       child: ListTile(
         title: Text('注册时间'),
-        trailing:
-            Text(DateFormatUtil.formatYMD(widget.brand.registrationDate) ?? ''),
+        trailing: Text(DateFormatUtil.formatYMD(widget.brand.registrationDate) ?? ''),
       ),
     );
   }
@@ -362,14 +353,10 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyBrandBaseFormPage(widget.brand)));
+                          context, MaterialPageRoute(builder: (context) => MyBrandBaseFormPage(widget.brand)));
                     },
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 214, 12, 1),
                         borderRadius: BorderRadius.circular(5),
@@ -389,8 +376,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                         image: widget.brand.profilePicture != null
-                            ? NetworkImage(
-                                '${GlobalConfigs.IMAGE_BASIC_URL}${widget.brand.profilePicture.url}')
+                            ? NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.brand.profilePicture.url}')
                             : AssetImage(
                                 'temp/picture.png',
                                 package: "assets",
@@ -419,13 +405,8 @@ class _MyBrandPageState extends State<MyBrandPage> {
                         ),
                         Container(
                           child: Text(
-                            widget.brand.approvalStatus ==
-                                    ArticleApprovalStatus.approved
-                                ? "已认证"
-                                : '未认证',
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Color.fromRGBO(255, 214, 12, 1)),
+                            widget.brand.approvalStatus == ArticleApprovalStatus.approved ? "已认证" : '未认证',
+                            style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 214, 12, 1)),
                           ),
                         ),
                       ],
@@ -486,9 +467,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   ),
                 ),
                 Text(
-                  widget.brand.scaleRange == null
-                      ? ''
-                      : ScaleRangesLocalizedMap[widget.brand.scaleRange],
+                  widget.brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.brand.scaleRange],
                   style: TextStyle(fontSize: 16),
                 ),
               ],

@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:b2b_commerce/src/_shared/widgets/product_search_input.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
+
+import '../../_shared/widgets/business/product_search_input.dart';
 
 List<File> _BOMList = [];
 

@@ -6,6 +6,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:services/src/message/message_bloc.dart';
+import 'package:services/src/net/error_response.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
 
 /// HTTP请求
@@ -72,8 +73,10 @@ class HttpManager {
       _clearContext();
       return response; // continue
     }, onError: (DioError e) {
+      ErrorResponse errorResponse = ErrorResponse.fromJson(e.response.data);
       //消息流推送
-      MessageBLoC.instance.errorMessageController.add(e.toString());
+      MessageBLoC.instance.errorMessageController
+          .add(errorResponse.errors[0].message);
       // 当请求失败时做一些预处理
       if (GlobalConfigs.DEBUG) {
         print(e.toString());
@@ -100,8 +103,12 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.get(path,
-        queryParameters: data, options: options, cancelToken: cancelToken);
+    return instance.get(
+      path,
+      queryParameters: data,
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 
   Future<Response<T>> post<T>(
@@ -116,13 +123,15 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.post(path,
-        data: data,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-        queryParameters: queryParameters);
+    return instance.post(
+      path,
+      data: data,
+      options: options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+      queryParameters: queryParameters,
+    );
   }
 
   Future<Response<T>> put<T>(
@@ -134,8 +143,12 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.put(path,
-        data: data, options: options, cancelToken: cancelToken);
+    return instance.put(
+      path,
+      data: data,
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 
   Future<Response<T>> delete<T>(
@@ -147,8 +160,12 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.delete(path,
-        data: data, options: options, cancelToken: cancelToken);
+    return instance.delete(
+      path,
+      data: data,
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 
   static _setContext(BuildContext context) {

@@ -8,115 +8,119 @@ class MyAccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-            child: ListView(
-      children: <Widget>[
-        _buildTopBackgroud(context),
-        _buildBill(context),
-        _buildBlankCard(context),
-      ],
-    )));
+      body: Container(
+        child: ListView(
+          children: <Widget>[
+            _buildTitle(context),
+            _buildBill(context),
+            _buildBlankCard(context),
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget _buildTopBackgroud(BuildContext context) {
+  Widget _buildTitle(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
       child: Center(
-          child: Column(
-        children: <Widget>[
-          Container(
-            child: Center(
-              child: Row(
-                children: <Widget>[
-                  Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Center(
+                child: Row(
+                  children: <Widget>[
+                    Container(
                       child: IconButton(
-                    icon: Icon(Icons.chevron_left),
-                    color: Color.fromRGBO(36, 38, 41, 1),
-                    iconSize: 30,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )),
-                  Expanded(
+                        icon: Icon(Icons.chevron_left),
+                        color: Color.fromRGBO(36, 38, 41, 1),
+                        iconSize: 30,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                    Expanded(
                       child: Center(
-                    child: Container(
-//                      padding: EdgeInsets.only(right: 0),
-                      child: Text(
-                        '我的账户',
-                        style: TextStyle(
-                          color: Color.fromRGBO(36, 38, 41, 1),
-                          fontSize: 22,
+                        child: Container(
+                          child: Text(
+                            '我的账户',
+                            style: TextStyle(
+                              color: Color.fromRGBO(36, 38, 41, 1),
+                              fontSize: 22,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  )),
-                  GestureDetector(
+                    GestureDetector(
                       child: Container(
-                        padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                         child: Center(
-                          child: Text(
+                          child: const Text(
                             '提现',
-                            style: TextStyle(
-                                color: Color.fromRGBO(36, 38, 41, 1),
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
+                            style: const TextStyle(
+                              color: const Color.fromRGBO(36, 38, 41, 1),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => WithdrawCash(),
-                          ),
+                          MaterialPageRoute(builder: (context) => WithdrawCash()),
                         );
-                      })
-                ],
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                      child: Text(
-                    "￥",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(36, 38, 41, 1),
-                    ),
-                  )),
-                  Container(
-                      child: Text(
-                    "987652.00",
-                    style: TextStyle(
-                      fontSize: 44,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(36, 38, 41, 1),
-                    ),
-                  ))
-                ],
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+              child: Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                        child: Text(
+                      "￥",
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        color: const Color.fromRGBO(36, 38, 41, 1),
+                      ),
+                    )),
+                    Container(
+                        child: Text(
+                      "987652.00",
+                      style: const TextStyle(
+                        fontSize: 44,
+                        fontWeight: FontWeight.w500,
+                        color: const Color.fromRGBO(36, 38, 41, 1),
+                      ),
+                    ))
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
-            child: Text(
-              '余额',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Color.fromRGBO(36, 38, 41, 1),
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+              child: Text(
+                '余额',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: const Color.fromRGBO(36, 38, 41, 1),
+                ),
               ),
-            ),
-          )
-        ],
-      )),
-      decoration: BoxDecoration(color: Color.fromRGBO(255, 219, 0, 1)),
+            )
+          ],
+        ),
+      ),
+      decoration: const BoxDecoration(color: const Color.fromRGBO(255, 219, 0, 1)),
     );
   }
 
@@ -128,17 +132,18 @@ class MyAccountPage extends StatelessWidget {
           Container(
             child: Center(
               child: Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
-                  child: Text(
-                    "账单",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                  )),
+                margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+                child: Text(
+                  "账单",
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                ),
+              ),
             ),
           ),
           GestureDetector(
             child: Container(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
                 children: <Widget>[
                   Container(
@@ -182,12 +187,12 @@ class MyAccountPage extends StatelessWidget {
 
   Widget _buildBlankCard(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-      margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(bottom: 15),
+            margin: const EdgeInsets.only(bottom: 15),
             child: Row(
               children: <Widget>[
                 Container(
@@ -198,38 +203,40 @@ class MyAccountPage extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                width: 150,
-                                child: Text(
-                                  '工商银行',
-                                ),
-                              ),
-                              Container(
-                                child: Text('6212***************4243'),
-                              )
-                            ],
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: 150,
+                            child: Text(
+                              '工商银行',
+                            ),
                           ),
-                        ))),
+                          Container(
+                            child: Text('6212***************4243'),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 Icon(B2BIcons.del_blank_card)
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: Center(
               child: Column(
                 children: <Widget>[
                   Container(
                       child: Text(
                     '＋ 添加银行卡',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                       color: Color(0xFFFF9516),
@@ -238,7 +245,7 @@ class MyAccountPage extends StatelessWidget {
                   Container(
                     child: Text(
                       '支持农行、工行、招行和建行',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),

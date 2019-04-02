@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
+import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
@@ -74,65 +74,57 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
         children: <Widget>[
-          widget.model.product.thumbnail != null?
-          GestureDetector(
-            child: Stack(
-              alignment: const Alignment(0.6, 1.1),
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: 15),
-                  padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+          widget.model.product.thumbnail != null
+              ? GestureDetector(
+                  child: Stack(
+                    alignment: const Alignment(0.6, 1.1),
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(right: 15),
+                        padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: widget.model.product != null &&
+                                      widget.model.product.thumbnail != null &&
+                                      widget.model.product.thumbnail.url != null
+                                  ? NetworkImage(
+                                      '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.product.thumbnail.url}')
+                                  : AssetImage(
+                                      'temp/picture.png',
+                                      package: "assets",
+                                    ),
+                              fit: BoxFit.cover,
+                            )),
+                      ),
+                      Container(
+                        child: Icon(
+                          Icons.photo_size_select_actual,
+                          color: Colors.black38,
+                          size: 20,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PicturePickPreviewWidget(
+                              medias: widget.model.product.thumbnails,
+                              isUpload: false,
+                            )));
+                  },
+                )
+              : Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: widget.model.product != null &&
-                            widget.model.product.thumbnail != null
-                            && widget.model.product.thumbnail.url !=
-                                null
-                            ?
-                        NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model
-                                .product.thumbnail.url}')
-                            : AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ),
-                        fit: BoxFit.cover,
-                      )),
+                      borderRadius: BorderRadius.circular(5),
+                      color: Color.fromRGBO(243, 243, 243, 1)),
+                  child: Icon(B2BIcons.noPicture,
+                      color: Color.fromRGBO(200, 200, 200, 1), size: 60),
                 ),
-                Container(
-                  child: Icon(
-                    Icons.photo_size_select_actual,
-                    color: Colors.black38,
-                    size: 20,
-                  ),
-                )
-              ],
-            ),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      PicturePickPreviewWidget(
-                        medias: widget.model.product.thumbnails,
-                        isUpload: false,
-                      ))
-              );
-            },
-          )
-              : Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Color.fromRGBO(243, 243, 243, 1)),
-            child: Icon(
-                B2BIcons.noPicture,
-                color: Color.fromRGBO(200, 200, 200, 1),
-                size: 60
-            ),
-          ),
           Expanded(
             flex: 1,
             child: Container(
@@ -228,16 +220,6 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                       fontSize: 18, color: Color.fromRGBO(255, 68, 68, 1)),
                 ),
               ),
-              FlatButton(
-                color: Color.fromRGBO(255, 149, 22, 1),
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                child: Text(
-                  '查看报价',
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
             ],
           )
         ],
@@ -284,32 +266,32 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               title: Row(
                 children: <Widget>[
                   widget.model.deliveryAddress == null ||
-                      widget.model.deliveryAddress.fullname == null ?
-                  Container() :
-                  Text(widget.model.deliveryAddress.fullname),
+                          widget.model.deliveryAddress.fullname == null
+                      ? Container()
+                      : Text(widget.model.deliveryAddress.fullname),
                   widget.model.deliveryAddress == null ||
-                      widget.model.deliveryAddress.cellphone == null ?
-                  Container() :
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Text(widget.model.deliveryAddress.cellphone),
-                  )
+                          widget.model.deliveryAddress.cellphone == null
+                      ? Container()
+                      : Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: Text(widget.model.deliveryAddress.cellphone),
+                        )
                 ],
               ),
               subtitle: widget.model.deliveryAddress == null ||
-                  widget.model.deliveryAddress.region == null ||
-                  widget.model.deliveryAddress.city == null ||
-                  widget.model.deliveryAddress.cityDistrict == null ||
-                  widget.model.deliveryAddress.line1 == null ?
-              Container() :
-              Text(
-                  widget.model.deliveryAddress.region.name +
-                      widget.model.deliveryAddress.city.name +
-                      widget.model.deliveryAddress.cityDistrict.name +
-                      widget.model.deliveryAddress.line1,
-                  style: TextStyle(
-                    color: Colors.black,
-                  )),
+                      widget.model.deliveryAddress.region == null ||
+                      widget.model.deliveryAddress.city == null ||
+                      widget.model.deliveryAddress.cityDistrict == null ||
+                      widget.model.deliveryAddress.line1 == null
+                  ? Container()
+                  : Text(
+                      widget.model.deliveryAddress.region.name +
+                          widget.model.deliveryAddress.city.name +
+                          widget.model.deliveryAddress.cityDistrict.name +
+                          widget.model.deliveryAddress.line1,
+                      style: TextStyle(
+                        color: Colors.black,
+                      )),
             ),
             SizedBox(
               child: Image.asset(
@@ -325,9 +307,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                     padding: EdgeInsets.all(20),
                     child: Text(
                       '物流信息',
-                      style: TextStyle(
-                          fontSize: 16
-                      ),
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                   Column(
@@ -335,31 +315,27 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                     children: <Widget>[
                       Container(
                         child: Text(
-                          '${widget.model.consignmentModel!=null && widget.model.consignmentModel.carrierModel!=null?
-                          widget.model.consignmentModel.carrierModel.name:''}',
-                          style: TextStyle(
-                              fontSize: 16
-                          ),
+                          '${widget.model.consignmentModel != null && widget.model.consignmentModel.carrierModel != null ? widget.model.consignmentModel.carrierModel.name : ''}',
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
                       Container(
                         child: Text(
-                          '${widget.model.consignmentModel!=null && widget.model.consignmentModel.carrierModel!=null?
-                          widget.model.consignmentModel.trackingID:''}',
-                          style: TextStyle(
-                              fontSize: 16
-                          ),
+                          '${widget.model.consignmentModel != null && widget.model.consignmentModel.carrierModel != null ? widget.model.consignmentModel.trackingID : ''}',
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
                     ],
                   )
                 ],
               ),
-              onTap: (){
-                if (widget.model.consignmentModel != null && widget.model.consignmentModel.carrierModel != null &&
-                    widget.model.consignmentModel.trackingID != null && widget.model.consignmentModel.carrierModel.name != null) {
+              onTap: () {
+                if (widget.model.consignmentModel != null &&
+                    widget.model.consignmentModel.carrierModel != null &&
+                    widget.model.consignmentModel.trackingID != null &&
+                    widget.model.consignmentModel.carrierModel.name != null) {
                   copyToClipboard(widget.model.consignmentModel.trackingID);
-                }else{
+                } else {
                   null;
                 }
               },
@@ -372,27 +348,29 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
         ),
       ),
       onTap: () async {
-        UserBLoC.instance.currentUser.type == UserType.BRAND ?
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MyAddressesPage(isJumpSourec: true)),
-          //接收返回数据并处理
-        ).then((value) async{
-          if(value != null){
-            setState(() {
-              widget.model.deliveryAddress = value;
-            });
-            bool result = await ProofingOrderRepository().updateAddress( widget.model.code,  widget.model);
-            _showMessage(context, result, '地址修改');
-          }
-        }):null;
+        UserBLoC.instance.currentUser.type == UserType.BRAND
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyAddressesPage(isJumpSource: true)),
+                //接收返回数据并处理
+              ).then((value) async {
+                if (value != null) {
+                  setState(() {
+                    widget.model.deliveryAddress = value;
+                  });
+                  bool result = await ProofingOrderRepository()
+                      .updateAddress(widget.model.code, widget.model);
+                  _showMessage(context, result, '地址修改');
+                }
+              })
+            : null;
       },
     );
   }
 
   //品牌信息UI
-  Widget _buildBrandInfo(BuildContext context){
+  Widget _buildBrandInfo(BuildContext context) {
     if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       return Container(
           margin: EdgeInsets.only(top: 10),
@@ -408,62 +386,50 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                          image: widget
-                              .model.supplier == null || widget
-                              .model.supplier.profilePicture == null ?
-                          AssetImage(
-                            'temp/picture.png',
-                            package: "assets",
-                          ) :
-                          NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget
-                              .model.supplier.profilePicture.url}'),
+                          image: widget.model.supplier == null ||
+                                  widget.model.supplier.profilePicture == null
+                              ? AssetImage(
+                                  'temp/picture.png',
+                                  package: "assets",
+                                )
+                              : NetworkImage(
+                                  '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.supplier.profilePicture.url}'),
                           fit: BoxFit.cover,
                         )),
                   ),
                   Container(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              '${widget.model.supplier == null ||
-                                  widget.model.supplier.name == null ?
-                              '' : widget.model.supplier.name}',
-                              textScaleFactor: 1.3,
-                            ),
-                          ),
-                          Container(
-                              margin: EdgeInsets.only(top: 5),
-                              color: Color.fromRGBO(254, 252, 235, 1),
-                              child: widget.model.supplier.approvalStatus ==
-                                  ArticleApprovalStatus.approved ?
-                              Text(
-                                  '  已认证  ',
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          '${widget.model.supplier == null || widget.model.supplier.name == null ? '' : widget.model.supplier.name}',
+                          textScaleFactor: 1.3,
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(top: 5),
+                          color: Color.fromRGBO(254, 252, 235, 1),
+                          child: widget.model.supplier.approvalStatus ==
+                                  ArticleApprovalStatus.approved
+                              ? Text('  已认证  ',
                                   style: TextStyle(
-                                    color:
-                                    Color.fromRGBO(255, 133, 148, 1),
-                                  )
-                              )
-                                  :
-                              Text(
-                                '  未认证  ',
-                                style: TextStyle(
-                                  color: Color.
-                                  fromRGBO(255, 133, 148, 1)
-                                  ,
-                                ),
-                              )
-                          )
-                        ],
-                      )
-                  )
+                                    color: Color.fromRGBO(255, 133, 148, 1),
+                                  ))
+                              : Text(
+                                  '  未认证  ',
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(255, 133, 148, 1),
+                                  ),
+                                ))
+                    ],
+                  ))
                 ],
               ),
             ],
-          )
-      );
-    }else{
+          ));
+    } else {
       return Container();
     }
   }
@@ -472,14 +438,23 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
-        onTap: ()async{
+        onTap: () async {
           //获取该工厂的现款商品
-          ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
-            'factory':widget.model.belongTo.uid,
-          }, {'size': 3});
+          ProductsResponse productsResponse =
+              await ProductRepositoryImpl().getProductsOfFactories({
+            'factory': widget.model.belongTo.uid,
+          }, {
+            'size': 3
+          });
 
           //TODO跳转详细页
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>MyFactoryPage(widget.model.belongTo,products: productsResponse.content,)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyFactoryPage(
+                        widget.model.belongTo,
+                        products: productsResponse.content,
+                      )));
         },
         child: Container(
           color: Colors.white,
@@ -604,7 +579,12 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               )),
           FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => OrderPaymentPage(
+                          order: widget.model,
+                        )));
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
@@ -629,17 +609,29 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           //           color: Color.fromRGBO(150, 150, 150, 1), fontSize: 16),
           //     )),
           Container(),
-          FlatButton(
-              onPressed: () {},
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 245, 193, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '确认收货',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
-              )),
+          Container(
+              width: 300,
+              margin: EdgeInsets.fromLTRB(20, 0, 10, 10),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: FlatButton(
+                onPressed: () async {
+                  bool result = false;
+                  result =
+                  await ProofingOrderRepository().shipped(widget.model.code);
+                  _showMessage(context, result, '确认收货');
+                },
+                color: Color(0xFFFFD600),
+                child: Text(
+                  '确认收货',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+              )
+          ),
         ];
       } else {
         return Container();
@@ -668,23 +660,23 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
         buttons = <Widget>[
           Container(),
           FlatButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => LogisticsInputPage(
-                      isProductionOrder: false,
-                      proofingModel: widget.model,
-                    )));
-              },
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => LogisticsInputPage(
+                        isProductionOrder: false,
+                        proofingModel: widget.model,
+                      )));
+            },
             color: Color(0xFFFFD600),
             child: Text(
               '确认发货',
               style: TextStyle(
                 color: Colors.black,
-                fontWeight: FontWeight.w500,
                 fontSize: 18,
               ),
             ),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
           ),
         ];
       }
@@ -718,9 +710,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
 
   copyToClipboard(final String text) {
     if (text != null) {
-      Clipboard.setData(
-          ClipboardData(text: text)
-      );
+      Clipboard.setData(ClipboardData(text: text));
       showDialog<void>(
         context: context,
         barrierDismissible: true, // user must tap button!
@@ -800,20 +790,22 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             )));
   }
 
-  void _showMessage(BuildContext context,bool result,String message){
-    _requestMessage(context,result == true? '${message}成功' : '${message}失败');
+  void _showMessage(BuildContext context, bool result, String message) {
+    _requestMessage(context, result == true ? '${message}成功' : '${message}失败');
   }
 
-  Future<void> _requestMessage(BuildContext context,String message) async {
+  Future<void> _requestMessage(BuildContext context, String message) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return SimpleDialog(
-          title: const Text('提示',
+          title: const Text(
+            '提示',
             style: TextStyle(
               fontSize: 16,
-            ),),
+            ),
+          ),
           children: <Widget>[
             SimpleDialogOption(
               child: Text('${message}'),

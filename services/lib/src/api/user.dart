@@ -31,8 +31,11 @@ abstract class UserApis {
   ///工作报表
   static get reports => '/{baseSiteId}/b2b/company/reports';
 
+  ///全部需求/推荐需求报表
+  static get requirementReports => '/{baseSiteId}/b2b/company/reports/requirement';
+
   ///手机号是否注册
-  static get phonExist => (code) {
+  static get phoneExists => (code) {
         return '/{baseSiteId}/b2b/companies/register/$code';
       };
 }

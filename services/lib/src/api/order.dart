@@ -1,11 +1,5 @@
 /// 订单API
 class OrderApis {
-  // === 支付 ===
-  /// 预付码
-  static get wechatPrepay => (code) {
-    return '/{baseSiteId}/checkout/multi/wechat/prepay/$code';
-  };
-
   // ========需求=========
 
   /// 根据条件获取需求订单列表 POST
@@ -55,7 +49,8 @@ class OrderApis {
       };
 
   //创建线下采购订单 POST
-  static get purchaseOfflineOrders => '/{baseSiteId}/b2b/orders/purchase/create';
+  static get purchaseOfflineOrders =>
+      '/{baseSiteId}/b2b/orders/purchase/create';
 
   //创建线上生产订单
   static get purchaseOnlineOrders => (quote) {
@@ -104,7 +99,7 @@ class OrderApis {
 
   //确认生产
   static get confirmProduction => (code) {
-    return '/{baseSiteId}/b2b/orders/purchase/$code/production';
+        return '/{baseSiteId}/b2b/orders/purchase/$code/production';
       };
 
   //品牌更新地址
@@ -168,7 +163,12 @@ class OrderApis {
 
   //确认发货
   static get proofingDelivering => (code) {
-    return '/{baseSiteId}/b2b/orders/proofing/$code/delivering';
+        return '/{baseSiteId}/b2b/orders/proofing/$code/delivering';
+      };
+
+  //确认收货
+  static get shipped => (code) {
+    return '/{baseSiteId}/b2b/orders/proofing/$code/shipped';
   };
 
   /// 更新需求信息

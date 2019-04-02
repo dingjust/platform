@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
-import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +47,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         ..price = widget.model.product.price
         ..category = widget.model.product.category;
 
+      remarks = widget.model.remarks;
       _remarksController.text = widget.model.remarks;
       _unitPriceController.text = widget.model.unitPrice.toString();
 
@@ -179,11 +179,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                         )
                       ],
                     ),
-                    Icon(
-                      Icons.chevron_right,
-                      size: 35,
-                      color: Color.fromRGBO(180, 180, 180, 1),
-                    )
                   ],
                 ),
               ),
@@ -214,10 +209,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   onChanged: (value) {
                     _countTotalPrice(value);
                   },
-                  //只能输入数字
-                  inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter.digitsOnly,
-                  ],
                   decoration:
                       InputDecoration(hintText: '填写', border: InputBorder.none),
                 )),
@@ -271,7 +262,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 Expanded(
                   child: Container(
                     child: Text(
-                      '订单备注',
+                      '备注',
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -582,7 +573,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                     ..unitPrice = double.parse(_unitPriceController.text)
                     ..totalPrice = totalPrice
                     ..totalQuantity = totalQuantity
-                    ..remarks = _remarksController.text;
+                    ..remarks = remarks;
                   String response = await ProofingOrderRepository()
                       .proofingCreate(widget.quoteModel.code, model);
                   //TODOS:跳转到打样订单详情

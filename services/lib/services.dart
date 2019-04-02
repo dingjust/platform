@@ -18,7 +18,6 @@ export 'src/order/bloc/purchase_order_bloc.dart';
 export 'src/order/bloc/quote_orders_bloc.dart';
 export 'src/order/bloc/requirement_order_bloc.dart';
 export 'src/order/bloc/requirement_pool_bloc.dart';
-export 'src/order/bloc/requirement_recommend_bloc.dart';
 export 'src/order/bloc/requirement_quote_detail_bloc.dart';
 export 'src/order/repository/proofing_order_respository.dart';
 export 'src/order/repository/purchase_order_repository.dart';
@@ -57,6 +56,8 @@ export 'src/user/response/address_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/wechat/wechat_service_impl.dart';
+export 'src/wechat/payment_for.dart';
+
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

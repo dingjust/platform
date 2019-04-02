@@ -651,9 +651,9 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   void _showMessage(BuildContext context,bool result) async{
     if(result){
-      _requestMessage(context,'修改成功');
+      _requestMessage(context,'操作成功');
     }else{
-      _requestMessage(context,'修改失败');
+      _requestMessage(context,'操作失败');
     }
     ProductionBLoC.instance.refreshData();
   }
@@ -689,7 +689,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               child: Text(
                 '${message}',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 16,
                 ),
               )
           ),

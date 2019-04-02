@@ -11,10 +11,10 @@ class RemarksField extends StatefulWidget {
 }
 
 class RemarksFieldState extends State<RemarksField> {
-
   @override
   Widget build(BuildContext context) {
-    TextEditingController _remarksController = TextEditingController(text: widget.item.remarks ?? '');
+    TextEditingController _remarksController =
+        TextEditingController(text: widget.item.remarks ?? '');
     FocusNode _remarksFocusNode = FocusNode();
     return GestureDetector(
         child: Container(
@@ -40,15 +40,17 @@ class RemarksFieldState extends State<RemarksField> {
             context,
             MaterialPageRoute(
               builder: (context) => PopupWindowPage(
-                fieldText: '订单备注',
-                text:widget.item.remarks == null ? null : widget.item.remarks.toString(),
-              ),
+                    fieldText: '订单备注',
+                    text: widget.item.remarks == null
+                        ? null
+                        : widget.item.remarks.toString(),
+                  ),
             ),
             //接收返回数据并处理
-          ).then((value){
-            if(value.trim() == ''){
+          ).then((value) {
+            if (value.trim() == '') {
               widget.item.remarks = null;
-            }else{
+            } else {
               widget.item.remarks = value;
             }
           });
