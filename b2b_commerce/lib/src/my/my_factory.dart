@@ -4,6 +4,10 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import './company/form/my_company_profile_form.dart';
+import './company/form/my_factory_base_form.dart';
+import './company/my_company_certificate.dart';
+import './company/my_company_contact_way.dart';
 import '../_shared/widgets/image_factory.dart';
 import '../business/orders/purchase_order_detail.dart';
 import '../business/orders/quote_item.dart';
@@ -11,10 +15,6 @@ import '../business/orders/requirement_order_from.dart';
 import '../business/products/existing_product.dart';
 import '../business/products/existing_product_item.dart';
 import '../home/factory/factory_item.dart';
-import './company/form/my_company_profile_form.dart';
-import './company/form/my_factory_base_form.dart';
-import './company/my_company_certificate.dart';
-import './company/my_company_contact_way.dart';
 
 /// 认证信息
 class MyFactoryPage extends StatefulWidget {

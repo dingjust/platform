@@ -13,7 +13,6 @@ import '../_shared/widgets/scrolled_to_end_tips.dart';
 import '../_shared/widgets/tab_factory.dart';
 import '../business/orders/purchase_order_detail.dart';
 import '../common/logistics_input_page.dart';
-import '../my/my_addresses.dart';
 import '../production/production_search.dart';
 
 const statuses = <EnumModel>[

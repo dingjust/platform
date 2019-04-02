@@ -3,9 +3,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../_shared/widgets/scrolled_to_end_tips.dart';
-
 import './address/address_form.dart';
+import '../_shared/widgets/scrolled_to_end_tips.dart';
 
 class MyAddressesPage extends StatelessWidget {
   MyAddressesPage({Key key, this.isJumpSource = false, this.title = '地址管理'})
