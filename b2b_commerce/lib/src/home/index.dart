@@ -375,9 +375,19 @@ class FactoryRequirementPoolSection extends StatelessWidget {
   /// 推荐需求streamController
   final StreamController _recommendRequirementStreamController = StreamController<int>.broadcast();
 
+  final StreamController _reportsStreamController =
+      StreamController<Reports>.broadcast();
+
+  void queryReports() async {
+    Reports response = await ReportsRepository().report();
+    if (response != null) {
+      _reportsStreamController.add(response);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO 调用查询需求数量接口(UserApis.requirementReports), 触发stream控制
+    queryReports();
     return Container(
       padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
       child: Row(

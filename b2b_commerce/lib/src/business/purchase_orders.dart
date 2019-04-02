@@ -245,10 +245,10 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
           Row(
             children: <Widget>[
               (widget.order.salesApplication == SalesApplication.ONLINE &&
-                          widget.order.depositPaid == false &&
+                          widget.order.depositPaid == false && widget.order.deposit != null && widget.order.deposit != 0 &&
                           widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT) ||
                       (widget.order.salesApplication == SalesApplication.ONLINE &&
-                          widget.order.balancePaid == false &&
+                          widget.order.balancePaid == false && widget.order.balance != null && widget.order.balance != 0 &&
                           widget.order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
@@ -329,7 +329,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
 
   Widget _buildHeaderText(BuildContext context) {
     if (widget.order.salesApplication == SalesApplication.ONLINE &&
-        widget.order.depositPaid == false &&
+        widget.order.depositPaid == false && (widget.order.deposit != null || widget.order.deposit > 0) &&
         widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT) {
       return Container(
         margin: const EdgeInsets.only(left: 5),
@@ -345,7 +345,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
         ),
       );
     } else if (widget.order.salesApplication == SalesApplication.ONLINE &&
-        widget.order.balancePaid == false &&
+        widget.order.balancePaid == false && (widget.order.balance != null || widget.order.balance > 0 )&&
         widget.order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
       return Container(
         margin: const EdgeInsets.only(left: 5),
@@ -376,8 +376,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
       child: Row(
         children: <Widget>[
           Container(
-            width: 100,
-            height: 100,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
@@ -451,13 +451,13 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
           return Container(
             margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
             child: Row(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Expanded(
                   child: Container(
-                      margin: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                      width: 100,
+                      margin: const EdgeInsets.fromLTRB(45, 0, 30, 0),
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      height: 40,
                       child: widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT
                           ? RaisedButton(
                               color: Colors.red,
@@ -515,9 +515,9 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                 ),
                 Expanded(
                   child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
+                      width: 100,
+                      padding: const EdgeInsets.fromLTRB(45, 0, 20, 0),
                       margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      height: 40,
                       child: RaisedButton(
                           color: Color(0xFFFFD600),
                           child: Text(

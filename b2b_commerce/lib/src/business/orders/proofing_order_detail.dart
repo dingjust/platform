@@ -221,16 +221,6 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                       fontSize: 18, color: Color.fromRGBO(255, 68, 68, 1)),
                 ),
               ),
-              FlatButton(
-                color: Color.fromRGBO(255, 149, 22, 1),
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                child: Text(
-                  '查看报价',
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
             ],
           )
         ],
@@ -620,19 +610,28 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           //           color: Color.fromRGBO(150, 150, 150, 1), fontSize: 16),
           //     )),
           Container(),
-          FlatButton(
-            onPressed: () {
-            },
-            color: Color(0xFFFFD600),
-            child: Text(
-              '确认收货',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-              ),
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20))),
+          Container(
+              width: 300,
+              margin: EdgeInsets.fromLTRB(20, 0, 10, 10),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: FlatButton(
+                onPressed: () async {
+                  bool result = false;
+                  result =
+                  await ProofingOrderRepository().shipped(widget.model.code);
+                  _showMessage(context, result, '确认收货');
+                },
+                color: Color(0xFFFFD600),
+                child: Text(
+                  '确认收货',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+              )
           ),
         ];
       } else {

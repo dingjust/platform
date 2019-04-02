@@ -33,7 +33,7 @@ class _ProductSizeColorNumState extends State<ProductSizeColorNum> {
             },
             child: Text(
               '确定',
-              style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+              style: TextStyle(color: Colors.black),
             ),
           )
         ],
