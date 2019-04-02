@@ -33,6 +33,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
   FocusNode _unitPriceFocusNode = FocusNode();
   List<MediaModel> attachments = [];
   DateTime expectedDeliveryDate = DateTime.now();
+  DateTime quoteDate;
 
   GlobalKey _scaffoldKey = GlobalKey();
 
@@ -52,6 +53,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
       _sampleController.text =
           widget.quoteModel.costOfSamples?.toString() ?? '';
       _unitPriceController.text = widget.quoteModel.unitPrice?.toString() ?? '';
+      quoteDate = widget.quoteModel.expectedDeliveryDate??'';
     } else {
       expectedDeliveryDate = widget.model.details.expectedDeliveryDate;
     }
@@ -269,77 +271,71 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
             focusNode: _unitPriceFocusNode,
-            leadingText: '生产单价',
+            leadingText: '生产单价￥',
             hintText: '填写',
             autofocus: false,
             inputType: TextInputType.number,
             textAlign: TextAlign.right,
             controller: _unitPriceController,
-            //只能输入数字
-            inputFormatters: <TextInputFormatter>[
-              WhitelistingTextInputFormatter.digitsOnly,
-            ],
           ),
+      Container(
+          padding: EdgeInsets.only(left: 20),
+          child:
           TextFieldComponent(
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
             focusNode: _fabricFocusNode,
-            leadingText: '面料单价',
+            leadingText: '面料单价￥',
             hintText: '填写',
             autofocus: false,
             inputType: TextInputType.number,
             textAlign: TextAlign.right,
             controller: _fabricController,
-            //只能输入数字
-            inputFormatters: <TextInputFormatter>[
-              WhitelistingTextInputFormatter.digitsOnly,
-            ],
           ),
+      ),
+      Container(
+        padding: EdgeInsets.only(left: 20),
+        child:
           TextFieldComponent(
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
             focusNode: _excipientsFocusNode,
-            leadingText: '辅料单价',
+            leadingText: '辅料单价￥',
             hintText: '填写',
             autofocus: false,
             inputType: TextInputType.number,
             textAlign: TextAlign.right,
             controller: _excipientsController,
-            //只能输入数字
-            inputFormatters: <TextInputFormatter>[
-              WhitelistingTextInputFormatter.digitsOnly,
-            ],
           ),
-          TextFieldComponent(
+      ),
+      Container(
+        padding: EdgeInsets.only(left: 20),
+        child:TextFieldComponent(
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
             focusNode: _processingFocusNode,
-            leadingText: '加工单价',
+            leadingText: '加工单价￥',
             hintText: '填写',
             autofocus: false,
             inputType: TextInputType.number,
             textAlign: TextAlign.right,
             controller: _processingController,
-            //只能输入数字
-            inputFormatters: <TextInputFormatter>[
-              WhitelistingTextInputFormatter.digitsOnly,
-            ],
           ),
-          TextFieldComponent(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            dividerPadding: EdgeInsets.only(),
-            focusNode: _otherFocusNode,
-            leadingText: '其他单价',
-            hintText: '填写',
-            autofocus: false,
-            inputType: TextInputType.number,
-            textAlign: TextAlign.right,
-            controller: _otherController,
-            //只能输入数字
-            inputFormatters: <TextInputFormatter>[
-              WhitelistingTextInputFormatter.digitsOnly,
-            ],
-          ),
+      ),
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: TextFieldComponent(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              dividerPadding: EdgeInsets.only(),
+              focusNode: _otherFocusNode,
+              leadingText: '其他单价￥',
+              hintText: '填写',
+              autofocus: false,
+              inputType: TextInputType.number,
+              textAlign: TextAlign.right,
+              controller: _otherController,
+            ),
+          )
         ],
       ),
     );
@@ -354,16 +350,12 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
         padding: EdgeInsets.symmetric(vertical: 5),
         dividerPadding: EdgeInsets.only(),
         focusNode: _sampleFocusNode,
-        leadingText: '打样费',
+        leadingText: '打样费￥',
         hintText: '填写',
         autofocus: false,
         inputType: TextInputType.number,
         textAlign: TextAlign.right,
         controller: _sampleController,
-        //只能输入数字
-        inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly,
-        ],
       ),
     );
   }
@@ -384,20 +376,25 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              trailing: Text(
-                expectedDeliveryDate == null
-                    ? '选择'
-                    : DateFormatUtil.formatYMD(expectedDeliveryDate),
+              trailing:
+              quoteDate == null
+                  ? Text(
+                '选择',
                 style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w500,
                     color: Colors.grey),
+              )
+                  : Text(
+                DateFormatUtil.formatYMD(quoteDate),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black),
               ),
             ),
-            onTap: () {
-              _showDatePicker();
-            },
-          )),
+                onTap: () {
+                  _showDatePicker();
+                },
+              )),
         ],
       ),
     );
@@ -441,13 +438,9 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
         leadingText: '备注',
         hintText: '填写',
         autofocus: false,
-        inputType: TextInputType.number,
+        inputType: TextInputType.text,
         textAlign: TextAlign.right,
         controller: _remarksController,
-        //只能输入数字
-        inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly,
-        ],
       ),
     );
   }
@@ -477,13 +470,13 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: expectedDeliveryDate,
+        initialDate: DateTime.now(),
         firstDate: new DateTime(1990),
         lastDate: new DateTime(2999));
 
     if (_picked != null) {
       setState(() {
-        expectedDeliveryDate = _picked;
+        quoteDate = _picked;
       });
     }
   }
@@ -505,13 +498,17 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
             title: Text('确定报价？'),
             actions: <Widget>[
               FlatButton(
-                child: Text('取消'),
+                child: Text('取消',style: TextStyle(
+                  color: Colors.grey
+                ),),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               FlatButton(
-                child: Text('确定'),
+                child: Text('确定',style: TextStyle(
+                    color: Colors.black
+                )),
                 onPressed: () async {
                   await onSure();
                 },
@@ -548,7 +545,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
         : double.parse(_sampleController.text);
     model.requirementOrder = RequirementOrderModel(code: widget.model.code);
     model.remarks = _remarksController.text;
-    model.expectedDeliveryDate = expectedDeliveryDate;
+    model.expectedDeliveryDate = quoteDate;
     model.attachments = attachments;
     model.unitPrice = double.parse(_unitPriceController.text);
     String response;
@@ -570,7 +567,9 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
             title: Text(widget.update ? '修改成功' : '报价成功'),
             actions: <Widget>[
               FlatButton(
-                child: Text('确定'),
+                child: Text('确定',style: TextStyle(
+                    color: Colors.black
+                )),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

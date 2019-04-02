@@ -576,7 +576,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 children: <Widget>[
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.only(left: 15),
                       child: Text('打样费'),
                     ),
                   ),
@@ -596,13 +595,25 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   }
 
   Widget _buildDeliveryDate() {
-    return Card(
-      elevation: 0,
+    return Container(
+      color: Colors.white,
       margin: EdgeInsets.only(top: 15),
-      child: Padding(
+      child: Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        child: Text(
-            '交货时间：${DateFormatUtil.formatYMD(pageItem.expectedDeliveryDate)}'),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                child: Text(
+                    '交货时间'),
+              ),
+            ),
+            Container(
+              child: Text(
+                  '${DateFormatUtil.formatYMD(pageItem.expectedDeliveryDate)}'),
+            )
+          ],
+        )
       ),
     );
   }
@@ -728,12 +739,12 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 onPressed: onCreateProofings,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                color: Color.fromRGBO(255, 245, 193, 1),
+                color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 child: Text(
-                  '打样订单',
+                  '创建打样订单',
                   style: TextStyle(
-                      color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
+                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 )),
           ),
           Container(
@@ -746,7 +757,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 child: Text(
-                  '生产订单',
+                  '创建生产订单',
                   style: TextStyle(
                       color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 )),
@@ -805,13 +816,17 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text('取消',style: TextStyle(
+                color: Colors.grey
+              ),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text('确定',style: TextStyle(
+                  color: Colors.black
+              )),
               onPressed: () async {
                 int statusCode = await QuoteOrderRepository()
                     .quoteReject(pageItem.code, rejectController.text);
@@ -839,13 +854,17 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           title: Text('是否确认?'),
           actions: <Widget>[
             FlatButton(
-              child: Text('否'),
+              child: Text('否',style: TextStyle(
+                  color: Colors.grey
+              )),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('是'),
+              child: Text('是',style: TextStyle(
+                  color: Colors.black
+              )),
               onPressed: () async {
                 int statusCode =
                     await QuoteOrderRepository().quoteApprove(pageItem.code);

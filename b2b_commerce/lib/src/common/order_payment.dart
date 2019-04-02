@@ -460,7 +460,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         context,
         MaterialPageRoute(
             builder: (context) => MyAddressesPage(
-                  isJumpSourec: true,
+                  isJumpSource: true,
                   title: '选择地址',
                 )),
         //接收返回数据并处理

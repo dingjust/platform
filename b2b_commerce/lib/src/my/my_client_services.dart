@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,7 +9,7 @@ class MyClientServicesPage extends StatefulWidget {
   _MyClientServicesPageState createState() => _MyClientServicesPageState();
 }
 
-class _MyClientServicesPageState extends State<MyClientServicesPage>{
+class _MyClientServicesPageState extends State<MyClientServicesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,144 +20,125 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
         title: Text('我的客服'),
       ),
       body: Container(
-          child: ListView(
-            children: <Widget>[
-              _buildTelephone(context),
-              Divider(
-                height: 0,
-              ),
-              _buildWechar(context),
-              Divider(
-                height: 0,
-              ),
-              _buildQQ(context),
-              Divider(
-                height: 0,
-              ),
-              _buildEmail(context),
-              _buildTips(context),
-            ],
-          )
+        child: ListView(
+          children: <Widget>[
+            _buildTelephone(context),
+            const Divider(height: 0),
+            _buildWechat(context),
+            const Divider(height: 0),
+            _buildQQ(context),
+            const Divider(height: 0),
+            _buildEmail(context),
+            _buildTips(context),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildTelephone(BuildContext context){
+  Widget _buildTelephone(BuildContext context) {
     return GestureDetector(
-        child: Container(
-          color: Colors.white,
-          child: ListTile(
-            leading: Text(
-              '客服电话',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
-            ),
-            trailing:
-            Text('020-81682620',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+      child: Container(
+        color: Colors.white,
+        child: ListTile(
+          leading: const Text(
+            '客服电话',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+          ),
+          trailing: const Text(
+            '020-81682620',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
-        onTap:() {
-          _selectActionButton('020-81682620');
-        });
+      ),
+      onTap: () {
+        _selectActionButton('020-81682620');
+      },
+    );
   }
 
-  Widget _buildWechar(BuildContext context){
+  Widget _buildWechat(BuildContext context) {
     return GestureDetector(
-        child: Container(
-          color: Colors.white,
-          child: ListTile(
-            leading: Text(
-              '客服微信',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
-            ),
-            trailing:
-            Text('',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+      child: Container(
+        color: Colors.white,
+        child: ListTile(
+          leading: Text(
+            '客服微信',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+          ),
+          trailing: const Text(
+            '',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
-        onTap : () {
-          copyToClipboard('13123465789');
-        });
+      ),
+      onTap: () {
+        copyToClipboard('13123465789');
+      },
+    );
   }
 
-  Widget _buildQQ(BuildContext context){
+  Widget _buildQQ(BuildContext context) {
     return GestureDetector(
-        child: Container(
-          color: Colors.white,
-          child: ListTile(
-            leading: Text(
-              '客服QQ',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
-            ),
-            trailing:
-            Text('1498868394',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+      child: Container(
+        color: Colors.white,
+        child: ListTile(
+          leading: const Text(
+            '客服QQ',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+          ),
+          trailing: Text(
+            '1498868394',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
-        onTap : () {
-          copyToClipboard('1498868394');
-        });
+      ),
+      onTap: () {
+        copyToClipboard('1498868394');
+      },
+    );
   }
 
-  Widget _buildEmail(BuildContext context){
+  Widget _buildEmail(BuildContext context) {
     return GestureDetector(
-        child: Container(
-          color: Colors.white,
-          child: ListTile(
-            leading: Text(
-              '客服邮箱',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
-            ),
-            trailing:
-            Text('xiaoyongkuang@nbyjy.net',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+      child: Container(
+        color: Colors.white,
+        child: ListTile(
+          leading: Text(
+            '客服邮箱',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+          ),
+          trailing: Text(
+            'xiaoyongkuang@nbyjy.net',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
-        onTap : () {
-          copyToClipboard('xiaoyongkuang@nbyjy.net');
-        });
+      ),
+      onTap: () {
+        copyToClipboard('xiaoyongkuang@nbyjy.net');
+      },
+    );
   }
 
-  Widget _buildTips(BuildContext context){
+  Widget _buildTips(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 100),
+      margin: const EdgeInsets.only(top: 100),
       child: Center(
-        child: Text('上班时间：工作日 9:00 - 18:00',
-          style: TextStyle(
-            fontSize: 16
-          ),
+        child: Text(
+          '上班时间：工作日 9:00 - 18:00',
+          style: const TextStyle(fontSize: 16),
         ),
       ),
     );
@@ -170,21 +153,23 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('拨打电话'),
+              leading: const Icon(Icons.phone),
+              title: const Text('拨打电话'),
               onTap: () async {
                 var url = 'tel:' + tel;
                 await launch(url);
               },
             ),
-            tel.indexOf('-')>-1?Container():ListTile(
-              leading: Icon(Icons.message),
-              title: Text('发送短信'),
-              onTap: () async {
-                var url = 'sms:' + tel;
-                await launch(url);
-              },
-            ),
+            tel.indexOf('-') > -1
+                ? Container()
+                : ListTile(
+                    leading: const Icon(Icons.message),
+                    title: const Text('发送短信'),
+                    onTap: () async {
+                      var url = 'sms:' + tel;
+                      await launch(url);
+                    },
+                  ),
           ],
         );
       },
@@ -193,9 +178,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
 
   copyToClipboard(final String text) {
     if (text == null) return;
-    Clipboard.setData(
-        ClipboardData(text: text)
-    );
+    Clipboard.setData(ClipboardData(text: text));
     _neverCopyContent(context);
   }
 
@@ -207,18 +190,15 @@ class _MyClientServicesPageState extends State<MyClientServicesPage>{
         return SimpleDialog(
           title: const Text(
             '提示',
-            style: TextStyle(
-              fontSize: 16,
-            ),
+            style: const TextStyle(fontSize: 16),
           ),
           children: <Widget>[
             SimpleDialogOption(
-              child: Text('复制成功'),
+              child: const Text('复制成功'),
             ),
           ],
         );
       },
     );
   }
-
 }

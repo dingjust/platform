@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
+import 'package:b2b_commerce/src/business/quote_orders.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -174,6 +175,10 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                           .purchaseOrderDelivering(
                           widget.purchaseOrderModel.code,
                           widget.purchaseOrderModel);
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) =>
+                              PurchaseOrdersPage()), ModalRoute.withName('/'));
+                      PurchaseOrderBLoC().refreshData('ALL');
                     }
                     //打样单的确认发货
                     else if(!widget.isProductionOrder && widget.proofingModel != null) {
@@ -182,11 +187,12 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                           .proofingDelivering(
                           widget.proofingModel.code,
                           widget.proofingModel);
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) =>
+                              QuoteOrdersPage()), ModalRoute.withName('/'));
+                      QuoteOrdersBLoC().refreshData('ALL');
                     }
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) =>
-                            PurchaseOrdersPage()), ModalRoute.withName('/'));
-                    PurchaseOrderBLoC().refreshData('ALL');
+
                     showDialog<void>(
                       context: context,
                       barrierDismissible: true, // user must tap button!

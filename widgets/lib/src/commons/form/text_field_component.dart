@@ -30,7 +30,7 @@ class TextFieldComponent extends StatefulWidget {
     this.leadingText,
     this.hintText,
     this.helperText,
-    this.leadingWidth = 75,
+    this.leadingWidth = 85,
     this.controller,
     @required this.focusNode,
     this.inputType,
