@@ -369,6 +369,8 @@ class BrandTrackingProgressSection extends StatelessWidget {
 }
 
 class FactoryRequirementPoolSection extends StatelessWidget {
+  int requirementAll = 0;
+  int requirementRecommend = 0;
   /// 全部需求streamController
   final StreamController _allRequirementStreamController = StreamController<int>.broadcast();
 
@@ -382,6 +384,8 @@ class FactoryRequirementPoolSection extends StatelessWidget {
     Reports response = await ReportsRepository().report();
     if (response != null) {
       _reportsStreamController.add(response);
+      requirementAll = response.ordersCount8;
+      requirementRecommend = response.ordersCount9;
     }
   }
 
@@ -395,7 +399,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
         children: <Widget>[
           StreamBuilder<int>(
             stream: _allRequirementStreamController.stream,
-            initialData: 10,
+            initialData: requirementAll,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return GestureDetector(
                 onTap: () async {
@@ -416,7 +420,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
           DividerFactory.buildVerticalSeparator(35),
           StreamBuilder<int>(
             stream: _recommendRequirementStreamController.stream,
-            initialData: 20,
+            initialData: requirementRecommend,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return GestureDetector(
                 onTap: () async{
