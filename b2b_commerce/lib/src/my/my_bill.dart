@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import '../_shared/widgets/scrolled_to_end_tips.dart';
 
 class MyBillPage extends StatefulWidget {
   final Widget child;
@@ -30,9 +31,9 @@ class _MyBillPageState extends State<MyBillPage> {
           brightness: Brightness.light,
           centerTitle: true,
           elevation: 0.5,
-          title: Text(
+          title: const Text(
             '账单',
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
           ),
         ),
         body: Scaffold(
@@ -52,10 +53,10 @@ class _MyBillPageState extends State<MyBillPage> {
 }
 
 class BillListView extends StatelessWidget {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   ///当前选中条件
-  DateTime selectDate = DateTime.now();
+  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class BillListView extends StatelessWidget {
 
     // 监听筛选条件更改
     bloc.conditionStream.listen((date) {
-      selectDate = date;
+      selectedDate = date;
       //清空数据
       bloc.clear();
     });
@@ -71,73 +72,76 @@ class BillListView extends StatelessWidget {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByDate(date: selectDate);
+        bloc.loadingMoreByDate(date: selectedDate);
       }
     });
 
     return Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-        color: Color.fromRGBO(245, 245, 245, 1),
-        child: RefreshIndicator(
-          onRefresh: () async {
-            return await bloc.refreshData(date: selectDate);
-          },
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: _scrollController,
-            children: <Widget>[
-              IncomeComparison(
-                height: 120,
-                income: 8000.00,
-                expenditure: 20134.00,
-                lineHeight: 8,
-              ),
-              StreamBuilder<List<BillModel>>(
-                stream: bloc.stream,
-                initialData: null,
-                builder: (BuildContext context, AsyncSnapshot<List<BillModel>> snapshot) {
-                  if (snapshot.data == null) {
-                    //默认条件查询
-                    bloc.filterByDate(date: selectDate);
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 200),
-                      child: ProgressIndicatorFactory.buildDefaultProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: snapshot.data.map((item) {
-                        return BillCard(
-                          model: item,
-                        );
-                      }).toList(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                },
-              ),
-              StreamBuilder<bool>(
-                stream: bloc.bottomStream,
-                initialData: false,
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                  }
-                  return ScrolledToEndTips(hasContent: snapshot.data);
-                },
-              ),
-              StreamBuilder<bool>(
-                stream: bloc.loadingStream,
-                initialData: false,
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(opacity: snapshot.data ? 1.0 : 0);
-                },
-              ),
-            ],
-          ),
-        ));
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      color: const Color.fromRGBO(245, 245, 245, 1),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          return await bloc.refreshData(date: selectedDate);
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _scrollController,
+          children: <Widget>[
+            IncomeComparison(
+              height: 120,
+              income: 8000.00,
+              expenditure: 20134.00,
+              lineHeight: 8,
+            ),
+            StreamBuilder<List<BillModel>>(
+              stream: bloc.stream,
+              initialData: null,
+              builder: (BuildContext context, AsyncSnapshot<List<BillModel>> snapshot) {
+                if (snapshot.data == null) {
+                  //默认条件查询
+                  bloc.filterByDate(date: selectedDate);
+                  return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                }
+                if (snapshot.hasData) {
+                  return Column(
+                    children: snapshot.data.map(
+                      (item) {
+                        return BillCard(model: item);
+                      },
+                    ).toList(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: bloc.bottomStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.data) {
+                  _scrollController.animateTo(
+                    _scrollController.offset - 70,
+                    duration: new Duration(milliseconds: 500),
+                    curve: Curves.easeOut,
+                  );
+                }
+                return ScrolledToEndTips(hasContent: snapshot.data);
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: bloc.loadingStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                  opacity: snapshot.data ? 1.0 : 0,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -155,12 +159,12 @@ class BillCard extends StatelessWidget {
         children: <Widget>[
           Text(
             model.date.day == DateTime.now().day ? '今日' : '${model.date.month}-${model.date.day}',
-            style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
+            style: const TextStyle(color: const Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
           ),
           Container(
             height: height,
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            margin: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -170,7 +174,7 @@ class BillCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '${BillTypeLocalizedMap[model.type]}',
-                      style: TextStyle(fontSize: 18, color: Color.fromRGBO(100, 100, 100, 1)),
+                      style: const TextStyle(fontSize: 18, color: const Color.fromRGBO(100, 100, 100, 1)),
                     )
                   ],
                 ),
@@ -178,7 +182,7 @@ class BillCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '- ￥ ${model.amount}',
-                      style: TextStyle(fontSize: 20, color: Color.fromRGBO(255, 68, 68, 1)),
+                      style: const TextStyle(fontSize: 20, color: const Color.fromRGBO(255, 68, 68, 1)),
                     )
                   ],
                 ),
@@ -186,7 +190,7 @@ class BillCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       model.order != null ? '生产订单${model.order.code}' : '提现到银行卡${model.bankAccount}',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      style: const TextStyle(fontSize: 18, color: Colors.black),
                     )
                   ],
                 ),
@@ -194,7 +198,7 @@ class BillCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '余额￥${model.balance}',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      style: const TextStyle(fontSize: 18, color: Colors.black),
                     )
                   ],
                 ),

@@ -130,7 +130,7 @@ class BrandFirstMenuSection extends StatelessWidget {
               );
             });
           },
-          icon: B2BImage.fast_factory(width: 60, height: 80)),
+          icon: B2BImage.fastFactory(width: 60, height: 80)),
       GridItem(
           title: '看款下单',
           onPressed: () async {

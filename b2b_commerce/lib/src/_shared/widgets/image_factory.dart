@@ -5,6 +5,7 @@ import 'package:models/models.dart';
 
 /// Image工厂类， 用于存放最通用的组件生成样式
 class ImageFactory {
+  /// 缩略图
   static Widget buildDefaultThumbnailImage({double size = 60}) {
     return Container(
       width: 80,
@@ -56,5 +57,20 @@ class ImageFactory {
     }
 
     return buildThumbnailImage(medias[0], fit: fit);
+  }
+
+  // 人物画像
+  static Widget buildDefaultAvatar(MediaModel profilePicture, {double radius = 40.0}) {
+    if (profilePicture == null) {
+      return CircleAvatar(
+        child: const Icon(B2BIcons.noPicture, size: 40),
+        radius: radius,
+      );
+    }
+
+    return CircleAvatar(
+      backgroundImage: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${profilePicture.url}'),
+      radius: radius,
+    );
   }
 }

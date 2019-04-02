@@ -1,14 +1,15 @@
-import 'package:b2b_commerce/src/my/company/my_company_certificate.dart';
-import 'package:b2b_commerce/src/my/company/my_personal_certificate.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-class MyCompanyCertificateSelectPage extends StatefulWidget {
-  CompanyModel company;
+import './company/my_company_certificate.dart';
+import './company/my_personal_certificate.dart';
 
+class MyCompanyCertificateSelectPage extends StatefulWidget {
   MyCompanyCertificateSelectPage(this.company);
+
+  CompanyModel company;
 
   MyCompanyCertificateSelectPageState createState() => MyCompanyCertificateSelectPageState();
 }
@@ -16,9 +17,11 @@ class MyCompanyCertificateSelectPage extends StatefulWidget {
 class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSelectPage> {
   //选的是否是个人认证
   bool _isPersonal = false;
+
   //选的是否是企业认证
   bool _isCompany = false;
   Text _statusText;
+
   //是否只读
   bool _onlyRead = true;
 
@@ -30,11 +33,11 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
 
   @override
   Widget build(BuildContext context) {
-    if(widget.company.approvalStatus == null) _onlyRead = false;
-    if(widget.company.type == null){
+    if (widget.company.approvalStatus == null) _onlyRead = false;
+    if (widget.company.type == null) {
       _isPersonal = true;
       _isCompany = true;
-    }else if (widget.company.type == CompanyType.INDIVIDUAL_HOUSEHOLD) {
+    } else if (widget.company.type == CompanyType.INDIVIDUAL_HOUSEHOLD) {
       _isPersonal = true;
     } else {
       _isCompany = true;
@@ -43,7 +46,7 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
     if (widget.company.approvalStatus == null)
       _statusText = Text(
         '未认证',
-          style: TextStyle(
+        style: TextStyle(
           color: Color.fromRGBO(255, 214, 12, 1),
         ),
       );
@@ -86,61 +89,64 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
                 ? InkWell(
                     onTap: () async {
                       CompanyModel result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyCompanyCertificatePage(
-                                    widget.company,onlyRead: _onlyRead,
-                                  )));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyCompanyCertificatePage(
+                                widget.company,
+                                onlyRead: _onlyRead,
+                              ),
+                        ),
+                      );
 
-                      if(result != null){
-                        setState(() {
-                          _onlyRead = true;
-                          widget.company = result;
-                        });
+                      if (result != null) {
+                        setState(
+                          () {
+                            _onlyRead = true;
+                            widget.company = result;
+                          },
+                        );
                       }
                     },
                     child: Container(
                       color: Colors.white,
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             child: Text(
                               '企业认证',
-                              style: TextStyle(fontSize: 17),
+                              style: const TextStyle(fontSize: 17),
                             ),
                           ),
-                          Container(
-                              padding: EdgeInsets.only(right: 15),
-                              child: _statusText),
+                          Container(padding: const EdgeInsets.only(right: 15), child: _statusText),
                           Text(
                             '企业四要素认证',
-                            style: TextStyle(color: Colors.grey),
+                            style: const TextStyle(color: Colors.grey),
                           ),
-                          Icon(Icons.chevron_right),
+                          const Icon(Icons.chevron_right),
                         ],
                       ),
                     ),
                   )
                 : Container(
                     color: Colors.white,
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          child: Text(
+                          child: const Text(
                             '企业认证',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 17,
                               color: Colors.grey,
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           '企业四要素认证',
-                          style: TextStyle(color: Colors.grey),
+                          style: const TextStyle(color: Colors.grey),
                         ),
-                        Icon(Icons.chevron_right,color: Colors.grey),
+                        const Icon(Icons.chevron_right, color: Colors.grey),
                       ],
                     ),
                   ),
@@ -148,81 +154,82 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
               offstage: UserBLoC.instance.currentUser.type == UserType.FACTORY,
               child: Column(
                 children: <Widget>[
-                  SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 5),
                   _isPersonal
                       ? InkWell(
-                    onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyPersonalCertificatePage(widget.company,onlyRead: _onlyRead,)));
-                    },
-                    child: Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(15),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              child: Text(
-                                '个人认证',
-                                style: TextStyle(fontSize: 17),
-                              )),
-                          Offstage(
-                            offstage: widget.company.type != CompanyType.INDIVIDUAL_HOUSEHOLD && widget.company.type != null,
-                            child: Container(
-                              padding: EdgeInsets.only(right: 15),
-                              child: _statusText,
+                          onTap: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MyPersonalCertificatePage(
+                                      widget.company,
+                                      onlyRead: _onlyRead,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            color: Colors.white,
+                            padding: const EdgeInsets.all(15),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                    child: const Text(
+                                  '个人认证',
+                                  style: const TextStyle(fontSize: 17),
+                                )),
+                                Offstage(
+                                  offstage: widget.company.type != CompanyType.INDIVIDUAL_HOUSEHOLD &&
+                                      widget.company.type != null,
+                                  child: Container(
+                                    padding: const EdgeInsets.only(right: 15),
+                                    child: _statusText,
+                                  ),
+                                ),
+                                Text(
+                                  '个人三要素认证',
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                                const Icon(Icons.chevron_right),
+                              ],
                             ),
                           ),
-                          Text(
-                            '个人三要素认证',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          Icon(Icons.chevron_right,),
-                        ],
-                      ),
-                    ),
-                  )
+                        )
                       : Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.all(15),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: Text(
-                              '个人认证',
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.grey,
+                          color: Colors.white,
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                  child: const Text(
+                                '个人认证',
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.grey,
+                                ),
+                              )),
+                              const Text(
+                                '个人三要素认证',
+                                style: const TextStyle(color: Colors.grey),
                               ),
-                            )),
-                        Text(
-                          '个人三要素认证',
-                          style: TextStyle(color: Colors.grey),
+                              const Icon(Icons.chevron_right, color: Colors.grey),
+                            ],
+                          ),
                         ),
-                        Icon(Icons.chevron_right,color: Colors.grey),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),
             Offstage(
               offstage: !_onlyRead || widget.company.approvalStatus == ArticleApprovalStatus.check,
               child: Container(
-                padding: EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 20),
                 width: MediaQuery.of(context).size.width - 16,
                 child: ActionChip(
-                  labelPadding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width / 3.5,
-                      vertical: 8),
+                  labelPadding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 3.5, vertical: 8),
                   backgroundColor: Colors.red,
-                  label: Text(
+                  label: const Text(
                     '重新认证',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
                   ),
                   onPressed: () async {
                     setState(() {

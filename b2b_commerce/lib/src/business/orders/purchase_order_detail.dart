@@ -651,7 +651,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => MyAddressesPage(isJumpSourec: true)),
+              builder: (context) => MyAddressesPage(isJumpSource: true)),
           //接收返回数据并处理
         ).then((value) async{
           if(value != null){
@@ -1432,7 +1432,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => MyAddressesPage(isJumpSourec: true)),
+                                            builder: (context) => MyAddressesPage(isJumpSource: true)),
                                         //接收返回数据并处理
                                       ).then((value) async{
                                         if(value != null){
