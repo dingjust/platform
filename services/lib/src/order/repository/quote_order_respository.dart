@@ -5,7 +5,7 @@ import 'package:services/src/net/http_manager.dart';
 
 class QuoteOrderRepository {
   /// 根据报价单编号获取明细
-  Future<QuoteModel> getquoteDetail(String code) async {
+  Future<QuoteModel> getQuoteDetails(String code) async {
     Response<Map<String, dynamic>> response;
     try {
       response = await http$.get(OrderApis.quoteDetail(code));

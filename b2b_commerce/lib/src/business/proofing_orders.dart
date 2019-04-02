@@ -554,7 +554,7 @@ class ProofingOrderItem extends StatelessWidget {
         await ProofingOrderRepository().proofingDetail(model.code);
 
     QuoteModel quoteModel =
-        await QuoteOrderRepository().getquoteDetail(detailModel.quoteRef);
+        await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
 
     Navigator.of(pageContext).push(
       MaterialPageRoute(

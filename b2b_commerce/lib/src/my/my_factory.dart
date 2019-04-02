@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -10,7 +11,6 @@ import './company/my_company_certificate.dart';
 import './company/my_company_contact_way.dart';
 import '../_shared/widgets/image_factory.dart';
 import '../business/orders/purchase_order_detail.dart';
-import '../business/orders/quote_item.dart';
 import '../business/orders/requirement_order_from.dart';
 import '../business/products/existing_product.dart';
 import '../business/products/existing_product_item.dart';
@@ -59,7 +59,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       _buildBaseInfo(),
     ];
     if (widget.quoteModel != null) {
-      _widgets.add(QuoteManageItem(
+      _widgets.add(QuoteListItem(
         model: widget.quoteModel,
         isSupplier: widget.quoteModel != null,
       ));
@@ -516,7 +516,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            "${widget.purchaseOrder.product.category.name}  ${sum}件",
+                            "${widget.purchaseOrder.product.category.name}  $sum件",
                             style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
                           ),
                         )

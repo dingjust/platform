@@ -26,11 +26,11 @@ class RequirementOrdersPage extends StatefulWidget {
 }
 
 class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
-  GlobalKey _globalKey = GlobalKey<_RequirementOrdersPageState>();
+  final GlobalKey _globalKey = GlobalKey<_RequirementOrdersPageState>();
 
   Widget _buildSearchButton(BuildContext context) {
     return IconButton(
-      icon: Icon(B2BIcons.search, size: 20),
+      icon: const Icon(B2BIcons.search, size: 20),
       onPressed: () => showSearch(context: context, delegate: RequirementOrderSearchDelegate()),
     );
   }
@@ -69,7 +69,7 @@ class RequirementOrderList extends StatelessWidget {
 
   final EnumModel status;
 
-  final ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class RequirementOrderList extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(color: Colors.grey[100]),
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: RefreshIndicator(
         onRefresh: () async {
           if (!bloc.lock) bloc.refreshData(status.code);
@@ -120,11 +120,13 @@ class RequirementOrderList extends StatelessWidget {
                 }
                 if (snapshot.hasData) {
                   return Column(
-                    children: snapshot.data.map((order) {
-                      return RequirementOrderItem(
-                        item: order,
-                      );
-                    }).toList(),
+                    children: snapshot.data.map(
+                      (order) {
+                        return RequirementOrderItem(
+                          item: order,
+                        );
+                      },
+                    ).toList(),
                   );
                 } else if (snapshot.hasError) {
                   return Text('${snapshot.error}');
@@ -138,7 +140,7 @@ class RequirementOrderList extends StatelessWidget {
                 if (snapshot.data) {
                   _scrollController.animateTo(
                     _scrollController.offset - 70,
-                    duration: new Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
                     curve: Curves.easeOut,
                   );
                 }
@@ -195,8 +197,8 @@ class RequirementOrderItem extends StatelessWidget {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
           children: <Widget>[
             _buildHeader(),
@@ -222,10 +224,7 @@ class RequirementOrderItem extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Text(
-                  '需求订单号：${item.code}',
-                  style: const TextStyle(fontSize: 16),
-                ),
+                child: Text('需求订单号：${item.code}', style: const TextStyle(fontSize: 16)),
               ),
               Text(
                 RequirementOrderStatusLocalizedMap[item.status],
@@ -260,12 +259,12 @@ class RequirementOrderItem extends StatelessWidget {
       }
 
       return Container(
-        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+        padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
         decoration: BoxDecoration(
           color: Colors.grey[200],
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Text('货号：$productSkuID', style: TextStyle(fontSize: 12, color: Colors.grey)),
+        child: Text('货号：$productSkuID', style: const TextStyle(fontSize: 12, color: Colors.grey)),
       );
     }
 
@@ -275,27 +274,27 @@ class RequirementOrderItem extends StatelessWidget {
       int expectedMachiningQuantity = 0,
     }) {
       return Container(
-        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+        padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
         decoration: BoxDecoration(
-          color: Color.fromRGBO(255, 243, 243, 1),
+          color: const Color.fromRGBO(255, 243, 243, 1),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
           "$majorCategory   $category   $expectedMachiningQuantity件",
-          style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
+          style: const TextStyle(fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
         ),
       );
     }
 
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
           ImageFactory.buildThumbnailImageForList(item.details.pictures, fit: BoxFit.cover),
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
               height: 80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -321,7 +320,7 @@ class RequirementOrderItem extends StatelessWidget {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[Text('已报价 $totalQuotesCount', style: TextStyle(color: Colors.red))],
+        children: <Widget>[Text('已报价 $totalQuotesCount', style: const TextStyle(color: Colors.red))],
       ),
     );
   }
