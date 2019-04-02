@@ -6,8 +6,11 @@ abstract class ProductRepository {
   ///获取商品列表
   Future<ProductsResponse> list(dynamic data,Map<String,Object> params);
 
-  ///获取商品列表
+  //品牌获取工厂的现款商品
   Future<ProductsResponse> getProductsOfFactories(dynamic data,Map<String,Object> params);
+
+  //品牌获取工厂的现款商品
+  Future<ProductsResponse> getProductsOfFactory(dynamic data,Map<String,Object> params,String uid);
 
   //获取商品明细
   Future<ApparelProductModel> detail(String code);
