@@ -131,135 +131,128 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   Widget _buildCompanyInfo() {
     /// 工厂端显示
     if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return  Container(
-          color: Colors.white,
-          child: Column(
-            children: <Widget>[
-              Row(
+      return Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.all(10),
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: widget.item.supplier?.profilePicture == null
+                            ? AssetImage(
+                                'temp/picture.png',
+                                package: "assets",
+                              )
+                            : NetworkImage(
+                                '${GlobalConfigs.IMAGE_BASIC_URL}${widget.item.supplier.profilePicture.url}'),
+                        fit: BoxFit.cover,
+                      )),
+                ),
+                Container(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        widget.item.supplier == null ||
+                                widget.item.supplier.name == null
+                            ? ''
+                            : '${widget.item.supplier?.name}',
+                        textScaleFactor: 1.3,
+                      ),
+                    ),
+                    widget.item.supplier == null ||
+                            widget.item.supplier.approvalStatus == null
+                        ? Container()
+                        : Container(
+                            margin: EdgeInsets.only(top: 5),
+                            color: Color.fromRGBO(254, 252, 235, 1),
+                            child: widget.item.supplier.approvalStatus !=
+                                    ArticleApprovalStatus.approved
+                                ? Text('  未认证  ',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(255, 133, 148, 1),
+                                    ))
+                                : Text(
+                                    '  已认证  ',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(255, 133, 148, 1),
+                                    ),
+                                  ))
+                  ],
+                ))
+              ],
+            ),
+            Divider(
+              height: 1,
+            ),
+            Container(
+              padding: EdgeInsets.all(15),
+              child: Row(
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: widget
-                              .item.supplier?.profilePicture == null?
-                          AssetImage(
-                            'temp/picture.png',
-                            package: "assets",
-                          ):
-                          NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.item.supplier.profilePicture.url}'),
-                          fit: BoxFit.cover,
-                        )),
+                  Expanded(
+                    child: Container(
+                      child: Text('联系人'),
+                    ),
                   ),
                   Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              widget.item.supplier == null ||
-                                  widget.item.supplier.name == null ?
-                              '' :
-                              '${widget.item.supplier?.name}',
-                              textScaleFactor: 1.3,
-                            ),
-                          ),
-                          widget.item.supplier == null ||
-                              widget.item.supplier.approvalStatus == null ?
-                          Container() :
-                          Container(
-                              margin: EdgeInsets.only(top: 5),
-                              color: Color.fromRGBO(254, 252, 235, 1),
-                              child: widget.item.supplier.approvalStatus !=
-                                  ArticleApprovalStatus.approved ?
-                              Text(
-                                  '  未认证  ',
-                                  style: TextStyle(
-                                    color:
-                                    Color.fromRGBO(255, 133, 148, 1),
-                                  )
-                              )
-                                  :
-                              Text(
-                                '  已认证  ',
-                                style: TextStyle(
-                                  color: Color.
-                                  fromRGBO(255, 133, 148, 1)
-                                  ,
-                                ),
-                              )
-                          )
-                        ],
-                      )
+                    child: Text(
+                      widget.item.supplier.contactAddress == null ||
+                              widget.item.supplier.contactAddress.fullname ==
+                                  null
+                          ? ''
+                          : '${widget.item.supplier.contactAddress.fullname}',
+                      style: TextStyle(
+                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                    ),
                   )
                 ],
               ),
-              Divider(
-                height: 1,
-              ),
-              Container(
+            ),
+            Divider(
+              height: 2,
+            ),
+            GestureDetector(
+              child: Container(
                 padding: EdgeInsets.all(15),
                 child: Row(
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                        child: Text(
-                            '联系人'
-                        ),
+                        child: Text('联系手机'),
                       ),
                     ),
                     Container(
                       child: Text(
                         widget.item.supplier.contactAddress == null ||
-                            widget.item.supplier.contactAddress.fullname == null ?
-                        '' :
-                        '${widget.item.supplier.contactAddress.fullname}',
+                                widget.item.supplier.contactAddress.cellphone ==
+                                    null
+                            ? ''
+                            : '${widget.item.supplier.contactAddress.cellphone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-              Divider(height: 2,),
-              GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          child: Text(
-                              '联系手机'
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Text(
-                          widget.item.supplier.contactAddress == null ||
-                              widget.item.supplier.contactAddress.cellphone == null ?
-                          '' :
-                          '${widget.item.supplier.contactAddress.cellphone}',
-                          style: TextStyle(
-                              color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: (){
-                  widget.item.supplier.contactAddress == null ||
-                      widget.item.supplier.contactAddress.cellphone == null ?
-                  null:
-                  _selectActionButton(widget.item.supplier.contactAddress.cellphone);
-                },
-              ),
-            ],
-          ),
+              onTap: () {
+                widget.item.supplier.contactAddress == null ||
+                        widget.item.supplier.contactAddress.cellphone == null
+                    ? null
+                    : _selectActionButton(
+                        widget.item.supplier.contactAddress.cellphone);
+              },
+            ),
+          ],
+        ),
       );
     } else {
       return Container();
@@ -270,92 +263,96 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
-        onTap: ()async{
+        onTap: () async {
           //获取该工厂的现款商品
-          ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
-            'factory':pageItem.belongTo.uid,
-          }, {'size': 3});
+          ProductsResponse productsResponse =
+              await ProductRepositoryImpl().getProductsOfFactories({
+            'factory': pageItem.belongTo.uid,
+          }, {
+            'size': 3
+          });
 
           //TODO跳转详细页
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>MyFactoryPage(pageItem.belongTo,products: productsResponse.content,)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyFactoryPage(
+                        pageItem.belongTo,
+                        products: productsResponse.content,
+                      )));
         },
         child: Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(top: 15),
-          child: Container(
-            padding: EdgeInsets.fromLTRB(10,15,0,15),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Row(
+            color: Colors.white,
+            margin: EdgeInsets.only(top: 15),
+            child: Container(
+                padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
-                          Expanded(
-                            child:
-                            pageItem.belongTo == null ||
-                                pageItem.belongTo.name == null ?
-                            Text(
-                              '',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                            ) :
-                            Text(
-                              pageItem.belongTo.name,
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          pageItem.belongTo == null ||
-                              pageItem.belongTo.starLevel == null ?
-                          Container() :
-                          Stars(
-                            size: 14,
-                            color: Color.fromRGBO(255, 183, 0, 1),
-                            highlightOnly: false,
-                            starLevel: pageItem.belongTo.starLevel,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              '历史接单${pageItem.belongTo == null || pageItem.belongTo.historyOrdersCount == null ? '0' : pageItem.belongTo.historyOrdersCount}单',
-                              style: TextStyle(
-                                  color: Colors.grey
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: pageItem.belongTo == null ||
+                                        pageItem.belongTo.name == null
+                                    ? Text(
+                                        '',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
+                                      )
+                                    : Text(
+                                        pageItem.belongTo.name,
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                               ),
-                            ),
+                              pageItem.belongTo == null ||
+                                      pageItem.belongTo.starLevel == null
+                                  ? Container()
+                                  : Stars(
+                                      size: 14,
+                                      color: Color.fromRGBO(255, 183, 0, 1),
+                                      highlightOnly: false,
+                                      starLevel: pageItem.belongTo.starLevel,
+                                    ),
+                            ],
                           ),
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  '${pageItem.belongTo.contactAddress?.city
-                                      ?.name} ${pageItem.belongTo.contactAddress
-                                      ?.cityDistrict?.name}',
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(
+                                  '历史接单${pageItem.belongTo == null || pageItem.belongTo.historyOrdersCount == null ? '0' : pageItem.belongTo.historyOrdersCount}单',
                                   style: TextStyle(color: Colors.grey),
                                 ),
-                              ],
-                            ),
+                              ),
+                              Container(
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      '${pageItem.belongTo.contactAddress?.city?.name} ${pageItem.belongTo.contactAddress?.cityDistrict?.name}',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
                           )
                         ],
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Icon(
-                    Icons.keyboard_arrow_right,
-                    size: 40,
-                    color: Colors.grey,
-                  ),
-                )
-              ],
-            )
-          )
-        ),
+                      ),
+                    ),
+                    Container(
+                      child: Icon(
+                        Icons.keyboard_arrow_right,
+                        size: 40,
+                        color: Colors.grey,
+                      ),
+                    )
+                  ],
+                ))),
       );
     } else {
       return Container();
@@ -427,7 +424,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    '${pageItem.requirementOrder.details?.majorCategoryName()} ${pageItem.requirementOrder.details?.category?.name}  ${pageItem.requirementOrder?.totalQuantity == null? '0' : pageItem.requirementOrder?.totalQuantity}件',
+                    '${pageItem.requirementOrder.details?.majorCategoryName()} ${pageItem.requirementOrder.details?.category?.name}  ${pageItem.requirementOrder?.totalQuantity == null ? '0' : pageItem.requirementOrder?.totalQuantity}件',
                     style: TextStyle(
                       color: Color.fromRGBO(255, 133, 148, 1),
                       fontSize: 15,
@@ -532,8 +529,8 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                       children: <Widget>[
                         Expanded(
                           child: Container(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Text('加工单价'),
+                            padding: EdgeInsets.only(left: 15),
+                            child: Text('加工单价'),
                           ),
                         ),
                         Text(
@@ -554,8 +551,8 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                       children: <Widget>[
                         Expanded(
                           child: Container(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Text('其他'),
+                            padding: EdgeInsets.only(left: 15),
+                            child: Text('其他'),
                           ),
                         ),
                         Text(
@@ -925,14 +922,16 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 await launch(url);
               },
             ),
-            tel.indexOf('-')>-1?Container():ListTile(
-              leading: Icon(Icons.message),
-              title: Text('发送短信'),
-              onTap: () async {
-                var url = 'sms:' + tel;
-                await launch(url);
-              },
-            ),
+            tel.indexOf('-') > -1
+                ? Container()
+                : ListTile(
+                    leading: Icon(Icons.message),
+                    title: Text('发送短信'),
+                    onTap: () async {
+                      var url = 'sms:' + tel;
+                      await launch(url);
+                    },
+                  ),
           ],
         );
       },

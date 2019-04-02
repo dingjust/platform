@@ -3,15 +3,19 @@ import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluwx/fluwx.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:fluwx/fluwx.dart' as fluwx;
 
 class OrderPaymentPage extends StatefulWidget {
   final OrderModel order;
 
-  const OrderPaymentPage({Key key, this.order}) : super(key: key);
+  final PaymentFor paymentFor;
+
+  const OrderPaymentPage(
+      {Key key, this.order, this.paymentFor = PaymentFor.DEFAULT})
+      : super(key: key);
 
   @override
   _OrderPaymentPageState createState() => _OrderPaymentPageState();
@@ -19,12 +23,21 @@ class OrderPaymentPage extends StatefulWidget {
 
 class _OrderPaymentPageState extends State<OrderPaymentPage> {
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => checkDeliveryAddress());
+
+    super.initState();
+  }
+
+  String paymentWay = "wechat";
+
+  @override
+  Widget build(BuildContext context) {
     //监听微信回调
     fluwx.responseFromPayment.listen((WeChatPaymentResponse data) async {
       if (data.errCode == 0) {
         //成功，调用确认支付接口
-        String confirmResult =
-            await WechatServiceImpl.instance.paymentConfirm(widget.order);
+        String confirmResult = await WechatServiceImpl.instance
+            .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
 
         if (confirmResult == null) {
           onPaymentError();
@@ -38,15 +51,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         Navigator.of(context).pop();
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) => checkDeliveryAddress());
 
-    super.initState();
-  }
-
-  String paymentWay = "wechat";
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,
@@ -363,7 +368,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
           child: Center(
             child: CircularProgressIndicator(),
           ));
-      WechatServiceImpl.instance.pay(widget.order.code);
+      WechatServiceImpl.instance
+          .pay(widget.order.code, paymentFor: widget.paymentFor);
     } else {
       showDialog<void>(
         context: context,
@@ -463,11 +469,16 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
           setState(() {
             widget.order.deliveryAddress = value;
           });
-          //更新打样单地址
-          bool result = await ProofingOrderRepository()
-              .updateAddress(widget.order.code, widget.order);
-          //TODO 采购单地址统一
 
+          if (widget.order is ProofingModel) {
+            //更新打样单地址
+            bool result = await ProofingOrderRepository()
+                .updateAddress(widget.order.code, widget.order);
+          } else if (widget.order is PurchaseOrderModel) {
+            // 采购单地址
+            bool result = await PurchaseOrderRepository()
+                .updateAddress(widget.order.code, widget.order);
+          }
         }
       });
     }

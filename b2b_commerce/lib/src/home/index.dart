@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/_shared/widgets/business/product_search_input.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import '../_shared/widgets/broadcast_factory.dart';
-import 'package:b2b_commerce/src/_shared/widgets/business/product_search_input.dart';
 import '../business/products/product_category.dart';
 import '../common/app_image.dart';
 import '../common/app_keys.dart';
@@ -79,7 +79,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SliverList(delegate: SliverChildListDelegate(widget.widgetsByUserType)),
+            SliverList(
+                delegate: SliverChildListDelegate(widget.widgetsByUserType)),
           ],
         ),
       ),
@@ -115,9 +116,12 @@ class BrandFirstMenuSection extends StatelessWidget {
             // 加载条
             showDialog(
               context: context,
-              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              builder: (context) =>
+                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
-            await ProductRepositoryImpl().cascadedCategories().then((categories) {
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -137,9 +141,12 @@ class BrandFirstMenuSection extends StatelessWidget {
             // 加载条
             showDialog(
               context: context,
-              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              builder: (context) =>
+                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
-            await ProductRepositoryImpl().cascadedCategories().then((categories) {
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -184,7 +191,8 @@ class BrandSecondMenuSection extends StatelessWidget {
   Widget _buildFindFactoriesByIndustrialClusterMenuItem(BuildContext context) {
     return AdvanceIconButton(
       onPressed: () async {
-        List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
+        List<LabelModel> labels =
+            await UserRepositoryImpl().industrialClustersFromLabels();
 
         Navigator.push(
           context,
@@ -333,14 +341,15 @@ class BrandTrackingProgressSection extends StatelessWidget {
   Widget _buildNoUniqueCode(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductionOfflineOrder()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ProductionOfflineOrder()));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
             '没有唯一码？点击这里',
-            style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1), fontSize: 15),
+            style: TextStyle(color: Colors.red, fontSize: 15),
           ),
           Icon(
             B2BIcons.arrow_right,
@@ -370,10 +379,12 @@ class BrandTrackingProgressSection extends StatelessWidget {
 
 class FactoryRequirementPoolSection extends StatelessWidget {
   /// 全部需求streamController
-  final StreamController _allRequirementStreamController = StreamController<int>.broadcast();
+  final StreamController _allRequirementStreamController =
+      StreamController<int>.broadcast();
 
   /// 推荐需求streamController
-  final StreamController _recommendRequirementStreamController = StreamController<int>.broadcast();
+  final StreamController _recommendRequirementStreamController =
+      StreamController<int>.broadcast();
 
   @override
   Widget build(BuildContext context) {
@@ -389,7 +400,9 @@ class FactoryRequirementPoolSection extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return GestureDetector(
                 onTap: () async {
-                  await ProductRepositoryImpl().majorCategories().then((categories) {
+                  await ProductRepositoryImpl()
+                      .majorCategories()
+                      .then((categories) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => RequirementPoolAllPage(
@@ -409,12 +422,14 @@ class FactoryRequirementPoolSection extends StatelessWidget {
             initialData: 0,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return GestureDetector(
-                onTap: () async{
-                  await ProductRepositoryImpl().majorCategories().then((categories) {
+                onTap: () async {
+                  await ProductRepositoryImpl()
+                      .majorCategories()
+                      .then((categories) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => RequirementPoolRecommend(
-                          categories: categories,
-                        )));
+                              categories: categories,
+                            )));
                   });
                 },
                 child: RecommendedRequirementMenuItem(count: snapshot.data),
@@ -428,7 +443,8 @@ class FactoryRequirementPoolSection extends StatelessWidget {
 }
 
 class AllRequirementMenuItem extends StatelessWidget {
-  const AllRequirementMenuItem({Key key, @required this.count}) : super(key: key);
+  const AllRequirementMenuItem({Key key, @required this.count})
+      : super(key: key);
 
   final int count;
 
@@ -470,7 +486,8 @@ class AllRequirementMenuItem extends StatelessWidget {
 }
 
 class RecommendedRequirementMenuItem extends StatelessWidget {
-  const RecommendedRequirementMenuItem({Key key, @required this.count}) : super(key: key);
+  const RecommendedRequirementMenuItem({Key key, @required this.count})
+      : super(key: key);
 
   final int count;
 
@@ -522,8 +539,12 @@ class RecommendedRequirementMenuItem extends StatelessWidget {
                   color: Color.fromRGBO(100, 100, 100, 1),
                 ),
                 children: <TextSpan>[
-                  TextSpan(text: '报价', style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1))),
-                  TextSpan(text: '的需求', style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)))
+                  TextSpan(
+                      text: '报价',
+                      style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1))),
+                  TextSpan(
+                      text: '的需求',
+                      style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)))
                 ]),
           )
         ],
@@ -574,7 +595,9 @@ class FactoryCollaborationSection extends StatelessWidget {
         },
         child: Text(
           '创建线下订单',
-          style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Color.fromRGBO(36, 38, 41, 1),
+              fontWeight: FontWeight.bold),
         ),
       ),
     );

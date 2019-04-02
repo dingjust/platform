@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/index.dart';
-import 'package:b2b_commerce/src/common/wechatpay_constants.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

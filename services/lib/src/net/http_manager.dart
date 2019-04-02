@@ -6,6 +6,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:services/src/message/message_bloc.dart';
+import 'package:services/src/net/error_response.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
 
 /// HTTP请求
@@ -40,16 +41,19 @@ class HttpManager {
 
     _instance = Dio(options);
 
-    (_instance.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+    (_instance.httpClientAdapter as DefaultHttpClientAdapter)
+        .onHttpClientCreate = (client) {
       // you can also create a new HttpClient to dio
       // return new HttpClient();
       // 忽略证书
       HttpClient httpClient = new HttpClient()
-        ..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+        ..badCertificateCallback =
+            ((X509Certificate cert, String host, int port) => true);
       return httpClient;
     };
 
-    _instance.interceptors.add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
+    _instance.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
       // 在请求被发送之前做一些事情
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
@@ -69,8 +73,10 @@ class HttpManager {
       _clearContext();
       return response; // continue
     }, onError: (DioError e) {
+      ErrorResponse errorResponse = ErrorResponse.fromJson(e.response.data);
       //消息流推送
-      MessageBLoC.instance.errorMessageController.add(e.toString());
+      MessageBLoC.instance.errorMessageController
+          .add(errorResponse.errors[0].message);
       // 当请求失败时做一些预处理
       if (GlobalConfigs.DEBUG) {
         print(e.toString());

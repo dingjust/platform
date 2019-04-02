@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
+import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
@@ -1385,129 +1386,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         borderRadius:
                         BorderRadius.all(Radius.circular(20))),
                     onPressed: () {
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: true,
-                        // user must tap button!
-                        builder: (context) {
-                          return  order.deliveryAddress == null ?
-                          SimpleDialog(
-                            title: const Text('提示',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),),
-                            children: <Widget>[
-                              SimpleDialogOption(
-                                child: Text('送货地址为空，请先添加'),
-                              ),
-                            ],
-                          ):
-                          AlertDialog(
-                            title: Text('您的当前收货地址为：'),
-                            content: SingleChildScrollView(
-                              child: ListBody(
-                                children: <Widget>[
-                                  GestureDetector(
-                                    child: ListTile(
-                                      title: Text(
-                                        '${order.deliveryAddress.fullname ==
-                                            null ? '' : order.deliveryAddress.fullname}  '
-                                            '${order.deliveryAddress.cellphone == null ? '' :
-                                        order.deliveryAddress.cellphone}',
-                                      ),
-                                      subtitle: Text(
-                                        '${order.deliveryAddress == null  ? '':
-                                        order.deliveryAddress.region.name} ${order.deliveryAddress.city.name} '
-                                            '${order.deliveryAddress.cityDistrict.name} ${order.deliveryAddress.line1}',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      trailing: Icon(
-                                        Icons.keyboard_arrow_right,
-                                      ),
-                                    ),
-                                    onTap: () async {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MyAddressesPage(isJumpSourec: true)),
-                                        //接收返回数据并处理
-                                      ).then((value) async{
-                                        if(value != null){
-                                          setState(() {
-                                            order.deliveryAddress = value;
-                                          });
-                                          bool result = await PurchaseOrderRepository().updateAddress(order.code,order);
-                                          Navigator.of(context).pop();
-                                          _showMessage(context, result, '地址修改');
-                                        }
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            actions: <Widget>[
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  margin: EdgeInsets.all(10),
-                                  width:100,
-                                  child: RaisedButton(
-                                      child: Text("不，在看看"),
-                                      textTheme: ButtonTextTheme.normal,
-                                      textColor: Color(0xFFFFD600),
-                                      color: Colors.white,
-                                      // 主题
-                                      // RaisedButton 才起效
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          side: BorderSide(
-                                              color: Color(0xFFFFD600),
-                                              style: BorderStyle.solid,
-                                              width: 1)),
-                                      materialTapTargetSize: MaterialTapTargetSize
-                                          .padded,
-                                      animationDuration: Duration(
-                                          seconds: 1),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      }
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Container(
-                                    margin: EdgeInsets.all(10),
-                                    width:100,
-                                    child: RaisedButton(
-                                        child: Text("是"),
-                                        textTheme: ButtonTextTheme.normal,
-                                        textColor: Colors.black,
-                                        color: Color(0xFFFFD600),
-                                        // 主题
-                                        // RaisedButton 才起效
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                        ),
-                                        materialTapTargetSize: MaterialTapTargetSize.padded,
-                                        animationDuration: Duration(seconds: 1),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        }
-                                    ),
-                                  )
-                              )
-                            ],
-                          );
-                        },
-                      );
-                    })),
+                      Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => OrderPaymentPage(
+                          order: widget.order,
+                          paymentFor: PaymentFor.DEPOSIT,
+                        )));
+                   })),
           ),
         ],
       ),
@@ -1522,6 +1406,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       }
       else if(order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE){
         if(order.balancePaid == false && order.balance != null && order.balance > 0){
+          //支付尾款
           return Container(
               child: Align(
                 alignment: Alignment.bottomRight,
@@ -1541,7 +1426,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius:
                           BorderRadius.all(Radius.circular(20))),
-                      onPressed: () {}
+                      onPressed: () {
+                                        Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => OrderPaymentPage(
+                          order: widget.order,
+                          paymentFor: PaymentFor.BALANCE,
+                        )));
+                      }
                   ),
                 ),
               )
