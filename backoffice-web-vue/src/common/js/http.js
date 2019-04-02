@@ -38,7 +38,14 @@ let http = {
       axios.get(url, {
         params: params
       }).then((response) => resolve(response.data))
-        .catch((error) => resolve(error.response || error.response.data));
+        .catch((error) => {
+          if (error.response && error.response.data) {
+            return resolve(error.response.data);
+          } else {
+
+            return resolve(error.response);
+          }
+        });
     });
   },
   /** post 请求
@@ -52,10 +59,17 @@ let http = {
       axios.post(url, data, {
         params: params
       }).then((response) => resolve(response.data))
-        .catch((error) => resolve(error.response || error.response.data));
+        .catch((error) => {
+          if (error.response && error.response.data) {
+            return resolve(error.response.data);
+          } else {
+
+            return resolve(error.response);
+          }
+        });
     });
   },
-  /** post 请求
+  /** put 请求
    * @param  {接口地址} url
    * @param  {请求参数} data
    */
@@ -65,7 +79,13 @@ let http = {
       axios.put(url, data, {
         params: params
       }).then((response) => resolve(response.data))
-        .catch((error) => resolve(error.response || error.response.data));
+        .catch((error) => {
+          if (error.response && error.response.data) {
+            return resolve(error.response.data);
+          } else {
+            return resolve(error.response);
+          }
+        });
     });
   },
   /** post 请求
@@ -78,7 +98,14 @@ let http = {
       axios.delete(url, {
         params: params
       }).then((response) => resolve(response.data))
-        .catch((error) => resolve(error.response || error.response.data));
+        .catch((error) => {
+          if (error.response && error.response.data) {
+            return resolve(error.response.data);
+          } else {
+
+            return resolve(error.response);
+          }
+        });
     });
   }
 };
