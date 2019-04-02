@@ -21,6 +21,9 @@ abstract class ProductApis {
   //品牌获取工厂的现款商品
   static get getProductsOfFactories => '/{baseSiteId}/b2b/products/apparel/factories';
 
+  //品牌获取工厂的现款商品
+  static get getProductsOfFactory => (uid) => '/{baseSiteId}/b2b/products/apparel/factories/$uid';
+
   ///根据code获取商品详情
   static get detail => (code) => '/{baseSiteId}/b2b/products/apparel/$code';
 
@@ -55,7 +58,7 @@ abstract class ProductApis {
   static get sampleUpdate => '/{baseSiteId}/b2b/products/sample/update';
   //获取样衣借还记录
   static get sampleHistorys =>
-      '/{baseSiteId}/b2b/products/sampleCheckoutHist';
+      '/{baseSiteId}/b2b/products/sampleCheckoutHist/search';
   //获取样衣借还记录明细
 
   //创建样衣借还记录
@@ -63,7 +66,7 @@ abstract class ProductApis {
       '/{baseSiteId}/b2b/products/sampleCheckoutHist/create';
   //更新样衣借还记录
   static get sampleHistoryUpdate =>
-      (id) => '/{baseSiteId}/b2b/products/sampleCheckoutHist/$id';
+      (id) => '/{baseSiteId}/b2b/products/sampleCheckoutHist/update/$id';
   //删除样衣借还记录
   static get sampleHistoryDelete =>
       (id) => '/{baseSiteId}/b2b/products/sampleCheckoutHist/$id';

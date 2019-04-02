@@ -668,7 +668,7 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
   int quantity;
 
   //预计归还日期
-  DateTime expectedReturnDate;
+  DateTime expectedReturningDate;
 
   //归还日期
   DateTime returnedDate;
@@ -680,20 +680,21 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
   String contact;
 
   //备注
-  String remakes;
+  String remarks;
 
+  @JsonKey(name: 'creationtime')
   DateTime creationDate;
 
   SampleBorrowReturnHistoryModel({
     this.type,
     this.quantity,
-    this.expectedReturnDate,
+    this.expectedReturningDate,
     this.returnedDate,
     this.relatedParty,
     this.contact,
     this.state,
     this.creationDate,
-    this.remakes,
+    this.remarks,
   });
 
   factory SampleBorrowReturnHistoryModel.fromJson(Map<String, dynamic> json) =>

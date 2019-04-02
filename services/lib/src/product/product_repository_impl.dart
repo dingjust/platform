@@ -20,6 +20,12 @@ class ProductRepositoryImpl extends ProductRepository{
   }
 
   @override
+  Future<ProductsResponse> getProductsOfFactory(dynamic data, Map<String, Object> params,String uid) async{
+    Response response = await http$.post(ProductApis.getProductsOfFactory(uid),data: data,queryParameters: params);
+    return ProductsResponse.fromJson(response.data);
+  }
+
+  @override
   Future<ApparelProductModel> detail(String code) async{
     Response response = await http$.get(ProductApis.detail(code));
     return ApparelProductModel.fromJson(response.data);
@@ -152,7 +158,7 @@ class ProductRepositoryImpl extends ProductRepository{
 
   @override
   Future<String> updateSampleHistory(SampleBorrowReturnHistoryModel sample)async {
-    Response response = await http$.put(ProductApis.sampleHistoryUpdate,data: SampleBorrowReturnHistoryModel.toJson(sample));
+    Response response = await http$.put(ProductApis.sampleHistoryUpdate(sample.id),data: SampleBorrowReturnHistoryModel.toJson(sample));
     return response.data;
   }
 

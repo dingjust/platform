@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/business/products/sample_product_history_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -32,9 +34,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> _widgets = [
+  List<Widget> _createWidgets(String state){
+    return [
       GestureDetector(
         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductsPage())),
         child: Card(
@@ -68,6 +69,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
               _type = LendBorrowType.BORROW;
             }
           });
+
+          SampleProductHistoryBLoC.instance.filterByStatuses(state, _type.toString());
         },
         child: Card(
           elevation: 0,
@@ -84,10 +87,10 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
-                  Text(
-                    '3',
-                    style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
-                  ),
+//                  Text(
+//                    '3',
+//                    style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+//                  ),
                   Icon(Icons.chevron_right, color: Colors.grey),
                 ],
               ),
@@ -96,6 +99,10 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
         ),
       ),
     ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
     return BLoCProvider<SampleProductHistoryBLoC>(
       bloc: SampleProductHistoryBLoC.instance,
@@ -133,7 +140,7 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
             ),
             body: TabBarView(
               children: _states.map((state) {
-                return SampleProductHistoryList(state.code, _widgets);
+                return SampleProductHistoryList(state.code,_type.toString(),_createWidgets(state.code));
 //                  ListView(
 //                  children: <Widget>[
 //                    GestureDetector(
@@ -211,7 +218,7 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductHistoryFormPage(model))),
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductHistoryFormPage(model,isCreated: true,))),
         ),
       ),
     );
@@ -219,11 +226,13 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
 }
 
 class SampleProductHistoryList extends StatelessWidget {
-  SampleProductHistoryList(this.state, this.widgets);
+  String state;
+  String type;
+  List<Widget> widgets;
 
-  final String state;
-  final List<Widget> widgets;
-  final ScrollController _scrollController = new ScrollController();
+  SampleProductHistoryList(this.state,this.type,this.widgets);
+
+  ScrollController _scrollController = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +242,7 @@ class SampleProductHistoryList extends StatelessWidget {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(state);
+        bloc.loadingMoreByStatuses(state,type);
       }
     });
 
@@ -259,7 +268,7 @@ class SampleProductHistoryList extends StatelessWidget {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.filterByStatuses(state);
+            return await bloc.filterByStatuses(state,type);
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -270,7 +279,7 @@ class SampleProductHistoryList extends StatelessWidget {
                 // initialData: null,
                 builder: (BuildContext context, AsyncSnapshot<List<SampleBorrowReturnHistoryModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByStatuses(state);
+                    bloc.filterByStatuses(state,type);
                     return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
