@@ -1,9 +1,9 @@
+import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-import '../business/orders/quote_item.dart';
 import './company/form/my_brand_base_form.dart';
 import './company/my_company_certificate.dart';
 import './company/my_company_contact_way.dart';
@@ -66,7 +66,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
     ];
 
     if (widget.quoteModel != null) {
-      _widgets.add(QuoteManageItem(
+      _widgets.add(QuoteListItem(
         model: widget.quoteModel,
         isSupplier: widget.quoteModel != null,
       ));
@@ -255,7 +255,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                                 decoration: BoxDecoration(
                                     color: Color.fromRGBO(255, 243, 243, 1), borderRadius: BorderRadius.circular(10)),
                                 child: Text(
-                                  "${widget.purchaseOrder.product.category.name}  ${sum}件",
+                                  "${widget.purchaseOrder.product.category.name}  $sum件",
                                   style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
                                 ),
                               )
