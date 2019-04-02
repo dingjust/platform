@@ -5,18 +5,18 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class RequirementQuoteOrderFrom extends StatefulWidget {
+class RequirementQuoteOrderForm extends StatefulWidget {
   RequirementOrderModel model;
   QuoteModel quoteModel;
   bool update;
-  RequirementQuoteOrderFrom(
+  RequirementQuoteOrderForm(
       {@required this.model, this.quoteModel, this.update = false});
 
-  _RequirementQuoteOrderFromState createState() =>
-      _RequirementQuoteOrderFromState();
+  _RequirementQuoteOrderFormState createState() =>
+      _RequirementQuoteOrderFormState();
 }
 
-class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
+class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
   TextEditingController _fabricController = TextEditingController();
   TextEditingController _excipientsController = TextEditingController();
   TextEditingController _processingController = TextEditingController();
@@ -594,7 +594,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
       if (!widget.update) {
         //查询明细
         QuoteModel detailModel =
-            await QuoteOrderRepository().getquoteDetail(response);
+            await QuoteOrderRepository().getQuoteDetails(response);
         widget.quoteModel = detailModel;
         Navigator.of(context).pop(detailModel);
       } else {

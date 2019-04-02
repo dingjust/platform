@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class _QuoteItemState extends State<QuoteItem> {
     return GestureDetector(
       onTap: () async {
         //查询明细
-        QuoteModel detailModel = await QuoteOrderRepository().getquoteDetail(widget.model.code);
+        QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(widget.model.code);
         if (detailModel != null) {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuoteOrderDetailPage(item: detailModel)));
         }

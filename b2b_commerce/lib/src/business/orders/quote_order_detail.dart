@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:core/core.dart';
@@ -654,7 +654,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   void refreshData() async {
     //查询明细
     QuoteModel detailModel =
-        await QuoteOrderRepository().getquoteDetail(pageItem.code);
+        await QuoteOrderRepository().getQuoteDetails(pageItem.code);
     if (detailModel != null) {
       setState(() {
         pageItem = detailModel;
@@ -869,7 +869,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
 
   void onQuoteAgain() {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RequirementQuoteOrderFrom(
+        builder: (context) => RequirementQuoteOrderForm(
               model: pageItem.requirementOrder,
               quoteModel: pageItem,
             )));
@@ -878,7 +878,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   void onUpdateQuote() async {
     //等待操作回调
     bool isSuccessfule = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RequirementQuoteOrderFrom(
+        builder: (context) => RequirementQuoteOrderForm(
               model: pageItem.requirementOrder,
               quoteModel: pageItem,
               update: true,
@@ -892,7 +892,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   void onCreateProofings() async {
     //查询明细
     QuoteModel detailModel =
-        await QuoteOrderRepository().getquoteDetail(pageItem.code);
+        await QuoteOrderRepository().getQuoteDetails(pageItem.code);
 
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ProofingOrderForm(

@@ -47,7 +47,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
             body: TabBarView(
               children: statuses
                   .map(
-                    (status) => QuoteList(status: status, pageContext: context),
+                    (status) => QuoteList(status: status),
                   )
                   .toList(),
             ),

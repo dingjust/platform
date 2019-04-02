@@ -782,7 +782,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
         await ProofingOrderRepository().proofingDetail(widget.model.code);
 
     QuoteModel quoteModel =
-        await QuoteOrderRepository().getquoteDetail(detailModel.quoteRef);
+        await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
 
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ProofingOrderForm(
