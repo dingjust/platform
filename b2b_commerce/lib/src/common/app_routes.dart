@@ -17,9 +17,7 @@ import '../my/account/register.dart';
 import '../my/index.dart';
 import '../my/my_account.dart';
 import '../my/my_addresses.dart';
-import '../my/my_cart.dart';
 import '../my/my_client_services.dart';
-import '../my/my_collections.dart';
 import '../my/my_invoices.dart';
 import '../my/my_settings.dart';
 
@@ -77,9 +75,7 @@ class AppRoutes with GlobalRoutes {
 //    ROUTE_MY_BRAND: (context) => MyBrandPage(),
 //    ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
-    ROUTE_MY_CART: (context) => MyCartPage(),
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
-    ROUTE_MY_COLLECTIONS: (context) => MyCollectionsPage(),
     ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),
     ROUTE_MY_SETTINGS: (context) => MySettingsPage(),
     ROUTE_MY_REGISTER: (context) => RegisterPage(),

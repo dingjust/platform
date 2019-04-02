@@ -574,7 +574,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (context) => MyAddressesPage(isJumpSourec: true),
+                                                      builder: (context) => MyAddressesPage(isJumpSource: true),
                                                     ),
                                                     //接收返回数据并处理
                                                   ).then((value) async {

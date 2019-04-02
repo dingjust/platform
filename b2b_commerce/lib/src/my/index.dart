@@ -60,12 +60,12 @@ class MyHomePage extends StatelessWidget {
               pinned: true,
               actions: <Widget>[],
               flexibleSpace: FlexibleSpaceBar(
-                key: const Key('__myHomeSpaceBar__'),
+                key: AppKeys.myHomeSpaceBar,
                 title: StreamBuilder<UserModel>(
                   stream: bloc.stream,
                   initialData: bloc.currentUser,
                   builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-                    debugPrint('${snapshot.data.type}');
+                    // debugPrint('${snapshot.data.type}');
                     return Container(
                       child: Column(
                         children: <Widget>[
@@ -162,6 +162,7 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
+/// 公司认证菜单
 class CompanyCertificationMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -217,6 +218,7 @@ class CompanyCertificationMenuItem extends StatelessWidget {
   }
 }
 
+/// 公司介绍菜单
 class CompanyIntroductionMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -245,13 +247,13 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
         ),
       ),
       onTap: () {
-        //品牌详情
+        // 品牌详情
         if (bloc.currentUser.type == UserType.BRAND) {
           UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
             Navigator.push(context, MaterialPageRoute(builder: (context) => MyBrandPage(brand)));
           });
         }
-        //工厂详情
+        // 工厂详情
         if (bloc.currentUser.type == UserType.FACTORY) {
           UserRepositoryImpl().getFactory(bloc.currentUser.companyCode).then((factory) {
             ProductRepositoryImpl().list({}, {'size': 3}).then((products) {

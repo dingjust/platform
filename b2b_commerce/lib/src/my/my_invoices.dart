@@ -35,8 +35,7 @@ class MyInvoicesPage extends StatelessWidget {
         margin: EdgeInsets.all(0),
         child: ListTile(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => TaxInvoicesPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => TaxInvoicesPage()));
           },
           leading: Icon(Icons.portrait),
           title: Text('我的发票'),
@@ -84,8 +83,7 @@ class MyInvoicesPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      InvoiceTitleDetailPage(invoiceTitle: invoiceTitle),
+                  builder: (context) => InvoiceTitleDetailPage(invoiceTitle: invoiceTitle),
                 ),
               );
             },
@@ -94,7 +92,7 @@ class MyInvoicesPage extends StatelessWidget {
               children: <Widget>[
                 tile,
                 Container(
-                  child:  ListTile(
+                  child: ListTile(
                     title: Text(
                       invoiceTitle.company,
                       style: TextStyle(
