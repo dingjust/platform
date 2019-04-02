@@ -7,8 +7,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../_shared/widgets/broadcast.dart';
-import '../_shared/widgets/product_search_input.dart';
+import '../_shared/widgets/broadcast_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/business/product_search_input.dart';
 import '../business/products/product_category.dart';
 import '../common/app_image.dart';
 import '../common/app_keys.dart';

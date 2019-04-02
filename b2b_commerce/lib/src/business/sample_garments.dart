@@ -1,13 +1,14 @@
-import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
-import 'package:b2b_commerce/src/business/products/sample_product_history_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'products/sample_product_history_form.dart';
-import 'products/sample_products.dart';
-import 'package:b2b_commerce/src/_shared/widgets/product_search_delegate_page.dart';
+import '../_shared/widgets/business/product_search_delegate_page.dart';
+import '../_shared/widgets/scrolled_to_end_tips.dart';
+
+import './products/sample_product_history_item.dart';
+import './products/sample_product_history_form.dart';
+import './products/sample_products.dart';
 
 List<EnumModel> _states = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -218,12 +219,11 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
 }
 
 class SampleProductHistoryList extends StatelessWidget {
-  String state;
-  List<Widget> widgets;
-
   SampleProductHistoryList(this.state, this.widgets);
 
-  ScrollController _scrollController = new ScrollController();
+  final String state;
+  final List<Widget> widgets;
+  final ScrollController _scrollController = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
