@@ -164,7 +164,7 @@ class _RequirementOrderDetailPageState
                   ),
                   Container(
                     child: Text(
-                      widget.order.belongTo.contactAddress.fullname  == null ?
+                      widget.order.belongTo.contactAddress?.fullname  == null ?
                       '' :
                       '${widget.order.belongTo.contactAddress.fullname}',
                       style: TextStyle(
