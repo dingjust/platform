@@ -36,7 +36,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         // onPaymentError();
         Navigator.of(context).pop();
       }
-      print("==================${data.errCode}");
     });
     super.initState();
   }
@@ -388,7 +387,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
   void onPaymentError() {
     //错误
-    // Navigator.of(context).pop();
+    Navigator.of(context).pop();
     showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -410,6 +409,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPaymentSucess() {
+    Navigator.of(context).pop();
     //成功
     showDialog<void>(
       context: context,

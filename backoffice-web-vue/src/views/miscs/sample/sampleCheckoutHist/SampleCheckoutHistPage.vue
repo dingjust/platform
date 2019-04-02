@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <sample-checkout-hist-toolbar @onSearch="onSearch" @onNew="onNew"/>
-      <sample-checkout-hist-search-result-list :page="page" @onDetails="onDetails"/>
+      <sample-checkout-hist-toolbar @onSearch="onSearch" @onNew="onNew" @onAdvancedSearch="onAdvancedSearch"/>
+      <sample-checkout-hist-search-result-list :page="page" @onDetails="onDetails" />
     </el-card>
   </div>
 </template>
@@ -26,20 +26,28 @@
     computed: {
       ...mapGetters({
         keyword: 'keyword',
-        page: 'page'
+        page: 'page',
+        queryFormData: 'queryFormData',
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
+        searchAdvanced: 'searchAdvanced'
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
         const url = this.apis().getSampleCheckoutHists();
         this.search({url, keyword, page, size});
       },
+      onAdvancedSearch(page, size) {
+        const query = this.queryFormData;
+        const url = this.apis().getAdvanceSampleCheckoutHists();
+        this.searchAdvanced({url, query, page, size});
+      },
       async onDetails(row) {
-        const url = this.apis().getSampleCheckoutHist(item.id);
+        console.log(row);
+        const url = this.apis().getSampleCheckoutHist(row.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

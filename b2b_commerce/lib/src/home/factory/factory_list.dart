@@ -70,12 +70,14 @@ class _FactoryPageState extends State<FactoryPage> {
                   filterConditionEntries: filterConditionEntries,
                   action: ConditionPageButton(
                     factoryCondition: widget.factoryCondition,
+                    requirementCode: widget.requirementCode,
                   ),
                 ),
               ),
               body: FactoryListView(
                 factoryCondition: widget.factoryCondition,
                 showButton: widget.requirementCode != null,
+                requirementCode: widget.requirementCode,
               )),
         ));
   }
@@ -100,7 +102,8 @@ class QuickReactionFactoryButton extends StatelessWidget {
 }
 
 class ConditionPageButton extends StatelessWidget {
-  const ConditionPageButton({Key key, @required this.factoryCondition}) : super(key: key);
+  final String requirementCode;
+  const ConditionPageButton({Key key, @required this.factoryCondition,this.requirementCode}) : super(key: key);
 
   final FactoryCondition factoryCondition;
 
@@ -112,8 +115,7 @@ class ConditionPageButton extends StatelessWidget {
         await ProductRepositoryImpl().majorCategories().then((categories) async {
           FactoryCondition newFactoryCondition = await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) =>
-                  ConditionPage(
+              builder: (context) => ConditionPage(
                     categories: categories,
                     factoryCondition: factoryCondition,
                   ),
@@ -121,7 +123,7 @@ class ConditionPageButton extends StatelessWidget {
           );
 
           ///条件更新数据
-          FactoryBLoC.instance.filterByCondition(newFactoryCondition);
+          FactoryBLoC.instance.filterByCondition(newFactoryCondition,requirementCode: requirementCode,);
         });
       },
     );
@@ -129,9 +131,11 @@ class ConditionPageButton extends StatelessWidget {
 }
 
 class FactoryListView extends StatefulWidget {
-  FactoryListView({this.showButton = false, this.factoryCondition});
+  FactoryListView({this.showButton = false, this.factoryCondition,this.requirementCode});
 
   final FactoryCondition factoryCondition;
+
+  final String requirementCode;
 
   final bool showButton;
 
@@ -167,6 +171,7 @@ class _FactoryListViewState extends State<FactoryListView> {
           widget.factoryCondition,
           condition: currentCondition.value,
           isDESC: currentCondition.isDESC,
+          requirementCode: widget.requirementCode,
         );
       }
     });
@@ -192,6 +197,7 @@ class _FactoryListViewState extends State<FactoryListView> {
                     widget.factoryCondition,
                     condition: this.currentCondition.value,
                     isDESC: this.currentCondition.isDESC,
+                    requirementCode: widget.requirementCode,
                   );
 
                   return Padding(
@@ -226,21 +232,15 @@ class _FactoryListViewState extends State<FactoryListView> {
                   );
                 }
 
-                return snapshot.data ? ScrolledToEndTips() : Container();
+                return ScrolledToEndTips(hasContent: snapshot.data);
               },
             ),
             StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Center(
-                    child: new Opacity(
-                      opacity: snapshot.data ? 1.0 : 0,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
+                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                  opacity: snapshot.data ? 1.0 : 0,
                 );
               },
             ),

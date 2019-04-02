@@ -1,116 +1,15 @@
-import 'package:b2b_commerce/src/common/address_picker.dart';
-import 'package:b2b_commerce/src/common/find_factory_by_map.dart';
-import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-List<CategoryModel> _categorys;
-final List<Map<CategoryModel, List<CategoryModel>>> _category = [
-  {
-    CategoryModel(code: 'C01', name: '男装'): [
-      CategoryModel(
-          code: 'C001',
-          name: 'T恤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C002',
-          name: '衬衫',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C003',
-          name: '卫衣',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C004',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C005',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C006',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C007',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C008',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C009',
-          name: '羽绒服',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C010',
-          name: '绒服地方',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C011',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-      CategoryModel(
-          code: 'C012',
-          name: '卫裤',
-          parent: CategoryModel(code: 'C01', name: '男装')),
-    ],
-    CategoryModel(code: 'C02', name: '女装'): [
-      CategoryModel(
-          code: 'C013',
-          name: '棉服服',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C014',
-          name: '羽绒服地方',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C015',
-          name: '背带裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C016',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C017',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C018',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C019',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C020',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C021',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C022',
-          name: '牛仔裤裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C023',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-      CategoryModel(
-          code: 'C024',
-          name: '牛仔裤',
-          parent: CategoryModel(code: 'C02', name: '女装')),
-    ],
-  },
-];
+import '../home/factory/factory_list.dart';
+import './address_picker.dart';
+import './find_factory_by_map.dart';
+
+List<CategoryModel> _categories;
 
 final List<CategoryModel> _majorCategory = [
   CategoryModel(code: 'C2', name: '针织'),
@@ -135,21 +34,20 @@ final List<EnumModel> technologyList = [
 ];
 
 class ScreenConditions extends StatefulWidget {
-  @required
-  String route;
+  ScreenConditions({@required this.route});
 
-  ScreenConditions({this.route});
+  final String route;
 
   _ScreenConditionsState createState() => _ScreenConditionsState();
 }
 
 class _ScreenConditionsState extends State<ScreenConditions> {
-  List<CategoryModel> _mojarSelected = [];
-  List<EnumModel> _mojarEnumSelected = [];
+  List<CategoryModel> _majorSelected = [];
+  List<EnumModel> _majorEnumSelected = [];
   List<CategoryModel> _categorySelected = [];
   List<EnumModel> _processingTypeSelected = [];
   List<EnumModel> _technologySelected = [];
-  String mojar = '点击选取';
+  String major = '点击选取';
   String category = '点击选取';
   bool _isShowA = false;
   bool _isShowB = false;
@@ -252,7 +150,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                   width: 150,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(mojar,
+                    child: Text(major,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -400,9 +298,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                     ),
                   ),
                   Icon(
-                    _isShowMore
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
+                    _isShowMore ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                     color: Color.fromRGBO(255, 214, 12, 1),
                     size: 28,
                   ),
@@ -540,8 +436,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
               fontSize: 18,
             ),
           ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
           onPressed: () {
             String _selected = '';
             if (_isShowA) {
@@ -557,7 +452,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
               _selected += '认证工厂,';
             }
             print('大类：' +
-                mojar +
+                major +
                 '\n小类：' +
                 category +
                 '\n需求数量：' +
@@ -598,27 +493,23 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       builder: (BuildContext context) {
         return Container(
           child: EnumSelection(
-            enumModels: _majorCategory
-                .map((category) => EnumModel(category.code, category.name))
-                .toList(),
+            enumModels: _majorCategory.map((category) => EnumModel(category.code, category.name)).toList(),
             multiple: false,
-            enumSelect: _mojarEnumSelected,
+            enumSelect: _majorEnumSelected,
           ),
         );
       },
     ).then((val) {
-      mojar = '';
-      _mojarSelected = _mojarEnumSelected
-          .map((enumModel) =>
-              CategoryModel(code: enumModel.code, name: enumModel.name))
-          .toList();
-      if (_mojarSelected.isNotEmpty) {
-        for (int i = 0; i < _mojarSelected.length; i++) {
-          mojar += _mojarSelected[i].name + ',';
+      major = '';
+      _majorSelected =
+          _majorEnumSelected.map((enumModel) => CategoryModel(code: enumModel.code, name: enumModel.name)).toList();
+      if (_majorSelected.isNotEmpty) {
+        for (int i = 0; i < _majorSelected.length; i++) {
+          major += _majorSelected[i].name + ',';
         }
       }
       setState(() {
-        mojar = mojar;
+        major = major;
       });
     });
   }
@@ -630,7 +521,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       builder: (BuildContext context) {
         return Container(
           child: CategorySelect(
-            categorys: _categorys,
+            categories: _categories,
             multiple: false,
             verticalDividerOpacity: 1,
             categorySelect: _categorySelected,

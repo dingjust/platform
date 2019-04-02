@@ -59,17 +59,36 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                               suffix: GestureDetector(
                             onTap: () async{
                               String unique = _textEditingController.text;
-                              //请求参数
-                              Map data = {
-                                'salesApplications': unique,
-                              };
-                              Response<Map<String, dynamic>> response;
+                              if(unique != null && unique != ''){
+                                //请求参数
+                                Map data = {
+                                  'salesApplications': unique,
+                                };
+                                Response<Map<String, dynamic>> response;
 
-                              PurchaseOrderModel _purchaseOrder = await PurchaseOrderRepository().getDetailsForUniqueCode(unique);
+                                PurchaseOrderModel _purchaseOrder = await PurchaseOrderRepository().getDetailsForUniqueCode(unique);
 
-                              setState(() {
-                                uniqueCodeEntry = _purchaseOrder;
-                              });
+                                if (_purchaseOrder != null) {
+                                  setState(() {
+                                    uniqueCodeEntry = _purchaseOrder;
+                                  });
+                                }
+                              }else{
+                                showDialog<void>(
+                                  context: context,
+                                  barrierDismissible: true, // user must tap button!
+                                  builder: (context) {
+                                    return SimpleDialog(
+                                      title: const Text('提示',style: TextStyle(fontSize: 16),),
+                                      children: <Widget>[
+                                        SimpleDialogOption(
+                                          child: Text('请输入唯一码'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
                             },
                             child: Text(
                               '检索',

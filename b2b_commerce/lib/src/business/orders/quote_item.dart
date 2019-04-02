@@ -32,9 +32,9 @@ class QuoteItem extends StatefulWidget {
 
 class _QuoteItemState extends State<QuoteItem> {
   static Map<QuoteState, MaterialColor> _statusColors = {
-    QuoteState.SELLER_SUBMITTED: Colors.green,
-    QuoteState.BUYER_APPROVED: Colors.blue,
-    QuoteState.BUYER_REJECTED: Colors.red
+    QuoteState.SELLER_SUBMITTED: Colors.red,
+    QuoteState.BUYER_APPROVED: Colors.green,
+    QuoteState.BUYER_REJECTED: Colors.grey
   };
 
   TextEditingController rejectController = TextEditingController();
@@ -311,9 +311,9 @@ class QuoteManageItem extends StatefulWidget {
 
 class _QuoteManageItemState extends State<QuoteManageItem> {
   static Map<QuoteState, MaterialColor> _statusColors = {
-    QuoteState.SELLER_SUBMITTED: Colors.green,
-    QuoteState.BUYER_APPROVED: Colors.blue,
-    QuoteState.BUYER_REJECTED: Colors.red
+    QuoteState.SELLER_SUBMITTED: Colors.red,
+    QuoteState.BUYER_APPROVED: Colors.green,
+    QuoteState.BUYER_REJECTED: Colors.grey
   };
 
   TextEditingController rejectController = TextEditingController();
@@ -473,7 +473,7 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.requirementOrder.details.majorCategoryName()}   ${widget.model.requirementOrder.details.category?.name}   ${widget.model.totalQuantity ?? 0}件",
+                      "${widget.model.requirementOrder.details?.majorCategoryName()}   ${widget.model.requirementOrder.details?.category?.name}   ${widget.model.totalQuantity ?? 0}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

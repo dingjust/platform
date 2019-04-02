@@ -372,7 +372,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image: pageItem.requirementOrder.details.pictures != null &&
+                image: pageItem.requirementOrder.details?.pictures != null &&
                         pageItem.requirementOrder.details.pictures.isNotEmpty
                     ? NetworkImage(
                         '${GlobalConfigs.IMAGE_BASIC_URL}${pageItem.requirementOrder.details.pictures[0].url}')
@@ -391,7 +391,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                pageItem.requirementOrder.details.productName != null
+                pageItem.requirementOrder.details?.productName != null
                     ? Text(
                         pageItem.requirementOrder.details.productName,
                         style: TextStyle(
@@ -428,7 +428,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    '${pageItem.requirementOrder.details.majorCategoryName()} ${pageItem.requirementOrder.details?.category.name}  ${pageItem.requirementOrder.totalQuantity == null? '0' : pageItem.requirementOrder.totalQuantity}件',
+                    '${pageItem.requirementOrder.details?.majorCategoryName()} ${pageItem.requirementOrder.details?.category?.name}  ${pageItem.requirementOrder?.totalQuantity == null? '0' : pageItem.requirementOrder?.totalQuantity}件',
                     style: TextStyle(
                       color: Color.fromRGBO(255, 133, 148, 1),
                       fontSize: 15,

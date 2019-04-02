@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -110,10 +111,7 @@ class SampleProductList extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<List<SampleProductModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses();
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 200),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
+                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
@@ -134,31 +132,15 @@ class SampleProductList extends StatelessWidget {
                     _scrollController.animateTo(_scrollController.offset - 70,
                         duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
                   }
-                  return snapshot.data
-                      ? Container(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                    child: Center(
-                      child: Text(
-                        "(￢_￢)已经到底了",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  )
-                      : Container();
+                  return ScrolledToEndTips(hasContent: snapshot.data);
                 },
               ),
               StreamBuilder<bool>(
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Center(
-                      child: new Opacity(
-                        opacity: snapshot.data ? 1.0 : 0,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
+                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                    opacity: snapshot.data ? 1.0 : 0,
                   );
                 },
               ),

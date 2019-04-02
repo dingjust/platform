@@ -364,16 +364,43 @@ class _RequirementOrderDetailPageState
               color: Color.fromRGBO(200, 200, 200, 1), size: 60),
         );
       } else {
-        _pictureWidget = Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: DecorationImage(
-                image: NetworkImage(
-                    '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.details.pictures[0].url}'),
-                fit: BoxFit.cover,
-              )),
+        _pictureWidget = GestureDetector(
+          child: Stack(
+              alignment: const Alignment(0.6, 1.1),
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: 15),
+                  padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image:
+                        NetworkImage(
+                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order
+                                .details.pictures[0].url}'),
+                        fit: BoxFit.cover,
+                      )),
+                ),
+                Container(
+                  child: Icon(
+                    Icons.photo_size_select_actual,
+                    color: Colors.black38,
+                    size: 20,
+                  ),
+                )
+              ],
+          ),
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    PicturePickPreviewWidget(
+                      medias: widget.order.details.pictures,
+                      isUpload: false,
+                    ))
+            );
+          },
         );
       }
     }
@@ -559,7 +586,7 @@ class _RequirementOrderDetailPageState
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: widget.order.status == RequirementOrderStatus.COMPLETED ? MainAxisAlignment.center : MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -575,7 +602,7 @@ class _RequirementOrderDetailPageState
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 )),
           ),
-          Container(
+          widget.order.status == RequirementOrderStatus.COMPLETED ? Container(): Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
             width: 180,
             child: FlatButton(
@@ -586,8 +613,8 @@ class _RequirementOrderDetailPageState
                         builder: (context) => FactoryPage(
                               FactoryCondition(
                                   starLevel: 0, adeptAtCategory: []),
-                              route: '全部工厂',
                               requirementCode: widget.order.code,
+                              route: '全部工厂',
                             )),
                   );
                 },
@@ -599,7 +626,7 @@ class _RequirementOrderDetailPageState
                   '邀请工厂报价',
                   style: TextStyle(color: Colors.black, fontSize: 16),
                 )),
-          )
+          ),
         ],
       );
     } else {

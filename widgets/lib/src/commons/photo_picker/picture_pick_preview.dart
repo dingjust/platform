@@ -180,7 +180,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                     image: DecorationImage(
                       image:
                       NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.medias[index].url}'),
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     )),
               ),
           ),

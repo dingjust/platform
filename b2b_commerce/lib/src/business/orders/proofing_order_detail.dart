@@ -1,4 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
@@ -73,17 +75,47 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
         children: <Widget>[
-          widget.model.product?.thumbnail != null
-              ? Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.product.thumbnail.url}'),
-                        fit: BoxFit.cover,
-                      )),
+          widget.model.product.thumbnail != null
+              ? GestureDetector(
+                  child: Stack(
+                    alignment: const Alignment(0.6, 1.1),
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(right: 15),
+                        padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: widget.model.product != null &&
+                                      widget.model.product.thumbnail != null &&
+                                      widget.model.product.thumbnail.url != null
+                                  ? NetworkImage(
+                                      '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.product.thumbnail.url}')
+                                  : AssetImage(
+                                      'temp/picture.png',
+                                      package: "assets",
+                                    ),
+                              fit: BoxFit.cover,
+                            )),
+                      ),
+                      Container(
+                        child: Icon(
+                          Icons.photo_size_select_actual,
+                          color: Colors.black38,
+                          size: 20,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PicturePickPreviewWidget(
+                              medias: widget.model.product.thumbnails,
+                              isUpload: false,
+                            )));
+                  },
                 )
               : Container(
                   width: 80,
@@ -625,20 +657,26 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
         ];
       } else if (widget.model.status == ProofingStatus.PENDING_DELIVERY) {
         buttons = <Widget>[
-          Container(
-            height: 40,
-            width: 250,
-            child: FlatButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                color: Color.fromRGBO(255, 245, 193, 1),
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                child: Text(
-                  '确认发货',
-                  style: TextStyle(
-                      color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
-                )),
+          Container(),
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => LogisticsInputPage(
+                        isProductionOrder: false,
+                        proofingModel: widget.model,
+                      )));
+            },
+            color: Color(0xFFFFD600),
+            child: Text(
+              '确认发货',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
           ),
         ];
       }

@@ -3,9 +3,10 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../_shared/widgets/business/product_search_delegate_page.dart';
+
 import 'apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
-import '../_shared/widgets/product_search_delegate_page.dart';
 
 class OffTheShelfApparelProductsPage extends StatelessWidget {
   @override
@@ -23,8 +24,7 @@ class OffTheShelfApparelProductsPage extends StatelessWidget {
                 B2BIcons.search,
                 size: 20,
               ),
-              onPressed: () => showSearch(
-                  context: context, delegate: ProductSearchDelegatePage()),
+              onPressed: () => showSearch(context: context, delegate: ProductSearchDelegatePage()),
             ),
           ],
         ),
@@ -54,9 +54,7 @@ class OffTheShelfApparelProductsPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ApparelProductFormPage(item: ApparelProductModel())),
+              MaterialPageRoute(builder: (context) => ApparelProductFormPage(item: ApparelProductModel())),
             );
           },
         ),

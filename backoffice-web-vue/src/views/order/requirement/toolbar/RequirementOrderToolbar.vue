@@ -26,9 +26,9 @@
                        multiple class="w-100">
               <el-option
                 v-for="item in requirementOrderStatuses"
-                :key="item.value"
-                :label="item.text"
-                :value="item.value">
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
               </el-option>
             </el-select>
           </el-form-item>
@@ -39,7 +39,7 @@
           <el-form-item label="创建时间从">
             <el-date-picker
               v-model="queryFormData.createdDateFrom"
-              value-format="yyyy-MM-dd"
+              value-format="timestamp"
               type="date"
               placeholder="请选择生产订单创建时间">
             </el-date-picker>
@@ -61,7 +61,7 @@
           <el-form-item label="交货时间从">
             <el-date-picker
               v-model="queryFormData.expectedDeliveryDateFrom"
-              value-format="yyyy-MM-dd"
+              value-format="timestamp"
               type="date"
               placeholder="请选择客户交期">
             </el-date-picker>
@@ -71,7 +71,7 @@
           <el-form-item label="交货时间到">
             <el-date-picker
               v-model="queryFormData.expectedDeliveryDateTo"
-              value-format="yyyy-MM-dd"
+              value-format="timestamp"
               type="date"
               placeholder="请选择客户交期">
             </el-date-picker>
@@ -109,7 +109,7 @@
         this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
-        this.setKeyword(this.queryFormData);
+        this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
       onNew() {

@@ -50,11 +50,10 @@ class _ProductionPageState extends State<ProductionPage> {
                 onPressed: () {},
               ),
               entries: <FilterConditionEntry>[
+                FilterConditionEntry(label: '当前生产', value: 'producting', checked: true),
                 FilterConditionEntry(
-                    label: '当前生产', value: 'producting', checked: true),
-                FilterConditionEntry(
-                    label: '延期预警',
-                    value: 'delayWarning',
+                  label: '延期预警',
+                  value: 'delayWarning',
 //                    onRemind: true,
 //                    remindNum: ''
                 ),
@@ -108,8 +107,7 @@ class _ProductionPageState extends State<ProductionPage> {
             // backgroundColor: Color.fromRGBO(255,214,12, 1),
             foregroundColor: Colors.black,
             elevation: 8.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
             children: [
               SpeedDialChild(
                 child: Center(
@@ -127,8 +125,7 @@ class _ProductionPageState extends State<ProductionPage> {
                     ),
                   );
                 },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               ),
               SpeedDialChild(
                 child: Center(
@@ -146,8 +143,7 @@ class _ProductionPageState extends State<ProductionPage> {
                     ),
                   );
                 },
-                shape: new RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
+                shape: new RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
               ),
             ],
           ),
@@ -159,8 +155,7 @@ class ProductionListView extends StatelessWidget {
   ScrollController _scrollController = new ScrollController();
 
   ///当前选中条件
-  FilterConditionEntry currentCondition = FilterConditionEntry(
-      label: '当前生产', value: 'comprehensive', checked: true);
+  FilterConditionEntry currentCondition = FilterConditionEntry(label: '当前生产', value: 'comprehensive', checked: true);
 
   @override
   Widget build(BuildContext context) {
@@ -184,14 +179,10 @@ class ProductionListView extends StatelessWidget {
             children: <Widget>[
               StreamBuilder<List<PurchaseOrderModel>>(
                   stream: bloc.stream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+                  builder: (BuildContext context, AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                     if (snapshot.data == null) {
                       bloc.getData();
-                      return Padding(
-                        padding: EdgeInsets.symmetric(vertical: 200),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
+                      return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                     }
                     if (snapshot.hasData) {
                       return Column(

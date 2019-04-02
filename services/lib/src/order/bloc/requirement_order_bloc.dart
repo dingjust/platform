@@ -26,14 +26,10 @@ class RequirementOrderBLoC extends BLoCBase {
   }
 
   static final Map<String, PageEntry> _ordersMap = {
-    'ALL': PageEntry(
-        currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
-    'PENDING_QUOTE': PageEntry(
-        currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
-    'COMPLETED': PageEntry(
-        currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
-    'CANCELLED': PageEntry(
-        currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
+    'ALL': PageEntry(currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
+    'PENDING_QUOTE': PageEntry(currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
+    'COMPLETED': PageEntry(currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
+    'CANCELLED': PageEntry(currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
   };
 
   List<RequirementOrderModel> orders(String status) => _ordersMap[status].data;
@@ -61,18 +57,13 @@ class RequirementOrderBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.requirementOrders,
-              data: data,
-              queryParameters: {
-                'page': _ordersMap[status].currentPage,
-                'size': _ordersMap[status].size
-              });
+              data: data, queryParameters: {'page': _ordersMap[status].currentPage, 'size': _ordersMap[status].size});
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          RequirementOrdersResponse ordersResponse =
-              RequirementOrdersResponse.fromJson(response.data);
+          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
           _ordersMap[status].data.clear();
@@ -90,7 +81,7 @@ class RequirementOrderBLoC extends BLoCBase {
       //数据到底
       if (_ordersMap[status].currentPage + 1 == _ordersMap[status].totalPages) {
         //通知显示已经到底部
-        _bottomController.sink.add(true);
+        bottomController.sink.add(true);
       } else {
         Map data = {};
         if (status != 'ALL') {
@@ -101,24 +92,19 @@ class RequirementOrderBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.requirementOrders,
-              data: data,
-              queryParameters: {
-                'page': ++_ordersMap[status].currentPage,
-                'size': _ordersMap[status].size
-              });
+              data: data, queryParameters: {'page': ++_ordersMap[status].currentPage, 'size': _ordersMap[status].size});
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          RequirementOrdersResponse ordersResponse =
-              RequirementOrdersResponse.fromJson(response.data);
+          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
           _ordersMap[status].data.addAll(ordersResponse.content);
         }
       }
-      _loadingController.sink.add(false);
+      loadingController.sink.add(false);
       _controller.sink.add(_ordersMap[status].data);
       lock = false;
     }
@@ -136,40 +122,9 @@ class RequirementOrderBLoC extends BLoCBase {
 
   //页面控制
 
-  var _loadingController = StreamController<bool>.broadcast();
-  var _bottomController = StreamController<bool>.broadcast();
-  var _toTopBtnController = StreamController<bool>.broadcast();
-  var _returnToTopController = StreamController<bool>.broadcast();
-
-  Stream<bool> get loadingStream => _loadingController.stream;
-
-  Stream<bool> get bottomStream => _bottomController.stream;
-
-  Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
-
-  Stream<bool> get returnToTopStream => _returnToTopController.stream;
-
-  loadingStart() async {
-    _loadingController.sink.add(true);
-  }
-
-  loadingEnd() async {
-    _loadingController.sink.add(false);
-  }
-
-  showToTopBtn() async {
-    _toTopBtnController.sink.add(true);
-  }
-
-  hideToTopBtn() async {
-    _toTopBtnController.sink.add(false);
-  }
-
-  returnToTop() async {
-    _returnToTopController.sink.add(true);
-  }
-
   dispose() {
     _controller.close();
+
+    super.dispose();
   }
 }

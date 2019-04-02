@@ -8,6 +8,12 @@ class OrderApis {
   /// 根据条件获取需求订单列表 POST
   static get requirementOrdersAll => '/{baseSiteId}/b2b/orders/requirement/all';
 
+  //全部需求列表 POST
+  static get allOrdersForFactory => '/{baseSiteId}/b2b/orders/requirement/factory/all';
+
+  //推荐需求列表 POST
+  static get allRecommendedOrders => '/{baseSiteId}/b2b/orders/requirement/factory/recommended';
+
   /// 急速发布需求/发布需求 POST
   static get requirementOrderNew => '/{baseSiteId}/b2b/orders/requirement/new';
 

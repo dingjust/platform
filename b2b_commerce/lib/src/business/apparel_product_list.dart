@@ -1,17 +1,24 @@
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class ApparelProductList extends StatelessWidget {
+class ApparelProductList extends StatefulWidget {
   final bool isRequirement;
   String status;
 
   //是否选择项
   bool selectProduct;
 
-  ApparelProductList({this.isRequirement = false, this.selectProduct = false,this.status});
+  ApparelProductList(
+      {this.isRequirement = false, this.selectProduct = false, this.status});
+
+  ApparelProductListState createState() => ApparelProductListState();
+}
+
+class ApparelProductListState extends State<ApparelProductList>{
 
   ScrollController _scrollController = new ScrollController();
 
@@ -23,7 +30,7 @@ class ApparelProductList extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(status);
+        bloc.loadingMoreByStatuses(widget.status);
       }
     });
 
@@ -50,7 +57,7 @@ class ApparelProductList extends StatelessWidget {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.filterByStatuses(status);
+            return await bloc.filterByStatuses(widget.status);
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -62,7 +69,7 @@ class ApparelProductList extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByStatuses(status);
+                    bloc.filterByStatuses(widget.status);
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
                       child: Center(child: CircularProgressIndicator()),
@@ -73,8 +80,8 @@ class ApparelProductList extends StatelessWidget {
                       children: snapshot.data.map((product) {
                         return ApparelProductItem(
                           product,
-                          isRequirement: isRequirement,
-                          status: status,
+                          isRequirement: widget.isRequirement,
+                          status: widget.status,
                         );
                       }).toList(),
                     );
@@ -92,17 +99,7 @@ class ApparelProductList extends StatelessWidget {
                         duration: new Duration(milliseconds: 500),
                         curve: Curves.easeOut);
                   }
-                  return snapshot.data
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                          child: Center(
-                            child: Text(
-                              "(￢_￢)已经到底了",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        )
-                      : Container();
+                  return ScrolledToEndTips(hasContent: snapshot.data);
                 },
               ),
               StreamBuilder<bool>(

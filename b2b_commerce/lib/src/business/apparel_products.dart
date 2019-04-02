@@ -4,10 +4,10 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../_shared/widgets/product_search_delegate_page.dart';
+import '../_shared/widgets/business/product_search_delegate_page.dart';
+
 import 'apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
-
 
 class ApparelProductsPage extends StatelessWidget {
 //  final List<ApparelProductModel> items = <ApparelProductModel>[];
@@ -16,10 +16,10 @@ class ApparelProductsPage extends StatelessWidget {
 
   ApparelProductsPage({this.isRequirement = false, this.item});
 
-  List<EnumModel> _statuses = UserBLoC.instance.currentUser.type == UserType.FACTORY ? <EnumModel>[
+  final List<EnumModel> _statuses = UserBLoC.instance.currentUser.type == UserType.FACTORY ? <EnumModel>[
     EnumModel('approved', '上架商品'),
     EnumModel('unapproved', '下架商品'),
-  ]:[
+  ] : [
     EnumModel('ALL', '全部商品'),
   ];
 
@@ -71,10 +71,12 @@ class ApparelProductsPage extends StatelessWidget {
               ),
               body: TabBarView(
                 children: _statuses
-                    .map((status) => ApparelProductList(
+                    .map((status) => Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child:ApparelProductList(
                   isRequirement: isRequirement,
                   status:status.code,
-                ),)
+                ),))
                     .toList(),
               ),
             ),
