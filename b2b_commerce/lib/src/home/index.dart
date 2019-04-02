@@ -377,8 +377,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO调用查询需求数量接口,触发stream控制
-
+    // TODO 调用查询需求数量接口(UserApis.requirementReports), 触发stream控制
     return Container(
       padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
       child: Row(

@@ -77,7 +77,7 @@ class UserRepositoryImpl implements UserRepository {
     /// 公司订单报表
     Response response;
     try {
-      response = await http$.get(UserApis.phonExist(phone));
+      response = await http$.get(UserApis.phoneExists(phone));
     } on DioError catch (e) {
       print(e);
     }
