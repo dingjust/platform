@@ -462,7 +462,7 @@ class ProofingOrderItem extends StatelessWidget {
       } else if (model.status == ProofingStatus.SHIPPED) {
         buttons = <Widget>[
           // _buildTrackingButton(context),
-          // Container(),
+           Container(),
           _buildConfirmReceivedButton(context),
         ];
       } else {
@@ -511,13 +511,17 @@ class ProofingOrderItem extends StatelessWidget {
           title: Text('确认取消？'),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text('取消',style: TextStyle(
+                  color: Colors.grey
+              )),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text('确定',style: TextStyle(
+                  color: Colors.black
+              )),
               onPressed: () async {
                 String response = await ProofingOrderRepository()
                     .proofingCancelling(model.code);
