@@ -621,16 +621,19 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           //     )),
           Container(),
           FlatButton(
-              onPressed: () {},
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 245, 193, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '确认收货',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 169, 0, 1), fontSize: 16),
-              )),
+            onPressed: () {
+            },
+            color: Color(0xFFFFD600),
+            child: Text(
+              '确认收货',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+          ),
         ];
       } else {
         return Container();
@@ -671,7 +674,6 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               '确认发货',
               style: TextStyle(
                 color: Colors.black,
-                fontWeight: FontWeight.w500,
                 fontSize: 18,
               ),
             ),

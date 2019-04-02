@@ -214,7 +214,7 @@ class OrdersListView extends StatelessWidget {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByCondition(currentCodition);
+        bloc.loadingMoreByCondition(currentCodition,false);
       }
     });
 
@@ -236,7 +236,7 @@ class OrdersListView extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
                   if (snapshot.data == null) {
                     //默认条件查询
-                    bloc.filterByCondition(currentCodition);
+                    bloc.filterByCondition(currentCodition,false);
                     return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {

@@ -228,13 +228,17 @@ class _QuoteItemState extends State<QuoteItem> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text('取消',style: TextStyle(
+                color: Colors.grey
+              ),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text('确定',style: TextStyle(
+                  color: Colors.black
+              )),
               onPressed: () async {
                 int statusCode = await QuoteOrderRepository()
                     .quoteReject(widget.model.code, rejectController.text);
@@ -262,13 +266,17 @@ class _QuoteItemState extends State<QuoteItem> {
           title: Text('是否确认?'),
           actions: <Widget>[
             FlatButton(
-              child: Text('否'),
+              child: Text('否',style: TextStyle(
+                  color: Colors.grey
+              )),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('是'),
+              child: Text('是',style: TextStyle(
+                  color: Colors.black
+              )),
               onPressed: () async {
                 int statusCode = await QuoteOrderRepository()
                     .quoteApprove(widget.model.code);
@@ -608,13 +616,17 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text('取消',style: TextStyle(
+                  color: Colors.grey
+              )),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text('确定',style: TextStyle(
+                  color: Colors.black
+              )),
               onPressed: () async {
                 int statusCode = await QuoteOrderRepository()
                     .quoteReject(widget.model.code, rejectController.text);
@@ -642,13 +654,17 @@ class _QuoteManageItemState extends State<QuoteManageItem> {
           title: Text('是否确认?'),
           actions: <Widget>[
             FlatButton(
-              child: Text('否'),
+              child: Text('否',style: TextStyle(
+                  color: Colors.grey
+              )),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('是'),
+              child: Text('是',style: TextStyle(
+                  color: Colors.black
+              )),
               onPressed: () async {
                 int statusCode = await QuoteOrderRepository()
                     .quoteApprove(widget.model.code);
