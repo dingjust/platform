@@ -61,7 +61,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     if (widget.quoteModel != null) {
       _widgets.add(QuoteListItem(
         model: widget.quoteModel,
-        isSupplier: widget.quoteModel != null,
+        showActions: false,
       ));
     }
     if (widget.purchaseOrder != null) {

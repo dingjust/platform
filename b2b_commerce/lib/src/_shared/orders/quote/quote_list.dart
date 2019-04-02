@@ -81,7 +81,10 @@ class _QuoteListState extends State<QuoteList> {
             FlatButton(
               child: Text('确定', style: TextStyle(color: Colors.black)),
               onPressed: () async {
-                int statusCode = await QuoteOrderRepository().quoteReject(model.code, widget.rejectController.text);
+                int statusCode = await QuoteOrderRepository().quoteReject(
+                  model.code,
+                  widget.rejectController.text,
+                );
                 Navigator.of(context).pop();
                 if (statusCode == 200) {
                   // 触发刷新

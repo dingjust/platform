@@ -35,11 +35,11 @@ class QuoteListItem extends StatelessWidget {
     this.onQuoteAgain,
     this.onProofingCreating,
     this.onProductionOrderCreating,
-    this.isSupplier = false,
+    this.showActions = true,
   }) : super(key: ObjectKey(model));
 
   final QuoteModel model;
-  final bool isSupplier;
+  final bool showActions;
 
   final QuoteRejectingCallback onQuoteRejecting;
   final QuoteConfirmingCallback onQuoteConfirming;
@@ -74,15 +74,8 @@ class QuoteListItem extends StatelessWidget {
             _buildHeader(),
             _buildEntries(),
             Offstage(
-              offstage: isSupplier,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: _buildSummary(context),
-                  )
-                ],
-              ),
+              offstage: !showActions,
+              child: Row(children: <Widget>[Expanded(flex: 1, child: _buildActions(context))]),
             )
           ],
         ),
@@ -207,7 +200,7 @@ class QuoteListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildSummary(BuildContext context) {
+  Widget _buildActions(BuildContext context) {
     List<Widget> buttons;
 
     //品牌端显示
