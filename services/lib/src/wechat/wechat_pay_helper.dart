@@ -3,24 +3,24 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/api/wechat.dart';
 import 'package:services/src/net/http_manager.dart';
-import 'package:services/src/net/http_utils.dart';
 
 class WechatPayHelper {
-  //获取预支付信息
+  ///获取预支付信息
   static Future<WechatPrepayModel> prepay(String orderCode) async {
-    Response orderRequest = await http$.post(HttpUtils.generateUrl(
-      url:
-          'http://192.168.1.129:9001/djstorefront/checkout/multi/wechat/prepay/' +
-              orderCode,
-    ));
-    print('查询订单信息：' + orderRequest.toString());
-    if (orderRequest != null && orderRequest.statusCode == 200) {
-      WechatPrepayModel model = WechatPrepayModel.fromJson(orderRequest.data);
-      //TODO:调用统一下单接口，返回预支付信息
-      return model;
+    Response response;
+    try {
+      response = await http$.get(WechatApis.wechatPrepay(orderCode));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      WechatPrepayModel wechatPrepayModel =
+          WechatPrepayModel.fromJson(response.data);
+      return wechatPrepayModel;
     } else {
-      throw Exception('Failed to fetch posts');
+      return null;
     }
   }
 }

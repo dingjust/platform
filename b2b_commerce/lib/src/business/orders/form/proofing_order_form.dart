@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
-import 'package:b2b_commerce/src/business/products/apparel_product_item.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';

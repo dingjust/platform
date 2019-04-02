@@ -53,7 +53,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         color: Color.fromRGBO(248, 248, 248, 1),
         child: ListView(
           children: <Widget>[
-            ProductCarousel(thumbnails, 300),
+            ProductCarousel(thumbnails, 400),
             _buildHeaderSection(),
             _buildBasicInfoSection(),
             _buildOrderButton(),

@@ -59,6 +59,7 @@ class AdvanceMenu extends StatelessWidget {
     }).toList();
 
     return Container(
+      width: double.infinity,
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(color: Colors.white),
@@ -70,9 +71,7 @@ class AdvanceMenu extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(10.0, 5.0, 0, 5.0),
             child: Text(title,
                 style: TextStyle(
-                  fontSize: 16.0,
-                  color: Color.fromRGBO(0, 0, 0, 1)
-                )),
+                    fontSize: 16.0, color: Color.fromRGBO(0, 0, 0, 1))),
           ),
           Container(
             padding: EdgeInsets.fromLTRB(10, 20, 10, 10),

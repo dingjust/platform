@@ -239,7 +239,6 @@ class AbstractOrderModel extends ItemModel {
 
   static Map<String, dynamic> _consignmentModelToJson(ConsignmentModel model) =>
       ConsignmentModel.toJson(model);
-
 }
 
 /// 订单
@@ -266,7 +265,7 @@ class OrderModel extends AbstractOrderModel {
             deliveryAddress: deliveryAddress,
             remarks: remarks,
             salesApplication: salesApplication,
-      consignmentModel: consignmentModel,
+            consignmentModel: consignmentModel,
             unitPrice: unitPrice);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
@@ -418,7 +417,8 @@ class ConsignmentModel extends ItemModel {
   static Map<String, dynamic> _carrierToJson(CarrierModel model) =>
       CarrierModel.toJson(model);
 
-  static List<Map<String, dynamic>> _entriesToJson(List<ConsignmentEntryModel> models) =>
+  static List<Map<String, dynamic>> _entriesToJson(
+          List<ConsignmentEntryModel> models) =>
       models.map((model) => ConsignmentEntryModel.toJson(model)).toList();
 }
 
@@ -759,19 +759,19 @@ class PurchaseOrderModel extends OrderModel {
       this.depositPaidDate,
       this.uniqueCode,
       this.delayed,
-        this.quoteRef,
-        this.modifiedtime,
+      this.quoteRef,
+      this.modifiedtime,
       SalesApplication salesApplication,
-        ConsignmentModel consignmentModel})
+      ConsignmentModel consignmentModel})
       : super(
-      code: code,
-      totalQuantity: totalQuantity,
-      totalPrice: totalPrice,
-      creationTime: creationTime,
-      deliveryAddress: deliveryAddress,
-      remarks: remarks,
-      salesApplication: salesApplication,
-      consignmentModel: consignmentModel);
+            code: code,
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice,
+            creationTime: creationTime,
+            deliveryAddress: deliveryAddress,
+            remarks: remarks,
+            salesApplication: salesApplication,
+            consignmentModel: consignmentModel);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
       _$PurchaseOrderModelFromJson(json);
@@ -1103,11 +1103,11 @@ class ProofingModel extends OrderModel {
   FactoryModel belongTo;
 
   ///合作商信息
-  @JsonKey(toJson: _supplierToJson)
+  @JsonKey(toJson: _companyToJson)
   CompanyModel supplier;
 
   // ApparelProductModel product;
-
+  @JsonKey(toJson: _quoteToJson)
   QuoteModel order;
 
   @JsonKey(toJson: _entriesToJson)
@@ -1162,11 +1162,14 @@ class ProofingModel extends OrderModel {
   static ProductModel _productFromJson(Map<String, dynamic> json) =>
       ProductModel.fromJson(json);
 
-  static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
-      FactoryModel.toJson(model);
+  static Map<String, dynamic> _factoryToJson(FactoryModel belongTo) =>
+      FactoryModel.toJson(belongTo);
 
-  static Map<String, dynamic> _supplierToJson(CompanyModel model) =>
-      CompanyModel.toJson(model);
+  static Map<String, dynamic> _companyToJson(CompanyModel supplier) =>
+      CompanyModel.toJson(supplier);
+
+  static Map<String, dynamic> _quoteToJson(QuoteModel order) =>
+      QuoteModel.toJson(order);
 }
 
 /// 打样订单行
@@ -1206,9 +1209,8 @@ class ProofingEntryModel extends OrderEntryModel {
       ProofingModel.toJson(order);
 }
 
-
 @JsonSerializable()
-class CarrierModel extends ItemModel{
+class CarrierModel extends ItemModel {
   String code;
   String name;
 

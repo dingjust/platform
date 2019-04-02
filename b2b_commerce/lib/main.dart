@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/business/index.dart';
+import 'package:b2b_commerce/src/common/wechatpay_constants.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +8,13 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'src/home/_shared/models/navigation_menu.dart';
 import 'src/home/_shared/widgets/bottom_navigation.dart';
-import 'src/business/index.dart';
 import 'src/business/orders/requirement_order_from.dart';
 import 'src/common/app_bloc.dart';
 import 'src/common/app_constants.dart';
 import 'src/common/app_keys.dart';
 import 'src/common/app_routes.dart';
+import 'src/home/_shared/models/navigation_menu.dart';
 import 'src/home/account/login.dart';
 import 'src/home/index.dart';
 import 'src/my/index.dart';
@@ -115,11 +116,9 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
-            margin: const EdgeInsets.only(right: 5),
             child: const Icon(B2BIcons.home),
           ),
           activeIcon: Container(
-            margin: const EdgeInsets.only(right: 5),
             child: const Icon(B2BIcons.home_active),
           ),
           title: const Text('商机'),
@@ -129,15 +128,15 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
-            margin: const EdgeInsets.only(right: 35),
+            margin: EdgeInsets.only(right: _isBrand() ? 35 : 0),
             child: const Icon(B2BIcons.production),
           ),
           activeIcon: Container(
-            margin: const EdgeInsets.only(right: 35),
+            margin: EdgeInsets.only(right: _isBrand() ? 35 : 0),
             child: const Icon(B2BIcons.production_active),
           ),
           title: Container(
-            margin: const EdgeInsets.only(right: 30),
+            margin: EdgeInsets.only(right: _isBrand() ? 25 : 0),
             child: const Text('生产'),
           ),
         ),
@@ -146,15 +145,15 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
             icon: Container(
-              margin: const EdgeInsets.only(left: 35),
+              margin: EdgeInsets.only(left: _isBrand() ? 30 : 0),
               child: const Icon(B2BIcons.business),
             ),
             activeIcon: Container(
-              margin: const EdgeInsets.only(left: 35),
+              margin: EdgeInsets.only(left: _isBrand() ? 30 : 0),
               child: const Icon(B2BIcons.business_active),
             ),
             title: Container(
-              margin: const EdgeInsets.only(left: 45),
+              margin: EdgeInsets.only(left: _isBrand() ? 45 : 0),
               child: const Text('工作'),
             )),
         BusinessHomePage(userType: widget.userType),
@@ -162,13 +161,13 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
-            margin: const EdgeInsets.only(right: 5),
+            margin: EdgeInsets.only(right: _isBrand() ? 10 : 0),
             child: const Icon(
               B2BIcons.my,
             ),
           ),
           activeIcon: Container(
-            margin: const EdgeInsets.only(right: 5),
+            margin: EdgeInsets.only(right: _isBrand() ? 10 : 0),
             child: const Icon(
               B2BIcons.my_active,
             ),
@@ -210,7 +209,8 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
                       onPublish: () => _onPublish(context),
                     )
                   : null,
-              floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
             ),
       ),
       routes: AppRoutes.allRoutes,

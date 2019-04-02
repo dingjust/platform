@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_quote_order_from.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -212,7 +214,7 @@ class OrdersListView extends StatelessWidget {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByCondition(currentCodition);
+        bloc.loadingMoreByCondition(currentCodition,false);
       }
     });
 
@@ -234,7 +236,7 @@ class OrdersListView extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
                   if (snapshot.data == null) {
                     //默认条件查询
-                    bloc.filterByCondition(currentCodition);
+                    bloc.filterByCondition(currentCodition,false);
                     return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
@@ -277,9 +279,11 @@ class OrdersListView extends StatelessWidget {
 }
 
 class RequirementPoolOrderItem extends StatelessWidget {
-  const RequirementPoolOrderItem({Key key, this.order}) : super(key: key);
+  const RequirementPoolOrderItem({Key key, this.order, this.pageContext}) : super(key: key);
 
   final RequirementOrderModel order;
+
+  final BuildContext pageContext;
 
   @override
   Widget build(BuildContext context) {
@@ -302,7 +306,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Column(
-          children: <Widget>[_buildEntries()],
+          children: <Widget>[_buildEntries(context)],
         ),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -311,7 +315,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
     );
   }
 
-  Widget _buildEntries() {
+  Widget _buildEntries(BuildContext context) {
     Widget _pictureWidget;
 
     if (order.details.pictures == null) {
@@ -364,7 +368,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[_buildRow1(), _buildRow2(), _buildRow3()],
+                children: <Widget>[_buildRow1(), _buildRow2(context), _buildRow3()],
               ),
             ),
           )
@@ -406,7 +410,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
     );
   }
 
-  Widget _buildRow2() {
+  Widget _buildRow2(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -415,7 +419,19 @@ class RequirementPoolOrderItem extends StatelessWidget {
           style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () async {
+            QuoteModel newQuote =
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => RequirementQuoteOrderFrom(
+                          model: order,
+                          quoteModel: QuoteModel(attachments: []),
+                        )));
+
+            if (newQuote != null) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => QuoteOrderDetailPage(item: newQuote)));
+            }
+          },
           child: Container(
             height: 25,
             width: 65,

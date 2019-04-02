@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -33,7 +34,8 @@ class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
   Widget _buildSearchButton(BuildContext context) {
     return IconButton(
       icon: Icon(B2BIcons.search, size: 20),
-      onPressed: () => showSearch(context: context, delegate: ProofingSearchDelegate()),
+      onPressed: () =>
+          showSearch(context: context, delegate: ProofingSearchDelegate()),
     );
   }
 
@@ -82,7 +84,8 @@ class ProofingOrdersList extends StatelessWidget {
     }
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(status.code);
       }
@@ -101,7 +104,8 @@ class ProofingOrdersList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       // 返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -118,10 +122,12 @@ class ProofingOrdersList extends StatelessWidget {
           children: <Widget>[
             StreamBuilder<List<ProofingModel>>(
               stream: bloc.stream,
-              builder: (BuildContext context, AsyncSnapshot<List<ProofingModel>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<ProofingModel>> snapshot) {
                 if (snapshot.data == null) {
                   bloc.filterByStatuses(status.code);
-                  return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                  return ProgressIndicatorFactory
+                      .buildPaddedProgressIndicator();
                 }
                 if (snapshot.hasData) {
                   return Column(
@@ -156,7 +162,8 @@ class ProofingOrdersList extends StatelessWidget {
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
                   opacity: snapshot.data ? 1.0 : 0,
                 );
               },
@@ -197,10 +204,13 @@ class ProofingOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         // 查询明细
-        ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(model.code);
+        ProofingModel detailModel =
+            await ProofingOrderRepository().proofingDetail(model.code);
 
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ProofingOrderDetailPage(model: detailModel)),
+          MaterialPageRoute(
+              builder: (context) =>
+                  ProofingOrderDetailPage(model: detailModel)),
         );
       },
       child: Container(
@@ -233,18 +243,21 @@ class ProofingOrderItem extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   text: '￥',
-                  style: const TextStyle(fontSize: 16, color: Color.fromRGBO(255, 45, 45, 1)),
+                  style: const TextStyle(
+                      fontSize: 16, color: Color.fromRGBO(255, 45, 45, 1)),
                   children: <TextSpan>[
                     TextSpan(
                       text: '${model.totalPrice}',
-                      style: const TextStyle(fontSize: 20, color: Color.fromRGBO(255, 45, 45, 1)),
+                      style: const TextStyle(
+                          fontSize: 20, color: Color.fromRGBO(255, 45, 45, 1)),
                     ),
                   ],
                 ),
               ),
               Text(
                 ProofingStatusLocalizedMap[model.status],
-                style: TextStyle(color: _statusColors[model.status], fontSize: 18),
+                style:
+                    TextStyle(color: _statusColors[model.status], fontSize: 18),
               ),
             ],
           ),
@@ -262,7 +275,8 @@ class ProofingOrderItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Text('${DateFormatUtil.format(model.creationTime)}', style: const TextStyle(fontSize: 15)),
+                Text('${DateFormatUtil.format(model.creationTime)}',
+                    style: const TextStyle(fontSize: 15)),
               ],
             ),
           ),
@@ -279,7 +293,9 @@ class ProofingOrderItem extends StatelessWidget {
     });
 
     Widget _buildProductName(String name) {
-      return Text(name, style: const TextStyle(fontSize: 15), overflow: TextOverflow.ellipsis);
+      return Text(name,
+          style: const TextStyle(fontSize: 15),
+          overflow: TextOverflow.ellipsis);
     }
 
     Widget _buildProductSkuID(String skuID) {
@@ -293,7 +309,8 @@ class ProofingOrderItem extends StatelessWidget {
           color: Colors.grey[200],
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Text('货号：$skuID', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        child: Text('货号：$skuID',
+            style: const TextStyle(fontSize: 12, color: Colors.grey)),
       );
     }
 
@@ -306,7 +323,8 @@ class ProofingOrderItem extends StatelessWidget {
         ),
         child: Text(
           "$category   $sum 件",
-          style: const TextStyle(fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
+          style: const TextStyle(
+              fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
         ),
       );
     }
@@ -344,17 +362,25 @@ class ProofingOrderItem extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: const Color.fromRGBO(255, 70, 70, 1),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-        child: const Text('取消订单', style: const TextStyle(color: Colors.white, fontSize: 16)),
+        child: const Text('取消订单',
+            style: const TextStyle(color: Colors.white, fontSize: 16)),
       );
     }
 
     Widget _buildPayButton(BuildContext context) {
       return FlatButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => OrderPaymentPage(
+                    order: model,
+                  )));
+        },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: const Color.fromRGBO(255, 214, 12, 1),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-        child: Text('  去支付  ', style: const TextStyle(color: const Color.fromRGBO(36, 38, 41, 1), fontSize: 16)),
+        child: Text('  去支付  ',
+            style: const TextStyle(
+                color: const Color.fromRGBO(36, 38, 41, 1), fontSize: 16)),
       );
     }
 
@@ -394,7 +420,8 @@ class ProofingOrderItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         child: Text(
           '修改订单',
-          style: const TextStyle(color: const Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+          style: const TextStyle(
+              color: const Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
         ),
       );
     }
@@ -404,16 +431,19 @@ class ProofingOrderItem extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => LogisticsInputPage(isProductionOrder: false, proofingModel: model),
+              builder: (context) => LogisticsInputPage(
+                  isProductionOrder: false, proofingModel: model),
             ),
           );
         },
         color: const Color(0xFFFFD600),
         child: Text(
           '确认发货',
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 18),
+          style: const TextStyle(
+              color: Colors.black, fontWeight: FontWeight.w500, fontSize: 18),
         ),
-        shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(20))),
       );
     }
 
@@ -432,7 +462,7 @@ class ProofingOrderItem extends StatelessWidget {
       } else if (model.status == ProofingStatus.SHIPPED) {
         buttons = <Widget>[
           // _buildTrackingButton(context),
-          // Container(),
+           Container(),
           _buildConfirmReceivedButton(context),
         ];
       } else {
@@ -463,7 +493,9 @@ class ProofingOrderItem extends StatelessWidget {
           flex: 1,
           child: Container(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: buttons),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: buttons),
           ),
         )
       ],
@@ -479,15 +511,20 @@ class ProofingOrderItem extends StatelessWidget {
           title: Text('确认取消？'),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消'),
+              child: Text('取消',style: TextStyle(
+                  color: Colors.grey
+              )),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定'),
+              child: Text('确定',style: TextStyle(
+                  color: Colors.black
+              )),
               onPressed: () async {
-                String response = await ProofingOrderRepository().proofingCancelling(model.code);
+                String response = await ProofingOrderRepository()
+                    .proofingCancelling(model.code);
                 if (response != null) {
                   onRefresh();
                   Navigator.of(context).pop();
@@ -513,13 +550,16 @@ class ProofingOrderItem extends StatelessWidget {
 
   void onUpdate() async {
     //查询明细
-    ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(model.code);
+    ProofingModel detailModel =
+        await ProofingOrderRepository().proofingDetail(model.code);
 
-    QuoteModel quoteModel = await QuoteOrderRepository().getquoteDetail(detailModel.quoteRef);
+    QuoteModel quoteModel =
+        await QuoteOrderRepository().getquoteDetail(detailModel.quoteRef);
 
     Navigator.of(pageContext).push(
       MaterialPageRoute(
-        builder: (context) => ProofingOrderForm(quoteModel: quoteModel, model: detailModel, update: true),
+        builder: (context) => ProofingOrderForm(
+            quoteModel: quoteModel, model: detailModel, update: true),
       ),
     );
   }
