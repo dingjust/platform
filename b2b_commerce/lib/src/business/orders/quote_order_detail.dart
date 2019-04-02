@@ -132,7 +132,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     /// 工厂端显示
     if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       return  Container(
-          margin: EdgeInsets.only(bottom: 10),
           color: Colors.white,
           child: Column(
             children: <Widget>[
@@ -481,17 +480,22 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
 //              padding: EdgeInsets.only(left: 20),
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          child: Text('面料单价'),
+                          child: Container(
+                            padding: EdgeInsets.only(left: 15),
+                            child: Text('面料单价'),
+                          ),
                         ),
-                        Text(
-                          '￥ ${pageItem.unitPriceOfFabric}',
-                          style: TextStyle(
-                            color: Colors.red,
+                        Container(
+                          child: Text(
+                            '￥ ${pageItem.unitPriceOfFabric}',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ],
@@ -500,12 +504,15 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   Divider(
                     color: Colors.grey,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          child: Text('辅料单价'),
+                          child: Container(
+                            padding: EdgeInsets.only(left: 15),
+                            child: Text('辅料单价'),
+                          ),
                         ),
                         Text(
                           '￥ ${pageItem.unitPriceOfExcipients}',
@@ -519,12 +526,15 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   Divider(
                     color: Colors.grey,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          child: Text('加工单价'),
+                          child: Container(
+                              padding: EdgeInsets.only(left: 15),
+                              child: Text('加工单价'),
+                          ),
                         ),
                         Text(
                           '￥ ${pageItem.unitPriceOfProcessing}',
@@ -538,12 +548,15 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   Divider(
                     color: Colors.grey,
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          child: Text('其他'),
+                          child: Container(
+                              padding: EdgeInsets.only(left: 15),
+                              child: Text('其他'),
+                          ),
                         ),
                         Text(
                           '￥ ${pageItem.costOfOther}',
@@ -560,12 +573,15 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text('打样费'),
+                    child: Container(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Text('打样费'),
+                    ),
                   ),
                   Text(
                     '￥' + pageItem.costOfSamples.toString(),

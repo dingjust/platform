@@ -44,17 +44,23 @@ class RequirementPoolBLoC extends BLoCBase {
   Stream<FilterConditionEntry> get conditionStream =>
       conditionController.stream;
 
-  filterByCondition(RequirementFilterCondition conditions) async {
+  filterByCondition(RequirementFilterCondition conditions,bool isRecommend) async {
     if (!lock) {
       lock = true;
       //重置参数
       reset();
-      Map data = generateConditionsMap(conditions);
+      Map data = generateConditionsMap(conditions,isRecommend);
       Response<Map<String, dynamic>> response;
       try {
-        response = await http$.post(OrderApis.allOrdersForFactory,
-            data: data,
-            queryParameters: {'page': currentPage, 'size': pageSize});
+        if(isRecommend){
+          response = await http$.post(OrderApis.allRecommendedOrders,
+              data: data,
+              queryParameters: {'page': currentPage, 'size': pageSize});
+        }else{
+          response = await http$.post(OrderApis.allOrdersForFactory,
+              data: data,
+              queryParameters: {'page': currentPage, 'size': pageSize});
+        }
       } on DioError catch (e) {
         print(e);
       }
@@ -72,7 +78,7 @@ class RequirementPoolBLoC extends BLoCBase {
     }
   }
 
-  loadingMoreByCondition(RequirementFilterCondition conditions) async {
+  loadingMoreByCondition(RequirementFilterCondition conditions,bool isRecommend) async {
     if (!lock) {
       lock = true;
 
@@ -81,13 +87,19 @@ class RequirementPoolBLoC extends BLoCBase {
         //通知显示已经到底部
         _bottomController.sink.add(true);
       } else {
-        Map data = generateConditionsMap(conditions);
+        Map data = generateConditionsMap(conditions,isRecommend);
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
-          response = await http$.post(OrderApis.requirementOrdersAll,
-              data: data,
-              queryParameters: {'page': currentPage, 'size': pageSize});
+          if(isRecommend){
+            response = await http$.post(OrderApis.allRecommendedOrders,
+                data: data,
+                queryParameters: {'page': currentPage, 'size': pageSize});
+          }else{
+            response = await http$.post(OrderApis.allOrdersForFactory,
+                data: data,
+                queryParameters: {'page': currentPage, 'size': pageSize});
+          }
         } on DioError catch (e) {
           print(e);
         }
@@ -159,8 +171,13 @@ class RequirementPoolBLoC extends BLoCBase {
   }
 
   /// 生成查询条件信息
-  Map generateConditionsMap(RequirementFilterCondition conditions) {
-    Map data = {"private": 0};
+  Map generateConditionsMap(RequirementFilterCondition conditions,bool isRecommend) {
+    Map data = new Map();
+    if(isRecommend){
+      data = {"private": 1};
+    }else{
+      data = {"private": 0};
+    }
     // 计算时间范围
     DateTime expectedDeliveryDateTo = DateTime.now();
     DateTime expectedDeliveryDateFrom;
