@@ -385,7 +385,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
         children: <Widget>[
           StreamBuilder<int>(
             stream: _allRequirementStreamController.stream,
-            initialData: 0,
+            initialData: 10,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return GestureDetector(
                 onTap: () async {
@@ -406,7 +406,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
           DividerFactory.buildVerticalSeparator(35),
           StreamBuilder<int>(
             stream: _recommendRequirementStreamController.stream,
-            initialData: 0,
+            initialData: 20,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return GestureDetector(
                 onTap: () async{
