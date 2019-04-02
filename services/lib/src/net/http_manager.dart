@@ -40,19 +40,16 @@ class HttpManager {
 
     _instance = Dio(options);
 
-    (_instance.httpClientAdapter as DefaultHttpClientAdapter)
-        .onHttpClientCreate = (client) {
+    (_instance.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
       // you can also create a new HttpClient to dio
       // return new HttpClient();
       // 忽略证书
       HttpClient httpClient = new HttpClient()
-        ..badCertificateCallback =
-            ((X509Certificate cert, String host, int port) => true);
+        ..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
       return httpClient;
     };
 
-    _instance.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
+    _instance.interceptors.add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
       // 在请求被发送之前做一些事情
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
@@ -100,8 +97,12 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.get(path,
-        queryParameters: data, options: options, cancelToken: cancelToken);
+    return instance.get(
+      path,
+      queryParameters: data,
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 
   Future<Response<T>> post<T>(
@@ -116,13 +117,15 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.post(path,
-        data: data,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-        queryParameters: queryParameters);
+    return instance.post(
+      path,
+      data: data,
+      options: options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+      queryParameters: queryParameters,
+    );
   }
 
   Future<Response<T>> put<T>(
@@ -134,8 +137,12 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.put(path,
-        data: data, options: options, cancelToken: cancelToken);
+    return instance.put(
+      path,
+      data: data,
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 
   Future<Response<T>> delete<T>(
@@ -147,8 +154,12 @@ class HttpManager {
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.delete(path,
-        data: data, options: options, cancelToken: cancelToken);
+    return instance.delete(
+      path,
+      data: data,
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 
   static _setContext(BuildContext context) {
