@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/index.dart';
-import 'package:b2b_commerce/src/common/wechatpay_constants.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -128,15 +127,15 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 35 : 0),
+            margin: EdgeInsets.only(right: _isBrand() ? 35 : 10),
             child: const Icon(B2BIcons.production),
           ),
           activeIcon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 35 : 0),
+            margin: EdgeInsets.only(right: _isBrand() ? 35 : 10),
             child: const Icon(B2BIcons.production_active),
           ),
           title: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 25 : 0),
+            margin: EdgeInsets.only(right: _isBrand() ? 30 : 0),
             child: const Text('生产'),
           ),
         ),
@@ -145,15 +144,13 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
             icon: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 30 : 0),
               child: const Icon(B2BIcons.business),
             ),
             activeIcon: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 30 : 0),
               child: const Icon(B2BIcons.business_active),
             ),
             title: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 45 : 0),
+              margin: EdgeInsets.only(left: 10),
               child: const Text('工作'),
             )),
         BusinessHomePage(userType: widget.userType),
@@ -161,13 +158,13 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 10 : 0),
+            margin: EdgeInsets.only(right: 10),
             child: const Icon(
               B2BIcons.my,
             ),
           ),
           activeIcon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 10 : 0),
+            margin: EdgeInsets.only(right: 10),
             child: const Icon(
               B2BIcons.my_active,
             ),

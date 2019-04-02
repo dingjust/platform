@@ -16,7 +16,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="加工类型" prop="machiningType">
+          <el-form-item label="合作方式" prop="machiningType">
             <el-radio-group v-model="slotData.machiningType">
               <el-radio v-for="item in machiningTypes"
                         :label="item.code"

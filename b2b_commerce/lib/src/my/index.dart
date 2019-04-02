@@ -4,13 +4,13 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../_shared/widgets/image_factory.dart';
-import '../common/app_routes.dart';
-import '../common/app_image.dart';
-import '../common/app_keys.dart';
 import './my_brand.dart';
 import './my_company_certificate_select.dart';
 import './my_factory.dart';
+import '../_shared/widgets/image_factory.dart';
+import '../common/app_image.dart';
+import '../common/app_keys.dart';
+import '../common/app_routes.dart';
 
 var menuSeparator = Container(
   padding: const EdgeInsets.fromLTRB(70, 0, 20, 0),

@@ -6,6 +6,15 @@
              :disabled="readOnly">
       <el-row :gutter="10">
         <el-col :span="6">
+          <el-form-item label="生产单价" prop="unitPrice">
+            <el-input-number class="w-100"
+                             v-model="slotData.unitPrice"
+                             :precision="2"
+                             :min="1">
+            </el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
           <el-form-item label="面料单价" prop="unitPriceOfFabric">
             <el-input-number class="w-100"
                              v-model="slotData.unitPriceOfFabric"
@@ -32,6 +41,9 @@
             </el-input-number>
           </el-form-item>
         </el-col>
+
+      </el-row>
+      <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item label="其他" prop="costOfOther">
             <el-input-number class="w-100"
@@ -41,8 +53,6 @@
             </el-input-number>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item label="打样费" prop="costOfSamples">
             <el-input-number class="w-100"
@@ -62,7 +72,7 @@
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="6">
           <el-form-item label="备注" prop="remarks">
             <el-input class="w-100" v-model="slotData.remarks"></el-input>
           </el-form-item>

@@ -88,11 +88,6 @@
       onSubmit() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
-            const expectedDeliveryDate = this.slotData.details.expectedDeliveryDate;
-            if (this.compareDate(new Date(), new Date(expectedDeliveryDate))) {
-              this.$message.error('预计完成时间不能小于当前时间');
-              return false;
-            }
 
             this._onSubmit();
             return true;
@@ -113,8 +108,10 @@
 
         const url = this.apis().createRequirementOrder();
         const result = await this.$http.post(url, formData);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        console.log(result);
+        console.log("lhj");
+        if (result.data) {
+          this.$message.error(result.data['errors'][0].message);
           return;
         }
 

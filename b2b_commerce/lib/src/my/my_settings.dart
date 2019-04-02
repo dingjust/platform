@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../business/orders/requirement_order_filter.dart';
-
 import './settings/about.dart';
 import './settings/account_security.dart';
+import '../business/orders/requirement_order_filter.dart';
 
 class MySettingsPage extends StatefulWidget {
   @override

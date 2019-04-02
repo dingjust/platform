@@ -104,7 +104,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="联系电话" prop="contactPhone">
-            <el-input v-model="slotData.contactPhone"></el-input>
+            <el-input v-model.number="slotData.contactPhone"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -238,6 +238,26 @@
       }
     },
     data() {
+      let checkCategory = (rule, value, callback) => {
+        console.log(value);
+        if (value==null||value.code === ''||value === {}) {
+          callback(new Error('请选择品类'));
+        }
+        callback();
+      };
+      let expectedDeliveryDate = (rule, value, callback) => {
+          if (this.compareDate(new Date(), new Date(value))) {
+            callback(new Error('预计交货时间不能小于当前时间'));
+          }
+        callback();
+      };
+      let contactPhone = (rule, value, callback) => {
+        console.log(Number.isInteger(value));
+        if (!Number.isInteger(value)) {
+          callback(new Error('请输入数字值'));
+        }
+        callback();
+      };
       return {
         categories: [],
         majorCategories: [],
@@ -246,10 +266,10 @@
         dialogImageUrl: '',
         dialogVisible: false,
         rules: {
-          category: [{required: true, message: '必填', trigger: 'blur'}],
+          category: [{validator: checkCategory, trigger: 'change'},{required: true, message: '必填', trigger: 'change'}],
           expectedMachiningQuantity: [{required: true, message: '必填', trigger: 'blur'}],
-          expectedDeliveryDate: [{required: true, message: '必填', trigger: 'blur'}],
-          contactPhone: [{required: true, message: '必填', trigger: 'blur'}],
+          expectedDeliveryDate: [{required: true, message: '必填', trigger: 'blur'},{validator: expectedDeliveryDate, trigger: 'blur'}],
+          contactPhone: [{required: true, message: '必填', trigger: 'blur'},{validator: contactPhone, trigger: 'blur'}],
           contactPerson: [{required: true, message: '必填', trigger: 'blur'}],
         },
       }

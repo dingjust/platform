@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:b2b_commerce/src/business/quote_orders.dart';
 import 'package:dio/dio.dart';
