@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluwx/fluwx.dart';
@@ -37,6 +38,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         Navigator.of(context).pop();
       }
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) => checkDeliveryAddress());
+
     super.initState();
   }
 
@@ -442,5 +445,31 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         );
       },
     );
+  }
+
+  void checkDeliveryAddress() {
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
+        widget.order.deliveryAddress == null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyAddressesPage(
+                  isJumpSourec: true,
+                  title: '选择地址',
+                )),
+        //接收返回数据并处理
+      ).then((value) async {
+        if (value != null) {
+          setState(() {
+            widget.order.deliveryAddress = value;
+          });
+          //更新打样单地址
+          bool result = await ProofingOrderRepository()
+              .updateAddress(widget.order.code, widget.order);
+          //TODO 采购单地址统一
+
+        }
+      });
+    }
   }
 }
