@@ -11,7 +11,7 @@ class TabFactory {
       tabs: tabs.map((tab) {
         return Tab(text: tab.name);
       }).toList(),
-      labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+      labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
       isScrollable: scrollable,
     );
   }

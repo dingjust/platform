@@ -28,7 +28,7 @@ typedef void ProductionOrderCreatingCallback();
 class QuoteListItem extends StatelessWidget {
   QuoteListItem({
     Key key,
-    this.model,
+    @required this.model,
     this.onQuoteRejecting,
     this.onQuoteConfirming,
     this.onQuoteUpdating,
