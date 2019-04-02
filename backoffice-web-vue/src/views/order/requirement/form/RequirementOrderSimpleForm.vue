@@ -4,15 +4,17 @@
       <div slot="header" class="clearfix">
         <span>需求信息</span>
       </div>
-      <el-form ref="requestForm"
-               label-position="top"
-               :model="slotData">
+        <el-form ref="simpleRequestForm"
+                 label-position="top"
+                 :model="slotData.details"
+                 :rules="rulesSimple">
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="产品类别" prop="category">
               <el-select class="w-100"
                          placeholder="请选择"
-                         v-model="slotData.details.category.code">
+                         v-model="slotData.details.category"
+                         value-key="code">
                 <el-option-group
                   v-for="group in categories"
                   :key="group.code"
@@ -21,7 +23,7 @@
                     v-for="item in group.children"
                     :key="item.code"
                     :label="item.name"
-                    :value="item.code">
+                    :value="item">
                   </el-option>
                 </el-option-group>
               </el-select>
@@ -30,7 +32,8 @@
           <el-col :span="6">
             <el-form-item label="加工数量" prop="expectedMachiningQuantity">
               <el-input-number class="w-100"
-                               v-model="slotData.details.expectedMachiningQuantity">
+                               v-model="slotData.details.expectedMachiningQuantity"
+                               :min="1">
               </el-input-number>
             </el-form-item>
           </el-col>
@@ -45,6 +48,18 @@
             </el-form-item>
           </el-col>
         </el-row>
+          <el-row :gutter="10">
+            <el-col :span="6">
+              <el-form-item label="联系人" prop="contactPerson">
+                <el-input v-model="slotData.details.contactPerson"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="联系电话" prop="contactPhone">
+                <el-input v-model.number="slotData.details.contactPhone"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
       </el-form>
     </el-card>
     <div class="pt-2"></div>
@@ -70,6 +85,9 @@
     // mixins: [OrderMixin],
     props: ['slotData'],
     methods: {
+      validate(callback) {
+        return this.$refs['simpleRequestForm'].validate(callback);
+      },
       ...mapActions({
         refresh: 'refresh'
       }),
@@ -84,14 +102,14 @@
         this.categories = result;
       },
       onSubmit() {
-        this.$refs['requestForm'].validate((valid) => {
-            if (!valid) {
-              return false;
+        this.$refs['simpleRequestForm'].validate((valid) => {
+            if (valid) {
+
+              this._onSubmit();
+              return true;
             }
 
-            this._onSubmit();
-
-            return true;
+            return false;
           }
         );
       },
@@ -116,8 +134,36 @@
     },
     computed: {},
     data() {
+      let checkCategory = (rule, value, callback) => {
+        console.log(value);
+        if (value==null||value.code === ''||value === {}) {
+          callback(new Error('请选择品类'));
+        }
+        callback();
+      };
+      let expectedDeliveryDate = (rule, value, callback) => {
+        console.log(value);
+        console.log("expectedDeliveryDate");
+          if (this.compareDate(new Date(), new Date(value))) {
+            callback(new Error('预计交货时间不能小于当前时间'));
+        }
+        callback();
+      };
+      let contactPhone = (rule, value, callback) => {
+        if (!Number.isInteger(value)) {
+          callback(new Error('请输入数字值'));
+        }
+        callback();
+      };
       return {
         categories: [],
+        rulesSimple: {
+          category: [{required: true, message: '必填', trigger: 'blur'},{validator: checkCategory, trigger: 'change'}],
+          expectedMachiningQuantity: [{required: true, message: '必填', trigger: 'blur'}],
+          expectedDeliveryDate: [{required: true, message: '必填', trigger: 'blur'},{validator: expectedDeliveryDate, trigger: 'blur'}],
+          contactPhone: [{required: true, message: '必填', trigger: 'blur'},{validator: contactPhone, trigger: 'blur'}],
+          contactPerson: [{required: true, message: '必填', trigger: 'blur'}],
+        },
       }
     },
     created() {

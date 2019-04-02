@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 /// Image工厂类， 用于存放最通用的组件生成样式
 class ImageFactory {

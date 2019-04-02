@@ -166,6 +166,11 @@ class OrderApis {
         return '/{baseSiteId}/b2b/orders/proofing/$code/delivering';
       };
 
+  //确认收货
+  static get shipped => (code) {
+    return '/{baseSiteId}/b2b/orders/proofing/$code/shipped';
+  };
+
   /// 更新需求信息
   static get requirementUpdate => (code) {
         return '/{baseSiteId}/b2b/orders/requirement/$code';

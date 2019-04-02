@@ -107,4 +107,21 @@ class ProofingOrderRepository {
       return false;
     }
   }
+
+  //确认收货
+  Future<bool> shipped(String code) async {
+    Response response;
+    try {
+      response = await http$.put(
+        OrderApis.shipped(code),
+      );
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

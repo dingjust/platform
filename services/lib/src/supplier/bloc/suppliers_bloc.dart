@@ -30,7 +30,9 @@ class SuppliersBloc extends BLoCBase {
   }
 
   filterbrands() async {
-    brandsResponse = await UserRepositoryImpl().brandSuppliers({});
+    brandsResponse = await UserRepositoryImpl().brandSuppliers({
+      'keyword':''
+    });
     _brands.clear();
     _brands.addAll(brandsResponse.content);
     _brandController.sink.add(_brands);

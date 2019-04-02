@@ -3,13 +3,14 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import './address/address_form.dart';
 import '../_shared/widgets/scrolled_to_end_tips.dart';
 
-import './address/address_form.dart';
-
 class MyAddressesPage extends StatelessWidget {
-  MyAddressesPage({Key key, this.isJumpSource = false}) : super(key: key);
+  MyAddressesPage({Key key, this.isJumpSource = false, this.title = '地址管理'})
+      : super(key: key);
 
+  final String title;
   final bool isJumpSource;
   final AddressModel model = AddressModel();
   final ScrollController _scrollController = new ScrollController();
@@ -19,7 +20,8 @@ class MyAddressesPage extends StatelessWidget {
     var bloc = AddressBLoC.instance;
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses();
       }
@@ -38,7 +40,8 @@ class MyAddressesPage extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -48,7 +51,7 @@ class MyAddressesPage extends StatelessWidget {
         appBar: AppBar(
           elevation: 0.5,
           centerTitle: true,
-          title: Text('地址管理'),
+          title: Text('${title}'),
         ),
         body: AddressList(
           isJumpSource: isJumpSource,
@@ -58,7 +61,9 @@ class MyAddressesPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddressFormPage(address: model, newlyCreated: true)),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      AddressFormPage(address: model, newlyCreated: true)),
             );
           },
         ),
@@ -78,7 +83,8 @@ class AddressList extends StatelessWidget {
     var bloc = BLoCProvider.of<AddressBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses();
       }
@@ -97,7 +103,8 @@ class AddressList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -114,10 +121,12 @@ class AddressList extends StatelessWidget {
               StreamBuilder<List<AddressModel>>(
                 stream: bloc.stream,
                 // initialData: null,
-                builder: (BuildContext context, AsyncSnapshot<List<AddressModel>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<AddressModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses();
-                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                    return ProgressIndicatorFactory
+                        .buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
@@ -148,7 +157,8 @@ class AddressList extends StatelessWidget {
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                  return ProgressIndicatorFactory
+                      .buildPaddedOpacityProgressIndicator(
                     opacity: snapshot.data ? 1.0 : 0,
                   );
                 },
@@ -214,7 +224,10 @@ class AddressItem extends StatelessWidget {
         if (isJumpSource) {
           Navigator.of(context).pop(item);
         } else {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddressFormPage(address: item)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddressFormPage(address: item)));
         }
       },
       title: _buildRow(

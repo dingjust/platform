@@ -56,6 +56,8 @@ export 'src/user/response/address_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/wechat/wechat_service_impl.dart';
+export 'src/wechat/payment_for.dart';
+
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

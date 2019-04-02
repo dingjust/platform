@@ -1,6 +1,8 @@
+import 'package:b2b_commerce/src/business/products/sample_product_history_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class SampleProductHistoryItem extends StatelessWidget {
   final SampleBorrowReturnHistoryModel item;
@@ -21,7 +23,7 @@ class SampleProductHistoryItem extends StatelessWidget {
       elevation: 0,
       child: GestureDetector(
         onTap: (){
-
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductHistoryFormPage(item,onlyRead:true)));
         },
         child: Container(
           padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
@@ -29,22 +31,27 @@ class SampleProductHistoryItem extends StatelessWidget {
             children: <Widget>[
               Offstage(
                 offstage: isSampleProductHistory,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    image: DecorationImage(
-                      image: item.images != null && item.images.length > 0
-                          ? NetworkImage(item.images[0].url)
-                          : AssetImage(
-                        'temp/picture.png',
-                        package: "assets",
-                      ),
-                      fit: BoxFit.cover,
+                child: item.images != null && item.images.length > 0?
+                      Image.network(
+                        '${GlobalConfigs.IMAGE_BASIC_URL}${item.images[0].url}',
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.fill,
+                        )
+                        : Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.circular(5),
+                        color:
+                        Color.fromRGBO(243, 243, 243, 1)),
+                    child: Icon(
+                        B2BIcons.noPicture,
+                        color: Color.fromRGBO(200, 200, 200, 1),
+                        size: 60
                     ),
                   ),
-                ),
               ),
               Expanded(
                 child: Container(
@@ -87,6 +94,7 @@ class SampleProductHistoryItem extends StatelessWidget {
 //                        ),
 //                      ),
 //                    ),
+                      item.type == LendBorrowType.BORROW ?
                       Row(
                         children: <Widget>[
                           Text(
@@ -100,6 +108,20 @@ class SampleProductHistoryItem extends StatelessWidget {
                             ),
                           )
                         ],
+                      ):
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            '借入日期：'+ (DateFormatUtil.formatYMD(item.creationDate) ?? ''),
+                          ),
+                          Offstage(
+                            offstage: !isSampleProductHistory,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Text('借入数量：${item.quantity ?? ''}'),
+                            ),
+                          )
+                        ],
                       ),
                       item.state == ReturnState.RETURNED
                           ? Text(
@@ -108,7 +130,7 @@ class SampleProductHistoryItem extends StatelessWidget {
                       )
                           : Text(
                         '预计归还日期：' +
-                            (DateFormatUtil.formatYMD(item.expectedReturnDate) ?? ''),
+                            (DateFormatUtil.formatYMD(item.expectedReturningDate) ?? ''),
                       ),
                       !isSampleProductHistory?
                       Row(
@@ -139,7 +161,7 @@ class SampleProductHistoryItem extends StatelessWidget {
                           ),
                         ],
                       ):
-                      Text('备注：${item.remakes ?? ''}')
+                      Text('备注：${item.remarks ?? ''}')
                     ],
                   ),
                 ),

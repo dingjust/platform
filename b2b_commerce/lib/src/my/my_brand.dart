@@ -8,6 +8,7 @@ import './company/form/my_brand_base_form.dart';
 import './company/my_company_certificate.dart';
 import './company/my_company_contact_way.dart';
 import './company/my_personal_certificate.dart';
+import '../business/orders/quote_item.dart';
 
 /// 认证信息
 class MyBrandPage extends StatefulWidget {
