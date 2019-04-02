@@ -33,6 +33,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
   FocusNode _unitPriceFocusNode = FocusNode();
   List<MediaModel> attachments = [];
   DateTime expectedDeliveryDate = DateTime.now();
+  DateTime quoteDate;
 
   GlobalKey _scaffoldKey = GlobalKey();
 
@@ -280,6 +281,9 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
               WhitelistingTextInputFormatter.digitsOnly,
             ],
           ),
+      Container(
+          padding: EdgeInsets.only(left: 15),
+          child:
           TextFieldComponent(
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
@@ -295,6 +299,10 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
               WhitelistingTextInputFormatter.digitsOnly,
             ],
           ),
+      ),
+      Container(
+        padding: EdgeInsets.only(left: 15),
+        child:
           TextFieldComponent(
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
@@ -310,7 +318,10 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
               WhitelistingTextInputFormatter.digitsOnly,
             ],
           ),
-          TextFieldComponent(
+      ),
+      Container(
+        padding: EdgeInsets.only(left: 15),
+        child:TextFieldComponent(
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
             focusNode: _processingFocusNode,
@@ -325,21 +336,25 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
               WhitelistingTextInputFormatter.digitsOnly,
             ],
           ),
-          TextFieldComponent(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            dividerPadding: EdgeInsets.only(),
-            focusNode: _otherFocusNode,
-            leadingText: '其他单价',
-            hintText: '填写',
-            autofocus: false,
-            inputType: TextInputType.number,
-            textAlign: TextAlign.right,
-            controller: _otherController,
-            //只能输入数字
-            inputFormatters: <TextInputFormatter>[
-              WhitelistingTextInputFormatter.digitsOnly,
-            ],
-          ),
+      ),
+          Container(
+            padding: EdgeInsets.only(left: 15),
+            child: TextFieldComponent(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              dividerPadding: EdgeInsets.only(),
+              focusNode: _otherFocusNode,
+              leadingText: '其他单价',
+              hintText: '填写',
+              autofocus: false,
+              inputType: TextInputType.number,
+              textAlign: TextAlign.right,
+              controller: _otherController,
+              //只能输入数字
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly,
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -385,9 +400,9 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
                 ),
               ),
               trailing: Text(
-                expectedDeliveryDate == null
+                quoteDate == null
                     ? '选择'
-                    : DateFormatUtil.formatYMD(expectedDeliveryDate),
+                    : DateFormatUtil.formatYMD(quoteDate),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -444,10 +459,6 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
         inputType: TextInputType.number,
         textAlign: TextAlign.right,
         controller: _remarksController,
-        //只能输入数字
-        inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly,
-        ],
       ),
     );
   }
@@ -477,13 +488,13 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: expectedDeliveryDate,
+        initialDate: DateTime.now(),
         firstDate: new DateTime(1990),
         lastDate: new DateTime(2999));
 
     if (_picked != null) {
       setState(() {
-        expectedDeliveryDate = _picked;
+        quoteDate = _picked;
       });
     }
   }
@@ -548,7 +559,7 @@ class _RequirementQuoteOrderFromState extends State<RequirementQuoteOrderFrom> {
         : double.parse(_sampleController.text);
     model.requirementOrder = RequirementOrderModel(code: widget.model.code);
     model.remarks = _remarksController.text;
-    model.expectedDeliveryDate = expectedDeliveryDate;
+    model.expectedDeliveryDate = quoteDate;
     model.attachments = attachments;
     model.unitPrice = double.parse(_unitPriceController.text);
     String response;

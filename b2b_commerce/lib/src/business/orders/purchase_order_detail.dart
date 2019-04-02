@@ -1515,44 +1515,50 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   //品牌端显示按钮
-  Widget _buildBrandButton(BuildContext context){
-    if(order.salesApplication == SalesApplication.ONLINE){
-      if(order.depositPaid == false && order.status == PurchaseOrderStatus.PENDING_PAYMENT){
+  Widget _buildBrandButton(BuildContext context) {
+    if (order.salesApplication == SalesApplication.ONLINE) {
+      if (order.depositPaid == false &&
+          order.status == PurchaseOrderStatus.PENDING_PAYMENT) {
         return _buildShowBrandButton(context);
       }
-      else if(order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE){
-        if(order.balancePaid == false && order.balance != null && order.balance > 0){
+      else if (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
+        if (order.balancePaid == false && order.balance != null &&
+            order.balance > 0) {
           return Container(
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  padding: EdgeInsets.only(right: 30),
-                  width: 150,
-                  child: FlatButton(
-                      color: Color(0xFFFFD600),
-                      child: Text(
-                        '去支付',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                        ),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: 300,
+                      margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: FlatButton(
+                          color: Color(0xFFFFD600),
+                          child: Text(
+                            '去支付',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20))),
+                          onPressed: () {}
                       ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(20))),
-                      onPressed: () {}
-                  ),
-                ),
+                    ),
+                  ]
               )
           );
-        }else{
+        } else {
           return Container(
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
-                  padding: EdgeInsets.only(right: 30),
-                  width: 150,
+                  width: 300,
+                  margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: FlatButton(
                       color: Color(0xFFFFD600),
                       child: Text(
@@ -1580,32 +1586,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(right: 10),
-                width: 150,
-                child: FlatButton(
-                    color: Colors.white,
-                    child: Text(
-                      '查看物流',
-                      style: TextStyle(
-                        color: Color(0xFF969696),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        side: BorderSide(
-                            color: Color(0xFF969696),
-                            style: BorderStyle.solid,
-                            width: 2)),
-                    clipBehavior: Clip.antiAlias,
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    onPressed: () {}
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                width: 150,
+                width: 300,
+                margin: EdgeInsets.fromLTRB(20, 0, 10, 10),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: FlatButton(
                     color: Color(0xFFFFD600),
                     child: Text(
@@ -1646,34 +1629,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(right: 10),
-                width: 150,
+                width: 300,
+                margin: EdgeInsets.fromLTRB(20, 10, 10, 0),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: FlatButton(
-                    color: Colors.white,
-                    child: Text(
-                      '查看物流',
-                      style: TextStyle(
-                        color: Color(0xFF969696),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        side: BorderSide(
-                            color: Color(0xFF969696),
-                            style: BorderStyle.solid,
-                            width: 2)),
-                    clipBehavior: Clip.antiAlias,
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    onPressed: () {}
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                width: 150,
-                child: FlatButton(
-                    color: Colors.white,
+                    color: Color(0xFFFFD600),
                     child: Text(
                       '确认收货',
                       style: TextStyle(
@@ -1690,7 +1650,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           style: BorderStyle.solid,
                           width: 2),
                     ),
-                    onPressed: () {}
+                    onPressed: () async{
+                      bool result = false;
+
+                      result = await PurchaseOrderRepository().purchaseOrderShipped(order.code, order);
+                      _showMessage(context, result, '确认收货');
+                    }
                 ),
               ),
             ],
@@ -1761,8 +1726,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     //当流程是待出库状态下
     else if (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
       //尾款已付时，出现确认发货
-      if (order.balancePaid ||
-          order.salesApplication == SalesApplication.BELOW_THE_LINE) {
+      if (order.balancePaid || order.balance == 0 || order.salesApplication == SalesApplication.BELOW_THE_LINE) {
         return Container(
           width: 300,
           margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
