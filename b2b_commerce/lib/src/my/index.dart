@@ -1,23 +1,29 @@
-import 'package:b2b_commerce/src/common/app_image.dart';
-import 'package:b2b_commerce/src/common/app_keys.dart';
-import 'package:b2b_commerce/src/my/my_brand.dart';
-import 'package:b2b_commerce/src/my/my_company_certificate_select.dart';
-import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../_shared/widgets/image_factory.dart';
 import '../common/app_routes.dart';
+import '../common/app_image.dart';
+import '../common/app_keys.dart';
+import './my_brand.dart';
+import './my_company_certificate_select.dart';
+import './my_factory.dart';
 
+var menuSeparator = Container(
+  padding: const EdgeInsets.fromLTRB(70, 0, 20, 0),
+  child: const Divider(height: 0),
+);
+
+/// 我的
 class MyHomePage extends StatelessWidget {
-  static const String ROUTE_SETTINGS = '/settings';
-  static final GlobalKey<ScaffoldState> _scaffoldKey =
-      GlobalKey<ScaffoldState>();
-  final double _appBarHeight = 160.0;
+  static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   MyHomePage() : super(key: AppKeys.myHomePage);
+
+  final double _appBarHeight = 160.0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,161 +31,22 @@ class MyHomePage extends StatelessWidget {
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
-        MenuItem(B2BImage.my_account(width: 23, height: 27), '我的账户',
-            AppRoutes.ROUTE_MY_ACCOUNT),
-        Container(
-          padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
-          child: Divider(
-            height: 0,
-          ),
-        ),
-        InkWell(
-          child: Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 32),
-                  child: B2BImage.company_introduce(height: 27, width: 23),
-                ),
-                Expanded(
-                    child: Text(
-                  '公司介绍',
-                  style: TextStyle(fontSize: 17),
-                )),
-                Icon(
-                  Icons.chevron_right,
-                  color: Colors.grey,
-                ),
-              ],
-            ),
-          ),
-          onTap: () {
-            //品牌详情
-            if (bloc.currentUser.type == UserType.BRAND) {
-              UserRepositoryImpl()
-                  .getBrand(bloc.currentUser.companyCode)
-                  .then((brand) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyBrandPage(brand)));
-              });
-            }
-            //工厂详情
-            if (bloc.currentUser.type == UserType.FACTORY) {
-              UserRepositoryImpl()
-                  .getFactory(bloc.currentUser.companyCode)
-                  .then((factory) {
-                ProductRepositoryImpl().list({}, {'size': 3}).then((products) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyFactoryPage(
-                            factory,
-                            products: products.content,
-                            isCompanyIntroduction: true,
-                          ),
-                    ),
-                  );
-                });
-              });
-            }
-          },
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
-          child: Divider(
-            height: 0,
-          ),
-        ),
-        InkWell(
-          child: Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 32),
-                  child: B2BImage.certicate_info(width: 26, height: 19),
-                ),
-                Expanded(
-                    child: Text(
-                  '我要认证',
-                  style: TextStyle(fontSize: 17),
-                )),
-//                Text(
-//                  '未认证',
-//                  style: TextStyle(
-//                    color: Color.fromRGBO(255, 214, 12, 1),
-//                  ),
-//                ),
-                Icon(
-                  Icons.chevron_right,
-                  color: Colors.grey,
-                ),
-              ],
-            ),
-          ),
-          onTap: () {
-            //品牌认证
-            if (bloc.currentUser.type == UserType.BRAND) {
-              UserRepositoryImpl()
-                  .getBrand(bloc.currentUser.companyCode)
-                  .then((brand) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MyCompanyCertificateSelectPage(brand)));
-              });
-            }
-            //工厂认证
-            if (bloc.currentUser.type == UserType.FACTORY) {
-              UserRepositoryImpl()
-                  .getFactory(bloc.currentUser.companyCode)
-                  .then((factory) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MyCompanyCertificateSelectPage(factory)));
-              });
-            }
-          },
-        )
+        MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户', AppRoutes.ROUTE_MY_ACCOUNT),
+        menuSeparator,
+        CompanyIntroductionMenuItem(),
+        menuSeparator,
+        CompanyCertificationMenuItem()
       ]),
       Menu('', <Widget>[
-        MenuItem(B2BImage.address_manage(width: 24, height: 29), '地址管理',
-            AppRoutes.ROUTE_MY_ADDRESSES),
-        Container(
-          padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
-          child: Divider(
-            height: 0,
-          ),
-        ),
-        MenuItem(B2BImage.invoice_manage(width: 26, height: 21), '发票管理',
-            AppRoutes.ROUTE_MY_INVOICES),
-//        MenuItem(Icons.shopping_cart, '购物车', AppRoutes.ROUTE_MY_CART),
+        MenuItem(B2BImage.addressManage(width: 24, height: 29), '地址管理', AppRoutes.ROUTE_MY_ADDRESSES),
+        menuSeparator,
+        MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理', AppRoutes.ROUTE_MY_INVOICES),
       ]),
-//      Menu('', <MenuItem>[
-//
-////        MenuItem(Icons.collections, '我的收藏', AppRoutes.ROUTE_MY_COLLECTIONS),
-//      ]),
       Menu('', <Widget>[
-        MenuItem(B2BImage.customer_service(width: 25, height: 25), '联系客服',
-            AppRoutes.ROUTE_MY_CLIENT_SERVICES),
-        Container(
-          padding: EdgeInsets.fromLTRB(70, 0, 20, 0),
-          child: Divider(
-            height: 0,
-          ),
-        ),
-        MenuItem(B2BImage.setting(width: 25, height: 24), '设置',
-            AppRoutes.ROUTE_MY_SETTINGS),
+        MenuItem(B2BImage.customerService(width: 25, height: 25), '联系客服', AppRoutes.ROUTE_MY_CLIENT_SERVICES),
+        menuSeparator,
+        MenuItem(B2BImage.setting(width: 25, height: 24), '设置', AppRoutes.ROUTE_MY_SETTINGS),
       ]),
-//      Menu('', <MenuItem>[
-//
-//      ]),
     ];
 
     return Scaffold(
@@ -191,36 +58,20 @@ class MyHomePage extends StatelessWidget {
             SliverAppBar(
               expandedHeight: _appBarHeight,
               pinned: true,
-              actions: <Widget>[
-//                IconButton(
-//                  icon: const Icon(Icons.menu),
-//                  tooltip: 'Edit',
-//                  color: Colors.white,
-//                  onPressed: () {
-//                    // http test
-//                    http$.get('/apparel-zh/users/13234', context: context).then((response) {});
-////                    _scaffoldKey.currentState.showSnackBar(
-////                      const SnackBar(
-////                        content: Text('Editing isn\'t supported in this screen.'),
-////                      ),
-////                    );
-//                  },
-//                ),
-              ],
+              actions: <Widget>[],
               flexibleSpace: FlexibleSpaceBar(
                 key: const Key('__myHomeSpaceBar__'),
                 title: StreamBuilder<UserModel>(
                   stream: bloc.stream,
                   initialData: bloc.currentUser,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<UserModel> snapshot) {
+                  builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
                     debugPrint('${snapshot.data.type}');
                     return Container(
                       child: Column(
                         children: <Widget>[
                           Text(
                             '${snapshot.data.name}',
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           )
                         ],
                       ),
@@ -230,31 +81,29 @@ class MyHomePage extends StatelessWidget {
                 background: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    _buildTopBackgroud(context, bloc.currentUser),
+                    _buildTopBackground(context, bloc.currentUser),
                   ],
                 ),
               ),
             ),
-            SliverList(
-              delegate: SliverChildListDelegate(menus),
-            ),
+            SliverList(delegate: SliverChildListDelegate(menus)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTopBackgroud(BuildContext context, UserModel user) {
+  Widget _buildTopBackground(BuildContext context, UserModel user) {
     return Container(
-      padding: EdgeInsets.only(top: 50),
+      padding: const EdgeInsets.only(top: 50),
       child: Row(
         children: <Widget>[
           _buildPortrait(context, user),
-          _buildInfomation(context, user),
+          _buildInformation(context, user),
         ],
       ),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(255, 219, 0, 1),
+      decoration: const BoxDecoration(
+        color: const Color.fromRGBO(255, 219, 0, 1),
       ),
     );
   }
@@ -262,76 +111,164 @@ class MyHomePage extends StatelessWidget {
   Widget _buildPortrait(BuildContext context, UserModel user) {
     return Container(
       height: 80,
-      margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
+      margin: const EdgeInsets.fromLTRB(20, 20, 10, 10),
       child: Container(
-          child: user.profilePicture != null
-              ? CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    '${GlobalConfigs.IMAGE_BASIC_URL}${user.profilePicture.url}',
-                  ),
-                  radius: 40.0,
-                )
-              : CircleAvatar(
-                  child: Icon(
-                    B2BIcons.noPicture,
-                    size: 40,
-                  ),
-                  radius: 40.0,
-                ),
-          decoration: BoxDecoration(
-            border: new Border.all(color: Colors.white, width: 0.5),
-            color: Colors.white,
-            shape: BoxShape.rectangle,
-            borderRadius: new BorderRadius.circular((50.0)),
-          )),
+        child: ImageFactory.buildDefaultAvatar(user.profilePicture),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white, width: 0.5),
+          color: Colors.white,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular((50.0)),
+        ),
+      ),
     );
   }
 
-  Widget _buildInfomation(BuildContext context, UserModel user) {
+  Widget _buildInformation(BuildContext context, UserModel user) {
     return Container(
       height: 80,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 20),
+            margin: const EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
                 Container(
-                    child: Text(
-                  "${user.name}",
-                  style: TextStyle(
+                  child: Text(
+                    "${user.name}",
+                    style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(36, 38, 41, 1)),
-                )),
-//                Container(
-//                  padding: EdgeInsets.all(3),
-//                  margin: EdgeInsets.only(left: 10),
-//                  child: Text(
-//                    '采购员',
-//                    style: TextStyle(
-//                        fontSize: 16,
-//                        fontWeight: FontWeight.w500,
-//                        color: Color.fromRGBO(255, 214, 12, 1)),
-//                  ),
-//                  decoration: BoxDecoration(
-//                    color: Color.fromRGBO(36, 38, 41, 1),
-//                    borderRadius: BorderRadius.circular(12),
-//                  ),
-//                )
+                      color: const Color.fromRGBO(36, 38, 41, 1),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
           Container(
             child: Text(
               '${UserBLoC.instance.currentUser.companyName}',
-              style: TextStyle(
-                  fontSize: 16, color: Color.fromRGBO(132, 114, 1, 1)),
+              style: const TextStyle(
+                fontSize: 16,
+                color: const Color.fromRGBO(132, 114, 1, 1),
+              ),
             ),
           )
         ],
       ),
+    );
+  }
+}
+
+class CompanyCertificationMenuItem extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
+
+    return InkWell(
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 32),
+              child: B2BImage.certificateInfo(width: 26, height: 19),
+            ),
+            Expanded(
+              child: const Text(
+                '我要认证',
+                style: const TextStyle(fontSize: 17),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              color: Colors.grey,
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        // 品牌认证
+        if (bloc.currentUser.type == UserType.BRAND) {
+          UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyCompanyCertificateSelectPage(brand),
+              ),
+            );
+          });
+        }
+        // 工厂认证
+        if (bloc.currentUser.type == UserType.FACTORY) {
+          UserRepositoryImpl().getFactory(bloc.currentUser.companyCode).then((factory) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyCompanyCertificateSelectPage(factory),
+              ),
+            );
+          });
+        }
+      },
+    );
+  }
+}
+
+class CompanyIntroductionMenuItem extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
+
+    return InkWell(
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 32),
+              child: B2BImage.companyIntroduce(height: 27, width: 23),
+            ),
+            Expanded(
+              child: const Text(
+                '公司介绍',
+                style: const TextStyle(fontSize: 17),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              color: Colors.grey,
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        //品牌详情
+        if (bloc.currentUser.type == UserType.BRAND) {
+          UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyBrandPage(brand)));
+          });
+        }
+        //工厂详情
+        if (bloc.currentUser.type == UserType.FACTORY) {
+          UserRepositoryImpl().getFactory(bloc.currentUser.companyCode).then((factory) {
+            ProductRepositoryImpl().list({}, {'size': 3}).then((products) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyFactoryPage(
+                        factory,
+                        products: products.content,
+                        isCompanyIntroduction: true,
+                      ),
+                ),
+              );
+            });
+          });
+        }
+      },
     );
   }
 }

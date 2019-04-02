@@ -84,10 +84,10 @@ class BrandMenusSection extends StatelessWidget {
       child: Row(
         children: <Widget>[
           AdvanceMenu('订单管理', <AdvanceMenuItem>[
-            AdvanceMenuItem(MenuItemImage.requirement_order, '需求订单', AppRoutes.ROUTE_REQUIREMENT_ORDERS),
-            AdvanceMenuItem(MenuItemImage.price_manage, '报价管理', AppRoutes.ROUTE_QUOTES),
-            AdvanceMenuItem(MenuItemImage.proofing_order, '打样订单', AppRoutes.ROUTE_PROOFING_ORDERS),
-            AdvanceMenuItem(MenuItemImage.purchase_order, '生产订单', AppRoutes.ROUTE_PURCHASE_ORDERS),
+            AdvanceMenuItem(MenuItemImage.requirementOrder, '需求订单', AppRoutes.ROUTE_REQUIREMENT_ORDERS),
+            AdvanceMenuItem(MenuItemImage.priceManage, '报价管理', AppRoutes.ROUTE_QUOTES),
+            AdvanceMenuItem(MenuItemImage.proofingOrder, '打样订单', AppRoutes.ROUTE_PROOFING_ORDERS),
+            AdvanceMenuItem(MenuItemImage.purchaseOrder, '生产订单', AppRoutes.ROUTE_PURCHASE_ORDERS),
           ])
         ],
       ),
@@ -101,10 +101,10 @@ class BrandMenusSection extends StatelessWidget {
       child: Row(
         children: <Widget>[
           AdvanceMenu('店铺管理', <AdvanceMenuItem>[
-            AdvanceMenuItem(MenuItemImage.product_manage, '商品管理', AppRoutes.ROUTE_PRODUCTS),
-            AdvanceMenuItem(MenuItemImage.employee_manage, '员工管理', AppRoutes.ROUTE_EMPLOYEES),
-            AdvanceMenuItem(MenuItemImage.supplier_manage, '供应商管理', AppRoutes.ROUTE_SUPPLIERS),
-            AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣借还', AppRoutes.ROUTE_SAMPLE_GARMENTS),
+            AdvanceMenuItem(MenuItemImage.productManage, '商品管理', AppRoutes.ROUTE_PRODUCTS),
+            AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理', AppRoutes.ROUTE_EMPLOYEES),
+            AdvanceMenuItem(MenuItemImage.supplierManage, '供应商管理', AppRoutes.ROUTE_SUPPLIERS),
+            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣借还', AppRoutes.ROUTE_SAMPLE_GARMENTS),
           ])
         ],
       ),
@@ -159,9 +159,9 @@ class FactoryMenusSection extends StatelessWidget {
       child: Row(
         children: <Widget>[
           AdvanceMenu('订单管理', <AdvanceMenuItem>[
-            AdvanceMenuItem(MenuItemImage.quote_factory, '报价管理', AppRoutes.ROUTE_QUOTES),
-            AdvanceMenuItem(MenuItemImage.proofing_order, '打样订单', AppRoutes.ROUTE_PROOFING_ORDERS),
-            AdvanceMenuItem(MenuItemImage.purchase_order, '生产订单', AppRoutes.ROUTE_PURCHASE_ORDERS),
+            AdvanceMenuItem(MenuItemImage.quoteFactory, '报价管理', AppRoutes.ROUTE_QUOTES),
+            AdvanceMenuItem(MenuItemImage.proofingOrder, '打样订单', AppRoutes.ROUTE_PROOFING_ORDERS),
+            AdvanceMenuItem(MenuItemImage.purchaseOrder, '生产订单', AppRoutes.ROUTE_PURCHASE_ORDERS),
           ]),
         ],
       ),
@@ -175,10 +175,10 @@ class FactoryMenusSection extends StatelessWidget {
       child: Row(
         children: <Widget>[
           AdvanceMenu('工厂管理', <AdvanceMenuItem>[
-            AdvanceMenuItem(MenuItemImage.employee_manage, '员工管理', AppRoutes.ROUTE_EMPLOYEES),
-            AdvanceMenuItem(MenuItemImage.product_factory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
-            AdvanceMenuItem(MenuItemImage.partner_factory, '合作商管理', AppRoutes.ROUTE_SUPPLIERS),
-            AdvanceMenuItem(MenuItemImage.clothes_manage, '样衣管理', AppRoutes.ROUTE_SAMPLE_GARMENTS),
+            AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理', AppRoutes.ROUTE_EMPLOYEES),
+            AdvanceMenuItem(MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
+            AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理', AppRoutes.ROUTE_SUPPLIERS),
+            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣管理', AppRoutes.ROUTE_SAMPLE_GARMENTS),
           ])
         ],
       ),
