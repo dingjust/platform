@@ -621,7 +621,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           ),
         ),
         onTap: () async {
-          ProductsResponse productsResponse = await ProductRepositoryImpl().list({}, {});
+          ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactory({}, {},widget.factory.uid);
+
           Navigator.push(
             context,
             MaterialPageRoute(
