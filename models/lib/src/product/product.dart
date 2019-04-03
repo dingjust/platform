@@ -668,9 +668,11 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
   int quantity;
 
   //预计归还日期
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime expectedReturningDate;
 
   //归还日期
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime returnedDate;
 
   //关联方
@@ -682,7 +684,7 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
   //备注
   String remarks;
 
-  @JsonKey(name: 'creationtime')
+  @JsonKey(name: 'creationtime',fromJson: _dateTimefromMilliseconds)
   DateTime creationDate;
 
   SampleBorrowReturnHistoryModel({
@@ -705,6 +707,9 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
 
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
       models.map((model) => MediaModel.toJson(model)).toList();
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 @JsonSerializable()
