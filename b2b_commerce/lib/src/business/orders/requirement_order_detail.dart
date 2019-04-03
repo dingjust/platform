@@ -48,7 +48,7 @@ class _RequirementOrderDetailPageState
           style: TextStyle(color: Colors.black),
         ),
         actions: <Widget>[
-          widget.order.editable && UserBLoC.instance.currentUser.type == UserType.BRAND
+          widget.order.editable != null && widget.order.editable && UserBLoC.instance.currentUser.type == UserType.BRAND
               ? FlatButton(
                   onPressed: onEdit,
                   child: Text('修改'),
