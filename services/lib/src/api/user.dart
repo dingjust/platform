@@ -5,6 +5,12 @@ abstract class UserApis {
         return '/{baseSiteId}/b2b/companies/register/$type';
       };
 
+  //发送短信验证码
+  static get sendCaptcha => (phone) => '/{baseSiteId}/sms/captcha/$phone';
+
+  //验证验证码是否正确
+  static get validateCaptcha => '/{baseSiteId}/sms/validate';
+
   /// 用户信息
   static get userInfo => '/{baseSiteId}/b2b/users/profile';
 
