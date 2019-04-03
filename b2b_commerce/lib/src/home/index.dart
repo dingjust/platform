@@ -1,13 +1,12 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/_shared/widgets/business/product_search_input.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../_shared/shares.dart';
 import '../_shared/widgets/broadcast_factory.dart';
 import '../business/products/product_category.dart';
 import '../common/app_image.dart';
@@ -16,6 +15,7 @@ import '../common/find_factory_by_map.dart';
 import '../home/factory/factory_list.dart';
 import '../home/factory/industrial_cluster_factory.dart';
 import '../home/pool/requirement_pool_all.dart';
+import '../home/pool/requirement_pool_recommend.dart';
 import '../home/requirement/fast_publish_requirement.dart';
 import '../production/production_offline_order_from.dart';
 import '../production/production_unique_code.dart';
@@ -43,7 +43,14 @@ class HomePage extends StatefulWidget {
     ]
   };
 
+  final Map<UserType, Widget> searchInputWidgets = <UserType, Widget>{
+    UserType.BRAND: GlobalSearchInput<FactoryModel>(delegate: FactorySearchDelegatePage()),
+    UserType.FACTORY: GlobalSearchInput<RequirementOrderModel>(delegate: RequirementOrderSearchDelegatePage()),
+  };
+
   get widgetsByUserType => widgets[userType];
+
+  get searchInputWidgetsByUserType => searchInputWidgets[userType];
 
   @override
   _HomePageState createState() => new _HomePageState();
@@ -66,9 +73,7 @@ class _HomePageState extends State<HomePage> {
               expandedHeight: 188.0,
               pinned: true,
               elevation: 0.5,
-              title: ProductSearchInput(
-                height: 35,
-              ),
+              title: widget.searchInputWidgetsByUserType,
               brightness: Brightness.dark,
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
@@ -79,8 +84,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SliverList(
-                delegate: SliverChildListDelegate(widget.widgetsByUserType)),
+            SliverList(delegate: SliverChildListDelegate(widget.widgetsByUserType)),
           ],
         ),
       ),
@@ -116,12 +120,9 @@ class BrandFirstMenuSection extends StatelessWidget {
             // 加载条
             showDialog(
               context: context,
-              builder: (context) =>
-                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
-            await ProductRepositoryImpl()
-                .cascadedCategories()
-                .then((categories) {
+            await ProductRepositoryImpl().cascadedCategories().then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -141,12 +142,9 @@ class BrandFirstMenuSection extends StatelessWidget {
             // 加载条
             showDialog(
               context: context,
-              builder: (context) =>
-                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
-            await ProductRepositoryImpl()
-                .cascadedCategories()
-                .then((categories) {
+            await ProductRepositoryImpl().cascadedCategories().then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -191,8 +189,7 @@ class BrandSecondMenuSection extends StatelessWidget {
   Widget _buildFindFactoriesByIndustrialClusterMenuItem(BuildContext context) {
     return AdvanceIconButton(
       onPressed: () async {
-        List<LabelModel> labels =
-            await UserRepositoryImpl().industrialClustersFromLabels();
+        List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
 
         Navigator.push(
           context,
@@ -341,8 +338,7 @@ class BrandTrackingProgressSection extends StatelessWidget {
   Widget _buildNoUniqueCode(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ProductionOfflineOrder()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductionOfflineOrder()));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -380,8 +376,7 @@ class BrandTrackingProgressSection extends StatelessWidget {
 class FactoryRequirementPoolSection extends StatelessWidget {
   int requirementAll = 0;
   int requirementRecommend = 0;
-  final StreamController _reportsStreamController =
-      StreamController<Reports>.broadcast();
+  final StreamController _reportsStreamController = StreamController<Reports>.broadcast();
 
   void queryReports() async {
     Reports response = await ReportsRepository().reportRequirementCount();
@@ -406,9 +401,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
               return GestureDetector(
                 onTap: () async {
-                  await ProductRepositoryImpl()
-                      .majorCategories()
-                      .then((categories) {
+                  await ProductRepositoryImpl().majorCategories().then((categories) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => RequirementPoolAllPage(
@@ -429,9 +422,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
               return GestureDetector(
                 onTap: () async {
-                  await ProductRepositoryImpl()
-                      .majorCategories()
-                      .then((categories) {
+                  await ProductRepositoryImpl().majorCategories().then((categories) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => RequirementPoolRecommend(
                               categories: categories,
@@ -449,8 +440,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
 }
 
 class AllRequirementMenuItem extends StatelessWidget {
-  const AllRequirementMenuItem({Key key, @required this.count})
-      : super(key: key);
+  const AllRequirementMenuItem({Key key, @required this.count}) : super(key: key);
 
   final int count;
 
@@ -492,8 +482,7 @@ class AllRequirementMenuItem extends StatelessWidget {
 }
 
 class RecommendedRequirementMenuItem extends StatelessWidget {
-  const RecommendedRequirementMenuItem({Key key, @required this.count})
-      : super(key: key);
+  const RecommendedRequirementMenuItem({Key key, @required this.count}) : super(key: key);
 
   final int count;
 
@@ -545,12 +534,8 @@ class RecommendedRequirementMenuItem extends StatelessWidget {
                   color: Color.fromRGBO(100, 100, 100, 1),
                 ),
                 children: <TextSpan>[
-                  TextSpan(
-                      text: '报价',
-                      style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1))),
-                  TextSpan(
-                      text: '的需求',
-                      style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)))
+                  TextSpan(text: '报价', style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1))),
+                  TextSpan(text: '的需求', style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)))
                 ]),
           )
         ],
@@ -601,9 +586,7 @@ class FactoryCollaborationSection extends StatelessWidget {
         },
         child: Text(
           '创建线下订单',
-          style: TextStyle(
-              color: Color.fromRGBO(36, 38, 41, 1),
-              fontWeight: FontWeight.bold),
+          style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontWeight: FontWeight.bold),
         ),
       ),
     );
