@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -277,12 +278,12 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
           Container(
             margin: EdgeInsets.only(bottom: 10),
             child: Text(
-              '生产订单号：${widget.order.code}',
+              '订单号：${widget.order.code}',
               style: TextStyle(color: Colors.grey, fontSize: 16),
             ),
           ),
           Text(
-            '订单生产时间：${DateFormatUtil.format(widget.order.creationTime)}',
+            '订单创建时间：${DateFormatUtil.format(widget.order.creationTime)}',
             style: TextStyle(color: Colors.grey, fontSize: 16),
           )
         ],
@@ -444,6 +445,16 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                       ModalRoute.withName('/'));
 
                   ///TODO:生产单
+                } else if (widget.order is PurchaseOrderModel) {
+                  //查询明细
+                  PurchaseOrderModel model = await PurchaseOrderRepository()
+                      .getPurchaseOrderDetail(widget.order.code);
+
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              PurchaseOrderDetailPage(order: model)),
+                      ModalRoute.withName('/'));
                 }
               },
             ),

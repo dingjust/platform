@@ -32,7 +32,10 @@
         <el-col :span="12">
           <el-form-item label="工厂">
             <el-select v-model="queryFormData.belongTos" placeholder="请选择"
-                       multiple class="w-100">
+                       multiple class="w-100"
+                       filterable
+                       remote
+                       :remote-method="getFactories">
               <el-option
                 v-for="item in factories"
                 :key="item.uid"
@@ -45,7 +48,10 @@
         <el-col :span="12">
           <el-form-item label="品牌">
             <el-select v-model="queryFormData.purchasers" placeholder="请选择"
-                       multiple class="w-100">
+                       multiple class="w-100"
+                       filterable
+                       remote
+                       :remote-method="getBrands">
               <el-option
                 v-for="item in brands"
                 :key="item.uid"
@@ -140,11 +146,11 @@
 
         this.$emit('onNew', formData);
       },
-      async getFactories() {
+      async getFactories(query) {
         const url = this.apis().getFactories();
-        const result = await this.$http.post(url,{},{
+        const result = await this.$http.post(url,{keyword:query},{
           page: 0,
-          size: 1000000
+          size: 10
         });
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -152,11 +158,11 @@
         }
         this.factories = result.content;
       },
-      async getBrands() {
+      async getBrands(query) {
         const url = this.apis().getBrands();
-        const result = await this.$http.post(url,{},{
+        const result = await this.$http.post(url,{keyword:query},{
           page: 0,
-          size: 1000000
+          size: 10
         });
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);

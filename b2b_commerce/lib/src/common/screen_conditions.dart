@@ -5,9 +5,9 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../home/factory/factory_list.dart';
 import './address_picker.dart';
 import './find_factory_by_map.dart';
+import '../home/factory/factory_list.dart';
 
 List<CategoryModel> _categories;
 
@@ -298,7 +298,9 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                     ),
                   ),
                   Icon(
-                    _isShowMore ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    _isShowMore
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
                     color: Color.fromRGBO(255, 214, 12, 1),
                     size: 28,
                   ),
@@ -436,7 +438,8 @@ class _ScreenConditionsState extends State<ScreenConditions> {
               fontSize: 18,
             ),
           ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
           onPressed: () {
             String _selected = '';
             if (_isShowA) {
@@ -477,7 +480,11 @@ class _ScreenConditionsState extends State<ScreenConditions> {
 //                  MaterialPageRoute(builder: (context) => RequirementPoolAll()),
                 MaterialPageRoute(
                     builder: (context) => FactoryPage(
-                          FactoryCondition(starLevel: 0, adeptAtCategory: []),
+                          FactoryCondition(
+                              starLevel: 0,
+                              adeptAtCategories: [],
+                              labels: [],
+                              cooperationModes: []),
                           route: widget.route,
                         )),
               );
@@ -493,7 +500,9 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       builder: (BuildContext context) {
         return Container(
           child: EnumSelection(
-            enumModels: _majorCategory.map((category) => EnumModel(category.code, category.name)).toList(),
+            enumModels: _majorCategory
+                .map((category) => EnumModel(category.code, category.name))
+                .toList(),
             multiple: false,
             enumSelect: _majorEnumSelected,
           ),
@@ -501,8 +510,10 @@ class _ScreenConditionsState extends State<ScreenConditions> {
       },
     ).then((val) {
       major = '';
-      _majorSelected =
-          _majorEnumSelected.map((enumModel) => CategoryModel(code: enumModel.code, name: enumModel.name)).toList();
+      _majorSelected = _majorEnumSelected
+          .map((enumModel) =>
+              CategoryModel(code: enumModel.code, name: enumModel.name))
+          .toList();
       if (_majorSelected.isNotEmpty) {
         for (int i = 0; i < _majorSelected.length; i++) {
           major += _majorSelected[i].name + ',';

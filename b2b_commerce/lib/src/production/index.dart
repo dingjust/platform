@@ -1,8 +1,10 @@
+import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/production/production.dart';
 import 'package:b2b_commerce/src/production/production_filter.dart';
 import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:b2b_commerce/src/production/search_input.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:models/models.dart';
@@ -50,7 +52,8 @@ class _ProductionPageState extends State<ProductionPage> {
                 onPressed: () {},
               ),
               entries: <FilterConditionEntry>[
-                FilterConditionEntry(label: '当前生产', value: 'producting', checked: true),
+                FilterConditionEntry(
+                    label: '当前生产', value: 'producting', checked: true),
                 FilterConditionEntry(
                   label: '延期预警',
                   value: 'delayWarning',
@@ -107,7 +110,8 @@ class _ProductionPageState extends State<ProductionPage> {
             // backgroundColor: Color.fromRGBO(255,214,12, 1),
             foregroundColor: Colors.black,
             elevation: 8.0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
             children: [
               SpeedDialChild(
                 child: Center(
@@ -125,7 +129,8 @@ class _ProductionPageState extends State<ProductionPage> {
                     ),
                   );
                 },
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
               ),
               SpeedDialChild(
                 child: Center(
@@ -143,7 +148,8 @@ class _ProductionPageState extends State<ProductionPage> {
                     ),
                   );
                 },
-                shape: new RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                shape: new RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
               ),
             ],
           ),
@@ -155,7 +161,8 @@ class ProductionListView extends StatelessWidget {
   ScrollController _scrollController = new ScrollController();
 
   ///当前选中条件
-  FilterConditionEntry currentCondition = FilterConditionEntry(label: '当前生产', value: 'comprehensive', checked: true);
+  FilterConditionEntry currentCondition = FilterConditionEntry(
+      label: '当前生产', value: 'comprehensive', checked: true);
 
   @override
   Widget build(BuildContext context) {
@@ -179,10 +186,17 @@ class ProductionListView extends StatelessWidget {
             children: <Widget>[
               StreamBuilder<List<PurchaseOrderModel>>(
                   stream: bloc.stream,
-                  builder: (BuildContext context, AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                     if (snapshot.data == null) {
-                      bloc.getData();
-                      return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                      if (UserBLoC.instance.currentUser.status ==
+                          UserStatus.ONLINE) {
+                        bloc.getData();
+                        return ProgressIndicatorFactory
+                            .buildPaddedProgressIndicator();
+                      } else {
+                        return LoginRemind();
+                      }
                     }
                     if (snapshot.hasData) {
                       return Column(
@@ -264,4 +278,33 @@ class ProductionListView extends StatelessWidget {
 //      ),
 //    );
 //  }
+}
+
+class LoginRemind extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(40, 200, 40, 0),
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+      decoration: BoxDecoration(color: Colors.white),
+      child: Column(
+        children: <Widget>[
+          Text('登录后，您将能随时查看订单生产进度，无需天天打电话询问。'),
+          Container(
+            width: 200,
+            child: FlatButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              onPressed: () {
+                Navigator.of(context).push(
+                    (MaterialPageRoute(builder: (context) => B2BLoginPage())));
+              },
+              child: Text('登录'),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

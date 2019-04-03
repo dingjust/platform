@@ -55,6 +55,14 @@
         </div>
         <purchase-order-delivery-address-form :slot-data="slotData" :read-only="readOnly"/>
       </el-card>
+      <div class="pt-2"></div>
+      <el-card class="box-card" v-if="!hideOnNew">
+        <div slot="header" class="clearfix">
+          <span>物流信息</span>
+        </div>
+        <purchase-order-consignment-form :slot-data="slotData" :read-only="readOnly"/>
+      </el-card>
+      <div class="pt-2"></div>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>生产进度</span>
@@ -76,8 +84,9 @@
 <script>
   import PurchaseOrderBasicForm from "./PurchaseOrderBasicForm";
   import PurchaseOrderSellerForm from "./PurchaseOrderSellerForm";
-  import PurchaseOrderDeliveryAddressForm from "./PurchaseOrderDeliveryAddressForm";
   import PurchaseOrderEntriesForm from "./PurchaseOrderEntriesForm";
+  import PurchaseOrderDeliveryAddressForm from "./PurchaseOrderDeliveryAddressForm";
+  import PurchaseOrderConsignmentForm from "./PurchaseOrderConsignmentForm";
   import PurchaseOrderProgressForm from "./PurchaseOrderProgressForm";
 
   export default {
@@ -88,6 +97,7 @@
       PurchaseOrderSellerForm,
       PurchaseOrderEntriesForm,
       PurchaseOrderDeliveryAddressForm,
+      PurchaseOrderConsignmentForm,
       PurchaseOrderProgressForm,
     },
     mixins: [],

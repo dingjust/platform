@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -19,7 +20,8 @@ var menuSeparator = Container(
 
 /// 我的
 class MyHomePage extends StatelessWidget {
-  static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>();
 
   MyHomePage() : super(key: AppKeys.myHomePage);
 
@@ -31,21 +33,26 @@ class MyHomePage extends StatelessWidget {
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
-        MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户', AppRoutes.ROUTE_MY_ACCOUNT),
+        MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
+            AppRoutes.ROUTE_MY_ACCOUNT),
         menuSeparator,
         CompanyIntroductionMenuItem(),
         menuSeparator,
         CompanyCertificationMenuItem()
       ]),
       Menu('', <Widget>[
-        MenuItem(B2BImage.addressManage(width: 24, height: 29), '地址管理', AppRoutes.ROUTE_MY_ADDRESSES),
+        MenuItem(B2BImage.addressManage(width: 24, height: 29), '地址管理',
+            AppRoutes.ROUTE_MY_ADDRESSES),
         menuSeparator,
-        MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理', AppRoutes.ROUTE_MY_INVOICES),
+        MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理',
+            AppRoutes.ROUTE_MY_INVOICES),
       ]),
       Menu('', <Widget>[
-        MenuItem(B2BImage.customerService(width: 25, height: 25), '联系客服', AppRoutes.ROUTE_MY_CLIENT_SERVICES),
+        MenuItem(B2BImage.customerService(width: 25, height: 25), '联系客服',
+            AppRoutes.ROUTE_MY_CLIENT_SERVICES),
         menuSeparator,
-        MenuItem(B2BImage.setting(width: 25, height: 24), '设置', AppRoutes.ROUTE_MY_SETTINGS),
+        MenuItem(B2BImage.setting(width: 25, height: 24), '设置',
+            AppRoutes.ROUTE_MY_SETTINGS),
       ]),
     ];
 
@@ -64,7 +71,8 @@ class MyHomePage extends StatelessWidget {
                 title: StreamBuilder<UserModel>(
                   stream: bloc.stream,
                   initialData: bloc.currentUser,
-                  builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<UserModel> snapshot) {
                     // debugPrint('${snapshot.data.type}');
                     return Container(
                       child: Column(
@@ -125,40 +133,59 @@ class MyHomePage extends StatelessWidget {
   }
 
   Widget _buildInformation(BuildContext context, UserModel user) {
-    return Container(
-      height: 80,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    "${user.name}",
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: const Color.fromRGBO(36, 38, 41, 1),
+    if (user.status == UserStatus.ONLINE) {
+      return Container(
+        height: 80,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: Text(
+                      "${user.name}",
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromRGBO(36, 38, 41, 1),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            child: Text(
-              '${UserBLoC.instance.currentUser.companyName}',
-              style: const TextStyle(
-                fontSize: 16,
-                color: const Color.fromRGBO(132, 114, 1, 1),
+                ],
               ),
             ),
-          )
-        ],
-      ),
-    );
+            Container(
+              child: Text(
+                '${UserBLoC.instance.currentUser.companyName}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: const Color.fromRGBO(132, 114, 1, 1),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        child: Container(
+          width: 200,
+          margin: EdgeInsets.only(left: 10),
+          child: RaisedButton(
+            color: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            onPressed: () {
+              Navigator.of(context).push(
+                  (MaterialPageRoute(builder: (context) => B2BLoginPage())));
+            },
+            child: Text('登录'),
+          ),
+        ),
+      );
+    }
   }
 }
 
@@ -193,7 +220,9 @@ class CompanyCertificationMenuItem extends StatelessWidget {
       onTap: () {
         // 品牌认证
         if (bloc.currentUser.type == UserType.BRAND) {
-          UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
+          UserRepositoryImpl()
+              .getBrand(bloc.currentUser.companyCode)
+              .then((brand) {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -204,7 +233,9 @@ class CompanyCertificationMenuItem extends StatelessWidget {
         }
         // 工厂认证
         if (bloc.currentUser.type == UserType.FACTORY) {
-          UserRepositoryImpl().getFactory(bloc.currentUser.companyCode).then((factory) {
+          UserRepositoryImpl()
+              .getFactory(bloc.currentUser.companyCode)
+              .then((factory) {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -249,13 +280,18 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
       onTap: () {
         // 品牌详情
         if (bloc.currentUser.type == UserType.BRAND) {
-          UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyBrandPage(brand)));
+          UserRepositoryImpl()
+              .getBrand(bloc.currentUser.companyCode)
+              .then((brand) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MyBrandPage(brand)));
           });
         }
         // 工厂详情
         if (bloc.currentUser.type == UserType.FACTORY) {
-          UserRepositoryImpl().getFactory(bloc.currentUser.companyCode).then((factory) {
+          UserRepositoryImpl()
+              .getFactory(bloc.currentUser.companyCode)
+              .then((factory) {
             ProductRepositoryImpl().list({}, {'size': 3}).then((products) {
               Navigator.push(
                 context,

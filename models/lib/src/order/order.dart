@@ -153,6 +153,10 @@ enum MachiningType {
   LIGHT_PROCESSING,
 }
 
+const MachiningTypeMap={
+  
+};
+
 const MachiningTypeLocalizedMap = {
   MachiningType.LABOR_AND_MATERIAL: '包工包料',
   MachiningType.LIGHT_PROCESSING: '清加工',

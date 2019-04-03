@@ -109,10 +109,11 @@ class IndustrialClusterItem extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => FactoryPage(
               FactoryCondition(
-                starLevel: 0,
-                adeptAtCategory: [],
-                industrialCuster: item,
-              ),
+                  starLevel: 0,
+                  adeptAtCategories: [],
+                  industrialCuster: item,
+                  labels: [],
+                  cooperationModes: []),
               route: item.name,
             ),
       ),

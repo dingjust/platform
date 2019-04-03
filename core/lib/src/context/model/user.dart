@@ -25,3 +25,11 @@ enum UserType {
   /// 工厂用户
   FACTORY
 }
+
+enum UserStatus {
+  ///在线
+  ONLINE,
+
+  ///离线
+  OFFLINE
+}

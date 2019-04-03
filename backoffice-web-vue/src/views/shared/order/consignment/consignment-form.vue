@@ -6,14 +6,12 @@
              :rules="rules"
              :disabled="readOnly">
       <el-row :gutter="10">
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="物流单号" prop="trackingID">
             <el-input placeholder="请输入物流单号" v-model="slotData.trackingID"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="物流企业" prop="carrierDetails">
             <el-select v-model="slotData.carrierDetails" class="w-100" value-key="code">
               <el-option v-for="item in carriers" :key="item.code"

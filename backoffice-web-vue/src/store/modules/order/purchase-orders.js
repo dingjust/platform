@@ -64,7 +64,8 @@ const state = {
         name: ''
       },
       line1: ''
-    }
+    },
+    progresses: []
   },
   queryFormData: {
     code: '',
