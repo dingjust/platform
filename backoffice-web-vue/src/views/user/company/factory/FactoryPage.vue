@@ -9,7 +9,7 @@
         </template>
       </factory-list>
     </el-card>
-    <el-dialog title="更新" width="30%" :visible.sync="dialogFormVisible" :before-close="handleClose">
+    <el-dialog title="更新" width="30%" :visible.sync="dialogFormVisible" :before-close="handleClose" append-to-body>
       <factory-labels-form :slotData="item"></factory-labels-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>

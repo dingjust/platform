@@ -7,8 +7,15 @@
              :disabled="readOnly">
       <el-row :gutter="10">
         <el-col :span="12">
-          <el-form-item label="生产阶段" prop="phase" >
-            <el-input :disabled="true" v-model="slotData.phase"></el-input>
+          <el-form-item label="生产阶段" prop="phase">
+            <el-select disabled  v-model="slotData.phase" placeholder="请选择">
+              <el-option
+                v-for="item in productionProgressPhaseTypes"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -63,6 +70,7 @@
     data() {
       return {
         updateVisible:false,
+        productionProgressPhaseTypes: this.$store.state.EnumsModule.productionProgressPhaseTypes,
       }
     },
     created() {
