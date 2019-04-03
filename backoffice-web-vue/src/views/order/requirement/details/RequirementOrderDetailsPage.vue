@@ -7,7 +7,8 @@
     <div class="pt-2"></div>
     <requirement-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
     
-    <el-dialog title="审核" width="450px" :visible.sync="this.reviewVisible" :before-close="handleClose">
+    <el-dialog title="审核" width="450px" :visible.sync="this.reviewVisible" :before-close="handleClose"
+               append-to-body>
       <requirement-order-labels-form :slotData = "slotData" :read-only="false"></requirement-order-labels-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
@@ -15,7 +16,8 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="修改" width="600px" :visible.sync="this.updateVisible" :before-close="handleClose">
+    <el-dialog title="修改" width="600px" :visible.sync="this.updateVisible" :before-close="handleClose"
+               append-to-body>
       <requirement-order-update-form :slotData = "slotData"></requirement-order-update-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
