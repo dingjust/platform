@@ -175,4 +175,9 @@ class OrderApis {
   static get requirementUpdate => (code) {
         return '/{baseSiteId}/b2b/orders/requirement/$code';
       };
+
+  //邀请工厂（推荐需求）
+  static get doRecommendation => (code,uid) {
+    return '/{baseSiteId}/b2b/orders/requirement/$code/factory/$uid/recommend';
+  };
 }

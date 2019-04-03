@@ -211,6 +211,7 @@ class _FactoryListViewState extends State<FactoryListView> {
                     children: snapshot.data.map((item) {
                       return FactoryItem(
                         model: item,
+                        requirementCode: widget.requirementCode,
                         showButton: widget.showButton,
                       );
                     }).toList(),
