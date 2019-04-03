@@ -176,8 +176,10 @@
       }
     },
     created() {
-      this.getFactories();
-      this.getBrands();
+      if (this.isTenant()) {
+        this.getFactories();
+        this.getBrands();
+      }
     }
   }
 </script>

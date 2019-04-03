@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-button v-if="isFactory()&&slotData.finishDate==null" type="text" icon="el-icon-edit"
+    <el-button v-if="isFactory() && slotData.finishDate == null" type="text" icon="el-icon-edit"
                @click="updateVisible = true">
       修改
     </el-button>
@@ -64,7 +64,7 @@
     </el-form>
 
     <el-dialog title="修改" width="600px" :visible.sync="this.updateVisible" :before-close="handleClose">
-      <purchase-order-update-form :slotData = "slotData"></purchase-order-update-form>
+      <purchase-order-update-form :slotData="slotData"></purchase-order-update-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="submit()">更新</el-button>
@@ -77,6 +77,7 @@
 <script>
   import PurchaseOrderAttachmentsForm from "./PurchaseOrderAttachmentsForm";
   import PurchaseOrderUpdateForm from "./PurchaseOrderUpdateForm";
+
   export default {
     name: 'PurchaseOrderProgressForm',
     props: ['slotData', 'readOnly'],
@@ -91,9 +92,9 @@
         this.updateVisible = false;
       },
       submit(finish) {
-        if(finish){
+        if (finish) {
           this.slotData.updateOnly = false;
-        }else {
+        } else {
           this.slotData.updateOnly = true;
         }
         this.$emit('onSubmit', this.slotData);
@@ -102,7 +103,7 @@
     },
     data() {
       return {
-        updateVisible:false,
+        updateVisible: false,
       }
     },
     created() {

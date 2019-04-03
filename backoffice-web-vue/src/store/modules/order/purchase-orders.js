@@ -40,6 +40,13 @@ const state = {
     unitPrice: 0,
     entries: [],
     remarks: '',
+    consignment: {
+      trackingID: '',
+      carrierDetails: {
+        code: '',
+        name: ''
+      }
+    },
     deliveryAddress: {
       id: null,
       fullname: '',
@@ -88,6 +95,13 @@ const state = {
       name: ''
     },
     line1: ''
+  },
+  consignmentFormData: {
+    trackingID: '',
+    carrierDetails: {
+      code: '',
+      name: ''
+    }
   }
 };
 

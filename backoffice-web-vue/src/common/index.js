@@ -5,8 +5,8 @@ const COMMON_APIS = {
   getRegions() {
     return '/djwebservices/addresses/CN/regions';
   },
-  getAllStyles() {
-    return '/djwebservices/styles/all';
+  getCarriers() {
+    return '/djwebservices/carriers';
   },
   createColor() {
     return '/djwebservices/colors/create';
@@ -330,6 +330,9 @@ let NONE_TENANT_APIS = {
   },
   getPurchaseOrders() {
     return '/b2b/orders/purchase';
+  },
+  confirmDeliveringOfProductionOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/delivering';
   },
   getProofings() {
     return '/b2b/orders/proofing';
