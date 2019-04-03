@@ -6,7 +6,6 @@ import 'package:widgets/widgets.dart';
 import '../../widgets/scrolled_to_end_tips.dart';
 
 import '../../../business/orders/form/proofing_order_form.dart';
-import '../../../business/orders/quote_order_detail.dart';
 import '../../../home/pool/requirement_quote_order_form.dart';
 import '../../../production/production_online_order_from.dart';
 
@@ -54,15 +53,13 @@ class _QuoteListState extends State<QuoteList> {
     bloc.returnToTopStream.listen((data) {
       // 返回到顶部时执行动画
       if (data) {
-        widget.scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        widget.scrollController.animateTo(
+          .0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.ease,
+        );
       }
     });
-  }
-
-  void _onQuoteDetails(QuoteModel model) async {
-    // 查询明细
-    QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(model.code);
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuoteOrderDetailPage(item: detailModel)));
   }
 
   void _onQuoteRejecting(QuoteModel model) {
@@ -71,28 +68,29 @@ class _QuoteListState extends State<QuoteList> {
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('请输入拒绝原因?'),
+          title: const Text('请输入拒绝原因?'),
           content: TextField(
             controller: widget.rejectController,
             autofocus: true,
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消', style: TextStyle(color: Colors.grey)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              child: const Text('取消', style: const TextStyle(color: Colors.grey)),
+              onPressed: () => Navigator.of(context).pop(),
             ),
             FlatButton(
               child: Text('确定', style: TextStyle(color: Colors.black)),
               onPressed: () async {
-                int statusCode = await QuoteOrderRepository().quoteReject(model.code, widget.rejectController.text);
+                int statusCode = await QuoteOrderRepository().quoteReject(
+                  model.code,
+                  widget.rejectController.text,
+                );
                 Navigator.of(context).pop();
                 if (statusCode == 200) {
                   // 触发刷新
-                  _handleRefresh(context);
+                  _handleRefresh();
                 } else {
-                  _alertMessage(context, '拒绝失败');
+                  _alertMessage('拒绝失败');
                 }
               },
             ),
@@ -108,24 +106,22 @@ class _QuoteListState extends State<QuoteList> {
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('是否确认?'),
+          title: const Text('是否确认?'),
           actions: <Widget>[
             FlatButton(
-              child: Text('否', style: TextStyle(color: Colors.grey)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              child: const Text('否', style: const TextStyle(color: Colors.grey)),
+              onPressed: () => Navigator.of(context).pop(),
             ),
             FlatButton(
-              child: Text('是', style: TextStyle(color: Colors.black)),
+              child: const Text('是', style: const TextStyle(color: Colors.black)),
               onPressed: () async {
                 int statusCode = await QuoteOrderRepository().quoteApprove(model.code);
                 Navigator.of(context).pop();
                 if (statusCode == 200) {
                   // 触发刷新
-                  _handleRefresh(context);
+                  _handleRefresh();
                 } else {
-                  _alertMessage(context, '确认失败');
+                  _alertMessage('确认失败');
                 }
               },
             ),
@@ -149,7 +145,7 @@ class _QuoteListState extends State<QuoteList> {
 
     //成功调用列表页传递的更新函数刷新页面
     if (success != null && success) {
-      _handleRefresh(context);
+      _handleRefresh();
     }
   }
 
@@ -158,18 +154,14 @@ class _QuoteListState extends State<QuoteList> {
     QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(model.code);
 
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ProofingOrderForm(quoteModel: detailModel),
-      ),
+      MaterialPageRoute(builder: (context) => ProofingOrderForm(quoteModel: detailModel)),
     );
   }
 
   void _onProductionOrderCreating(QuoteModel model) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => ProductionOnlineOrderFrom(quoteModel: model),
-      ),
+      MaterialPageRoute(builder: (context) => ProductionOnlineOrderFrom(quoteModel: model)),
     );
   }
 
@@ -182,12 +174,12 @@ class _QuoteListState extends State<QuoteList> {
   }
 
   // 子组件刷新数据方法
-  void _handleRefresh(BuildContext context) {
+  void _handleRefresh() {
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
     bloc.refreshData(widget.status.code);
   }
 
-  void _alertMessage(BuildContext context, String message) {
+  void _alertMessage(String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -226,7 +218,6 @@ class _QuoteListState extends State<QuoteList> {
                     children: snapshot.data.map((item) {
                       return QuoteListItem(
                         model: item,
-                        onQuoteDetails: () => _onQuoteDetails(item),
                         onQuoteRejecting: () => _onQuoteRejecting(item),
                         onQuoteConfirming: () => _onQuoteConfirming(item),
                         onQuoteUpdating: () => _onQuoteUpdating(item),

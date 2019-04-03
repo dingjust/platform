@@ -256,11 +256,8 @@ class SuppliersItem extends StatelessWidget {
         if (ordersResponse.content.length > 0) purchaseOrderModel = ordersResponse.content[0];
 
         //获取该工厂的现款商品
-        ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
-          'factory': supplierModel.uid,
-        }, {
-          'size': 3
-        });
+        ProductsResponse productsResponse = await ProductRepositoryImpl()
+            .getProductsOfFactory({}, {'size': 3}, supplierModel.uid);
 
         Navigator.push(
           context,

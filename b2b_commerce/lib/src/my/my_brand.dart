@@ -69,7 +69,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
     if (widget.quoteModel != null) {
       _widgets.add(QuoteListItem(
         model: widget.quoteModel,
-        isSupplier: widget.quoteModel != null,
+        showActions: false,
       ));
     }
 

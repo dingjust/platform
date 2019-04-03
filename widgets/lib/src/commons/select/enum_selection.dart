@@ -23,7 +23,7 @@ class EnumSelectionState extends State<EnumSelection> {
     _enumModels = widget.enumModels;
     _multiple = widget.multiple;
     if(widget.enumSelect.isNotEmpty){
-      _enumCodeSelect = widget.enumSelect?.map((enumModel) => enumModel.code)?.toList();
+      _enumCodeSelect = widget.enumSelect?.map<String>((enumModel) => enumModel.code)?.toList();
     }
 
     // TODO: implement initState

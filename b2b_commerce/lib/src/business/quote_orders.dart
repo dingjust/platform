@@ -23,7 +23,7 @@ class QuoteOrdersPage extends StatefulWidget {
 class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
   final GlobalKey _globalKey = GlobalKey<_QuoteOrdersPageState>();
 
-  Widget _buildSearchButton(BuildContext context) {
+  Widget _buildSearchButton() {
     return IconButton(
       icon: const Icon(B2BIcons.search, size: 20),
       onPressed: () => showSearch(context: context, delegate: QuotesSearchDelegate()),
@@ -38,7 +38,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
       child: Scaffold(
         appBar: AppBarFactory.buildDefaultAppBar(
           '报价管理',
-          actions: <Widget>[_buildSearchButton(context)],
+          actions: <Widget>[_buildSearchButton()],
         ),
         body: DefaultTabController(
           length: statuses.length,

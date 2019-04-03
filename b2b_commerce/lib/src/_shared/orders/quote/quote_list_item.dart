@@ -2,41 +2,45 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
-typedef void QuoteDetailsCallback();
+import '../../widgets/image_factory.dart';
+import '../../../business/orders/quote_order_detail.dart';
 
+/// 拒绝报价
 typedef void QuoteRejectingCallback();
 
+/// 确认报价
 typedef void QuoteConfirmingCallback();
 
+/// 修改报价
 typedef void QuoteUpdatingCallback();
 
+/// 重新报价
 typedef void QuoteAgainCallback();
 
+/// 创建打样订单
 typedef void ProofingCreatingCallback();
 
+/// 创建生产订单
 typedef void ProductionOrderCreatingCallback();
 
 /// 报价单行
 class QuoteListItem extends StatelessWidget {
   QuoteListItem({
     Key key,
-    this.model,
-    this.onQuoteDetails,
+    @required this.model,
     this.onQuoteRejecting,
     this.onQuoteConfirming,
     this.onQuoteUpdating,
     this.onQuoteAgain,
     this.onProofingCreating,
     this.onProductionOrderCreating,
-    this.isSupplier = false,
+    this.showActions = true,
   }) : super(key: ObjectKey(model));
 
   final QuoteModel model;
-  final bool isSupplier;
+  final bool showActions;
 
-  final QuoteDetailsCallback onQuoteDetails;
   final QuoteRejectingCallback onQuoteRejecting;
   final QuoteConfirmingCallback onQuoteConfirming;
   final QuoteUpdatingCallback onQuoteUpdating;
@@ -52,8 +56,16 @@ class QuoteListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void _onQuoteDetails() async {
+      // 查询明细
+      QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(model.code);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => QuoteOrderDetailPage(item: detailModel)),
+      );
+    }
+
     return GestureDetector(
-      onTap: onQuoteDetails,
+      onTap: _onQuoteDetails,
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -62,15 +74,8 @@ class QuoteListItem extends StatelessWidget {
             _buildHeader(),
             _buildEntries(),
             Offstage(
-              offstage: isSupplier,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: _buildSummary(context),
-                  )
-                ],
-              ),
+              offstage: !showActions,
+              child: Row(children: <Widget>[Expanded(flex: 1, child: _buildActions(context))]),
             )
           ],
         ),
@@ -122,7 +127,7 @@ class QuoteListItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '${model?.supplier?.name}',
+                  '${model.supplier?.name}',
                   style: const TextStyle(fontSize: 15),
                 ),
                 Text(
@@ -142,32 +147,7 @@ class QuoteListItem extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          model.requirementOrder.details?.pictures != null && model.requirementOrder.details.pictures.isNotEmpty
-              ? Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          '${GlobalConfigs.IMAGE_BASIC_URL}${model.requirementOrder.details.pictures[0].url}'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                )
-              : Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: const Color.fromRGBO(243, 243, 243, 1),
-                  ),
-                  child: const Icon(
-                    B2BIcons.noPicture,
-                    color: const Color.fromRGBO(200, 200, 200, 1),
-                    size: 60,
-                  ),
-                ),
+          ImageFactory.buildThumbnailImageForList(model.requirementOrder.details?.pictures),
           Expanded(
             flex: 1,
             child: Container(
@@ -220,7 +200,7 @@ class QuoteListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildSummary(BuildContext context) {
+  Widget _buildActions(BuildContext context) {
     List<Widget> buttons;
 
     //品牌端显示
