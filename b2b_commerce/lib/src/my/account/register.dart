@@ -218,7 +218,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             : Colors.black54),
                   ),
                   GestureDetector(
-                      onTap: () {},
+                      onTap: showServiceProtocol,
                       child: Container(
                         child: Text(
                           '《钉单平台服务协议》',
@@ -287,18 +287,63 @@ class _RegisterPageState extends State<RegisterPage> {
         return FutureBuilder(
             future: DefaultAssetBundle.of(context)
                 .loadString("packages/assets/document/paymentProtocol.txt"),
+            initialData: null,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                print(snapshot.data);
-                return AlertDialog(
-                  title: const Text('提示', style: const TextStyle(fontSize: 16)),
-                  content: SingleChildScrollView(
-                    child: ListBody(
-                      children: <Widget>[Text(snapshot.data)],
-                    ),
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '钉单货款代收代付服务协议',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
                   ),
-                );
-              }
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  void showServiceProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/serviceProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '钉单平台服务协议',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
             });
       },
     );

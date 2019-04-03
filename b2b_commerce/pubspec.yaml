@@ -127,6 +127,7 @@ flutter:
     - packages/assets/temp/business/quote_manage_factory.png
     - packages/assets/temp/my/company_introduce.png
     - packages/assets/document/paymentProtocol.txt
+    - packages/assets/document/serviceProtocol.txt
 
   fonts:
     - family: b2bIcons
