@@ -240,6 +240,9 @@ const COMMON_APIS = {
   getRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code;
   },
+  recommendRequirementOrderToFactory(code,uid) {
+    return '/b2b/orders/requirement/' + code+"/factory/"+uid+"/recommend";
+  },
   createRequirementOrder() {
     return '/b2b/orders/requirement/new';
   },
