@@ -176,11 +176,10 @@
       }
     },
     created() {
-      if(this.$store.getters.currentUser.type === 'TENANT'){
+      if (this.isTenant()) {
         this.getFactories();
         this.getBrands();
       }
-
     }
   }
 </script>

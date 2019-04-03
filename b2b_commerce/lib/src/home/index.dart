@@ -380,19 +380,11 @@ class BrandTrackingProgressSection extends StatelessWidget {
 class FactoryRequirementPoolSection extends StatelessWidget {
   int requirementAll = 0;
   int requirementRecommend = 0;
-  /// 全部需求streamController
-  final StreamController _allRequirementStreamController =
-      StreamController<int>.broadcast();
-
-  /// 推荐需求streamController
-  final StreamController _recommendRequirementStreamController =
-      StreamController<int>.broadcast();
-
   final StreamController _reportsStreamController =
       StreamController<Reports>.broadcast();
 
   void queryReports() async {
-    Reports response = await ReportsRepository().report();
+    Reports response = await ReportsRepository().reportRequirementCount();
     if (response != null) {
       _reportsStreamController.add(response);
       requirementAll = response.ordersCount8;
@@ -408,10 +400,10 @@ class FactoryRequirementPoolSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          StreamBuilder<int>(
-            stream: _allRequirementStreamController.stream,
-            initialData: requirementAll,
-            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+          StreamBuilder<Reports>(
+            stream: _reportsStreamController.stream,
+            initialData: Reports(),
+            builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
               return GestureDetector(
                 onTap: () async {
                   await ProductRepositoryImpl()
@@ -426,15 +418,15 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                     );
                   });
                 },
-                child: AllRequirementMenuItem(count: snapshot.data),
+                child: AllRequirementMenuItem(count: snapshot.data.ordersCount8),
               );
             },
           ),
           DividerFactory.buildVerticalSeparator(35),
-          StreamBuilder<int>(
-            stream: _recommendRequirementStreamController.stream,
-            initialData: requirementRecommend,
-            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+          StreamBuilder<Reports>(
+            stream: _reportsStreamController.stream,
+            initialData: Reports(),
+            builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
               return GestureDetector(
                 onTap: () async {
                   await ProductRepositoryImpl()
@@ -446,7 +438,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                             )));
                   });
                 },
-                child: RecommendedRequirementMenuItem(count: snapshot.data),
+                child: RecommendedRequirementMenuItem(count: snapshot.data.ordersCount9),
               );
             },
           ),

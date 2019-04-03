@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-button v-if="isFactory()&&slotData.finishDate==null" type="text" icon="el-icon-edit"
+    <el-button v-if="isFactory() && slotData.finishDate == null" type="text" icon="el-icon-edit"
                @click="updateVisible = true">
       修改
     </el-button>
@@ -23,7 +23,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="数量" prop="quantity">
-            <el-input-number v-model="slotData.quantity" :min="1"></el-input-number>
+            <el-input-number v-model="slotData.quantity" :min="0"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -85,6 +85,7 @@
 <script>
   import PurchaseOrderAttachmentsForm from "./PurchaseOrderAttachmentsForm";
   import PurchaseOrderUpdateForm from "./PurchaseOrderUpdateForm";
+
   export default {
     name: 'PurchaseOrderProgressForm',
     props: ['slotData', 'readOnly'],
@@ -99,9 +100,9 @@
         this.updateVisible = false;
       },
       submit(finish) {
-        if(finish){
+        if (finish) {
           this.slotData.updateOnly = false;
-        }else {
+        } else {
           this.slotData.updateOnly = true;
         }
         this.$emit('onSubmit', this.slotData);
