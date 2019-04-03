@@ -44,15 +44,22 @@ class UserBLoC extends BLoCBase {
 
   Stream<UserModel> get stream => _controller.stream;
 
-  StreamController _loginResultController = StreamController<DioError>.broadcast();
+  StreamController _loginResultController =
+      StreamController<DioError>.broadcast();
 
   Stream<DioError> get loginStream => _loginResultController.stream;
+
+  ///跳转登陆
+  StreamController loginJumpController = StreamController<bool>.broadcast();
+
+  Stream<bool> get loginJumpStream => loginJumpController.stream;
 
   Future<bool> login({String username, String password, bool remember}) async {
     // // login service
     Response loginResponse;
     try {
-      loginResponse = await http$.post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+      loginResponse = await http$
+          .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
         'username': username,
         'password': password,
         'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
@@ -82,11 +89,13 @@ class UserBLoC extends BLoCBase {
       if (infoResponse != null && infoResponse.statusCode == 200) {
         _user = UserModel.fromJson(infoResponse.data);
         _user.name = infoResponse.data['username'];
+        _user.status=UserStatus.ONLINE;
       }
 
       //  记录登陆用户信息
       if (remember) {
-        LocalStorage.save(GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
+        LocalStorage.save(
+            GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
         LocalStorage.save(GlobalConfigs.USER_KEY, username);
       }
       _controller.sink.add(_user);
@@ -105,16 +114,23 @@ class UserBLoC extends BLoCBase {
     _controller.sink.add(_user);
   }
 
+  void changeUserType(UserType userType) {
+    _user.type = userType;
+    _controller.sink.add(_user);
+  }
+
   //检测本地用户记录
   Future<void> checkLocalUser() async {
     // 检测本地是否有refresh_token
-    String localRefreshToken = await LocalStorage.get(GlobalConfigs.REFRESH_TOKEN_KEY);
+    String localRefreshToken =
+        await LocalStorage.get(GlobalConfigs.REFRESH_TOKEN_KEY);
 
     if (localRefreshToken != null && localRefreshToken != '') {
       //调用刷新token接口
       Response loginResponse;
       try {
-        loginResponse = await http$.post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+        loginResponse = await http$.post(
+            HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
           'grant_type': GlobalConfigs.GRANT_TYPE_REFRESH_TOKEN,
           'client_id': 'asm',
           'client_secret': 'password',
@@ -144,7 +160,8 @@ class UserBLoC extends BLoCBase {
         }
 
         //  记录refresh_token
-        LocalStorage.save(GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
+        LocalStorage.save(
+            GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
       }
     }
   }
@@ -153,5 +170,6 @@ class UserBLoC extends BLoCBase {
   dispose() {
     _controller.close();
     _loginResultController.close();
+    loginJumpController.close();
   }
 }
