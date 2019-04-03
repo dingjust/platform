@@ -128,6 +128,7 @@ flutter:
     - packages/assets/temp/my/company_introduce.png
     - packages/assets/document/paymentProtocol.txt
     - packages/assets/document/serviceProtocol.txt
+    - packages/assets/temp/client_select.png
 
   fonts:
     - family: b2bIcons

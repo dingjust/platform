@@ -85,7 +85,8 @@ class HttpManager {
       // unauthorized
       if (e.response != null && e.response.statusCode == 401) {
         //token过期，用户记录清空
-        UserBLoC.instance.logout();
+        // UserBLoC.instance.logout();
+        UserBLoC.instance.loginJumpController.add(true);
       }
 
       _clearContext();
