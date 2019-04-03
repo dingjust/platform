@@ -54,6 +54,7 @@ class _RequirementDatePickState extends State<RequirementDatePick> {
             child: Row(
               children: <Widget>[
                 Text(
+                  widget.fastRequirementForm.categories == null ? '':
                   '已填选结果: ${widget.fastRequirementForm.categories[0].name}',
                   style: TextStyle(
                       color: Color.fromRGBO(100, 100, 100, 1), fontSize: 18),

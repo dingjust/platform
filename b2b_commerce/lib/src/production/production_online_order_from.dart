@@ -64,6 +64,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           _buildProcessCount(context),
           _buildExpectPrice(context),
           _buildEarnestMoney(context),
+          _buildDeliveryDate(context),
           _buildCooperationModes(context),
           _buildInvoice(context),
           _buildAnnex(context),
@@ -538,6 +539,46 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
         });
   }
 
+  //预计交货时间
+  Widget _buildDeliveryDate(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 3),
+          child: ListTile(
+            leading: Text(
+              '预计交货时间',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: widget.quoteModel == null || widget.quoteModel.expectedDeliveryDate == null
+                ? Icon(Icons.keyboard_arrow_right)
+                : Text(
+              '${DateFormatUtil.formatYMD(widget.quoteModel.expectedDeliveryDate)}',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OfflineOrderInputPage(
+                    fieldText: '定金', inputType: TextInputType.number)),
+            //接收返回数据并处理
+          ).then((value) {
+            setState(() {
+              earnestMoney = value;
+            });
+          });
+        });
+  }
+
   //合作方式
   Widget _buildCooperationModes(BuildContext context) {
     return GestureDetector(
@@ -809,6 +850,8 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     purchaseOrder.remarks = remarks;
     //附件
     purchaseOrder.attachments = mediaList;
+    //预计交货时间
+    purchaseOrder.expectedDeliveryDate = widget.quoteModel.expectedDeliveryDate;
     //添加订单行
     if (productModel != null &&
         productModel.variants != null &&

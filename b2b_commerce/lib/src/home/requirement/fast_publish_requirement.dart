@@ -338,9 +338,11 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
 class FastRequirementForm {
   List<CategoryModel> categories;
   DateTime deliveryDate;
+  String product;
+  String factoryUid;
   TextEditingController requirementNum;
   TextEditingController contactPerson;
   TextEditingController phone;
 
-  FastRequirementForm({this.categories, this.contactPerson, this.deliveryDate, this.phone, this.requirementNum});
+  FastRequirementForm({this.categories,this.factoryUid,this.product, this.contactPerson, this.deliveryDate, this.phone, this.requirementNum});
 }
