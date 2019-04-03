@@ -623,13 +623,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     children: <Widget>[
                       Container(
                         child: Text(
-                          '${order.consignment != null && order.consignment.carrierModel != null ? order.consignment.carrierModel.name : ''}',
+                          '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.carrierDetails.name : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
                       Container(
                         child: Text(
-                          '${order.consignment != null && order.consignment.carrierModel != null ? order.consignment.trackingID : ''}',
+                          '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.trackingID : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -639,9 +639,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               ),
               onTap: () {
                 if (order.consignment != null &&
-                    order.consignment.carrierModel != null &&
+                    order.consignment.carrierDetails != null &&
                     order.consignment.trackingID != null &&
-                    order.consignment.carrierModel.name != null) {
+                    order.consignment.carrierDetails.name != null) {
                   copyToClipboard(order.consignment.trackingID);
                 } else {
                   null;
