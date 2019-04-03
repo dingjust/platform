@@ -75,8 +75,8 @@ class HttpManager {
     }, onError: (DioError e) {
       ErrorResponse errorResponse = ErrorResponse.fromJson(e.response.data);
       //消息流推送
-      MessageBLoC.instance.errorMessageController
-          .add(errorResponse.errors[0].message);
+      MessageBLoC.instance.errorMessageController.add(
+          '${errorResponse.errors[0].message}   errorType:${errorResponse.errors[0].type}');
       // 当请求失败时做一些预处理
       if (GlobalConfigs.DEBUG) {
         print(e.toString());
