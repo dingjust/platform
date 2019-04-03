@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <requirement-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
-    <requirement-order-operate-toolbar :read-only="slotData.editable" @onUpdate="onUpdate" @onReview="onReview"/>
+    <requirement-order-operate-toolbar :read-only="slotData.editable" @onUpdate="onUpdate" @onReview="onReview" @onRecommended="onRecommended"/>
     <div class="pt-2"></div>
     <requirement-order-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
     <div class="pt-2"></div>
@@ -22,6 +22,26 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="update()">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="推荐工厂" width="600px" :visible.sync="recommendedVisible" :before-close="handleClose"
+               append-to-body>
+      <el-select v-model="recommendedFactories" placeholder="请选择"
+                 multiple class="w-100"
+                 filterable
+                 remote
+                 :remote-method="getFactories">
+        <el-option
+          v-for="item in factories"
+          :key="item.uid"
+          :label="item.name"
+          :value="item.uid">
+        </el-option>
+      </el-select>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="recommended()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -55,6 +75,36 @@
       handleClose(done) {
         this.reviewVisible = false;
         this.updateVisible = false;
+        this.recommendedVisible = false;
+      },
+      async recommended() {
+        console.log(this.recommendedFactories);
+
+        if (this.recommendedFactories == '') {
+          this.$message.error('请选择工厂推荐');
+          return false;
+        }
+        const url = this.apis().recommendRequirementOrderToFactory(this.slotData.code,this.recommendedFactories);
+        const result = await this.$http.put(url,{});
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('推荐成功');
+        this.recommendedVisible = false;
+        this.fn.closeSlider(true);
+
+      },
+      async recommendedSubmit(code,uid){
+        const url = this.apis().recommendRequirementOrderToFactory(code,uid);
+        const result = await this.$http.put(url,{});
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('推荐成功');
+        this.recommendedVisible = false;
+        this.fn.closeSlider(true);
       },
       async update() {
         console.log(this.slotData);
@@ -79,13 +129,18 @@
         this.updateVisible = false;
         this.reviewVisible = false;
       },
+
       onUpdate() {
         this.reviewVisible = false;
         this.updateVisible = true;
+
       },
       onReview() {
         this.reviewVisible = true;
         this.updateVisible = false;
+      },
+      onRecommended() {
+        this.recommendedVisible = true;
       },
       onSubmit() {
         this.$refs['form'].validate((valid) => {
@@ -120,7 +175,19 @@
         this.$set(this.slotData, 'code', result);
         this.refresh();
         this.fn.closeSlider(true);
-      }
+      },
+      async getFactories(query) {
+        const url = this.apis().getFactories();
+        const result = await this.$http.post(url,{keyword:query},{
+          page: 0,
+          size: 10
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.factories = result.content;
+      },
     },
     computed: {
 
@@ -128,11 +195,19 @@
         return this.slotData.id === null;
       }
     },
+    created() {
+      if (!this.isFactory()) {
+        this.getFactories();
+      }
+    },
     data() {
       return {
         updateVisible:false,
         reviewVisible:false,
+        recommendedVisible:false,
         item:{},
+        recommendedFactories:'',
+        factories:[],
 
       }
     }

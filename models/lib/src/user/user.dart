@@ -16,6 +16,10 @@ class UserModel extends PrincipalModel {
   /// 用户类型
   UserType type;
 
+
+  /// 用户状态
+  UserStatus status;
+
   /// 角色
   List<RoleModel> roles;
 
@@ -34,6 +38,7 @@ class UserModel extends PrincipalModel {
     this.loginDisabled,
     this.type,
     this.roles,
+    this.status
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -46,6 +51,7 @@ class UserModel extends PrincipalModel {
     this.name = "未登录用户";
     this.loginDisabled = false;
     this.type = UserType.ANONYMOUS;
+    this.status=UserStatus.OFFLINE;
   }
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

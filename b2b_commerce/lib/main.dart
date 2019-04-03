@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/index.dart';
+import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
             // 未登陆
             if (snapshot.data.type == UserType.ANONYMOUS) {
               return MaterialApp(
-                home: B2BLoginPage(),
+                home: ClientSelectPage(),
               );
             }
 
@@ -80,11 +81,17 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   @override
   void initState() {
     // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((_) => initListener());
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => listenMessage());
   }
 
-  //异常消息dialog
+  //初始化监听
+  void initListener() {
+    listenMessage();
+    listenLogin();
+  }
+
+  //监听异常消息,dialog
   void listenMessage() {
     MessageBLoC.instance.errorMessageStream.listen((value) {
       final appContext = _navigatorKey.currentState.overlay.context;
@@ -92,6 +99,16 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
         content: Text('$value'),
       );
       showDialog(context: appContext, builder: (x) => dialog);
+    });
+  }
+
+  //监听未登录接口调用跳转登陆页
+  void listenLogin() {
+    UserBLoC.instance.loginJumpStream.listen((value) {
+      if (true) {
+        Navigator.of(_navigatorKey.currentState.overlay.context)
+            .push(MaterialPageRoute(builder: (context) => B2BLoginPage()));
+      }
     });
   }
 
