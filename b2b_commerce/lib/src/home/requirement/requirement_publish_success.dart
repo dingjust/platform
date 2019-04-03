@@ -1,8 +1,10 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
+import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class PublishRequirementSuccessDialog extends StatefulWidget {
@@ -239,7 +241,16 @@ class _PublishRequirementSuccessDialogState
               height: 45,
               child: FlatButton(
                 onPressed: () {
-                  //TODO:工厂列表
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FactoryPage(
+                        FactoryCondition(starLevel: 0, adeptAtCategory: []),
+                        route: '全部工厂',
+                        requirementCode: widget.model.code,
+                      ),
+                    ),
+                  );
                 },
                 color: Color.fromRGBO(255, 214, 12, 1),
                 shape: RoundedRectangleBorder(

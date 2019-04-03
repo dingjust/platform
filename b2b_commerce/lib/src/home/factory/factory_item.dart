@@ -36,7 +36,6 @@ class FactoryItem extends StatelessWidget {
           'size': 3
         });
 
-        // TODO 工厂跳转
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -297,6 +296,7 @@ class InviteFactoryButton extends StatelessWidget {
                 );
               },
             );
+            FactoryBLoC().clear();
           },
           color: Color.fromRGBO(255, 214, 12, 1),
           child: Text(

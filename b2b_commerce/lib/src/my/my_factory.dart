@@ -140,7 +140,6 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           MaterialPageRoute(
             builder: (context) => RequirementOrderFrom(
                   factoryUid: widget.factory.uid,
-                  order: orderModel,
                 ),
           ),
         );
