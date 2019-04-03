@@ -23,7 +23,6 @@
                 </el-card>
               </template>
             </el-timeline>
-
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -56,21 +55,20 @@
         </div>
         <purchase-order-delivery-address-form :slot-data="slotData" :read-only="readOnly"/>
       </el-card>
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>生产进度</span>
-          </div>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>生产进度</span>
+        </div>
         <el-timeline>
           <template v-for="progress in slotData.progresses">
             <el-timeline-item color="#0bbd87" size="large">
-            <el-card>
-              <purchase-order-progress-form :slot-data="progress" :read-only="readOnly" @onSubmit="progressSubmit"/>
-            </el-card>
+              <el-card>
+                <purchase-order-progress-form :slot-data="progress" :read-only="readOnly" @onSubmit="progressSubmit"/>
+              </el-card>
             </el-timeline-item>
           </template>
         </el-timeline>
-
-        </el-card>
+      </el-card>
     </template>
   </div>
 </template>
@@ -100,7 +98,7 @@
       }
     },
     methods: {
-      async progressSubmit(data){
+      async progressSubmit(data) {
         let formData = data;
         console.log(formData);
 
@@ -109,7 +107,7 @@
           this.$message.error('预计完成时间不能小于当前时间');
           return false;
         }
-        const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code,formData.id);
+        const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, formData.id);
         const result = await this.$http.put(url, formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

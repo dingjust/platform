@@ -440,12 +440,8 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       return GestureDetector(
         onTap: () async {
           //获取该工厂的现款商品
-          ProductsResponse productsResponse =
-              await ProductRepositoryImpl().getProductsOfFactories({
-            'factory': widget.model.belongTo.uid,
-          }, {
-            'size': 3
-          });
+          ProductsResponse productsResponse = await ProductRepositoryImpl()
+              .getProductsOfFactory({}, {'size': 3}, widget.model.belongTo.uid);
 
           //TODO跳转详细页
           Navigator.push(
@@ -616,8 +612,8 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               child: FlatButton(
                 onPressed: () async {
                   bool result = false;
-                  result =
-                  await ProofingOrderRepository().shipped(widget.model.code);
+                  result = await ProofingOrderRepository()
+                      .shipped(widget.model.code);
                   _showMessage(context, result, '确认收货');
                 },
                 color: Color(0xFFFFD600),
@@ -630,8 +626,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))),
-              )
-          ),
+              )),
         ];
       } else {
         return Container();

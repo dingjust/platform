@@ -1,10 +1,14 @@
 <template>
   <div class="animated fadeIn">
-    <purchase-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
+                                 @onSubmit="onSubmit"
+                                 @onCancel="onCancel"/>
     <div class="pt-2"></div>
     <purchase-order-form :slot-data="slotData" :read-only="!isNewlyCreated"/>
     <div class="pt-2"></div>
-    <purchase-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
+                                 @onSubmit="onSubmit"
+                                 @onCancel="onCancel"/>
   </div>
 </template>
 
@@ -57,6 +61,9 @@
       },
       onCancel() {
         this.fn.closeSlider();
+      },
+      confirmDelivering() {
+
       }
     },
     computed: {

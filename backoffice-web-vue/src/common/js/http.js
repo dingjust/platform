@@ -1,5 +1,6 @@
 // 引入 axios
 import axios from 'axios';
+import { Loading } from 'element-ui';
 
 axios.defaults.baseURL = '';
 setAuthorization();
@@ -28,21 +29,31 @@ axios.interceptors.request.use(
 );
 
 let http = {
+  options:{
+    text:"正在请求，请稍等",
+    background:"rgba(0, 0, 0, 0.8)",
+    spinner:"el-icon-loading"
+  },
   /** get 请求
    * @param  {接口地址} url
    * @param  {请求参数} params
    */
   get: function (url, params) {
+    let loading = Loading.service(this.options);
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.get(url, {
         params: params
-      }).then((response) => resolve(response.data))
+      }).then((response) => {
+        loading.close();
+        return resolve(response.data)
+      })
         .catch((error) => {
           if (error.response && error.response.data) {
+            loading.close();
             return resolve(error.response.data);
           } else {
-
+            loading.close();
             return resolve(error.response);
           }
         });
@@ -54,16 +65,21 @@ let http = {
    * @param  {headers参数} params
    */
   post: function (url, data, params) {
+    let loading = Loading.service(this.options);
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.post(url, data, {
         params: params
-      }).then((response) => resolve(response.data))
+      }).then((response) => {
+        loading.close();
+        return resolve(response.data);
+      })
         .catch((error) => {
           if (error.response && error.response.data) {
+            loading.close();
             return resolve(error.response.data);
           } else {
-
+            loading.close();
             return resolve(error.response);
           }
         });
@@ -74,35 +90,45 @@ let http = {
    * @param  {请求参数} data
    */
   put: function (url, data, params) {
+    let loading = Loading.service(this.options);
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.put(url, data, {
         params: params
-      }).then((response) => resolve(response.data))
-        .catch((error) => {
+      }).then((response) => {
+        loading.close();
+        return resolve(response.data)
+      }).catch((error) => {
           if (error.response && error.response.data) {
+            loading.close();
             return resolve(error.response.data);
           } else {
+            loading.close();
             return resolve(error.response);
           }
         });
     });
   },
-  /** post 请求
+  /** delete 请求
    * @param  {接口地址} url
    * @param  {请求参数} params
    */
   delete: function (url, params) {
+    let loading = Loading.service(this.options);
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.delete(url, {
         params: params
-      }).then((response) => resolve(response.data))
+      }).then((response) => {
+        loading.close();
+        return resolve(response.data);
+      })
         .catch((error) => {
           if (error.response && error.response.data) {
+            loading.close();
             return resolve(error.response.data);
           } else {
-
+            loading.close();
             return resolve(error.response);
           }
         });
