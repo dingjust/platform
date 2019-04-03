@@ -22,6 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
   int _seconds = 0;
   Timer _timer;
   bool validate = false;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   String phoneValidateStr = "";
 
@@ -62,6 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0.5,
         iconTheme: IconThemeData(color: Color.fromRGBO(36, 38, 41, 1)),
@@ -77,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
         children: <Widget>[
           _buildInputArea(),
           RaisedButton(
-            onPressed: validate ? onNext : null,
+            onPressed: validate ? () => onNext(context) : null,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
             color: Color.fromRGBO(255, 214, 12, 1),
@@ -104,7 +106,6 @@ class _RegisterPageState extends State<RegisterPage> {
             field: TextField(
               autofocus: false,
               onChanged: (value) async {
-                validatePhone();
                 formValidate();
               },
               keyboardType: TextInputType.phone,
@@ -144,10 +145,15 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(50)),
               color: Color.fromRGBO(255, 214, 12, 1),
               onPressed: (_seconds == 0)
-                  ? () {
-                      setState(() {
-                        _startTimer();
-                      });
+                  ? () async{
+                      bool isExist = await validatePhone();
+                      if(isExist){
+                        UserRepositoryImpl().sendCaptcha(_phoneController.text).then((a){
+                          setState(() {
+                            _startTimer();
+                          });
+                        });
+                      }
                     }
                   : null,
               child: Text(
@@ -236,8 +242,9 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 
-  void validatePhone() async {
+  Future<bool> validatePhone() async {
     String result = "";
+    bool isExist = false;
 
     if (_phoneController.text == '') {
       result = '';
@@ -248,6 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
         if (exist != null && exist) {
           result = "账号已存在";
+          isExist = true;
         } else {
           result = "";
         }
@@ -259,6 +267,8 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() {
       phoneValidateStr = result;
     });
+
+    return isExist;
   }
 
   void formValidate() {
@@ -270,13 +280,18 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  void onNext() {
-    //TODOS验证验证码
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RegisterInfoPage(
-              phone: _phoneController.text,
-              password: _passwordController.text,
-            )));
+  void onNext(BuildContext context) async{
+    bool result = await UserRepositoryImpl().validateCaptcha(_phoneController.text, _captchaController.text);
+    if(result){
+      //TODOS验证验证码
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => RegisterInfoPage(
+            phone: _phoneController.text,
+            password: _passwordController.text,
+          )));
+    }else{
+      (_scaffoldKey.currentState).showSnackBar(SnackBar(content: Text('验证不正确')));
+    }
   }
 
   void showPayProtocol() {

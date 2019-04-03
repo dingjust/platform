@@ -5,6 +5,12 @@ import 'package:services/src/supplier/brands_response.dart';
 abstract class UserRepository {
   //注册
   Future<String> register({String type, CompanyRegisterDTO form});
+  
+  //发送短信验证码
+  Future<String> sendCaptcha(String phone);
+
+  //验证验证码是否正确
+  Future<bool> validateCaptcha(String phone,String captcha);
 
   Future<List<UserModel>> list();
 
