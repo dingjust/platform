@@ -94,10 +94,14 @@
         const result = await this.$http.put(url, {
           deliveryAddress: this.addressFormData
         });
+
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
         }
+
+        // 更新当前的地址，避免调后台
+        this.$set(this.slotData, 'deliveryAddress', this.addressFormData);
 
         this.$message.success('地址更新成功');
       },

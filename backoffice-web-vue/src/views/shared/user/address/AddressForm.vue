@@ -96,9 +96,6 @@
         }
 
         this.regions = result;
-        if (this.slotData.region && this.slotData.region.isocode) {
-          this.onRegionChanged(this.slotData.region);
-        }
       },
       onRegionChanged(current) {
         if (!current) {
@@ -112,12 +109,12 @@
         this.$set(this.slotData, 'city', {code: '', name: ''});
         this.$set(this.slotData, 'cityDistrict', {code: '', name: ''});
 
-        this._getCities(current);
+        this.getCities(current);
         if (this.slotData.city && this.slotData.city.code) {
           this.onCityChanged(this.slotData.city.code);
         }
       },
-      async _getCities(region) {
+      async getCities(region) {
         const result = await this.$http.get('/djwebservices/addresses/' + region.isocode + '/cities');
 
         if (result["errors"]) {
@@ -136,11 +133,11 @@
       },
       async _onCityChanged(current) {
         this.cityDistricts = [];
-        this.$set(this.slotData, 'cityDistrict', {code: '', name: ''});
+        // this.$set(this.slotData, 'cityDistrict', {code: '', name: ''});
 
-        this._getDistricts(current);
+        this.getDistricts(current);
       },
-      async _getDistricts(city) {
+      async getDistricts(city) {
         const result = await this.$http.get('/djwebservices/addresses/' + city.code + '/districts');
 
         if (result["errors"]) {
@@ -157,10 +154,11 @@
       doUpdate() {
         // 直接显示已有的省、市、区
         if (this.slotData.region) {
-          this._getCities(this.slotData.region);
+          this.getCities(this.slotData.region);
         }
+
         if (this.slotData.city) {
-          this._getDistricts(this.slotData.city);
+          this.getDistricts(this.slotData.city);
         }
       }
     },
@@ -181,6 +179,8 @@
     },
     created() {
       this.getRegions();
+
+      this.doUpdate();
     }
   }
 </script>
