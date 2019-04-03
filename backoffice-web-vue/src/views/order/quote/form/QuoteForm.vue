@@ -24,7 +24,8 @@
       <quote-attachments-form :read-only="readOnly" :slot-data="slotData"/>
     </el-card>
 
-    <el-dialog title="修改报价" width="650px" :visible.sync="this.updateVisible" :before-close="handleClose">
+    <el-dialog title="修改报价" width="650px" :visible.sync="this.updateVisible" :before-close="handleClose"
+               append-to-body>
       <quote-request-form ref="requestForm" :read-only="false" :slot-data="slotData"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
@@ -32,8 +33,8 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="拒绝理由" width="450px" :visible.sync="refuseVisible" :before-close="handleClose">
-
+    <el-dialog title="拒绝理由" width="450px" :visible.sync="refuseVisible" :before-close="handleClose"
+               append-to-body>
         <el-input
           placeholder="请输入拒绝理由"
           prefix-icon="el-icon-search"

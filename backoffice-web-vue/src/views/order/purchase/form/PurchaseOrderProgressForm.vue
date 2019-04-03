@@ -11,7 +11,14 @@
       <el-row :gutter="10">
         <el-col :span="8">
           <el-form-item label="生产阶段" prop="phase">
-            <el-input v-model="slotData.phase"></el-input>
+            <el-select v-model="slotData.phase" placeholder="请选择">
+              <el-option
+                v-for="item in productionProgressPhaseTypes"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -63,8 +70,9 @@
       </el-row>
     </el-form>
 
-    <el-dialog title="修改" width="600px" :visible.sync="this.updateVisible" :before-close="handleClose">
-      <purchase-order-update-form :slotData="slotData"></purchase-order-update-form>
+    <el-dialog title="修改" width="600px" :visible.sync="this.updateVisible" :before-close="handleClose"
+               append-to-body>
+      <purchase-order-update-form :slotData = "slotData"></purchase-order-update-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="submit()">更新</el-button>
@@ -103,7 +111,8 @@
     },
     data() {
       return {
-        updateVisible: false,
+        updateVisible:false,
+        productionProgressPhaseTypes: this.$store.state.EnumsModule.productionProgressPhaseTypes,
       }
     },
     created() {
