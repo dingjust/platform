@@ -72,4 +72,22 @@ class RequirementOrderRepository {
       return null;
     }
   }
+
+
+  //邀请报价（推荐需求）
+  Future<bool> doRecommendation(String code,String factoryId) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.doRecommendation(code,factoryId),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }

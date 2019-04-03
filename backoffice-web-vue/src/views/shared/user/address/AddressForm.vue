@@ -96,9 +96,6 @@
         }
 
         this.regions = result;
-        if (this.slotData.region && this.slotData.region.isocode) {
-          this.onRegionChanged(this.slotData.region);
-        }
       },
       onRegionChanged(current) {
         if (!current) {
@@ -107,12 +104,18 @@
 
         this._onRegionChanged(current);
       },
-      async _onRegionChanged(current) {
+      _onRegionChanged(current) {
         this.cities = [];
         this.$set(this.slotData, 'city', {code: '', name: ''});
         this.$set(this.slotData, 'cityDistrict', {code: '', name: ''});
 
-        const result = await this.$http.get('/djwebservices/addresses/' + current.isocode + '/cities');
+        this.getCities(current);
+        if (this.slotData.city && this.slotData.city.code) {
+          this.onCityChanged(this.slotData.city.code);
+        }
+      },
+      async getCities(region) {
+        const result = await this.$http.get('/djwebservices/addresses/' + region.isocode + '/cities');
 
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -120,9 +123,6 @@
         }
 
         this.cities = result;
-        if (this.slotData.city && this.slotData.city.code) {
-          this.onCityChanged(this.slotData.city.code);
-        }
       },
       onCityChanged(current) {
         if (!current) {
@@ -133,19 +133,33 @@
       },
       async _onCityChanged(current) {
         this.cityDistricts = [];
-        this.$set(this.slotData, 'cityDistrict', {code: '', name: ''});
-        const result = await this.$http.get('/djwebservices/addresses/' + current.code + '/districts');
+        // this.$set(this.slotData, 'cityDistrict', {code: '', name: ''});
+
+        this.getDistricts(current);
+      },
+      async getDistricts(city) {
+        const result = await this.$http.get('/djwebservices/addresses/' + city.code + '/districts');
 
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
         }
 
-        this.cityDistricts = result;
+        this.cityDistricts =  result;
       },
       refresh() {
         this.onRegionChanged(this.slotData.region);
         this.onCityChanged(this.slotData.city);
+      },
+      doUpdate() {
+        // 直接显示已有的省、市、区
+        if (this.slotData.region) {
+          this.getCities(this.slotData.region);
+        }
+
+        if (this.slotData.city) {
+          this.getDistricts(this.slotData.city);
+        }
       }
     },
     data() {
@@ -165,6 +179,8 @@
     },
     created() {
       this.getRegions();
+
+      this.doUpdate();
     }
   }
 </script>

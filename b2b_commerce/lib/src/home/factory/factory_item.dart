@@ -10,11 +10,14 @@ class FactoryItem extends StatelessWidget {
   const FactoryItem({
     Key key,
     @required this.model,
+    this.requirementCode,
     this.showButton = false,
     this.hasInvited = false,
   }) : super(key: key);
 
   final FactoryModel model;
+
+  final String requirementCode;
 
   ///是否显示按钮
   final bool showButton;
@@ -33,7 +36,6 @@ class FactoryItem extends StatelessWidget {
           'size': 3
         });
 
-        // TODO 工厂跳转
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -55,7 +57,7 @@ class FactoryItem extends StatelessWidget {
               Row(
                 children: <Widget>[
                   FactoryNameText(model: model),
-                  showButton ? InviteFactoryButton() : Container(),
+                  showButton ? InviteFactoryButton(factoryModel: model,requirementCode: requirementCode,) : Container(),
                 ],
               ),
               Container(
@@ -259,37 +261,49 @@ class CategoriesText extends StatelessWidget {
 }
 
 class InviteFactoryButton extends StatelessWidget {
-  const InviteFactoryButton({Key key, this.hasInvited}) : super(key: key);
-
-  final bool hasInvited;
+  InviteFactoryButton({Key key, this.factoryModel,this.requirementCode}) : super(key: key);
+  FactoryModel factoryModel;
+  String requirementCode;
 
   @override
   Widget build(BuildContext context) {
-    if (hasInvited) {
+    if (factoryModel.invited) {
       return Container(
-        height: 23,
-        width: 80,
+        height: 35,
+        width: 100,
         child: Center(
           child: Text(
             '已邀请',
-            style: TextStyle(color: Colors.white, fontSize: 12),
+            style: TextStyle(color: Colors.white, fontSize: 16),
           ),
         ),
         decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(20)),
       );
     } else {
       return Container(
-        height: 23,
-        width: 80,
-        margin: EdgeInsets.only(left: 20),
+        height: 35,
+        width: 100,
         child: FlatButton(
-          onPressed: () {},
+          onPressed: () async {
+            bool result = await RequirementOrderRepository().doRecommendation(requirementCode, factoryModel.uid);
+            showDialog<void>(
+              context: context,
+              barrierDismissible: true, // user must tap button!
+              builder: (context) {
+                return SimpleDialog(
+                  title: const Text('提示', style: const TextStyle(fontSize: 16)),
+                  children: <Widget>[SimpleDialogOption(child: Text('邀请${result?'成功':'失败'}'))],
+                );
+              },
+            );
+            FactoryBLoC().clear();
+          },
           color: Color.fromRGBO(255, 214, 12, 1),
           child: Text(
             '邀请报价',
             style: TextStyle(
               color: Colors.black,
-              fontSize: 12,
+              fontSize: 16,
             ),
           ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

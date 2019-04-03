@@ -244,14 +244,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('确定'),
-              onPressed: () async {},
-            ),
-            FlatButton(
-              child: Text('取消'),
+              child: Text('取消',style: TextStyle(color: Colors.grey),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+            ),
+            FlatButton(
+              child: Text('确定',style: TextStyle(color: Colors.black)),
+              onPressed: () async {},
             ),
           ],
         );

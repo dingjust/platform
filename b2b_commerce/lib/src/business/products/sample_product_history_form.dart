@@ -135,10 +135,12 @@ class SampleProductHistoryFormPageState
                 if(widget.isCreated){
                   ProductRepositoryImpl().createSampleHistory(widget.model).then((a){
                     Navigator.pop(context);
+                    SampleProductHistoryBLoC.instance.filterByStatuses('ALL', LendBorrowType.BORROW.toString());
                   });
                 }else{
                   ProductRepositoryImpl().updateSampleHistory(widget.model).then((a){
                     Navigator.pop(context);
+                    SampleProductHistoryBLoC.instance.filterByStatuses('ALL', LendBorrowType.BORROW.toString());
                   });
                 }
 

@@ -288,6 +288,8 @@ class SampleProductHistoryList extends StatelessWidget {
                     _widgets.addAll(snapshot.data
                         .map((borrowHistory) => SampleProductHistoryItem(
                               item: borrowHistory,
+                      state: state,
+                              type: type,
                             ))
                         .toList());
                     return Column(

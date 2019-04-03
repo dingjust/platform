@@ -60,6 +60,8 @@ abstract class ProductApis {
   static get sampleHistorys =>
       '/{baseSiteId}/b2b/products/sampleCheckoutHist/search';
   //获取样衣借还记录明细
+  static get getHistory =>
+      (id) => '/{baseSiteId}/b2b/products/sampleCheckoutHist/$id';
 
   //创建样衣借还记录
   static get sampleHistoryCreate =>

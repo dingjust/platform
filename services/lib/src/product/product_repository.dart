@@ -60,7 +60,7 @@ abstract class ProductRepository {
   Future<SampleProductHistorysResponse> sampleHistorys(dynamic data, Map<String, dynamic> params);
 
   //获取样衣记录明细
-  Future<SampleBorrowReturnHistoryModel> getSampleHistory(String code);
+  Future<SampleBorrowReturnHistoryModel> getSampleHistory(String id);
 
   //创建样衣记录
   Future<String> createSampleHistory(SampleBorrowReturnHistoryModel sample);
