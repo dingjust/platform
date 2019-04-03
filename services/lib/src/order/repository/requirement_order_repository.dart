@@ -6,12 +6,26 @@ import 'package:services/services.dart';
 
 class RequirementOrderRepository {
   /// 发布需求
-  Future<String> publishNewRequirement(RequirementOrderModel form) async {
+  Future<String> publishNewRequirement(RequirementOrderModel form, String factoryUid , bool privacy) async {
     Response response;
     try {
-      response = await http$.post(OrderApis.requirementOrderNew,
-          data: RequirementOrderModel.toJson(form),
-          options: Options(responseType: ResponseType.plain));
+      if(factoryUid != null){
+        response = await http$.post(OrderApis.requirementOrderNew,
+            data: RequirementOrderModel.toJson(form),
+            queryParameters: {'factory': factoryUid},
+            options: Options(responseType: ResponseType.plain));
+      }
+      else if(factoryUid != null && privacy){
+        response = await http$.post(OrderApis.requirementOrderNew,
+            data: RequirementOrderModel.toJson(form),
+            queryParameters: {'factory': factoryUid,'privacy':'true'},
+            options: Options(responseType: ResponseType.plain));
+      }else{
+        response = await http$.post(OrderApis.requirementOrderNew,
+            data: RequirementOrderModel.toJson(form),
+            options: Options(responseType: ResponseType.plain));
+      }
+
     } on DioError catch (e) {
       print(e);
     }

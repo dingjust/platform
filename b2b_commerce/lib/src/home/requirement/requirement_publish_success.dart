@@ -245,10 +245,14 @@ class _PublishRequirementSuccessDialogState
                     context,
                     MaterialPageRoute(
                       builder: (context) => FactoryPage(
-                        FactoryCondition(starLevel: 0, adeptAtCategory: []),
-                        route: '全部工厂',
-                        requirementCode: widget.model.code,
-                      ),
+                            FactoryCondition(
+                                starLevel: 0,
+                                labels: [],
+                                adeptAtCategories: [],
+                                cooperationModes: []),
+                            route: '全部工厂',
+                            requirementCode: widget.model.code,
+                          ),
                     ),
                   );
                 },

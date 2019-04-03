@@ -315,13 +315,13 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                     children: <Widget>[
                       Container(
                         child: Text(
-                          '${widget.model.consignmentModel != null && widget.model.consignmentModel.carrierModel != null ? widget.model.consignmentModel.carrierModel.name : ''}',
+                          '${widget.model.consignment != null && widget.model.consignment.carrierModel != null ? widget.model.consignment.carrierModel.name : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
                       Container(
                         child: Text(
-                          '${widget.model.consignmentModel != null && widget.model.consignmentModel.carrierModel != null ? widget.model.consignmentModel.trackingID : ''}',
+                          '${widget.model.consignment != null && widget.model.consignment.carrierModel != null ? widget.model.consignment.trackingID : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -330,11 +330,11 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 ],
               ),
               onTap: () {
-                if (widget.model.consignmentModel != null &&
-                    widget.model.consignmentModel.carrierModel != null &&
-                    widget.model.consignmentModel.trackingID != null &&
-                    widget.model.consignmentModel.carrierModel.name != null) {
-                  copyToClipboard(widget.model.consignmentModel.trackingID);
+                if (widget.model.consignment != null &&
+                    widget.model.consignment.carrierModel != null &&
+                    widget.model.consignment.trackingID != null &&
+                    widget.model.consignment.carrierModel.name != null) {
+                  copyToClipboard(widget.model.consignment.trackingID);
                 } else {
                   null;
                 }

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 import 'package:models/models.dart';
 
 part 'factory_condition.g.dart';
@@ -13,11 +14,11 @@ class FactoryCondition {
   int historyOrdersCount;
 
   /// 大类
-  String category;
+  String categories;
 
   /// 小类
 
-  List<CategoryModel> adeptAtCategory;
+  List<CategoryModel> adeptAtCategories;
 
   /// 地区
   @JsonKey(toJson: _regionToJson)
@@ -28,39 +29,64 @@ class FactoryCondition {
 
   IndustrialClusterModel industrialCuster;
 
-  FactoryCondition({
-    this.starLevel,
-    this.historyOrdersCount,
-    this.category,
-    this.adeptAtCategory,
-    this.productiveOrientations,
-    this.populationScale,
-    this.industrialCuster
-  });
+  ///标签
+  List<LabelModel> labels;
 
-  factory FactoryCondition.fromJson(Map<String, dynamic> json) => _$FactoryConditionFromJson(json);
+  /// 加工类型
+  List<CooperationModes> cooperationModes;
 
-  static Map<String, dynamic> toJson(FactoryCondition model) => _$FactoryConditionToJson(model);
+  FactoryCondition(
+      {this.starLevel,
+      this.historyOrdersCount,
+      this.categories,
+      @required this.adeptAtCategories,
+      this.productiveOrientations,
+      this.populationScale,
+      @required this.labels,
+      @required this.cooperationModes,
+      this.industrialCuster});
 
-  static Map<String, dynamic> _regionToJson(RegionModel productiveOrientations) =>
+  factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
+      _$FactoryConditionFromJson(json);
+
+  static Map<String, dynamic> toJson(FactoryCondition model) =>
+      _$FactoryConditionToJson(model);
+
+  static Map<String, dynamic> _regionToJson(
+          RegionModel productiveOrientations) =>
       RegionModel.toJson(productiveOrientations);
 
   Map<String, dynamic> toDataJson() {
-    List<String> adeptAtCategoryStrs = [];
+    List<String> adeptAtCategoryArray = [];
+    List<int> labelsArray = [];
+    List<String> cooperationModesArray = [];
 
-    if (adeptAtCategory != null) {
-      adeptAtCategory.forEach((category) {
-        adeptAtCategoryStrs.add(category.code);
+    if (adeptAtCategories != null) {
+      adeptAtCategories.forEach((category) {
+        adeptAtCategoryArray.add(category.code);
+      });
+
+      labels.forEach((label) {
+        labelsArray.add(label.id);
+      });
+
+      cooperationModes.forEach((type) {
+        cooperationModesArray.add(CooperationModesMap[type]);
       });
 
       var result = {
-        'category': category ?? '',
-        'adeptAtCategory': adeptAtCategoryStrs,
-        'productiveOrientations': productiveOrientations?.isocode ?? '',
-        'starLevel': starLevel != 0 ? starLevel : ''
+        'categories': [categories??''],
+        'adeptAtCategory': adeptAtCategoryArray,
+        'productiveOrientations':
+            productiveOrientations != null ? [productiveOrientations.id] : [],
+        // 'starLevel': starLevel,
+        'labels': labelsArray,
+        'cooperationModes': cooperationModesArray
       };
+      
+    
 
-      print(result);
+      // print(result);
 
       return result;
     }

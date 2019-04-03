@@ -213,7 +213,11 @@ class BrandSecondMenuSection extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => FactoryPage(
-                  FactoryCondition(starLevel: 0, adeptAtCategory: []),
+                  FactoryCondition(
+                      starLevel: 0,
+                      adeptAtCategories: [],
+                      labels: [],
+                      cooperationModes: []),
                   route: '品牌工厂',
                 ),
           ),
@@ -235,7 +239,11 @@ class BrandSecondMenuSection extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => FactoryPage(
-                  FactoryCondition(starLevel: 0, adeptAtCategory: []),
+                  FactoryCondition(
+                      starLevel: 0,
+                      adeptAtCategories: [],
+                      labels: [],
+                      cooperationModes: []),
                   route: '全部工厂',
                 ),
           ),
@@ -411,7 +419,8 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                     );
                   });
                 },
-                child: AllRequirementMenuItem(count: snapshot.data.ordersCount8),
+                child:
+                    AllRequirementMenuItem(count: snapshot.data.ordersCount8),
               );
             },
           ),
@@ -429,7 +438,8 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                             )));
                   });
                 },
-                child: RecommendedRequirementMenuItem(count: snapshot.data.ordersCount9),
+                child: RecommendedRequirementMenuItem(
+                    count: snapshot.data.ordersCount9),
               );
             },
           ),

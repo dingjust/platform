@@ -11,7 +11,8 @@ class ConditionPage extends StatefulWidget {
   /// 大类
   final List<CategoryModel> categories;
 
-  ConditionPage({Key key, @required this.categories, this.factoryCondition}) : super(key: key);
+  ConditionPage({Key key, @required this.categories, this.factoryCondition})
+      : super(key: key);
 
   @override
   _ConditionPageState createState() => _ConditionPageState();
@@ -43,6 +44,7 @@ class _ConditionPageState extends State<ConditionPage> {
                       _buildPopulationBlock(),
                       _buildAddressBlock(),
                       _buildStarsBlock(),
+                      _buildMachiningTypeBlock(),
                       _buildMajorCategoryBlock()
                     ]),
                   )
@@ -60,14 +62,18 @@ class _ConditionPageState extends State<ConditionPage> {
               // 加载条
               showDialog(
                 context: context,
-                builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+                builder: (context) =>
+                    ProgressIndicatorFactory.buildDefaultProgressIndicator(),
               );
-              await ProductRepositoryImpl().cascadedCategories().then((categories) {
+              await ProductRepositoryImpl()
+                  .cascadedCategories()
+                  .then((categories) {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
-                          minCategorySelect: widget.factoryCondition.adeptAtCategory,
+                          minCategorySelect:
+                              widget.factoryCondition.adeptAtCategories,
                           categories: categories,
                           categoryActionType: CategoryActionType.none,
                         ),
@@ -81,9 +87,9 @@ class _ConditionPageState extends State<ConditionPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    widget.factoryCondition.adeptAtCategory.isEmpty
+                    widget.factoryCondition.adeptAtCategories.isEmpty
                         ? '选择分类'
-                        : '${widget.factoryCondition.adeptAtCategory[0].name}',
+                        : '${widget.factoryCondition.adeptAtCategories[0].name}',
                     style: TextStyle(fontSize: 16),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -110,6 +116,29 @@ class _ConditionPageState extends State<ConditionPage> {
                       groupValue: populationScale,
                       value: scale,
                       title: Text('${PopulationScaleLocalizedMap[scale]}'),
+                    ),
+              )
+              .toList(),
+        ));
+  }
+
+  Widget _buildMachiningTypeBlock() {
+    return ConditionBlock(
+        label: '加工类型',
+        height: 280,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: CooperationModes.values
+              .map(
+                (type) => RadioListTile(
+                      onChanged: (value) {
+                        setState(() {
+                          populationScale = value;
+                        });
+                      },
+                      groupValue: populationScale,
+                      value: type,
+                      title: Text('${CooperationModesLocalizedMap[type]}'),
                     ),
               )
               .toList(),
@@ -186,10 +215,10 @@ class _ConditionPageState extends State<ConditionPage> {
                 (categoryItem) => RadioListTile(
                       onChanged: (value) {
                         setState(() {
-                          widget.factoryCondition.category = value;
+                          widget.factoryCondition.categories = value;
                         });
                       },
-                      groupValue: widget.factoryCondition.category,
+                      groupValue: widget.factoryCondition.categories,
                       value: categoryItem.code,
                       title: Text('${categoryItem.name}'),
                     ),
@@ -212,7 +241,8 @@ class ConditionBlock extends StatelessWidget {
 
   final Widget child;
 
-  const ConditionBlock({Key key, this.height = 100, this.label, this.child}) : super(key: key);
+  const ConditionBlock({Key key, this.height = 100, this.label, this.child})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +259,10 @@ class ConditionBlock extends StatelessWidget {
               Container(
                 width: 50,
                 height: 1,
-                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom:
+                            BorderSide(color: Colors.grey[300], width: 0.5))),
               ),
               Text(
                 '$label',
@@ -238,7 +271,10 @@ class ConditionBlock extends StatelessWidget {
               Container(
                 width: 50,
                 height: 1,
-                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom:
+                            BorderSide(color: Colors.grey[300], width: 0.5))),
               )
             ],
           ),
@@ -268,7 +304,12 @@ class FactoryCondtions {
   //生产大类
   List<CategoryModel> categories;
 
-  FactoryCondtions({this.scaleRange, this.region, this.starLevel, this.machiningType, this.categories});
+  FactoryCondtions(
+      {this.scaleRange,
+      this.region,
+      this.starLevel,
+      this.machiningType,
+      this.categories});
 }
 
 class CondtionItem {
