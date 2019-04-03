@@ -3,12 +3,15 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
+import 'package:services/services.dart';
 
 class SampleProductHistoryItem extends StatelessWidget {
   final SampleBorrowReturnHistoryModel item;
   final bool isSampleProductHistory;
+  final String state;
+  final String type;
 
-  const SampleProductHistoryItem({Key key, this.item,this.isSampleProductHistory = false,}) : super(key: key);
+  const SampleProductHistoryItem({Key key, this.item,this.isSampleProductHistory = false,this.state,this.type,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +158,19 @@ class SampleProductHistoryItem extends StatelessWidget {
                                 ),
                               ),
                               onTap: (){
-                                print('归还');
+                                ProductRepositoryImpl().getSampleHistory(item.id.toString()).then((history){
+                                  history.state = ReturnState.RETURNED;
+                                  history.returnedDate = DateTime.now();
+                                  ShowDialogUtil.showAlertDialog(context, '是否确认归还', (){
+                                    ProductRepositoryImpl().updateSampleHistory(history).then((a){
+                                      print(SampleBorrowReturnHistoryModel.toJson(history));
+                                      Navigator.pop(context);
+                                      SampleProductHistoryBLoC.instance.filterByStatuses(state, type);
+                                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('样衣归还成功'),duration: Duration(seconds: 2),));
+                                    });
+                                  });
+                                });
+
                               },
                             ),
                           ),

@@ -146,8 +146,9 @@ class ProductRepositoryImpl extends ProductRepository{
   }
 
   @override
-  Future<SampleBorrowReturnHistoryModel> getSampleHistory(String code) async{
-
+  Future<SampleBorrowReturnHistoryModel> getSampleHistory(String id) async{
+    Response response = await http$.get(ProductApis.getHistory(id));
+    return SampleBorrowReturnHistoryModel.fromJson(response.data);
   }
 
   @override
