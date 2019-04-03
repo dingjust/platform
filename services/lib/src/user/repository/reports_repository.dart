@@ -21,4 +21,21 @@ class ReportsRepository {
     }
     return result;
   }
+
+  //全部需求/推荐需求
+  Future<Reports> reportRequirementCount() async {
+    Response response;
+    Reports result;
+    try {
+      response = await http$.post(UserApis.requirementReports, data: {});
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = Reports.fromJson(response.data);
+    } else {
+      result = null;
+    }
+    return result;
+  }
 }
