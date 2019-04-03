@@ -176,8 +176,11 @@
       }
     },
     created() {
-      this.getFactories();
-      this.getBrands();
+      if(this.$store.getters.currentUser.type === 'TENANT'){
+        this.getFactories();
+        this.getBrands();
+      }
+
     }
   }
 </script>

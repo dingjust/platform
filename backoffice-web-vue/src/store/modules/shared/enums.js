@@ -1,12 +1,24 @@
 const state = {
+
+  //生产进度类型
+  productionProgressPhaseTypes: [
+    {code: 'MATERIAL_PREPARATION', name: '备料'},
+    {code: 'CUTTING', name: '裁剪'},
+    {code: 'STITCHING', name: '车缝'},
+    {code: 'AFTER_FINISHING', name: '后整'},
+    {code: 'INSPECTION', name: '验货'},
+  ],
+  //样衣借还类型
   sampleCheckoutTypes: [
     {code: 'BORROW', name: '借入'},
     {code: 'LEND', name: '借出'},
   ],
+  //样衣借还状态
   returnStates: [
     {code: 'NOT_RETURNED', name: '已还'},
     {code: 'RETURNED', name: '未还'},
   ],
+  //需求订单状态
   requirementOrderStatuses: [
     {code: 'PENDING_QUOTE', name: '报价中'},
     {code: 'COMPLETED', name: '已完成'},
@@ -17,6 +29,7 @@ const state = {
     COMPLETED: 1,
     CANCELLED: 1
   },
+  //生产订单状态
   purchaseOrderStatuses: [
     {code: 'PENDING_PAYMENT', name: '待付款'},
     {code: 'IN_PRODUCTION', name: '生产中'},
@@ -25,6 +38,7 @@ const state = {
     {code: 'COMPLETED', name: '已完成'},
     {code: 'CANCELLED', name: '已取消'},
   ],
+  //打样订单状态
   proofingOrderStatuses: [
     {code: 'PENDING_PAYMENT', name: '待付款'},
     {code: 'PENDING_DELIVERY', name: '待发货'},
@@ -43,6 +57,7 @@ const state = {
     'SHIPPED': 2,
     'COMPLETED': 3
   },
+  //报价单状态
   quoteStates: [
     {code: 'SELLER_SUBMITTED', name: '待处理'},
     {code: 'BUYER_APPROVED', name: '通过'},
