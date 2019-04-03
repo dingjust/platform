@@ -7,13 +7,13 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'src/home/_shared/widgets/bottom_navigation.dart';
 import 'src/business/orders/requirement_order_from.dart';
 import 'src/common/app_bloc.dart';
 import 'src/common/app_constants.dart';
 import 'src/common/app_keys.dart';
 import 'src/common/app_routes.dart';
 import 'src/home/_shared/models/navigation_menu.dart';
+import 'src/home/_shared/widgets/bottom_navigation.dart';
 import 'src/home/account/login.dart';
 import 'src/home/index.dart';
 import 'src/my/index.dart';
@@ -186,7 +186,6 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       navigatorKey: _navigatorKey,
       title: AppConstants.appTitle,
       theme: ThemeData(
-        // primarySwatch: Colors.blue,
         primaryColor: Colors.white,
         textSelectionColor: Colors.black,
         accentColor: Color.fromRGBO(255, 214, 12, 1),
