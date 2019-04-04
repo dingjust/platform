@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 import 'package:models/models.dart';
 
 part 'factory_condition.g.dart';
@@ -13,11 +14,11 @@ class FactoryCondition {
   int historyOrdersCount;
 
   /// 大类
-  String category;
+  String categories;
 
   /// 小类
 
-  List<CategoryModel> adeptAtCategory;
+  List<CategoryModel> adeptAtCategories;
 
   /// 地区
   @JsonKey(toJson: _regionToJson)
@@ -28,14 +29,22 @@ class FactoryCondition {
 
   IndustrialClusterModel industrialCuster;
 
+  ///标签
+  List<LabelModel> labels;
+
+  /// 加工类型
+  List<CooperationModes> cooperationModes;
+
   FactoryCondition({
     this.starLevel,
     this.historyOrdersCount,
-    this.category,
-    this.adeptAtCategory,
+    this.categories,
+    @required this.adeptAtCategories,
     this.productiveOrientations,
     this.populationScale,
-    this.industrialCuster
+    @required this.labels,
+    @required this.cooperationModes,
+    this.industrialCuster,
   });
 
   factory FactoryCondition.fromJson(Map<String, dynamic> json) => _$FactoryConditionFromJson(json);
@@ -46,23 +55,39 @@ class FactoryCondition {
       RegionModel.toJson(productiveOrientations);
 
   Map<String, dynamic> toDataJson() {
-    List<String> adeptAtCategoryStrs = [];
+    List<String> adeptAtCategoryArray = [];
+    List<int> labelsArray = [];
+    List<String> cooperationModesArray = [];
 
-    if (adeptAtCategory != null) {
-      adeptAtCategory.forEach((category) {
-        adeptAtCategoryStrs.add(category.code);
+    if (adeptAtCategories != null) {
+      adeptAtCategories.forEach((category) {
+        adeptAtCategoryArray.add(category.code);
       });
-
-      var result = {
-        'category': category ?? '',
-        'adeptAtCategory': adeptAtCategoryStrs,
-        'productiveOrientations': productiveOrientations?.isocode ?? '',
-        'starLevel': starLevel != 0 ? starLevel : ''
-      };
-
-      print(result);
-
-      return result;
     }
+
+    if (labels != null) {
+      labels.forEach((label) {
+        labelsArray.add(label.id);
+      });
+    }
+
+    if (cooperationModes != null) {
+      cooperationModes.forEach((type) {
+        cooperationModesArray.add(CooperationModesMap[type]);
+      });
+    }
+
+    var result = {
+      'categories': categories != null ? [categories] : [],
+      'adeptAtCategories': adeptAtCategoryArray,
+      'productiveOrientations': productiveOrientations != null ? [productiveOrientations.id] : [],
+      // 'starLevel': starLevel,
+      'labels': labelsArray,
+      'cooperationModes': cooperationModesArray
+    };
+
+    // print(result);
+
+    return result;
   }
 }

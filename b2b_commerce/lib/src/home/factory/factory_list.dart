@@ -38,6 +38,23 @@ class _FactoryPageState extends State<FactoryPage> {
     checked: true,
   );
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (widget.factoryCondition.adeptAtCategories == null) {
+      widget.factoryCondition.adeptAtCategories = [];
+    }
+    if (widget.factoryCondition.labels == null) {
+      widget.factoryCondition.labels = [];
+    }
+
+    if (widget.factoryCondition.cooperationModes == null) {
+      widget.factoryCondition.cooperationModes = [];
+    }
+
+    super.initState();
+  }
+
   void changeCondition(FilterConditionEntry condition) {
     setState(() {
       currentCondition = condition;
@@ -103,7 +120,9 @@ class QuickReactionFactoryButton extends StatelessWidget {
 
 class ConditionPageButton extends StatelessWidget {
   final String requirementCode;
-  const ConditionPageButton({Key key, @required this.factoryCondition,this.requirementCode}) : super(key: key);
+  const ConditionPageButton(
+      {Key key, @required this.factoryCondition, this.requirementCode})
+      : super(key: key);
 
   final FactoryCondition factoryCondition;
 
@@ -112,8 +131,11 @@ class ConditionPageButton extends StatelessWidget {
     return IconButton(
       icon: Icon(Icons.menu),
       onPressed: () async {
-        await ProductRepositoryImpl().majorCategories().then((categories) async {
-          FactoryCondition newFactoryCondition = await Navigator.of(context).push(
+        await ProductRepositoryImpl()
+            .majorCategories()
+            .then((categories) async {
+          FactoryCondition newFactoryCondition =
+              await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ConditionPage(
                     categories: categories,
@@ -123,7 +145,10 @@ class ConditionPageButton extends StatelessWidget {
           );
 
           ///条件更新数据
-          FactoryBLoC.instance.filterByCondition(newFactoryCondition,requirementCode: requirementCode,);
+          FactoryBLoC.instance.filterByCondition(
+            newFactoryCondition,
+            requirementCode: requirementCode,
+          );
         });
       },
     );
@@ -131,7 +156,8 @@ class ConditionPageButton extends StatelessWidget {
 }
 
 class FactoryListView extends StatefulWidget {
-  FactoryListView({this.showButton = false, this.factoryCondition,this.requirementCode});
+  FactoryListView(
+      {this.showButton = false, this.factoryCondition, this.requirementCode});
 
   final FactoryCondition factoryCondition;
 
@@ -165,7 +191,8 @@ class _FactoryListViewState extends State<FactoryListView> {
     });
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByCondition(
           widget.factoryCondition,
@@ -190,7 +217,8 @@ class _FactoryListViewState extends State<FactoryListView> {
             StreamBuilder<List<FactoryModel>>(
               stream: bloc.stream,
               initialData: null,
-              builder: (BuildContext context, AsyncSnapshot<List<FactoryModel>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<FactoryModel>> snapshot) {
                 if (snapshot.data == null) {
                   // 默认条件查询
                   bloc.filterByCondition(
@@ -202,7 +230,8 @@ class _FactoryListViewState extends State<FactoryListView> {
 
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 200),
-                    child: ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+                    child: ProgressIndicatorFactory
+                        .buildDefaultProgressIndicator(),
                   );
                 }
 
@@ -240,7 +269,8 @@ class _FactoryListViewState extends State<FactoryListView> {
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
                   opacity: snapshot.data ? 1.0 : 0,
                 );
               },

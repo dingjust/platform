@@ -39,7 +39,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="产品分类">
+          <el-form-item label="上/下架状态">
             <el-select v-model="queryFormData.approvalStatuses" placeholder="请选择" class="w-100" multiple>
               <el-option v-for="item in approvalStatuses"
                          :key="item.code"

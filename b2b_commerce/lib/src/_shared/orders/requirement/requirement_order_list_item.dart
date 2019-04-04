@@ -26,7 +26,10 @@ class RequirementOrderItem extends StatelessWidget {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[Text('已报价 $totalQuotesCount', style: const TextStyle(color: Colors.red))],
+        children: <Widget>[
+          Text('已报价 $totalQuotesCount',
+              style: const TextStyle(color: Colors.red))
+        ],
       ),
     );
   }
@@ -35,18 +38,21 @@ class RequirementOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     void _onOrderDetails() async {
       // 根据code查询明
-      RequirementOrderModel detail = await RequirementOrderRepository().getRequirementOrderDetail(model.code);
+      RequirementOrderModel detail = await RequirementOrderRepository()
+          .getRequirementOrderDetail(model.code);
 
-      List<QuoteModel> quotes = await RequirementOrderRepository().getRequirementOrderQuotes(
+      List<QuoteModel> quotes =
+          await RequirementOrderRepository().getRequirementOrderQuotes(
         code: detail.code,
         page: 0,
         size: 1,
       );
 
-      if (model != null) {
+      if (detail != null) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => RequirementOrderDetailPage(order: model, quotes: quotes),
+            builder: (context) =>
+                RequirementOrderDetailPage(order: detail, quotes: quotes),
           ),
         );
       }
@@ -82,11 +88,13 @@ class RequirementOrderItem extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Text('需求订单号：${model.code}', style: const TextStyle(fontSize: 16)),
+                child: Text('需求订单号：${model.code}',
+                    style: const TextStyle(fontSize: 16)),
               ),
               Text(
                 RequirementOrderStatusLocalizedMap[model.status],
-                style: TextStyle(color: _statusColors[model.status], fontSize: 18),
+                style:
+                    TextStyle(color: _statusColors[model.status], fontSize: 18),
               )
             ],
           ),
@@ -108,7 +116,8 @@ class RequirementOrderItem extends StatelessWidget {
         return TextFactory.buildEmptyText();
       }
 
-      return Text(productName, style: TextStyle(fontSize: 15), overflow: TextOverflow.ellipsis);
+      return Text(productName,
+          style: TextStyle(fontSize: 15), overflow: TextOverflow.ellipsis);
     }
 
     Widget _buildProductSkuID(String productSkuID) {
@@ -122,7 +131,8 @@ class RequirementOrderItem extends StatelessWidget {
           color: Colors.grey[200],
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Text('货号：$productSkuID', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        child: Text('货号：$productSkuID',
+            style: const TextStyle(fontSize: 12, color: Colors.grey)),
       );
     }
 
@@ -139,7 +149,8 @@ class RequirementOrderItem extends StatelessWidget {
         ),
         child: Text(
           "$majorCategory   $category   $expectedMachiningQuantity件",
-          style: const TextStyle(fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
+          style: const TextStyle(
+              fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
         ),
       );
     }
@@ -148,7 +159,8 @@ class RequirementOrderItem extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          ImageFactory.buildThumbnailImageForList(model.details.pictures, fit: BoxFit.cover),
+          ImageFactory.buildThumbnailImageForList(model.details.pictures,
+              fit: BoxFit.cover),
           Expanded(
             flex: 1,
             child: Container(
@@ -163,7 +175,8 @@ class RequirementOrderItem extends StatelessWidget {
                   _buildCategoriesAndQuantity(
                     majorCategory: model.details.majorCategoryName(),
                     category: model.details.category?.name,
-                    expectedMachiningQuantity: model.details.expectedMachiningQuantity,
+                    expectedMachiningQuantity:
+                        model.details.expectedMachiningQuantity,
                   )
                 ],
               ),

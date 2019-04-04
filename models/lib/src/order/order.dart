@@ -153,6 +153,10 @@ enum MachiningType {
   LIGHT_PROCESSING,
 }
 
+const MachiningTypeMap={
+  
+};
+
 const MachiningTypeLocalizedMap = {
   MachiningType.LABOR_AND_MATERIAL: '包工包料',
   MachiningType.LIGHT_PROCESSING: '清加工',
@@ -218,7 +222,7 @@ class AbstractOrderModel extends ItemModel {
 
   //物流信息
   @JsonKey(toJson: _consignmentModelToJson)
-  ConsignmentModel consignmentModel;
+  ConsignmentModel consignment;
 
   AbstractOrderModel(
       {@required this.code,
@@ -229,7 +233,7 @@ class AbstractOrderModel extends ItemModel {
       this.remarks,
       this.unitPrice,
       this.salesApplication,
-      this.consignmentModel});
+      this.consignment});
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
@@ -256,7 +260,7 @@ class OrderModel extends AbstractOrderModel {
       //线上线下订单
       SalesApplication salesApplication,
         //物流信息
-        ConsignmentModel consignmentModel})
+        ConsignmentModel consignment})
       : super(
             code: code,
             totalQuantity: totalQuantity,
@@ -265,7 +269,7 @@ class OrderModel extends AbstractOrderModel {
             deliveryAddress: deliveryAddress,
             remarks: remarks,
             salesApplication: salesApplication,
-            consignmentModel: consignmentModel,
+      consignment: consignment,
             unitPrice: unitPrice);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
@@ -399,7 +403,7 @@ class ConsignmentModel extends ItemModel {
 
   //物流公司
   @JsonKey(toJson: _carrierToJson)
-  CarrierModel carrierModel;
+  CarrierModel carrierDetails;
 
   ConsignmentModel({
     this.code,
@@ -508,6 +512,9 @@ class RequirementInfoModel extends ItemModel {
   @JsonKey(toJson: _cityDistrictToJson)
   DistrictModel cityDistrict;
 
+  //商品的Code
+  String productCode;
+
   RequirementInfoModel({
     this.expectedDeliveryDate,
     this.maxExpectedPrice,
@@ -525,6 +532,7 @@ class RequirementInfoModel extends ItemModel {
     this.expectedMachiningQuantity,
     this.category,
     this.majorCategory,
+    this.productCode,
   });
 
   factory RequirementInfoModel.fromJson(Map<String, dynamic> json) =>
@@ -762,7 +770,7 @@ class PurchaseOrderModel extends OrderModel {
       this.quoteRef,
       this.modifiedtime,
       SalesApplication salesApplication,
-      ConsignmentModel consignmentModel})
+      ConsignmentModel consignment})
       : super(
             code: code,
             totalQuantity: totalQuantity,
@@ -771,7 +779,7 @@ class PurchaseOrderModel extends OrderModel {
             deliveryAddress: deliveryAddress,
             remarks: remarks,
             salesApplication: salesApplication,
-            consignmentModel: consignmentModel);
+      consignment: consignment);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
       _$PurchaseOrderModelFromJson(json);

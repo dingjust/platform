@@ -28,7 +28,8 @@ class _ProofingListState extends State<ProofingList> {
     var bloc = BLoCProvider.of<ProofingOrdersBLoC>(context);
 
     widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
+      if (widget.scrollController.position.pixels ==
+          widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(widget.status.code);
       }
@@ -80,7 +81,8 @@ class _ProofingListState extends State<ProofingList> {
             FlatButton(
               child: Text('确定', style: TextStyle(color: Colors.black)),
               onPressed: () async {
-                String response = await ProofingOrderRepository().proofingCancelling(model.code);
+                String response = await ProofingOrderRepository()
+                    .proofingCancelling(model.code);
                 if (response != null) {
                   _handleRefresh();
                   Navigator.of(context).pop();
@@ -104,19 +106,24 @@ class _ProofingListState extends State<ProofingList> {
     );
   }
 
-  void _onProofingConfirmReceived(ProofingModel model) {
+  void _onProofingConfirmReceived(ProofingModel model) async {
     // TODO: 确认收货
+    bool result = false;
+    result = await ProofingOrderRepository().shipped(model.code);
   }
 
   void _onProofingUpdating(ProofingModel model) async {
     //查询明细
-    ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(model.code);
+    ProofingModel detailModel =
+        await ProofingOrderRepository().proofingDetail(model.code);
 
-    QuoteModel quoteModel = await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
+    QuoteModel quoteModel =
+        await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => ProofingOrderForm(quoteModel: quoteModel, model: detailModel, update: true),
+        builder: (context) => ProofingOrderForm(
+            quoteModel: quoteModel, model: detailModel, update: true),
       ),
     );
   }
@@ -124,7 +131,8 @@ class _ProofingListState extends State<ProofingList> {
   void _onProofingConfirmDelivered(ProofingModel model) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => LogisticsInputPage(isProductionOrder: false, proofingModel: model),
+        builder: (context) =>
+            LogisticsInputPage(isProductionOrder: false, proofingModel: model),
       ),
     );
   }
@@ -153,10 +161,12 @@ class _ProofingListState extends State<ProofingList> {
           children: <Widget>[
             StreamBuilder<List<ProofingModel>>(
               stream: bloc.stream,
-              builder: (BuildContext context, AsyncSnapshot<List<ProofingModel>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<ProofingModel>> snapshot) {
                 if (snapshot.data == null) {
                   bloc.filterByStatuses(widget.status.code);
-                  return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                  return ProgressIndicatorFactory
+                      .buildPaddedProgressIndicator();
                 }
                 if (snapshot.hasData) {
                   return Column(
@@ -165,9 +175,11 @@ class _ProofingListState extends State<ProofingList> {
                         model: order,
                         onProofingPaying: () => _onProofingPaying(order),
                         onProofingCanceling: () => _onProofingCanceling(order),
-                        onProofingConfirmReceived: () => _onProofingConfirmReceived(order),
+                        onProofingConfirmReceived: () =>
+                            _onProofingConfirmReceived(order),
                         onProofingUpdating: () => _onProofingUpdating(order),
-                        onProofingConfirmDelivered: () => _onProofingConfirmDelivered(order),
+                        onProofingConfirmDelivered: () =>
+                            _onProofingConfirmDelivered(order),
                       );
                     }).toList(),
                   );
@@ -195,7 +207,8 @@ class _ProofingListState extends State<ProofingList> {
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
                   opacity: snapshot.data ? 1.0 : 0,
                 );
               },

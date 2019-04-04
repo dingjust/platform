@@ -133,57 +133,59 @@ class MyHomePage extends StatelessWidget {
   }
 
   Widget _buildInformation(BuildContext context, UserModel user) {
-    return UserBLoC.instance.currentUser.status == UserStatus.ONLINE
-        ? Container(
-            height: 80,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          "${user.name}",
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: const Color.fromRGBO(36, 38, 41, 1),
-                          ),
-                        ),
+    if (user.status == UserStatus.ONLINE) {
+      return Container(
+        height: 80,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: Text(
+                      "${user.name}",
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromRGBO(36, 38, 41, 1),
                       ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Text(
-                    '${UserBLoC.instance.currentUser.companyName}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: const Color.fromRGBO(132, 114, 1, 1),
                     ),
                   ),
-                )
-              ],
-            ),
-          )
-        : Container(
-            child: Container(
-              width: 200,
-              margin: EdgeInsets.only(left: 10),
-              child: RaisedButton(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                onPressed: () {
-                  Navigator.of(context).push((MaterialPageRoute(
-                      builder: (context) => B2BLoginPage())));
-                },
-                child: Text('登录'),
+                ],
               ),
             ),
-          );
+            Container(
+              child: Text(
+                '${UserBLoC.instance.currentUser.companyName}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: const Color.fromRGBO(132, 114, 1, 1),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        child: Container(
+          width: 200,
+          margin: EdgeInsets.only(left: 10),
+          child: RaisedButton(
+            color: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            onPressed: () {
+              Navigator.of(context).push(
+                  (MaterialPageRoute(builder: (context) => B2BLoginPage())));
+            },
+            child: Text('登录'),
+          ),
+        ),
+      );
+    }
   }
 }
 

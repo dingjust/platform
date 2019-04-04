@@ -1,8 +1,12 @@
 import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
+import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
+import 'package:b2b_commerce/src/home/requirement/requirement_date_pick.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -39,15 +43,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         elevation: 0.5,
         centerTitle: true,
         title: Text('现款详情'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              B2BIcons.more,
-              size: 4,
-            ),
-            onPressed: () {},
-          )
-        ],
       ),
       body: Container(
         color: Color.fromRGBO(248, 248, 248, 1),
@@ -73,7 +68,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         : ['0', '0'];
 
     return Container(
-      height: 110,
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
@@ -81,39 +75,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            '${widget.product.name}',
-            style: TextStyle(
-                color: Color.fromRGBO(50, 50, 50, 1),
-                fontSize: 16,
-                fontWeight: FontWeight.bold),
-            overflow: TextOverflow.clip,
-          ),
-          RichText(
-            text: TextSpan(
-                text: '￥',
-                style: TextStyle(
-                    color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
-                children: <TextSpan>[
-                  TextSpan(
-                      text: '${_minPrice[0]}.', style: TextStyle(fontSize: 25)),
-                  TextSpan(text: '${_minPrice[1]}'),
-                  TextSpan(text: '——￥'),
-                  TextSpan(
-                      text: '${_maxPrice[0]}.', style: TextStyle(fontSize: 25)),
-                  TextSpan(text: '${_maxPrice[1]}')
-                ]),
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Text(
+              '${widget.product.name}',
+              style: TextStyle(
+                  color: Color.fromRGBO(50, 50, 50, 1),
+                  fontSize: 16,),
+              overflow: TextOverflow.clip,
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                '订单数：68',
-                style: TextStyle(
-                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
+              RichText(
+                text: TextSpan(
+                    text: '￥',
+                    style: TextStyle(
+                        color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '${_minPrice[0]}.', style: TextStyle(fontSize: 25)),
+                      TextSpan(text: '${_minPrice[1]}'),
+                      TextSpan(text: '——￥'),
+                      TextSpan(
+                          text: '${_maxPrice[0]}.', style: TextStyle(fontSize: 25)),
+                      TextSpan(text: '${_maxPrice[1]}')
+                    ]),
               ),
               Text(
-                '${widget.product.belongTo?.address}',
+                '${widget.product.belongTo.contactAddress.region.name}${widget.product.belongTo.contactAddress.city.name}',
                 style: TextStyle(
                     color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
               )
@@ -139,18 +130,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             value: '${widget.product.belongTo?.name}',
             action: JumpTo(
               label: '进厂',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SuppliersDetail(
-                          supplierModel: SupplierModel(
-                            factory: widget.product.belongTo,
-                          ),
-                          isSupplier: false,
-                        ),
-                  ),
-                );
+              onTap: () async {
+                //获取该工厂的现款商品
+                ProductsResponse productsResponse = await ProductRepositoryImpl()
+                    .getProductsOfFactory({}, {'size': 3}, widget.product.belongTo.uid);
+
+                UserRepositoryImpl()
+                    .getFactory(widget.product.belongTo.uid)
+                    .then((factory) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyFactoryPage(factory,products: productsResponse.content,),
+                    ),
+                  );
+                });
               },
             ),
           ),
@@ -171,7 +165,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           FlatButton(
-              onPressed: onOrder,
+              onPressed: (){
+                FastRequirementForm fastRequirementForm = new FastRequirementForm();
+                fastRequirementForm.product = widget.product.code;
+                fastRequirementForm.factoryUid = widget.product.belongTo.uid;
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => RequirementDatePick(
+                      fastRequirementForm: fastRequirementForm,
+                      nowTime: DateTime.now(),
+                    )));
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
               color: Color.fromRGBO(255, 214, 12, 1),

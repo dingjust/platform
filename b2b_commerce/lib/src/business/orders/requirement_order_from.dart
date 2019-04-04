@@ -133,7 +133,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             label: Text(widget.order != null ? '修改需求' : '确定发布'),
             labelStyle: TextStyle(color: Colors.black, fontSize: 20),
             onPressed: () {
-              widget.order != null ? onUpdate() : onPublish();
+              widget.order != null ? onUpdate() : onPublish(widget.factoryUid);
             },
           ),
         ),
@@ -270,10 +270,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   }
 
   /// 发布
-  void onPublish() async {
-    String code =
-        await RequirementOrderRepository().publishNewRequirement(model);
-    if (code != null) {
+  void onPublish(String factoryUid) async {
+    print(factoryUid);
+    String code = await RequirementOrderRepository().publishNewRequirement(
+        model, factoryUid, factoryUid != null ? true : false);
+    if (code != null && code != '') {
       model.code = code;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
