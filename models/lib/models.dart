@@ -50,6 +50,28 @@ String enumMap(dynamic enumModels,String code){
   return text;
 }
 
+List<EnumModel> enumCodesToModels(List<String> codes,dynamic enumModels){
+  return codes.map((code){
+    return enumModels.firstWhere((enumModel) => enumModel.code == code,orElse: () => null);;
+  }).toList();
+}
+List<String> enumCodesToNames(List<String> codes,dynamic enumModels){
+  List<String> names = codes.map((code){
+    EnumModel model = enumModels.firstWhere((enumModel) => enumModel.code == code,orElse: () => null);
+    if(model != null){
+      return model.name;
+    }else{
+      return null;
+    }
+  }).toList();
+//
+//  if(codes.length > count){
+//    names = names.sublist(0,count);
+//  }
+
+  return names;
+}
+
 //格式选中的枚举（多选）
 String formatEnumSelectsText(List<String> codes, List<EnumModel> enumModels,int count) {
   String text = '';
