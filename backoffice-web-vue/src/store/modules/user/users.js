@@ -2,7 +2,7 @@ import axios from 'axios';
 import http from '@/common/js/http';
 import router from '@/router';
 
-const CLIENT_ID = 'asm';
+const CLIENT_ID = 'nbyjy';
 const CLIENT_SECRET = 'password';
 const GRANT_TYPE_PASSWORD = 'password';
 const GRANT_TYPE_REFRESH_TOKEN = 'refresh_token';
