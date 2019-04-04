@@ -427,7 +427,10 @@ class FactoryRequirementPoolSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    queryReports();
+    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
+    if(bloc.currentUser.status != UserStatus.OFFLINE){
+      queryReports();
+    }
     return Container(
       padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
       child: Row(
