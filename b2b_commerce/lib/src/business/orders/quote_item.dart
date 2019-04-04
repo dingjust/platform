@@ -84,12 +84,12 @@ class _QuoteItemState extends State<QuoteItem> {
                             color: Color.fromRGBO(255, 183, 0, 1),
                             highlightOnly: false,
                           ),
-                          RichText(
-                            text: TextSpan(text: '历史接单', style: TextStyle(color: Colors.black54), children: <TextSpan>[
-                              TextSpan(text: '214', style: TextStyle(color: Colors.red)),
-                              TextSpan(text: '单', style: TextStyle(color: Colors.black54)),
-                            ]),
-                          ),
+//                          RichText(
+//                            text: TextSpan(text: '历史接单', style: TextStyle(color: Colors.black54), children: <TextSpan>[
+//                              TextSpan(text: '214', style: TextStyle(color: Colors.red)),
+//                              TextSpan(text: '单', style: TextStyle(color: Colors.black54)),
+//                            ]),
+//                          ),
                           Icon(
                             Icons.chevron_right,
                             color: Colors.grey,
@@ -119,7 +119,7 @@ class _QuoteItemState extends State<QuoteItem> {
                   TextSpan(text: '￥', style: TextStyle(fontSize: 14, color: Colors.red)),
                   TextSpan(
                       text:
-                          '${widget.model.unitPriceOfFabric + widget.model.unitPriceOfExcipients + widget.model.unitPriceOfProcessing + widget.model.costOfSamples + widget.model.costOfOther}',
+                          '${widget.model.unitPrice}',
                       style: TextStyle(color: Colors.red)),
                 ]),
               ),

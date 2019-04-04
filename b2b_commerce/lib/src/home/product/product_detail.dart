@@ -1,10 +1,12 @@
 import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_date_pick.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -41,15 +43,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         elevation: 0.5,
         centerTitle: true,
         title: Text('现款详情'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              B2BIcons.more,
-              size: 4,
-            ),
-            onPressed: () {},
-          )
-        ],
       ),
       body: Container(
         color: Color.fromRGBO(248, 248, 248, 1),
@@ -106,21 +99,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   TextSpan(text: '${_maxPrice[1]}')
                 ]),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '订单数：68',
-                style: TextStyle(
-                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
-              ),
-              Text(
-                '${widget.product.belongTo?.address}',
-                style: TextStyle(
-                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
-              )
-            ],
-          )
+//          Row(
+//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//            children: <Widget>[
+//              Text(
+//                '订单数：68',
+//                style: TextStyle(
+//                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
+//              ),
+//              Text(
+//                '${widget.product.belongTo?.address}',
+//                style: TextStyle(
+//                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
+//              )
+//            ],
+//          )
         ],
       ),
     );
@@ -141,18 +134,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             value: '${widget.product.belongTo?.name}',
             action: JumpTo(
               label: '进厂',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SuppliersDetail(
-                          supplierModel: SupplierModel(
-                            factory: widget.product.belongTo,
-                          ),
-                          isSupplier: false,
-                        ),
-                  ),
-                );
+              onTap: () async {
+                //获取该工厂的现款商品
+                ProductsResponse productsResponse = await ProductRepositoryImpl()
+                    .getProductsOfFactory({}, {'size': 3}, widget.product.belongTo.uid);
+
+                UserRepositoryImpl()
+                    .getFactory(widget.product.belongTo.uid)
+                    .then((factory) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyFactoryPage(factory,products: productsResponse.content,),
+                    ),
+                  );
+                });
               },
             ),
           ),
