@@ -394,7 +394,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          widget.brand.name,
+                          widget.brand.name ?? '',
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -430,7 +430,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   ),
                 ),
                 Text(
-                  widget.brand.brand,
+                  '${widget.brand.brand ?? ''}',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -449,7 +449,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   ),
                 ),
                 Text(
-                  "${widget.brand.cooperativeBrand}",
+                  "${widget.brand.cooperativeBrand ?? ''}",
                   style: TextStyle(fontSize: 16),
                 ),
               ],
