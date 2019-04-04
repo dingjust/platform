@@ -64,6 +64,7 @@ class FactoryBLoC extends BLoCBase {
         try {
           response = await http$.post(Apis.factories,
               data: factoryCondition.toDataJson(),
+              // data:{},
               queryParameters: {'page': currentPage, 'size': pageSize});
         } on DioError catch (e) {
           print(e);

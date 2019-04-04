@@ -74,8 +74,8 @@ class FactoryCondition {
         cooperationModesArray.add(CooperationModesMap[type]);
       });
 
-      var result = {
-        'categories': [categories??''],
+      Map<String,dynamic> result = {
+        'categories': [categories ?? ''],
         'adeptAtCategory': adeptAtCategoryArray,
         'productiveOrientations':
             productiveOrientations != null ? [productiveOrientations.id] : [],
@@ -83,10 +83,8 @@ class FactoryCondition {
         'labels': labelsArray,
         'cooperationModes': cooperationModesArray
       };
-      
-    
 
-      // print(result);
+      print(result);
 
       return result;
     }

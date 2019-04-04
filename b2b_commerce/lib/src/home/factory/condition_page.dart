@@ -287,37 +287,3 @@ class ConditionBlock extends StatelessWidget {
     );
   }
 }
-
-class FactoryCondtions {
-  /// 规模范围
-  ScaleRanges scaleRange;
-
-  /// 地区
-  RegionModel region;
-
-  /// 星级
-  int starLevel;
-
-  /// 加工类型
-  MachiningType machiningType;
-
-  //生产大类
-  List<CategoryModel> categories;
-
-  FactoryCondtions(
-      {this.scaleRange,
-      this.region,
-      this.starLevel,
-      this.machiningType,
-      this.categories});
-}
-
-class CondtionItem {
-  String label;
-
-  dynamic condition;
-
-  bool checked;
-
-  CondtionItem({this.label, this.checked = false, this.condition});
-}
