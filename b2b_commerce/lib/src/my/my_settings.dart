@@ -4,7 +4,6 @@ import 'package:widgets/widgets.dart';
 
 import './settings/about.dart';
 import './settings/account_security.dart';
-import '../business/orders/requirement_order_filter.dart';
 
 class MySettingsPage extends StatefulWidget {
   @override
@@ -37,26 +36,13 @@ class _MySettingsPageState extends State<MySettingsPage> {
           ),
           ListTile(
             trailing: const Icon(Icons.chevron_right),
-            title: const Text('关于衣加衣'),
+            title: const Text('关于钉单'),
             leading: const Icon(Icons.shopping_basket),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ProfileAboutPage()),
               );
-            },
-          ),
-          ListTile(
-            trailing: const Icon(Icons.chevron_right),
-            title: const Text('工厂需求订单筛选条件'),
-            leading: const Icon(Icons.lock),
-            onTap: () async {
-              Map<String, Object> map = Map();
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RequirementOrderFilterPage(map)),
-              );
-              // print(map);
             },
           ),
           InkWell(

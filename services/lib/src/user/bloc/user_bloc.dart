@@ -89,7 +89,7 @@ class UserBLoC extends BLoCBase {
       if (infoResponse != null && infoResponse.statusCode == 200) {
         _user = UserModel.fromJson(infoResponse.data);
         _user.name = infoResponse.data['username'];
-        _user.status=UserStatus.ONLINE;
+        _user.status = UserStatus.ONLINE;
       }
 
       //  记录登陆用户信息
@@ -157,6 +157,7 @@ class UserBLoC extends BLoCBase {
         if (infoResponse != null && infoResponse.statusCode == 200) {
           _user = UserModel.fromJson(infoResponse.data);
           _user.name = infoResponse.data['username'];
+          _user.status = UserStatus.ONLINE;
         }
 
         //  记录refresh_token
