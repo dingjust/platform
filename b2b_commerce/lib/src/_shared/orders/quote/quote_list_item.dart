@@ -270,7 +270,7 @@ class QuoteListItem extends StatelessWidget {
             ),
           ),
         ];
-      } else {
+      } else if(model.requirementOrder.status == RequirementOrderStatus.PENDING_QUOTE){
         buttons = [
           Container(),
           FlatButton(

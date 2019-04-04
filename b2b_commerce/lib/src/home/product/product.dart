@@ -83,13 +83,13 @@ class RecommendProductItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                '浙江杭州',
+                                '${model.belongTo.contactAddress.region.name}${model.belongTo.contactAddress.city.name}',
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Color.fromRGBO(149, 149, 149, 1)),
                               ),
                               Text(
-                                '800下单',
+                                '',
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Color.fromRGBO(149, 149, 149, 1)),
