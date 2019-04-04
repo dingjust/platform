@@ -144,7 +144,7 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
         Container(
             width: double.infinity,
             height: 50,
-            margin: EdgeInsets.fromLTRB(0, 200, 0, 10),
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
             child: Builder(builder: (context) {
               return FlatButton(
                 color: Color.fromRGBO(255, 214, 12, 1),

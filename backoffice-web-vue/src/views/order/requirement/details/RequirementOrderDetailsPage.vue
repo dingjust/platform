@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <requirement-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
-    <requirement-order-operate-toolbar :read-only="slotData.editable" @onUpdate="onUpdate" @onReview="onReview" @onRecommended="onRecommended"/>
+    <requirement-order-operate-toolbar :read-only="slotData.editable" :can-recommended="slotData.status=='PENDING_QUOTE'" @onUpdate="onUpdate" @onReview="onReview" @onRecommended="onRecommended"/>
     <div class="pt-2"></div>
     <requirement-order-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
     <div class="pt-2"></div>
@@ -90,21 +90,10 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success('推荐成功');
+        this.$message.success('推荐成功'+this.slotData.code);
         this.recommendedVisible = false;
         this.fn.closeSlider(true);
 
-      },
-      async recommendedSubmit(code,uid){
-        const url = this.apis().recommendRequirementOrderToFactory(code,uid);
-        const result = await this.$http.put(url,{});
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('推荐成功');
-        this.recommendedVisible = false;
-        this.fn.closeSlider(true);
       },
       async update() {
         console.log(this.slotData);
