@@ -1,4 +1,6 @@
 import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
+import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
+import 'package:b2b_commerce/src/home/requirement/requirement_date_pick.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -171,7 +173,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           FlatButton(
-              onPressed: onOrder,
+              onPressed: (){
+                FastRequirementForm fastRequirementForm = new FastRequirementForm();
+                fastRequirementForm.product = widget.product.code;
+                fastRequirementForm.factoryUid = widget.product.belongTo.uid;
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => RequirementDatePick(
+                      fastRequirementForm: fastRequirementForm,
+                      nowTime: DateTime.now(),
+                    )));
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
               color: Color.fromRGBO(255, 214, 12, 1),

@@ -1,10 +1,13 @@
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:models/models.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -90,6 +93,31 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     listenMessage();
     listenLogin();
   }
+
+  // void update() async {
+  //   //获取应用目录路径
+  //   String dir = (await getApplicationDocumentsDirectory()).path;
+  //   String filePath = "$dir/app.apk}";
+  //   var dio = new Dio();
+
+  //   (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+  //       (client) {
+  //     client.idleTimeout = new Duration(seconds: 0);
+  //   };
+
+  //   try {
+  //     Response response = await dio.download(
+  //         'http://dingjust.oss-cn-shenzhen.aliyuncs.com/app-release.apk',
+  //         filePath, onReceiveProgress: (received, total) {
+  //       print((received / total * 100).toStringAsFixed(0) + "%");
+  //     });
+  //     print(response.statusCode);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  //   //打开文件
+  //   OpenFile.open(filePath);
+  // }
 
   //监听异常消息,dialog
   void listenMessage() {

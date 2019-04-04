@@ -1,13 +1,12 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/_shared/widgets/business/product_search_input.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../_shared/shares.dart';
 import '../_shared/widgets/broadcast_factory.dart';
 import '../business/products/product_category.dart';
 import '../common/app_image.dart';
@@ -16,6 +15,7 @@ import '../common/find_factory_by_map.dart';
 import '../home/factory/factory_list.dart';
 import '../home/factory/industrial_cluster_factory.dart';
 import '../home/pool/requirement_pool_all.dart';
+import '../home/pool/requirement_pool_recommend.dart';
 import '../home/requirement/fast_publish_requirement.dart';
 import '../production/production_offline_order_from.dart';
 import '../production/production_unique_code.dart';
@@ -43,7 +43,16 @@ class HomePage extends StatefulWidget {
     ]
   };
 
+  final Map<UserType, Widget> searchInputWidgets = <UserType, Widget>{
+    UserType.BRAND:
+        GlobalSearchInput<FactoryModel>(delegate: FactorySearchDelegatePage()),
+    UserType.FACTORY: GlobalSearchInput<RequirementOrderModel>(
+        delegate: RequirementOrderSearchDelegatePage()),
+  };
+
   get widgetsByUserType => widgets[userType];
+
+  get searchInputWidgetsByUserType => searchInputWidgets[userType];
 
   @override
   _HomePageState createState() => new _HomePageState();
@@ -51,6 +60,60 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   _HomePageState();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // WidgetsBinding.instance.addPostFrameCallback((_) => checkVersion());
+
+    super.initState();
+  }
+
+  void checkVersion() {
+    //TODO 调用接口
+    showNewVersion();
+  }
+
+  void showNewVersion() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          // title: Text('确认取消？'),
+          content: Container(
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Image.asset(
+                  'temp/login_logo.png',
+                  package: 'assets',
+                  width: 100.0,
+                  height: 100.0,
+                ),
+                Text('版本更新'),
+                Text('钉单最新版本来啦，马上更新吧！'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('稍后再说', style: TextStyle(color: Colors.grey)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('立即更新',
+                  style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1))),
+              onPressed: () async {},
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +129,7 @@ class _HomePageState extends State<HomePage> {
               expandedHeight: 188.0,
               pinned: true,
               elevation: 0.5,
-              title: ProductSearchInput(
-                height: 35,
-              ),
+              title: widget.searchInputWidgetsByUserType,
               brightness: Brightness.dark,
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
@@ -632,7 +693,7 @@ class FactoryCollaborationSection extends StatelessWidget {
             style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
           ),
           Text(
-            '• 创建后生成唯一码，邀请品牌线上查看生成进度;',
+            '• 创建后生成唯一码，邀请品牌线上查看生产进度;',
             style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
           )
         ],

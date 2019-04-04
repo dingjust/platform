@@ -35,16 +35,17 @@ class FactoryCondition {
   /// 加工类型
   List<CooperationModes> cooperationModes;
 
-  FactoryCondition(
-      {this.starLevel,
-      this.historyOrdersCount,
-      this.categories,
-      @required this.adeptAtCategories,
-      this.productiveOrientations,
-      this.populationScale,
-      @required this.labels,
-      @required this.cooperationModes,
-      this.industrialCuster});
+  FactoryCondition({
+    this.starLevel,
+    this.historyOrdersCount,
+    this.categories,
+    @required this.adeptAtCategories,
+    this.productiveOrientations,
+    this.populationScale,
+    @required this.labels,
+    @required this.cooperationModes,
+    this.industrialCuster,
+  });
 
   factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
       _$FactoryConditionFromJson(json);
@@ -65,28 +66,36 @@ class FactoryCondition {
       adeptAtCategories.forEach((category) {
         adeptAtCategoryArray.add(category.code);
       });
+    }
 
+    if (labels != null) {
       labels.forEach((label) {
         labelsArray.add(label.id);
       });
+    }
 
+    if (cooperationModes != null) {
       cooperationModes.forEach((type) {
         cooperationModesArray.add(CooperationModesMap[type]);
       });
-
-      Map<String,dynamic> result = {
-        'categories': [categories ?? ''],
-        'adeptAtCategory': adeptAtCategoryArray,
-        'productiveOrientations':
-            productiveOrientations != null ? [productiveOrientations.id] : [],
-        // 'starLevel': starLevel,
-        'labels': labelsArray,
-        'cooperationModes': cooperationModesArray
-      };
-
-      print(result);
-
-      return result;
     }
+
+    var result = {
+      'categories': categories != null ? [categories] : [],
+      'adeptAtCategories': adeptAtCategoryArray,
+      'productiveOrientations': productiveOrientations != null
+          ? [productiveOrientations.isocode]
+          : [],
+      'starLevel': starLevel > 0 ? starLevel : '',
+      'labels': labelsArray,
+      'cooperationModes': cooperationModesArray,
+      'populationScales': populationScale != null
+          ? [_$PopulationScaleEnumMap[populationScale]]
+          : []
+    };
+
+    print(result);
+
+    return result;
   }
 }
