@@ -12,7 +12,7 @@ class _ProfileAboutPageState extends State<ProfileAboutPage> {
       appBar: AppBar(
         elevation: 0.5,
         centerTitle: true,
-        title: const Text('关于衣加衣'),
+        title: const Text('关于钉单'),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -20,10 +20,10 @@ class _ProfileAboutPageState extends State<ProfileAboutPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
-              child: AppProfile(icon: Icon(Icons.ac_unit), name: '衣加衣', version: '1.0.0'),
+              child: AppProfile(name: '钉单', version: '1.0.0'),
             ),
             AppActions(),
-            AppProtocols(),
+            AppProtocols(context),
             AppCopyright()
           ],
         ),
@@ -33,9 +33,8 @@ class _ProfileAboutPageState extends State<ProfileAboutPage> {
 }
 
 class AppProfile extends StatelessWidget {
-  AppProfile({@required this.icon, @required this.name, @required this.version});
+  AppProfile({@required this.name, @required this.version});
 
-  final Icon icon;
   final String name;
   final String version;
 
@@ -44,7 +43,12 @@ class AppProfile extends StatelessWidget {
     return Center(
       child: Column(
         children: <Widget>[
-          icon,
+          Image.asset(
+            'temp/login_logo.png',
+            package: 'assets',
+            width: 80.0,
+            height: 80.0,
+          ),
           Text(this.name),
           Text(this.version),
         ],
@@ -76,17 +80,101 @@ class AppActions extends StatelessWidget {
 }
 
 class AppProtocols extends StatelessWidget {
+  final BuildContext context;
+
+  const AppProtocols(this.context, {Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        FlatButton(
-          textColor: Colors.lightBlueAccent,
-          child: Text('衣加衣软件许可及使用协议'),
-          onPressed: () {},
+        GestureDetector(
+            onTap: showServiceProtocol,
+            child: Container(
+              child: Text(
+                '《钉单平台服务协议》',
+                style: TextStyle(color: Colors.blue),
+              ),
+            )),
+        GestureDetector(
+          onTap: showPayProtocol,
+          child: Text(
+            '《钉单平台货款代收代付服务协议》',
+            style: TextStyle(color: Colors.blue),
+          ),
         ),
       ],
+    );
+  }
+
+  void showPayProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/paymentProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '钉单货款代收代付服务协议',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  void showServiceProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/serviceProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '钉单平台服务协议',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
     );
   }
 }
@@ -95,7 +183,7 @@ class AppCopyright extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('宁波衣加衣 版权所有'),
+      child: Text('宁波钉单 版权所有'),
     );
   }
 }

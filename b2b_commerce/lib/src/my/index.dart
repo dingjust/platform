@@ -33,9 +33,9 @@ class MyHomePage extends StatelessWidget {
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
-        MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
-            AppRoutes.ROUTE_MY_ACCOUNT),
-        menuSeparator,
+        // MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
+        //     AppRoutes.ROUTE_MY_ACCOUNT),
+        // menuSeparator,
         CompanyIntroductionMenuItem(),
         menuSeparator,
         CompanyCertificationMenuItem()

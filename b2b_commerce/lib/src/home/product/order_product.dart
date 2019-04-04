@@ -44,13 +44,13 @@ class _ProductsPageState extends State<ProductsPage> {
                     delegate: OrderProductSearchDelegate(),
                   ),
             ),
-            IconButton(
-              icon: Icon(
-                B2BIcons.condition,
-                size: 18,
-              ),
-              onPressed: () {},
-            )
+            // IconButton(
+            //   icon: Icon(
+            //     B2BIcons.condition,
+            //     size: 18,
+            //   ),
+            //   onPressed: () {},
+            // )
           ],
         ),
         body: ProductsView(

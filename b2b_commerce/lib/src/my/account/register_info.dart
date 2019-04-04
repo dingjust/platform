@@ -225,7 +225,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
             builder: (BuildContext context) => B2BLoginPage(
                   isLoginSuccess: true,
                 )),
-        (Route<dynamic> route) => false,
+        ModalRoute.withName('/'),
       );
     } else {
       showDialog<void>(
