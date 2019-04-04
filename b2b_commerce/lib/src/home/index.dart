@@ -44,8 +44,12 @@ class HomePage extends StatefulWidget {
   };
 
   final Map<UserType, Widget> searchInputWidgets = <UserType, Widget>{
-    UserType.BRAND: GlobalSearchInput<FactoryModel>(delegate: FactorySearchDelegatePage()),
-    UserType.FACTORY: GlobalSearchInput<RequirementOrderModel>(delegate: RequirementOrderSearchDelegatePage()),
+    UserType.BRAND: GlobalSearchInput<FactoryModel>(
+      tips: ' 找工厂...',
+      delegate: FactorySearchDelegatePage(),
+    ),
+    UserType.FACTORY: GlobalSearchInput<RequirementOrderModel>(
+      tips: ' 找需求...', delegate: RequirementOrderSearchDelegatePage(),),
   };
 
   get widgetsByUserType => widgets[userType];
@@ -213,11 +217,7 @@ class BrandSecondMenuSection extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => FactoryPage(
-                  FactoryCondition(
-                      starLevel: 0,
-                      adeptAtCategories: [],
-                      labels: [],
-                      cooperationModes: []),
+                  FactoryCondition(starLevel: 0, adeptAtCategories: [], labels: [], cooperationModes: []),
                   route: '品牌工厂',
                 ),
           ),
@@ -239,11 +239,7 @@ class BrandSecondMenuSection extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => FactoryPage(
-                  FactoryCondition(
-                      starLevel: 0,
-                      adeptAtCategories: [],
-                      labels: [],
-                      cooperationModes: []),
+                  FactoryCondition(starLevel: 0, adeptAtCategories: [], labels: [], cooperationModes: []),
                   route: '全部工厂',
                 ),
           ),
@@ -419,8 +415,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                     );
                   });
                 },
-                child:
-                    AllRequirementMenuItem(count: snapshot.data.ordersCount8),
+                child: AllRequirementMenuItem(count: snapshot.data.ordersCount8),
               );
             },
           ),
@@ -438,8 +433,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                             )));
                   });
                 },
-                child: RecommendedRequirementMenuItem(
-                    count: snapshot.data.ordersCount9),
+                child: RecommendedRequirementMenuItem(count: snapshot.data.ordersCount9),
               );
             },
           ),
