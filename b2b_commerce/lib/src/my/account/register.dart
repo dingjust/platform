@@ -16,7 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _captchaController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  bool _isAgree = true;
+  bool _isAgree = false;
   String _userType = "brand";
   String _verifyStr = '获取验证码';
   int _seconds = 0;
@@ -145,13 +145,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(50)),
               color: Color.fromRGBO(255, 214, 12, 1),
               onPressed: (_seconds == 0)
-                  ? () async{
+                  ? () async {
                       bool isExist = await validatePhone();
-                      if(isExist){
-                        UserRepositoryImpl().sendCaptcha(_phoneController.text).then((a){
-                          setState(() {
-                            _startTimer();
-                          });
+                      if (!isExist) {
+                        UserRepositoryImpl()
+                            .sendCaptcha(_phoneController.text)
+                            .then((a) {
+                          _startTimer();
                         });
                       }
                     }
@@ -207,23 +207,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             : Colors.black54),
                   ),
                   GestureDetector(
-                    onTap: showPayProtocol,
-                    child: Text(
-                      '《钉单平台货款代收代付服务协议》',
-                      style: TextStyle(
-                          color: _isAgree
-                              ? Color.fromRGBO(255, 214, 12, 1)
-                              : Colors.blue),
-                    ),
-                  ),
-                  Text(
-                    '和',
-                    style: TextStyle(
-                        color: _isAgree
-                            ? Color.fromRGBO(255, 214, 12, 1)
-                            : Colors.black54),
-                  ),
-                  GestureDetector(
                       onTap: showServiceProtocol,
                       child: Container(
                         child: Text(
@@ -235,6 +218,23 @@ class _RegisterPageState extends State<RegisterPage> {
                                   : Colors.blue),
                         ),
                       )),
+                  Text(
+                    '和',
+                    style: TextStyle(
+                        color: _isAgree
+                            ? Color.fromRGBO(255, 214, 12, 1)
+                            : Colors.black54),
+                  ),
+                  GestureDetector(
+                    onTap: showPayProtocol,
+                    child: Text(
+                      '《钉单平台货款代收代付服务协议》',
+                      style: TextStyle(
+                          color: _isAgree
+                              ? Color.fromRGBO(255, 214, 12, 1)
+                              : Colors.blue),
+                    ),
+                  ),
                 ],
               ),
             )
@@ -280,17 +280,19 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  void onNext(BuildContext context) async{
-    bool result = await UserRepositoryImpl().validateCaptcha(_phoneController.text, _captchaController.text);
-    if(result){
+  void onNext(BuildContext context) async {
+    bool result = await UserRepositoryImpl()
+        .validateCaptcha(_phoneController.text, _captchaController.text);
+    if (result) {
       //TODOS验证验证码
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => RegisterInfoPage(
-            phone: _phoneController.text,
-            password: _passwordController.text,
-          )));
-    }else{
-      (_scaffoldKey.currentState).showSnackBar(SnackBar(content: Text('验证不正确')));
+                phone: _phoneController.text,
+                password: _passwordController.text,
+              )));
+    } else {
+      (_scaffoldKey.currentState)
+          .showSnackBar(SnackBar(content: Text('验证不正确')));
     }
   }
 

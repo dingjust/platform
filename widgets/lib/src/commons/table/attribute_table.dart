@@ -45,32 +45,32 @@ class AttributeTable extends StatelessWidget {
                   value: product.gramWeight != null
                       ? product.gramWeight.toString()
                       : ''),
-              _buildRow(label: '风格', values: product.attributes.styles ?? []),
+              _buildRow(label: '风格', values: enumCodesToNames(product.attributes.styles ?? [],StyleEnum)),
               _buildRow(
                   label: '面料成分',
-                  values: product.attributes.fabricCompositions ?? []),
+                  values: enumCodesToNames(product.attributes.fabricCompositions ?? [],FabricCompositionEnum)),
               _buildRow(
-                  label: '版型', value: product.attributes.editionType ?? ''),
-              _buildRow(label: '款式', value: product.attributes.pattern ?? ''),
+                  label: '版型', value: enumMap(EditionTypeEnum, product.attributes.editionType)),
+              _buildRow(label: '款式', value: enumMap(PatternEnum, product.attributes.pattern)),
               _buildRow(
-                  label: '袖型', value: product.attributes.sleeveType ?? ''),
+                  label: '袖型', value: enumMap(SleeveTypeEnum, product.attributes.sleeveType)),
               _buildRow(
-                  label: '袖长/裤腿', value: product.attributes.sleeveLength ?? ''),
+                  label: '袖长/裤腿', value: enumMap(SleeveLengthEnum, product.attributes.sleeveLength)),
               _buildRow(
                   label: '图案',
-                  values: product.attributes.decorativePatterns ?? []),
+                  values: enumCodesToNames(product.attributes.decorativePatterns ?? [],DecorativePatternEnum)),
               _buildRow(
                   label: '流行元素',
-                  values: product.attributes.popularElements ?? []),
-              _buildRow(label: '填充物', value: product.attributes.filler ?? ''),
-              _buildRow(label: '厚薄', value: product.attributes.thickness ?? ''),
-              _buildRow(label: '季节', value: product.attributes.season ?? ''),
+                  values: enumCodesToNames(product.attributes.popularElements ?? [],PopularElementsEnum)),
+              _buildRow(label: '填充物', value: enumMap(FillerEnum, product.attributes.filler)),
+              _buildRow(label: '厚薄', value: enumMap(ThicknessEnum, product.attributes.thickness)),
+              _buildRow(label: '季节', value: enumMap(SeasonEnum, product.attributes.season)),
               _buildRow(
                   label: '是否有吊牌',
                   value: product.attributes.taggable == null
                       ? ''
                       : product.attributes.taggable ? '是' : '否'),
-              _buildRow(label: '门襟', value: product.attributes.placket ?? ''),
+              _buildRow(label: '门襟', value: enumMap(PlacketEnum, product.attributes.placket)),
             ],
           )
         ],
@@ -90,7 +90,7 @@ class AttributeTable extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16.0, color: Color(0xFF30424D)),
           ),
-          height: 40.0,
+//          height: 40.0,
         )),
         TableCell(
             child: Container(
@@ -99,9 +99,9 @@ class AttributeTable extends StatelessWidget {
           child: Text(
             '${generateValue(value: value, values: values)}',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Color(0xFF30424D)),
+            style: TextStyle(fontSize: 16.0, color: Color(0xFF30424D),wordSpacing: 8),
           ),
-          height: 40.0,
+//          height: 40.0,
         )),
       ],
     );

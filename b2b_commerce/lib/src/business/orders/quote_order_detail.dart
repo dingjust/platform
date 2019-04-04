@@ -759,7 +759,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 )),
           )
         ];
-      } else {
+      } else if(pageItem.requirementOrder.status == RequirementOrderStatus.PENDING_QUOTE){
         buttons = [
           Container(
             width: 250,

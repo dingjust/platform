@@ -64,6 +64,60 @@ class _HomePageState extends State<HomePage> {
   _HomePageState();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    // WidgetsBinding.instance.addPostFrameCallback((_) => checkVersion());
+
+    super.initState();
+  }
+
+  void checkVersion() {
+    //TODO 调用接口
+    showNewVersion();
+  }
+
+  void showNewVersion() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          // title: Text('确认取消？'),
+          content: Container(
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Image.asset(
+                  'temp/login_logo.png',
+                  package: 'assets',
+                  width: 100.0,
+                  height: 100.0,
+                ),
+                Text('版本更新'),
+                Text('钉单最新版本来啦，马上更新吧！'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('稍后再说', style: TextStyle(color: Colors.grey)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('立即更新',
+                  style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1))),
+              onPressed: () async {},
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     ScrollController _scrollController = ScrollController();
 
@@ -124,9 +178,12 @@ class BrandFirstMenuSection extends StatelessWidget {
             // 加载条
             showDialog(
               context: context,
-              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              builder: (context) =>
+                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
-            await ProductRepositoryImpl().cascadedCategories().then((categories) {
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -146,9 +203,12 @@ class BrandFirstMenuSection extends StatelessWidget {
             // 加载条
             showDialog(
               context: context,
-              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              builder: (context) =>
+                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
-            await ProductRepositoryImpl().cascadedCategories().then((categories) {
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -193,7 +253,8 @@ class BrandSecondMenuSection extends StatelessWidget {
   Widget _buildFindFactoriesByIndustrialClusterMenuItem(BuildContext context) {
     return AdvanceIconButton(
       onPressed: () async {
-        List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
+        List<LabelModel> labels =
+            await UserRepositoryImpl().industrialClustersFromLabels();
 
         Navigator.push(
           context,
@@ -217,7 +278,11 @@ class BrandSecondMenuSection extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => FactoryPage(
-                  FactoryCondition(starLevel: 0, adeptAtCategories: [], labels: [], cooperationModes: []),
+                  FactoryCondition(
+                      starLevel: 0,
+                      adeptAtCategories: [],
+                      labels: [],
+                      cooperationModes: []),
                   route: '品牌工厂',
                 ),
           ),
@@ -239,7 +304,11 @@ class BrandSecondMenuSection extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => FactoryPage(
-                  FactoryCondition(starLevel: 0, adeptAtCategories: [], labels: [], cooperationModes: []),
+                  FactoryCondition(
+                      starLevel: 0,
+                      adeptAtCategories: [],
+                      labels: [],
+                      cooperationModes: []),
                   route: '全部工厂',
                 ),
           ),
@@ -380,7 +449,8 @@ class BrandTrackingProgressSection extends StatelessWidget {
 class FactoryRequirementPoolSection extends StatelessWidget {
   int requirementAll = 0;
   int requirementRecommend = 0;
-  final StreamController _reportsStreamController = StreamController<Reports>.broadcast();
+  final StreamController _reportsStreamController =
+      StreamController<Reports>.broadcast();
 
   void queryReports() async {
     Reports response = await ReportsRepository().reportRequirementCount();
@@ -405,7 +475,9 @@ class FactoryRequirementPoolSection extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
               return GestureDetector(
                 onTap: () async {
-                  await ProductRepositoryImpl().majorCategories().then((categories) {
+                  await ProductRepositoryImpl()
+                      .majorCategories()
+                      .then((categories) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => RequirementPoolAllPage(
@@ -426,7 +498,9 @@ class FactoryRequirementPoolSection extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
               return GestureDetector(
                 onTap: () async {
-                  await ProductRepositoryImpl().majorCategories().then((categories) {
+                  await ProductRepositoryImpl()
+                      .majorCategories()
+                      .then((categories) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => RequirementPoolRecommend(
                               categories: categories,
@@ -609,7 +683,7 @@ class FactoryCollaborationSection extends StatelessWidget {
             style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
           ),
           Text(
-            '• 创建后生成唯一码，邀请品牌线上查看生成进度;',
+            '• 创建后生成唯一码，邀请品牌线上查看生产进度;',
             style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
           )
         ],

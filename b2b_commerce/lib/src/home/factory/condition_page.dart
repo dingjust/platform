@@ -38,14 +38,17 @@ class _ConditionPageState extends State<ConditionPage> {
               padding: const EdgeInsets.only(left: 10, top: 5),
               child: CustomScrollView(
                 slivers: <Widget>[
+                  _buildLabel('规模'),
+                  _buildPopulationBlock(),
+                  _buildLabel('加工方式'),
+                  _buildCooperationBlock(),
+                  _buildLabel('大类'),
+                  _buildMajorCategoryBlock(),
                   SliverList(
                     delegate: SliverChildListDelegate(<Widget>[
                       _buildCategoryBlock(),
-                      _buildPopulationBlock(),
                       _buildAddressBlock(),
                       _buildStarsBlock(),
-                      _buildMachiningTypeBlock(),
-                      _buildMajorCategoryBlock()
                     ]),
                   )
                 ],
@@ -100,49 +103,86 @@ class _ConditionPageState extends State<ConditionPage> {
   }
 
   Widget _buildPopulationBlock() {
-    return ConditionBlock(
-        label: '规模',
-        height: 280,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: PopulationScale.values
-              .map(
-                (scale) => RadioListTile(
-                      onChanged: (value) {
-                        setState(() {
-                          populationScale = value;
-                        });
-                      },
-                      groupValue: populationScale,
-                      value: scale,
-                      title: Text('${PopulationScaleLocalizedMap[scale]}'),
-                    ),
-              )
-              .toList(),
-        ));
+    return SliverPadding(
+      padding: EdgeInsets.all(10),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, //Grid按两列显示
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: 4.0,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            //创建子widget
+            return FilterChip(
+              label: Text(
+                  '${PopulationScaleLocalizedMap[PopulationScale.values[index]]}',
+                  style: TextStyle(
+                    fontSize: 18,
+                  )),
+              selectedColor: Color.fromRGBO(255, 214, 12, 1),
+              backgroundColor: Colors.white,
+              selected: widget.factoryCondition.populationScale ==
+                  PopulationScale.values[index],
+              onSelected: ((value) {
+                setState(() {
+                  if (value) {
+                    widget.factoryCondition.populationScale =
+                        PopulationScale.values[index];
+                  } else {
+                    widget.factoryCondition.populationScale = null;
+                  }
+                });
+              }),
+            );
+          },
+          childCount: PopulationScale.values.length,
+        ),
+      ),
+    );
   }
 
-  Widget _buildMachiningTypeBlock() {
-    return ConditionBlock(
-        label: '加工类型',
-        height: 280,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: CooperationModes.values
-              .map(
-                (type) => RadioListTile(
-                      onChanged: (value) {
-                        setState(() {
-                          populationScale = value;
-                        });
-                      },
-                      groupValue: populationScale,
-                      value: type,
-                      title: Text('${CooperationModesLocalizedMap[type]}'),
-                    ),
-              )
-              .toList(),
-        ));
+  Widget _buildCooperationBlock() {
+    return SliverPadding(
+      padding: EdgeInsets.all(10),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, //Grid按两列显示
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: 4.0,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            //创建子widget
+            return FilterChip(
+              label: Text(
+                  '${CooperationModesLocalizedMap[CooperationModes.values[index]]}',
+                  style: TextStyle(
+                    fontSize: 18,
+                  )),
+              selectedColor: Color.fromRGBO(255, 214, 12, 1),
+              backgroundColor: Colors.white,
+              selected: widget.factoryCondition.cooperationModes
+                  .contains(CooperationModes.values[index]),
+              onSelected: ((value) {
+                setState(() {
+                  if (value) {
+                    widget.factoryCondition.cooperationModes
+                        .add(CooperationModes.values[index]);
+                  } else {
+                    widget.factoryCondition.cooperationModes
+                        .remove(CooperationModes.values[index]);
+                  }
+                });
+              }),
+            );
+          },
+          childCount: CooperationModes.values.length,
+        ),
+      ),
+    );
   }
 
   Widget _buildAddressBlock() {
@@ -205,26 +245,72 @@ class _ConditionPageState extends State<ConditionPage> {
   }
 
   Widget _buildMajorCategoryBlock() {
-    return ConditionBlock(
-        label: '大类',
-        height: 320,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: widget.categories
-              .map(
-                (categoryItem) => RadioListTile(
-                      onChanged: (value) {
-                        setState(() {
-                          widget.factoryCondition.categories = value;
-                        });
-                      },
-                      groupValue: widget.factoryCondition.categories,
-                      value: categoryItem.code,
-                      title: Text('${categoryItem.name}'),
-                    ),
-              )
-              .toList(),
-        ));
+    return SliverPadding(
+      padding: EdgeInsets.all(10),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, //Grid按两列显示
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: 4.0,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            //创建子widget
+            return FilterChip(
+              label: Text('${widget.categories[index].name}',
+                  style: TextStyle(
+                    fontSize: 18,
+                  )),
+              selectedColor: Color.fromRGBO(255, 214, 12, 1),
+              backgroundColor: Colors.white,
+              selected: widget.factoryCondition.categories ==
+                  widget.categories[index].code,
+              onSelected: ((value) {
+                setState(() {
+                  if (value) {
+                    widget.factoryCondition.categories =
+                        widget.categories[index].code;
+                  } else {
+                    widget.factoryCondition.categories = null;
+                  }
+                });
+              }),
+            );
+          },
+          childCount: widget.categories.length,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLabel(String label) {
+    return SliverToBoxAdapter(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 50,
+            height: 1,
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+          ),
+          Text(
+            '$label',
+            style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+          ),
+          Container(
+            width: 50,
+            height: 1,
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+          )
+        ],
+      ),
+    );
   }
 
   void _handleStarChanged(int newValue) {
@@ -286,38 +372,4 @@ class ConditionBlock extends StatelessWidget {
       ),
     );
   }
-}
-
-class FactoryCondtions {
-  /// 规模范围
-  ScaleRanges scaleRange;
-
-  /// 地区
-  RegionModel region;
-
-  /// 星级
-  int starLevel;
-
-  /// 加工类型
-  MachiningType machiningType;
-
-  //生产大类
-  List<CategoryModel> categories;
-
-  FactoryCondtions(
-      {this.scaleRange,
-      this.region,
-      this.starLevel,
-      this.machiningType,
-      this.categories});
-}
-
-class CondtionItem {
-  String label;
-
-  dynamic condition;
-
-  bool checked;
-
-  CondtionItem({this.label, this.checked = false, this.condition});
 }

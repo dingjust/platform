@@ -620,7 +620,12 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           ),
         ),
         onTap: () async {
-          ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactory({}, {},widget.factory.uid);
+          ProductsResponse productsResponse;
+          if(UserBLoC.instance.currentUser.type != UserType.BRAND){
+            productsResponse = await ProductRepositoryImpl().list({}, {});
+          }else{
+            productsResponse = await ProductRepositoryImpl().getProductsOfFactory({}, {},widget.factory.uid);
+          }
 
           Navigator.push(
             context,

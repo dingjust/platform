@@ -47,11 +47,14 @@ class FactoryCondition {
     this.industrialCuster,
   });
 
-  factory FactoryCondition.fromJson(Map<String, dynamic> json) => _$FactoryConditionFromJson(json);
+  factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
+      _$FactoryConditionFromJson(json);
 
-  static Map<String, dynamic> toJson(FactoryCondition model) => _$FactoryConditionToJson(model);
+  static Map<String, dynamic> toJson(FactoryCondition model) =>
+      _$FactoryConditionToJson(model);
 
-  static Map<String, dynamic> _regionToJson(RegionModel productiveOrientations) =>
+  static Map<String, dynamic> _regionToJson(
+          RegionModel productiveOrientations) =>
       RegionModel.toJson(productiveOrientations);
 
   Map<String, dynamic> toDataJson() {
@@ -80,13 +83,18 @@ class FactoryCondition {
     var result = {
       'categories': categories != null ? [categories] : [],
       'adeptAtCategories': adeptAtCategoryArray,
-      'productiveOrientations': productiveOrientations != null ? [productiveOrientations.id] : [],
-      // 'starLevel': starLevel,
+      'productiveOrientations': productiveOrientations != null
+          ? [productiveOrientations.isocode]
+          : [],
+      'starLevel': starLevel > 0 ? starLevel : '',
       'labels': labelsArray,
-      'cooperationModes': cooperationModesArray
+      'cooperationModes': cooperationModesArray,
+      'populationScales': populationScale != null
+          ? [_$PopulationScaleEnumMap[populationScale]]
+          : []
     };
 
-    // print(result);
+    print(result);
 
     return result;
   }
