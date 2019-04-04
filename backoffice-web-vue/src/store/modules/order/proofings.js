@@ -111,7 +111,7 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      code: state.keyword,
+      keyword: state.keyword,
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize

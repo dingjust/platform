@@ -90,21 +90,10 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success('推荐成功');
+        this.$message.success('推荐成功'+this.slotData.code);
         this.recommendedVisible = false;
         this.fn.closeSlider(true);
 
-      },
-      async recommendedSubmit(code,uid){
-        const url = this.apis().recommendRequirementOrderToFactory(code,uid);
-        const result = await this.$http.put(url,{});
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('推荐成功');
-        this.recommendedVisible = false;
-        this.fn.closeSlider(true);
       },
       async update() {
         console.log(this.slotData);
