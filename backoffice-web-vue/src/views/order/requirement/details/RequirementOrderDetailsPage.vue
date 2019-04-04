@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <requirement-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
-    <requirement-order-operate-toolbar :read-only="slotData.editable" @onUpdate="onUpdate" @onReview="onReview" @onRecommended="onRecommended"/>
+    <requirement-order-operate-toolbar :read-only="slotData.editable" :can-recommended="slotData.status=='PENDING_QUOTE'" @onUpdate="onUpdate" @onReview="onReview" @onRecommended="onRecommended"/>
     <div class="pt-2"></div>
     <requirement-order-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
     <div class="pt-2"></div>
