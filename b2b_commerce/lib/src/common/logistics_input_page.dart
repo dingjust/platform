@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:b2b_commerce/src/business/quote_orders.dart';
 import 'package:dio/dio.dart';
@@ -163,13 +164,13 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                   //把物流信息放到model
                   ConsignmentModel consignment = new ConsignmentModel();
                   consignment.trackingID = _orderNumberController.text;
-                  consignment.carrierModel = carrier;
+                  consignment.carrierDetails = carrier;
                   if(_orderNumberController.text != null && _orderNumberController.text != ''
                       && carrierCode != null && carrierCode != '') {
                     //生产单的确认发货
                     if (widget.isProductionOrder && widget.purchaseOrderModel != null) {
                       //把内容放到生产订单里
-                      widget.purchaseOrderModel.consignmentModel = consignment;
+                      widget.purchaseOrderModel.consignment = consignment;
                       result = await PurchaseOrderRepository()
                           .purchaseOrderDelivering(
                           widget.purchaseOrderModel.code,
@@ -181,15 +182,15 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                     }
                     //打样单的确认发货
                     else if(!widget.isProductionOrder && widget.proofingModel != null) {
-                      widget.proofingModel.consignmentModel = consignment;
+                      widget.proofingModel.consignment = consignment;
                       result = await ProofingOrderRepository()
                           .proofingDelivering(
                           widget.proofingModel.code,
                           widget.proofingModel);
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (context) =>
-                              QuoteOrdersPage()), ModalRoute.withName('/'));
-                      QuoteOrdersBLoC().refreshData('ALL');
+                              ProofingOrdersPage()), ModalRoute.withName('/'));
+                      ProofingOrdersBLoC().refreshData('ALL');
                     }
 
                     showDialog<void>(

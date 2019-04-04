@@ -47,7 +47,11 @@ class CategorySelectPageState extends State<CategorySelectPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FactoryPage(
-              FactoryCondition(starLevel: 0, adeptAtCategory: [category]),
+              FactoryCondition(
+                  starLevel: 0,
+                  adeptAtCategories: [category],
+                  labels: [],
+                  cooperationModes: []),
             ),
       ),
     );
@@ -122,7 +126,8 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                 ? FlatButton(
                     onPressed: () {
                       if (widget.fastRequirementForm.categories.isEmpty) {
-                        (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
+                        (_scaffoldKey.currentState as ScaffoldState)
+                            .showSnackBar(
                           SnackBar(
                             content: Text('请选择品类'),
                             duration: Duration(seconds: 1),
@@ -132,7 +137,8 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => RequirementDatePick(
-                                  fastRequirementForm: widget.fastRequirementForm,
+                                  fastRequirementForm:
+                                      widget.fastRequirementForm,
                                   nowTime: DateTime.now(),
                                 ),
                           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
-import 'package:b2b_commerce/src/_shared/widgets/business/product_search_delegate_page.dart';
+import './product_search_delegate_page.dart';
 
 /// 产品搜索框
 class ProductSearchInput extends StatelessWidget {

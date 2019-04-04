@@ -48,7 +48,9 @@ class _RequirementOrderDetailPageState
           style: TextStyle(color: Colors.black),
         ),
         actions: <Widget>[
-          widget.order.editable != null && widget.order.editable && UserBLoC.instance.currentUser.type == UserType.BRAND
+          widget.order.editable != null &&
+                  widget.order.editable &&
+                  UserBLoC.instance.currentUser.type == UserType.BRAND
               ? FlatButton(
                   onPressed: onEdit,
                   child: Text('修改'),
@@ -94,58 +96,50 @@ class _RequirementOrderDetailPageState
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image: widget
-                            .order.belongTo.profilePicture == null?
-                        AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ):
-                        NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.belongTo.profilePicture.url}'),
+                        image: widget.order.belongTo.profilePicture == null
+                            ? AssetImage(
+                                'temp/picture.png',
+                                package: "assets",
+                              )
+                            : NetworkImage(
+                                '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.belongTo.profilePicture.url}'),
                         fit: BoxFit.cover,
                       )),
                 ),
                 Container(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(bottom: 5),
-                          child: Text(
-                            widget.order.belongTo == null ||
-                                widget.order.belongTo == null ?
-                            '' :
-                            '${widget.order.belongTo.name}',
-                            textScaleFactor: 1.3,
-                          ),
-                        ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 5),
+                      child: Text(
                         widget.order.belongTo == null ||
-                            widget.order.belongTo.approvalStatus == null ?
-                        Container() :
-                        Container(
+                                widget.order.belongTo == null
+                            ? ''
+                            : '${widget.order.belongTo.name}',
+                        textScaleFactor: 1.3,
+                      ),
+                    ),
+                    widget.order.belongTo == null ||
+                            widget.order.belongTo.approvalStatus == null
+                        ? Container()
+                        : Container(
                             margin: EdgeInsets.only(top: 5),
                             color: Color.fromRGBO(254, 252, 235, 1),
                             child: widget.order.belongTo.approvalStatus !=
-                                ArticleApprovalStatus.approved ?
-                            Text(
-                                '  未认证  ',
-                                style: TextStyle(
-                                  color:
-                                  Color.fromRGBO(255, 133, 148, 1),
-                                )
-                            )
-                                :
-                            Text(
-                              '  已认证  ',
-                              style: TextStyle(
-                                color: Color.
-                                fromRGBO(255, 133, 148, 1)
-                                ,
-                              ),
-                            )
-                        )
-                      ],
-                    )
-                )
+                                    ArticleApprovalStatus.approved
+                                ? Text('  未认证  ',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(255, 133, 148, 1),
+                                    ))
+                                : Text(
+                                    '  已认证  ',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(255, 133, 148, 1),
+                                    ),
+                                  ))
+                  ],
+                ))
               ],
             ),
             Divider(
@@ -157,16 +151,14 @@ class _RequirementOrderDetailPageState
                 children: <Widget>[
                   Expanded(
                     child: Container(
-                      child: Text(
-                          '联系人'
-                      ),
+                      child: Text('联系人'),
                     ),
                   ),
                   Container(
                     child: Text(
-                      widget.order.belongTo.contactAddress?.fullname  == null ?
-                      '' :
-                      '${widget.order.belongTo.contactAddress.fullname}',
+                      widget.order.belongTo.contactAddress?.fullname == null
+                          ? ''
+                          : '${widget.order.belongTo.contactAddress.fullname}',
                       style: TextStyle(
                           color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                     ),
@@ -174,7 +166,9 @@ class _RequirementOrderDetailPageState
                 ],
               ),
             ),
-            Divider(height: 2,),
+            Divider(
+              height: 2,
+            ),
             GestureDetector(
               child: Container(
                 padding: EdgeInsets.all(15),
@@ -182,16 +176,14 @@ class _RequirementOrderDetailPageState
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                        child: Text(
-                            '联系手机'
-                        ),
+                        child: Text('联系手机'),
                       ),
                     ),
                     Container(
                       child: Text(
-                        widget.order.belongTo.contactAddress.cellphone == null  ?
-                        '' :
-                        '${widget.order.belongTo.contactAddress.cellphone}',
+                        widget.order.belongTo.contactAddress.cellphone == null
+                            ? ''
+                            : '${widget.order.belongTo.contactAddress.cellphone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
@@ -199,10 +191,11 @@ class _RequirementOrderDetailPageState
                   ],
                 ),
               ),
-              onTap: (){
-                widget.order.belongTo.contactAddress.cellphone == null?
-                null:
-                _selectActionButton(widget.order.belongTo.contactAddress.cellphone);
+              onTap: () {
+                widget.order.belongTo.contactAddress.cellphone == null
+                    ? null
+                    : _selectActionButton(
+                        widget.order.belongTo.contactAddress.cellphone);
               },
             ),
           ],
@@ -366,40 +359,36 @@ class _RequirementOrderDetailPageState
       } else {
         _pictureWidget = GestureDetector(
           child: Stack(
-              alignment: const Alignment(0.6, 1.1),
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: 15),
-                  padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image:
-                        NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order
-                                .details.pictures[0].url}'),
-                        fit: BoxFit.cover,
-                      )),
+            alignment: const Alignment(0.6, 1.1),
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 15),
+                padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.details.pictures[0].url}'),
+                      fit: BoxFit.cover,
+                    )),
+              ),
+              Container(
+                child: Icon(
+                  Icons.photo_size_select_actual,
+                  color: Colors.black38,
+                  size: 20,
                 ),
-                Container(
-                  child: Icon(
-                    Icons.photo_size_select_actual,
-                    color: Colors.black38,
-                    size: 20,
-                  ),
-                )
-              ],
+              )
+            ],
           ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    PicturePickPreviewWidget(
+                builder: (context) => PicturePickPreviewWidget(
                       medias: widget.order.details.pictures,
                       isUpload: false,
-                    ))
-            );
+                    )));
           },
         );
       }
@@ -586,7 +575,10 @@ class _RequirementOrderDetailPageState
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return Row(
-        mainAxisAlignment: widget.order.status == RequirementOrderStatus.COMPLETED ? MainAxisAlignment.center : MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment:
+            widget.order.status == RequirementOrderStatus.COMPLETED
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -602,31 +594,38 @@ class _RequirementOrderDetailPageState
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 )),
           ),
-          widget.order.status == RequirementOrderStatus.COMPLETED ? Container(): Container(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-            width: 180,
-            child: FlatButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FactoryPage(
-                              FactoryCondition(
-                                  starLevel: 0, adeptAtCategory: []),
-                              requirementCode: widget.order.code,
-                              route: '全部工厂',
-                            )),
-                  );
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                color: Color.fromRGBO(255, 214, 12, 1),
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                child: Text(
-                  '邀请工厂报价',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                )),
-          ),
+          widget.order.status == RequirementOrderStatus.COMPLETED
+              ? Container()
+              : Container(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                  width: 180,
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FactoryPage(
+                                    FactoryCondition(
+                                      starLevel: 0,
+                                      adeptAtCategories: [],
+                                      labels: [],
+                                      cooperationModes: []
+                                    ),
+                                    requirementCode: widget.order.code,
+                                    route: '全部工厂',
+                                  )),
+                        );
+                      },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                      child: Text(
+                        '邀请工厂报价',
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                      )),
+                ),
         ],
       );
     } else {
@@ -688,14 +687,16 @@ class _RequirementOrderDetailPageState
                 await launch(url);
               },
             ),
-            tel.indexOf('-')>-1?Container():ListTile(
-              leading: Icon(Icons.message),
-              title: Text('发送短信'),
-              onTap: () async {
-                var url = 'sms:' + tel;
-                await launch(url);
-              },
-            ),
+            tel.indexOf('-') > -1
+                ? Container()
+                : ListTile(
+                    leading: Icon(Icons.message),
+                    title: Text('发送短信'),
+                    onTap: () async {
+                      var url = 'sms:' + tel;
+                      await launch(url);
+                    },
+                  ),
           ],
         );
       },
