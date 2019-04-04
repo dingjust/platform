@@ -90,16 +90,27 @@
             </el-select>
           </el-form-item>
         </el-col>
-
         <el-col :span="6">
-          <el-form-item label="备注" prop="remarks">
-            <el-input type="textarea"
-                      :rows="2"
-                      placeholder="请输入内容"
-                      v-model="slotData.remarks">
-            </el-input>
+          <el-form-item label="归还时间" prop="returnedDate">
+            <el-date-picker class="w-100"
+                            type="date"
+                            v-model="slotData.returnedDate"
+                            placeholder="选择日期"
+                            value-format="timestamp">
+            </el-date-picker>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
+      <el-col :span="6">
+        <el-form-item label="备注" prop="remarks">
+          <el-input type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                    v-model="slotData.remarks">
+          </el-input>
+        </el-form-item>
+      </el-col>
       </el-row>
     </el-form>
   </div>
@@ -111,7 +122,8 @@
     props: ['slotData', 'readOnly'],
     mixins: [],
     computed: {},
-    methods: {},
+    methods: {
+    },
     data() {
       return {
         sampleCheckoutTypes: this.$store.state.EnumsModule.sampleCheckoutTypes,

@@ -15,8 +15,8 @@ const state = {
   ],
   //样衣借还状态
   returnStates: [
-    {code: 'NOT_RETURNED', name: '已还'},
-    {code: 'RETURNED', name: '未还'},
+    {code: 'NOT_RETURNED', name: '未还'},
+    {code: 'RETURNED', name: '已还'},
   ],
   //需求订单状态
   requirementOrderStatuses: [
