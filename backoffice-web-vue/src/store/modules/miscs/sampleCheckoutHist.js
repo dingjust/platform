@@ -26,7 +26,8 @@ const state = {
     company: {
       uid: '',
       name: ''
-    }
+    },
+    returnedDate:'',
   },
   queryFormData: {
     id: null,
@@ -43,7 +44,8 @@ const state = {
     company: {
       uid: '',
       name: ''
-    }
+    },
+    returnedDate:'',
   }
 };
 
