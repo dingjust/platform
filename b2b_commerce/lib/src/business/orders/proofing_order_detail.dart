@@ -244,7 +244,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
             ),
           ),
-          Text('${widget.model.remarks}')
+          Text('${widget.model.remarks==null?'':widget.model.remarks}')
         ],
       ),
     );
@@ -315,13 +315,13 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                     children: <Widget>[
                       Container(
                         child: Text(
-                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null ? widget.model.consignment.carrierDetails.name : ''}',
+                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null && widget.model.consignment.carrierDetails.name != null ? widget.model.consignment.carrierDetails.name : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
                       Container(
                         child: Text(
-                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null ? widget.model.consignment.trackingID : ''}',
+                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null && widget.model.consignment.trackingID != null? widget.model.consignment.trackingID : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -501,7 +501,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         children: <Widget>[
                           Text('历史接单'),
                           Text(
-                            widget.model.belongTo.historyOrdersCount.toString(),
+                            '${widget.model.belongTo.historyOrdersCount==null?'':widget.model.belongTo.historyOrdersCount}',
                             style: TextStyle(color: Colors.red),
                           ),
                           Text('单')

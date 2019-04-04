@@ -129,7 +129,7 @@ class ProductionItem extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                    image: order.product == null || order.product.thumbnail.url == null?
+                    image: order.product == null || order.product.thumbnail == null ||order.product.thumbnail.url == null?
                     AssetImage(
                       'temp/picture.png',
                       package: "assets",
