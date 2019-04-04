@@ -63,7 +63,7 @@ class UserBLoC extends BLoCBase {
         'username': username,
         'password': password,
         'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
-        'client_id': 'asm', // TODO:
+        'client_id': 'nbyjy', // TODO:
         'client_secret': 'password' // TODO:
       }));
     } on DioError catch (e) {
@@ -132,7 +132,7 @@ class UserBLoC extends BLoCBase {
         loginResponse = await http$.post(
             HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
           'grant_type': GlobalConfigs.GRANT_TYPE_REFRESH_TOKEN,
-          'client_id': 'asm',
+          'client_id': 'nbyjy',
           'client_secret': 'password',
           'refresh_token': localRefreshToken
         }));

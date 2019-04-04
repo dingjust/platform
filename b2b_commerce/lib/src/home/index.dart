@@ -44,10 +44,12 @@ class HomePage extends StatefulWidget {
   };
 
   final Map<UserType, Widget> searchInputWidgets = <UserType, Widget>{
-    UserType.BRAND:
-        GlobalSearchInput<FactoryModel>(delegate: FactorySearchDelegatePage()),
+    UserType.BRAND: GlobalSearchInput<FactoryModel>(
+      tips: ' 找工厂...',
+      delegate: FactorySearchDelegatePage(),
+    ),
     UserType.FACTORY: GlobalSearchInput<RequirementOrderModel>(
-        delegate: RequirementOrderSearchDelegatePage()),
+      tips: ' 找需求...', delegate: RequirementOrderSearchDelegatePage(),),
   };
 
   get widgetsByUserType => widgets[userType];
@@ -104,8 +106,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SliverList(
-                delegate: SliverChildListDelegate(widget.widgetsByUserType)),
+            SliverList(delegate: SliverChildListDelegate(widget.widgetsByUserType)),
           ],
         ),
       ),
@@ -374,8 +375,7 @@ class BrandTrackingProgressSection extends StatelessWidget {
   Widget _buildNoUniqueCode(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ProductionOfflineOrder()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductionOfflineOrder()));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -451,8 +451,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                     );
                   });
                 },
-                child:
-                    AllRequirementMenuItem(count: snapshot.data.ordersCount8),
+                child: AllRequirementMenuItem(count: snapshot.data.ordersCount8),
               );
             },
           ),
@@ -472,8 +471,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                             )));
                   });
                 },
-                child: RecommendedRequirementMenuItem(
-                    count: snapshot.data.ordersCount9),
+                child: RecommendedRequirementMenuItem(count: snapshot.data.ordersCount9),
               );
             },
           ),
@@ -484,8 +482,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
 }
 
 class AllRequirementMenuItem extends StatelessWidget {
-  const AllRequirementMenuItem({Key key, @required this.count})
-      : super(key: key);
+  const AllRequirementMenuItem({Key key, @required this.count}) : super(key: key);
 
   final int count;
 
@@ -527,8 +524,7 @@ class AllRequirementMenuItem extends StatelessWidget {
 }
 
 class RecommendedRequirementMenuItem extends StatelessWidget {
-  const RecommendedRequirementMenuItem({Key key, @required this.count})
-      : super(key: key);
+  const RecommendedRequirementMenuItem({Key key, @required this.count}) : super(key: key);
 
   final int count;
 
@@ -580,12 +576,8 @@ class RecommendedRequirementMenuItem extends StatelessWidget {
                   color: Color.fromRGBO(100, 100, 100, 1),
                 ),
                 children: <TextSpan>[
-                  TextSpan(
-                      text: '报价',
-                      style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1))),
-                  TextSpan(
-                      text: '的需求',
-                      style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)))
+                  TextSpan(text: '报价', style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1))),
+                  TextSpan(text: '的需求', style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)))
                 ]),
           )
         ],
@@ -636,9 +628,7 @@ class FactoryCollaborationSection extends StatelessWidget {
         },
         child: Text(
           '创建线下订单',
-          style: TextStyle(
-              color: Color.fromRGBO(36, 38, 41, 1),
-              fontWeight: FontWeight.bold),
+          style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontWeight: FontWeight.bold),
         ),
       ),
     );
