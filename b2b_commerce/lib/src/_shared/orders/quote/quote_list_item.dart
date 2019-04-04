@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-import '../../widgets/image_factory.dart';
 import '../../../business/orders/quote_order_detail.dart';
+import '../../widgets/image_factory.dart';
 
 /// 拒绝报价
 typedef void QuoteRejectingCallback();

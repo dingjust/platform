@@ -44,8 +44,12 @@ class HomePage extends StatefulWidget {
   };
 
   final Map<UserType, Widget> searchInputWidgets = <UserType, Widget>{
-    UserType.BRAND: GlobalSearchInput<FactoryModel>(delegate: FactorySearchDelegatePage()),
-    UserType.FACTORY: GlobalSearchInput<RequirementOrderModel>(delegate: RequirementOrderSearchDelegatePage()),
+    UserType.BRAND: GlobalSearchInput<FactoryModel>(
+      tips: ' 找工厂...',
+      delegate: FactorySearchDelegatePage(),
+    ),
+    UserType.FACTORY: GlobalSearchInput<RequirementOrderModel>(
+      tips: ' 找需求...', delegate: RequirementOrderSearchDelegatePage(),),
   };
 
   get widgetsByUserType => widgets[userType];
@@ -57,13 +61,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  GlobalKey homePageKey = GlobalKey();
+
+  ///是否已查看新版本提示
+  bool ignoreVersionNotification;
+
   _HomePageState();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    // ignoreVersionNotification = false;
+    // WidgetsBinding.instance.addPostFrameCallback((_) =>
+    //     AppVersion(homePageKey.currentContext)
+    //         .checkVersion(ignoreVersionNotification));
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     ScrollController _scrollController = ScrollController();
 
     return Scaffold(
+      key: homePageKey,
       body: Container(
         color: Colors.white,
         child: CustomScrollView(
@@ -120,9 +142,12 @@ class BrandFirstMenuSection extends StatelessWidget {
             // 加载条
             showDialog(
               context: context,
-              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              builder: (context) =>
+                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
-            await ProductRepositoryImpl().cascadedCategories().then((categories) {
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -142,9 +167,12 @@ class BrandFirstMenuSection extends StatelessWidget {
             // 加载条
             showDialog(
               context: context,
-              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              builder: (context) =>
+                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
-            await ProductRepositoryImpl().cascadedCategories().then((categories) {
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -189,7 +217,8 @@ class BrandSecondMenuSection extends StatelessWidget {
   Widget _buildFindFactoriesByIndustrialClusterMenuItem(BuildContext context) {
     return AdvanceIconButton(
       onPressed: () async {
-        List<LabelModel> labels = await UserRepositoryImpl().industrialClustersFromLabels();
+        List<LabelModel> labels =
+            await UserRepositoryImpl().industrialClustersFromLabels();
 
         Navigator.push(
           context,
@@ -384,7 +413,8 @@ class BrandTrackingProgressSection extends StatelessWidget {
 class FactoryRequirementPoolSection extends StatelessWidget {
   int requirementAll = 0;
   int requirementRecommend = 0;
-  final StreamController _reportsStreamController = StreamController<Reports>.broadcast();
+  final StreamController _reportsStreamController =
+      StreamController<Reports>.broadcast();
 
   void queryReports() async {
     Reports response = await ReportsRepository().reportRequirementCount();
@@ -409,7 +439,9 @@ class FactoryRequirementPoolSection extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
               return GestureDetector(
                 onTap: () async {
-                  await ProductRepositoryImpl().majorCategories().then((categories) {
+                  await ProductRepositoryImpl()
+                      .majorCategories()
+                      .then((categories) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => RequirementPoolAllPage(
@@ -419,8 +451,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                     );
                   });
                 },
-                child:
-                    AllRequirementMenuItem(count: snapshot.data.ordersCount8),
+                child: AllRequirementMenuItem(count: snapshot.data.ordersCount8),
               );
             },
           ),
@@ -431,15 +462,16 @@ class FactoryRequirementPoolSection extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
               return GestureDetector(
                 onTap: () async {
-                  await ProductRepositoryImpl().majorCategories().then((categories) {
+                  await ProductRepositoryImpl()
+                      .majorCategories()
+                      .then((categories) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => RequirementPoolRecommend(
                               categories: categories,
                             )));
                   });
                 },
-                child: RecommendedRequirementMenuItem(
-                    count: snapshot.data.ordersCount9),
+                child: RecommendedRequirementMenuItem(count: snapshot.data.ordersCount9),
               );
             },
           ),
@@ -615,7 +647,7 @@ class FactoryCollaborationSection extends StatelessWidget {
             style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
           ),
           Text(
-            '• 创建后生成唯一码，邀请品牌线上查看生成进度;',
+            '• 创建后生成唯一码，邀请品牌线上查看生产进度;',
             style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
           )
         ],

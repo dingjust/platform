@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

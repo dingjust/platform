@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/supplier/suppliers_detail.dart';
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_date_pick.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';

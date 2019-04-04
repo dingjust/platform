@@ -34,5 +34,5 @@ class GlobalConfigs {
   static const APP_NAME = 'dingjust_platform';
 
   /// 衣加衣base site id
-  static const APP_BASE_SITE_ID = 'apparel-zh';
+  static const APP_BASE_SITE_ID = 'b2b-apparel-zh';
 }

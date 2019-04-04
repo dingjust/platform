@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
-import 'package:b2b_commerce/src/business/quote_orders.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';

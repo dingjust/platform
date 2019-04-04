@@ -25,6 +25,8 @@ dependencies:
   shared_preferences: ^0.4.2
   fluwx: ^0.5.4
   rxdart: ^0.20.0
+  open_file: 1.1.1
+
 
 
   # The following adds the Cupertino Icons font to your application.

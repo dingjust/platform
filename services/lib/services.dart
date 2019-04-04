@@ -2,7 +2,6 @@ library app_services;
 
 import 'dart:async';
 
-
 export 'src/api/apis.dart';
 export 'src/api/order.dart';
 export 'src/api/product.dart';
@@ -40,6 +39,7 @@ export 'src/system/notification/message_file_storage.dart';
 export 'src/system/notification/message_repository.dart';
 export 'src/system/notification/message_repository_impl.dart';
 export 'src/system/notification/message_web_client.dart';
+export 'src/system/version/app_version.dart';
 export 'src/user/address_repository.dart';
 export 'src/user/address_repository_impl.dart';
 export 'src/user/bloc/address_bloc.dart';
@@ -55,9 +55,8 @@ export 'src/user/repository/reports_repository.dart';
 export 'src/user/response/address_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
-export 'src/wechat/wechat_service_impl.dart';
 export 'src/wechat/payment_for.dart';
-
+export 'src/wechat/wechat_service_impl.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();
