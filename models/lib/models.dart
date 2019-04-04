@@ -1,23 +1,21 @@
 library models;
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:models/models.dart';
 
 export 'src/media/media.dart';
+export 'src/my/bill.dart';
+export 'src/order/invoice.dart';
 export 'src/order/order.dart';
 export 'src/product/product.dart';
 export 'src/report/report.dart';
 export 'src/security/principal.dart';
 export 'src/system/notification/message.dart';
+export 'src/user/dto.dart';
 export 'src/user/member.dart';
 export 'src/user/user.dart';
 export 'src/user/user_group.dart';
-export 'src/order/invoice.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
-export 'src/my/bill.dart';
-export 'src/user/dto.dart';
-
 
 part 'models.g.dart';
 

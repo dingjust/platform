@@ -59,60 +59,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  GlobalKey homePageKey = GlobalKey();
+
+  ///是否已查看新版本提示
+  bool ignoreVersionNotification;
+
   _HomePageState();
 
   @override
   void initState() {
     // TODO: implement initState
-    // WidgetsBinding.instance.addPostFrameCallback((_) => checkVersion());
+
+    // ignoreVersionNotification = false;
+    // WidgetsBinding.instance.addPostFrameCallback((_) =>
+    //     AppVersion(homePageKey.currentContext)
+    //         .checkVersion(ignoreVersionNotification));
 
     super.initState();
-  }
-
-  void checkVersion() {
-    //TODO 调用接口
-    showNewVersion();
-  }
-
-  void showNewVersion() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          // title: Text('确认取消？'),
-          content: Container(
-            height: 200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Image.asset(
-                  'temp/login_logo.png',
-                  package: 'assets',
-                  width: 100.0,
-                  height: 100.0,
-                ),
-                Text('版本更新'),
-                Text('钉单最新版本来啦，马上更新吧！'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('稍后再说', style: TextStyle(color: Colors.grey)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('立即更新',
-                  style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1))),
-              onPressed: () async {},
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -120,6 +83,7 @@ class _HomePageState extends State<HomePage> {
     ScrollController _scrollController = ScrollController();
 
     return Scaffold(
+      key: homePageKey,
       body: Container(
         color: Colors.white,
         child: CustomScrollView(
