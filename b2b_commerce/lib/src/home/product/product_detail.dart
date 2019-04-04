@@ -68,7 +68,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         : ['0', '0'];
 
     return Container(
-      height: 110,
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
@@ -76,44 +75,41 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            '${widget.product.name}',
-            style: TextStyle(
-                color: Color.fromRGBO(50, 50, 50, 1),
-                fontSize: 16,
-                fontWeight: FontWeight.bold),
-            overflow: TextOverflow.clip,
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Text(
+              '${widget.product.name}',
+              style: TextStyle(
+                  color: Color.fromRGBO(50, 50, 50, 1),
+                  fontSize: 16,),
+              overflow: TextOverflow.clip,
+            ),
           ),
-          RichText(
-            text: TextSpan(
-                text: '￥',
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              RichText(
+                text: TextSpan(
+                    text: '￥',
+                    style: TextStyle(
+                        color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '${_minPrice[0]}.', style: TextStyle(fontSize: 25)),
+                      TextSpan(text: '${_minPrice[1]}'),
+                      TextSpan(text: '——￥'),
+                      TextSpan(
+                          text: '${_maxPrice[0]}.', style: TextStyle(fontSize: 25)),
+                      TextSpan(text: '${_maxPrice[1]}')
+                    ]),
+              ),
+              Text(
+                '${widget.product.belongTo.contactAddress.region.name}${widget.product.belongTo.contactAddress.city.name}',
                 style: TextStyle(
-                    color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
-                children: <TextSpan>[
-                  TextSpan(
-                      text: '${_minPrice[0]}.', style: TextStyle(fontSize: 25)),
-                  TextSpan(text: '${_minPrice[1]}'),
-                  TextSpan(text: '——￥'),
-                  TextSpan(
-                      text: '${_maxPrice[0]}.', style: TextStyle(fontSize: 25)),
-                  TextSpan(text: '${_maxPrice[1]}')
-                ]),
-          ),
-//          Row(
-//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//            children: <Widget>[
-//              Text(
-//                '订单数：68',
-//                style: TextStyle(
-//                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
-//              ),
-//              Text(
-//                '${widget.product.belongTo?.address}',
-//                style: TextStyle(
-//                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
-//              )
-//            ],
-//          )
+                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
+              )
+            ],
+          )
         ],
       ),
     );
