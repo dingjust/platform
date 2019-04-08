@@ -5,18 +5,32 @@ import 'package:models/models.dart';
 
 class ProductionEarnestMoney extends StatefulWidget {
   final ApparelProductModel product;
+  final EarnestMoney earnest;
 
-  ProductionEarnestMoney({this.product});
+  ProductionEarnestMoney({this.product,this.earnest});
   _ProductionEarnestMoneyState createState() => _ProductionEarnestMoneyState();
 }
 
 class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
-  String earnestMoney;
+  String earnestMoney ;
   String tailMoney;
   bool isEarnestPayment = false;
   DateTime estimatePaymentDate;
   bool isTailPayment = false;
   DateTime tailPaymentDate;
+
+  @override
+  void initState() {
+    if(widget.earnest != null){
+      earnestMoney = widget.earnest.earnestMoney;
+      tailMoney = widget.earnest.tailMoney;
+      isEarnestPayment = widget.earnest.isEarnestPayment;
+      estimatePaymentDate = widget.earnest.estimatePaymentDate;
+      isTailPayment = widget.earnest.isTailPayment;
+      tailPaymentDate = widget.earnest.tailPaymentDate;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
