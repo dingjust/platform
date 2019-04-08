@@ -116,9 +116,10 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   await ProductRepositoryImpl().update(widget.item);
                 }
 
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => ApparelProductsPage()
-                    ), ModalRoute.withName('/'));
+                Navigator.pop(context);
+//                Navigator.of(context).pushAndRemoveUntil(
+//                    MaterialPageRoute(builder: (context) => ApparelProductsPage()
+//                    ), ModalRoute.withName('/'));
                 ApparelProductBLoC.instance.filterByStatuses(widget.status);
 //              print(widget.item.attributes.styles[0]);
               },
