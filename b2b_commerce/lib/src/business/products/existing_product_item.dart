@@ -45,6 +45,7 @@ class ExistingProductItem extends StatelessWidget{
                     padding:EdgeInsets.only(top: 10),
                     child: Text(
                       product.name ?? '',
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 16,
                       ),

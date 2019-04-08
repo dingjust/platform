@@ -420,7 +420,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    '${pageItem.requirementOrder.details?.majorCategoryName()} ${pageItem.requirementOrder.details?.category?.name}  ${pageItem.requirementOrder?.totalQuantity == null ? '0' : pageItem.requirementOrder?.totalQuantity}件',
+                    '${pageItem.requirementOrder.details?.majorCategoryName()} ${pageItem.requirementOrder.details?.category?.name}  ${pageItem?.totalQuantity == null ? '0' : pageItem?.totalQuantity}件',
                     style: TextStyle(
                       color: Color.fromRGBO(255, 133, 148, 1),
                       fontSize: 15,
@@ -615,7 +615,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   }
 
   Widget _buildAttachment() {
-    return Card(
+    return pageItem.attachments == null ? Container():Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 15),
       child: Padding(

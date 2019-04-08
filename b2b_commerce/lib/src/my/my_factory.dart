@@ -297,7 +297,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   style: TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 Text(
-                  "${ScaleRangesLocalizedMap[widget.factory.scaleRange]}",
+                  "${ScaleRangesLocalizedMap[widget.factory.scaleRange] ?? ''}",
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
