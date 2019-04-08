@@ -63,7 +63,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ? widget.product.minPrice.toString().split(".")
         : ['0', '0'];
     List<String> _maxPrice = widget.product.maxPrice != null
-        ? widget.product.minPrice.toString().split(".")
+        ? widget.product.maxPrice.toString().split(".")
         : ['0', '0'];
 
     return Container(
