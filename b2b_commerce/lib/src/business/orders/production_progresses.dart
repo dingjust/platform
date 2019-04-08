@@ -182,7 +182,9 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 child: Container(
                   child: Column(
                     children: <Widget>[
-                      sequence <= _index ||(order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE && phase == currentPhase && currentPhase == ProductionProgressPhaseLocalizedMap[ProductionProgressPhase.INSPECTION])?
+                      sequence < _index || (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE &&
+                          phase == currentPhase &&
+                          currentPhase == ProductionProgressPhaseLocalizedMap[ProductionProgressPhase.INSPECTION])?
                       _buildFinishDate(context,progress,currentPhase,sequence,_index):
                       _buildEstimatedDate(context,progress,currentPhase,sequence,_index),
                       _buildQuantity(context,progress,currentPhase,sequence,_index),

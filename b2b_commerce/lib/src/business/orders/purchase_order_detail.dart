@@ -498,8 +498,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     Container(
                         margin: EdgeInsets.only(top: 5),
                         color: Color.fromRGBO(254, 252, 235, 1),
-                        child: order.purchaser.approvalStatus ==
-                                ArticleApprovalStatus.approved
+                        child: order.purchaser != null && order.purchaser.approvalStatus != null &&
+                            order.purchaser.approvalStatus != ArticleApprovalStatus.approved
                             ? Text('  已认证  ',
                                 style: TextStyle(
                                   color: Color.fromRGBO(255, 133, 148, 1),
@@ -803,7 +803,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    isCurrentStatus == true
+                    isCurrentStatus == true && widget.order.status == PurchaseOrderStatus.IN_PRODUCTION
                         ? _buildEstimatedDate(
                             context, productionProgress, isCurrentStatus)
                         : _buildFinishDate(

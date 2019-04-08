@@ -496,7 +496,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductionEarnestMoney(),
+              builder: (context) => ProductionEarnestMoney(earnest: earnest,),
             ),
           ).then((value) {
             setState(() {
@@ -823,7 +823,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice <= 0){
         isSubmit = _showValidateMsg(context, '请输入生产单价');
       }
-      else if(purchaseOrder.deposit == null || purchaseOrder.deposit <= 0){
+      else if(purchaseOrder.deposit == null || purchaseOrder.deposit < 0){
         isSubmit = _showValidateMsg(context, '请输入定金');
       }
       else if(purchaseOrder.machiningType == null){
