@@ -115,6 +115,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BLoCProvider.of<UserBLoC>(context);
     return Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,
@@ -168,8 +169,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 ? _buildTipsPayment(context)
                 : _buildPurchaseProductionProgresse(context),
             _buildDeliveryAddress(context),
-            userType != null && userType == 'brand'
-                ? _buildFactoryInfo(context)
+            bloc.isBrandUser ? _buildFactoryInfo(context)
                 : _buildBrandInfo(context),
             _buildDocutment(context),
             _buildRemarks(context),
