@@ -5,7 +5,6 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import '../business/apparel_products.dart';
-import '../business/apparel_products_off_the_shelf.dart';
 import '../business/employees.dart';
 import '../business/purchase_orders.dart';
 import '../business/quote_orders.dart';
@@ -64,7 +63,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
     ROUTE_PRODUCTS: (context) => ApparelProductsPage(),
-    ROUTE_PRODUCTS_OFF_THE_SHELF: (context) => OffTheShelfApparelProductsPage(),
     ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),

@@ -6,16 +6,20 @@ import 'package:widgets/widgets.dart';
 
 import 'package:b2b_commerce/src/_shared/products/product_search_delegate_page.dart';
 
-import 'apparel_product_list.dart';
+import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
 
-class ApparelProductsPage extends StatelessWidget {
+class ApparelProductsPage extends StatefulWidget {
 //  final List<ApparelProductModel> items = <ApparelProductModel>[];
-  final bool isRequirement;
+  final bool isSelectOption;
   final ApparelProductModel item;
 
-  ApparelProductsPage({this.isRequirement = false, this.item});
+  ApparelProductsPage({this.isSelectOption = false, this.item});
 
+  _ApparelProductsPageState createState() => _ApparelProductsPageState();
+}
+
+class _ApparelProductsPageState extends State<ApparelProductsPage>{
   final List<EnumModel> _statuses = UserBLoC.instance.currentUser.type == UserType.FACTORY ? <EnumModel>[
     EnumModel('approved', '上架商品'),
     EnumModel('unapproved', '下架商品'),
@@ -25,15 +29,11 @@ class ApparelProductsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-//    List<ApparelProductItem> _items = items.map((item) {
-//      return ApparelProductItem(item);
-//    }).toList();
-//    print("${ApparelProductBLoC.instance.newProduct.hashCode}=============");
     return BLoCProvider<ApparelProductBLoC>(
       bloc: ApparelProductBLoC.instance,
       child: WillPopScope(
         onWillPop: () {
-          Navigator.pop(context, item);
+          Navigator.pop(context, widget.item);
           return Future.value(false);
         },
         child: Scaffold(
@@ -74,7 +74,7 @@ class ApparelProductsPage extends StatelessWidget {
                     .map((status) => Container(
                   padding: EdgeInsets.only(top: 10),
                   child:ApparelProductList(
-                  isRequirement: isRequirement,
+                  isSelectOption: widget.isSelectOption,
                   status:status.code,
                 ),))
                     .toList(),

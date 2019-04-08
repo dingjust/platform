@@ -159,7 +159,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
               context,
               MaterialPageRoute(
                 builder: (context) => ApparelProductsPage(
-                      isRequirement: true,
+                      isSelectOption: true,
                       item: _product,
                     ),
               ),
@@ -304,7 +304,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             context,
             MaterialPageRoute(
               builder: (context) => ApparelProductsPage(
-                    isRequirement: true,
+                    isSelectOption: true,
                     item: _product,
                   ),
             ),
