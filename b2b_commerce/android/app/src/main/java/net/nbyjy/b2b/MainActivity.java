@@ -1,4 +1,4 @@
-package com.example.b2bcommerce;
+package net.nbyjy.b2b;
 
 import android.os.Bundle;
 

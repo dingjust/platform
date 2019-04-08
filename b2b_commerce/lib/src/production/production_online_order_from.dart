@@ -564,19 +564,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             ),
           ),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(
-                    fieldText: '定金', inputType: TextInputType.number)),
-            //接收返回数据并处理
-          ).then((value) {
-            setState(() {
-              earnestMoney = value;
-            });
-          });
-        });
+        );
   }
 
   //合作方式
@@ -838,6 +826,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   }
 
   void onSure() async {
+    bool isSubmit = false;
     List<PurchaseOrderEntryModel> entries = new List();
     purchaseOrder.purchaser = widget.quoteModel.requirementOrder.belongTo;
     //加工方式
@@ -891,23 +880,74 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     purchaseOrder.salesApplication = SalesApplication.ONLINE;
 
     try {
-      String response = await PurchaseOrderRepository()
-          .onlinePurchaseOrder(widget.quoteModel.code, purchaseOrder);
-      if (response != null && response != '') {
-        //根据code查询明
-        PurchaseOrderModel model =
-            await PurchaseOrderRepository().getPurchaseOrderDetail(response);
-        if (model != null) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) => PurchaseOrderDetailPage(
-                        order: model,
-                      )),
-              ModalRoute.withName('/'));
+      //非空验证
+      if(purchaseOrder.entries == null || purchaseOrder.entries.length <= 0){
+        isSubmit = _showValidateMsg(context, '请选择商品');
+      }
+      else if(purchaseOrder.totalQuantity == null || purchaseOrder.totalQuantity <= 0){
+        isSubmit = _showValidateMsg(context, '请输入生产数量');
+      }
+      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice <= 0){
+        isSubmit = _showValidateMsg(context, '请输入生产单价');
+      }
+      else if(purchaseOrder.deposit == null || purchaseOrder.deposit <= 0){
+        isSubmit = _showValidateMsg(context, '请输入定金');
+      }
+      else if(purchaseOrder.machiningType == null){
+        isSubmit = _showValidateMsg(context, '请选择合作方式');
+      }
+      else if(purchaseOrder.invoiceNeeded == null){
+        isSubmit = _showValidateMsg(context, '请选择是否开具发票');
+      }else{
+        isSubmit = true;
+      }
+
+      if(isSubmit){
+        String response = await PurchaseOrderRepository()
+            .onlinePurchaseOrder(widget.quoteModel.code, purchaseOrder);
+        if (response != null && response != '') {
+          //根据code查询明
+          PurchaseOrderModel model =
+          await PurchaseOrderRepository().getPurchaseOrderDetail(response);
+          if (model != null) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => PurchaseOrderDetailPage(
+                      order: model,
+                    )),
+                ModalRoute.withName('/'));
+          }
         }
       }
     } catch (e) {
       print(e);
     }
+  }
+
+  //非空提示
+  bool _showValidateMsg(BuildContext context,String message){
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context,String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('提示',
+            style: TextStyle(
+                fontSize: 16
+            ),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('${message}'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

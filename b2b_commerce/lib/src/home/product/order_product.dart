@@ -154,9 +154,9 @@ class ProductsView extends StatelessWidget {
                         sliver: SliverGrid(
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2, //Grid按两列显示
-                            mainAxisSpacing: 12.0,
-                            crossAxisSpacing: 12.0,
-                            childAspectRatio: 0.65,
+                            mainAxisSpacing: 10.0,
+                            crossAxisSpacing: 10.0,
+                            childAspectRatio: 0.61,
                           ),
                           delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                             return recommendProductItems[index];

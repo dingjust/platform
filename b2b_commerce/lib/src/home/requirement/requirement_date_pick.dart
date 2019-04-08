@@ -17,7 +17,7 @@ class _RequirementDatePickState extends State<RequirementDatePick> {
   @override
   void initState() {
     // TODO: implement initState
-    widget.fastRequirementForm.deliveryDate = DateTime.now();
+    widget.fastRequirementForm.deliveryDate = widget.nowTime;
     super.initState();
   }
 
