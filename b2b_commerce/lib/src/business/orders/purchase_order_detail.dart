@@ -1280,7 +1280,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       color: Colors.white,
-      child: Attachments(list: order.attachments),
+      child: order.attachments == null ? Container() :
+      Attachments(list: order.attachments),
     );
   }
 
