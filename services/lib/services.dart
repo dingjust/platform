@@ -24,6 +24,7 @@ export 'src/order/repository/quote_order_respository.dart';
 export 'src/order/repository/requirement_order_repository.dart';
 export 'src/order/response/order_response.dart';
 export 'src/product/bloc/apparel_product_bloc.dart';
+export 'src/product/bloc/apparel_product_search_result_bloc.dart';
 export 'src/product/bloc/sample_product_bloc.dart';
 export 'src/product/bloc/sample_product_history_bloc.dart';
 export 'src/product/product_repository_impl.dart';

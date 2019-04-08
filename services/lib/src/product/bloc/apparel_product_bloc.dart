@@ -45,6 +45,7 @@ class ApparelProductBLoC extends BLoCBase {
 
   filterByStatuses(String status) async {
     print(status);
+    if(status == null) status = 'ALL';
     Map<String, dynamic> data = {};
     if (status != 'ALL') {
       data = {
@@ -60,10 +61,11 @@ class ApparelProductBLoC extends BLoCBase {
   }
 
   loadingMoreByStatuses(String status) async {
+    if(status == null) status = 'ALL';
     Map<String, dynamic> data = {};
     if (status != 'ALL') {
       data = {
-        'approvalStatuses': [status]
+        'approvalStatuses': [status],
       };
     }
     if (productsResponse.number < productsResponse.totalPages - 1) {
@@ -75,6 +77,16 @@ class ApparelProductBLoC extends BLoCBase {
       bottomController.sink.add(true);
     }
     loadingController.sink.add(false);
+    _controller.sink.add(products);
+  }
+
+  getData(String keyword) async {
+    products.clear();
+    productsResponse = await ProductRepositoryImpl().list({
+      'keyword':keyword,
+    }, {});
+    print(productsResponse.content);
+    products.addAll(productsResponse.content);
     _controller.sink.add(products);
   }
 
