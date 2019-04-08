@@ -7,8 +7,8 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import '../../../business/orders/purchase_order_detail.dart';
-import '../../../common/order_payment.dart';
 import '../../../common/logistics_input_page.dart';
+import '../../../common/order_payment.dart';
 
 class PurchaseOrderItem extends StatefulWidget {
   PurchaseOrderItem({Key key, this.order}) : super(key: key);
@@ -18,7 +18,8 @@ class PurchaseOrderItem extends StatefulWidget {
   _PurchaseOrderItemState createState() => _PurchaseOrderItemState();
 }
 
-class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKeepAliveClientMixin {
+class _PurchaseOrderItemState extends State<PurchaseOrderItem>
+    with AutomaticKeepAliveClientMixin {
   static Map<PurchaseOrderStatus, Color> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
     PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Color(0xFFFFD600),
@@ -44,7 +45,9 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
           children: <Widget>[
             _buildHeader(context),
             _buildContent(context),
-            bloc.isBrandUser ? _buildBrandButton(context) : _buildFactoryButton(context),
+            bloc.isBrandUser
+                ? _buildBrandButton(context)
+                : _buildFactoryButton(context),
           ],
         ),
         decoration: BoxDecoration(
@@ -54,11 +57,13 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
       ),
       onTap: () async {
         //根据code查询
-        PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(widget.order.code);
+        PurchaseOrderModel model = await PurchaseOrderRepository()
+            .getPurchaseOrderDetail(widget.order.code);
 
         if (model != null) {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => PurchaseOrderDetailPage(order: model)),
+            MaterialPageRoute(
+                builder: (context) => PurchaseOrderDetailPage(order: model)),
           );
         }
       },
@@ -76,12 +81,15 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                           widget.order.depositPaid == false &&
                           widget.order.deposit != null &&
                           widget.order.deposit != 0 &&
-                          widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT) ||
-                      (widget.order.salesApplication == SalesApplication.ONLINE &&
+                          widget.order.status ==
+                              PurchaseOrderStatus.PENDING_PAYMENT) ||
+                      (widget.order.salesApplication ==
+                              SalesApplication.ONLINE &&
                           widget.order.balancePaid == false &&
                           widget.order.balance != null &&
                           widget.order.balance != 0 &&
-                          widget.order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)
+                          widget.order.status ==
+                              PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
@@ -215,12 +223,14 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image: widget.order.product == null || widget.order.product.thumbnail == null
+                  image: widget.order.product == null ||
+                          widget.order.product.thumbnail == null
                       ? AssetImage(
                           'temp/picture.png',
                           package: "assets",
                         )
-                      : NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.product.thumbnail.url}'),
+                      : NetworkImage(
+                          '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.product.thumbnail.url}'),
                   fit: BoxFit.cover,
                 )),
           ),
@@ -234,11 +244,13 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                     children: <Widget>[
                       Align(
                         alignment: Alignment.topLeft,
-                        child: widget.order.product == null || widget.order.product.name == null
+                        child: widget.order.product == null ||
+                                widget.order.product.name == null
                             ? Container()
                             : Text(
                                 '${widget.order.product.name}',
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
                               ),
                       ),
                       Align(
@@ -251,11 +263,13 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                           ),
                           child: Text(
                             '货号：${widget.order.product == null ? '' : widget.order.product.skuID}',
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
                           ),
                         ),
                       ),
-                      widget.order.product == null || widget.order.product.category == null
+                      widget.order.product == null ||
+                              widget.order.product.category == null
                           ? Container()
                           : Container(
                               padding: const EdgeInsets.all(3),
@@ -281,100 +295,101 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
   Widget _buildBrandButton(BuildContext context) {
     if (widget.order.salesApplication == SalesApplication.ONLINE) {
       if (widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT) {
-        if (widget.order.depositPaid == false && widget.order.deposit != null && widget.order.deposit > 0) {
+        if (widget.order.depositPaid == false &&
+            widget.order.deposit != null &&
+            widget.order.deposit > 0) {
           return Container(
             margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Expanded(
-                  child: Container(
-                      width: 100,
-                      margin: const EdgeInsets.fromLTRB(45, 0, 30, 0),
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT
-                          ? RaisedButton(
-                              color: Colors.red,
-                              child: Text(
-                                '取消订单',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                ),
+                Container(
+                    width: 120,
+                    child: widget.order.status ==
+                            PurchaseOrderStatus.PENDING_PAYMENT
+                        ? FlatButton(
+                            color: Colors.red,
+                            child: Text(
+                              '取消订单',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
                               ),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
+                            ),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(20),
                               ),
-                              onPressed: () async {
-                                showDialog<void>(
-                                  context: context,
-                                  barrierDismissible: true, // user must tap button!
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        '提示',
-                                        style: const TextStyle(fontSize: 16),
+                            ),
+                            onPressed: () async {
+                              showDialog<void>(
+                                context: context,
+                                barrierDismissible:
+                                    true, // user must tap button!
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      '提示',
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                    content: Text('是否要取消订单？'),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text(
+                                          '取消',
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
                                       ),
-                                      content: Text('是否要取消订单？'),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          child: Text(
-                                            '取消',
-                                            style: TextStyle(color: Colors.grey),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
+                                      FlatButton(
+                                        child: Text(
+                                          '确定',
+                                          style: TextStyle(color: Colors.black),
                                         ),
-                                        FlatButton(
-                                          child: Text(
-                                            '确定',
-                                            style: TextStyle(color: Colors.black),
-                                          ),
-                                          onPressed: () async {
-                                            bool result = await PurchaseOrderRepository()
-                                                .purchaseOrderCancelling(widget.order.code);
-                                            _showMessage(context, result, '订单取消');
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              })
-                          : Container()),
-                ),
-                Expanded(
-                  child: Container(
-                      width: 100,
-                      padding: const EdgeInsets.fromLTRB(45, 0, 20, 0),
-                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: RaisedButton(
-                          color: Color(0xFFFFD600),
-                          child: Text(
-                            '去支付',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
-                            ),
+                                        onPressed: () async {
+                                          bool result =
+                                              await PurchaseOrderRepository()
+                                                  .purchaseOrderCancelling(
+                                                      widget.order.code);
+                                          _showMessage(context, result, '订单取消');
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            })
+                        : Container()),
+                Container(
+                    width: 120,
+                    child: FlatButton(
+                        color: Color(0xFFFFD600),
+                        child: Text(
+                          '去支付',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
                           ),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
-                            ),
+                        ),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20),
                           ),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => OrderPaymentPage(
-                                      order: widget.order,
-                                      paymentFor: PaymentFor.DEPOSIT,
-                                    )));
-                          })),
-                ),
+                        ),
+                        onPressed: () {
+                          PurchaseOrderModel order = widget.order;
+                          //将支付金额置为定金
+                          order.totalPrice = order.deposit;
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => OrderPaymentPage(
+                                    order: order,
+                                    paymentFor: PaymentFor.DEPOSIT,
+                                  )));
+                        })),
               ],
             ),
           );
@@ -395,9 +410,12 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                       fontSize: 18,
                     ),
                   ),
-                  shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(20))),
                   onPressed: () async {
-                    bool result = await PurchaseOrderRepository().confirmProduction(widget.order.code, widget.order);
+                    bool result = await PurchaseOrderRepository()
+                        .confirmProduction(widget.order.code, widget.order);
                     _showMessage(context, result, '确认生产');
                   },
                 ),
@@ -407,8 +425,11 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
         }
       }
       //支付尾款
-      else if (widget.order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
-        if (widget.order.balancePaid == false && widget.order.balance != null && widget.order.balance > 0) {
+      else if (widget.order.status ==
+          PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
+        if (widget.order.balancePaid == false &&
+            widget.order.balance != null &&
+            widget.order.balance > 0) {
           return Container(
             child: Align(
               alignment: Alignment.bottomRight,
@@ -425,8 +446,13 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                       fontSize: 18,
                     ),
                   ),
-                  shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(20))),
                   onPressed: () {
+                    PurchaseOrderModel order = widget.order;
+                    //将支付金额置为定金
+                    order.totalPrice = order.balance;
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => OrderPaymentPage(
                               order: widget.order,
@@ -457,10 +483,12 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                     fontSize: 18,
                   ),
                 ),
-                shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
                 onPressed: () async {
                   bool result = false;
-                  result = await PurchaseOrderRepository().purchaseOrderShipped(widget.order.code, widget.order);
+                  result = await PurchaseOrderRepository()
+                      .purchaseOrderShipped(widget.order.code, widget.order);
                   _showMessage(context, result, '确认收货');
                 },
               ),
@@ -487,10 +515,12 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                     fontSize: 18,
                   ),
                 ),
-                shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
                 onPressed: () async {
                   bool result = false;
-                  result = await PurchaseOrderRepository().purchaseOrderShipped(widget.order.code, widget.order);
+                  result = await PurchaseOrderRepository()
+                      .purchaseOrderShipped(widget.order.code, widget.order);
                   _showMessage(context, result, '确认收货');
                 },
               ),
@@ -505,7 +535,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
 
   Widget _buildFactoryButton(BuildContext context) {
     //流程是待付款状态并定金未付的情况下能修改订单金额
-    if (widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT && widget.order.depositPaid == false) {
+    if (widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
+        widget.order.depositPaid == false) {
       return Container(
         child: Align(
           alignment: Alignment.bottomRight,
@@ -522,7 +553,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                     fontSize: 18,
                   ),
                 ),
-                shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
                 onPressed: () {
                   _showDepositDialog(context, widget.order);
                 }),
@@ -582,12 +614,14 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                     fontSize: 18,
                   ),
                 ),
-                shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) =>
-                          LogisticsInputPage(isProductionOrder: true, purchaseOrderModel: widget.order),
+                      builder: (context) => LogisticsInputPage(
+                          isProductionOrder: true,
+                          purchaseOrderModel: widget.order),
                     ),
                   );
                 },
@@ -595,7 +629,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
             ),
           ),
         );
-      } else if (widget.order.salesApplication == SalesApplication.ONLINE && !widget.order.balancePaid) {
+      } else if (widget.order.salesApplication == SalesApplication.ONLINE &&
+          !widget.order.balancePaid) {
         //未付尾款时可以修改金额
         return Container(
           child: Align(
@@ -613,7 +648,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                     fontSize: 18,
                   ),
                 ),
-                shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
                 onPressed: () {
                   _showBalanceDialog(context, widget.order);
                 },
@@ -657,7 +693,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
   }
 
   //修改金额按钮方法
-  Future<void> _neverUpdateBalance(BuildContext context, PurchaseOrderModel model) async {
+  Future<void> _neverUpdateBalance(
+      BuildContext context, PurchaseOrderModel model) async {
     TextEditingController dialogText = TextEditingController();
     return showDialog<void>(
       context: context,
@@ -708,26 +745,38 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                           fontSize: 18,
                         ),
                       ),
-                      shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20))),
                       onPressed: () async {
                         bool result = false;
                         if (dialogText.text != null && dialogText.text != '') {
-                          double balance = dialogText.text == null || dialogText.text == ''
-                              ? model.balance
-                              : double.parse(dialogText.text);
+                          double balance =
+                              dialogText.text == null || dialogText.text == ''
+                                  ? model.balance
+                                  : double.parse(dialogText.text);
                           model.balance = balance;
                           model.skipPayBalance = false;
                           try {
-                            result = await PurchaseOrderRepository().purchaseOrderBalanceUpdate(model.code, model);
+                            result = await PurchaseOrderRepository()
+                                .purchaseOrderBalanceUpdate(model.code, model);
                           } catch (e) {
                             print(e);
                           }
-                          if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
+                          if (model.status ==
+                              PurchaseOrderStatus.IN_PRODUCTION) {
                             try {
-                              for (int i = 0; i < widget.order.progresses.length; i++) {
-                                if (widget.order.currentPhase == widget.order.progresses[i].phase) {
-                                  result = await PurchaseOrderRepository().productionProgressUpload(widget.order.code,
-                                      widget.order.progresses[i].id.toString(), widget.order.progresses[i]);
+                              for (int i = 0;
+                                  i < widget.order.progresses.length;
+                                  i++) {
+                                if (widget.order.currentPhase ==
+                                    widget.order.progresses[i].phase) {
+                                  result = await PurchaseOrderRepository()
+                                      .productionProgressUpload(
+                                          widget.order.code,
+                                          widget.order.progresses[i].id
+                                              .toString(),
+                                          widget.order.progresses[i]);
                                 }
                               }
                             } catch (e) {
@@ -758,7 +807,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
   }
 
   //修改定金
-  Future<void> _neverUpdateDeposit(BuildContext context, PurchaseOrderModel model) async {
+  Future<void> _neverUpdateDeposit(
+      BuildContext context, PurchaseOrderModel model) async {
     final TextEditingController depositText = TextEditingController();
     final TextEditingController unitText = TextEditingController();
     return showDialog<void>(
@@ -777,7 +827,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                   child: TextField(
                     controller: depositText,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: '定金：￥${model.deposit}'),
+                    decoration:
+                        InputDecoration(labelText: '定金：￥${model.deposit}'),
                   ),
                 ),
                 Container(
@@ -786,7 +837,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                   child: TextField(
                     controller: unitText,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: '单价：￥${model.unitPrice}'),
+                    decoration:
+                        InputDecoration(labelText: '单价：￥${model.unitPrice}'),
                   ),
                 ),
               ],
@@ -806,19 +858,24 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                       fontSize: 18,
                     ),
                   ),
-                  shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(20))),
                   onPressed: () async {
                     bool result = false;
-                    double unit =
-                        unitText.text == null || unitText.text == '' ? model.unitPrice : double.parse(unitText.text);
-                    double deposit = depositText.text == null || depositText.text == ''
-                        ? model.deposit
-                        : double.parse(depositText.text);
+                    double unit = unitText.text == null || unitText.text == ''
+                        ? model.unitPrice
+                        : double.parse(unitText.text);
+                    double deposit =
+                        depositText.text == null || depositText.text == ''
+                            ? model.deposit
+                            : double.parse(depositText.text);
                     model.deposit = deposit;
                     model.unitPrice = unit;
                     model.skipPayBalance = false;
                     try {
-                      result = await PurchaseOrderRepository().purchaseOrderDepositUpdate(model.code, model);
+                      result = await PurchaseOrderRepository()
+                          .purchaseOrderDepositUpdate(model.code, model);
                     } catch (e) {
                       print(e);
                     }
@@ -852,7 +909,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
   }
 
   //确认跳过按钮
-  Future<void> _neverComplete(BuildContext context, PurchaseOrderModel model) async {
+  Future<void> _neverComplete(
+      BuildContext context, PurchaseOrderModel model) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -877,13 +935,18 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem> with AutomaticKee
                 model.balance = 0;
                 model.skipPayBalance = true;
                 try {
-                  result = await PurchaseOrderRepository().purchaseOrderBalanceUpdate(model.code, model);
+                  result = await PurchaseOrderRepository()
+                      .purchaseOrderBalanceUpdate(model.code, model);
                   if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
                     try {
                       for (int i = 0; i < widget.order.progresses.length; i++) {
-                        if (widget.order.currentPhase == widget.order.progresses[i].phase) {
-                          result = await PurchaseOrderRepository().productionProgressUpload(
-                              widget.order.code, widget.order.progresses[i].id.toString(), widget.order.progresses[i]);
+                        if (widget.order.currentPhase ==
+                            widget.order.progresses[i].phase) {
+                          result = await PurchaseOrderRepository()
+                              .productionProgressUpload(
+                                  widget.order.code,
+                                  widget.order.progresses[i].id.toString(),
+                                  widget.order.progresses[i]);
                         }
                       }
                     } catch (e) {

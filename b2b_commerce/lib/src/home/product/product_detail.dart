@@ -115,6 +115,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget _buildBasicInfoSection() {
+    final bloc = BLoCProvider.of<UserBLoC>(context);
     return Container(
       height: 80,
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -130,20 +131,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             action: JumpTo(
               label: '进厂',
               onTap: () async {
-                //获取该工厂的现款商品
-                ProductsResponse productsResponse = await ProductRepositoryImpl()
-                    .getProductsOfFactory({}, {'size': 3}, widget.product.belongTo.uid);
+                if(bloc.isBrandUser) {
+                  //获取该工厂的现款商品
+                  ProductsResponse productsResponse = await ProductRepositoryImpl()
+                      .getProductsOfFactory(
+                      {}, {'size': 3}, widget.product.belongTo.uid);
 
-                UserRepositoryImpl()
-                    .getFactory(widget.product.belongTo.uid)
-                    .then((factory) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyFactoryPage(factory,products: productsResponse.content,),
-                    ),
-                  );
-                });
+                  UserRepositoryImpl()
+                      .getFactory(widget.product.belongTo.uid)
+                      .then((factory) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            MyFactoryPage(
+                              factory, products: productsResponse.content,),
+                      ),
+                    );
+                  });
+                }
               },
             ),
           ),
