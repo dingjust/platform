@@ -57,9 +57,9 @@ class SampleProductBLoC extends BLoCBase {
 
   loadingMoreByStatuses() async {
     if (productsResponse.number < productsResponse.totalPages - 1) {
-//      productsResponse = await ProductRepositoryImpl().list({
-//        'page':productsResponse.number+1,
-//      },{});
+      productsResponse = await ProductRepositoryImpl().samples({
+        'page':productsResponse.number+1,
+      });
       products.addAll(productsResponse.content);
     } else {
       bottomController.sink.add(true);

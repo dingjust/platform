@@ -58,7 +58,7 @@ module.exports = {
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
-          '^/djwebservices': 'djwebservices/v2/apparel-zh'
+          '^/djwebservices': 'djwebservices/v2/b2b-apparel-zh'
         }
       },
       '/b2b': {
@@ -66,7 +66,7 @@ module.exports = {
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
-          '^/b2b': 'djwebservices/v2/apparel-zh/b2b'
+          '^/b2b': 'djwebservices/v2/b2b-apparel-zh/b2b'
         }
       }
     },
