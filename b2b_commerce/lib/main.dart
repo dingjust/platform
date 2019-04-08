@@ -4,6 +4,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -31,6 +32,15 @@ void main() async {
     bloc: AppBLoC(),
     child: MyApp(),
   ));
+
+  //头部状态栏阴影
+  TargetPlatform platform = defaultTargetPlatform;
+  if (platform != TargetPlatform.iOS) {
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        );
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -108,7 +118,9 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     UserBLoC.instance.loginJumpStream.listen((value) {
       if (true) {
         Navigator.of(_navigatorKey.currentState.overlay.context)
-            .push(MaterialPageRoute(builder: (context) => B2BLoginPage()));
+            .pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => B2BLoginPage()),
+                ModalRoute.withName('/'));
       }
     });
   }

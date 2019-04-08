@@ -12,18 +12,17 @@ class ProductionGenerateUniqueCodePage extends StatefulWidget {
   ProductionGenerateUniqueCodePage({@required this.model});
 
   _ProductionGenerateUniqueCodePageState createState() =>
-      _ProductionGenerateUniqueCodePageState(model: model);
+      _ProductionGenerateUniqueCodePageState();
 }
 
 class _ProductionGenerateUniqueCodePageState
     extends State<ProductionGenerateUniqueCodePage> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
-  PurchaseOrderModel model;
   String uniqueCode;
 
   SimpleAutoCompleteTextField textField;
-  _ProductionGenerateUniqueCodePageState({this.model,this.uniqueCode});
+  _ProductionGenerateUniqueCodePageState({this.uniqueCode});
 
   List<String> added = [];
   String currentText = "";
@@ -41,8 +40,9 @@ class _ProductionGenerateUniqueCodePageState
 
   @override
   void initState(){
-    model.uniqueCode != null && model.uniqueCode != null ?
-    uniqueCode = model.uniqueCode : uniqueCode = '';
+    print(widget.model.uniqueCode);
+    widget.model.uniqueCode != null && widget.model.uniqueCode != null ?
+    uniqueCode = widget.model.uniqueCode : uniqueCode = '';
     super.initState();
   }
 
@@ -256,6 +256,7 @@ class _ProductionGenerateUniqueCodePageState
                 ),
                 Container(
                   width: 100,
+                  margin: EdgeInsets.only(left: 10),
                   child: FlatButton(
                     color: Color.fromRGBO(255,214,12, 1),
                     onPressed: () {
@@ -263,7 +264,7 @@ class _ProductionGenerateUniqueCodePageState
                     },
                     child: Text(
                       '是',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.black),
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -303,19 +304,11 @@ class _ProductionGenerateUniqueCodePageState
   Future<void> _neverCopyContent(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (context) {
         return AlertDialog(
           title: Text('消息'),
           content: Text('复制成功'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
         );
       },
     );
@@ -369,7 +362,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   userType != null && userType == 'brand'?
-                  '工厂：${order.belongTo.name}':'品牌：${order.purchaser.name}',
+                  '工厂：${order.belongTo==null || order.belongTo.name==null?'':order.belongTo.name}':'品牌：${order.purchaser == null || order.purchaser.name == null? '':order.purchaser.name}',
                   style: TextStyle(fontSize: 15),
                 ),
               ),

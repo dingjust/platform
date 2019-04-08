@@ -115,6 +115,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BLoCProvider.of<UserBLoC>(context);
     return Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,
@@ -168,8 +169,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 ? _buildTipsPayment(context)
                 : _buildPurchaseProductionProgresse(context),
             _buildDeliveryAddress(context),
-            userType != null && userType == 'brand'
-                ? _buildFactoryInfo(context)
+            bloc.isBrandUser ? _buildFactoryInfo(context)
                 : _buildBrandInfo(context),
             _buildDocutment(context),
             _buildRemarks(context),
@@ -498,8 +498,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     Container(
                         margin: EdgeInsets.only(top: 5),
                         color: Color.fromRGBO(254, 252, 235, 1),
-                        child: order.purchaser.approvalStatus ==
-                                ArticleApprovalStatus.approved
+                        child: order.purchaser != null && order.purchaser.approvalStatus != null &&
+                            order.purchaser.approvalStatus != ArticleApprovalStatus.approved
                             ? Text('  已认证  ',
                                 style: TextStyle(
                                   color: Color.fromRGBO(255, 133, 148, 1),
@@ -803,7 +803,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    isCurrentStatus == true
+                    isCurrentStatus == true && widget.order.status == PurchaseOrderStatus.IN_PRODUCTION
                         ? _buildEstimatedDate(
                             context, productionProgress, isCurrentStatus)
                         : _buildFinishDate(
@@ -1280,8 +1280,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       color: Colors.white,
-      child: order.attachments == null ? Container() :
-      Attachments(list: order.attachments),
+      child: order.attachments == null
+          ? Container()
+          : Attachments(list: order.attachments),
     );
   }
 
@@ -1440,9 +1441,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
+                            PurchaseOrderModel order = widget.order;
+                            //将支付金额置为定金
+                            order.totalPrice = order.deposit;
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => OrderPaymentPage(
-                                      order: widget.order,
+                                      order: order,
                                       paymentFor: PaymentFor.DEPOSIT,
                                     )));
                           })),
@@ -1484,9 +1488,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       onPressed: () {
+                        PurchaseOrderModel order = widget.order;
+                        //将支付金额置为定金
+                        order.totalPrice = order.balance;
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => OrderPaymentPage(
-                                  order: widget.order,
+                                  order: order,
                                   paymentFor: PaymentFor.BALANCE,
                                 )));
                       }),

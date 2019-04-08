@@ -248,16 +248,20 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                             .purchaseOrderDelivering(
                         widget.purchaseOrderModel.code,
                         widget.purchaseOrderModel);
+                     Navigator.of(context).pushAndRemoveUntil(
+                         MaterialPageRoute(builder: (context) =>
+                             PurchaseOrdersPage()), ModalRoute.withName('/'));
+                     PurchaseOrderBLoC().refreshData('ALL');
                   }else{
                     result = await ProofingOrderRepository()
                         .proofingDelivering(
                         widget.proofingModel.code,
                         widget.proofingModel);
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) =>
+                            ProofingOrdersPage()), ModalRoute.withName('/'));
+                    ProofingOrdersBLoC().refreshData('ALL');
                   }
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) =>
-                          PurchaseOrdersPage()), ModalRoute.withName('/'));
-                  PurchaseOrderBLoC().refreshData('ALL');
                   showDialog<void>(
                     context: context,
                     barrierDismissible: true, // user must tap button!

@@ -1,6 +1,11 @@
 <template>
   <div class="animated fadeIn">
-    <consignment-form :slot-data="slotData.consignment" :read-only="true"/>
+    <template v-if="slotData.consignment&& slotData.consignment.trackingID">
+      <consignment-form :slot-data="slotData.consignment" :read-only="true"/>
+    </template>
+    <template v-else>
+      物流信息未维护
+    </template>
   </div>
 </template>
 
