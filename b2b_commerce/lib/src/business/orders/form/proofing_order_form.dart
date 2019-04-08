@@ -445,7 +445,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     ApparelProductModel selectProduct =
         await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ApparelProductsPage(
-                  isRequirement: true,
+                  isSelectOption: true,
                 )));
 
     setState(() {

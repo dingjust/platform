@@ -190,7 +190,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             MaterialPageRoute(
               builder: (context) =>
                   ApparelProductsPage(
-                    isRequirement: true,
+                    isSelectOption: true,
                     item: _product,
                   ),
             ),
