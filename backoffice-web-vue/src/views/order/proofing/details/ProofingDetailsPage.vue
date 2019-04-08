@@ -1,10 +1,10 @@
 <template>
   <div class="animated fadeIn">
-    <proofing-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <proofing-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
     <div class="pt-2"></div>
     <proofing-form :slot-data="slotData" :read-only="!isNewlyCreated"/>
     <div class="pt-2"></div>
-    <proofing-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <proofing-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
   </div>
 </template>
 

@@ -56,6 +56,13 @@ const state = {
         name: ''
       },
       line1: ''
+    },
+    consignment: {
+      trackingID: '',
+      carrierDetails: {
+        code: '',
+        name: ''
+      }
     }
   },
   queryFormData: {
@@ -86,6 +93,13 @@ const state = {
       name: ''
     },
     line1: ''
+  },
+  consignmentFormData: {
+    trackingID: '',
+    carrierDetails: {
+      code: '',
+      name: ''
+    }
   }
 };
 

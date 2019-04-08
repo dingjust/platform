@@ -46,12 +46,14 @@
         this.search({url, keyword, page, size});
       },
       async onDetails(row) {
+
         const url = this.apis().getProofing(row.code);
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
         }
+        console.log(result);
 
         this.fn.openSlider('打样订单:' + row.code, ProofingDetailsPage, row);
       },
