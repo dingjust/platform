@@ -1280,8 +1280,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       color: Colors.white,
-      child: order.attachments == null ? Container() :
-      Attachments(list: order.attachments),
+      child: order.attachments == null
+          ? Container()
+          : Attachments(list: order.attachments),
     );
   }
 
@@ -1440,9 +1441,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
+                            PurchaseOrderModel order = widget.order;
+                            //将支付金额置为定金
+                            order.totalPrice = order.deposit;
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => OrderPaymentPage(
-                                      order: widget.order,
+                                      order: order,
                                       paymentFor: PaymentFor.DEPOSIT,
                                     )));
                           })),
@@ -1484,9 +1488,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       onPressed: () {
+                        PurchaseOrderModel order = widget.order;
+                        //将支付金额置为定金
+                        order.totalPrice = order.balance;
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => OrderPaymentPage(
-                                  order: widget.order,
+                                  order: order,
                                   paymentFor: PaymentFor.BALANCE,
                                 )));
                       }),
