@@ -5,6 +5,12 @@ const COMMON_APIS = {
   getRegions() {
     return '/djwebservices/addresses/CN/regions';
   },
+  getCities(parentCode){
+    return '/djwebservices/addresses/' + parentCode + '/cities'
+  },
+  getDistricts(parentCode){
+    return '/djwebservices/addresses/' + parentCode + '/districts'
+  },
   getCarriers() {
     return '/djwebservices/carriers';
   },
