@@ -155,7 +155,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.entries[0].product.name}   ${widget.model.entries[0].product.category.name}   ${sum}件",
+                      " ${widget.model.product.category.name}   ${sum}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
