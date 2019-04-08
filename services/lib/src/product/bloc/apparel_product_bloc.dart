@@ -67,7 +67,9 @@ class ApparelProductBLoC extends BLoCBase {
       };
     }
     if (productsResponse.number < productsResponse.totalPages - 1) {
-      productsResponse = await ProductRepositoryImpl().list({}, data);
+      productsResponse = await ProductRepositoryImpl().list(data,{
+        'page':productsResponse.number+1,
+      });
       products.addAll(productsResponse.content);
     } else {
       bottomController.sink.add(true);

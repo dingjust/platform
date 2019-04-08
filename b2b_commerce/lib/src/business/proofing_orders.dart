@@ -22,7 +22,7 @@ class ProofingOrdersPage extends StatefulWidget {
   _ProofingOrdersPageState createState() => _ProofingOrdersPageState();
 }
 
-class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
+  class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
   final GlobalKey _globalKey = GlobalKey<_ProofingOrdersPageState>();
 
   Widget _buildSearchButton() {

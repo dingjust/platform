@@ -82,7 +82,7 @@ class _ProductCarouselState extends State<ProductCarousel> {
   _changePage(int index) {
     _curPageIndex = index;
     // 获取指示器索引
-    _curIndicatorsIndex = index % widget.items.length;
+    if(widget.items.length > 0) _curIndicatorsIndex = index % widget.items.length;
 
     setState(() {});
   }

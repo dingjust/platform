@@ -31,11 +31,6 @@
       async onSubmit() {
         // console.log("submitted data: " + JSON.stringify(this.slotData));
 
-        const deliveryAddress = this.slotData.deliveryAddress;
-        // 地址信息未填时，清除deliveryAddress节点
-        if (!deliveryAddress.region || !deliveryAddress.region.isocode) {
-          delete this.slotData.deliveryAddress;
-        }
         const expectedDeliveryDate = this.slotData.expectedDeliveryDate;
         if (this.compareDate(new Date(), new Date(expectedDeliveryDate))) {
           this.$message.error('交货日期不能小于当前时间');

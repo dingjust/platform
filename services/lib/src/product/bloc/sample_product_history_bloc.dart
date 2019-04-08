@@ -44,8 +44,6 @@ class SampleProductHistoryBLoC extends BLoCBase {
   Stream<SampleBorrowReturnHistoryModel> get detailStream => _detailController.stream;
 
   filterByStatuses(String state,String type) async {
-    print(state + '---filter');
-    print(type.split('.')[1]+'--------');
     Map<String, dynamic> data = {};
     if (state != 'ALL') {
       data = {
@@ -63,7 +61,6 @@ class SampleProductHistoryBLoC extends BLoCBase {
   }
 
   loadingMoreByStatuses(String state,String type) async {
-    print(state);
     Map<String, dynamic> data = {};
     if (state != 'ALL') {
       data = {

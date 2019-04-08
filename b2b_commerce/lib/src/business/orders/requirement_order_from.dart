@@ -95,7 +95,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ApparelProductsPage(
-                          isRequirement: true,
+                          isSelectOption: true,
                           item: widget.product,
                         ),
                   ),
