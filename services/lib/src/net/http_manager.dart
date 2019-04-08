@@ -74,22 +74,26 @@ class HttpManager {
       return response; // continue
     }, onError: (DioError e) {
       ErrorResponse errorResponse = ErrorResponse.fromJson(e.response.data);
-      //消息流推送
-      MessageBLoC.instance.errorMessageController.add(
-          '${errorResponse.errors[0].message}   errorType:${errorResponse.errors[0].type}');
-      // 当请求失败时做一些预处理
-      if (GlobalConfigs.DEBUG) {
-        print(e.toString());
-      }
 
       // unauthorized
       if (e.response != null && e.response.statusCode == 401) {
         //token过期，用户记录清空
         // UserBLoC.instance.logout();
         UserBLoC.instance.loginJumpController.add(true);
-      }
+        //消息流推送
+        MessageBLoC.instance.errorMessageController.add('请先登录');
+        return e;
+      } else {
+        // 消息流推送
+        MessageBLoC.instance.errorMessageController
+            .add('${errorResponse.errors[0].message}');
+        // 当请求失败时做一些预处理
+        if (GlobalConfigs.DEBUG) {
+          print(e.toString());
+        }
 
-      _clearContext();
+        _clearContext();
+      }
 
       return e; //continue
     }));
