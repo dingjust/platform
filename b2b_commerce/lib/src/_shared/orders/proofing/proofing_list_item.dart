@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-import '../../widgets/image_factory.dart';
-
 import '../../../business/orders/proofing_order_detail.dart';
+import '../../widgets/image_factory.dart';
 
 /// 取消订单
 typedef void ProofingCancelingCallback();
@@ -289,13 +288,12 @@ class ProofingOrderItem extends StatelessWidget {
 
     return Row(
       children: <Widget>[
-        Container(width: 80),
         Expanded(
           flex: 1,
           child: Container(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: buttons,
             ),
           ),

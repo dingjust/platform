@@ -71,8 +71,10 @@ android {
 
 
     android.applicationVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "钉单.apk"
+        if (variant.buildType.name.equals('release')) {
+            variant.outputs.all {
+                outputFileName = "钉单.apk"
+            }
         }
     }
 
