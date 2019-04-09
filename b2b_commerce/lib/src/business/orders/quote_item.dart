@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -42,8 +43,7 @@ class _QuoteItemState extends State<QuoteItem> {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        padding: EdgeInsets.fromLTRB(10,0,10,0),
         child: Column(
           children: <Widget>[
             _buildHeader(),
@@ -62,44 +62,95 @@ class _QuoteItemState extends State<QuoteItem> {
   }
 
   Widget _buildMain() {
-    return Container(
-      child: InkWell(
-        onTap: () {},
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      return GestureDetector(
+        onTap: () async {
+          //获取该工厂的现款商品
+          ProductsResponse productsResponse = await ProductRepositoryImpl()
+              .getProductsOfFactory({}, {'size': 3}, widget.model.belongTo.uid);
+
+          //TODO跳转详细页
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyFactoryPage(
+                    widget.model.belongTo,
+                    products: productsResponse.content,
+                  )));
+        },
+        child: Container(
+            color: Colors.white,
+            child: Container(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
                         children: <Widget>[
-                          Stars(
-                            starLevel: widget.model.belongTo.starLevel ?? 1,
-                            color: Color.fromRGBO(255, 183, 0, 1),
-                            highlightOnly: false,
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: widget.model.belongTo == null ||
+                                    widget.model.belongTo.name == null
+                                    ? Text(
+                                  '',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                )
+                                    : Text(
+                                  widget.model.belongTo.name,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              widget.model.belongTo == null ||
+                                  widget.model.belongTo.starLevel == null
+                                  ? Container()
+                                  : Stars(
+                                size: 14,
+                                color: Color.fromRGBO(255, 183, 0, 1),
+                                highlightOnly: false,
+                                starLevel: widget.model.belongTo.starLevel,
+                              ),
+                            ],
                           ),
-//                          RichText(
-//                            text: TextSpan(text: '历史接单', style: TextStyle(color: Colors.black54), children: <TextSpan>[
-//                              TextSpan(text: '214', style: TextStyle(color: Colors.red)),
-//                              TextSpan(text: '单', style: TextStyle(color: Colors.black54)),
-//                            ]),
-//                          ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Colors.grey,
-                          ),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(
+                                  '历史接单${widget.model.belongTo == null || widget.model.belongTo.historyOrdersCount == null ? '0' : widget.model.belongTo.historyOrdersCount}单',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                              Container(
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      '${widget.model.belongTo.contactAddress?.city?.name} ${widget.model.belongTo.contactAddress?.cityDistrict?.name}',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          )
                         ],
                       ),
-                    )),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+                    ),
+                    Container(
+                      child: Icon(
+                        Icons.keyboard_arrow_right,
+                        size: 40,
+                        color: Colors.grey,
+                      ),
+                    )
+                  ],
+                ))),
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildHeader() {

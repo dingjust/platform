@@ -314,7 +314,28 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               child: Card(
                   elevation: 0,
                   color: Colors.white10,
-                  child: Center(child: Text('商品选择/创建'))),
+                  child: Center(
+                      child:
+                      RichText(
+                        text: TextSpan(
+                            text: '商品选择/创建',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.red)
+                              ),
+                            ]),
+                      ),
+                  )
+              ),
             ),
             onTap: () {
               _onProductSelect();

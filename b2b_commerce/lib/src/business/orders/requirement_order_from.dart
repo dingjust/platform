@@ -143,64 +143,87 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   Widget _buildBody(BuildContext context) {
     return Container(
-      color: Colors.white,
       child: Center(
         child: Column(
           children: <Widget>[
-//            _buildPic(context),
-            PicturesField(
-              model: model,
-            ),
-            Offstage(
-              offstage: widget.product == null,
-              child: ProductField(widget.product),
-            ),
-            CategoryField(
-              model,
-              product: widget.product,
-            ),
-            new Divider(height: 0),
-            MajorCategoryField(model),
-            new Divider(height: 0),
-            ExpectedMachiningQuantityField(model),
-            new Divider(height: 0),
-            MaxExpectedPriceField(model),
-            new Divider(height: 0),
-            ExpectedDeliveryDateField(model),
-            new Divider(height: 0),
-            ContactWayField(model),
-            new Divider(height: 0),
-//            _isShowMore ? Container() : new Divider(height: 0),
+            _buildhead(context),
             _buildHideBody(context),
-//            _buildHideTips(context),
-            Column(
-              children: <Widget>[
-                Container(
-                  margin:
-                      EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        '附件',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                EditableAttachments(
-                  list: model.attachments,
-                  maxNum: 5,
-                )
-              ],
-            )
+            _buildBottom(context),
+
           ],
         ),
       ),
     );
   }
 
+  Widget _buildhead(BuildContext context){
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          PicturesField(
+            model: model,
+          ),
+          Offstage(
+            offstage: widget.product == null,
+            child: ProductField(widget.product),
+          ),
+          CategoryField(
+            model,
+            product: widget.product,
+          ),
+          new Divider(height: 0),
+          MajorCategoryField(model),
+          new Divider(height: 0),
+          ExpectedMachiningQuantityField(model),
+          new Divider(height: 0),
+          MaxExpectedPriceField(model),
+          new Divider(height: 0),
+          ExpectedDeliveryDateField(model),
+          new Divider(height: 0),
+          ContactWayField(model),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottom(BuildContext context){
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          RemarksField(model),
+          new Divider(height: 0),
+          Column(
+            children: <Widget>[
+              Container(
+                margin:
+                EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      '附件',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              EditableAttachments(
+                list: model.attachments,
+                maxNum: 5,
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildHideBody(BuildContext context) {
     return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 20),
       child: Center(
         child: Column(
           children: <Widget>[
@@ -213,8 +236,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             IsProvideSampleProductField(model),
             new Divider(height: 0),
             IsInvoiceField(model),
-            new Divider(height: 0),
-            RemarksField(model),
+
           ],
         ),
       ),

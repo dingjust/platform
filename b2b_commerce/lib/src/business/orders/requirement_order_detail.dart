@@ -477,7 +477,7 @@ class _RequirementOrderDetailPageState
                   },
                   child: Text(
                     '查看全部报价>>',
-                    style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                    style: TextStyle(color: Colors.red),
                   ),
                 )
               ],
