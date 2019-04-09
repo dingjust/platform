@@ -1,0 +1,60 @@
+@import "../../base.less";
+
+.bottomNav{
+    height: 1rem;
+    line-height: 1rem;
+    border-top: 1px solid #D2D2D2;
+    width: 100%;
+    .checkbox{
+        width: 1.4rem;
+        margin-right: 0.2rem;
+        :global(.am-list-item .am-list-thumb:first-child){
+            margin-right: 0.1rem;
+        }
+        :global(.am-list-content){
+            font-size: @font-size40;
+            margin-top: 0.05rem;
+        }
+    }
+    :global(.am-list-item .am-list-line){
+        padding-right: 0;
+    }
+    .delete{
+        width: 0.7rem;
+        font-size: @font-size40;
+        color: #FF4444;
+        margin-top: 0.03rem;
+    }
+    .money{
+        text-align: right;
+        padding-right: 0.2rem;
+        font-size: @font-size40;
+        .title{
+            width:0.7rem;
+        }
+        .number{
+            font-size: @font-size48;
+            .tip{
+                font-size: @font-size36;
+                margin-right: 0.05rem;
+                color: #FF4444;
+            }
+            // font-weight: bold;
+            color: #FF4444;
+            margin-left: 0.1rem;
+            // font-family: ""
+        }
+    }
+    .settleAccounts{
+        height: 0.7rem;
+        line-height: 0.7rem;
+        margin-top: 0.15rem;
+        border-radius: 0.4rem;
+        width: 2rem;
+        text-align: center;
+        color: #fff;
+        font-size: @font-size46;
+        margin-right: 0.2rem;
+        background-color: #2F8AFF;
+    }
+}

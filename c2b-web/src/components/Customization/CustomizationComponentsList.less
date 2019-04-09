@@ -1,0 +1,211 @@
+@import "../../base.less";
+.search{
+    width: 100%;
+    display: block;
+    // border-bottom: 1px solid #e6e6e6;
+}
+
+// 物料选择列表
+.selectListBox{
+  padding: 0.25rem 0.25rem 0.05rem;
+
+    &:global(.selectBg){
+        background-color: #F0F0F0;
+        .selectListItem{
+            border: 0;
+        }
+    }
+    .selectListItem{
+        padding-bottom: 0.2rem;
+        border-bottom: 1px solid #D2D2D2;
+        :global(.imgBorder){
+            border:1px solid #C8C8C8;
+            border-radius: 0.1rem;
+        }
+        .details{
+            color: #c9c0c0;
+            text-align: left;
+            color: #646464;
+            margin-top: -0.07rem;
+            font-size: @font-size42;
+        }
+        .title{
+            // font-weight: bold;
+            text-align: left;
+            font-size: @font-size46;
+        }
+        &:first-child{
+            
+        }
+        .star{
+            text-align: left;
+            :global(.iconfont){
+                font-size: @font-size36;
+                color: #FFB700;
+                margin-left: 0.05rem;
+            }
+            
+        }
+    }
+    .selectImgBox{
+        width: 1.3rem;
+        height: 1.3rem;
+        overflow: hidden;
+        margin-right: 0.2rem;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    // 价格
+    .selectPriceBox{
+        width: auto;
+        .price{
+            color: #FF3535;
+            text-align: right;
+            font-weight: 500;
+            font-size: @font-size48;
+            margin-bottom: 0.2rem;
+
+        }
+        .goDatial{
+            width: 1.4rem;
+            height: 0.55rem;
+            line-height: 0.55rem;
+            text-align: center;
+            color: #fff;
+            display: block;
+            border-radius: 0.4rem;
+            font-size: @font-size42;
+            background-color: #2F8AFF;
+        }
+    }
+}
+// 筛选条件
+.queryConditionBox{
+    padding: 0.2rem 0;
+    .displayNone{
+        display: none;
+    }
+    .queryCondition{
+        // padding-top: 0.15rem;
+        .title{
+            min-width: 1rem;
+            height: 1rem;
+            line-height: 1rem;
+            font-size: @font-size48;
+            text-indent: 0.2rem;
+            text-align: left;
+            color:#323232;
+            margin-right: 0.2rem;
+        }
+        .imgBox{
+            display: flex;
+            flex-wrap: wrap;
+           
+            .imgItem{
+                margin-top: 0.2rem;
+                margin-right: 0.25rem;
+                width: 0.6rem;
+                height: 0.6rem;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .bigSize{
+                width: 1.1rem;
+                height: 1.1rem;
+                border-radius: 1rem;
+                margin-top: -0.01rem;
+                margin-left: -0.2rem;
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+
+.customizationHidden{
+    // 限制滚动
+    :global(.am-list-view-scrollview){
+        overflow: hidden!important;
+    }
+}
+
+// 重写样式
+.customizationComponentsList{
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    top: 0.9rem;
+    .loading{
+        padding-bottom: 0.6rem;
+        color: #999;
+    }
+    
+    :global(.am-search-input){
+        flex: inherit;
+        :global(.am-search-synthetic-ph-icon){
+            vertical-align: -0.04rem;
+        }
+    }
+    :global(.am-search){
+        background-color: #f6F6F6;
+    }
+    :global(.am-search-input){
+        border-radius: 0.6rem;
+    }
+    :global(.am-search-cancel){
+        font-size: 0.28rem;
+    }
+    :global(.am-tabs-default-bar-top){
+        // padding-bottom: 0.2rem;
+        background-color: #f6F6F6!important;
+        height: 1rem;
+    }
+    :global(.am-tabs-default-bar-top .am-tabs-default-bar-tab){
+        border-bottom: 2px solid #f6F6F6;
+        line-height: 1rem;
+        border-bottom: 0;
+        padding-bottom: 0.05rem;
+        padding-top: 0.4rem;
+    }
+    :global(.am-tabs-default-bar-tab-active){
+        font-weight: bold;
+        border-color: #f6F6F6;
+    }
+    :global(.am-tabs-default-bar-underline){
+        border: 0;
+        bottom: 0.2rem;
+    }
+    :global(.am-tabs-default-bar-underline:after){
+        // width: 0.4rem!important;
+        content:'';
+        display:block;
+        width:0.35rem;
+        height:0.03rem;
+        border-radius:10px;/**控制形状**/
+        background:#2F8AFF;/**控制图标颜色**/
+        position: absolute;
+        bottom: 0.001rem;
+        left: 50%;
+        margin-left: -0.2rem;
+        
+    }
+}
+
+.detailsModel{
+    .cloneDetail{
+        position: fixed;
+        top: 0.3rem;
+        right: 0.2rem;
+        z-index: 2;
+    }
+}
+
+
