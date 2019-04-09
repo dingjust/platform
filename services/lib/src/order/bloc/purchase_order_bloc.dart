@@ -13,6 +13,10 @@ class PurchaseOrderBLoC extends BLoCBase {
   static PurchaseOrderBLoC get instance => _getInstance();
   static PurchaseOrderBLoC _instance;
 
+  PurchaseOrdersResponse purchaseOrdersResponse;
+
+  bool lock = false;
+
   PurchaseOrderBLoC._internal() {}
 
   static PurchaseOrderBLoC _getInstance() {
@@ -141,6 +145,35 @@ class PurchaseOrderBLoC extends BLoCBase {
       _ordersMap[status].data.addAll(ordersResponse.content);
     }
     _controller.sink.add(_ordersMap[status].data);
+  }
+
+  //获取供应商的相关全部生产单
+  getData(String factoryUid)async{
+    if (!lock) {
+      lock = true;
+      //获取与该工厂全部的报价单
+      purchaseOrdersResponse = await PurchaseOrderRepository().getPurchaseOrdersByFactory(factoryUid, {});
+      _controller.sink.add(purchaseOrdersResponse.content);
+      lock = false;
+    }
+  }
+
+  //获取供应商的相关全部生产单
+  lodingMoreByFactory(String factoryUid)async{
+    if (!lock) {
+      lock = true;
+      //获取与该工厂全部的报价单
+      if(purchaseOrdersResponse.number < purchaseOrdersResponse.totalPages - 1){
+        purchaseOrdersResponse = await PurchaseOrderRepository().getPurchaseOrdersByFactory(factoryUid, {
+          'page':purchaseOrdersResponse.number + 1
+        });
+      }else{
+        bottomController.sink.add(true);
+      }
+      loadingController.sink.add(false);
+      _controller.sink.add(purchaseOrdersResponse.content);
+      lock = false;
+    }
   }
 
   dispose() {

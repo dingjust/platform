@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:b2b_commerce/src/my/address/region_select.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -26,8 +27,6 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
   bool validate = false;
 
   DistrictModel districtModel;
-
-  String userType = 'FACTORY';
 
   GlobalKey _scaffoldKey = GlobalKey();
 
@@ -147,26 +146,6 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                       decoration: InputDecoration(
                           hintText: '请输入', border: InputBorder.none),
                     )),
-                RadioListTile(
-                  onChanged: (value) {
-                    setState(() {
-                      userType = value;
-                    });
-                  },
-                  groupValue: userType,
-                  value: 'BRAND',
-                  title: Text('品牌'),
-                ),
-                RadioListTile(
-                  onChanged: (value) {
-                    setState(() {
-                      userType = value;
-                    });
-                  },
-                  groupValue: userType,
-                  value: 'FACTORY',
-                  title: Text('工厂'),
-                )
               ],
             ),
           ),
@@ -215,8 +194,8 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
 
     print(CompanyRegisterDTO.toJson(form));
 
-    String response =
-        await UserRepositoryImpl().register(type: userType, form: form);
+    String response = await UserRepositoryImpl().register(
+        type: UserTypeMap[UserBLoC.instance.currentUser.type], form: form);
 
     if (response != null) {
       Navigator.pushAndRemoveUntil(

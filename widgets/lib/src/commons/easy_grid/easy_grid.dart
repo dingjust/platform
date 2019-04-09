@@ -26,8 +26,8 @@ class EasyGrid extends StatelessWidget {
           physics: !scrollable ? NeverScrollableScrollPhysics() : null,
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 240.0,
-            childAspectRatio: 2.35, //宽高比为2
+            maxCrossAxisExtent: 250.0,
+            childAspectRatio: 2.40, //宽高比为2
             crossAxisSpacing: 10,
           ),
           children: List.generate(
@@ -62,25 +62,26 @@ class EasyGridItem extends StatelessWidget {
         ],
       ),
       child: Container(
-        padding: EdgeInsets.fromLTRB(5, 5, 15, 5),
-        child: Center(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: ListTile(
-                  title: Text(
-                    item.title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color.fromRGBO(32, 32, 32, 1),
-                      fontWeight: FontWeight.bold,
-                    ),
+        padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  item.title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color.fromRGBO(32, 32, 32, 1),
+                    fontWeight: FontWeight.bold,
                   ),
-                ),
-              ),
-              item.icon,
-            ],
-          ),
+                )
+              ],
+            )),
+            item.icon,
+          ],
         ),
       ),
     );
