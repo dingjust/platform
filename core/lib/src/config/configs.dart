@@ -24,6 +24,8 @@ class GlobalConfigs {
   static const AUTH_TOKEN_KEY = 'token';
   static const PRODUCTION_HISTORY_KEYWORD_KEY =
       'production_history_keyword_key';
+  static const PRODUCT_HISTORY_KEYWORD_KEY =
+      'product_history_keyword_key';
 
   /// grant types
   static const GRANT_TYPE_PASSWORD = 'password';
