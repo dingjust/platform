@@ -43,13 +43,9 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
         onTap: () {
           showDatePicker(
             context: context,
-            initialDate: widget.item.details?.expectedDeliveryDate == null
-                ? now
-                : widget.item.details?.expectedDeliveryDate,
-            firstDate: widget.item.details?.expectedDeliveryDate == null
-                ? now
-                : widget.item.details?.expectedDeliveryDate,
-            lastDate: DateTime(2101),
+            initialDate: DateTime.now(),
+            firstDate: DateTime.now(),
+            lastDate: DateTime(2999),
           ).then((value) {
             setState(() {
               widget.item.details?.expectedDeliveryDate = value;
