@@ -507,7 +507,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
+        firstDate: new DateTime(1999),
         lastDate: new DateTime(2999));
 
     if (_picked != null) {
