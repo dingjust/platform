@@ -27,12 +27,23 @@ class ContactWayFieldState extends State<ContactWayField>{
     return GestureDetector(
         child: Container(
           child: ListTile(
-            leading: Text(
-              '联系方式',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+            leading: RichText(
+              text: TextSpan(
+                  text: '联系方式',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red)
+                    ),
+                  ]),
             ),
             trailing: Text(
               formatContactWayText(),

@@ -24,9 +24,13 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
     if(widget.earnest != null){
       earnestMoney = widget.earnest.earnestMoney;
       tailMoney = widget.earnest.tailMoney;
-      isEarnestPayment = widget.earnest.isEarnestPayment;
+      if (widget.earnest.isEarnestPayment != null) {
+        isEarnestPayment = widget.earnest.isEarnestPayment;
+      }
+      if(widget.earnest.isTailPayment != null){
+        isTailPayment = widget.earnest.isTailPayment;
+      }
       estimatePaymentDate = widget.earnest.estimatePaymentDate;
-      isTailPayment = widget.earnest.isTailPayment;
       tailPaymentDate = widget.earnest.tailPaymentDate;
     }
     super.initState();
@@ -166,6 +170,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
         ),
       ),
       onTap: (){
+        print(isEarnestPayment);
         setState(() {
           isEarnestPayment = !isEarnestPayment;
         });

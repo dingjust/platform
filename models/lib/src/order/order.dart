@@ -153,9 +153,7 @@ enum MachiningType {
   LIGHT_PROCESSING,
 }
 
-const MachiningTypeMap={
-  
-};
+const MachiningTypeMap = {};
 
 const MachiningTypeLocalizedMap = {
   MachiningType.LABOR_AND_MATERIAL: '包工包料',
@@ -259,8 +257,8 @@ class OrderModel extends AbstractOrderModel {
       String remarks,
       //线上线下订单
       SalesApplication salesApplication,
-        //物流信息
-        ConsignmentModel consignment})
+      //物流信息
+      ConsignmentModel consignment})
       : super(
             code: code,
             totalQuantity: totalQuantity,
@@ -269,7 +267,7 @@ class OrderModel extends AbstractOrderModel {
             deliveryAddress: deliveryAddress,
             remarks: remarks,
             salesApplication: salesApplication,
-      consignment: consignment,
+            consignment: consignment,
             unitPrice: unitPrice);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
@@ -603,6 +601,10 @@ class RequirementOrderModel extends OrderModel {
   /// 是否可修改
   bool editable;
 
+  ///标签
+  @JsonKey(toJson: _labelsToJson)
+  List<LabelModel> labels;
+
   RequirementOrderModel(
       {this.status,
       this.belongTo,
@@ -617,7 +619,8 @@ class RequirementOrderModel extends OrderModel {
       AddressModel deliveryAddress,
       String remarks,
       this.editable,
-      this.attachments})
+      this.attachments,
+      this.labels})
       : super(
           code: code,
           totalQuantity: totalQuantity,
@@ -642,6 +645,9 @@ class RequirementOrderModel extends OrderModel {
 
   static Map<String, dynamic> _brandToJson(BrandModel belongTo) =>
       BrandModel.toJson(belongTo);
+
+  static List<Map<String, dynamic>> _labelsToJson(List<LabelModel> labels) =>
+      labels.map((label) => LabelModel.toJson(label)).toList();
 }
 
 /// 采购订单
@@ -779,7 +785,7 @@ class PurchaseOrderModel extends OrderModel {
             deliveryAddress: deliveryAddress,
             remarks: remarks,
             salesApplication: salesApplication,
-      consignment: consignment);
+            consignment: consignment);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
       _$PurchaseOrderModelFromJson(json);

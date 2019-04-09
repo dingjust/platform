@@ -199,8 +199,8 @@ class ProofingOrderItem extends StatelessWidget {
         onPressed: onProofingCanceling,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: const Color.fromRGBO(255, 70, 70, 1),
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-        child: const Text('取消订单', style: const TextStyle(color: Colors.white, fontSize: 16)),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+        child: const Text('取消订单', style: const TextStyle(color: Colors.white, fontSize: 18)),
       );
     }
 
@@ -209,8 +209,8 @@ class ProofingOrderItem extends StatelessWidget {
         onPressed: onProofingPaying,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: const Color.fromRGBO(255, 214, 12, 1),
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-        child: Text('  去支付  ', style: const TextStyle(color: const Color.fromRGBO(36, 38, 41, 1), fontSize: 16)),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+        child: Text('  去支付  ', style: const TextStyle(color: const Color.fromRGBO(36, 38, 41, 1), fontSize: 18)),
       );
     }
 
@@ -222,7 +222,7 @@ class ProofingOrderItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         child: Text(
           '确认收货',
-          style: const TextStyle(color: Colors.black, fontSize: 16),
+          style: const TextStyle(color: Colors.black, fontSize: 18),
         ),
       );
     }
@@ -237,7 +237,7 @@ class ProofingOrderItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         child: Text(
           '修改订单',
-          style: const TextStyle(color: const Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+          style: const TextStyle(color: const Color.fromRGBO(255, 45, 45, 1), fontSize: 18),
         ),
       );
     }
@@ -289,12 +289,16 @@ class ProofingOrderItem extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          flex: 1,
+          child: Container(),
+        ),
+        Expanded(
           child: Container(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: buttons,
+            child: Align(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: buttons,
+              ),
             ),
           ),
         )

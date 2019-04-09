@@ -34,6 +34,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
   List<MediaModel> attachments = [];
   DateTime expectedDeliveryDate = DateTime.now();
   DateTime quoteDate;
+  bool isHide = true;
 
   GlobalKey _scaffoldKey = GlobalKey();
 
@@ -255,88 +256,123 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Column(
         children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                '报价明细',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ),
           TextFieldComponent(
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
             focusNode: _unitPriceFocusNode,
             leadingText: '生产单价￥',
-            hintText: '填写',
+            hintText: '必填',
             autofocus: false,
             inputType: TextInputType.number,
             textAlign: TextAlign.right,
             controller: _unitPriceController,
           ),
-      Container(
-          padding: EdgeInsets.only(left: 20),
-          child:
-          TextFieldComponent(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            dividerPadding: EdgeInsets.only(),
-            focusNode: _fabricFocusNode,
-            leadingText: '面料单价￥',
-            hintText: '填写',
-            autofocus: false,
-            inputType: TextInputType.number,
-            textAlign: TextAlign.right,
-            controller: _fabricController,
-          ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 20),
-        child:
-          TextFieldComponent(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            dividerPadding: EdgeInsets.only(),
-            focusNode: _excipientsFocusNode,
-            leadingText: '辅料单价￥',
-            hintText: '填写',
-            autofocus: false,
-            inputType: TextInputType.number,
-            textAlign: TextAlign.right,
-            controller: _excipientsController,
-          ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 20),
-        child:TextFieldComponent(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            dividerPadding: EdgeInsets.only(),
-            focusNode: _processingFocusNode,
-            leadingText: '加工单价￥',
-            hintText: '填写',
-            autofocus: false,
-            inputType: TextInputType.number,
-            textAlign: TextAlign.right,
-            controller: _processingController,
-          ),
-      ),
-          Container(
-            padding: EdgeInsets.only(left: 20),
-            child: TextFieldComponent(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              dividerPadding: EdgeInsets.only(),
-              focusNode: _otherFocusNode,
-              leadingText: '其他单价￥',
-              hintText: '填写',
-              autofocus: false,
-              inputType: TextInputType.number,
-              textAlign: TextAlign.right,
-              controller: _otherController,
-            ),
-          )
+          _buildProductHide(context),
+          _buildPriceEntries(context),
         ],
+      ),
+    );
+  }
+
+  Widget _buildProductHide(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+          child: Align(
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    "报价明细",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Icon(
+                    isHide
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_up,
+                    color: Colors.grey,
+                    size: 28,
+                  ),
+                ],
+              )),
+        ),
+        onTap: () {
+          setState(() {
+            isHide = !isHide;
+          });
+        });
+  }
+
+  Widget _buildPriceEntries(BuildContext context){
+    return Offstage(
+      offstage: isHide,
+      child: Container(
+          child:Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 20),
+                child:
+                TextFieldComponent(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  dividerPadding: EdgeInsets.only(),
+                  focusNode: _fabricFocusNode,
+                  leadingText: '面料单价￥',
+                  hintText: '填写',
+                  autofocus: false,
+                  inputType: TextInputType.number,
+                  textAlign: TextAlign.right,
+                  controller: _fabricController,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 20),
+                child:
+                TextFieldComponent(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  dividerPadding: EdgeInsets.only(),
+                  focusNode: _excipientsFocusNode,
+                  leadingText: '辅料单价￥',
+                  hintText: '填写',
+                  autofocus: false,
+                  inputType: TextInputType.number,
+                  textAlign: TextAlign.right,
+                  controller: _excipientsController,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 20),
+                child:TextFieldComponent(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  dividerPadding: EdgeInsets.only(),
+                  focusNode: _processingFocusNode,
+                  leadingText: '加工单价￥',
+                  hintText: '填写',
+                  autofocus: false,
+                  inputType: TextInputType.number,
+                  textAlign: TextAlign.right,
+                  controller: _processingController,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 20),
+                child: TextFieldComponent(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  dividerPadding: EdgeInsets.only(),
+                  focusNode: _otherFocusNode,
+                  leadingText: '其他单价￥',
+                  hintText: '填写',
+                  autofocus: false,
+                  inputType: TextInputType.number,
+                  textAlign: TextAlign.right,
+                  controller: _otherController,
+                ),
+              )
+            ],
+          )
       ),
     );
   }
@@ -379,7 +415,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               trailing:
               quoteDate == null
                   ? Text(
-                '选择',
+                '必选',
                 style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey),

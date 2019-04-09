@@ -477,7 +477,7 @@ class _RequirementOrderDetailPageState
                   },
                   child: Text(
                     '查看全部报价>>',
-                    style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                    style: TextStyle(color: Colors.red),
                   ),
                 )
               ],
@@ -492,7 +492,7 @@ class _RequirementOrderDetailPageState
   }
 
   Widget _buildAttachments() {
-    return widget.order.attachments == null ? Container() : Container(
+    return widget.order.attachments == null||widget.order.attachments.length<=0 ? Container() : Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(top: 10),

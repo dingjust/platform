@@ -107,9 +107,28 @@ class _ProofingListState extends State<ProofingList> {
   }
 
   void _onProofingConfirmReceived(ProofingModel model) async {
-    // TODO: 确认收货
     bool result = false;
     result = await ProofingOrderRepository().shipped(model.code);
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('提示',
+            style: TextStyle(
+                fontSize: 16
+            ),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('${result?'确认收货成功':'确认收货失败'}'),
+            ),
+          ],
+        );
+      },
+    );
+    _handleRefresh();
   }
 
   void _onProofingUpdating(ProofingModel model) async {

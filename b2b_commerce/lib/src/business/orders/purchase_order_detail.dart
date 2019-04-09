@@ -810,12 +810,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             context, productionProgress, isCurrentStatus),
                     _buildQuantity(
                         context, productionProgress, isCurrentStatus),
+                    _buildProgressRemarks(context, productionProgress, isCurrentStatus),
                   ],
                 ),
               ),
               GestureDetector(
                 child: Container(
-                  margin: EdgeInsets.only(right: 15),
+                  margin: EdgeInsets.only(right: 20),
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
@@ -854,7 +855,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               ),
             ],
           ),
-          _buildProgressRemarks(context, productionProgress, isCurrentStatus),
         ],
       ),
     );
@@ -1034,8 +1034,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             child: Text(
                               '${progress.remarks}',
                               softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
                             ),
                           )),
               ),
@@ -1277,12 +1275,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //构建附件UI
   Widget _buildDocutment(BuildContext context) {
-    return Container(
+    return order.attachments == null || order.attachments.length <= 0
+        ? Container()
+        : Container(
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       color: Colors.white,
-      child: order.attachments == null
-          ? Container()
-          : Attachments(list: order.attachments),
+      child: Attachments(list: order.attachments),
     );
   }
 
@@ -1856,6 +1854,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       ProductionProgressModel model, String type, String remarks) async {
     dialogText = TextEditingController();
     _dialogFocusNode = FocusNode();
+    if(remarks != null){
+      dialogText.text = remarks;
+    }
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -1871,7 +1872,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   controller: dialogText,
                   autofocus: true,
                   inputType: TextInputType.text,
-                  helperText: '${remarks == null ? '' : remarks}',
                 ),
               ],
             ),

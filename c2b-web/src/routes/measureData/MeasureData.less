@@ -1,0 +1,120 @@
+@import '../../base.less';
+.measureData{
+    .save{
+        color: #2F8AFF;
+        font-size: @font-size44;
+    }
+    .loading{
+        background-color: #000000b3;
+        color: #fff;
+        // padding: 0.5rem;
+        position: fixed;
+        top: 50%;
+        text-align: center;
+        border-radius: 0.2rem;
+        margin-top: -0.5rem;
+        height: 1rem;
+        line-height: 1rem;
+        width: 50%;
+        left: 25%;
+        z-index: 1;
+    }
+    .upData{
+        margin-top: 0.9rem;
+        // height: 1rem;
+        padding:0.4rem  0.2rem 0;
+        :global(.flex1){
+            overflow: hidden;
+        }
+        line-height: 0.8rem;
+        .imgData{
+            width: 4rem;
+        }
+        :global(.iconfont){
+            font-size: 0.5rem;
+            float: right;
+            margin-right: 0.4rem;
+            color: #2F8AFF;
+        }
+        .name{
+            font-size: @font-size46;
+            margin-right: 0.4rem;
+        }
+        .title{
+            font-size: @font-size46;
+        }
+        .text{
+            font-size: @font-size46;
+            color: #2F8AFF;
+            margin-right: 0.2rem;
+        }
+        .userImg{
+            width: 0.8rem;
+            height: 0.8rem;
+            margin-right: 0.1rem;
+            img{
+                width: 100%;
+                height: 100%;
+                border-radius: 1rem;
+            }
+        }
+    }
+    .listBox{
+        padding: 0 0.2rem;
+        .unit{
+            line-height: 0.9rem;
+        }
+        .listTitle{
+            line-height: 1rem;
+            height: 1rem;
+            text-align: center;
+            font-weight: bold;
+            overflow: hidden;
+            .iconTitle{
+                width: 3rem;
+                float: left;
+            }
+            .textTitle{
+                width: 3rem;
+                float: right;
+            }
+            div{
+                font-size: @font-size44;
+                color: #2F8AFF;
+            }
+        }
+    }
+    .measureDataList{
+        .inputBox{
+            width: 2.5rem;
+            margin-right: 0.2rem;
+        }
+        input{
+            text-align: center;
+            font-size: @font-size44;
+        }
+        border-top:1px solid #C8C8C8;
+        padding:0.2rem 0;
+        .imgBox{
+            height: 100%;
+            width: auto;
+            margin-left: 0.2rem;
+        }
+        .icon{
+            height: 1rem;
+            width: auto;
+            margin-right: 0.1rem;
+            span{
+                line-height: 1rem;
+                height: 1rem;
+                color: #323232;
+                font-size: @font-size44;
+            }
+            img{
+                height: 100%;
+                width: auto;
+                margin-left: 0.1rem;
+            }
+        }
+    }
+}
