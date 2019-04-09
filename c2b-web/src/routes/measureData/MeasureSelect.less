@@ -1,0 +1,73 @@
+@import '../../base.less';
+.measureSelect{
+    .banner{
+        margin-top: 0.9rem;
+        width: 100%;
+        height: auto;
+        img{
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    .listBox{
+        height: auto;
+        padding: 0 0.2rem;
+        .measureList{
+            margin-top: 0.3rem;
+        }
+        .listTitle{
+            font-size: @font-size46;
+            font-weight: bold;
+            color: #1E1E1E;
+            margin-top: 0.1rem;
+        }
+        .listTime{
+            margin-top: 0.2rem;
+            color: #2F8AFF;
+            font-size: @font-size36;
+            :global(.iconfont){
+                color: #2F8AFF;
+                margin-right: 0.1rem
+            }
+        }
+        .explain{
+            color: #646464;
+            font-size: @font-size40;
+            position: absolute;
+            bottom: 0.1rem;
+        }
+        .listImg{
+            width: 2rem;
+            height: 2rem;
+            margin-right: 0.2rem;
+            position: relative;
+            img{
+                width: 100%;
+                height: auto;
+            }
+            .weight{
+                font-size: @font-size32;
+                color: #fff;
+                width: 0.7rem;
+                text-align: center;
+                height: 0.3rem;
+                line-height: 0.3rem;
+                border-bottom-right-radius: 0.16rem;
+                border-top-left-radius: 0.05rem;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            .one{
+                background-color: #6EA4FF;
+            }
+            .two{
+                background-color: #FFC862;
+            }
+            .three{
+                background-color: #FF7F5B;
+            }
+        }
+    }
+}
