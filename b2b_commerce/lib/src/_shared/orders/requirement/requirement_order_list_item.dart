@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import '../../widgets/image_factory.dart';
 import '../../widgets/text_factory.dart';
@@ -185,5 +186,94 @@ class RequirementOrderItem extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+
+class ItemPicture extends StatelessWidget {
+  final RequirementOrderModel order;
+
+  const ItemPicture({Key key, this.order}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget _pictureWidget;
+
+    //TODO 审核标签
+    if (order.details.pictures == null || order.details.pictures.isEmpty) {
+      _pictureWidget = Container(
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color.fromRGBO(243, 243, 243, 1)),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(right: 10),
+                child: Icon(
+                  B2BIcons.noPicture,
+                  color: Color.fromRGBO(200, 200, 200, 1),
+                  size: 60,
+                ),
+              ),
+              Positioned(
+                left: 0,
+                bottom: 0,
+                child: Container(
+                  width: 60,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(5)),
+                      color: Color.fromRGBO(255, 214, 12, 1)),
+                  child: Center(
+                    child: Text(
+                      '已审核',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ));
+    } else {
+      _pictureWidget = Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            image: DecorationImage(
+              image: NetworkImage(
+                  '${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
+              fit: BoxFit.cover,
+            )),
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Positioned(
+              left: 0,
+              bottom: 0,
+              child: Container(
+                width: 60,
+                height: 20,
+                decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(5)),
+                    color: Color.fromRGBO(255, 214, 12, 1)),
+                child: Center(
+                  child: Text(
+                    '已审核',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+    return _pictureWidget;
   }
 }

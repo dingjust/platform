@@ -615,7 +615,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   }
 
   Widget _buildAttachment() {
-    return pageItem.attachments == null ? Container():Card(
+    return pageItem.attachments == null || pageItem.attachments.length <= 0 ? Container():Card(
       elevation: 0,
       margin: EdgeInsets.only(top: 15),
       child: Padding(

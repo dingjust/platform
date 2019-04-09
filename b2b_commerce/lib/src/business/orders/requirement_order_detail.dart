@@ -492,7 +492,7 @@ class _RequirementOrderDetailPageState
   }
 
   Widget _buildAttachments() {
-    return widget.order.attachments == null ? Container() : Container(
+    return widget.order.attachments == null||widget.order.attachments.length<=0 ? Container() : Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(top: 10),

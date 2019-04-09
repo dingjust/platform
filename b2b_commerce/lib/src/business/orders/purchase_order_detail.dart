@@ -1277,12 +1277,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //构建附件UI
   Widget _buildDocutment(BuildContext context) {
-    return Container(
+    return order.attachments == null || order.attachments.length <= 0
+        ? Container()
+        : Container(
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       color: Colors.white,
-      child: order.attachments == null
-          ? Container()
-          : Attachments(list: order.attachments),
+      child: Attachments(list: order.attachments),
     );
   }
 

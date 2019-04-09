@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
@@ -341,12 +342,13 @@ class RequirementPoolOrderItem extends StatelessWidget {
   }
 
   Widget _buildEntries(BuildContext context) {
-
     return Container(
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          ItemPicture(order: order,),
+          ItemPicture(
+            order: order,
+          ),
           Expanded(
             flex: 1,
             child: Container(
@@ -448,17 +450,8 @@ class RequirementPoolOrderItem extends StatelessWidget {
   Widget _buildRow3() {
     return Row(
       children: <Widget>[
-        Container(
-          width: 20,
-          height: 20,
-          margin: EdgeInsets.only(right: 10),
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://img.alicdn.com/imgextra/i2/33675276/O1CN01Y6p4Bt1oqS9FLTcm3_!!0-saturn_solar.jpg_220x220.jpg_.webp'),
-                fit: BoxFit.cover,
-              )),
+        Logo(
+          order: order,
         ),
         Expanded(
           flex: 1,
@@ -484,90 +477,41 @@ class RequirementPoolOrderItem extends StatelessWidget {
   }
 }
 
-class ItemPicture extends StatelessWidget {
+class Logo extends StatelessWidget {
   final RequirementOrderModel order;
 
-  const ItemPicture({Key key, this.order}) : super(key: key);
+  const Logo({Key key, this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget _pictureWidget;
-
-    //TODO 审核标签
-    if (order.details.pictures == null || order.details.pictures.isEmpty) {
-      _pictureWidget = Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Color.fromRGBO(243, 243, 243, 1)),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(right: 10),
-                child: Icon(
-                  B2BIcons.noPicture,
-                  color: Color.fromRGBO(200, 200, 200, 1),
-                  size: 60,
-                ),
-              ),
-              Positioned(
-                left: 0,
-                bottom: 0,
-                child: Container(
-                  width: 60,
-                  height: 20,
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(5)),
-                      color: Color.fromRGBO(255, 214, 12, 1)),
-                  child: Center(
-                    child: Text(
-                      '已审核',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ));
-    } else {
-      _pictureWidget = Container(
-        width: 100,
-        height: 100,
+    Widget _logo;
+    if (order.belongTo.profilePicture == null) {
+      _logo = Container(
+        width: 20,
+        height: 20,
+        margin: EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            image: DecorationImage(
-              image: NetworkImage(
-                  '${GlobalConfigs.IMAGE_BASIC_URL}${order.details.pictures[0].url}'),
-              fit: BoxFit.cover,
-            )),
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Positioned(
-              left: 0,
-              bottom: 0,
-              child: Container(
-                width: 60,
-                height: 20,
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(5)),
-                    color: Color.fromRGBO(255, 214, 12, 1)),
-                child: Center(
-                  child: Text(
-                    '已审核',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              ),
-            )
-          ],
+            shape: BoxShape.circle, color: Color.fromRGBO(243, 243, 243, 1)),
+        child: Icon(
+          B2BIcons.noPicture,
+          color: Color.fromRGBO(200, 200, 200, 1),
+          size: 10,
         ),
       );
+    } else {
+      _logo = Container(
+        width: 20,
+        height: 20,
+        margin: EdgeInsets.only(right: 10),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: NetworkImage(
+                  '${GlobalConfigs.IMAGE_BASIC_URL}${order.belongTo.profilePicture.url}'),
+              fit: BoxFit.cover,
+            )),
+      );
     }
-    return _pictureWidget;
+    return _logo;
   }
 }

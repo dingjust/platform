@@ -3,11 +3,12 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import './proofing_list_item.dart';
 import '../../../business/orders/form/proofing_order_form.dart';
 import '../../../common/logistics_input_page.dart';
 import '../../../common/order_payment.dart';
 import '../../widgets/scrolled_to_end_tips.dart';
+
+import './proofing_list_item.dart';
 
 class ProofingList extends StatefulWidget {
   ProofingList({Key key, this.status}) : super(key: key);
@@ -106,47 +107,28 @@ class _ProofingListState extends State<ProofingList> {
   }
 
   void _onProofingConfirmReceived(ProofingModel model) async {
-    // TODO: 确认收货
     bool result = false;
+    result = await ProofingOrderRepository().shipped(model.code);
 
     showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (context) {
-        return AlertDialog(
-          title: Text('确认发货？'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消', style: TextStyle(color: Colors.grey)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+        return SimpleDialog(
+          title: const Text('提示',
+            style: TextStyle(
+                fontSize: 16
             ),
-            FlatButton(
-              child: Text('确定', style: TextStyle(color: Colors.black)),
-              onPressed: () async {
-                result = await ProofingOrderRepository().shipped(model.code);
-                if (result) {
-                  _handleRefresh();
-                  Navigator.of(context).pop();
-                } else {
-                  Navigator.of(context).pop();
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[Text('确认失败')],
-                          ),
-                        ),
-                  );
-                }
-              },
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('${result?'确认收货成功':'确认收货失败'}'),
             ),
           ],
         );
       },
     );
+    _handleRefresh();
   }
 
   void _onProofingUpdating(ProofingModel model) async {
