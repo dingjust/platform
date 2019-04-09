@@ -25,16 +25,9 @@ class OrderPaymentPage extends StatefulWidget {
 class _OrderPaymentPageState extends State<OrderPaymentPage> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) => checkDeliveryAddress());
-
-    super.initState();
-  }
-
-  String paymentWay = "wechat";
-
-  @override
-  Widget build(BuildContext context) {
     //监听微信回调
     fluwx.responseFromPayment.listen((WeChatPaymentResponse data) async {
+      print('========Fluwx response');
       if (data.errCode == 0) {
         //成功，调用确认支付接口
         String confirmResult = await WechatServiceImpl.instance
@@ -52,7 +45,13 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         Navigator.of(context).pop();
       }
     });
+    super.initState();
+  }
 
+  String paymentWay = "wechat";
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,

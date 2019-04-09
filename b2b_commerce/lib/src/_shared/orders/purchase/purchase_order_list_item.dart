@@ -299,7 +299,6 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             widget.order.deposit != null &&
             widget.order.deposit > 0) {
           return Container(
-            margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[

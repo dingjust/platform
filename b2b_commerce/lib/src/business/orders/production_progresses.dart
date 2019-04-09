@@ -188,13 +188,14 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       _buildFinishDate(context,progress,currentPhase,sequence,_index):
                       _buildEstimatedDate(context,progress,currentPhase,sequence,_index),
                       _buildQuantity(context,progress,currentPhase,sequence,_index),
+                      _buildRemarks(context,progress,currentPhase,sequence,_index),
                     ],
                   ),
                 ),
               ),
               GestureDetector(
                 child: Container(
-                  margin: EdgeInsets.only(right: 15),
+                  margin: EdgeInsets.fromLTRB(0,10,15,0),
                   padding: EdgeInsets.fromLTRB(0,10, 15,0),
                   width: 80,
                   height: 80,
@@ -227,7 +228,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               ),
             ],
           ),
-          _buildRemarks(context,progress,currentPhase,sequence,_index),
           Container(
               width: double.infinity,
               margin: EdgeInsets.only(top: 10),
@@ -396,12 +396,9 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                             ),
                           ):
                           Container(
-                            margin: EdgeInsets.only(right: 20),
                             child: Text(
                               '${progress.remarks}',
                               softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines:2,
                             ),
                           )
                       ),
@@ -411,7 +408,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         ),
         onTap: () async {
           userType != null && userType == 'factory' && (sequence >= _index) && order.status == PurchaseOrderStatus.IN_PRODUCTION?
-          _showRemarksDialog(progress,'备注',remarks) : null;
+          _showRemarksDialog(progress,'备注','${progress.remarks}') : null;
         },
       )
     );
@@ -564,7 +561,11 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type,String remarks) async {
     dialogText = TextEditingController();
+    print(remarks);
     _dialogFocusNode = FocusNode();
+    if(remarks!= null){
+      dialogText.text = remarks;
+    }
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -580,7 +581,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   controller: dialogText,
                   autofocus: true,
                   inputType: TextInputType.text,
-                  helperText: '${remarks==null?'':remarks}',
                 ),
               ],
             ),

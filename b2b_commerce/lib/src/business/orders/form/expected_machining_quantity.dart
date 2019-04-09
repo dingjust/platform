@@ -22,12 +22,23 @@ class ExpectedMachiningQuantityFieldState
     return GestureDetector(
       child: Container(
         child: ListTile(
-          leading: Text(
-            '加工数量',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+          leading: RichText(
+            text: TextSpan(
+                text: '加工数量',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.red)
+                  ),
+                ]),
           ),
           trailing: Text(
             widget.item.details.expectedMachiningQuantity == null

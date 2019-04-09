@@ -207,16 +207,17 @@ class QuoteListItem extends StatelessWidget {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       if (model.state == QuoteState.SELLER_SUBMITTED) {
         buttons = <Widget>[
-          FlatButton(
-            onPressed: onQuoteRejecting,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.red,
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            child: Text(
-              '拒绝报价',
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          ),
+//          FlatButton(
+//            onPressed: onQuoteRejecting,
+//            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+//            color: Colors.red,
+//            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+//            child: Text(
+//              '拒绝报价',
+//              style: TextStyle(color: Colors.white, fontSize: 16),
+//            ),
+//          ),
+        Container(),
           FlatButton(
             onPressed: onQuoteConfirming,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -224,7 +225,7 @@ class QuoteListItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             child: Text(
               '确认报价',
-              style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+              style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
             ),
           ),
         ];
@@ -243,7 +244,7 @@ class QuoteListItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             child: Text(
               '修改报价',
-              style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+              style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1), fontSize: 18),
             ),
           ),
         ];
@@ -256,7 +257,7 @@ class QuoteListItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             child: Text(
               '创建打样订单',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(color: Colors.black, fontSize: 18),
             ),
           ),
           FlatButton(
@@ -266,7 +267,7 @@ class QuoteListItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             child: Text(
               '创建生产订单',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(color: Colors.black, fontSize: 18),
             ),
           ),
         ];
@@ -280,7 +281,7 @@ class QuoteListItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             child: Text(
               '重新报价',
-              style: TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
         ];
