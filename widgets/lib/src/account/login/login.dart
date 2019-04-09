@@ -88,22 +88,22 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          // _isPasswordLogin
-          //     ? GestureDetector(
-          //         onTap: () {
-          //           Navigator.of(context).push(MaterialPageRoute(
-          //               builder: (context) => widget.forgetPasswordPage));
-          //         },
-          //         child: Container(
-          //           margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
-          //           child: Text(
-          //             '忘记密码',
-          //             style: TextStyle(color: Colors.red, fontSize: 15),
-          //           ),
-          //         ),
-          //       )
+          // _isPasswordLogin?
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => widget.forgetPasswordPage));
+            },
+            child: Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
+              child: Text(
+                '忘记密码',
+                style: TextStyle(color: Colors.red, fontSize: 15),
+              ),
+            ),
+          ),
           //     : Container(),
           GestureDetector(
             onTap: () {
