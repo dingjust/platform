@@ -1,4 +1,7 @@
+import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
+import 'package:b2b_commerce/src/business/supplier/factory_purchase_list.dart';
+import 'package:b2b_commerce/src/business/supplier/factory_quote_list.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -38,7 +41,8 @@ class MyFactoryPage extends StatefulWidget {
 }
 
 class _MyFactoryPageState extends State<MyFactoryPage> {
-  RequirementOrderModel orderModel = RequirementOrderModel(details: RequirementInfoModel());
+  RequirementOrderModel orderModel =
+      RequirementOrderModel(details: RequirementInfoModel());
   Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
     PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
@@ -59,38 +63,53 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       _buildBaseInfo(),
     ];
     if (widget.quoteModel != null) {
-      _widgets.add(QuoteListItem(
-        model: widget.quoteModel,
-        showActions: false,
+      _widgets.add(Column(
+        children: <Widget>[
+          QuoteListItem(
+            model: widget.quoteModel,
+            showActions: false,
+          ),
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Center(
+              child: GestureDetector(
+                child: Text(
+                  '查看全部>>',
+                  style: TextStyle(color: Colors.red,fontSize: 18,),
+                ),
+                onTap: ()async{
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FactoryQuoteListPage(factoryUid: widget.factory.uid,)));
+                },
+              ),
+            ),
+          )
+        ],
       ));
     }
     if (widget.purchaseOrder != null) {
       _widgets.add(
-        GestureDetector(
-          child: Card(
-            elevation: 0,
-            margin: EdgeInsets.only(top: 10),
-            child: Column(
-              children: <Widget>[
-                _buildOrderHeader(),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: _buildContent(),
-                ),
-              ],
+        Column(
+          children: <Widget>[
+            PurchaseOrderItem(
+              order:widget.purchaseOrder,
             ),
-          ),
-          onTap: () async {
-            PurchaseOrderModel model =
-                await PurchaseOrderRepository().getPurchaseOrderDetail(widget.purchaseOrder.code);
-
-            if (model != null) {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PurchaseOrderDetailPage(
-                        order: model,
-                      )));
-            }
-          },
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Center(
+                child: GestureDetector(
+                  child: Text(
+                    '查看全部>>',
+                    style: TextStyle(color: Colors.red,fontSize: 18,),
+                  ),
+                  onTap: ()async{
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => FactoryPurchaseListPage(factoryUid: widget.factory.uid,)));
+                  },
+                ),
+              ),
+            )
+          ],
         ),
       );
     }
@@ -215,7 +234,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   children: <Widget>[
                     GestureDetector(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
                         decoration: BoxDecoration(
                           color: const Color.fromRGBO(255, 214, 12, 1),
                           borderRadius: BorderRadius.circular(5),
@@ -225,7 +245,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MyFactoryBaseFormPage(widget.factory)),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyFactoryBaseFormPage(widget.factory)),
                         );
                       },
                     )
@@ -283,7 +305,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   style: const TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 Text(
-                  MonthlyCapacityRangesLocalizedMap[widget.factory.monthlyCapacityRange] ?? '',
+                  MonthlyCapacityRangesLocalizedMap[
+                          widget.factory.monthlyCapacityRange] ??
+                      '',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
@@ -311,7 +335,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   style: const TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 Text(
-                  PopulationScaleLocalizedMap[widget.factory.populationScale] ?? '',
+                  PopulationScaleLocalizedMap[widget.factory.populationScale] ??
+                      '',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
@@ -325,7 +350,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   style: const TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 Text(
-                  formatCooperationModesSelectText(widget.factory.cooperationModes),
+                  formatCooperationModesSelectText(
+                      widget.factory.cooperationModes),
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
@@ -353,7 +379,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   style: const TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 Text(
-                  formatCategoriesSelectText(widget.factory.adeptAtCategories, 2),
+                  formatCategoriesSelectText(
+                      widget.factory.adeptAtCategories, 2),
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
@@ -389,12 +416,16 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE &&
+                (widget.purchaseOrder.salesApplication ==
+                                SalesApplication.ONLINE &&
                             widget.purchaseOrder.depositPaid == false &&
-                            widget.purchaseOrder.status == PurchaseOrderStatus.PENDING_PAYMENT) ||
-                        (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE &&
+                            widget.purchaseOrder.status ==
+                                PurchaseOrderStatus.PENDING_PAYMENT) ||
+                        (widget.purchaseOrder.salesApplication ==
+                                SalesApplication.ONLINE &&
                             widget.purchaseOrder.balancePaid == false &&
-                            widget.purchaseOrder.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)
+                            widget.purchaseOrder.status ==
+                                PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
@@ -477,7 +508,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Row(
         children: <Widget>[
-          ImageFactory.buildThumbnailImage(widget.purchaseOrder?.product?.thumbnail),
+          ImageFactory.buildThumbnailImage(
+              widget.purchaseOrder?.product?.thumbnail),
           Expanded(
             child: Container(
               padding: EdgeInsets.all(5),
@@ -488,25 +520,30 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 children: <Widget>[
                   Align(
                     alignment: Alignment.topLeft,
-                    child: widget.purchaseOrder.product == null || widget.purchaseOrder.product.name == null
+                    child: widget.purchaseOrder.product == null ||
+                            widget.purchaseOrder.product.name == null
                         ? Container()
                         : Text(
                             '${widget.purchaseOrder.product.name}',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
                           ),
                   ),
                   Align(
                     alignment: Alignment.topLeft,
                     child: Container(
                       padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(5)),
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5)),
                       child: Text(
                         '货号：${widget.purchaseOrder.product == null ? '' : widget.purchaseOrder.product.skuID}',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
                   ),
-                  widget.purchaseOrder.product == null || widget.purchaseOrder.product.category == null
+                  widget.purchaseOrder.product == null ||
+                          widget.purchaseOrder.product.category == null
                       ? Container()
                       : Container(
                           padding: EdgeInsets.all(3),
@@ -516,7 +553,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                           ),
                           child: Text(
                             "${widget.purchaseOrder.product.category.name}  $sum件",
-                            style: TextStyle(fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromRGBO(255, 133, 148, 1)),
                           ),
                         )
                 ],
@@ -541,9 +580,11 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           fontWeight: FontWeight.w500,
         ),
       );
-    } else if (widget.purchaseOrder.salesApplication == SalesApplication.ONLINE &&
+    } else if (widget.purchaseOrder.salesApplication ==
+            SalesApplication.ONLINE &&
         widget.purchaseOrder.balancePaid == false &&
-        widget.purchaseOrder.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
+        widget.purchaseOrder.status ==
+            PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
       return Text(
         '（待付尾款）',
         textAlign: TextAlign.start,
@@ -621,10 +662,11 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
         ),
         onTap: () async {
           ProductsResponse productsResponse;
-          if(UserBLoC.instance.currentUser.type != UserType.BRAND){
+          if (UserBLoC.instance.currentUser.type != UserType.BRAND) {
             productsResponse = await ProductRepositoryImpl().list({}, {});
-          }else{
-            productsResponse = await ProductRepositoryImpl().getProductsOfFactory({}, {},widget.factory.uid);
+          } else {
+            productsResponse = await ProductRepositoryImpl()
+                .getProductsOfFactory({}, {}, widget.factory.uid);
           }
 
           Navigator.push(
@@ -663,7 +705,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                     offstage: !widget.isCompanyIntroduction,
                     child: GestureDetector(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
                         decoration: BoxDecoration(
                           color: const Color.fromRGBO(255, 214, 12, 1),
                           borderRadius: BorderRadius.circular(5),
@@ -671,11 +714,13 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                         child: const Text('编辑'),
                       ),
                       onTap: () {
-                        if (widget.factory.profiles == null) widget.factory.profiles = [];
+                        if (widget.factory.profiles == null)
+                          widget.factory.profiles = [];
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MyCompanyProfileFormPage(widget.factory),
+                            builder: (context) =>
+                                MyCompanyProfileFormPage(widget.factory),
                           ),
                         );
                       },
@@ -762,7 +807,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       margin: EdgeInsets.only(top: 10),
       child: ListTile(
         title: Text('注册时间'),
-        trailing: Text(DateFormatUtil.formatYMD(widget.factory.registrationDate) ?? ''),
+        trailing: Text(
+            DateFormatUtil.formatYMD(widget.factory.registrationDate) ?? ''),
       ),
     );
   }
@@ -814,7 +860,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
   }
 
   //格式化合作方式
-  String formatCooperationModesSelectText(List<CooperationModes> cooperationModes) {
+  String formatCooperationModesSelectText(
+      List<CooperationModes> cooperationModes) {
     String text = '';
 
     if (cooperationModes != null) {
