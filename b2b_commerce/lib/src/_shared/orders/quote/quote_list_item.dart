@@ -169,7 +169,7 @@ class QuoteListItem extends StatelessWidget {
                         ),
                   model.requirementOrder.details?.productSkuID != null
                       ? Container(
-                          padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
+                          padding: const EdgeInsets.fromLTRB(0, 1, 3, 1),
                           decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(10)),
                           child: Text(
                             '货号：${model.requirementOrder.details.productSkuID}',
@@ -178,7 +178,7 @@ class QuoteListItem extends StatelessWidget {
                         )
                       : Container(),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    padding: const EdgeInsets.fromLTRB(0, 1, 3, 1),
                     decoration: BoxDecoration(
                       color: const Color.fromRGBO(255, 243, 243, 1),
                       borderRadius: BorderRadius.circular(10),
