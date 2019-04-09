@@ -1,5 +1,7 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class CategorySelect extends StatefulWidget {
   CategorySelect({
@@ -53,7 +55,8 @@ class CategorySelectState extends State<CategorySelect> {
     _multiple = widget.multiple;
     if (widget.categorySelect.isNotEmpty) {
       _selectLeft = widget.categorySelect[0].parent?.code;
-      _selectRights = widget.categorySelect.map((category) => category.code).toList();
+      _selectRights =
+          widget.categorySelect.map((category) => category.code).toList();
       _valueItem = widget.categories[0].children;
     } else {
       _selectLeft = widget.categories[0].code;
@@ -78,7 +81,8 @@ class CategorySelectState extends State<CategorySelect> {
             if (_selectRights.contains(category.code)) {
               setState(() {
                 _selectRights.remove(category.code);
-                widget.categorySelect.removeWhere((category1) => category1.code == category.code);
+                widget.categorySelect.removeWhere(
+                    (category1) => category1.code == category.code);
               });
             } else {
               if (_multiple) {
@@ -101,16 +105,31 @@ class CategorySelectState extends State<CategorySelect> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-                color: _selectRights.contains(category.code) ? Color.fromRGBO(255, 219, 0, 1) : Colors.white)),
+                color: _selectRights.contains(category.code)
+                    ? Color.fromRGBO(255, 219, 0, 1)
+                    : Colors.white)),
         child: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Image.network(
-                'https://img12.360buyimg.com/cms/jfs/t9163/239/228215842/27228/5758028d/59a3c8beN117bd14c.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
+            category.thumbnail != null
+                ? Container(
+                    padding: EdgeInsets.all(10),
+                    child: Image.network(
+                      '${GlobalConfigs.IMAGE_BASIC_URL}${category.thumbnail.url}',
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Container(
+                    width: 60,
+                    height: 60,
+                    margin: EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(243, 243, 243, 1)),
+                    child: Icon(
+                      B2BIcons.noPicture,
+                      color: Color.fromRGBO(200, 200, 200, 1),
+                      size: 40,
+                    ),
+                  ),
             Text(
               '${category.name}',
               overflow: TextOverflow.ellipsis,
@@ -142,7 +161,9 @@ class CategorySelectState extends State<CategorySelect> {
         },
         child: Container(
           width: 60,
-          color: _selectLeft == category.code ? Colors.white : Color.fromRGBO(245, 244, 243, 1),
+          color: _selectLeft == category.code
+              ? Colors.white
+              : Color.fromRGBO(245, 244, 243, 1),
           padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Container(
             padding: EdgeInsets.fromLTRB(0, 5, 0, 5),

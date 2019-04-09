@@ -28,19 +28,19 @@ void main() async {
   // 初始化,检测是否有用户登陆信息
   await UserBLoC.instance.checkLocalUser();
 
-  runApp(BLoCProvider<AppBLoC>(
-    bloc: AppBLoC(),
-    child: MyApp(),
-  ));
-
   //头部状态栏阴影
   TargetPlatform platform = defaultTargetPlatform;
   if (platform != TargetPlatform.iOS) {
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        );
+      statusBarColor: Colors.transparent,
+    );
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
+
+  runApp(BLoCProvider<AppBLoC>(
+    bloc: AppBLoC(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
