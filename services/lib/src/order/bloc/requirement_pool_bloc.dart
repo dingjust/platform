@@ -175,8 +175,6 @@ class RequirementPoolBLoC extends BLoCBase {
     Map data = new Map();
     if(isRecommend){
       data = {"private": 1};
-    }else{
-      data = {"private": 0};
     }
     // 计算时间范围
     DateTime expectedDeliveryDateTo = DateTime.now();
