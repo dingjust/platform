@@ -1,0 +1,103 @@
+@import '../../base.less';
+
+.addressList{
+    :global(.flexBox){
+        padding: 0.2rem 0;
+    }
+    :global(.flex1){
+        overflow: hidden;
+    }
+    :global(.am-swipe-btn){
+        // min-width:1.53rem;
+    }
+    :global(.am-swipe-btn-text){
+        // min-width:1.52rem;
+    }
+    .newAddress{
+        width: 70%;
+        height: 0.9rem;
+        border-radius: 1rem;
+        background-color: #2F8AFF;
+        position: absolute;
+        bottom: 0.6rem;
+        left: 15%;
+        text-align: center;
+        line-height: 0.9rem;
+        position: fixed;
+        i{
+            color: #fff;
+            margin-right: 0.2rem;
+        }
+        span{
+            color: #fff;
+            font-size: @font-size44;
+        }
+    }
+    .listBox{
+        position: absolute;
+        padding-bottom: 2rem;
+        width: 100%;
+        top: 0.9rem;
+    }
+    .delete{
+        background-color: #F6F6F6;
+        padding-right: 0.2rem;
+        :global(.iconfont){
+            color: #FF4444;
+        }
+    }
+    .default{
+        background: #F6F6F6;
+        :global(.am-swipe-btn-text){
+            color: #464646;
+        }
+    }
+    .defaultBt{
+        width: 1.3rem;
+        height: 0.55rem;
+        border-radius: 0.3rem;
+        line-height: 0.55rem;
+        font-size: @font-size32;
+        text-align: center;
+        border: 1px solid #2F8AFF;
+        color: #2F8AFF;
+        display: block;
+    }
+    .alter{
+        width: 0.8rem;
+        height: 100%;
+        :global(.iconfont){
+            color: #6a6a6a;
+            font-size: 0.3rem;
+            position: absolute;
+            bottom: 0.2rem;
+            right: 0.4rem;
+        }
+    }
+    .title{
+        .name{
+            font-weight: bold;
+            font-size: @font-size46;
+            color: #323232;
+            margin-right: 0.3rem;
+        }
+        .phone{
+            font-weight: bold;
+            font-size: @font-size46;
+            color: #323232;
+        }
+        .default{
+            font-size: @font-size32;
+            background-color: #DBEBFF;
+            color: #2F8AFF;
+            width: 0.5rem;
+            padding:0.02rem 0.12rem;
+            margin-left: 0.2rem;
+            border-radius: 0.4rem;
+        }
+    }
+    .addressDetail{
+        font-size: @font-size40;
+        color: #969696;
+    }
+}

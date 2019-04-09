@@ -1,0 +1,38 @@
+.shareImg{
+    position: fixed;
+    top: 0;
+    left:0;
+    right: 0;
+    bottom: 0;
+    width: 60%!important;
+    height: 50%!important;
+    margin: auto;
+    .closeIcon{
+        position: absolute;
+        bottom: -1rem;
+        left: 50%;
+        margin-left: -0.25rem;
+    }
+    :global(.borderWhite){
+        background-color: #fff0;
+        border: 1px solid #fff;
+    }
+    .imgBox{
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    img{
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+    }
+    :global(.am-modal-content){
+        border-radius: 0.1rem;
+        overflow: inherit;
+    }
+    :global(.am-modal-body){
+        position: relative;
+        overflow: inherit;
+    }
+}
