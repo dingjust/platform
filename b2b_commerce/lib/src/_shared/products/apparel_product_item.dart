@@ -9,18 +9,15 @@ class ApparelProductItem extends StatelessWidget {
   const ApparelProductItem({
     @required this.item,
     this.isSelectOption = false,
-    this.isSelectItem = false,
     this.status,
     this.onPrdouctDeleting,
     this.onPrdouctUpdating,
     this.onPrdouctProduction,
     this.onProductShlefing,
-
   });
 
   final ApparelProductModel item;
   final bool isSelectOption;
-  final bool isSelectItem;
   final String status;
 
   final VoidCallback onPrdouctDeleting;
@@ -33,7 +30,7 @@ class ApparelProductItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (isSelectOption) Navigator.pop(context, item);
-        // if(widget.isSelectItem)
+        // if(widget.isSelectOption)
       },
       child: Card(
         margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
@@ -129,7 +126,7 @@ class ApparelProductItem extends StatelessWidget {
       _approvalStatusText = '上架';
     }
 
-    if (!isSelectItem) {
+    if (!isSelectOption) {
       return Container(
         padding: EdgeInsets.only(bottom: 10),
         child: Row(
@@ -174,9 +171,7 @@ class ApparelProductItem extends StatelessWidget {
                     backgroundColor: Color.fromRGBO(255, 214, 12, 1),
                     label: Text(_approvalStatusText),
                     labelStyle: TextStyle(color: Colors.black),
-                    onPressed: () {
-
-                    },
+                    onPressed: onProductShlefing,
                   ),
           ],
         ),

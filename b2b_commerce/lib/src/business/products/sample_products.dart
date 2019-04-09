@@ -49,6 +49,7 @@ class SampleProductsPage extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: Text('我的样衣'),
+          elevation: 0.5,
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.push(context,
