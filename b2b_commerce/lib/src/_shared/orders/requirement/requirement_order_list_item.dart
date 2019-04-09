@@ -4,10 +4,9 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../../../business/orders/requirement_order_detail.dart';
 import '../../widgets/image_factory.dart';
 import '../../widgets/text_factory.dart';
-
-import '../../../business/orders/requirement_order_detail.dart';
 
 class RequirementOrderItem extends StatelessWidget {
   const RequirementOrderItem({
@@ -189,7 +188,6 @@ class RequirementOrderItem extends StatelessWidget {
   }
 }
 
-
 class ItemPicture extends StatelessWidget {
   final RequirementOrderModel order;
 
@@ -218,24 +216,27 @@ class ItemPicture extends StatelessWidget {
                   size: 60,
                 ),
               ),
-              Positioned(
-                left: 0,
-                bottom: 0,
-                child: Container(
-                  width: 60,
-                  height: 20,
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(5)),
-                      color: Color.fromRGBO(255, 214, 12, 1)),
-                  child: Center(
-                    child: Text(
-                      '已审核',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-              )
+              order.labels != null && order.labels.isNotEmpty
+                  ? 
+                  Positioned(
+                      left: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: 60,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(5)),
+                            color: Color.fromRGBO(255, 214, 12, 1)),
+                        child: Center(
+                          child: Text(
+                            '${order.labels[0].name}',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container()
             ],
           ));
     } else {
@@ -252,24 +253,26 @@ class ItemPicture extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            Positioned(
-              left: 0,
-              bottom: 0,
-              child: Container(
-                width: 60,
-                height: 20,
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(5)),
-                    color: Color.fromRGBO(255, 214, 12, 1)),
-                child: Center(
-                  child: Text(
-                    '已审核',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              ),
-            )
+            order.labels != null && order.labels.isNotEmpty
+                ? Positioned(
+                    left: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: 60,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.only(bottomLeft: Radius.circular(5)),
+                          color: Color.fromRGBO(255, 214, 12, 1)),
+                      child: Center(
+                        child: Text(
+                          '${order.labels[0].name}',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container()
           ],
         ),
       );
