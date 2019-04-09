@@ -26,6 +26,12 @@ enum UserType {
   FACTORY
 }
 
+const UserTypeMap = {
+  UserType.ANONYMOUS: "ANONYMOUS",
+  UserType.BRAND: "BRAND",
+  UserType.FACTORY: "FACTORY",
+};
+
 enum UserStatus {
   ///在线
   ONLINE,
