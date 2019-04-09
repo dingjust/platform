@@ -70,13 +70,13 @@ android {
     }
 
 
-    android.applicationVariants.all { variant ->
-        if (variant.buildType.name.equals('release')) {
-            variant.outputs.all {
-                outputFileName = "钉单.apk"
-            }
-        }
-    }
+//    android.applicationVariants.all { variant ->
+//        if (variant.buildType.name.equals('release')) {
+//            variant.outputs.all {
+//                outputFileName = "钉单.apk"
+//            }
+//        }
+//    }
 
     flutter {
         source '../..'

@@ -34,6 +34,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
   List<MediaModel> attachments = [];
   DateTime expectedDeliveryDate = DateTime.now();
   DateTime quoteDate;
+  DateTime firstData = DateTime.now();
 
   GlobalKey _scaffoldKey = GlobalKey();
 
@@ -53,9 +54,10 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
       _sampleController.text =
           widget.quoteModel.costOfSamples?.toString() ?? '';
       _unitPriceController.text = widget.quoteModel.unitPrice?.toString() ?? '';
-      quoteDate = widget.quoteModel.expectedDeliveryDate??'';
+      quoteDate = widget.quoteModel.expectedDeliveryDate ?? DateTime.now();
     } else {
       expectedDeliveryDate = widget.model.details.expectedDeliveryDate;
+      quoteDate = DateTime.now();
     }
 
     if (widget.update) {
@@ -278,50 +280,48 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             textAlign: TextAlign.right,
             controller: _unitPriceController,
           ),
-      Container(
-          padding: EdgeInsets.only(left: 20),
-          child:
-          TextFieldComponent(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            dividerPadding: EdgeInsets.only(),
-            focusNode: _fabricFocusNode,
-            leadingText: '面料单价￥',
-            hintText: '填写',
-            autofocus: false,
-            inputType: TextInputType.number,
-            textAlign: TextAlign.right,
-            controller: _fabricController,
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: TextFieldComponent(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              dividerPadding: EdgeInsets.only(),
+              focusNode: _fabricFocusNode,
+              leadingText: '面料单价￥',
+              hintText: '填写',
+              autofocus: false,
+              inputType: TextInputType.number,
+              textAlign: TextAlign.right,
+              controller: _fabricController,
+            ),
           ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 20),
-        child:
-          TextFieldComponent(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            dividerPadding: EdgeInsets.only(),
-            focusNode: _excipientsFocusNode,
-            leadingText: '辅料单价￥',
-            hintText: '填写',
-            autofocus: false,
-            inputType: TextInputType.number,
-            textAlign: TextAlign.right,
-            controller: _excipientsController,
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: TextFieldComponent(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              dividerPadding: EdgeInsets.only(),
+              focusNode: _excipientsFocusNode,
+              leadingText: '辅料单价￥',
+              hintText: '填写',
+              autofocus: false,
+              inputType: TextInputType.number,
+              textAlign: TextAlign.right,
+              controller: _excipientsController,
+            ),
           ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 20),
-        child:TextFieldComponent(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            dividerPadding: EdgeInsets.only(),
-            focusNode: _processingFocusNode,
-            leadingText: '加工单价￥',
-            hintText: '填写',
-            autofocus: false,
-            inputType: TextInputType.number,
-            textAlign: TextAlign.right,
-            controller: _processingController,
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: TextFieldComponent(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              dividerPadding: EdgeInsets.only(),
+              focusNode: _processingFocusNode,
+              leadingText: '加工单价￥',
+              hintText: '填写',
+              autofocus: false,
+              inputType: TextInputType.number,
+              textAlign: TextAlign.right,
+              controller: _processingController,
+            ),
           ),
-      ),
           Container(
             padding: EdgeInsets.only(left: 20),
             child: TextFieldComponent(
@@ -376,25 +376,20 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              trailing:
-              quoteDate == null
+              trailing: quoteDate == null
                   ? Text(
-                '选择',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey),
-              )
+                      '选择',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    )
                   : Text(
-                DateFormatUtil.formatYMD(quoteDate),
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black),
-              ),
+                      DateFormatUtil.formatYMD(quoteDate),
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
             ),
-                onTap: () {
-                  _showDatePicker();
-                },
-              )),
+            onTap: () {
+              _showDatePicker();
+            },
+          )),
         ],
       ),
     );
@@ -470,8 +465,8 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
+        initialDate: quoteDate,
+        firstDate: firstData.subtract(Duration(days: 1)),
         lastDate: new DateTime(2999));
 
     if (_picked != null) {
@@ -498,17 +493,16 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             title: Text('确定报价？'),
             actions: <Widget>[
               FlatButton(
-                child: Text('取消',style: TextStyle(
-                  color: Colors.grey
-                ),),
+                child: Text(
+                  '取消',
+                  style: TextStyle(color: Colors.grey),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               FlatButton(
-                child: Text('确定',style: TextStyle(
-                    color: Colors.black
-                )),
+                child: Text('确定', style: TextStyle(color: Colors.black)),
                 onPressed: () async {
                   await onSure();
                 },
@@ -567,9 +561,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             title: Text(widget.update ? '修改成功' : '报价成功'),
             actions: <Widget>[
               FlatButton(
-                child: Text('确定',style: TextStyle(
-                    color: Colors.black
-                )),
+                child: Text('确定', style: TextStyle(color: Colors.black)),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
