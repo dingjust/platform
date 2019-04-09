@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <template v-if="slotData.deliveryAddress&& slotData.consignment.trackingID">
+    <template v-if="slotData.consignment&& slotData.consignment.trackingID">
       <consignment-form :slot-data="slotData.consignment" :read-only="true"/>
     </template>
     <template v-else>

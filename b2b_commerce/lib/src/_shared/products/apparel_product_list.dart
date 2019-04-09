@@ -57,7 +57,7 @@ class _ApparelProductListState extends State<ApparelProductList>{
         decoration: BoxDecoration(color: Colors.grey[100]),
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
-            onRefresh: () async {
+          onRefresh: () async {
             return await bloc.filterByStatuses(widget.status);
           },
           child: ListView(
@@ -183,3 +183,28 @@ class _ApparelProductListState extends State<ApparelProductList>{
     }
   }
 }
+
+//class _ToTopBtn extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    final bloc = ProductBlocProvider.of(context);
+//
+//    return StreamBuilder<bool>(
+//        stream: bloc.toTopBtnStream,
+//        initialData: false,
+//        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+//          return snapshot.data
+//              ? FloatingActionButton(
+//                  child: Icon(
+//                    Icons.arrow_upward,
+//                    color: Colors.white,
+//                  ),
+//                  onPressed: () {
+//                    bloc.returnToTop();
+//                  },
+//                  backgroundColor: Colors.blue,
+//                )
+//              : Container();
+//        });
+//  }
+//}

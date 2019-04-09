@@ -17,7 +17,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         brightness: Brightness.light,
         centerTitle: true,
         elevation: 0.5,
-        title: Text('我的客服'),
+        title: Text('联系客服'),
       ),
       body: Container(
         child: ListView(

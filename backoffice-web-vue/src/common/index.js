@@ -346,6 +346,9 @@ let NONE_TENANT_APIS = {
   getProofings() {
     return '/b2b/orders/proofing';
   },
+  confirmDeliveringOfProofing(code) {
+    return '/b2b/orders/proofing/' + code + '/delivering';
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

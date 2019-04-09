@@ -60,7 +60,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     } else {
       if (widget.quoteModel.unitPrice != null &&
           widget.quoteModel.unitPrice >= 0) {
-        _unitPriceController.text = widget.quoteModel.unitPrice.toString();
+        _unitPriceController.text = widget.quoteModel.costOfSamples.toString();
       }
     }
     super.initState();
