@@ -155,14 +155,14 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     );
   }
 
-  //商品
+  //产品
   Widget _buildProduct(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
               leading:  RichText(
                 text: TextSpan(
-                    text: '商品',
+                    text: '产品',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -872,7 +872,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     try{
       //非空验证
       if(purchaseOrder.entries == null || purchaseOrder.entries.length <= 0){
-        isSubmit = _showValidateMsg(context, '请选择商品');
+        isSubmit = _showValidateMsg(context, '请选择产品');
       }
       else if(purchaseOrder.totalQuantity == null || purchaseOrder.totalQuantity <= 0){
         isSubmit = _showValidateMsg(context, '请输入生产数量');

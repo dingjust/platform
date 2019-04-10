@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 
 part 'product_response.g.dart';
 
-/// 商品列表响应
+/// 产品列表响应
 @JsonSerializable()
 class ProductsResponse {
   final int number;

@@ -42,11 +42,14 @@ class AddressBLoC extends BLoCBase {
 
   Stream<AddressModel> get detailStream => _detailController.stream;
 
-  filterByStatuses() async {
+  getAddressData() async {
     if (!lock) {
       lock = true;
       addresses.clear();
-      addresses = await AddressRepositoryImpl().list();
+      List<AddressModel> result = await AddressRepositoryImpl().list();
+      if (result != null) {
+        addresses = result;
+      }
       _controller.sink.add(addresses);
       lock = false;
     }

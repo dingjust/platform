@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -216,23 +217,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Row(
         children: <Widget>[
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: widget.order.product == null ||
-                          widget.order.product.thumbnail == null
-                      ? AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        )
-                      : NetworkImage(
-                          '${widget.order.product.thumbnail.actualUrl}'),
-                  fit: BoxFit.cover,
-                )),
-          ),
+          ImageFactory.buildThumbnailImage(widget.order.product?.thumbnail),
           Expanded(
               child: Container(
                   padding: const EdgeInsets.all(10),

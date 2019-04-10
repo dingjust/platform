@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 
 part 'sample_product_historys_response.g.dart';
 
-/// 商品列表响应
+/// 产品列表响应
 @JsonSerializable()
 class SampleProductHistorysResponse {
   final int number;

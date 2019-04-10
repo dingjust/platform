@@ -598,7 +598,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     }
   }
 
-  //现款商品
+  //现款产品
   Card _buildCashProducts() {
     return Card(
       elevation: 0,
@@ -615,7 +615,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                     Container(
                       width: 110,
                       child: Text(
-                        '现款商品',
+                        '现款产品',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
@@ -169,7 +170,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 ? _buildTipsPayment(context)
                 : _buildPurchaseProductionProgresse(context),
             _buildDeliveryAddress(context),
-            bloc.isBrandUser ? _buildFactoryInfo(context)
+            bloc.isBrandUser
+                ? _buildFactoryInfo(context)
                 : _buildBrandInfo(context),
             _buildDocutment(context),
             _buildRemarks(context),
@@ -197,26 +199,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   child: Stack(
                     alignment: const Alignment(0.6, 1.1),
                     children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 15),
-                        padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: order.product != null &&
-                                      order.product.thumbnail != null &&
-                                      order.product.thumbnail.url != null
-                                  ? NetworkImage(
-                                      '${order.product.thumbnail.actualUrl}')
-                                  : AssetImage(
-                                      'temp/picture.png',
-                                      package: "assets",
-                                    ),
-                              fit: BoxFit.cover,
-                            )),
-                      ),
+                      ImageFactory.buildThumbnailImage(
+                          order.product?.thumbnail),
                       Container(
                         child: Icon(
                           Icons.photo_size_select_actual,
@@ -467,36 +451,35 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             Row(
               children: <Widget>[
                 order.purchaser == null ||
-                    order.purchaser.profilePicture == null
-                    ?
-                Container(
-                  margin: EdgeInsets.all(10),
-                  padding: EdgeInsets.fromLTRB(0,0, 10,0),
-                  child: Center(
-                    child: Icon(
-                      B2BIcons.noPicture,
-                      color: Color.fromRGBO(200, 200, 200, 1),
-                      size: 60,
-                    ),
-                  ),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color.fromRGBO(243, 243, 243, 1)),
-                ):
-                Container(
-                  margin: EdgeInsets.all(10),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                                '${order.purchaser.profilePicture.actualUrl}'),
-                        fit: BoxFit.cover,
-                      )),
-                ),
+                        order.purchaser.profilePicture == null
+                    ? Container(
+                        margin: EdgeInsets.all(10),
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: Center(
+                          child: Icon(
+                            B2BIcons.noPicture,
+                            color: Color.fromRGBO(200, 200, 200, 1),
+                            size: 60,
+                          ),
+                        ),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Color.fromRGBO(243, 243, 243, 1)),
+                      )
+                    : Container(
+                        margin: EdgeInsets.all(10),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  '${order.purchaser.profilePicture.actualUrl}'),
+                              fit: BoxFit.cover,
+                            )),
+                      ),
                 Container(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -511,8 +494,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     Container(
                         margin: EdgeInsets.only(top: 5),
                         color: Color.fromRGBO(254, 252, 235, 1),
-                        child: order.purchaser != null && order.purchaser.approvalStatus != null &&
-                            order.purchaser.approvalStatus != ArticleApprovalStatus.approved
+                        child: order.purchaser != null &&
+                                order.purchaser.approvalStatus != null &&
+                                order.purchaser.approvalStatus !=
+                                    ArticleApprovalStatus.approved
                             ? Text('  已认证  ',
                                 style: TextStyle(
                                   color: Color.fromRGBO(255, 133, 148, 1),
@@ -816,47 +801,50 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    isCurrentStatus == true && widget.order.status == PurchaseOrderStatus.IN_PRODUCTION
+                    isCurrentStatus == true &&
+                            widget.order.status ==
+                                PurchaseOrderStatus.IN_PRODUCTION
                         ? _buildEstimatedDate(
                             context, productionProgress, isCurrentStatus)
                         : _buildFinishDate(
                             context, productionProgress, isCurrentStatus),
                     _buildQuantity(
                         context, productionProgress, isCurrentStatus),
-                    _buildProgressRemarks(context, productionProgress, isCurrentStatus),
+                    _buildProgressRemarks(
+                        context, productionProgress, isCurrentStatus),
                   ],
                 ),
               ),
               GestureDetector(
                 child: productionProgress.medias == null ||
-                    productionProgress.medias.isEmpty
+                        productionProgress.medias.isEmpty
                     ? Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  child: Center(
-                    child: Icon(
-                      B2BIcons.noPicture,
-                      color: Color.fromRGBO(200, 200, 200, 1),
-                      size: 60,
-                    ),
-                  ),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color.fromRGBO(243, 243, 243, 1)),
-                ) :
-                Container(
-                  margin: EdgeInsets.only(right: 20),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            '${productionProgress.medias[0].actualUrl}'),
-                        fit: BoxFit.fill,
-                      )),
-                ),
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: Center(
+                          child: Icon(
+                            B2BIcons.noPicture,
+                            color: Color.fromRGBO(200, 200, 200, 1),
+                            size: 60,
+                          ),
+                        ),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Color.fromRGBO(243, 243, 243, 1)),
+                      )
+                    : Container(
+                        margin: EdgeInsets.only(right: 20),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  '${productionProgress.medias[0].actualUrl}'),
+                              fit: BoxFit.fill,
+                            )),
+                      ),
                 onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(
@@ -909,12 +897,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: progress.estimatedDate == null
-                      ? Text(
-                      '选择日期',
-                      style: TextStyle(fontWeight: FontWeight.w500,color: Colors.grey))
+                      ? Text('选择日期',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, color: Colors.grey))
                       : Text(
-                      '${DateFormatUtil.formatYMD(progress.estimatedDate)}',
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                          '${DateFormatUtil.formatYMD(progress.estimatedDate)}',
+                          style: TextStyle(fontWeight: FontWeight.w500)),
                 ),
               ),
               onTap: () {
@@ -1286,10 +1274,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return order.attachments == null || order.attachments.length <= 0
         ? Container()
         : Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      color: Colors.white,
-      child: Attachments(list: order.attachments),
-    );
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            color: Colors.white,
+            child: Attachments(list: order.attachments),
+          );
   }
 
   //按钮UI，判断用户类型展示按钮
@@ -1911,7 +1899,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       ProductionProgressModel model, String type, String remarks) async {
     dialogText = TextEditingController();
     _dialogFocusNode = FocusNode();
-    if(remarks != null){
+    if (remarks != null) {
       dialogText.text = remarks;
     }
     return showDialog<void>(

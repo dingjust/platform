@@ -29,7 +29,7 @@ class FactoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        // 获取该工厂的现款商品
+        // 获取该工厂的现款产品
         ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
           'factory': model.uid,
         }, {
