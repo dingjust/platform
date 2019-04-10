@@ -276,7 +276,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildBottom(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
         children: <Widget>[
           Align(
@@ -1311,31 +1311,37 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //线下单显示按钮
   Widget _buildOfflineButton(BuildContext context) {
-    return Container(
-        width: 300,
-        margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        height: 40,
-        child: FlatButton(
-            color: Color(0xFFFFD600),
-            child: Text(
-              '唯一码',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              ),
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20))),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProductionGenerateUniqueCodePage(
-                            model: widget.order,
-                          )));
-            }));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Expanded(
+          child: Container(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 0, horizontal: 30),
+              child: FlatButton(
+                  color: Color(0xFFFFD600),
+                  child: Text(
+                    '唯一码',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductionGenerateUniqueCodePage(
+                              model: widget.order,
+                            )));
+                  })
+          ),
+        ),
+      ],
+    );
   }
 
   //品牌端支付按钮
@@ -1348,101 +1354,95 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         ? Container(
             margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
             child: Row(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Expanded(
                   child: Container(
-                      margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      height: 40,
-                      child: order.status == PurchaseOrderStatus.PENDING_PAYMENT
-                          ? RaisedButton(
-                              color: Colors.red,
-                              child: Text(
-                                '取消订单',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20))),
-                              onPressed: () async {
-                                showDialog<void>(
-                                  context: context,
-                                  barrierDismissible:
-                                      true, // user must tap button!
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        '提示',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                        ),
+                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+                      child: widget.order.status ==
+                          PurchaseOrderStatus.PENDING_PAYMENT
+                          ? FlatButton(
+                          color: Colors.red,
+                          child: Text(
+                            '取消订单',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          onPressed: () async {
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible:
+                              true, // user must tap button!
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    '提示',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  content: Text('是否要取消订单？'),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text(
+                                        '取消',
+                                        style: TextStyle(color: Colors.grey),
                                       ),
-                                      content: Text('是否要取消订单？'),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          child: Text(
-                                            '取消',
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        FlatButton(
-                                          child: Text(
-                                            '确定',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                          onPressed: () async {
-                                            bool result =
-                                                await PurchaseOrderRepository()
-                                                    .purchaseOrderCancelling(
-                                                        order.code);
-                                            _showMessage(
-                                                context, result, '订单取消');
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text(
+                                        '确定',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      onPressed: () async {
+                                        bool result =
+                                        await PurchaseOrderRepository()
+                                            .purchaseOrderCancelling(
+                                            widget.order.code);
+                                        _showMessage(context, result, '订单取消');
+                                      },
+                                    ),
+                                  ],
                                 );
-                              })
+                              },
+                            );
+                          })
                           : Container()),
                 ),
                 Expanded(
                   child: Container(
-                      padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      height: 40,
-                      child: RaisedButton(
+                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+                      child: FlatButton(
                           color: Color(0xFFFFD600),
                           child: Text(
                             '去支付',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                              fontSize: 16,
                             ),
                           ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
                           onPressed: () {
                             PurchaseOrderModel order = widget.order;
                             //将支付金额置为定金
                             order.totalPrice = order.deposit;
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => OrderPaymentPage(
-                                      order: order,
-                                      paymentFor: PaymentFor.DEPOSIT,
-                                    )));
+                                  order: order,
+                                  paymentFor: PaymentFor.DEPOSIT,
+                                )));
                           })),
                 ),
               ],
@@ -1465,9 +1465,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Expanded(
-                child: Container(),
-              ),
-              Expanded(
                 child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 0, horizontal: 30),
@@ -1477,8 +1474,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           '去支付',
                           style: const TextStyle(
                             color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                            fontSize: 16,
                           ),
                         ),
                         shape: const RoundedRectangleBorder(
@@ -1506,9 +1502,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Expanded(
-                child: Container(),
-              ),
-              Expanded(
                 child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 0, horizontal: 30),
@@ -1518,8 +1511,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           '确认',
                           style: const TextStyle(
                             color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                            fontSize: 16,
                           ),
                         ),
                         shape: const RoundedRectangleBorder(
@@ -1544,9 +1536,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Expanded(
-              child: Container(),
-            ),
-            Expanded(
               child: Container(
                   padding: const EdgeInsets.symmetric(
                       vertical: 0, horizontal: 30),
@@ -1556,8 +1545,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         '确认收货',
                         style: const TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                       shape: const RoundedRectangleBorder(
@@ -1585,9 +1573,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Expanded(
-              child: Container(),
-            ),
-            Expanded(
               child: Container(
                   padding: const EdgeInsets.symmetric(
                       vertical: 0, horizontal: 30),
@@ -1597,8 +1582,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         '确认收货',
                         style: const TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                       shape: const RoundedRectangleBorder(
@@ -1632,9 +1616,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Expanded(
-            child: Container(),
-          ),
-          Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(
                   vertical: 0, horizontal: 30),
@@ -1644,8 +1625,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     '修改金额',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                   shape: const RoundedRectangleBorder(
@@ -1694,9 +1674,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Expanded(
-              child: Container(),
-            ),
-            Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(
                     vertical: 0, horizontal: 30),
@@ -1706,8 +1683,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     '确认发货',
                     style: const TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                   shape: const RoundedRectangleBorder(
@@ -1733,9 +1709,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Expanded(
-              child: Container(),
-            ),
-            Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(
                     vertical: 0, horizontal: 30),
@@ -1745,8 +1718,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     '修改金额',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                   shape: const RoundedRectangleBorder(

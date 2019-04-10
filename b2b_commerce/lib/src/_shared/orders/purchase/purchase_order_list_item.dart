@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -149,10 +150,16 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             children: <Widget>[
               Expanded(
                 child: Container(
-                  child: Text(
+                  child:
+                UserBLoC.instance.currentUser.type == UserType.BRAND?
+                  Text(
                     '${widget.order.belongTo == null ? widget.order.companyOfSeller : widget.order.belongTo.name}',
                     style: const TextStyle(fontSize: 16),
-                  ),
+                  ):
+                Text(
+                  '${widget.order.purchaser == null ? widget.order.companyOfSeller : widget.order.purchaser.name}',
+                  style: const TextStyle(fontSize: 16),
+                ),
                 ),
               ),
               Text(
@@ -297,8 +304,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                             '取消订单',
                             style: const TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                              fontSize: 16,
                             ),
                           ),
                           shape: const RoundedRectangleBorder(
@@ -357,8 +363,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                             '去支付',
                             style: const TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                              fontSize: 16,
                             ),
                           ),
                           shape: const RoundedRectangleBorder(
@@ -397,8 +402,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           '确认',
                           style: const TextStyle(
                             color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                            fontSize: 16,
                           ),
                         ),
                         shape: const RoundedRectangleBorder(
@@ -441,8 +445,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           '去支付',
                           style: const TextStyle(
                             color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                            fontSize: 16,
                           ),
                         ),
                         shape: const RoundedRectangleBorder(
@@ -485,8 +488,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                         '确认收货',
                         style: const TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                       shape: const RoundedRectangleBorder(
@@ -525,8 +527,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                         '确认收货',
                         style: const TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                       shape: const RoundedRectangleBorder(
@@ -570,8 +571,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       '修改金额',
                       style: const TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                     ),
                     shape: const RoundedRectangleBorder(
@@ -636,8 +636,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                     '确认发货',
                     style: const TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                   shape: const RoundedRectangleBorder(
@@ -675,8 +674,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                     '修改金额',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                   shape: const RoundedRectangleBorder(
