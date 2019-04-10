@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
@@ -321,7 +322,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   child: Center(
                     child: RichText(
                       text: TextSpan(
-                          text: '商品选择/创建',
+                          text: '产品选择/创建',
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -350,21 +351,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
           child: Row(
             children: <Widget>[
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: product.thumbnail != null
-                          ? NetworkImage('${product.thumbnail.actualUrl}')
-                          : AssetImage(
-                              'temp/picture.png',
-                              package: "assets",
-                            ),
-                      fit: BoxFit.cover,
-                    )),
-              ),
+              ImageFactory.buildThumbnailImage(product.thumbnail),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
@@ -429,7 +416,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 //                mainAxisAlignment: MainAxisAlignment.center,
 //                children: <Widget>[
 //                  Text(
-//                    '商品选择/创建',
+//                    '产品选择/创建',
 //                    style: TextStyle(fontSize: 20),
 //                  ),
 //                  Icon(
@@ -543,7 +530,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     if (productEntries == null || product == null) {
       (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
         SnackBar(
-          content: Text('请选择商品和数量'),
+          content: Text('请选择产品和数量'),
           duration: Duration(seconds: 1),
         ),
       );

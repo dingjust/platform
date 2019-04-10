@@ -25,14 +25,6 @@
         refresh: 'refresh'
       }),
       async onSubmit() {
-        // console.log("submitted data: " + JSON.stringify(this.slotData));
-
-        const deliveryAddress = this.slotData.deliveryAddress;
-        // 地址信息未填时，清除deliveryAddress节点
-        if (!deliveryAddress.region || !deliveryAddress.region.isocode) {
-          delete this.slotData.deliveryAddress;
-        }
-
         const quoteRef = this.slotData.quoteRef;
         const url = this.apis().createProofing(quoteRef);
         const result = await this.$http.post(url, this.slotData);

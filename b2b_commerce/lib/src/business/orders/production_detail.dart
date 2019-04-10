@@ -147,7 +147,7 @@ class _ProductionDetailPage extends State<ProductionDetailPage> {
                       },
                     ),
                     new Divider(),
-                    new ListTile(trailing: new Text("共24件商品")),
+                    new ListTile(trailing: new Text("共24件产品")),
                   ]
                   )
               ),

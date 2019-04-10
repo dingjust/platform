@@ -17,7 +17,7 @@ class ProductFieldState extends State<ProductField> {
       children: <Widget>[
         ListTile(
           leading: Text(
-            '商品名称',
+            '产品名称',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -39,7 +39,7 @@ class ProductFieldState extends State<ProductField> {
         Divider(height: 0,),
         ListTile(
           leading: Text(
-            '商品货号',
+            '产品货号',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,

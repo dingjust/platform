@@ -3,36 +3,36 @@ import 'package:services/services.dart';
 
 /// 市
 abstract class ProductRepository {
-  ///获取商品列表
+  ///获取产品列表
   Future<ProductsResponse> list(dynamic data,Map<String,Object> params);
 
-  //品牌获取工厂的现款商品
+  //品牌获取工厂的现款产品
   Future<ProductsResponse> getProductsOfFactories(dynamic data,Map<String,Object> params);
 
-  //品牌获取工厂的现款商品
+  //品牌获取工厂的现款产品
   Future<ProductsResponse> getProductsOfFactory(dynamic data,Map<String,Object> params,String uid);
 
-  //获取商品明细
+  //获取产品明细
   Future<ApparelProductModel> detail(String code);
 
-  //创建商品
+  //创建产品
   Future<String> create(ApparelProductModel form);
 
-  //编辑商品
+  //编辑产品
   Future<String> update(ApparelProductModel form);
 
-  //删除商品
+  //删除产品
   Future<String> delete(String code);
 
-  //商品上架
+  //产品上架
   Future<String> on(String code);
-  //商品下架
+  //产品下架
   Future<String> off(String code);
 
-  //获取商品小类
+  //获取产品小类
   Future<List<CategoryModel>> cascadedCategories();
 
-  //获取商品大类
+  //获取产品大类
   Future<List<CategoryModel>> majorCategories();
   
   //获取所有颜色

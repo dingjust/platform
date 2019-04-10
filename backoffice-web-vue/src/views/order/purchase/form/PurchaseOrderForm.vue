@@ -63,7 +63,7 @@
         <purchase-order-consignment-form :slot-data="slotData" :read-only="readOnly"/>
       </el-card>
       <div class="pt-2"></div>
-      <el-card class="box-card">
+      <el-card class="box-card" v-if="showProgress">
         <div slot="header" class="clearfix">
           <span>生产进度</span>
         </div>
@@ -105,6 +105,9 @@
       // 创建时，工厂不维护地址；由品牌维护
       hideOnNew: function () {
         return !this.readOnly && this.isFactory();
+      },
+      showProgress: function () {
+        return this.slotData.status != 'PENDING_PAYMENT' && this.slotData.status != 'CANCELLED';
       }
     },
     methods: {

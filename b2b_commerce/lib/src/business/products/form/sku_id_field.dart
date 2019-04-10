@@ -27,8 +27,8 @@ class _SkuIDFieldState extends State<SkuIDField> {
     return TextFieldComponent(
       focusNode: _skuIDFocusNode,
       controller: _skuIDController,
-      leadingText: '商品货号',
-      hintText: '请输入商品货号',
+      leadingText: '产品货号',
+      hintText: '请输入产品货号',
     );
   }
 }

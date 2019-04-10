@@ -181,7 +181,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         )));
   }
 
-  //商品详情
+  //产品详情
   Widget _buildEntries(BuildContext context) {
     //计算总数
     int sum = 0;
@@ -200,7 +200,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     alignment: const Alignment(0.6, 1.1),
                     children: <Widget>[
                       ImageFactory.buildThumbnailImage(
-                          widget.order.product?.thumbnail),
+                          order.product?.thumbnail),
                       Container(
                         child: Icon(
                           Icons.photo_size_select_actual,
@@ -314,7 +314,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildFactoryInfo(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        //获取该工厂的现款商品
+        //获取该工厂的现款产品
         ProductsResponse productsResponse = await ProductRepositoryImpl()
             .getProductsOfFactory({}, {'size': 3}, order.belongTo.uid);
 
@@ -450,8 +450,36 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                ImageFactory.buildThumbnailImage(
-                    order.purchaser?.profilePicture),
+                order.purchaser == null ||
+                        order.purchaser.profilePicture == null
+                    ? Container(
+                        margin: EdgeInsets.all(10),
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: Center(
+                          child: Icon(
+                            B2BIcons.noPicture,
+                            color: Color.fromRGBO(200, 200, 200, 1),
+                            size: 60,
+                          ),
+                        ),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Color.fromRGBO(243, 243, 243, 1)),
+                      )
+                    : Container(
+                        margin: EdgeInsets.all(10),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  '${order.purchaser.profilePicture.actualUrl}'),
+                              fit: BoxFit.cover,
+                            )),
+                      ),
                 Container(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -788,24 +816,35 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 ),
               ),
               GestureDetector(
-                child: Container(
-                  margin: EdgeInsets.only(right: 20),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: productionProgress.medias == null ||
-                                productionProgress.medias.isEmpty
-                            ? AssetImage(
-                                'temp/picture.png',
-                                package: "assets",
-                              )
-                            : NetworkImage(
-                                '${productionProgress.medias[0].actualUrl}'),
-                        fit: BoxFit.fill,
-                      )),
-                ),
+                child: productionProgress.medias == null ||
+                        productionProgress.medias.isEmpty
+                    ? Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: Center(
+                          child: Icon(
+                            B2BIcons.noPicture,
+                            color: Color.fromRGBO(200, 200, 200, 1),
+                            size: 60,
+                          ),
+                        ),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Color.fromRGBO(243, 243, 243, 1)),
+                      )
+                    : Container(
+                        margin: EdgeInsets.only(right: 20),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  '${productionProgress.medias[0].actualUrl}'),
+                              fit: BoxFit.fill,
+                            )),
+                      ),
                 onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(
@@ -858,7 +897,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: progress.estimatedDate == null
-                      ? Container()
+                      ? Text('选择日期',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, color: Colors.grey))
                       : Text(
                           '${DateFormatUtil.formatYMD(progress.estimatedDate)}',
                           style: TextStyle(fontWeight: FontWeight.w500)),
@@ -872,24 +913,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     ? _showDatePicker(progress)
                     : null;
               }),
-          progress.estimatedDate == null || progress.estimatedDate == ''
-              ? Align(
-                  alignment: Alignment.centerRight,
-                  child: userType == 'brand'
-                      ? Container()
-                      : IconButton(
-                          icon: Icon(Icons.date_range),
-                          onPressed: () {
-                            userType != null &&
-                                    userType == 'factory' &&
-                                    isCurrentStatus == true &&
-                                    order.status ==
-                                        PurchaseOrderStatus.IN_PRODUCTION
-                                ? _showDatePicker(progress)
-                                : null;
-                          }),
-                )
-              : Container()
         ],
       ),
     );
@@ -994,7 +1017,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     alignment: Alignment.centerRight,
                     child: progress.remarks == null
                         ? Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.centerRight,
                             child: Text(
                               '${userType == 'brand' ? '' : '填写'}',
                               style: TextStyle(
@@ -1048,7 +1071,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         : Container();
   }
 
-  // 提示隐藏商品颜色尺码UI
+  // 提示隐藏产品颜色尺码UI
   Widget _buildProductHide(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -1059,7 +1082,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Text(
-                    "生产商品详情",
+                    "生产产品详情",
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
@@ -1082,7 +1105,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         });
   }
 
-  //商品的颜色尺码及价格
+  //产品的颜色尺码及价格
   Widget _buildProductInfo(BuildContext context) {
     return mockData.isEmpty
         ? Container()

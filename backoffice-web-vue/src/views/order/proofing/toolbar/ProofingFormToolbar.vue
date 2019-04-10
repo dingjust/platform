@@ -11,6 +11,9 @@
       <el-button v-if="canPay" size="mini" type="primary" @click="onPaying">
         支付
       </el-button>
+      <el-button v-if="cancelling" size="mini" type="primary" @click="onCancelling">
+        取消
+      </el-button>
       <el-button v-if="canConfirmDelivery" size="mini" type="primary" @click="onConfirmDelivering">
         确认发货
       </el-button>
@@ -57,6 +60,9 @@
       },
       canConfirmDelivery: function () {
         return this.slotData.status === 'WAIT_FOR_OUT_OF_STORE' && this.isFactory();
+      },
+      cancelling: function () {
+        return this.slotData.status === 'PENDING_PAYMENT' && this.isFactory();
       }
     },
     methods: {
@@ -102,6 +108,18 @@
         this.$set(this.slotData, 'deliveryAddress', this.addressFormData);
 
         this.$message.success('地址更新成功');
+      },
+      async onCancelling() {
+        const url = this.apis().cancellingOfProofing(this.slotData.code);
+        const result = await this.$http.put(url, this.slotData);
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('取消打样单成功');
+        this.fn.closeSlider();
       },
       onConfirmDelivering() {
         this.confirmDeliveryDialogVisible = true;

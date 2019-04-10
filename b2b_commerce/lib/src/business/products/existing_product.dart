@@ -17,7 +17,7 @@ class _ExistingProductsPageState extends State<ExistingProductsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('现款商品'),
+          title: Text('现款产品'),
           brightness: Brightness.light,
           centerTitle: true,
           elevation: 0.5,
@@ -36,7 +36,7 @@ class _ExistingProductsPageState extends State<ExistingProductsPage> {
         body: Container(child: _buildExistingProductItem(context)));
   }
 
-  //现款商品
+  //现款产品
   Widget _buildExistingProductItem(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 15, 5, 15),

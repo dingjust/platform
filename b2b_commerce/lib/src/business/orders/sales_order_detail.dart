@@ -665,7 +665,7 @@ class SaleOrderDetail extends StatelessWidget {
                 ],
               ),
               Text(
-                '共70件商品 合计：￥7000',
+                '共70件产品 合计：￥7000',
                 style: TextStyle(fontSize: 16.0, color: Color(0xFFFF4444)),
               )
             ],

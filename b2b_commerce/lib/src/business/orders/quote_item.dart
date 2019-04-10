@@ -65,7 +65,7 @@ class _QuoteItemState extends State<QuoteItem> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-          //获取该工厂的现款商品
+          //获取该工厂的现款产品
           ProductsResponse productsResponse = await ProductRepositoryImpl()
               .getProductsOfFactory({}, {'size': 3}, widget.model.belongTo.uid);
 

@@ -38,19 +38,19 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            title: Text('定金尾款'),
-            elevation: 0.5,
-            brightness: Brightness.light,
-            centerTitle: true,
-            actions: <Widget>[
-              GestureDetector(
+    return WillPopScope(
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text('定金尾款'),
+              elevation: 0.5,
+              brightness: Brightness.light,
+              centerTitle: true,
+              leading: GestureDetector(
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    padding: EdgeInsets.only(left: 10),
                     child: Center(
                       child: Text(
-                        '确定',
+                        '返回',
                         style: TextStyle(
                             color: Colors.black),
                       ),
@@ -66,16 +66,26 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
                     earnest.tailPaymentDate = tailPaymentDate;
                     Navigator.of(context).pop(earnest);
                   }
-              )
-            ]
+              ),
+            ),
+            body: Container(
+                child: ListView(
+                  children: <Widget>[
+                    _buildTop(context),
+                    _buildBottom(context),
+                  ],
+                ))
         ),
-        body: Container(
-            child: ListView(
-              children: <Widget>[
-                _buildTop(context),
-                _buildBottom(context),
-              ],
-            ))
+        onWillPop:  () async {
+          EarnestMoney earnest = new EarnestMoney();
+          earnest.earnestMoney = earnestMoney;
+          earnest.isEarnestPayment = isEarnestPayment;
+          earnest.estimatePaymentDate = estimatePaymentDate;
+          earnest.tailMoney = tailMoney;
+          earnest.isTailPayment = isTailPayment;
+          earnest.tailPaymentDate = tailPaymentDate;
+          Navigator.of(context).pop(earnest);
+        }
     );
   }
 

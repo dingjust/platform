@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-/// 现款商品搜索页
+/// 现款产品搜索页
 class ExistingProductSearchDelegate extends SearchDelegate<ApparelProductModel> {
   @override
   List<Widget> buildActions(BuildContext context) {
