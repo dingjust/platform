@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -114,7 +113,7 @@ class CategorySelectState extends State<CategorySelect> {
                 ? Container(
                     padding: EdgeInsets.all(10),
                     child: Image.network(
-                      '${GlobalConfigs.IMAGE_BASIC_URL}${category.thumbnail.url}',
+                      '${category.thumbnail.imageUrl}',
                       fit: BoxFit.cover,
                     ),
                   )

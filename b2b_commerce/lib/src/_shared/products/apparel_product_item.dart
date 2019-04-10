@@ -1,9 +1,7 @@
-import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 class ApparelProductItem extends StatelessWidget {
   const ApparelProductItem({
@@ -61,7 +59,7 @@ class ApparelProductItem extends StatelessWidget {
                 image: DecorationImage(
                   image: item.thumbnail != null
                       ? NetworkImage(
-                          '${GlobalConfigs.IMAGE_BASIC_URL}${item.thumbnail.url}')
+                          '${item.thumbnail.imageUrl}')
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",

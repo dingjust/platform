@@ -91,7 +91,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                                       widget.model.product.thumbnail != null &&
                                       widget.model.product.thumbnail.url != null
                                   ? NetworkImage(
-                                      '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.product.thumbnail.url}')
+                                      '${widget.model.product.thumbnail.imageUrl}')
                                   : AssetImage(
                                       'temp/picture.png',
                                       package: "assets",
@@ -393,7 +393,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                                   package: "assets",
                                 )
                               : NetworkImage(
-                                  '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.supplier.profilePicture.url}'),
+                                  '${widget.model.supplier.profilePicture.imageUrl}'),
                           fit: BoxFit.cover,
                         )),
                   ),

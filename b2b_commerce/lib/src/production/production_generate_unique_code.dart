@@ -1,5 +1,4 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -399,7 +398,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                       'temp/picture.png',
                       package: "assets",
                     ):
-                    NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}'),
+                    NetworkImage('${order.product.thumbnail.imageUrl}'),
                     fit: BoxFit.cover,
                   )),
             ),

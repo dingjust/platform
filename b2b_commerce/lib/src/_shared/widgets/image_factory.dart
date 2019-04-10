@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -40,7 +39,7 @@ class ImageFactory {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         image: DecorationImage(
-          image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${media.url}'),
+          image: NetworkImage('${media.imageUrl}'),
           fit: fit,
         ),
       ),
@@ -69,7 +68,7 @@ class ImageFactory {
     }
 
     return CircleAvatar(
-      backgroundImage: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${profilePicture.url}'),
+      backgroundImage: NetworkImage('${profilePicture.imageUrl}'),
       radius: radius,
     );
   }

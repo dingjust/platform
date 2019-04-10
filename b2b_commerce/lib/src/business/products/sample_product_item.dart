@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/products/sample_product_detail.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -37,7 +36,7 @@ class SampleProductItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                   image: DecorationImage(
                     image: item.pictures.length > 0
-                        ? NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${item.pictures[0].url}')
+                        ? NetworkImage('${item.pictures[0].imageUrl}')
                         : AssetImage(
                             'temp/picture.png',
                             package: "assets",

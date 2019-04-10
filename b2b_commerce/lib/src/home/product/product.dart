@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/home/product/product_detail.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -41,7 +40,7 @@ class RecommendProductItem extends StatelessWidget {
                 image: DecorationImage(
                   image: model.thumbnail != null
                       ? NetworkImage(
-                          '${GlobalConfigs.IMAGE_BASIC_URL}${model.thumbnail.url}')
+                          '${model.thumbnail.imageUrl}')
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",

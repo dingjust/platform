@@ -179,14 +179,14 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image:
-                      NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.medias[index].url}'),
+                      NetworkImage('${widget.medias[index].imageUrl}'),
                       fit: BoxFit.cover,
                     )),
               ),
           ),
           onTap: () {
             onPreview(
-                context,'${GlobalConfigs.IMAGE_BASIC_URL}${widget.medias[index].url}');
+                context,'${widget.medias[index].imageUrl}');
           },
 
           onLongPress: () {
@@ -218,7 +218,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
   }
 //文件下载打开
   Future<String> _previewFile(String url, String name, String mediaType) async {
-    String downloadUrl = '${GlobalConfigs.IMAGE_BASIC_URL}${url}';
+    String downloadUrl = '${GlobalConfigs.CONTEXT_PATH}${url}';
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -396,7 +396,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
       Navigator.of(context).pop();
       //写入具体url
       String baseUrl = response.data['url'];
-      String url = '${GlobalConfigs.IMAGE_BASIC_URL}$baseUrl';
+      String url = '${GlobalConfigs.CONTEXT_PATH}$baseUrl';
       response.data['url'] = url;
       setState(() {
         widget.medias.add(MediaModel.fromJson(response.data));

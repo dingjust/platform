@@ -149,7 +149,7 @@ class UserBLoC extends BLoCBase {
         // 获取用户信息
         Response infoResponse;
         try {
-          String username = LocalStorage.get(GlobalConfigs.USER_KEY);
+          String username =await LocalStorage.get(GlobalConfigs.USER_KEY);
           infoResponse = await http$.get(UserApis.userInfo(username));
         } on DioError catch (e) {
           print(e);

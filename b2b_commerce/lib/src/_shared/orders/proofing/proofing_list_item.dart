@@ -288,9 +288,7 @@ class ProofingOrderItem extends StatelessWidget {
 
     return Row(
       children: <Widget>[
-        Expanded(
-          child: Container(),
-        ),
+
         Expanded(
           child: Container(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),

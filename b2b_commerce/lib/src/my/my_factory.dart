@@ -13,7 +13,6 @@ import './company/form/my_factory_base_form.dart';
 import './company/my_company_certificate.dart';
 import './company/my_company_contact_way.dart';
 import '../_shared/widgets/image_factory.dart';
-import '../business/orders/purchase_order_detail.dart';
 import '../business/orders/requirement_order_from.dart';
 import '../business/products/existing_product.dart';
 import '../business/products/existing_product_item.dart';
@@ -740,7 +739,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                             ? Container(
                                 margin: const EdgeInsets.all(5),
                                 child: Image.network(
-                                  '${GlobalConfigs.IMAGE_BASIC_URL}${profile.medias[0].url}',
+                                  '${profile.medias[0].imageUrl}',
                                   height: 200,
                                   width: double.infinity,
                                   fit: BoxFit.fill,

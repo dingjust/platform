@@ -150,14 +150,14 @@ class _AttachmentsState extends State<Attachments> {
                       color: Colors.grey,
                       image: DecorationImage(
                         image: NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}'),
+                            '${model.imageUrl}'),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   onTap: () {
                     onPreview(context,
-                        '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}');
+                        '${model.imageUrl}');
                   },
                 );
             }
@@ -183,7 +183,7 @@ class _AttachmentsState extends State<Attachments> {
 
   //文件下载打开
   Future<String> _previewFile(String url, String name, String mediaType) async {
-    String downloadUrl = '${GlobalConfigs.IMAGE_BASIC_URL}${url}';
+    String downloadUrl = '${GlobalConfigs.CONTEXT_PATH}${url}';
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -430,14 +430,14 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                   color: Colors.grey,
                   image: DecorationImage(
                     image: NetworkImage(
-                        '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}'),
+                        '${model.imageUrl}'),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               onTap: () {
                 onPreview(
-                    context, '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}');
+                    context, '${model.imageUrl}');
               },
               onLongPress: () {
                 if(widget.editable) _deleteFile(model);
@@ -474,7 +474,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
   //文件下载打开
   Future<String> _previewFile(String url, String name, String mediaType) async {
-    String downloadUrl = '${GlobalConfigs.IMAGE_BASIC_URL}${url}';
+    String downloadUrl = '${GlobalConfigs.CONTEXT_PATH}${url}';
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -641,7 +641,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
       Navigator.of(context).pop();
       //写入具体url
       String baseUrl = response.data['url'];
-      String url = '${GlobalConfigs.IMAGE_BASIC_URL}$baseUrl';
+      String url = '${GlobalConfigs.CONTEXT_PATH}$baseUrl';
       response.data['url'] = url;
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表
