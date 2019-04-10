@@ -432,9 +432,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: price == null || price == ''
-                ? Icon(Icons.keyboard_arrow_right)
-                : Text(price,
+            trailing: Text(price == null || price == ''? '0' : price,
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -630,12 +628,23 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-            leading: Text(
-              '合作方式',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+            leading: RichText(
+              text: TextSpan(
+                  text: '合作方式',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red)
+                    ),
+                  ]),
             ),
             trailing: machiningType == null
                 ? Icon(Icons.keyboard_arrow_right)
@@ -659,12 +668,23 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-            leading: Text(
-              '是否开具发票',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+            leading: RichText(
+              text: TextSpan(
+                  text: '是否开具发票',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red)
+                    ),
+                  ]),
             ),
             trailing: isInvoice == null
                 ? Icon(Icons.keyboard_arrow_right)
@@ -822,6 +842,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     //单价
     if (price != null && double.parse(price) > 0) {
       purchaseOrder.unitPrice = double.parse(price);
+    }else{
+      purchaseOrder.unitPrice = 0;
     }
     //添加订单行
     if(entries.length > 0 && entries.isNotEmpty){
@@ -832,6 +854,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       if (earnest.earnestMoney != null) {
         purchaseOrder.deposit =
             double.parse(earnest.earnestMoney);
+      }else{
+        purchaseOrder.deposit = 0;
       }
       purchaseOrder.depositPaid = earnest.isEarnestPayment;
       purchaseOrder.depositPaidDate = earnest.estimatePaymentDate;
@@ -855,6 +879,12 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       }
       else if(purchaseOrder.expectedDeliveryDate == null){
         isSubmit = _showValidateMsg(context, '请选择交货日期');
+      }
+      else if(purchaseOrder.machiningType == null){
+        isSubmit = _showValidateMsg(context, '请选择合作方式');
+      }
+      else if(purchaseOrder.invoiceNeeded == null){
+        isSubmit = _showValidateMsg(context, '请选择是否开具发票');
       }else{
         isSubmit = true;
       }
