@@ -8,7 +8,6 @@ import './company/form/my_brand_base_form.dart';
 import './company/my_company_certificate.dart';
 import './company/my_company_contact_way.dart';
 import './company/my_personal_certificate.dart';
-import '../business/orders/quote_item.dart';
 
 /// 认证信息
 class MyBrandPage extends StatefulWidget {
@@ -218,7 +217,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                             'temp/picture.png',
                             package: "assets",
                           )
-                        : NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.purchaseOrder.product.thumbnail.url}'),
+                        : NetworkImage('${widget.purchaseOrder.product.thumbnail.actualUrl}'),
                     fit: BoxFit.cover,
                   )),
             ),
@@ -377,7 +376,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                         image: widget.brand.profilePicture != null
-                            ? NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${widget.brand.profilePicture.url}')
+                            ? NetworkImage('${widget.brand.profilePicture.actualUrl}')
                             : AssetImage(
                                 'temp/picture.png',
                                 package: "assets",

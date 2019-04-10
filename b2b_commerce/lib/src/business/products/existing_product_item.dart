@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/home/product/product_detail.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -20,7 +19,7 @@ class ExistingProductItem extends StatelessWidget{
                   Container(
                     child: product.thumbnail != null ?
                     Image.network(
-                      '${GlobalConfigs.IMAGE_BASIC_URL}${product.thumbnail.url}',
+                      '${product.thumbnail.actualUrl}',
                       width: 100,
                       height: 100,
                       fit: BoxFit.fill,
@@ -87,7 +86,7 @@ class ExistingProductItem extends StatelessWidget{
                     padding: EdgeInsets.all(20),
                     child: product.thumbnail != null ?
                     Image.network(
-                      '${GlobalConfigs.IMAGE_BASIC_URL}${product.thumbnail.url}',
+                      '${product.thumbnail.actualUrl}',
                       fit: BoxFit.scaleDown,
                     )
                         : Container(

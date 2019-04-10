@@ -203,4 +203,4 @@ class HttpManager {
   }
 }
 
-var http$ = HttpManager(GlobalConfigs.APP_BASE_SITE_ID);
+var http$ = HttpManager(GlobalConfigs.B2B_API_PREFIX);

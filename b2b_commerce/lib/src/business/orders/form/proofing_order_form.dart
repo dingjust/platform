@@ -143,7 +143,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                               package: "assets",
                             )
                                 : NetworkImage(
-                                '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo.profilePicture.url}'),
+                                '${widget.quoteModel.requirementOrder.belongTo.profilePicture.actualUrl}'),
                             fit: BoxFit.cover,
                           )),
                     ),
@@ -358,7 +358,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                     image: DecorationImage(
                       image: product.thumbnail != null
                           ? NetworkImage(
-                          '${GlobalConfigs.IMAGE_BASIC_URL}${product.thumbnail.url}')
+                          '${product.thumbnail.actualUrl}')
                           : AssetImage(
                         'temp/picture.png',
                         package: "assets",

@@ -209,7 +209,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                                       order.product.thumbnail != null &&
                                       order.product.thumbnail.url != null
                                   ? NetworkImage(
-                                      '${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}')
+                                      '${order.product.thumbnail.actualUrl}')
                                   : AssetImage(
                                       'temp/picture.png',
                                       package: "assets",
@@ -480,7 +480,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                                 package: "assets",
                               )
                             : NetworkImage(
-                                '${GlobalConfigs.IMAGE_BASIC_URL}${order.purchaser.profilePicture.url}'),
+                                '${order.purchaser.profilePicture.actualUrl}'),
                         fit: BoxFit.cover,
                       )),
                 ),
@@ -829,7 +829,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                                 package: "assets",
                               )
                             : NetworkImage(
-                                '${GlobalConfigs.IMAGE_BASIC_URL}${productionProgress.medias[0].url}'),
+                                '${productionProgress.medias[0].actualUrl}'),
                         fit: BoxFit.fill,
                       )),
                 ),

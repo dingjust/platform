@@ -63,8 +63,8 @@ class UserBLoC extends BLoCBase {
         'username': username,
         'password': password,
         'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
-        'client_id': 'nbyjy', // TODO:
-        'client_secret': 'password' // TODO:
+        'client_id': GlobalConfigs.B2B_CLIENT_ID,
+        'client_secret': GlobalConfigs.B2B_CLIENT_SECRET
       }));
     } on DioError catch (e) {
       print(e);
@@ -132,8 +132,8 @@ class UserBLoC extends BLoCBase {
         loginResponse = await http$.post(
             HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
           'grant_type': GlobalConfigs.GRANT_TYPE_REFRESH_TOKEN,
-          'client_id': 'nbyjy',
-          'client_secret': 'password',
+          'client_id': GlobalConfigs.B2B_CLIENT_ID,
+          'client_secret': GlobalConfigs.B2B_CLIENT_SECRET,
           'refresh_token': localRefreshToken
         }));
       } on DioError catch (e) {
@@ -149,7 +149,7 @@ class UserBLoC extends BLoCBase {
         // 获取用户信息
         Response infoResponse;
         try {
-          String username = LocalStorage.get(GlobalConfigs.USER_KEY);
+          String username =await LocalStorage.get(GlobalConfigs.USER_KEY);
           infoResponse = await http$.get(UserApis.userInfo(username));
         } on DioError catch (e) {
           print(e);

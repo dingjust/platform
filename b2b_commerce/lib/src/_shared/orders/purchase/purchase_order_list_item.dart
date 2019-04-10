@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -230,7 +229,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           package: "assets",
                         )
                       : NetworkImage(
-                          '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.product.thumbnail.url}'),
+                          '${widget.order.product.thumbnail.actualUrl}'),
                   fit: BoxFit.cover,
                 )),
           ),

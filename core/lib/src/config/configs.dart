@@ -3,7 +3,7 @@ class GlobalConfigs {
   static const DEBUG = true;
   //测试
   static const CONTEXT_PATH = 'http://47.106.112.137';
-  static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
+  // static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
   // static const CONTEXT_PATH = 'https://192.168.1.191:9002';
   // 生产
   // static const CONTEXT_PATH = 'https://120.78.211.86:9002';
@@ -39,6 +39,8 @@ class GlobalConfigs {
   /// 应用名称（英文），用于获取应用程序目录
   static const APP_NAME = 'dingjust_platform';
 
-  /// 衣加衣base site id
-  static const APP_BASE_SITE_ID = 'b2b-apparel-zh';
+  /// 通过nginx代理所有b2b前缀的请求
+  static const B2B_API_PREFIX = 'b2b';
+  static const B2B_CLIENT_ID = 'nbyjy';
+  static const B2B_CLIENT_SECRET = 'password';
 }
