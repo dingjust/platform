@@ -958,10 +958,10 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
       else if(purchaseOrder.totalQuantity == null || purchaseOrder.totalQuantity <= 0){
         isSubmit = _showValidateMsg(context, '请输入生产数量');
       }
-      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice <= 0){
+      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice < 0){
         isSubmit = _showValidateMsg(context, '请输入生产单价');
       }
-      else if(purchaseOrder.deposit == null || purchaseOrder.deposit <= 0){
+      else if(purchaseOrder.deposit == null || purchaseOrder.deposit < 0){
         isSubmit = _showValidateMsg(context, '请输入定金');
       }
       else if(purchaseOrder.machiningType == null){
