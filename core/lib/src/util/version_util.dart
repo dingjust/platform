@@ -4,7 +4,7 @@ class VersionUtil {
       if (version1==version2) {
         return 0;
       }
-      List<String> version1Array = version1.split("."); //转义
+      List<String> version1Array = version1.split("."); 
       List<String> version2Array = version2.split(".");
 
 

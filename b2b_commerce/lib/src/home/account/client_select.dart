@@ -22,9 +22,9 @@ class ClientSelectPage extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
                 width: 300,
                 height: 50,
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: FlatButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -38,7 +38,12 @@ class ClientSelectPage extends StatelessWidget {
                   ),
                 ),
               ),
+              Text(
+                '批发商、零售商',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              ),
               Container(
+                margin: EdgeInsets.fromLTRB(0, 30, 0, 20),
                 width: 300,
                 height: 50,
                 child: FlatButton(
