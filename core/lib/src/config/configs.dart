@@ -39,6 +39,8 @@ class GlobalConfigs {
   /// 应用名称（英文），用于获取应用程序目录
   static const APP_NAME = 'dingjust_platform';
 
-  /// 衣加衣base site id
-  static const APP_BASE_SITE_ID = 'b2b-apparel-zh';
+  /// 通过nginx代理所有b2b前缀的请求
+  static const B2B_API_PREFIX = 'b2b';
+  static const B2B_CLIENT_ID = 'nbyjy';
+  static const B2B_CLIENT_SECRET = 'password';
 }
