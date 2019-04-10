@@ -1,12 +1,11 @@
+import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
+import 'package:b2b_commerce/src/_shared/products/product_search_delegate_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'package:b2b_commerce/src/_shared/products/product_search_delegate_page.dart';
-
-import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
 
 class ApparelProductsPage extends StatefulWidget {
