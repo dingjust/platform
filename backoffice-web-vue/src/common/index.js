@@ -1,42 +1,42 @@
 const COMMON_APIS = {
   changePassword(username) {
-    return '/djwebservices/users/' + username + '/password';
+    return '/b2b/users/' + username + '/password';
   },
   getRegions() {
-    return '/djwebservices/addresses/CN/regions';
+    return '/b2b/addresses/CN/regions';
   },
   getCities(parentCode){
-    return '/djwebservices/addresses/' + parentCode + '/cities'
+    return '/b2b/addresses/' + parentCode + '/cities'
   },
   getDistricts(parentCode){
-    return '/djwebservices/addresses/' + parentCode + '/districts'
+    return '/b2b/addresses/' + parentCode + '/districts'
   },
   getCarriers() {
-    return '/djwebservices/carriers';
+    return '/b2b/carriers';
   },
   createColor() {
-    return '/djwebservices/colors/create';
+    return '/b2b/colors/create';
   },
   getColors() {
-    return '/djwebservices/colors';
+    return '/b2b/colors';
   },
   getColor(code) {
-    return '/djwebservices/colors/' + code;
+    return '/b2b/colors/' + code;
   },
   getAllColors() {
-    return '/djwebservices/colors/all';
+    return '/b2b/colors/all';
   },
   createSize() {
-    return '/djwebservices/sizes/create';
+    return '/b2b/sizes/create';
   },
   getSizes() {
-    return '/djwebservices/sizes';
+    return '/b2b/sizes';
   },
   getSize(code) {
-    return '/djwebservices/sizes/' + code;
+    return '/b2b/sizes/' + code;
   },
   getAllSizes() {
-    return '/djwebservices/sizes/all';
+    return '/b2b/sizes/all';
   },
   createSampleProduct() {
     return '/b2b/products/sample/create';
@@ -66,16 +66,16 @@ const COMMON_APIS = {
     return '/b2b/products/sampleCheckoutHist/' + id;
   },
   createCarousel() {
-    return '/djwebservices/carousels/create';
+    return '/b2b/carousels/create';
   },
   updateCarousel(id) {
-    return '/djwebservices/carousels/update/'+id;
+    return '/b2b/carousels/update/'+id;
   },
   getCarousels() {
-    return '/djwebservices/carousels';
+    return '/b2b/carousels';
   },
   getCarousel(id) {
-    return '/djwebservices/carousels/' + id;
+    return '/b2b/carousels/' + id;
   },
   createIndustrialCluster() {
     return '/b2b/industrialClusters/create';
@@ -87,22 +87,22 @@ const COMMON_APIS = {
     return '/b2b/industrialClusters/' + code;
   },
   createLabel() {
-    return '/djwebservices/labels/create';
+    return '/b2b/labels/create';
   },
   getAllLabels() {
-    return '/djwebservices/labels/all';
+    return '/b2b/labels/all';
   },
   getGroupLabels(group) {
-    return '/djwebservices/labels/' + group + '/all';
+    return '/b2b/labels/' + group + '/all';
   },
   getIndustrialClusterLabels() {
     return '/b2b/industrialClusters/labels';
   },
   getLabels() {
-    return '/djwebservices/labels';
+    return '/b2b/labels';
   },
   getLabel(id) {
-    return '/djwebservices/labels/' + id;
+    return '/b2b/labels/' + id;
   },
   getBrandSuppliers() {
     return '/b2b/factories/getSuppliers';
@@ -298,7 +298,7 @@ const COMMON_APIS = {
     return '/b2b/orders/proofing/create/' + quote;
   },
   removeMedia(mediaID) {
-    return '/djwebservices/media/' + mediaID
+    return '/b2b/media/' + mediaID
   }
 };
 
@@ -348,6 +348,12 @@ let NONE_TENANT_APIS = {
   },
   confirmDeliveringOfProofing(code) {
     return '/b2b/orders/proofing/' + code + '/delivering';
+  },
+  cancellingOfProofing(code) {
+    return '/b2b/orders/proofing/' + code + '/cancelling';
+  },
+  cancellingOfPurchaseOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/cancelling';
   },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

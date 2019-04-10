@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:models/models.dart';
 
@@ -43,7 +44,8 @@ class MediaModel extends ItemModel {
   static Map<String, dynamic> toJson(MediaModel model) =>
       _$MediaModelToJson(model);
 
-  static List<String> convertedMediasToJson(
-          List<MediaModel> convertedMedias) =>
+  static List<String> convertedMediasToJson(List<MediaModel> convertedMedias) =>
       null;
+
+  String get actualUrl => '${GlobalConfigs.CONTEXT_PATH}${url}';
 }

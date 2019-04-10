@@ -8,116 +8,11 @@ class SampleProductDetailPage extends StatelessWidget {
   SampleProductModel item;
   SampleProductDetailPage({this.item});
 
-//  List<SampleBorrowReturnHistoryModel> _sampleBorrowHistoryList =
-//  <SampleBorrowReturnHistoryModel>[
-//    SampleBorrowReturnHistoryModel(
-//      sampleProduct: SampleProductModel(
-//        name: '样衣1',
-//        code: 'NA893151351',
-////        thumbnail:
-////        'http://img.alicdn.com/bao/uploaded/O1CN01lBdn6U1X6KmbjwLmM_!!595412874.jpg_80x80.jpg',
-//      ),
-//      type: LendBorrowType.BORROW,
-//      state: SampleProductReturnState.NO_RETURN,
-//      creationDate: DateTime.parse('2019-02-11'),
-//      expectedReturnDate: DateTime.parse('2019-03-01'),
-////        returnedDate: DateTime.parse('2019-03-18'),
-//      relatedParty: '老刘',
-//      quantity: 10,
-//      contactWay: 'weixin',
-//      remake: '',
-//    ),
-//    SampleBorrowReturnHistoryModel(
-//      sampleProduct: SampleProductModel(
-//        name: '样衣2',
-//        code: 'NA893151352',
-////        thumbnail:
-////        'http://img.alicdn.com/bao/uploaded/O1CN017h2qoE1X6KmcjQRml_!!595412874.jpg_80x80.jpg',
-//      ),
-//      type: LendBorrowType.BORROW,
-//      state: SampleProductReturnState.RETURNED,
-//      creationDate: DateTime.parse('2019-02-11'),
-//      expectedReturnDate: DateTime.parse('2019-03-01'),
-//      returnedDate: DateTime.parse('2019-03-18'),
-//      relatedParty: '老刘',
-//      quantity: 10,
-//      contactWay: 'weixin',
-//      remake: '',
-//    ),
-//    SampleBorrowReturnHistoryModel(
-//      sampleProduct: SampleProductModel(
-//        name: '样衣3',
-//        code: 'NA893151353',
-////        thumbnail:
-////        'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-//      ),
-//      type: LendBorrowType.BORROW,
-//      state: SampleProductReturnState.RETURNED,
-//      creationDate: DateTime.parse('2019-02-11'),
-//      expectedReturnDate: DateTime.parse('2019-03-01'),
-//      returnedDate: DateTime.parse('2019-03-18'),
-//      relatedParty: '老刘',
-//      quantity: 10,
-//      contactWay: 'weixin',
-//      remake: '',
-//    ),
-//    SampleBorrowReturnHistoryModel(
-//      sampleProduct: SampleProductModel(
-//        name: '样衣3',
-//        code: 'NA893151353',
-////        thumbnail:
-////        'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-//      ),
-//      type: LendBorrowType.BORROW,
-//      state: SampleProductReturnState.RETURNED,
-//      creationDate: DateTime.parse('2019-02-11'),
-//      expectedReturnDate: DateTime.parse('2019-03-01'),
-//      returnedDate: DateTime.parse('2019-03-18'),
-//      relatedParty: '老刘',
-//      quantity: 10,
-//      contactWay: 'weixin',
-//      remake: '',
-//    ),
-//    SampleBorrowReturnHistoryModel(
-//      sampleProduct: SampleProductModel(
-//        name: '样衣3',
-//        code: 'NA893151353',
-////        thumbnail:
-////        'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-//      ),
-//      type: LendBorrowType.BORROW,
-//      state: SampleProductReturnState.RETURNED,
-//      creationDate: DateTime.parse('2019-02-11'),
-//      expectedReturnDate: DateTime.parse('2019-03-01'),
-//      returnedDate: DateTime.parse('2019-03-18'),
-//      relatedParty: '老刘',
-//      quantity: 10,
-//      contactWay: 'weixin',
-//      remake: '',
-//    ),
-//    SampleBorrowReturnHistoryModel(
-//      sampleProduct: SampleProductModel(
-//        name: '样衣3',
-//        code: 'NA893151353',
-////        thumbnail:
-////        'http://g.search2.alicdn.com/img/i2/107651422/O1CN0171M0es1MNJhJfITfG_!!0-saturn_solar.jpg_220x220.jpg_.webp',
-//      ),
-//      type: LendBorrowType.BORROW,
-//      state: SampleProductReturnState.RETURNED,
-//      creationDate: DateTime.parse('2019-02-11'),
-//      expectedReturnDate: DateTime.parse('2019-03-01'),
-//      returnedDate: DateTime.parse('2019-03-18'),
-//      relatedParty: '老刘',
-//      quantity: 10,
-//      contactWay: 'weixin',
-//      remake: '',
-//    ),
-//  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('样衣详情'),
         actions: <Widget>[

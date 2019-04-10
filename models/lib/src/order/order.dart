@@ -471,10 +471,10 @@ class RequirementInfoModel extends ItemModel {
   @JsonKey(toJson: _mediaToJson)
   List<MediaModel> pictures;
 
-  ///商品名称
+  ///产品名称
   String productName;
 
-  ///商品货号
+  ///产品货号
   String productSkuID;
 
   ///大类
@@ -510,7 +510,7 @@ class RequirementInfoModel extends ItemModel {
   @JsonKey(toJson: _cityDistrictToJson)
   DistrictModel cityDistrict;
 
-  //商品的Code
+  //产品的Code
   String productCode;
 
   RequirementInfoModel({
@@ -1133,7 +1133,7 @@ class ProofingModel extends OrderModel {
   ///  报价单号
   String quoteRef;
 
-  /// 商品信息
+  /// 产品信息
   @JsonKey(toJson: _productToJson, fromJson: _productFromJson)
   ProductModel product;
 

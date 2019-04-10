@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -114,7 +113,7 @@ class CategorySelectState extends State<CategorySelect> {
                 ? Container(
                     padding: EdgeInsets.all(10),
                     child: Image.network(
-                      '${GlobalConfigs.IMAGE_BASIC_URL}${category.thumbnail.url}',
+                      '${category.thumbnail.actualUrl}',
                       fit: BoxFit.cover,
                     ),
                   )
@@ -255,6 +254,6 @@ enum CategoryActionType {
   /// 跳转到工厂列表
   TO_FACTORIES,
 
-  /// 跳转到商品列表
+  /// 跳转到产品列表
   TO_PRODUCTS,
 }

@@ -111,7 +111,7 @@ class _AttachmentsState extends State<Attachments> {
                 return GestureDetector(
                   child: CommonImage.pdf(),
                   onTap: () {
-                    _previewFile(model.url, 'yijiayi', model.mediaType);
+                    _previewFile(model.actualUrl, 'yijiayi', model.mediaType);
                   },
                 );
                 break;
@@ -119,7 +119,7 @@ class _AttachmentsState extends State<Attachments> {
                 return GestureDetector(
                   child: CommonImage.word(),
                   onTap: () {
-                    _previewFile(model.url, 'yijiayi', model.mediaType);
+                    _previewFile(model.actualUrl, 'yijiayi', model.mediaType);
                   },
                 );
                 break;
@@ -127,7 +127,7 @@ class _AttachmentsState extends State<Attachments> {
                 return GestureDetector(
                   child: CommonImage.excel(),
                   onTap: () {
-                    _previewFile(model.url, 'yijiayi', model.mediaType);
+                    _previewFile(model.actualUrl, 'yijiayi', model.mediaType);
                   },
                 );
                 break;
@@ -135,7 +135,7 @@ class _AttachmentsState extends State<Attachments> {
                 return GestureDetector(
                   child: CommonImage.word(),
                   onTap: () {
-                    _previewFile(model.url, 'yijiayi', model.mediaType);
+                    _previewFile(model.actualUrl, 'yijiayi', model.mediaType);
                   },
                 );
                 break;
@@ -150,14 +150,14 @@ class _AttachmentsState extends State<Attachments> {
                       color: Colors.grey,
                       image: DecorationImage(
                         image: NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}'),
+                            '${model.actualUrl}'),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   onTap: () {
                     onPreview(context,
-                        '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}');
+                        '${model.actualUrl}');
                   },
                 );
             }
@@ -183,7 +183,6 @@ class _AttachmentsState extends State<Attachments> {
 
   //文件下载打开
   Future<String> _previewFile(String url, String name, String mediaType) async {
-    String downloadUrl = '${GlobalConfigs.IMAGE_BASIC_URL}${url}';
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -238,7 +237,7 @@ class _AttachmentsState extends State<Attachments> {
     };
 
     try {
-      Response response = await dio.download(downloadUrl, filePath,
+      Response response = await dio.download(url, filePath,
           onReceiveProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
         _streamController.sink.add(received / total);
@@ -390,7 +389,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
             return GestureDetector(
               child: CommonImage.pdf(),
               onTap: () {
-                _previewFile(model.url, 'yijiayi', model.mediaType);
+                _previewFile(model.actualUrl, 'yijiayi', model.mediaType);
               },
               onLongPress: () {
                 _deleteFile(model);
@@ -401,7 +400,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
             return GestureDetector(
               child: CommonImage.word(),
               onTap: () {
-                _previewFile(model.url, 'yijiayi', model.mediaType);
+                _previewFile(model.actualUrl, 'yijiayi', model.mediaType);
               },
               onLongPress: () {
                 _deleteFile(model);
@@ -412,7 +411,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
             return GestureDetector(
               child: CommonImage.excel(),
               onTap: () {
-                _previewFile(model.url, 'yijiayi', model.mediaType);
+                _previewFile(model.actualUrl, 'yijiayi', model.mediaType);
               },
               onLongPress: () {
                 _deleteFile(model);
@@ -430,14 +429,14 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                   color: Colors.grey,
                   image: DecorationImage(
                     image: NetworkImage(
-                        '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}'),
+                        '${model.actualUrl}'),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               onTap: () {
                 onPreview(
-                    context, '${GlobalConfigs.IMAGE_BASIC_URL}${model.url}');
+                    context, '${model.actualUrl}');
               },
               onLongPress: () {
                 if(widget.editable) _deleteFile(model);
@@ -474,7 +473,6 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
   //文件下载打开
   Future<String> _previewFile(String url, String name, String mediaType) async {
-    String downloadUrl = '${GlobalConfigs.IMAGE_BASIC_URL}${url}';
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -527,7 +525,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
       client.idleTimeout = new Duration(seconds: 0);
     };
     try {
-      Response response = await dio.download(downloadUrl, filePath,
+      Response response = await dio.download(url, filePath,
           onReceiveProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
         _streamController.sink.add(received / total);
@@ -639,10 +637,6 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
       Navigator.of(context).pop();
       Navigator.of(context).pop();
-      //写入具体url
-      String baseUrl = response.data['url'];
-      String url = '${GlobalConfigs.IMAGE_BASIC_URL}$baseUrl';
-      response.data['url'] = url;
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表
         widget.list.add(MediaModel.fromJson(response.data));

@@ -80,11 +80,11 @@ class ProfileHomePageState extends State<ProfileHomePage> {
             onPressed: () {
               _scaffoldKey.currentState.showSnackBar(
                 const SnackBar(
-                  content: Text('TODO：商品管理'),
+                  content: Text('TODO：产品管理'),
                 ),
               );
             },
-            title: '商品管理',
+            title: '产品管理',
           ),
           Divider(),
           _MenuItem(

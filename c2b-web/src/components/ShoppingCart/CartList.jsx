@@ -34,7 +34,7 @@ class CartListItem extends React.Component{
       this.props.editQuantity(number,index)
       this.serversQuantity({number,index,entryNumber})
     }else{
-      modalAlert('删除', '是否确定删除定制商品?', [
+      modalAlert('删除', '是否确定删除定制产品?', [
         { text: '取消', onPress: () => console.log('cancel') },
         { text: '确定', onPress: () => this.serversQuantity({number,index,entryNumber}) },
       ])

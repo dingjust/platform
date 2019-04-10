@@ -184,7 +184,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               borderRadius: BorderRadius.circular(5),
               image: DecorationImage(
                 image: NetworkImage(
-                    '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.details.pictures[0].url}'),
+                    '${widget.model.details.pictures[0].actualUrl}'),
                 fit: BoxFit.cover,
               )),
         );
@@ -234,7 +234,8 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.details.majorCategory?.name}   ${widget.model.details.category?.name}   ${widget.model.details.expectedMachiningQuantity}件",
+                      "${widget.model.details.majorCategory == null || widget.model.details.majorCategory.name == null ? '':widget.model.details.majorCategory.name}   ${widget.model.details.category == null || widget.model.details.category.name == null ? '':widget.model.details.category.name}  "
+                          " ${widget.model.details.expectedMachiningQuantity == null ? '':widget.model.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -507,7 +508,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
+        firstDate: new DateTime(1999),
         lastDate: new DateTime(2999));
 
     if (_picked != null) {

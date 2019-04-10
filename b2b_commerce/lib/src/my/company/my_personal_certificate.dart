@@ -114,7 +114,12 @@ class MyPersonalCertificatePageState extends State<MyPersonalCertificatePage>{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text('认证证件',style: TextStyle(color: Colors.grey,fontSize: 16),),
-                  EditableAttachments(list: widget.company.certificates,maxNum: widget.company.certificates.length,editable: false,),
+                  EditableAttachments(list: widget.company.certificates,
+                    maxNum: widget.onlyRead
+                      ? widget.company.certificates.length
+                      : 5,
+                    editable: !widget.onlyRead,
+                  ),
                 ],
               ),
             ),
@@ -138,7 +143,7 @@ class MyPersonalCertificatePageState extends State<MyPersonalCertificatePage>{
                   widget.company.name = _nameController.text;
                   widget.company.certificateOfLegal = _certificateOfLegalController.text;
                   widget.company.contactPhone = _contactPhoneController.text;
-                  await UserRepositoryImpl().applyCertification(widget.company);
+//                  await UserRepositoryImpl().applyCertification(widget.company);
                   UserRepositoryImpl().applyCertification(widget.company).then((a){
                     Navigator.pop(context);
                   });

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +15,14 @@ class ProductionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+        PurchaseOrderModel model =
+            await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
 
         if (model != null) {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ProductionProgressesPage(
-                order: model,
-              ))
-          );
+                    order: model,
+                  )));
         }
       },
       child: Container(
@@ -42,30 +43,32 @@ class ProductionItem extends StatelessWidget {
     );
   }
 
-  Widget _buildCompanyName(BuildContext context){
+  Widget _buildCompanyName(BuildContext context) {
     final bloc = BLoCProvider.of<UserBLoC>(context);
-    if(bloc.isBrandUser){
-      if((order.belongTo != null && order.belongTo.name != null) || order.companyOfSeller != null){
+    if (bloc.isBrandUser) {
+      if ((order.belongTo != null && order.belongTo.name != null) ||
+          order.companyOfSeller != null) {
         return Text(
-          '${order.belongTo != null && order.belongTo.name != null?order.belongTo.name:order.companyOfSeller}',
+          '${order.belongTo != null && order.belongTo.name != null ? order.belongTo.name : order.companyOfSeller}',
           style: TextStyle(fontSize: 16),
           overflow: TextOverflow.ellipsis,
         );
-      }else{
+      } else {
         return Text(
           ' ',
           style: TextStyle(fontSize: 16),
           overflow: TextOverflow.ellipsis,
         );
       }
-    }else{
-      if((order.purchaser != null && order.purchaser.name != null)|| order.companyOfSeller != null){
+    } else {
+      if ((order.purchaser != null && order.purchaser.name != null) ||
+          order.companyOfSeller != null) {
         return Text(
-          '${order.purchaser != null && order.purchaser.name != null?order.purchaser.name:order.companyOfSeller}',
+          '${order.purchaser != null && order.purchaser.name != null ? order.purchaser.name : order.companyOfSeller}',
           style: TextStyle(fontSize: 16),
           overflow: TextOverflow.ellipsis,
         );
-      }else{
+      } else {
         return Text(
           ' ',
           style: TextStyle(fontSize: 16),
@@ -89,22 +92,22 @@ class ProductionItem extends StatelessWidget {
                 child: _buildCompanyName(context),
               ),
               Expanded(
-                child:
-                   order.delayed == true ?
-                Text(
-                  '已延期',
-                  style: TextStyle(
-                    color:Colors.red,
-                    fontSize: 16,
-                  ),
-                ):Container(),
+                child: order.delayed == true
+                    ? Text(
+                        '已延期',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                        ),
+                      )
+                    : Container(),
               ),
               Text(
                 '${order.salesApplication == null ? '' : SalesApplicationLocalizedMap[order.salesApplication]}',
                 style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    ),
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
               )
             ],
           ),
@@ -123,21 +126,7 @@ class ProductionItem extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: Row(
           children: <Widget>[
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: order.product == null || order.product.thumbnail == null ||order.product.thumbnail.url == null?
-                    AssetImage(
-                      'temp/picture.png',
-                      package: "assets",
-                    ):
-                    NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${order.product.thumbnail.url}'),
-                    fit: BoxFit.cover,
-                  )),
-            ),
+            ImageFactory.buildThumbnailImage(order.product?.thumbnail),
             Expanded(
                 child: Container(
                     padding: EdgeInsets.all(5),
@@ -148,13 +137,16 @@ class ProductionItem extends StatelessWidget {
                       children: <Widget>[
                         Align(
                             alignment: Alignment.topLeft,
-                            child: order.product == null ||  order.product.name == null?
-                            Container():
-                            Text(
-                              '${order.product.name}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            )),
+                            child: order.product == null ||
+                                    order.product.name == null
+                                ? Container()
+                                : Text(
+                                    '${order.product.name}',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  )),
                         Align(
                             alignment: Alignment.topLeft,
                             child: Container(
@@ -163,28 +155,27 @@ class ProductionItem extends StatelessWidget {
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(5)),
                               child: Text(
-                                '货号：${order.product == null? '' : order.product.skuID}',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.grey),
+                                '货号：${order.product == null ? '' : order.product.skuID}',
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
                               ),
                             )),
-                         order.product == null ||  order.product.category == null?
-                        Container() :
-                        Container(
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(255, 243, 243, 1),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Text(
-                            "${order.product.category.name} ${sum}件",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Color.fromRGBO(255, 133, 148, 1)),
-                          ),
-                        )
+                        order.product == null || order.product.category == null
+                            ? Container()
+                            : Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(255, 243, 243, 1),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Text(
+                                  "${order.product.category.name} ${sum}件",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Color.fromRGBO(255, 133, 148, 1)),
+                                ),
+                              )
                       ],
-                    ))
-            ),
+                    ))),
             Container(
               width: 80,
               height: 80,
@@ -202,15 +193,14 @@ class ProductionItem extends StatelessWidget {
 
   Widget _buildBottom() {
     return Container(
-      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child:Align(
-        alignment: Alignment.topLeft,
-        child: Text(
-          '最近更新时间：' + DateFormatUtil.format(order.modifiedtime),
-          textAlign: TextAlign.start,
-          style: TextStyle(fontSize: 14),
-        ),
-      )
-    );
+        margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            '最近更新时间：' + DateFormatUtil.format(order.modifiedtime),
+            textAlign: TextAlign.start,
+            style: TextStyle(fontSize: 14),
+          ),
+        ));
   }
 }

@@ -57,7 +57,7 @@ Vue.mixin({
   data() {
     return {
       defaultDateValueFormat: 'yyyy-MM-dd"T"HH:mm:ssZ',
-      mediaUploadUrl: '/djwebservices/media/file/upload',
+      mediaUploadUrl: '/b2b/media/file/upload',
       VIEW_MODE_LIST: 'LIST',
       VIEW_MODE_TABS: 'TABS',
     }

@@ -208,7 +208,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
                         image: NetworkImage(
-                            '${GlobalConfigs.IMAGE_BASIC_URL}${model.product.thumbnail.url}'),
+                            '${GlobalConfigs.CONTEXT_PATH}${model.product.thumbnail.url}'),
                         fit: BoxFit.cover,
                       )),
                 )

@@ -2,8 +2,8 @@ import 'package:b2b_commerce/src/business/products/sample_product_history_form.d
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class SampleProductHistoryItem extends StatelessWidget {
   final SampleBorrowReturnHistoryModel item;
@@ -36,7 +36,7 @@ class SampleProductHistoryItem extends StatelessWidget {
                 offstage: isSampleProductHistory,
                 child: item.images != null && item.images.length > 0?
                       Image.network(
-                        '${GlobalConfigs.IMAGE_BASIC_URL}${item.images[0].url}',
+                        '${item.images[0].actualUrl}',
                           width: 80,
                           height: 80,
                           fit: BoxFit.fill,

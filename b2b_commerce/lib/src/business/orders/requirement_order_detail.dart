@@ -102,7 +102,7 @@ class _RequirementOrderDetailPageState
                                 package: "assets",
                               )
                             : NetworkImage(
-                                '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.belongTo.profilePicture.url}'),
+                                '${widget.order.belongTo.profilePicture.actualUrl}'),
                         fit: BoxFit.cover,
                       )),
                 ),
@@ -370,7 +370,7 @@ class _RequirementOrderDetailPageState
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image: NetworkImage(
-                          '${GlobalConfigs.IMAGE_BASIC_URL}${widget.order.details.pictures[0].url}'),
+                          '${widget.order.details.pictures[0].actualUrl}'),
                       fit: BoxFit.cover,
                     )),
               ),

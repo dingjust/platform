@@ -35,8 +35,8 @@ class AttributeTable extends StatelessWidget {
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             border: TableBorder.all(width: 1.0, color: Colors.grey[300]),
             children: [
-              _buildRow(label: '商品货号', value: product.skuID ?? ''),
-              _buildRow(label: '商品类目', value: product.category.name ?? ''),
+              _buildRow(label: '产品货号', value: product.skuID ?? ''),
+              _buildRow(label: '产品类目', value: product.category.name ?? ''),
               _buildRow(label: '颜色', value: colorString),
               _buildRow(label: '尺码', value: sizeString),
               _buildRow(label: '品牌', value: product.brand ?? ''),

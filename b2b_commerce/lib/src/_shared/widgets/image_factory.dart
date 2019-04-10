@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -26,7 +25,7 @@ class ImageFactory {
   static Widget buildThumbnailImage(
     MediaModel media, {
     double size = 60,
-    BoxFit fit = BoxFit.fill,
+    BoxFit fit = BoxFit.cover,
   }) {
     if (media == null) {
       return buildDefaultThumbnailImage(size: size);
@@ -40,7 +39,7 @@ class ImageFactory {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         image: DecorationImage(
-          image: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${media.url}'),
+          image: NetworkImage('${media.actualUrl}'),
           fit: fit,
         ),
       ),
@@ -50,7 +49,7 @@ class ImageFactory {
   static Widget buildThumbnailImageForList(
     List<MediaModel> medias, {
     double size = 60,
-    BoxFit fit = BoxFit.fill,
+    BoxFit fit = BoxFit.cover,
   }) {
     if (medias == null || medias.isEmpty) {
       return buildDefaultThumbnailImage();
@@ -60,16 +59,25 @@ class ImageFactory {
   }
 
   // 人物画像
-  static Widget buildDefaultAvatar(MediaModel profilePicture, {double radius = 40.0}) {
+  static Widget buildDefaultAvatar(MediaModel profilePicture,
+      {double radius = 40.0}) {
     if (profilePicture == null) {
       return CircleAvatar(
-        child: const Icon(B2BIcons.noPicture, size: 40),
+        backgroundColor: Color.fromRGBO(243, 243, 243, 1),
+        child: Container(
+          padding: EdgeInsets.only(right: 5),
+          child: Icon(
+            B2BIcons.noPicture,
+            color: Color.fromRGBO(200, 200, 200, 1),
+            size: 40,
+          ),
+        ),
         radius: radius,
       );
     }
 
     return CircleAvatar(
-      backgroundImage: NetworkImage('${GlobalConfigs.IMAGE_BASIC_URL}${profilePicture.url}'),
+      backgroundImage: NetworkImage('${profilePicture.actualUrl}'),
       radius: radius,
     );
   }

@@ -19,22 +19,22 @@ class Apis {
 
   /// 获取品牌明细 GET
   static get brand => (uid) {
-        return '/{baseSiteId}/b2b/brands/$uid';
+        return '/{baseSiteId}/brands/$uid';
       };
 
   /// 获取品牌明细 GET
   static get brandUpdate => (uid) {
-        return '/{baseSiteId}/b2b/brands/$uid';
+        return '/{baseSiteId}/brands/$uid';
       };
 
   /// 获取工厂明细 GET
   static get factory => (uid) {
-        return '/{baseSiteId}/b2b/factories/$uid';
+        return '/{baseSiteId}/factories/$uid';
       };
 
   /// 获取工厂明细 GET
   static get factoryUpdate => (uid) {
-        return '/{baseSiteId}/b2b/factories/$uid';
+        return '/{baseSiteId}/factories/$uid';
       };
 
   /// 图片上传
@@ -49,22 +49,22 @@ class Apis {
 
   ///需求发布
   static get publishNewRequirement => () {
-        return '/{baseSiteId}/b2b/orders/requirement/new';
+        return '/{baseSiteId}/orders/requirement/new';
       };
 
   //公司认证
-  static get applyCertification => '/{baseSiteId}/b2b/companies/certification';
+  static get applyCertification => '/{baseSiteId}/companies/certification';
 
   /// 全部工厂列表
-  static get factories => '/{baseSiteId}/b2b/factories';
+  static get factories => '/{baseSiteId}/factories';
 
   //邀请报价工厂列表 传入需求单号
   static get requestQuoteFactories => (String code) {
-     return '/{baseSiteId}/b2b/factories/requirement/$code';
+     return '/{baseSiteId}/factories/requirement/$code';
   };
 
     /// 获取品牌的供应商列表
-    static get factorySuppliers => '/{baseSiteId}/b2b/factories/getSuppliers';
+    static get factorySuppliers => '/{baseSiteId}/factories/getSuppliers';
     /// 获取工厂的供应商列表
-    static get brandsSuppliers => '/{baseSiteId}/b2b/brands/getSuppliers';
+    static get brandsSuppliers => '/{baseSiteId}/brands/getSuppliers';
 }

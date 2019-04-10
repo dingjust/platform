@@ -81,7 +81,7 @@ class _OfflineProductColorSizePageState extends State<OfflineProductColorSizePag
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text('商品颜色尺码信息'),
+            title: Text('产品颜色尺码信息'),
             elevation: 0.5,
             brightness: Brightness.light,
             centerTitle: true,
@@ -189,7 +189,7 @@ class _OfflineProductColorSizePageState extends State<OfflineProductColorSizePag
               });
             },
             child: ShowSelectTile(
-              leadingText: '商品色码',
+              leadingText: '产品色码',
               tralingText: colorSizeSelectText(),
             ),
           ),
@@ -236,7 +236,7 @@ class _OfflineProductColorSizePageState extends State<OfflineProductColorSizePag
               });
             },
             child: ShowSelectTile(
-              leadingText: '商品数量',
+              leadingText: '产品数量',
               tralingText:
               isCheck == false ? '' : '已选择',
             ),

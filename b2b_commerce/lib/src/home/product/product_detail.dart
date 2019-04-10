@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/home/requirement/fast_publish_requirement.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_date_pick.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -33,7 +32,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             mediaType: thumbnail.mediaType,
             mime: thumbnail.mime,
             name: thumbnail.name,
-            url: '${GlobalConfigs.IMAGE_BASIC_URL}${thumbnail.url}',
+            url: '${thumbnail.actualUrl}',
             id: thumbnail.id))
         .toList();
 
@@ -132,7 +131,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               label: '进厂',
               onTap: () async {
                 if(bloc.isBrandUser) {
-                  //获取该工厂的现款商品
+                  //获取该工厂的现款产品
                   ProductsResponse productsResponse = await ProductRepositoryImpl()
                       .getProductsOfFactory(
                       {}, {'size': 3}, widget.product.belongTo.uid);

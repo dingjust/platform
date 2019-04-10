@@ -150,7 +150,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                                 package: "assets",
                               )
                             : NetworkImage(
-                                '${GlobalConfigs.IMAGE_BASIC_URL}${widget.item.supplier.profilePicture.url}'),
+                                '${widget.item.supplier.profilePicture.actualUrl}'),
                         fit: BoxFit.cover,
                       )),
                 ),
@@ -264,7 +264,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-          //获取该工厂的现款商品
+          //获取该工厂的现款产品
           ProductsResponse productsResponse = await ProductRepositoryImpl()
               .getProductsOfFactory({}, {'size': 3}, pageItem.belongTo.uid);
 
@@ -367,7 +367,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 image: pageItem.requirementOrder.details?.pictures != null &&
                         pageItem.requirementOrder.details.pictures.isNotEmpty
                     ? NetworkImage(
-                        '${GlobalConfigs.IMAGE_BASIC_URL}${pageItem.requirementOrder.details.pictures[0].url}')
+                        '${pageItem.requirementOrder.details.pictures[0].actualUrl}')
                     : AssetImage(
                         'temp/picture.png',
                         package: "assets",

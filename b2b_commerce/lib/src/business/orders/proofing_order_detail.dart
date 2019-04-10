@@ -91,7 +91,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                                       widget.model.product.thumbnail != null &&
                                       widget.model.product.thumbnail.url != null
                                   ? NetworkImage(
-                                      '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.product.thumbnail.url}')
+                                      '${widget.model.product.thumbnail.actualUrl}')
                                   : AssetImage(
                                       'temp/picture.png',
                                       package: "assets",
@@ -393,7 +393,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                                   package: "assets",
                                 )
                               : NetworkImage(
-                                  '${GlobalConfigs.IMAGE_BASIC_URL}${widget.model.supplier.profilePicture.url}'),
+                                  '${widget.model.supplier.profilePicture.actualUrl}'),
                           fit: BoxFit.cover,
                         )),
                   ),
@@ -439,7 +439,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-          //获取该工厂的现款商品
+          //获取该工厂的现款产品
           ProductsResponse productsResponse = await ProductRepositoryImpl()
               .getProductsOfFactory({}, {'size': 3}, widget.model.belongTo.uid);
 

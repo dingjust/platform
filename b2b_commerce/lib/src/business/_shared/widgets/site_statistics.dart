@@ -13,7 +13,7 @@ class SiteStatistics extends StatelessWidget {
       Color color = Colors.red;
 
       return Container(
-        width: 80,
+        // width: 80,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -40,16 +40,16 @@ class SiteStatistics extends StatelessWidget {
       );
     }
 
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(24.0),
-      child: Wrap(
-        spacing: 50.0, // 主轴(水平)方向间距
-        runSpacing: 10.0, // 纵轴（垂直）方向间距
-        alignment: WrapAlignment.start,
-        children: items.map((item) {
-          return buildItem(item.label, item.value);
-        }).toList(),
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, //横轴三个子widget
+          childAspectRatio: 1.6),
+      delegate: new SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          //创建子widget
+          return buildItem(items[index].label, items[index].value);
+        },
+        childCount: items.length,
       ),
     );
   }

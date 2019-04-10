@@ -53,20 +53,20 @@ module.exports = {
           '^/authorizationserver': 'authorizationserver'
         }
       },
-      '/djwebservices': {
-        target: 'https://localhost:9002',
-        changeOrigin: true,
-        "secure": false,
-        pathRewrite: {
-          '^/djwebservices': 'djwebservices/v2/b2b-apparel-zh'
-        }
-      },
       '/b2b': {
         target: 'https://localhost:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
-          '^/b2b': 'djwebservices/v2/b2b-apparel-zh/b2b'
+          '^/b2b': 'djwebservices/v2/b2b-apparel-zh'
+        }
+      },
+      '/c2b': {
+        target: 'https://localhost:9002',
+        changeOrigin: true,
+        "secure": false,
+        pathRewrite: {
+          '^/c2b': 'djwebservices/v2/c2b-apparel-zh'
         }
       }
     },
