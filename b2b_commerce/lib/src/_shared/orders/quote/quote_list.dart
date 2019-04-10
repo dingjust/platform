@@ -14,10 +14,12 @@ import './quote_list_item.dart';
 class QuoteList extends StatefulWidget {
   QuoteList({
     Key key,
-    @required this.status,
+    this.status,
+    this.factoryUid,
   }) : super(key: key);
 
   final EnumModel status;
+  final String factoryUid;
 
   final ScrollController scrollController = ScrollController();
   final TextEditingController rejectController = TextEditingController();
@@ -36,7 +38,12 @@ class _QuoteListState extends State<QuoteList> {
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(widget.status.code);
+        if(widget.factoryUid != null){
+          bloc.lodingMoreByFactory(widget.factoryUid);
+        }else{
+          bloc.loadingMoreByStatuses(widget.status.code);
+        }
+
       }
     });
 
@@ -176,7 +183,11 @@ class _QuoteListState extends State<QuoteList> {
   // 子组件刷新数据方法
   void _handleRefresh() {
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
-    bloc.refreshData(widget.status.code);
+    if(widget.factoryUid != null){
+      bloc.getData(widget.factoryUid);
+    }else{
+      bloc.refreshData(widget.status.code);
+    }
   }
 
   void _alertMessage(String message) {
@@ -210,7 +221,12 @@ class _QuoteListState extends State<QuoteList> {
               stream: bloc.stream,
               builder: (BuildContext context, AsyncSnapshot<List<QuoteModel>> snapshot) {
                 if (snapshot.data == null) {
-                  bloc.filterByStatuses(widget.status.code);
+                  if(widget.factoryUid != null){
+                    bloc.getData(widget.factoryUid);
+                  }else{
+                    bloc.filterByStatuses(widget.status.code);
+                  }
+
                   return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                 }
                 if (snapshot.hasData) {

@@ -38,7 +38,7 @@ void main() async {
   }
 
   runApp(BLoCProvider<AppBLoC>(
-    bloc: AppBLoC(),
+    bloc: AppBLoC.instance,
     child: MyApp(),
   ));
 }
@@ -63,7 +63,6 @@ class _MyAppState extends State<MyApp> {
                 home: ClientSelectPage(),
               );
             }
-
             return MyAppHomeDelegate(userType: snapshot.data.type);
           }),
     );

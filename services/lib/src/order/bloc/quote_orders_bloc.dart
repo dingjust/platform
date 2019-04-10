@@ -13,6 +13,8 @@ class QuoteOrdersBLoC extends BLoCBase {
   static QuoteOrdersBLoC get instance => _getInstance();
   static QuoteOrdersBLoC _instance;
 
+  QuoteOrdersResponse quoteResponse;
+
   //锁
   bool lock = false;
 
@@ -114,6 +116,36 @@ class QuoteOrdersBLoC extends BLoCBase {
     _quotesMap[status].data.clear();
     _quotesMap[status].currentPage = 0;
     await filterByStatuses(status);
+  }
+
+
+  //获取供应商的相关全部报价
+  getData(String factoryUid)async{
+    if (!lock) {
+      lock = true;
+      //获取与该工厂全部的报价单
+      quoteResponse = await QuoteOrderRepository().getQuotesByFactory(factoryUid, {});
+      _controller.sink.add(quoteResponse.content);
+      lock = false;
+    }
+  }
+
+  //获取供应商的相关全部报价
+  lodingMoreByFactory(String factoryUid)async{
+    if (!lock) {
+      lock = true;
+      //获取与该工厂全部的报价单
+      if(quoteResponse.number < quoteResponse.totalPages - 1){
+        quoteResponse = await QuoteOrderRepository().getQuotesByFactory(factoryUid, {
+          'page':quoteResponse.number + 1
+        });
+      }else{
+        bottomController.sink.add(true);
+      }
+      loadingController.sink.add(false);
+      _controller.sink.add(quoteResponse.content);
+      lock = false;
+    }
   }
 
   dispose() {

@@ -1,0 +1,72 @@
+@import "../../base.less";
+.textCenter{
+    text-align: center;
+    font-size: @font-size36;
+}
+.componentsBg{
+    padding: 0.15rem;
+    background-color:#e3f0ff;
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    display: flex;
+    box-sizing: border-box;
+    .mark{
+        width: 0.14rem;
+        height: 0.14rem;
+        border-radius: 0.2rem;
+        top: 0.1rem;
+        right: 0.23rem;
+        display: block;
+        background-color: #83B9FF;
+        position: absolute;
+        z-index: 1;
+
+    }
+}
+.hint{
+    position: absolute;
+    bottom: 2rem;
+    left: 0.3rem;
+    width: 1.8rem;
+}
+.active{
+    border-top: 3px solid #2f8aff!important;
+}
+.componentsItem{
+    width: 1.7rem;
+    height: 1.7rem;
+    background-color: #fff;
+    padding-top: 0.1rem;
+    box-sizing: border-box;
+    border: 2px solid #83B9FF;
+    margin-right: 0.14rem;
+    position: relative;
+    img{
+        margin: 0 auto;
+        display: block;
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+
+    p{
+        padding-top: 0.1rem;
+        color: #505050 ;
+    }
+}
+.componentsModal{
+    top: 0;
+    .sixClose{
+        width:0.5rem;
+        height: 0.5rem;
+    }
+}
+.tabBg{
+    padding: 0.025rem 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+    border-top-right-radius: 0.4rem;
+    color: #fff;
+    background-color: #2F8AFF;
+    margin-left: -0.4rem;
+    font-size: @font-size50;
+}

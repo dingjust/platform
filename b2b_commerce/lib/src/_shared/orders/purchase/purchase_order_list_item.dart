@@ -236,7 +236,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
           ),
           Expanded(
               child: Container(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(10),
                   height: 100,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

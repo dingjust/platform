@@ -8,9 +8,10 @@ import '../../widgets/scrolled_to_end_tips.dart';
 import './purchase_order_list_item.dart';
 
 class PurchaseOrderList extends StatefulWidget {
-  PurchaseOrderList({Key key, this.status});
+  PurchaseOrderList({Key key, this.status,this.factoryUid});
 
   final EnumModel status;
+  final String factoryUid;
 
   final ScrollController scrollController = ScrollController();
 
@@ -27,7 +28,12 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(widget.status.code);
+        if(widget.factoryUid != null){
+          bloc.lodingMoreByFactory(widget.factoryUid);
+        }else{
+          bloc.loadingMoreByStatuses(widget.status.code);
+        }
+
       }
     });
 
@@ -57,7 +63,11 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: RefreshIndicator(
         onRefresh: () async {
-          return await bloc.refreshData(widget.status.code);
+          if(widget.factoryUid != null){
+            return await bloc.getData(widget.factoryUid);
+          }else{
+            return await bloc.refreshData(widget.status.code);
+          }
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -68,7 +78,12 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
               // initialData: null,
               builder: (BuildContext context, AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                 if (snapshot.data == null) {
-                  bloc.filterByStatuses(widget.status.code);
+                  if(widget.factoryUid != null){
+                    bloc.getData(widget.factoryUid);
+                  }else{
+                    bloc.filterByStatuses(widget.status.code);
+                  }
+
                   return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                 }
                 if (snapshot.hasData) {

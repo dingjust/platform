@@ -123,62 +123,60 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         },
         child: Container(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          margin: EdgeInsets.only(bottom: 10),
           color: Colors.white,
           child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(widget
-                                              .quoteModel
-                                              .requirementOrder
-                                              .belongTo
-                                              ?.profilePicture !=
-                                          null
-                                      ? '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo.profilePicture.url}'
-                                      : 'http://img.jituwang.com/uploads/allimg/150305/258852-150305121F483.jpg')),
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 10),
-                          height: 70,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                '${widget.quoteModel.requirementOrder.belongTo?.name}',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(36, 38, 41, 1)),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Color.fromRGBO(229, 242, 255, 1),
-                                ),
-                                padding: EdgeInsets.all(2),
-                                child: Text(
-                                  '已认证',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(22, 141, 255, 1)),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: widget.quoteModel.requirementOrder.belongTo == null ||
+                                widget.quoteModel.requirementOrder.belongTo.profilePicture == null
+                                ? AssetImage(
+                              'temp/picture.png',
+                              package: "assets",
+                            )
+                                : NetworkImage(
+                                '${GlobalConfigs.IMAGE_BASIC_URL}${widget.quoteModel.requirementOrder.belongTo.profilePicture.url}'),
+                            fit: BoxFit.cover,
+                          )),
                     ),
+                    Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                '${widget.quoteModel.requirementOrder == null || widget.quoteModel.requirementOrder.belongTo.name == null ?
+                                '' : widget.quoteModel.requirementOrder.belongTo.name}',
+                                textScaleFactor: 1.3,
+                              ),
+                            ),
+                            Container(
+                                margin: EdgeInsets.only(top: 5),
+                                color: Color.fromRGBO(254, 252, 235, 1),
+                                child: widget.quoteModel.requirementOrder != null && widget.quoteModel.requirementOrder.belongTo != null &&
+                                    widget.quoteModel.requirementOrder.belongTo.approvalStatus != null
+                                    && widget.quoteModel.requirementOrder.belongTo.approvalStatus != ArticleApprovalStatus.approved
+                                    ? Text('  已认证  ',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(255, 133, 148, 1),
+                                    ))
+                                    : Text(
+                                  '  未认证  ',
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(255, 133, 148, 1),
+                                  ),
+                                ))
+                          ],
+                        ))
                   ],
                 ),
               ),
@@ -193,8 +191,8 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   Widget _buildProofingInfo() {
     return Container(
+      margin: EdgeInsets.only(top: 5),
         color: Colors.white,
-        margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Column(
           children: <Widget>[
@@ -220,13 +218,13 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                           width: 0.5,
                           color: Color.fromRGBO(200, 200, 200, 1)))),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    '合计',
-                    style: TextStyle(
-                        color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                  Expanded(
+                    child: Text(
+                      '合计',
+                      style: TextStyle(
+                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                    ),
                   ),
                   Text(
                     '￥${totalPrice}',
@@ -479,7 +477,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   }
 
   Widget _buildSampleNum() {
-    if (product != null) {
       return GestureDetector(
         onTap: onSampleNumTap,
         child: Container(
@@ -493,10 +490,23 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Expanded(
-                child: Text(
-                  '样衣数量',
-                  style: TextStyle(
-                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                child: RichText(
+                  text: TextSpan(
+                      text: '样衣数量',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.red)
+                        ),
+                      ]),
                 ),
               ),
               Text(
@@ -512,9 +522,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           ),
         ),
       );
-    } else {
-      return Container();
-    }
   }
 
   void _countTotalPrice(String value) {
@@ -729,7 +736,6 @@ class InputRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       decoration: BoxDecoration(
           border: hasBottom
               ? Border(

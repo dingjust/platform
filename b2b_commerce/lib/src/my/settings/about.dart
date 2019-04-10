@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/common/app_bloc.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class ProfileAboutPage extends StatefulWidget {
@@ -20,7 +22,9 @@ class _ProfileAboutPageState extends State<ProfileAboutPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
-              child: AppProfile(name: '钉单', version: '1.0.0'),
+              child: AppProfile(
+                  name: '钉单',
+                  version: '${AppBLoC.instance.packageInfo.version}'),
             ),
             AppActions(),
             AppProtocols(context),
@@ -72,7 +76,10 @@ class AppActions extends StatelessWidget {
           trailing: Icon(Icons.chevron_right),
           title: const Text('版本更新'),
           leading: const Icon(Icons.shopping_basket),
-          onTap: () {},
+          onTap: () {
+            //TODO版本检测
+            print(VersionUtil.compareVersion('1.4.1', '1.3.1'));
+          },
         )
       ],
     );
