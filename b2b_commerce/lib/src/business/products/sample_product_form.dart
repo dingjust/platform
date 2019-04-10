@@ -36,6 +36,7 @@ class SampleProductFormPageState extends State<SampleProductFormPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('编辑样衣'),
       ),
