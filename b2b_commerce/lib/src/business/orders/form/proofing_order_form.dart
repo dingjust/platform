@@ -69,49 +69,47 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          brightness: Brightness.light,
-          centerTitle: true,
-          elevation: 0.5,
-          title: Text('创建打样订单'),
-        ),
-        body: Container(
-            color: Color.fromRGBO(245, 245, 245, 1),
-            margin: EdgeInsets.only(bottom: 70),
-            child: ListView(
-              children: <Widget>[
-                _buildCompanyInfo(),
-                product == null ?
-                _buildProductSelect()
-                :_buildProduct(),
-                _buildProofingInfo(),
-              ],
-            )),
-        floatingActionButton: FloatingActionButton.extended(
-          icon: Container(
-            width: 0,
-            child: Icon(
-              null,
-              color: Colors.white,
-            ),
+      key: _scaffoldKey,
+      appBar: AppBar(
+        brightness: Brightness.light,
+        centerTitle: true,
+        elevation: 0.5,
+        title: Text('创建打样订单'),
+      ),
+      body: Container(
+          color: Color.fromRGBO(245, 245, 245, 1),
+          margin: EdgeInsets.only(bottom: 70),
+          child: ListView(
+            children: <Widget>[
+              _buildCompanyInfo(),
+              product == null ? _buildProductSelect() : _buildProduct(),
+              _buildProofingInfo(),
+            ],
+          )),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Container(
+          width: 0,
+          child: Icon(
+            null,
+            color: Colors.white,
           ),
-          label: Container(
-              width: 300,
-              child: Center(
-                child: Text(
-                  widget.update ? '修改订单' : '提交订单',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                ),
-              )),
-          onPressed: widget.update ? onUpdate : onCreate,
-          backgroundColor: Colors.amberAccent,
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        );
+        label: Container(
+            width: 300,
+            child: Center(
+              child: Text(
+                widget.update ? '修改订单' : '提交订单',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                ),
+              ),
+            )),
+        onPressed: widget.update ? onUpdate : onCreate,
+        backgroundColor: Colors.amberAccent,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 
   Widget _buildCompanyInfo() {
@@ -136,47 +134,57 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: widget.quoteModel.requirementOrder.belongTo == null ||
-                                widget.quoteModel.requirementOrder.belongTo.profilePicture == null
+                            image: widget.quoteModel.requirementOrder
+                                            .belongTo ==
+                                        null ||
+                                    widget.quoteModel.requirementOrder.belongTo
+                                            .profilePicture ==
+                                        null
                                 ? AssetImage(
-                              'temp/picture.png',
-                              package: "assets",
-                            )
+                                    'temp/picture.png',
+                                    package: "assets",
+                                  )
                                 : NetworkImage(
-                                '${widget.quoteModel.requirementOrder.belongTo.profilePicture.actualUrl}'),
+                                    '${widget.quoteModel.requirementOrder.belongTo.profilePicture.actualUrl}'),
                             fit: BoxFit.cover,
                           )),
                     ),
                     Container(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(bottom: 5),
-                              child: Text(
-                                '${widget.quoteModel.requirementOrder == null || widget.quoteModel.requirementOrder.belongTo.name == null ?
-                                '' : widget.quoteModel.requirementOrder.belongTo.name}',
-                                textScaleFactor: 1.3,
-                              ),
-                            ),
-                            Container(
-                                margin: EdgeInsets.only(top: 5),
-                                color: Color.fromRGBO(254, 252, 235, 1),
-                                child: widget.quoteModel.requirementOrder != null && widget.quoteModel.requirementOrder.belongTo != null &&
-                                    widget.quoteModel.requirementOrder.belongTo.approvalStatus != null
-                                    && widget.quoteModel.requirementOrder.belongTo.approvalStatus != ArticleApprovalStatus.approved
-                                    ? Text('  已认证  ',
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            '${widget.quoteModel.requirementOrder == null || widget.quoteModel.requirementOrder.belongTo.name == null ? '' : widget.quoteModel.requirementOrder.belongTo.name}',
+                            textScaleFactor: 1.3,
+                          ),
+                        ),
+                        Container(
+                            margin: EdgeInsets.only(top: 5),
+                            color: Color.fromRGBO(254, 252, 235, 1),
+                            child: widget.quoteModel.requirementOrder != null &&
+                                    widget.quoteModel.requirementOrder
+                                            .belongTo !=
+                                        null &&
+                                    widget.quoteModel.requirementOrder.belongTo
+                                            .approvalStatus !=
+                                        null &&
+                                    widget.quoteModel.requirementOrder.belongTo
+                                            .approvalStatus !=
+                                        ArticleApprovalStatus.approved
+                                ? Text('  已认证  ',
                                     style: TextStyle(
                                       color: Color.fromRGBO(255, 133, 148, 1),
                                     ))
-                                    : Text(
-                                  '  未认证  ',
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(255, 133, 148, 1),
-                                  ),
-                                ))
-                          ],
-                        ))
+                                : Text(
+                                    '  未认证  ',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(255, 133, 148, 1),
+                                    ),
+                                  ))
+                      ],
+                    ))
                   ],
                 ),
               ),
@@ -191,7 +199,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   Widget _buildProofingInfo() {
     return Container(
-      margin: EdgeInsets.only(top: 5),
+        margin: EdgeInsets.only(top: 5),
         color: Colors.white,
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Column(
@@ -254,7 +262,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     return GestureDetector(
         child: Container(
             color: Colors.white,
-            padding: EdgeInsets.fromLTRB(0,15,0,15),
+            padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -270,29 +278,27 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 remarks == null || remarks == ''
                     ? Icon(Icons.keyboard_arrow_right)
                     : Container(
-                    width: 150,
-                    child: Text(
-                      remarks,
-                      textAlign: TextAlign.end,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey),
-                    )
-                )
+                        width: 150,
+                        child: Text(
+                          remarks,
+                          textAlign: TextAlign.end,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey),
+                        ))
               ],
-            )
-        ),
+            )),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    OfflineOrderInputRemarksPage(
+                builder: (context) => OfflineOrderInputRemarksPage(
                       fieldText: '订单备注',
                       inputType: TextInputType.text,
-                      content: remarks,)),
+                      content: remarks,
+                    )),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
@@ -313,33 +319,27 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   elevation: 0,
                   color: Colors.white10,
                   child: Center(
-                      child:
-                      RichText(
-                        text: TextSpan(
-                            text: '商品选择/创建',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.red)
-                              ),
-                            ]),
-                      ),
-                  )
-              ),
+                    child: RichText(
+                      text: TextSpan(
+                          text: '商品选择/创建',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.red)),
+                          ]),
+                    ),
+                  )),
             ),
             onTap: () {
               _onProductSelect();
-            }
-        )
-    );
+            }));
   }
 
   Widget _buildProduct() {
@@ -357,12 +357,11 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image: product.thumbnail != null
-                          ? NetworkImage(
-                          '${product.thumbnail.actualUrl}')
+                          ? NetworkImage('${product.thumbnail.actualUrl}')
                           : AssetImage(
-                        'temp/picture.png',
-                        package: "assets",
-                      ),
+                              'temp/picture.png',
+                              package: "assets",
+                            ),
                       fit: BoxFit.cover,
                     )),
               ),
@@ -415,8 +414,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         ),
         onTap: () async {
           _onProductSelect();
-        }
-    );
+        });
   }
 
 //  Widget _buildProductSelect() {
@@ -477,51 +475,49 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   }
 
   Widget _buildSampleNum() {
-      return GestureDetector(
-        onTap: onSampleNumTap,
-        child: Container(
-          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-                      width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                      text: '样衣数量',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.red)
-                        ),
-                      ]),
-                ),
+    return GestureDetector(
+      onTap: onSampleNumTap,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: RichText(
+                text: TextSpan(
+                    text: '样衣数量',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red)),
+                    ]),
               ),
-              Text(
-                '${totalQuantity}件',
-                style: TextStyle(color: Colors.grey),
-              ),
-              Icon(
-                Icons.chevron_right,
-                size: 35,
-                color: Color.fromRGBO(180, 180, 180, 1),
-              )
-            ],
-          ),
+            ),
+            Text(
+              '${totalQuantity}件',
+              style: TextStyle(color: Colors.grey),
+            ),
+            Icon(
+              Icons.chevron_right,
+              size: 35,
+              color: Color.fromRGBO(180, 180, 180, 1),
+            )
+          ],
         ),
-      );
+      ),
+    );
   }
 
   void _countTotalPrice(String value) {
@@ -567,20 +563,16 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             title: Text('确定提交？'),
             actions: <Widget>[
               FlatButton(
-                child: Text('取消',
-                    style: TextStyle(
-                        color: Colors.grey
-                    )
-                ),
+                child: Text('取消', style: TextStyle(color: Colors.grey)),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               FlatButton(
-                child: Text('确定',
-                style: TextStyle(
-                  color: Colors.black
-                ),),
+                child: Text(
+                  '确定',
+                  style: TextStyle(color: Colors.black),
+                ),
                 onPressed: () async {
                   //拼装数据
                   ProofingModel model = ProofingModel();
@@ -637,20 +629,13 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           title: Text('确定修改？'),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消',
-                  style: TextStyle(
-                      color: Colors.grey
-                  )),
+              child: Text('取消', style: TextStyle(color: Colors.grey)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定',
-                  style: TextStyle(
-                  color: Colors.black
-                  )
-              ),
+              child: Text('确定', style: TextStyle(color: Colors.black)),
               onPressed: () async {
                 //拼装数据
                 ProofingModel model = ProofingModel();

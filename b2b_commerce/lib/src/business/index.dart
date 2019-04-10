@@ -19,9 +19,14 @@ class BusinessHomePage extends StatefulWidget {
   final UserType userType;
 
   final Map<UserType, List<Widget>> widgets = <UserType, List<Widget>>{
-    UserType.BRAND: <Widget>[BrandSiteStatisticsSection(), BrandMenusSection()],
+    UserType.BRAND: <Widget>[
+      BrandSiteStatisticsSection(),
+      SliverSpacing(),
+      BrandMenusSection(),
+    ],
     UserType.FACTORY: <Widget>[
       FactorySiteStatisticsSection(),
+      SliverSpacing(),
       FactoryMenusSection()
     ]
   };
@@ -42,8 +47,8 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
         elevation: 0.5,
       ),
       body: Container(
-        color: Color.fromRGBO(245, 245, 245, 1),
-        child: ListView(children: widget.widgetsByUserType),
+        color: Colors.white,
+        child: CustomScrollView(slivers: widget.widgetsByUserType),
       ),
     );
   }
@@ -90,7 +95,6 @@ class BrandSiteStatisticsSection extends StatelessWidget {
 class BrandMenusSection extends StatelessWidget {
   Widget _buildOrderMenu() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -111,7 +115,6 @@ class BrandMenusSection extends StatelessWidget {
 
   Widget _buildCompanyMenu() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -132,12 +135,15 @@ class BrandMenusSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+    return SliverList(
+      delegate: SliverChildListDelegate(<Widget>[
         _buildOrderMenu(),
+        Container(
+          height: 10,
+          color: Color.fromRGBO(245, 245, 245, 1),
+        ),
         _buildCompanyMenu(),
-      ],
+      ]),
     );
   }
 }
@@ -156,7 +162,6 @@ class FactorySiteStatisticsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (UserBLoC.instance.currentUser.status == UserStatus.ONLINE) {
-      print('================');
       queryReports();
     }
 
@@ -181,7 +186,6 @@ class FactoryMenusSection extends StatelessWidget {
   Widget _buildOrderMenu() {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(top: 10),
       child: Row(
         children: <Widget>[
           AdvanceMenu('订单管理', <AdvanceMenuItem>[
@@ -200,7 +204,6 @@ class FactoryMenusSection extends StatelessWidget {
   Widget _buildCompanyMenu() {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(top: 10),
       child: Row(
         children: <Widget>[
           AdvanceMenu('工厂管理', <AdvanceMenuItem>[
@@ -220,12 +223,27 @@ class FactoryMenusSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+    return SliverList(
+      delegate: SliverChildListDelegate(<Widget>[
         _buildOrderMenu(),
+        Container(
+          height: 10,
+          color: Color.fromRGBO(245, 245, 245, 1),
+        ),
         _buildCompanyMenu(),
-      ],
+      ]),
+    );
+  }
+}
+
+class SliverSpacing extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Container(
+        height: 10,
+        color: Color.fromRGBO(245, 245, 245, 1),
+      ),
     );
   }
 }

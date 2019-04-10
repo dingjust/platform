@@ -171,7 +171,7 @@ class ProofingOrderItem extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          ImageFactory.buildThumbnailImage(model.product?.thumbnail, size: 25),
+          ImageFactory.buildThumbnailImage(model.product?.thumbnail),
           Expanded(
             flex: 1,
             child: Container(

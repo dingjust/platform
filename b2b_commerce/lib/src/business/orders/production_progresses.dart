@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -208,7 +209,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           package: "assets",
                         ):
                         NetworkImage('${progress.medias[0].actualUrl}'),
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       )),
                 ),
                 onTap: (){
