@@ -120,10 +120,10 @@ class BrandMenusSection extends StatelessWidget {
         children: <Widget>[
           AdvanceMenu('店铺管理', <AdvanceMenuItem>[
             AdvanceMenuItem(
-                MenuItemImage.productManage, '产品管理', AppRoutes.ROUTE_PRODUCTS),
+                MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
             // AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
             //     AppRoutes.ROUTE_EMPLOYEES),
-            AdvanceMenuItem(MenuItemImage.supplierManage, '供应商管理',
+            AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',
                 AppRoutes.ROUTE_SUPPLIERS),
             AdvanceMenuItem(MenuItemImage.clothesManage, '样衣借还',
                 AppRoutes.ROUTE_SAMPLE_GARMENTS),
@@ -207,8 +207,8 @@ class FactoryMenusSection extends StatelessWidget {
       child: Row(
         children: <Widget>[
           AdvanceMenu('工厂管理', <AdvanceMenuItem>[
-            AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
-                AppRoutes.ROUTE_EMPLOYEES),
+            // AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
+            //     AppRoutes.ROUTE_EMPLOYEES),
             AdvanceMenuItem(
                 MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
             AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',

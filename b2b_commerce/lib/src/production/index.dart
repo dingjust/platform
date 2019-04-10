@@ -27,7 +27,7 @@ class _ProductionPageState extends State<ProductionPage> {
           appBar: AppBar(
             elevation: 0,
             title: ProductionSearchInputBox(),
-            brightness: Brightness.dark,
+            brightness: Brightness.light,
             actions: <Widget>[
 //              IconButton(
 //                padding: EdgeInsets.only(right: 20),

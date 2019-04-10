@@ -23,7 +23,7 @@ class _SuppliersPageState extends State<SuppliersPage> {
         brightness: Brightness.light,
         centerTitle: true,
         elevation: 0.5,
-        title: Text('供应商管理'),
+        title: Text('合作商管理'),
         actions: <Widget>[
           IconButton(
             icon: Icon(
