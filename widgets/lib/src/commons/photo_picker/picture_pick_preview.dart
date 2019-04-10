@@ -179,14 +179,14 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image:
-                      NetworkImage('${widget.medias[index].imageUrl}'),
+                      NetworkImage('${widget.medias[index].actualUrl}'),
                       fit: BoxFit.cover,
                     )),
               ),
           ),
           onTap: () {
             onPreview(
-                context,'${widget.medias[index].imageUrl}');
+                context,'${widget.medias[index].actualUrl}');
           },
 
           onLongPress: () {

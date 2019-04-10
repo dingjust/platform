@@ -229,7 +229,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           package: "assets",
                         )
                       : NetworkImage(
-                          '${widget.order.product.thumbnail.imageUrl}'),
+                          '${widget.order.product.thumbnail.actualUrl}'),
                   fit: BoxFit.cover,
                 )),
           ),

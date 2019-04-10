@@ -99,7 +99,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                           package: "assets",
                         )
                             : NetworkImage(
-                            '${widget.quoteModel.requirementOrder.belongTo.profilePicture.imageUrl}'),
+                            '${widget.quoteModel.requirementOrder.belongTo.profilePicture.actualUrl}'),
                         fit: BoxFit.cover,
                       )),
                 ),
@@ -260,7 +260,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                     image: DecorationImage(
                       image: productModel.thumbnail != null
                           ? NetworkImage(
-                              '${productModel.thumbnail.imageUrl}')
+                              '${productModel.thumbnail.actualUrl}')
                           : AssetImage(
                               'temp/picture.png',
                               package: "assets",

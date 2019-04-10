@@ -507,7 +507,7 @@ class Logo extends StatelessWidget {
             shape: BoxShape.circle,
             image: DecorationImage(
               image: NetworkImage(
-                  '${order.belongTo.profilePicture.imageUrl}'),
+                  '${order.belongTo.profilePicture.actualUrl}'),
               fit: BoxFit.cover,
             )),
       );

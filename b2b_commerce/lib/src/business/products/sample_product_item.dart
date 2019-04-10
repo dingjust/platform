@@ -36,7 +36,7 @@ class SampleProductItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                   image: DecorationImage(
                     image: item.pictures.length > 0
-                        ? NetworkImage('${item.pictures[0].imageUrl}')
+                        ? NetworkImage('${item.pictures[0].actualUrl}')
                         : AssetImage(
                             'temp/picture.png',
                             package: "assets",

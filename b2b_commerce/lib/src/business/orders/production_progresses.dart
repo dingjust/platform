@@ -207,7 +207,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           'temp/picture.png',
                           package: "assets",
                         ):
-                        NetworkImage('${progress.medias[0].imageUrl}'),
+                        NetworkImage('${progress.medias[0].actualUrl}'),
                         fit: BoxFit.fill,
                       )),
                 ),

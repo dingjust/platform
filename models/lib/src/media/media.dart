@@ -47,5 +47,5 @@ class MediaModel extends ItemModel {
   static List<String> convertedMediasToJson(List<MediaModel> convertedMedias) =>
       null;
 
-  String get imageUrl => '${GlobalConfigs.CONTEXT_PATH}${url}';
+  String get actualUrl => '${GlobalConfigs.CONTEXT_PATH}${url}';
 }

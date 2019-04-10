@@ -134,7 +134,7 @@ class ProductionItem extends StatelessWidget {
                       'temp/picture.png',
                       package: "assets",
                     ):
-                    NetworkImage('${order.product.thumbnail.imageUrl}'),
+                    NetworkImage('${order.product.thumbnail.actualUrl}'),
                     fit: BoxFit.cover,
                   )),
             ),

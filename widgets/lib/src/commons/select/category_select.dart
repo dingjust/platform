@@ -113,7 +113,7 @@ class CategorySelectState extends State<CategorySelect> {
                 ? Container(
                     padding: EdgeInsets.all(10),
                     child: Image.network(
-                      '${category.thumbnail.imageUrl}',
+                      '${category.thumbnail.actualUrl}',
                       fit: BoxFit.cover,
                     ),
                   )

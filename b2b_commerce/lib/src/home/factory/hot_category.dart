@@ -396,7 +396,7 @@
 //     this.height = 80,
 //     @required this.name,
 //     this.code,
-//     @required this.imageUrl,
+//     @required this.actualUrl,
 //     this.onPressed,
 //   }) : super(key: key);
 

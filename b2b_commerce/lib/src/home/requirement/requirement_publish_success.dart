@@ -135,7 +135,7 @@ class _PublishRequirementSuccessDialogState
               borderRadius: BorderRadius.circular(5),
               image: DecorationImage(
                 image: NetworkImage(
-                    '${widget.model.details.pictures[0].imageUrl}'),
+                    '${widget.model.details.pictures[0].actualUrl}'),
                 fit: BoxFit.cover,
               )),
         );
