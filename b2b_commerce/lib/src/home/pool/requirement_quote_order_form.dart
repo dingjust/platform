@@ -234,7 +234,8 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.details.majorCategory?.name}   ${widget.model.details.category?.name}   ${widget.model.details.expectedMachiningQuantity}件",
+                      "${widget.model.details.majorCategory == null || widget.model.details.majorCategory.name == null ? '':widget.model.details.majorCategory.name}   ${widget.model.details.category == null || widget.model.details.category.name == null ? '':widget.model.details.category.name}  "
+                          " ${widget.model.details.expectedMachiningQuantity == null ? '':widget.model.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
