@@ -8,7 +8,7 @@ class FilterConditionEntry {
     this.onRemind = false,
     this.remindNum,
     this.checked = false,
-    this.isDESC = false});
+    this.isDESC = true});
 
   ///Tab标签
   final String label;

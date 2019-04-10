@@ -207,8 +207,8 @@ class FactoryMenusSection extends StatelessWidget {
       child: Row(
         children: <Widget>[
           AdvanceMenu('工厂管理', <AdvanceMenuItem>[
-            AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
-                AppRoutes.ROUTE_EMPLOYEES),
+            // AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
+            //     AppRoutes.ROUTE_EMPLOYEES),
             AdvanceMenuItem(
                 MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
             AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',
