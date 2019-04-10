@@ -139,7 +139,7 @@ class AddressFormState extends State<AddressFormPage> {
                   Navigator.pop(context);
                   AddressRepositoryImpl().delete(widget.address.id.toString()).then((a){
                     Navigator.pop(context);
-                    AddressBLoC.instance.filterByStatuses();
+                    AddressBLoC.instance.getAddressData();
                   });
                 });
               }
@@ -191,7 +191,7 @@ class AddressFormState extends State<AddressFormPage> {
                 await AddressRepositoryImpl().update(widget.address).then((a)=>Navigator.pop(context));
               }
 
-              AddressBLoC.instance.filterByStatuses();
+              AddressBLoC.instance.getAddressData();
             },
           )
         ],
