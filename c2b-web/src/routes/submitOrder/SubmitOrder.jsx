@@ -63,7 +63,7 @@ class ShoppingCart extends React.Component {
           <List >
             <Item extra="不可开发票" arrow="horizontal" onClick={() => {}}>发票</Item>
             <Item extra={`无可用`} arrow="horizontal" onClick={() => {}}>优惠券</Item>
-            <Item extra={<span className={style.money}><span className={style.tip}>￥</span>{this.props.data&&this.props.data.subTol}</span>} arrow="horizontal">商品金额</Item>
+            <Item extra={<span className={style.money}><span className={style.tip}>￥</span>{this.props.data&&this.props.data.subTol}</span>} arrow="horizontal">产品金额</Item>
             <Item extra={<span className={style.money}><span className={style.tip}>￥</span>{this.props.data&&this.props.data.tolDiscounts}</span>} arrow="horizontal">运费</Item>
             <Item extra={<span className={style.money}>-<span className={style.tip}>￥</span>{this.props.data&&this.props.data.delCost}</span>} arrow="horizontal">优惠</Item>
           </List>

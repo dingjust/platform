@@ -111,7 +111,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                       showDateFilterMenu = false;
                     });
                   }),
-                  FilterEntry('商品大类', () {
+                  FilterEntry('产品大类', () {
                     setState(() {
                       showCategoriesFilterMenu = !showCategoriesFilterMenu;
                       showDateFilterMenu = false;

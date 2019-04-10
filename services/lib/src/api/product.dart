@@ -15,32 +15,32 @@ abstract class ProductApis {
   ///获取风格
   static get styles => '/{baseSiteId}/styles/all';
 
-  ///获取商品列表
+  ///获取产品列表
   static get list => '/{baseSiteId}/products/apparel';
 
-  //品牌获取工厂的现款商品
+  //品牌获取工厂的现款产品
   static get getProductsOfFactories => '/{baseSiteId}/products/apparel/factories';
 
-  //品牌获取工厂的现款商品
+  //品牌获取工厂的现款产品
   static get getProductsOfFactory => (uid) => '/{baseSiteId}/products/apparel/factories/$uid';
 
-  ///根据code获取商品详情
+  ///根据code获取产品详情
   static get detail => (code) => '/{baseSiteId}/products/apparel/$code';
 
-  ///创建商品
+  ///创建产品
   static get create => '/{baseSiteId}/products/apparel/create';
 
-  ///更新商品
+  ///更新产品
   static get update => (code) => '/{baseSiteId}/products/apparel/$code';
 
-  ///删除商品
+  ///删除产品
   static get delete =>
       (code) => '/{baseSiteId}/products/apparel/$code/deleted';
 
-  //商品上架
+  //产品上架
   static get on =>
           (code) => '/{baseSiteId}/products/apparel/$code/on';
-  //商品下架
+  //产品下架
   static get off =>
           (code) => '/{baseSiteId}/products/apparel/$code/off';
 

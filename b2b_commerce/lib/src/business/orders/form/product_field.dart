@@ -39,7 +39,7 @@ class ProductFieldState extends State<ProductField> {
         Divider(height: 0,),
         ListTile(
           leading: Text(
-            '商品货号',
+            '产品货号',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,

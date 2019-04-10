@@ -141,11 +141,11 @@ class _ProductListViewState extends State<ProductListView>{
   }
 
   void _onProudctDeleting(ApparelProductModel product){
-    ShowDialogUtil.showAlertDialog(context, '是否要删除商品', () async {
+    ShowDialogUtil.showAlertDialog(context, '是否要删除产品', () async {
       await ProductRepositoryImpl().delete(product.code);
       Navigator.of(context).pop();
       Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('删除商品成功'),
+        content: Text('删除产品成功'),
         duration: Duration(
           seconds: 2,
         ),
@@ -171,7 +171,7 @@ class _ProductListViewState extends State<ProductListView>{
     });
   }
   void _onProudctProduction(ApparelProductModel product){
-    // TODO: 带到商品，跳到需求页面
+    // TODO: 带到产品，跳到需求页面
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -180,7 +180,7 @@ class _ProductListViewState extends State<ProductListView>{
             )));
   }
   void _onProductShlefing(ApparelProductModel product){
-    //TODO:商品上下架
+    //TODO:产品上下架
     if (product.approvalStatus ==
         ArticleApprovalStatus.approved) {
       ProductRepositoryImpl().off(product.code).then((a) {

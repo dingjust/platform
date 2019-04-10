@@ -85,7 +85,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 child: Center(
                   child: Text(
-                    '导入商品',
+                    '导入产品',
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -100,7 +100,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                         ),
                   ),
                 );
-                //TODO：导入商品后的一系列操作
+                //TODO：导入产品后的一系列操作
                 widget.product = result;
                 if (result != null) {
                   setState(() {
