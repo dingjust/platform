@@ -160,12 +160,23 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-              leading: Text(
-                '商品',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+              leading:  RichText(
+                text: TextSpan(
+                    text: '商品',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red)
+                      ),
+                    ]),
               ),
             trailing: productName == null || productName == ''
                 ? Icon(Icons.keyboard_arrow_right)
@@ -266,12 +277,23 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-            leading: Text(
-              '生产数量',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+            leading:  RichText(
+              text: TextSpan(
+                  text: '生产数量',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red)
+                    ),
+                  ]),
             ),
             trailing: _totalQuantity == null || _totalQuantity < 0
                 ? Icon(Icons.keyboard_arrow_right)
@@ -440,12 +462,23 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-              leading: Text(
-                '交货日期',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+              leading:  RichText(
+                text: TextSpan(
+                    text: '交货日期',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red)
+                      ),
+                    ]),
               ),
               trailing: deliveryDate == null
                   ? Icon(Icons.keyboard_arrow_right)
@@ -820,17 +853,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       else if(purchaseOrder.totalQuantity == null || purchaseOrder.totalQuantity <= 0){
         isSubmit = _showValidateMsg(context, '请输入生产数量');
       }
-      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice <= 0){
-        isSubmit = _showValidateMsg(context, '请输入生产单价');
-      }
-      else if(purchaseOrder.deposit == null || purchaseOrder.deposit < 0){
-        isSubmit = _showValidateMsg(context, '请输入定金');
-      }
-      else if(purchaseOrder.machiningType == null){
-        isSubmit = _showValidateMsg(context, '请选择合作方式');
-      }
-      else if(purchaseOrder.invoiceNeeded == null){
-        isSubmit = _showValidateMsg(context, '请选择是否开具发票');
+      else if(purchaseOrder.expectedDeliveryDate == null){
+        isSubmit = _showValidateMsg(context, '请选择交货日期');
       }else{
         isSubmit = true;
       }

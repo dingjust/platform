@@ -164,10 +164,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           PicturesField(
             model: model,
           ),
-          Offstage(
-            offstage: widget.product == null,
-            child: ProductField(widget.product),
-          ),
+           widget.product == null?
+           _buildProductName(context):
+           ProductField(widget.product),
           CategoryField(
             model,
             product: widget.product,
@@ -184,6 +183,55 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ContactWayField(model),
         ],
       ),
+    );
+  }
+
+  Widget _buildProductName(BuildContext context){
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+            leading: Text(
+              '产品名称',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Container(
+              width: 235,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(model.details.productName ?? '填写',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey),
+                    overflow: TextOverflow.ellipsis),
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  PopupWindowPage(
+                    fieldText: '产品名称',
+                    text: model.details.productName  == null
+                        ? null
+                        : model.details.productName.toString(),
+                  ),
+            ),
+            //接收返回数据并处理
+          ).then((value) {
+            if (value.trim() == '') {
+              model.details.productName  = null;
+            } else {
+              model.details.productName  = value;
+            }
+          });
+        }
     );
   }
 
@@ -293,7 +341,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   /// 发布
   void onPublish(String factoryUid) async {
-    print(factoryUid);
     String code = await RequirementOrderRepository().publishNewRequirement(
         model, factoryUid, factoryUid != null ? true : false);
     if (code != null && code != '') {
