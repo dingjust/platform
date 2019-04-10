@@ -7,7 +7,7 @@
         "roadhog"
     ],
     "scripts": {
-        "start": "roadhog server",
+        "start": "set PORT=3000&&roadhog server",
         "build": "roadhog build",
         "build:dll": "roadhog buildDll",
         "test": "roadhog test",
