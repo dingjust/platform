@@ -1051,15 +1051,16 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 ),
               ),
               onPressed: () async {
-                PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
-                ProductionBLoC.instance.refreshData();
-
                 Navigator.of(context).pop();
-                result == true ?
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) =>
-                        PurchaseOrderDetailPage(order: model)
-                    ), ModalRoute.withName('/')) : null;
+                if(code!= null){
+                  PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
+                  ProductionBLoC.instance.refreshData();
+                  result == true ?
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) =>
+                          PurchaseOrderDetailPage(order: model)
+                      ), ModalRoute.withName('/')) : null;
+                }
               },
             ),
           ],
