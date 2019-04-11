@@ -66,7 +66,7 @@ class ProofingOrderItem extends StatelessWidget {
           children: <Widget>[
             _buildHeader(),
             _buildEntries(),
-            _buildSummary(context),
+            _buildActions(context),
           ],
         ),
         decoration: BoxDecoration(
@@ -286,19 +286,111 @@ class ProofingOrderItem extends StatelessWidget {
       }
     }
 
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            child: Align(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: buttons,
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: buttons ?? [],
+      ),
+    );
+
+  }
+
+  Widget _buildActions(BuildContext context) {
+    List<Widget> buttons;
+
+    //品牌端显示
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      if (model.status == ProofingStatus.PENDING_PAYMENT) {
+        buttons = <Widget>[
+          Container(
+            height: 30,
+            child: FlatButton(
+              onPressed: onProofingCanceling,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: const Color.fromRGBO(255, 70, 70, 1),
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
+              child: const Text('取消订单',
+                  style: const TextStyle(color: Colors.white, fontSize: 16)),
+            ),
+          ),
+          Container(
+            height: 30,
+            child: FlatButton(
+              onPressed: onProofingPaying,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 35),
+              child: Text(
+                ' 去支付 ',
+                style: TextStyle(color: Colors.black, fontSize: 16),
               ),
             ),
           ),
-        )
-      ],
+        ];
+      } else if (model.status == ProofingStatus.SHIPPED) {
+        buttons = <Widget>[
+          Container(),
+          Container(
+            height: 30,
+            child: FlatButton(
+              onPressed: onProofingConfirmReceived,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '确认收货',
+                style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+              ),
+            ),
+          ),
+        ];
+      }
+    } //工厂端显示
+    else {
+      if (model.status == ProofingStatus.PENDING_PAYMENT) {
+        buttons = [
+          Container(),
+          Container(
+            height: 30,
+            child: FlatButton(
+              onPressed: onProofingUpdating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Colors.grey,
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: const Text('修改订单',
+                  style: const TextStyle(color: Colors.white, fontSize: 16)),
+            ),
+          ),
+        ];
+      } else if (model.status == ProofingStatus.PENDING_DELIVERY) {
+        buttons = [
+          Container(),
+          Container(
+            height: 30,
+            child: FlatButton(
+              onPressed: onProofingConfirmDelivered,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '确认发货',
+                style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+              ),
+            ),
+          ),
+        ];
+      }
+    }
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: buttons ?? [],
+      ),
     );
   }
 }

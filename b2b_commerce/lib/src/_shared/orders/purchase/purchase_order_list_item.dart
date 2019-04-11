@@ -295,7 +295,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
               children: <Widget>[
                 Expanded(
                   child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+                    height: 30,
+                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                       child: widget.order.status ==
                           PurchaseOrderStatus.PENDING_PAYMENT
                           ? FlatButton(
@@ -340,6 +341,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                         style: TextStyle(color: Colors.black),
                                       ),
                                       onPressed: () async {
+                                        Navigator.of(context).pop();
                                         bool result =
                                         await PurchaseOrderRepository()
                                             .purchaseOrderCancelling(
@@ -356,7 +358,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                 ),
                 Expanded(
                   child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                    height: 30,
                       child: FlatButton(
                           color: Color(0xFFFFD600),
                           child: Text(
@@ -394,8 +397,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
               ),
               Expanded(
                 child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 30),
+                  height: 30,
+                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                     child: FlatButton(
                         color: Color(0xFFFFD600),
                         child: Text(
@@ -437,8 +440,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
               ),
               Expanded(
                 child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 30),
+                  height: 30,
+                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                     child: FlatButton(
                         color: Color(0xFFFFD600),
                         child: Text(
@@ -480,8 +483,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             ),
             Expanded(
               child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 0, horizontal: 30),
+                height: 30,
+                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                   child: FlatButton(
                       color: Color(0xFFFFD600),
                       child: Text(
@@ -519,8 +522,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             ),
             Expanded(
               child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 0, horizontal: 30),
+                height: 30,
+                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                   child: FlatButton(
                       color: Color(0xFFFFD600),
                       child: Text(
@@ -556,19 +559,19 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
     if (widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
         widget.order.depositPaid == false) {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
             child: Container(),
           ),
           Expanded(
             child: Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 0, horizontal: 30),
+              height: 30,
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                 child: FlatButton(
-                    color: Colors.red,
+                    color: Colors.grey,
                     child: const Text(
-                      '修改金额',
+                      '修改价格',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -628,8 +631,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 0, horizontal: 30),
+                height: 30,
+                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                 child: FlatButton(
                   color: const Color(0xFFFFD600),
                   child: const Text(
@@ -639,6 +642,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       fontSize: 16,
                     ),
                   ),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 0, horizontal: 20),
                   shape: const RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(20))),
                   onPressed: () {
@@ -666,12 +671,12 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 0, horizontal: 30),
+                height: 30,
+                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                 child: FlatButton(
-                  color: Colors.red,
+                  color: Colors.grey,
                   child: const Text(
-                    '修改金额',
+                    '修改价格',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,

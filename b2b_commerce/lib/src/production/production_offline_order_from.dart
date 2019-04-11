@@ -426,7 +426,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         child: Container(
           child: ListTile(
             leading: Text(
-              '生产单价',
+              '订单报价',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -445,7 +445,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(fieldText: '生产单价',inputType: TextInputType.number)),
+                builder: (context) => OfflineOrderInputPage(fieldText: '订单报价',inputType: TextInputType.number)),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
@@ -1051,7 +1051,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 ),
               ),
               onPressed: () async {
-                Navigator.of(context).pop();
                 if(code!= null){
                   PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
                   ProductionBLoC.instance.refreshData();
@@ -1060,6 +1059,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                       MaterialPageRoute(builder: (context) =>
                           PurchaseOrderDetailPage(order: model)
                       ), ModalRoute.withName('/')) : null;
+                }else{
+                  Navigator.of(context).pop();
                 }
               },
             ),

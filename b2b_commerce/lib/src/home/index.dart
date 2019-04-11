@@ -30,11 +30,10 @@ class HomePage extends StatefulWidget {
     UserType.BRAND: <Widget>[
       BrandFirstMenuSection(),
       BrandSecondMenuSection(),
-      BroadcastSection(),
       FastPublishRequirement(),
-      DividerFactory.buildDivider(15),
+      BroadcastSection(),
       BrandTrackingProgressSection(),
-      DividerFactory.buildDivider(40),
+      // DividerFactory.buildDivider(40),
     ],
     UserType.FACTORY: <Widget>[
       FactoryRequirementPoolSection(),
@@ -251,12 +250,12 @@ class BrandSecondMenuSection extends StatelessWidget {
                       adeptAtCategories: [],
                       labels: [],
                       cooperationModes: []),
-                  route: '品牌工厂',
+                  route: '优质工厂',
                 ),
           ),
         );
       },
-      title: '品牌工厂',
+      title: '优质工厂',
       icon: Icon(
         B2BIcons.factory_brand,
         color: Color.fromRGBO(255, 189, 82, 1.0),
@@ -433,7 +432,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
-    if(bloc.currentUser.status != UserStatus.OFFLINE){
+    if (bloc.currentUser.status != UserStatus.OFFLINE) {
       queryReports();
     }
     return Container(

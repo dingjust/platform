@@ -58,7 +58,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
             }
           },
           child: ShowSelectTile(
-            leadingText: '产品类目',
+            leadingText: '产品品类',
             tralingText: _minorCategoryText,
           ),
         ),

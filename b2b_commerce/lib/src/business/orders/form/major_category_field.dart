@@ -34,7 +34,7 @@ class MajorCategoryFieldState extends State<MajorCategoryField>{
         child: Container(
           child: ListTile(
               leading: Text(
-                '产品大类',
+                '面料类别',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,

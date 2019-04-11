@@ -24,7 +24,7 @@ class ExpectedMachiningQuantityFieldState
         child: ListTile(
           leading: RichText(
             text: TextSpan(
-                text: '加工数量',
+                text: '订单数量',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -54,7 +54,7 @@ class ExpectedMachiningQuantityFieldState
           context,
           MaterialPageRoute(
             builder: (context) => PopupWindowPage(
-                  fieldText: '加工数量',
+                  fieldText: '订单数量',
                   inputType: TextInputType.number,
                   text:widget.item.details.expectedMachiningQuantity == null ? null : widget.item.details.expectedMachiningQuantity.toString(),
                 ),

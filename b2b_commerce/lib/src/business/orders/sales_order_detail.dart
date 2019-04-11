@@ -243,7 +243,7 @@ class SaleOrderDetail extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '生产单价：￥56',
+                        '订单报价：￥56',
                         style: TextStyle(fontSize: 16.0, color: Color(0xFFFF4444)),
                       )
                     ],

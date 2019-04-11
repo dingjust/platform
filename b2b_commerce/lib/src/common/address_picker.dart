@@ -143,8 +143,8 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
     areaController = new FixedExtentScrollController();
     setState(() {
       province = widget.data;
-      city = widget.data[provinceIndex]['sub'];
-      area = widget.data[provinceIndex]['sub'][cityIndex]['sub'];
+      city = widget.data[provinceIndex]['cities'];
+      area = widget.data[provinceIndex]['cities'][cityIndex]['districts'];
     });
   }
 
@@ -199,19 +199,19 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                     FlatButton(
                       onPressed: () {
                         Map<String, dynamic> provinceMap = {
-                          "isocode": province[provinceIndex]['code'],
+                          "isocode": province[provinceIndex]['isocode'],
                           "name": province[provinceIndex]['name']
                         };
                         Map<String, dynamic> cityMap = {
-                          "code": province[provinceIndex]['sub'][cityIndex]
+                          "code": province[provinceIndex]['cities'][cityIndex]
                           ['code'],
-                          "name": province[provinceIndex]['sub'][cityIndex]
+                          "name": province[provinceIndex]['cities'][cityIndex]
                           ['name']
                         };
                         Map<String, dynamic> areaMap = {
-                          "code": province[provinceIndex]['sub'][cityIndex]['sub']
+                          "code": province[provinceIndex]['cities'][cityIndex]['districts']
                           [areaIndex]['code'],
-                          "name": province[provinceIndex]['sub'][cityIndex]['sub']
+                          "name": province[provinceIndex]['cities'][cityIndex]['districts']
                           [areaIndex]['name']
                         };
                         if (widget.selectProvince != null) {
@@ -261,9 +261,9 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                         areaIndex = 0;
                         cityController.jumpToItem(0);
                         areaController.jumpToItem(0);
-                        city = widget.data[provinceIndex]['sub'];
+                        city = widget.data[provinceIndex]['cities'];
                         area =
-                        widget.data[provinceIndex]['sub'][cityIndex]['sub'];
+                        widget.data[provinceIndex]['cities'][cityIndex]['districts'];
                       });
                     },
                   ),
@@ -287,7 +287,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                         areaIndex = 0;
                         areaController.jumpToItem(0);
                         area =
-                        widget.data[provinceIndex]['sub'][cityIndex]['sub'];
+                        widget.data[provinceIndex]['cities'][cityIndex]['districts'];
                       });
                     },
                   ),

@@ -1,4 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
+import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_online_order_from.dart';
@@ -455,7 +457,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text('生产单价'),
+                    child: Text('订单报价'),
                   ),
                   Text(
                     '￥ ${pageItem.unitPrice}',
@@ -480,7 +482,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 15),
-                            child: Text('面料单价'),
+                            child: Text('面料价格'),
                           ),
                         ),
                         Container(
@@ -504,7 +506,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 15),
-                            child: Text('辅料单价'),
+                            child: Text('辅料价格'),
                           ),
                         ),
                         Text(
@@ -526,7 +528,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 15),
-                            child: Text('加工单价'),
+                            child: Text('加工价格'),
                           ),
                         ),
                         Text(
@@ -548,7 +550,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 15),
-                            child: Text('其他'),
+                            child: Text('其他价格'),
                           ),
                         ),
                         Text(
@@ -674,31 +676,29 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
       if (pageItem.state == QuoteState.SELLER_SUBMITTED) {
         buttons = <Widget>[
           Container(
-            height: 40,
-            width: 150,
+            height: 30,
             margin: EdgeInsets.only(right: 20),
             child: FlatButton(
                 onPressed: onReject,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 color: Colors.red,
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 45),
                 child: Text(
-                  '拒绝报价',
+                  '拒绝工厂',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 )),
           ),
           Container(
-            width: 150,
-            height: 40,
+            height: 30,
             child: FlatButton(
                 onPressed: onApprove,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 color: Color.fromRGBO(255, 214, 12, 1),
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 45),
                 child: Text(
-                  '确认报价',
+                  '确认工厂',
                   style: TextStyle(
                       color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 )),
@@ -710,14 +710,13 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
       if (pageItem.state == QuoteState.SELLER_SUBMITTED) {
         buttons = [
           Container(
-            width: 250,
-            height: 40,
+            height: 30,
             child: FlatButton(
                 onPressed: onUpdateQuote,
                 shape: RoundedRectangleBorder(
                     side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
                     borderRadius: BorderRadius.circular(20)),
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 120),
                 child: Text(
                   '修改报价',
                   style: TextStyle(
@@ -727,9 +726,9 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         ];
       } else if (pageItem.state == QuoteState.BUYER_APPROVED) {
         buttons = <Widget>[
+          pageItem.activeProofing == null ?
           Container(
-            width: 150,
-            height: 40,
+            height: 30,
             margin: EdgeInsets.only(right: 20),
             child: FlatButton(
                 onPressed: onCreateProofings,
@@ -742,10 +741,63 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   style: TextStyle(
                       color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 )),
+          ):Container(
+            height: 30,
+            child: FlatButton(
+              onPressed: () async{
+                QuoteModel quote = await QuoteOrderRepository().getQuoteDetails(pageItem.code);
+                if(quote.activeProofing?.code != null){
+                  //查询明细
+                  ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(quote.activeProofing.code);
+                  if (detailModel != null) {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) =>
+                            ProofingOrderDetailPage(model: detailModel)
+                        )
+                    );
+                  }
+                }else{
+                  showDialog<void>(
+                    context: context,
+                    barrierDismissible: false, // user must tap button!
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('提示',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),),
+                        content: Text('该订单已被取消'),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text(
+                              '确定',
+                              style: TextStyle(
+                                  color: Colors.black
+                              ),
+                            ),
+                            onPressed: () async {
+                              QuoteOrdersBLoC().refreshData('ALL');
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              color: Colors.grey,
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '查看打样订单',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
           ),
+          pageItem.activePurchaseOrder == null ?
           Container(
-            width: 150,
-            height: 40,
+            height: 30,
             child: FlatButton(
                 onPressed: onCreateProduction,
                 shape: RoundedRectangleBorder(
@@ -757,19 +809,71 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   style: TextStyle(
                       color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 )),
-          )
+          ):Container(
+            height: 30,
+            child: FlatButton(
+              onPressed: () async {
+                QuoteModel quote = await QuoteOrderRepository().getQuoteDetails(pageItem.code);
+                if (quote.activePurchaseOrder?.code != null) {
+                  PurchaseOrderModel purchase = await PurchaseOrderRepository()
+                      .getPurchaseOrderDetail(quote.activePurchaseOrder.code);
+                  if (purchase != null) {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) =>
+                            PurchaseOrderDetailPage(order: purchase)
+                        )
+                    );
+                  }
+                } else {
+                  showDialog<void>(
+                    context: context,
+                    barrierDismissible: false, // user must tap button!
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('提示',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),),
+                        content: Text('该订单已被取消'),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text(
+                              '确定',
+                              style: TextStyle(
+                                  color: Colors.black
+                              ),
+                            ),
+                            onPressed: () async {
+                              QuoteOrdersBLoC().refreshData('ALL');
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              color: Colors.grey,
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '查看生产订单',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ),
         ];
       } else if(pageItem.requirementOrder.status == RequirementOrderStatus.PENDING_QUOTE){
         buttons = [
           Container(
-            width: 250,
-            height: 40,
+            height: 30,
             child: FlatButton(
                 onPressed: onQuoteAgain,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 color: Color.fromRGBO(255, 70, 70, 1),
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 120),
                 child: Text(
                   '重新报价',
                   style: TextStyle(color: Colors.white, fontSize: 16),
