@@ -12,11 +12,11 @@
           </el-button>
           <el-button v-if="isFactory()&&props.item.state=='BUYER_APPROVED'" type="text" icon="el-icon-edit"
                      @click="onCreatePurchaseOrder(props.item)">
-            生成生产订单
+            生产
           </el-button>
           <el-button v-if="isFactory()&&props.item.state=='BUYER_APPROVED'" type="text" icon="el-icon-edit"
                      @click="onCreateProofing(props.item)">
-            生成打样单
+            打样
           </el-button>
           <el-button v-if="isFactory()&&props.item.state=='BUYER_REJECTED'&&props.item.requirementOrder.status=='PENDING_QUOTE'" type="text" icon="el-icon-edit"
                      @click="onReQuote(props.item)">
