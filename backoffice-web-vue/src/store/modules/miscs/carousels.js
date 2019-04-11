@@ -13,6 +13,7 @@ const state = {
   },
   formData: {
     id: null,
+    active:true,
     uid: '',
     name: '',
     type:'',

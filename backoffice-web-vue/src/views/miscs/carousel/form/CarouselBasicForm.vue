@@ -62,7 +62,15 @@
   export default {
     name: 'CarouselBasicForm',
     props: ['slotData', 'readOnly'],
-    methods: {},
+    methods: {
+      validate(callback) {
+        if(this.$refs['form'].validate(callback)){
+          return false;
+        }
+        return true;
+      }
+
+    },
     data() {
       return {
         rules: {
