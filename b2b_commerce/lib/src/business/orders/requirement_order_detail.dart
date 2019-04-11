@@ -209,7 +209,7 @@ class _RequirementOrderDetailPageState
   Widget _buildHeader() {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
@@ -573,62 +573,97 @@ class _RequirementOrderDetailPageState
 
   Widget _buildButtonGroups() {
     //品牌端显示
-    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-      return Row(
-        mainAxisAlignment:
-            widget.order.status == RequirementOrderStatus.COMPLETED
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-            width: 180,
-            child: FlatButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                color: Colors.red,
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                child: Text(
-                  '重新发布需求',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                )),
-          ),
-          widget.order.status == RequirementOrderStatus.COMPLETED
-              ? Container()
-              : Container(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-                  width: 180,
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND && widget.order.status == RequirementOrderStatus.PENDING_QUOTE) {
+      return Container(
+        margin: EdgeInsets.only(bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
                   child: FlatButton(
+                      color: Colors.red,
+                      child: Text(
+                        '重新发布需求',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      onPressed: () async {
+                        onReview();
+                      })
+              ),
+            ),
+            Expanded(
+              child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+                  child: FlatButton(
+                      color: Color(0xFFFFD600),
+                      child: Text(
+                        '邀请工厂报价',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => FactoryPage(
-                                    FactoryCondition(
-                                      starLevel: 0,
-                                      adeptAtCategories: [],
-                                      labels: [],
-                                      cooperationModes: []
-                                    ),
-                                    requirementCode: widget.order.code,
-                                    route: '全部工厂',
-                                  )),
+                                FactoryCondition(
+                                    starLevel: 0,
+                                    adeptAtCategories: [],
+                                    labels: [],
+                                    cooperationModes: []
+                                ),
+                                requirementCode: widget.order.code,
+                                route: '全部工厂',
+                              )),
                         );
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                      child: Text(
-                        '邀请工厂报价',
-                        style: TextStyle(color: Colors.black, fontSize: 16),
-                      )),
-                ),
-        ],
+                      })
+              ),
+            ),
+          ],
+        ),
       );
-    } else {
+    } else if(UserBLoC.instance.currentUser.type == UserType.BRAND && widget.order.status != RequirementOrderStatus.PENDING_QUOTE){
+      return Container(
+        width: double.infinity,
+        child: Container(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+          child:FlatButton(
+              color: Colors.red,
+              child: Text(
+                '重新发布需求',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+              shape: const RoundedRectangleBorder(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              onPressed: () async {
+                onReview();
+              })
+        ),
+      );
+    }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       return Container(
         width: double.infinity,
         child: Container(
@@ -661,6 +696,8 @@ class _RequirementOrderDetailPageState
               )),
         ),
       );
+    }else{
+      return Container();
     }
   }
 
@@ -669,6 +706,14 @@ class _RequirementOrderDetailPageState
         builder: (context) => RequirementOrderFrom(
               order: widget.order,
             )));
+  }
+
+  void onReview() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RequirementOrderFrom(
+          order: widget.order,
+          isReview: true,
+        )));
   }
 
   //拨打电话或发短信

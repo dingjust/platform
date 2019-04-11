@@ -407,7 +407,7 @@ class FactoryModel extends B2BUnitModel {
   //响应报价时间
   int responseQuotedTime;
 
-  //现货商品
+  //现货产品
   @JsonKey(toJson: _productToJson)
   List<ProductModel> products;
 

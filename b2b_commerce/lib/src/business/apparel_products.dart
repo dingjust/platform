@@ -1,12 +1,11 @@
+import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
+import 'package:b2b_commerce/src/_shared/products/product_search_delegate_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'package:b2b_commerce/src/_shared/products/product_search_delegate_page.dart';
-
-import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
 import 'products/apparel_product_form.dart';
 
 class ApparelProductsPage extends StatefulWidget {
@@ -21,10 +20,10 @@ class ApparelProductsPage extends StatefulWidget {
 
 class _ApparelProductsPageState extends State<ApparelProductsPage>{
   final List<EnumModel> _statuses = UserBLoC.instance.currentUser.type == UserType.FACTORY ? <EnumModel>[
-    EnumModel('approved', '上架商品'),
-    EnumModel('unapproved', '下架商品'),
+    EnumModel('approved', '上架产品'),
+    EnumModel('unapproved', '下架产品'),
   ] : [
-    EnumModel('ALL', '全部商品'),
+    EnumModel('ALL', '全部产品'),
   ];
 
   @override
@@ -40,7 +39,7 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>{
           appBar: AppBar(
             elevation: 0.5,
             centerTitle: true,
-            title: Text('商品管理'),
+            title: Text('产品管理'),
             actions: <Widget>[
               IconButton(
                 icon: Icon(

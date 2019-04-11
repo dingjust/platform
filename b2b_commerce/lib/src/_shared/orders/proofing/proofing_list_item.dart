@@ -171,7 +171,7 @@ class ProofingOrderItem extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          ImageFactory.buildThumbnailImage(model.product?.thumbnail, size: 25),
+          ImageFactory.buildThumbnailImage(model.product?.thumbnail),
           Expanded(
             flex: 1,
             child: Container(
@@ -234,7 +234,7 @@ class ProofingOrderItem extends StatelessWidget {
           side: const BorderSide(color: const Color.fromRGBO(255, 45, 45, 1)),
           borderRadius: BorderRadius.circular(20),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
         child: Text(
           '修改订单',
           style: const TextStyle(color: const Color.fromRGBO(255, 45, 45, 1), fontSize: 18),
@@ -290,7 +290,6 @@ class ProofingOrderItem extends StatelessWidget {
       children: <Widget>[
         Expanded(
           child: Container(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Align(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

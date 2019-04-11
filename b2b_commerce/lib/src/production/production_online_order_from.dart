@@ -153,7 +153,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                 color: Colors.white10,
                 child: Center(child: RichText(
                   text: TextSpan(
-                      text: '商品选择/创建',
+                      text: '产品选择/创建',
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -953,15 +953,15 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     try {
       //非空验证
       if(purchaseOrder.entries == null || purchaseOrder.entries.length <= 0){
-        isSubmit = _showValidateMsg(context, '请选择商品');
+        isSubmit = _showValidateMsg(context, '请选择产品');
       }
       else if(purchaseOrder.totalQuantity == null || purchaseOrder.totalQuantity <= 0){
         isSubmit = _showValidateMsg(context, '请输入生产数量');
       }
-      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice <= 0){
+      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice < 0){
         isSubmit = _showValidateMsg(context, '请输入生产单价');
       }
-      else if(purchaseOrder.deposit == null || purchaseOrder.deposit <= 0){
+      else if(purchaseOrder.deposit == null || purchaseOrder.deposit < 0){
         isSubmit = _showValidateMsg(context, '请输入定金');
       }
       else if(purchaseOrder.machiningType == null){

@@ -1,9 +1,8 @@
 import 'dart:io';
 
+import 'package:b2b_commerce/src/_shared/products/product_search_input.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
-
-import 'package:b2b_commerce/src/_shared/products/product_search_input.dart';
 
 List<File> _BOMList = [];
 
@@ -16,7 +15,7 @@ class _RequirementImportProductState extends State<RequirementImportProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('我的商品'),
+          title: Text('我的产品'),
           elevation: 0.5,
           brightness: Brightness.light,
           centerTitle: true,
@@ -52,7 +51,7 @@ class _RequirementImportProductState extends State<RequirementImportProduct> {
       height: 270,
       child: Column(
         children: <Widget>[
-          _buildTips(context, '按照现有商品生产'),
+          _buildTips(context, '按照现有产品生产'),
           _buildSearch(context),
         ],
       ),
@@ -79,7 +78,7 @@ class _RequirementImportProductState extends State<RequirementImportProduct> {
         children: <Widget>[
           ProductSearchInput(
             width: 300,
-            tips: '请输入商品名或货号',
+            tips: '请输入产品名或货号',
           ),
           Expanded(
               child: Container(

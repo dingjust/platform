@@ -117,7 +117,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                       showDateFilterMenu = false;
                     });
                   }),
-                  FilterEntry('商品大类', () {
+                  FilterEntry('产品大类', () {
                     setState(() {
                       showCategoriesFilterMenu = !showCategoriesFilterMenu;
                       showDateFilterMenu = false;

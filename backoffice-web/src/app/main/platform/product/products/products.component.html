@@ -19,7 +19,7 @@
                     shopping_basket
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    商品
+                    产品
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -55,19 +55,19 @@
 
                 <!-- code Column -->
                 <ng-container matColumnDef="code">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>商品编码</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>产品编码</mat-header-cell>
                     <mat-cell *matCellDef="let model">{{model.code}}</mat-cell>
                 </ng-container>
 
                 <!-- name Column -->
                 <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>商品名称</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>产品名称</mat-header-cell>
                     <mat-cell *matCellDef="let model">{{model.name}}</mat-cell>
                 </ng-container>
 
                 <!-- skuID Column -->
                 <ng-container matColumnDef="skuID">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>供应商商品编码</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>供应商产品编码</mat-header-cell>
                     <mat-cell *matCellDef="let model">{{model.skuID}}</mat-cell>
                 </ng-container>
 

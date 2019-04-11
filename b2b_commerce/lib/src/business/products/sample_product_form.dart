@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class SampleProductFormPage extends StatefulWidget {
   SampleProductModel item;
@@ -36,6 +35,7 @@ class SampleProductFormPageState extends State<SampleProductFormPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        elevation: 0.5,
         centerTitle: true,
         title: Text('编辑样衣'),
       ),

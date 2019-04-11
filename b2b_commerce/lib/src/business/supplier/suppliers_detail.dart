@@ -612,7 +612,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
     );
   }
 
-  //现款商品
+  //现款产品
   Widget _buildExistingProductItem(BuildContext context) {
     return GestureDetector(
         child: Container(
@@ -626,7 +626,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                     Container(
                       width: 110,
                       child: Text(
-                        '现款商品',
+                        '现款产品',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -1064,7 +1064,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                 '共' +
                     widget.supplierModel.purchaseOrder.totalQuantity
                         .toString() +
-                    '件商品   合计： ￥' +
+                    '件产品   合计： ￥' +
                     widget.supplierModel.purchaseOrder.totalPrice.toString(),
                 style: TextStyle(fontSize: 16, color: Colors.red),
               ),

@@ -254,6 +254,6 @@ enum CategoryActionType {
   /// 跳转到工厂列表
   TO_FACTORIES,
 
-  /// 跳转到商品列表
+  /// 跳转到产品列表
   TO_PRODUCTS,
 }

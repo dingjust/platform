@@ -1,5 +1,5 @@
-import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
 import 'package:core/core.dart';
@@ -128,11 +128,11 @@ class _ApparelProductListState extends State<ApparelProductList>{
   }
 
   void _onProudctDeleting(ApparelProductModel product){
-    ShowDialogUtil.showAlertDialog(context, '是否要删除商品', () async {
+    ShowDialogUtil.showAlertDialog(context, '是否要删除产品', () async {
       await ProductRepositoryImpl().delete(product.code);
       Navigator.of(context).pop();
       Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('删除商品成功'),
+        content: Text('删除产品成功'),
         duration: Duration(
           seconds: 2,
         ),
@@ -158,7 +158,7 @@ class _ApparelProductListState extends State<ApparelProductList>{
     });
   }
   void _onProudctProduction(ApparelProductModel product){
-    // TODO: 带到商品，跳到需求页面
+    // TODO: 带到产品，跳到需求页面
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -167,7 +167,7 @@ class _ApparelProductListState extends State<ApparelProductList>{
             )));
   }
   void _onProductShlefing(ApparelProductModel product){
-    //TODO:商品上下架
+    //TODO:产品上下架
     if (product.approvalStatus ==
         ArticleApprovalStatus.approved) {
       ProductRepositoryImpl().off(product.code).then((a) {

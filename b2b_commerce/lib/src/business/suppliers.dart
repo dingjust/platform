@@ -23,7 +23,7 @@ class _SuppliersPageState extends State<SuppliersPage> {
         brightness: Brightness.light,
         centerTitle: true,
         elevation: 0.5,
-        title: Text('供应商管理'),
+        title: Text('合作商管理'),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -255,7 +255,7 @@ class SuppliersItem extends StatelessWidget {
         });
         if (ordersResponse.content.length > 0) purchaseOrderModel = ordersResponse.content[0];
 
-        //获取该工厂的现款商品
+        //获取该工厂的现款产品
         ProductsResponse productsResponse = await ProductRepositoryImpl()
             .getProductsOfFactory({}, {'size': 3}, supplierModel.uid);
 

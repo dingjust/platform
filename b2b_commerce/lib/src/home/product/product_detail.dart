@@ -131,7 +131,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               label: '进厂',
               onTap: () async {
                 if(bloc.isBrandUser) {
-                  //获取该工厂的现款商品
+                  //获取该工厂的现款产品
                   ProductsResponse productsResponse = await ProductRepositoryImpl()
                       .getProductsOfFactory(
                       {}, {'size': 3}, widget.product.belongTo.uid);

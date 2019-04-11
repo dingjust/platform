@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 
 part 'address_response.g.dart';
 
-/// 商品列表响应
+/// 产品列表响应
 @JsonSerializable()
 class AddressResponse {
   final int number;

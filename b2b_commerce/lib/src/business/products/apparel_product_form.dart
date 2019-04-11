@@ -1,9 +1,7 @@
-import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/products/form/prices_field.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -66,7 +64,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         appBar: AppBar(
           elevation: 0.5,
           centerTitle: true,
-          title: Text('编辑商品'),
+          title: Text('编辑产品'),
           actions: <Widget>[
             IconButton(
               icon: Text(
@@ -78,21 +76,21 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                            content: Text('请输入商品名称'),
+                            content: Text('请输入产品名称'),
                           ));
                   return;
                 } else if (widget.item.skuID == null) {
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                            content: Text('请输入商品货号'),
+                            content: Text('请输入产品货号'),
                           ));
                   return;
                 } else if (widget.item.category == null) {
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                            content: Text('请输入商品类别'),
+                            content: Text('请输入产品类别'),
                           ));
                   return;
                 }
@@ -136,8 +134,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _nameFocusNode,
                 controller: _nameController,
-                leadingText: '商品名称',
-                hintText: '请输入商品名称',
+                leadingText: '产品名称',
+                hintText: '请输入产品名称',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   widget.item.name = value;
@@ -150,8 +148,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _skuIDFocusNode,
                 controller: _skuIDController,
-                leadingText: '商品货号',
-                hintText: '请输入商品货号',
+                leadingText: '产品货号',
+                hintText: '请输入产品货号',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   widget.item.skuID = value;
@@ -226,7 +224,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                         labelPadding:
                             EdgeInsets.symmetric(vertical: 4, horizontal: 22),
                         labelStyle: TextStyle(fontSize: 16),
-                        label: Text('发布商品'),
+                        label: Text('发布产品'),
                         onPressed: () {
                           // TODO:默认下架
                         },

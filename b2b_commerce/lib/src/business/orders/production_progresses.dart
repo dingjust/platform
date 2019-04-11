@@ -194,7 +194,24 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 ),
               ),
               GestureDetector(
-                child: Container(
+                child: progress.medias == null || progress.medias.isEmpty?
+                Container(
+                  margin: EdgeInsets.fromLTRB(0,0,15,0),
+                  padding: EdgeInsets.fromLTRB(0,0, 10,0),
+                  child: Center(
+                    child: Icon(
+                      B2BIcons.noPicture,
+                      color: Color.fromRGBO(200, 200, 200, 1),
+                      size: 60,
+                    ),
+                  ),
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Color.fromRGBO(243, 243, 243, 1)),
+                ):
+              Container(
                   margin: EdgeInsets.fromLTRB(0,10,15,0),
                   padding: EdgeInsets.fromLTRB(0,10, 15,0),
                   width: 80,
@@ -202,12 +219,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image:  progress.medias == null || progress.medias.isEmpty?
-                        AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ):
-                        NetworkImage('${progress.medias[0].actualUrl}'),
+                        image: NetworkImage('${progress.medias[0].actualUrl}'),
                         fit: BoxFit.fill,
                       )),
                 ),
@@ -277,7 +289,9 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child:
-                  progress.estimatedDate == null? Container():
+                  progress.estimatedDate == null?
+                  Text('选择日期',
+                      style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w500)) :
                   Text('${DateFormatUtil.formatYMD(
                       progress.estimatedDate)}',
                       style: TextStyle(fontWeight: FontWeight.w500)),
@@ -287,17 +301,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 userType != null && userType == 'factory' && (sequence >= _index)  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                 _showDatePicker(progress) : null;
               }),
-          progress.estimatedDate == null?
-          Align(
-            alignment: Alignment.centerRight,
-            child: userType=='brand'?Container():IconButton(
-                icon: Icon(Icons.date_range),
-                onPressed: () {
-                  userType != null && userType == 'factory' && (sequence >= _index)  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
-                  _showDatePicker(progress) : null;
-                }
-            ),
-          ):Container()
+
         ],
       ),
     );
@@ -355,7 +359,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           : null;
                     }
                 ),
-                progress.quantity == null || progress.quantity ==''?
+                progress.quantity == null ?
                 Align(
                   alignment: Alignment.centerRight,
                   child: userType=='brand'?Container():IconButton(
@@ -387,7 +391,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           alignment: Alignment.centerRight,
                           child: progress.remarks == null?
                           Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.centerRight,
                             child: Text(
                               '${userType=='brand'? '':'填写'}',
                               style: TextStyle(
@@ -408,7 +412,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         ),
         onTap: () async {
           userType != null && userType == 'factory' && (sequence >= _index) && order.status == PurchaseOrderStatus.IN_PRODUCTION?
-          _showRemarksDialog(progress,'备注','${progress.remarks}') : null;
+          _showRemarksDialog(progress,'备注','${progress.remarks==null?'':progress.remarks}') : null;
         },
       )
     );
@@ -560,11 +564,12 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type,String remarks) async {
-    dialogText = TextEditingController();
-    print(remarks);
+    dialogText =new TextEditingController();
     _dialogFocusNode = FocusNode();
-    if(remarks!= null){
+    if (remarks != null) {
       dialogText.text = remarks;
+    }else{
+      dialogText.text = '';
     }
     return showDialog<void>(
       context: context,

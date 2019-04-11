@@ -6,7 +6,7 @@ class GlobalConfigs {
   // static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
   // static const CONTEXT_PATH = 'https://192.168.1.191:9002';
   // 生产
-  // static const CONTEXT_PATH = 'https://120.78.211.86:9002';
+  // static const CONTEXT_PATH = 'http://120.78.211.86';
   // static const IMAGE_BASIC_URL = 'http://120.78.211.86:9001/djwebservices/v2';
 
   static const BASE_URL = '$CONTEXT_PATH';

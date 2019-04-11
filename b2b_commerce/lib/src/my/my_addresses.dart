@@ -112,7 +112,7 @@ class AddressList extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.grey[100]),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.filterByStatuses();
+            return await bloc.getAddressData();
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -124,7 +124,7 @@ class AddressList extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<AddressModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByStatuses();
+                    bloc.getAddressData();
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }

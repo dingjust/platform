@@ -127,7 +127,7 @@ class Index extends React.Component {
             <div ref='indexMain' className={style.indexMain} >
                 <div ref='searchBar' className={`flexBox ${style.topNav}`}>
                     <div className={`flex1`}>
-                        <SearchBar placeholder="请输入您想定制的商品" />
+                        <SearchBar placeholder="请输入您想定制的产品" />
                     </div>
                     <div className={style.news}>
                         <Icon name={`icon-xiaoxi1`}></Icon>
