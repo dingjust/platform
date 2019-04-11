@@ -3,14 +3,26 @@
     <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="!readOnly">
       <el-row :gutter="20">
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="名称" prop="name">
-              <el-input type="textarea" :rows="2" v-model="slotData.name"></el-input>
+              <el-input  v-model="slotData.name"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
+            <el-form-item label="分组" prop="type">
+              <el-select v-model="slotData.type">
+                <el-option v-for="item in carouselTypes"
+                           :label="item.name"
+                           :key="item.code"
+                           :value="item.code">
+                  {{item.name}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="跳转动作" prop="action">
-              <el-input type="textarea" :rows="2" v-model="slotData.action"></el-input>
+              <el-input  v-model="slotData.action"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -40,9 +52,10 @@
     data() {
       return {
         rules: {
-          code: [{required: true, message: '必填', trigger: 'blur'}],
+          type: [{required: true, message: '必填', trigger: 'change'}],
           name: [{required: true, message: '必填', trigger: 'blur'}]
-        }
+        },
+        carouselTypes: this.$store.state.EnumsModule.carouselTypes,
       };
     },
     created() {

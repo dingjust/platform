@@ -85,8 +85,10 @@ class HttpManager {
         return e;
       } else {
         // 消息流推送
-        MessageBLoC.instance.errorMessageController
-            .add('${errorResponse.errors[0].message}');
+        if (errorResponse.errors!= null) {
+          MessageBLoC.instance.errorMessageController
+              .add('${errorResponse.errors[0].message}');
+        }
         // 当请求失败时做一些预处理
         if (GlobalConfigs.DEBUG) {
           print(e.toString());

@@ -198,12 +198,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             children: <Widget>[
               Container(
                 padding: EdgeInsets.all(10),
-                child: Text('${result.response}'),
+                child: Text('${result}'),
               ),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Text('${result.message}'),
-              )
             ],
           ));
     });
