@@ -3,7 +3,7 @@ abstract class ProductApis {
   ///获取产品分类级联列表
   static get cascadedCategories => '/{baseSiteId}/categories/cascaded';
 
-  ///获取产品大类列表
+  ///获取面料类别列表
   static get majorCategories => '/{baseSiteId}/categories/majors';
 
   ///获取所有颜色
