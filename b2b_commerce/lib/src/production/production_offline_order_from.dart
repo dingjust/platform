@@ -1051,7 +1051,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 ),
               ),
               onPressed: () async {
-                Navigator.of(context).pop();
                 if(code!= null){
                   PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
                   ProductionBLoC.instance.refreshData();
@@ -1060,6 +1059,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                       MaterialPageRoute(builder: (context) =>
                           PurchaseOrderDetailPage(order: model)
                       ), ModalRoute.withName('/')) : null;
+                }else{
+                  Navigator.of(context).pop();
                 }
               },
             ),
