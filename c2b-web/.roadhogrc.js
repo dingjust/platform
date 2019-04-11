@@ -17,18 +17,18 @@ export default {
         ]
     },
     "proxy": {
-        "/djc2bwebservices/v2/c2b": {
-            "target": "https://www.dingjust.top",
+        "/c2b": {
+            "target": "http://47.106.112.137",
             "changeOrigin": true,
             "secure": false
         },
         "/imageserver/api/render/image": {
-            "target": "https://www.dingjust.top",
+            "target": "http://47.106.112.137",
             "changeOrigin": true,
             "secure": false
         },
         "/authorizationserver": {
-            "target": "https://www.dingjust.top",
+            "target": "http://47.106.112.137",
             "changeOrigin": true,
             "secure": false
         }
