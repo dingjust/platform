@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
+import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
@@ -1124,7 +1125,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   Container(
                     child: ListTile(
                         leading: Text(
-                          '生产单价',
+                          '订单报价',
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -1284,171 +1285,224 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildCommitButton(BuildContext context) {
     if (userType == 'brand') {
       if (order.salesApplication == SalesApplication.BELOW_THE_LINE) {
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            _buildBrandButton(context),
-            _buildOfflineButton(context),
-          ],
+        return Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              _buildBrandButton(context),
+              _buildOfflineButton(context),
+            ],
+          ),
         );
       } else {
-        return _buildBrandButton(context);
+        return Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child: _buildBrandButton(context),
+        );
       }
     } else {
       if (order.salesApplication == SalesApplication.BELOW_THE_LINE) {
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            _buildFactoryButton(context),
-            _buildOfflineButton(context),
-          ],
+        return Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              _buildFactoryButton(context),
+              _buildOfflineButton(context),
+            ],
+          ),
         );
       } else {
-        return _buildFactoryButton(context);
+        return Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child: _buildFactoryButton(context),
+        );
       }
     }
   }
 
   //线下单显示按钮
   Widget _buildOfflineButton(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Expanded(
-          child: Container(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 0, horizontal: 30),
-              child: FlatButton(
-                  color: Color(0xFFFFD600),
-                  child: Text(
-                    '唯一码',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
+    return Container(
+      margin: EdgeInsets.fromLTRB(0,20,0,20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              height: 30,
+                padding: const EdgeInsets.symmetric(
+                    vertical: 0, horizontal: 30),
+                child: FlatButton(
+                    color: Colors.grey,
+                    child: Text(
+                      '唯一码',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductionGenerateUniqueCodePage(
-                              model: widget.order,
-                            )));
-                  })
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductionGenerateUniqueCodePage(
+                                model: widget.order,
+                              )));
+                    })
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   //品牌端支付按钮
   Widget _buildShowBrandButton(BuildContext context) {
     return isShowButton == true &&
-            widget.order.depositPaid == false &&
-            widget.order.deposit != null &&
-            widget.order.deposit > 0 &&
-            widget.order.salesApplication == SalesApplication.ONLINE
+        widget.order.depositPaid == false &&
+        widget.order.deposit != null &&
+        widget.order.deposit > 0 &&
+        widget.order.salesApplication == SalesApplication.ONLINE
         ? Container(
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-                      child: widget.order.status ==
-                          PurchaseOrderStatus.PENDING_PAYMENT
-                          ? FlatButton(
-                          color: Colors.red,
-                          child: Text(
-                            '取消订单',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Expanded(
+            child: Container(
+                height: 30,
+                padding: const EdgeInsets.symmetric(
+                    vertical: 0, horizontal: 30),
+                child: widget.order.status ==
+                    PurchaseOrderStatus.PENDING_PAYMENT
+                    ? FlatButton(
+                    color: Colors.red,
+                    child: Text(
+                      '取消订单',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    onPressed: () async {
+                      showDialog<void>(
+                        context: context,
+                        barrierDismissible:
+                        true, // user must tap button!
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(
+                              '提示',
+                              style: const TextStyle(fontSize: 16),
                             ),
-                          ),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          onPressed: () async {
-                            showDialog<void>(
-                              context: context,
-                              barrierDismissible:
-                              true, // user must tap button!
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text(
-                                    '提示',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  content: Text('是否要取消订单？'),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: Text(
-                                        '取消',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    FlatButton(
-                                      child: Text(
-                                        '确定',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      onPressed: () async {
-                                        bool result =
-                                        await PurchaseOrderRepository()
-                                            .purchaseOrderCancelling(
-                                            widget.order.code);
-                                        _showMessage(context, result, '订单取消');
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          })
-                          : Container()),
-                ),
-                Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-                      child: FlatButton(
-                          color: Color(0xFFFFD600),
-                          child: Text(
-                            '去支付',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                            ),
-                          ),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          onPressed: () {
-                            PurchaseOrderModel order = widget.order;
-                            //将支付金额置为定金
-                            order.totalPrice = order.deposit;
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => OrderPaymentPage(
-                                  order: order,
-                                  paymentFor: PaymentFor.DEPOSIT,
-                                )));
-                          })),
-                ),
-              ],
-            ),
-          )
-        : Container();
+                            content: Text('是否要取消订单？'),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text(
+                                  '取消',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: Text(
+                                  '确定',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                onPressed: () async {
+                                  bool result =
+                                  await PurchaseOrderRepository()
+                                      .purchaseOrderCancelling(
+                                      widget.order.code);
+                                  _showMessage(context, result, '订单取消');
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    })
+                    : Container()),
+          ),
+          Expanded(
+            child: Container(
+                height: 30,
+                padding: const EdgeInsets.symmetric(
+                    vertical: 0, horizontal: 30),
+                child: FlatButton(
+                    color: Color(0xFFFFD600),
+                    child: Text(
+                      '去支付',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    onPressed: () {
+                      PurchaseOrderModel order = widget.order;
+                      //将支付金额置为定金
+                      order.totalPrice = order.deposit;
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              OrderPaymentPage(
+                                order: order,
+                                paymentFor: PaymentFor.DEPOSIT,
+                              )));
+                    })),
+          ),
+        ],
+      ),
+    )
+        :
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Expanded(
+          child: Container(
+              height: 30,
+              padding: const EdgeInsets.symmetric(
+                  vertical: 0, horizontal: 30),
+              child: FlatButton(
+                  color: Color(0xFFFFD600),
+                  child: Text(
+                    '确认',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  ),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  onPressed: () async {
+                    bool result = await PurchaseOrderRepository()
+                        .confirmProduction(
+                        widget.order.code, widget.order);
+                    _showMessage(context, result, '确认生产');
+                  }
+              )
+          ),
+        ),
+      ],
+    );
   }
 
   //品牌端显示按钮
@@ -1466,6 +1520,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             children: <Widget>[
               Expanded(
                 child: Container(
+                  height: 30,
                     padding: const EdgeInsets.symmetric(
                         vertical: 0, horizontal: 30),
                     child: FlatButton(
@@ -1497,39 +1552,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               ),
             ],
           );
-        } else {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 30),
-                    child: FlatButton(
-                        color: Color(0xFFFFD600),
-                        child: Text(
-                          '确认',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        onPressed: () async {
-                          bool result = await PurchaseOrderRepository()
-                              .confirmProduction(
-                              widget.order.code, widget.order);
-                          _showMessage(context, result, '确认生产');
-                        }
-                    )
-                ),
-              ),
-            ],
-          );
         }
       } else if (order.status == PurchaseOrderStatus.OUT_OF_STORE) {
         return Row(
@@ -1537,6 +1559,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           children: <Widget>[
             Expanded(
               child: Container(
+                  height: 30,
                   padding: const EdgeInsets.symmetric(
                       vertical: 0, horizontal: 30),
                   child: FlatButton(
@@ -1574,6 +1597,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           children: <Widget>[
             Expanded(
               child: Container(
+                  height: 30,
                   padding: const EdgeInsets.symmetric(
                       vertical: 0, horizontal: 30),
                   child: FlatButton(
@@ -1617,12 +1641,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         children: <Widget>[
           Expanded(
             child: Container(
+              height: 30,
               padding: const EdgeInsets.symmetric(
                   vertical: 0, horizontal: 30),
               child: FlatButton(
-                  color: Colors.red,
+                  color: Colors.grey,
                   child: const Text(
-                    '修改金额',
+                    '修改价格',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -1675,6 +1700,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           children: <Widget>[
             Expanded(
               child: Container(
+                height: 30,
                 padding: const EdgeInsets.symmetric(
                     vertical: 0, horizontal: 30),
                 child: FlatButton(
@@ -1710,10 +1736,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           children: <Widget>[
             Expanded(
               child: Container(
+                height: 30,
                 padding: const EdgeInsets.symmetric(
                     vertical: 0, horizontal: 30),
                 child: FlatButton(
-                  color: Colors.red,
+                  color: Colors.grey,
                   child: const Text(
                     '修改金额',
                     style: const TextStyle(
@@ -2231,18 +2258,29 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Future<void> _requestMessage(BuildContext context, String message) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: true, // user must tap button!
+      barrierDismissible: false, // user must tap button!
       builder: (context) {
-        return SimpleDialog(
-          title: const Text(
-            '提示',
+        return AlertDialog(
+          title: Text('提示',
             style: TextStyle(
               fontSize: 16,
-            ),
-          ),
-          children: <Widget>[
-            SimpleDialogOption(
-              child: Text('${message}'),
+            ),),
+          content: Text('${message}'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                '确定',
+                style: TextStyle(
+                    color: Colors.black
+                ),
+              ),
+              onPressed: () async {
+                PurchaseOrderBLoC.instance.refreshData('ALL');
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) =>
+                        PurchaseOrdersPage()
+                    ), ModalRoute.withName('/'));
+              },
             ),
           ],
         );

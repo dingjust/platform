@@ -1,5 +1,12 @@
 const state = {
 
+
+  //轮播图类型
+  carouselTypes: [
+  {code: 'CT002', name: '工厂首页'},
+  {code: 'CT003', name: '品牌首页'},
+],
+
   //生产进度类型
   productionProgressPhaseTypes: [
     {code: 'MATERIAL_PREPARATION', name: '备料'},

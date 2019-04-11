@@ -15,6 +15,8 @@ const state = {
     id: null,
     uid: '',
     name: '',
+    type:'',
+    group:'B2B',
     description: '',
     media:{}
   }
@@ -36,7 +38,8 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      keyword: state.keyword},{
+      keyword: state.keyword,
+      group:'B2B'},{
       page: state.currentPageNumber,
       size: state.currentPageSize
     });

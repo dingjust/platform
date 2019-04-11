@@ -201,7 +201,7 @@ class AbstractOrderModel extends ItemModel {
   /// 合计金额
   double totalPrice;
 
-  /// 生产单价
+  /// 订单报价
   double unitPrice;
 
   /// 创建时间
@@ -448,7 +448,7 @@ class RequirementInfoModel extends ItemModel {
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime expectedDeliveryDate;
 
-  ///预计加工数量
+  ///预计订单数量
   int expectedMachiningQuantity;
 
   /// 期望价格
@@ -962,12 +962,20 @@ class QuoteModel extends AbstractOrderModel {
   /// 其他
   double costOfOther;
 
+  //生产订单
+  PurchaseOrderModel activePurchaseOrder;
+
+  //打样订单
+  ProofingModel activeProofing;
+
   /// 附件
   @JsonKey(toJson: _attachmentsToJson)
   List<MediaModel> attachments;
 
   /// 拒绝报价理由
   String comment;
+
+
 
   QuoteModel(
       {String code,
@@ -989,6 +997,8 @@ class QuoteModel extends AbstractOrderModel {
       this.costOfOther,
       this.expectedDeliveryDate,
       this.supplier,
+      this.activePurchaseOrder,
+      this.activeProofing,
       this.comment})
       : super(
             code: code,

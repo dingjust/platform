@@ -581,6 +581,7 @@ class _RequirementOrderDetailPageState
           children: <Widget>[
             Expanded(
               child: Container(
+                height: 30,
                   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
                   child: FlatButton(
                       color: Colors.red,
