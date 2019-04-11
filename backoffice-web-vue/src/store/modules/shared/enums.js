@@ -1,11 +1,17 @@
 const state = {
 
+  //轮播图类型
+  carouselGroups: [
+    {code: 'B2B', name: 'B2B'},
+    {code: 'C2B', name: 'C2B'},
+  ],
 
   //轮播图类型
   carouselTypes: [
-  {code: 'CT002', name: '工厂首页'},
-  {code: 'CT003', name: '品牌首页'},
-],
+    {code: 'CT001', name: '首页'},
+    {code: 'CT002', name: '工厂首页'},
+    {code: 'CT003', name: '品牌首页'},
+  ],
 
   //生产进度类型
   productionProgressPhaseTypes: [
