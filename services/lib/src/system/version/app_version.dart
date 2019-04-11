@@ -19,7 +19,7 @@ class AppVersion {
   void _showNewVersion() {
     showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           // title: Text('确认取消？'),
@@ -51,7 +51,8 @@ class AppVersion {
                   style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1))),
               onPressed: () async {
                 updateApp(
-                    'http://dingjust.oss-cn-shenzhen.aliyuncs.com/app-release.apk');
+                    // 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/app-release.apk'
+                    'http://47.106.112.137/downloads/app-release.apk');
               },
             ),
           ],
@@ -67,6 +68,7 @@ class AppVersion {
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[

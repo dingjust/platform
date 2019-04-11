@@ -8,15 +8,15 @@ class B2BIcons {
   static const IconData publish_requirement_success =
       const IconData(0xe69e, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData factory_map =
-      const IconData(0xe6b8, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6c8, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData industrial_cluster =
-      const IconData(0xe698, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6c9, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData factory_brand =
-      const IconData(0xe699, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6cb, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData free_proofing =
       const IconData(0xe69c, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData factory_all =
-      const IconData(0xe69a, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6ca, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData message =
       const IconData(0xe653, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData left_quotation =
@@ -62,21 +62,21 @@ class B2BIcons {
   static const IconData hot =
       const IconData(0xe6a9, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData production =
-      const IconData(0xe6c8, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6d0, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData production_active =
-      const IconData(0xe6c9, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6d1, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData home =
-      const IconData(0xe6cb, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6d3, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData home_active =
-      const IconData(0xe6ca, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6d2, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData business_active =
-      const IconData(0xe6c6, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6cf, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData business =
-      const IconData(0xe6c5, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6ce, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData my =
-      const IconData(0xe6c4, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6cd, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData my_active =
-      const IconData(0xe6c3, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe6cc, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData wechat =
       const IconData(0xe63d, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }

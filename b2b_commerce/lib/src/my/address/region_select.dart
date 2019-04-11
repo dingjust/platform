@@ -49,7 +49,7 @@ class RegionSelectPage extends StatelessWidget {
                       _selectCity(context, region);
                     }
                   },
-                  title: Text(region.name),
+                  title: Text('${region.name}'),
                   trailing: Icon(Icons.chevron_right),
                 );
               }).toList(),
