@@ -40,7 +40,9 @@ class Site extends CommonFn{
         }
     }
     replace=(value)=>{
-        return value.replace(/\s+/g, "")
+        if(value){
+            return value.replace(/\s+/g, "")
+        }
     }
     forbid=()=>{
         if(this.state.checked){
@@ -65,7 +67,7 @@ class Site extends CommonFn{
                             onClick={() => {}}
                             platform="android"
                             >
-                            {this.props.address.fullname} {this.replace(this.props.address.cellphone)}<Brief>{this.props.address.region.name}/{this.props.address.city.name}/{this.props.address.district.name}/{this.props.address.line1}</Brief>
+                            {this.props.address.fullname} {this.replace(this.props.address.cellphone)}<Brief>{this.props.address.region&&this.props.address.region.name}/{this.props.address.city&&this.props.address.city.name}/{this.props.address.district&&this.props.address.district.name}/{this.props.address.line1}</Brief>
                             </Item>
                         </List>
                     </div>
