@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/common/app_bloc.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 
 class ProfileAboutPage extends StatefulWidget {
   @override
@@ -78,7 +78,8 @@ class AppActions extends StatelessWidget {
           leading: const Icon(Icons.shopping_basket),
           onTap: () {
             //TODO版本检测
-            print(VersionUtil.compareVersion('1.4.1', '1.3.1'));
+            AppVersion(context).checkVersion(false,
+                AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID');
           },
         )
       ],

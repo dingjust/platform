@@ -35,9 +35,45 @@ class AppVersion {
             1) {
           _showNewVersion(appVersionResponse.releaseVersion,
               appVersionResponse.description, appVersionResponse.url);
+        } else {
+          _showMessage(appVersionResponse.releaseVersion);
         }
       }
     }
+  }
+
+  void _showMessage(String releaseVersion) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          content: Container(
+            height: 250,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Image.asset(
+                  'temp/login_logo.png',
+                  package: 'assets',
+                  width: 100.0,
+                  height: 100.0,
+                ),
+                Text('已经是最新版本,当前版本：${releaseVersion}'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定', style: TextStyle(color: Colors.grey)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showNewVersion(String releaseVersion, String description, String url) {
@@ -156,7 +192,6 @@ class AppVersion {
     }
     //打开文件
     OpenFile.open(filePath);
-    // InstallPlugin.installApk(filePath, 'net.nbyjy.b2b');
     return filePath;
   }
 }
