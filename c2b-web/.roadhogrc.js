@@ -5,7 +5,7 @@ export default {
     "entry": "src/index.js",
     "disableCSSModules": false,
     "cssModulesExclude": ["./src/global.less"],
-    "publicPath": "/dist/",
+    "publicPath": "/dist/c2b/",
     "hash": true,
     "theme": "./theme.config.js",
     "resolve": {
@@ -18,12 +18,12 @@ export default {
     },
     "proxy": {
         "/c2b": {
-            "target": "http://47.106.112.137",
+            "target": "https://47.106.112.137",
             "changeOrigin": true,
             "secure": false
         },
         "/imageserver/api/render/image": {
-            "target": "http://47.106.112.137",
+            "target": "https://47.106.112.137",
             "changeOrigin": true,
             "secure": false
         },
