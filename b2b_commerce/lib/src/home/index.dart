@@ -237,7 +237,7 @@ class BrandSecondMenuSection extends StatelessWidget {
       title: '产业集群',
       icon: Icon(
         B2BIcons.industrial_cluster,
-        color: Color.fromRGBO(5, 202, 150, 1.0),
+        color: Color.fromRGBO(105, 210, 217, 1),
         size: 30,
       ),
     );
@@ -262,7 +262,7 @@ class BrandSecondMenuSection extends StatelessWidget {
       title: '优质工厂',
       icon: Icon(
         B2BIcons.factory_brand,
-        color: Color.fromRGBO(255, 189, 82, 1.0),
+        color: Color.fromRGBO(105, 224, 139, 1),
         size: 30,
       ),
     );

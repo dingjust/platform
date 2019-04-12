@@ -124,44 +124,44 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
           ),
-          // InputRow(
-          //   label: '验证码',
-          //   field: TextField(
-          //     autofocus: false,
-          //     onChanged: (value) {
-          //       formValidate();
-          //     },
-          //     keyboardType: TextInputType.phone,
-          //     //只能输入数字
-          //     inputFormatters: <TextInputFormatter>[
-          //       WhitelistingTextInputFormatter.digitsOnly,
-          //     ],
-          //     controller: _captchaController,
-          //     decoration:
-          //         InputDecoration(hintText: '请输入', border: InputBorder.none),
-          //   ),
-          //   surfix: FlatButton(
-          //     shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(50)),
-          //     color: Color.fromRGBO(255, 214, 12, 1),
-          //     onPressed: (_seconds == 0)
-          //         ? () async {
-          //             bool isExist = await validatePhone();
-          //             if (!isExist) {
-          //               UserRepositoryImpl()
-          //                   .sendCaptcha(_phoneController.text)
-          //                   .then((a) {
-          //                 _startTimer();
-          //               });
-          //             }
-          //           }
-          //         : null,
-          //     child: Text(
-          //       '$_verifyStr',
-          //       style: TextStyle(color: Colors.black),
-          //     ),
-          //   ),
-          // ),
+          InputRow(
+            label: '验证码',
+            field: TextField(
+              autofocus: false,
+              onChanged: (value) {
+                formValidate();
+              },
+              keyboardType: TextInputType.phone,
+              //只能输入数字
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly,
+              ],
+              controller: _captchaController,
+              decoration:
+                  InputDecoration(hintText: '请输入', border: InputBorder.none),
+            ),
+            surfix: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              onPressed: (_seconds == 0)
+                  ? () async {
+                      bool isExist = await validatePhone();
+                      if (!isExist) {
+                        UserRepositoryImpl()
+                            .sendCaptcha(_phoneController.text)
+                            .then((a) {
+                          _startTimer();
+                        });
+                      }
+                    }
+                  : null,
+              child: Text(
+                '$_verifyStr',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
           InputRow(
               label: '设置密码',
               field: TextField(
@@ -274,26 +274,26 @@ class _RegisterPageState extends State<RegisterPage> {
   void formValidate() {
     setState(() {
       validate = _phoneController.text.trim().length > 0 &&
-          // _captchaController.text.trim().length > 0 &&
+          _captchaController.text.trim().length > 0 &&
           _passwordController.text.trim().length > 0 &&
           _isAgree;
     });
   }
 
   void onNext(BuildContext context) async {
-    // bool result = await UserRepositoryImpl()
-    //     .validateCaptcha(_phoneController.text, _captchaController.text);
-    // if (result) {
+    bool result = await UserRepositoryImpl()
+        .validateCaptcha(_phoneController.text, _captchaController.text);
+    if (result) {
       //TODOS验证验证码
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => RegisterInfoPage(
                 phone: _phoneController.text,
                 password: _passwordController.text,
               )));
-    // } else {
-    //   (_scaffoldKey.currentState)
-    //       .showSnackBar(SnackBar(content: Text('验证不正确')));
-    // }
+    } else {
+      (_scaffoldKey.currentState)
+          .showSnackBar(SnackBar(content: Text('验证不正确')));
+    }
   }
 
   void showPayProtocol() {

@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:services/src/api/apis.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/system/version/app_response.dart';
+// import 'package:install_plugin/install_plugin.dart';
 
 class AppVersion {
   final BuildContext context;
@@ -68,7 +69,6 @@ class AppVersion {
             FlatButton(
               child: Text('稍后再说', style: TextStyle(color: Colors.grey)),
               onPressed: () {
-                
                 Navigator.of(context).pop();
               },
             ),
@@ -138,7 +138,7 @@ class AppVersion {
 
     //获取应用目录路径
     String dir = (await getApplicationDocumentsDirectory()).path;
-    String filePath = "$dir/app.apk}";
+    String filePath = "$dir/app.apk";
     var dio = new Dio();
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
@@ -156,6 +156,7 @@ class AppVersion {
     }
     //打开文件
     OpenFile.open(filePath);
+    // InstallPlugin.installApk(filePath, 'net.nbyjy.b2b');
     return filePath;
   }
 }
