@@ -81,7 +81,7 @@ class HttpManager {
         // UserBLoC.instance.logout();
         UserBLoC.instance.loginJumpController.add(true);
         //消息流推送
-        MessageBLoC.instance.errorMessageController.add('请先登录');
+        // MessageBLoC.instance.errorMessageController.add('请先登录');
         return e;
       } else {
         // 消息流推送

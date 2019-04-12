@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/common/app_bloc.dart';
 import 'package:b2b_commerce/src/common/coming_soon_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -73,10 +74,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
 
-    // ignoreVersionNotification = false;
-    // WidgetsBinding.instance.addPostFrameCallback((_) =>
-    //     AppVersion(homePageKey.currentContext)
-    //         .checkVersion(ignoreVersionNotification));
+    ignoreVersionNotification = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        AppVersion(homePageKey.currentContext).checkVersion(
+            ignoreVersionNotification,
+            AppBLoC.instance.packageInfo.version,
+            'nbyjy',
+            'ANDROID'));
 
     super.initState();
   }

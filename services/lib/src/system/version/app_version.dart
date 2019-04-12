@@ -1,22 +1,45 @@
 import 'dart:async';
 
+import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:services/src/api/apis.dart';
+import 'package:services/src/net/http_manager.dart';
+import 'package:services/src/system/version/app_response.dart';
 
 class AppVersion {
   final BuildContext context;
 
   AppVersion(this.context);
 
-  void checkVersion(bool ignoreVersionNotification) {
+  void checkVersion(bool ignoreVersionNotification, String packageVersion,
+      String name, String platform) async {
     if (!ignoreVersionNotification) {
-      _showNewVersion();
+      Response response;
+      try {
+        response = await http$.get(
+          Apis.appVersions(name, platform),
+        );
+      } on DioError catch (e) {
+        print(e);
+      }
+      if (response != null && response.statusCode == 200) {
+        AppVersionResponse appVersionResponse =
+            AppVersionResponse.fromJson(response.data);
+        //比较版本
+        if (VersionUtil.compareVersion(
+                appVersionResponse.releaseVersion, packageVersion) ==
+            1) {
+          _showNewVersion(appVersionResponse.releaseVersion,
+              appVersionResponse.description, appVersionResponse.url);
+        }
+      }
     }
   }
 
-  void _showNewVersion() {
+  void _showNewVersion(String releaseVersion, String description, String url) {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -24,7 +47,7 @@ class AppVersion {
         return AlertDialog(
           // title: Text('确认取消？'),
           content: Container(
-            height: 200,
+            height: 250,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -35,6 +58,8 @@ class AppVersion {
                   height: 100.0,
                 ),
                 Text('版本更新'),
+                Text('新版本：${releaseVersion}'),
+                Text('版本说明：${description}'),
                 Text('钉单最新版本来啦，马上更新吧！'),
               ],
             ),
@@ -43,6 +68,7 @@ class AppVersion {
             FlatButton(
               child: Text('稍后再说', style: TextStyle(color: Colors.grey)),
               onPressed: () {
+                
                 Navigator.of(context).pop();
               },
             ),
@@ -52,7 +78,7 @@ class AppVersion {
               onPressed: () async {
                 updateApp(
                     // 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/app-release.apk'
-                    'http://47.106.112.137/downloads/app-release.apk');
+                    url);
               },
             ),
           ],
