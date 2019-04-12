@@ -45,9 +45,9 @@ class UserBLoC extends BLoCBase {
   Stream<UserModel> get stream => _controller.stream;
 
   StreamController _loginResultController =
-      StreamController<DioError>.broadcast();
+      StreamController<String>.broadcast();
 
-  Stream<DioError> get loginStream => _loginResultController.stream;
+  Stream<String> get loginStream => _loginResultController.stream;
 
   ///跳转登陆
   StreamController loginJumpController = StreamController<bool>.broadcast();
@@ -55,21 +55,26 @@ class UserBLoC extends BLoCBase {
   Stream<bool> get loginJumpStream => loginJumpController.stream;
 
   Future<bool> login({String username, String password, bool remember}) async {
-    // // login service
     Response loginResponse;
     try {
-      loginResponse = await http$
-          .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
-        'username': username,
-        'password': password,
-        'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
-        'client_id': GlobalConfigs.B2B_CLIENT_ID,
-        'client_secret': GlobalConfigs.B2B_CLIENT_SECRET
-      }));
+      //校验账号存在
+      bool exist = await UserRepositoryImpl().phoneExist(username);
+      if (exist != null && exist) {
+        loginResponse = await http$.post(
+            HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+          'username': username,
+          'password': password,
+          'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
+          'client_id': GlobalConfigs.B2B_CLIENT_ID,
+          'client_secret': GlobalConfigs.B2B_CLIENT_SECRET
+        }));
+      } else {
+        _loginResultController.sink.add('账号不存在请注册后登陆');
+      }
     } on DioError catch (e) {
       print(e);
       //登陆错误回调
-      _loginResultController.sink.add(e);
+      _loginResultController.sink.add('密码错误请输入正确的密码');
     }
 
     if (loginResponse != null && loginResponse.statusCode == 200) {
@@ -149,7 +154,7 @@ class UserBLoC extends BLoCBase {
         // 获取用户信息
         Response infoResponse;
         try {
-          String username =await LocalStorage.get(GlobalConfigs.USER_KEY);
+          String username = await LocalStorage.get(GlobalConfigs.USER_KEY);
           infoResponse = await http$.get(UserApis.userInfo(username));
         } on DioError catch (e) {
           print(e);

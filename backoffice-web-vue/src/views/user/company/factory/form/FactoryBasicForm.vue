@@ -75,8 +75,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="公司规模" prop="populationScales">
-            <el-select v-model="slotData.populationScales" class="w-100" multiple>
+          <el-form-item label="公司规模" prop="populationScale">
+            <el-select v-model="slotData.populationScale" class="w-100">
               <el-option v-for="item in populationScales"
                          :key="item.code"
                          :label="item.name"
@@ -95,7 +95,7 @@
         <el-col :span="6">
           <el-form-item label="生产大类" prop="categories">
             <el-select class="w-100" v-model="slotData.categories" value-key="code" multiple>
-              <el-option v-for="item in categories" :label="item.code" :key="item.code" :value="item">
+              <el-option v-for="item in categories" :label="item.name" :key="item.code" :value="item">
                 {{item.name}}
               </el-option>
             </el-select>

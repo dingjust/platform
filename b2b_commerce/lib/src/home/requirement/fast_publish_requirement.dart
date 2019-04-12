@@ -9,7 +9,8 @@ class FastPublishRequirement extends StatefulWidget {
 }
 
 class _FastPublishRequirementState extends State<FastPublishRequirement> {
-  RequirementOrderModel model = RequirementOrderModel(details: RequirementInfoModel());
+  RequirementOrderModel model =
+      RequirementOrderModel(details: RequirementInfoModel());
   GlobalKey _formKey = new GlobalKey<FormState>();
   TextEditingController _requirementNumController = TextEditingController();
 
@@ -47,9 +48,12 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
             //加载条
             showDialog(
               context: context,
-              builder: (context) => ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+              builder: (context) =>
+                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
-            await ProductRepositoryImpl().cascadedCategories().then((categories) {
+            await ProductRepositoryImpl()
+                .cascadedCategories()
+                .then((categories) {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => CategorySelectPage(
@@ -61,13 +65,23 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
             });
           },
           child: Container(
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.fromLTRB(8, 15, 8, 10),
-            color: Colors.white,
+            margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
+            padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey[200],
+                  blurRadius: 5.0,
+                  spreadRadius: 2.0,
+                  offset: Offset(0, 3.0),
+                ),
+              ],
+            ),
             child: Column(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.only(bottom: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -78,7 +92,10 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                       ),
                       Text(
                         '   急速发布需求   ',
-                        style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
                       ),
                       Icon(
                         B2BIcons.right_quotation,
@@ -254,7 +271,9 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: expectedDeliveryDate == null ? DateTime.now() : expectedDeliveryDate,
+        initialDate: expectedDeliveryDate == null
+            ? DateTime.now()
+            : expectedDeliveryDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     setState(() {
@@ -290,7 +309,8 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                 style: TextStyle(color: Color(0xffFF9516)),
               ),
               onPressed: () {
-                if (_requirementNumController.text != '' && _requirementNumController.text != null) {
+                if (_requirementNumController.text != '' &&
+                    _requirementNumController.text != null) {
                   setState(() {
                     requirementNum = int.parse(_requirementNumController.text);
                   });
@@ -344,5 +364,12 @@ class FastRequirementForm {
   TextEditingController contactPerson;
   TextEditingController phone;
 
-  FastRequirementForm({this.categories,this.factoryUid,this.product, this.contactPerson, this.deliveryDate, this.phone, this.requirementNum});
+  FastRequirementForm(
+      {this.categories,
+      this.factoryUid,
+      this.product,
+      this.contactPerson,
+      this.deliveryDate,
+      this.phone,
+      this.requirementNum});
 }

@@ -164,7 +164,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
             child: const Icon(B2BIcons.production_active),
           ),
           title: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 30 : 0),
+            margin: EdgeInsets.only(right: _isBrand() ? 35 : 0),
             child: const Text('生产'),
           ),
         ),
@@ -179,27 +179,29 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
               child: const Icon(B2BIcons.business_active),
             ),
             title: Container(
-              margin: EdgeInsets.only(left: 10),
+              // margin: EdgeInsets.only(left: 10),
               child: const Text('工作'),
             )),
         BusinessHomePage(userType: widget.userType),
       ),
       NavigationMenu(
         BottomNavigationBarItem(
-          icon: Container(
-            margin: EdgeInsets.only(right: 10),
-            child: const Icon(
-              B2BIcons.my,
+            icon: Container(
+              margin: EdgeInsets.only(right: 10),
+              child: const Icon(
+                B2BIcons.my,
+              ),
             ),
-          ),
-          activeIcon: Container(
-            margin: EdgeInsets.only(right: 10),
-            child: const Icon(
-              B2BIcons.my_active,
+            activeIcon: Container(
+              margin: EdgeInsets.only(right: 10),
+              child: const Icon(
+                B2BIcons.my_active,
+              ),
             ),
-          ),
-          title: const Text('我的'),
-        ),
+            title: Container(
+              margin: EdgeInsets.only(right: 10),
+              child: const Text('我的'),
+            )),
         MyHomePage(),
       ),
     ];

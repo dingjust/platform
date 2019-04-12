@@ -34,7 +34,12 @@ class CompanyRegisterDTO {
       this.contactAddress});
 
   static Map<String, dynamic> _addressToJson(AddressModel contactAddress) =>
-      AddressModel.toJson(contactAddress);
+      {
+        "region": {"isocode": contactAddress.region.isocode},
+        "city": {"code": contactAddress.city.code},
+        "cityDistrict": {"code": contactAddress.cityDistrict.code},
+        "line1": contactAddress.line1
+      };
 
   factory CompanyRegisterDTO.fromJson(Map<String, dynamic> json) =>
       _$CompanyRegisterDTOFromJson(json);

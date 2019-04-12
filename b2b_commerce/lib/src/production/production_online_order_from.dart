@@ -467,7 +467,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                 child: ListTile(
                   leading: RichText(
                     text: TextSpan(
-                        text: '生产单价',
+                        text: '订单报价',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -499,7 +499,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => OfflineOrderInputPage(
-                          fieldText: '生产单价', inputType: TextInputType.number)),
+                          fieldText: '订单报价', inputType: TextInputType.number)),
                   //接收返回数据并处理
                 ).then((value) {
                   setState(() {
@@ -958,10 +958,10 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
       else if(purchaseOrder.totalQuantity == null || purchaseOrder.totalQuantity <= 0){
         isSubmit = _showValidateMsg(context, '请输入生产数量');
       }
-      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice <= 0){
-        isSubmit = _showValidateMsg(context, '请输入生产单价');
+      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice < 0){
+        isSubmit = _showValidateMsg(context, '请输入订单报价');
       }
-      else if(purchaseOrder.deposit == null || purchaseOrder.deposit <= 0){
+      else if(purchaseOrder.deposit == null || purchaseOrder.deposit < 0){
         isSubmit = _showValidateMsg(context, '请输入定金');
       }
       else if(purchaseOrder.machiningType == null){

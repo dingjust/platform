@@ -261,7 +261,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
             focusNode: _unitPriceFocusNode,
-            leadingText: '生产单价￥',
+            leadingText: '订单报价￥',
             hintText: '必填',
             autofocus: false,
             inputType: TextInputType.number,
@@ -321,7 +321,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _fabricFocusNode,
-                  leadingText: '面料单价￥',
+                  leadingText: '面料价格￥',
                   hintText: '填写',
                   autofocus: false,
                   inputType: TextInputType.number,
@@ -336,7 +336,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _excipientsFocusNode,
-                  leadingText: '辅料单价￥',
+                  leadingText: '辅料价格￥',
                   hintText: '填写',
                   autofocus: false,
                   inputType: TextInputType.number,
@@ -350,7 +350,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _processingFocusNode,
-                  leadingText: '加工单价￥',
+                  leadingText: '加工价格￥',
                   hintText: '填写',
                   autofocus: false,
                   inputType: TextInputType.number,
@@ -364,7 +364,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _otherFocusNode,
-                  leadingText: '其他单价￥',
+                  leadingText: '其他价格￥',
                   hintText: '填写',
                   autofocus: false,
                   inputType: TextInputType.number,
@@ -522,7 +522,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
     if (_unitPriceController.text.isEmpty) {
       (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
         SnackBar(
-          content: Text('请选择生产单价'),
+          content: Text('请输入订单报价'),
           duration: Duration(seconds: 1),
         ),
       );

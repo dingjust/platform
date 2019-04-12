@@ -57,8 +57,9 @@ class _FactoryPageState extends State<FactoryPage> {
 
   void changeCondition(FilterConditionEntry condition) {
     setState(() {
-      currentCondition = condition;
+      currentCondition=condition;
     });
+    FactoryBLoC.instance.clear();
   }
 
   @override
@@ -95,6 +96,7 @@ class _FactoryPageState extends State<FactoryPage> {
                 factoryCondition: widget.factoryCondition,
                 showButton: widget.requirementCode != null,
                 requirementCode: widget.requirementCode,
+                currentCondition: currentCondition,
               )),
         ));
   }
@@ -157,13 +159,19 @@ class ConditionPageButton extends StatelessWidget {
 
 class FactoryListView extends StatefulWidget {
   FactoryListView(
-      {this.showButton = false, this.factoryCondition, this.requirementCode});
+      {this.showButton = false,
+      this.factoryCondition,
+      this.requirementCode,
+      @required this.currentCondition});
 
   final FactoryCondition factoryCondition;
 
   final String requirementCode;
 
   final bool showButton;
+
+  /// 当前选中头部排序条件
+  FilterConditionEntry currentCondition;
 
   @override
   State<StatefulWidget> createState() => _FactoryListViewState();
@@ -172,12 +180,12 @@ class FactoryListView extends StatefulWidget {
 class _FactoryListViewState extends State<FactoryListView> {
   final ScrollController _scrollController = ScrollController();
 
-  /// 当前选中条件
-  FilterConditionEntry currentCondition = FilterConditionEntry(
-    label: '综合',
-    value: 'comprehensive',
-    checked: true,
-  );
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +193,7 @@ class _FactoryListViewState extends State<FactoryListView> {
 
     // 监听筛选条件更改
     bloc.conditionStream.listen((condition) {
-      currentCondition = condition;
+      widget.currentCondition = condition;
       // 清空数据
       bloc.clear();
     });
@@ -196,8 +204,8 @@ class _FactoryListViewState extends State<FactoryListView> {
         bloc.loadingStart();
         bloc.loadingMoreByCondition(
           widget.factoryCondition,
-          condition: currentCondition.value,
-          isDESC: currentCondition.isDESC,
+          condition: widget.currentCondition.value,
+          sort: widget.currentCondition.isDESC ? 'desc' : 'asc',
           requirementCode: widget.requirementCode,
         );
       }
@@ -223,8 +231,8 @@ class _FactoryListViewState extends State<FactoryListView> {
                   // 默认条件查询
                   bloc.filterByCondition(
                     widget.factoryCondition,
-                    condition: this.currentCondition.value,
-                    isDESC: this.currentCondition.isDESC,
+                    condition: widget.currentCondition.value,
+                    sort: widget.currentCondition.isDESC ? 'desc' : 'asc',
                     requirementCode: widget.requirementCode,
                   );
 

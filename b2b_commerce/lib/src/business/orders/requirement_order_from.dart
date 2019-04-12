@@ -28,7 +28,9 @@ class RequirementOrderFrom extends StatefulWidget {
 
   RequirementOrderModel order;
 
-  RequirementOrderFrom({this.product, this.order,this.factoryUid,});
+  bool isReview ;
+
+  RequirementOrderFrom({this.product, this.order,this.factoryUid,this.isReview:false});
 
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
@@ -130,10 +132,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 horizontal: MediaQuery.of(context).size.width / 2.8,
                 vertical: 8),
             backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-            label: Text(widget.order != null ? '修改需求' : '确定发布'),
+            label: Text(widget.order != null && widget.isReview == false ? '修改需求' : '确定发布'),
             labelStyle: TextStyle(color: Colors.black, fontSize: 20),
             onPressed: () {
-              widget.order != null ? onUpdate() : onPublish(widget.factoryUid);
+              widget.order != null && widget.isReview == false ? onUpdate() : onPublish(widget.factoryUid);
             },
           ),
         ),
@@ -341,6 +343,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   /// 发布
   void onPublish(String factoryUid) async {
+    if(widget.isReview){
+      model.code = '';
+    }
     String code = await RequirementOrderRepository().publishNewRequirement(
         model, factoryUid, factoryUid != null ? true : false);
     if (code != null && code != '') {

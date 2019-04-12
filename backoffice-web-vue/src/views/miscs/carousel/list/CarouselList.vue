@@ -2,6 +2,16 @@
   <div class="animated fadeIn">
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="名称" prop="name"></el-table-column>
+      <el-table-column label="平台组" prop="group">
+        <template slot-scope="scope">
+          {{getEnum('carouselGroups', scope.row.group)}}
+        </template>
+      </el-table-column>
+      <el-table-column label="类型" prop="type">
+        <template slot-scope="scope">
+          {{getEnum('carouselTypes', scope.row.type)}}
+        </template>
+      </el-table-column>
       <el-table-column label="跳转动作" prop="action"></el-table-column>
       <el-table-column label="描述" prop="description"></el-table-column>
       <el-table-column label="是否可用" prop="active">
@@ -51,7 +61,8 @@
       },
     },
     data() {
-      return {}
+      return {
+      }
     }
   }
 </script>

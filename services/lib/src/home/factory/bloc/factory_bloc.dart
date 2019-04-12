@@ -46,26 +46,36 @@ class FactoryBLoC extends BLoCBase {
 
   //查询所有工厂列表
   filterByCondition(FactoryCondition factoryCondition,
-      {String condition, bool isDESC ,String requirementCode}) async {
+      {String condition, String sort, String requirementCode}) async {
     if (!lock) {
       lock = true;
       //重置参数
       reset();
       Response<Map<String, dynamic>> response;
-      if(requirementCode != null && requirementCode != ''){
+      if (requirementCode != null && requirementCode != '') {
         try {
-          response = await http$.post(Apis.requestQuoteFactories(requirementCode),
+          response = await http$.post(
+              Apis.requestQuoteFactories(requirementCode),
               data: factoryCondition.toDataJson(),
-              queryParameters: {'page': currentPage, 'size': pageSize});
+              queryParameters: {
+                'page': currentPage,
+                'size': pageSize,
+                'sort': '${condition},${sort}'
+              });
         } on DioError catch (e) {
           print(e);
         }
-      }else{
+      } else {
         try {
-          response = await http$.post(Apis.factories,
-              data: factoryCondition.toDataJson(),
-              // data:{},
-              queryParameters: {'page': currentPage, 'size': pageSize});
+          
+          response = await http$
+              .post(Apis.factories, data: factoryCondition.toDataJson(),
+                  // data:{},
+                  queryParameters: {
+                'page': currentPage,
+                'size': pageSize,
+                'sort': '${condition},${sort}'
+              });
         } on DioError catch (e) {
           print(e);
         }
@@ -86,7 +96,7 @@ class FactoryBLoC extends BLoCBase {
 
   //邀请报价的工厂列表
   filterRequestQuoteByCondition(FactoryCondition factoryCondition,
-      {String condition, bool isDESC ,String requirementCode}) async {
+      {String condition, String sort, String requirementCode}) async {
     if (!lock) {
       lock = true;
       //重置参数
@@ -95,14 +105,18 @@ class FactoryBLoC extends BLoCBase {
       try {
         response = await http$.post(Apis.requestQuoteFactories(requirementCode),
             data: factoryCondition.toDataJson(),
-            queryParameters: {'page': currentPage, 'size': pageSize});
+            queryParameters: {
+              'page': currentPage,
+              'size': pageSize,
+              'sort': '${condition},${sort}'
+            });
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
         FactoriesResponse factoriesResponse =
-        FactoriesResponse.fromJson(response.data);
+            FactoriesResponse.fromJson(response.data);
         totalPages = factoriesResponse.totalPages;
         totalElements = factoriesResponse.totalElements;
         _factories.clear();
@@ -113,9 +127,8 @@ class FactoryBLoC extends BLoCBase {
     }
   }
 
-
   loadingMoreByCondition(FactoryCondition factoryCondition,
-      {String condition, bool isDESC, String requirementCode}) async {
+      {String condition, String sort, String requirementCode}) async {
     if (!lock) {
       lock = true;
 
@@ -125,26 +138,34 @@ class FactoryBLoC extends BLoCBase {
         _bottomController.sink.add(true);
       } else {
         Response<Map<String, dynamic>> response;
-        if(requirementCode != null && requirementCode != ''){
+        if (requirementCode != null && requirementCode != '') {
           try {
             currentPage++;
-            response = await http$.post(Apis.requestQuoteFactories(requirementCode),
+            response = await http$.post(
+                Apis.requestQuoteFactories(requirementCode),
                 data: factoryCondition.toDataJson(),
-                queryParameters: {'page': currentPage, 'size': pageSize});
+                queryParameters: {
+                  'page': currentPage,
+                  'size': pageSize,
+                  'sort': '${condition},${sort}'
+                });
           } on DioError catch (e) {
             print(e);
           }
-        }else{
+        } else {
           try {
             currentPage++;
             response = await http$.post(Apis.factories,
                 data: factoryCondition.toDataJson(),
-                queryParameters: {'page': currentPage, 'size': pageSize});
+                queryParameters: {
+                  'page': currentPage,
+                  'size': pageSize,
+                  'sort': '${condition},${sort}'
+                });
           } on DioError catch (e) {
             print(e);
           }
         }
-
 
         if (response != null && response.statusCode == 200) {
           FactoriesResponse factoriesResponse =
@@ -162,7 +183,7 @@ class FactoryBLoC extends BLoCBase {
 
   //邀请报价的工厂列表
   loadingMoreRequestQuoteByCondition(FactoryCondition factoryCondition,
-      {String condition, bool isDESC, String requirementCode}) async {
+      {String condition, String sort, String requirementCode}) async {
     if (!lock) {
       lock = true;
 
@@ -174,16 +195,21 @@ class FactoryBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
-          response = await http$.post(Apis.requestQuoteFactories(requirementCode),
+          response = await http$.post(
+              Apis.requestQuoteFactories(requirementCode),
               data: factoryCondition.toDataJson(),
-              queryParameters: {'page': currentPage, 'size': pageSize});
+              queryParameters: {
+                'page': currentPage,
+                'size': pageSize,
+                'sort': '${condition},${sort}'
+              });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
           FactoriesResponse factoriesResponse =
-          FactoriesResponse.fromJson(response.data);
+              FactoriesResponse.fromJson(response.data);
           totalPages = factoriesResponse.totalPages;
           totalElements = factoriesResponse.totalElements;
           _factories.addAll(factoriesResponse.content);

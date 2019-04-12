@@ -564,32 +564,38 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       if (widget.model.status == ProofingStatus.PENDING_PAYMENT) {
         buttons = <Widget>[
-          FlatButton(
-              onPressed: onCancelling,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 70, 70, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '取消订单',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              )),
-          FlatButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => OrderPaymentPage(
-                          order: widget.model,
-                        )));
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '  去支付  ',
-                style: TextStyle(
-                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-              )),
+          Container(
+            height: 30,
+            child: FlatButton(
+                onPressed: onCancelling,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Color.fromRGBO(255, 70, 70, 1),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                child: Text(
+                  '取消订单',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                )),
+          ),
+          Container(
+            height: 30,
+            child: FlatButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => OrderPaymentPage(
+                        order: widget.model,
+                      )));
+                },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 45),
+                child: Text(
+                  '  去支付  ',
+                  style: TextStyle(
+                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                )),
+          ),
         ];
       } else if (widget.model.status == ProofingStatus.SHIPPED) {
         buttons = <Widget>[
@@ -604,29 +610,24 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           //       style: TextStyle(
           //           color: Color.fromRGBO(150, 150, 150, 1), fontSize: 16),
           //     )),
-          Container(),
           Container(
-              width: 300,
-              margin: EdgeInsets.fromLTRB(20, 0, 10, 10),
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: FlatButton(
+            height: 30,
+            child: FlatButton(
                 onPressed: () async {
                   bool result = false;
                   result = await ProofingOrderRepository()
                       .shipped(widget.model.code);
                   _showMessage(context, result, '确认收货');
                 },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
                 color: Color(0xFFFFD600),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 150),
                 child: Text(
                   '确认收货',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-              )),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                )),
+          ),
         ];
       } else {
         return Container();
@@ -636,42 +637,44 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       if (widget.model.status == ProofingStatus.PENDING_PAYMENT) {
         buttons = [
           Container(
-            height: 40,
-            width: 250,
+            height: 30,
             child: FlatButton(
                 onPressed: onUpdate,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
                     borderRadius: BorderRadius.circular(20)),
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                color: Colors.grey,
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
                 child: Text(
                   '修改订单',
                   style: TextStyle(
-                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                      color: Colors.white, fontSize: 16),
                 )),
-          )
+          ),
         ];
       } else if (widget.model.status == ProofingStatus.PENDING_DELIVERY) {
         buttons = <Widget>[
-          Container(),
-          FlatButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => LogisticsInputPage(
-                        isProductionOrder: false,
-                        proofingModel: widget.model,
-                      )));
-            },
-            color: Color(0xFFFFD600),
-            child: Text(
-              '确认发货',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
+          Container(
+            height: 30,
+            child: FlatButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => LogisticsInputPage(
+                      isProductionOrder: false,
+                      proofingModel: widget.model,
+                    )));
+              },
+              color: Color(0xFFFFD600),
+              child: Text(
+                '确认发货',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
               ),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20))),
           ),
         ];
       }

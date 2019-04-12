@@ -13,10 +13,14 @@ const state = {
   },
   formData: {
     id: null,
+    active:true,
     uid: '',
     name: '',
+    type:'',
+    group:'',
     description: '',
-    media:{}
+    media:{},
+    url:''
   }
 };
 

@@ -30,8 +30,8 @@ class Index extends React.Component {
                  }, {
                     "code" : "C2B011",
                     "img" : [
-                        "https://www.dingjust.top/imageserver/_ui/images/C2B007/99981f6aadb44e2b128f21628516e327-1.0.png",
-                        "https://www.dingjust.top/imageserver/_ui/images/C2B007/2c6dfdf981d7b0f0b5e8a707830c3faf-1.0.png"
+                        "http://47.106.112.137/imageserver/_ui/images/C2B007/99981f6aadb44e2b128f21628516e327-1.0.png",
+                        "http://47.106.112.137/imageserver/_ui/images/C2B007/2c6dfdf981d7b0f0b5e8a707830c3faf-1.0.png"
                     ],
                     "title" : "女士工装外套"
                  }, {
@@ -49,8 +49,8 @@ class Index extends React.Component {
                  }, {
                     "code" : "C2B011",
                     "img" : [
-                        "https://www.dingjust.top/imageserver/_ui/images/C2B007/99981f6aadb44e2b128f21628516e327-1.0.png",
-                        "https://www.dingjust.top/imageserver/_ui/images/C2B007/2c6dfdf981d7b0f0b5e8a707830c3faf-1.0.png"
+                        "http://47.106.112.137/imageserver/_ui/images/C2B007/99981f6aadb44e2b128f21628516e327-1.0.png",
+                        "http://47.106.112.137/imageserver/_ui/images/C2B007/2c6dfdf981d7b0f0b5e8a707830c3faf-1.0.png"
                     ],
                     "title" : "女士工装外套"
                  }, {
@@ -68,8 +68,8 @@ class Index extends React.Component {
                  }, {
                     "code" : "C2B011",
                     "img" : [
-                        "https://www.dingjust.top/imageserver/_ui/images/C2B007/99981f6aadb44e2b128f21628516e327-1.0.png",
-                        "https://www.dingjust.top/imageserver/_ui/images/C2B007/2c6dfdf981d7b0f0b5e8a707830c3faf-1.0.png"
+                        "http://47.106.112.137/imageserver/_ui/images/C2B007/99981f6aadb44e2b128f21628516e327-1.0.png",
+                        "http://47.106.112.137/imageserver/_ui/images/C2B007/2c6dfdf981d7b0f0b5e8a707830c3faf-1.0.png"
                     ],
                     "title" : "女士工装外套"
                  }, {
@@ -87,8 +87,8 @@ class Index extends React.Component {
              }, {
                 "code" : "C2B011",
                 "img" : [
-                    "https://www.dingjust.top/imageserver/_ui/images/C2B007/99981f6aadb44e2b128f21628516e327-1.0.png",
-                    "https://www.dingjust.top/imageserver/_ui/images/C2B007/2c6dfdf981d7b0f0b5e8a707830c3faf-1.0.png"
+                    "http://47.106.112.137/imageserver/_ui/images/C2B007/99981f6aadb44e2b128f21628516e327-1.0.png",
+                    "http://47.106.112.137/imageserver/_ui/images/C2B007/2c6dfdf981d7b0f0b5e8a707830c3faf-1.0.png"
                 ],
                 "title" : "女士工装外套"
              }, {

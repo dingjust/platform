@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:models/models.dart';
 
 class MyPersonalCertificatePage extends StatefulWidget{
   CompanyModel company;
