@@ -374,13 +374,29 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '优势类目',
+                  '优势品类',
                   style: const TextStyle(color: Colors.grey, fontSize: 16),
                 ),
-                Text(
-                  formatCategoriesSelectText(
-                      widget.factory.adeptAtCategories, 2),
-                  style: const TextStyle(fontSize: 16),
+                GestureDetector(
+                  onTap: (){
+                    showDialog(context: (context),builder: (context){
+                      return SimpleDialog(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(left: 10,right: 5,),
+                            child: Text(formatCategoriesSelectText(
+                                widget.factory.adeptAtCategories, widget.factory.adeptAtCategories.length),
+                              style: const TextStyle(fontSize: 16),),
+                          )
+                        ],
+                      );
+                    });
+                  },
+                  child: Text(
+                    formatCategoriesSelectText(
+                        widget.factory.adeptAtCategories, 2),
+                    style: const TextStyle(fontSize: 16),
+                  ),
                 ),
               ],
             ),
