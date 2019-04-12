@@ -28,7 +28,7 @@ export default {
             "secure": false
         },
         "/authorizationserver": {
-            "target": "http://47.106.112.137",
+            "target": "https://47.106.112.137",
             "changeOrigin": true,
             "secure": false
         }
