@@ -32,7 +32,7 @@ abstract class ProductRepository {
   //获取产品小类
   Future<List<CategoryModel>> cascadedCategories();
 
-  //获取产品大类
+  //获取面料类别
   Future<List<CategoryModel>> majorCategories();
   
   //获取所有颜色

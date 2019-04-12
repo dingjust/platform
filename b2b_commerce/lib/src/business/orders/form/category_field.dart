@@ -41,7 +41,7 @@ class CategoryFieldState extends State<CategoryField> {
           child: ListTile(
               leading: RichText(
                   text: TextSpan(
-                      text: '产品类目',
+                      text: '产品品类',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,

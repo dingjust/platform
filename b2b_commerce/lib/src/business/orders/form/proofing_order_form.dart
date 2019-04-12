@@ -666,13 +666,15 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                     .toList(),
               )));
     } else {
-      List<EditApparelSizeVariantProductEntry> returnEntries =
-          await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ProductSizeColorNum(
-                    editData: productEntries,
-                  )));
-      if (returnEntries != null) {
-        productEntries = returnEntries;
+      if(productEntries != null){
+        List<EditApparelSizeVariantProductEntry> returnEntries =
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ProductSizeColorNum(
+              editData: productEntries,
+            )));
+        if (returnEntries != null) {
+          productEntries = returnEntries;
+        }
       }
     }
 
