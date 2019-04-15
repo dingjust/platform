@@ -70,9 +70,13 @@ class ApparelProductAttributesInputPageState
       popularElements: _popularElementsCodes,
       decorativePatterns: _decorativePatternCodes,
       filler: _fillerCode.length > 0 ? _fillerCode[0] : null,
-      taggable:
-          _taggableCode.length > 0 ? _taggableCode[0] == 'true' : null,
     );
+    if(_taggableCode.length > 0 && _taggableCode[0] == 'true'){
+      attributesModel.taggable = true;
+    }else if(_taggableCode.length > 0 && _taggableCode[0] == 'false'){
+      attributesModel.taggable = false;
+    }
+
     Navigator.pop(context, attributesModel);
     return Future.value(false);
   }
