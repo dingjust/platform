@@ -97,6 +97,17 @@ class UserBLoC extends BLoCBase {
         _user.status = UserStatus.ONLINE;
       }
 
+      // 获取公司信息
+      if (_user.type == UserType.BRAND) {
+        UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+          _user.b2bUnit = brand;
+        });
+      } else if (_user.type == UserType.FACTORY) {
+        UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
+          _user.b2bUnit = factory;
+        });
+      }
+
       //  记录登陆用户信息
       if (remember) {
         LocalStorage.save(
@@ -164,6 +175,17 @@ class UserBLoC extends BLoCBase {
           _user = UserModel.fromJson(infoResponse.data);
           _user.name = infoResponse.data['username'];
           _user.status = UserStatus.ONLINE;
+        }
+
+        // 获取公司信息
+        if (_user.type == UserType.BRAND) {
+          UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+            _user.b2bUnit = brand;
+          });
+        } else if (_user.type == UserType.FACTORY) {
+          UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
+            _user.b2bUnit = factory;
+          });
         }
 
         //  记录refresh_token

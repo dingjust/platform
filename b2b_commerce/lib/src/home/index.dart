@@ -75,12 +75,10 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
 
     ignoreVersionNotification = false;
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        AppVersion(homePageKey.currentContext).checkVersion(
-            ignoreVersionNotification,
-            AppBLoC.instance.packageInfo.version,
-            'nbyjy',
-            'ANDROID'));
+    WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
+          homePageKey.currentContext,
+        ).initCheckVersion(ignoreVersionNotification,
+            AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID'));
 
     super.initState();
   }

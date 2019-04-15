@@ -121,7 +121,7 @@ class MyHomePage extends StatelessWidget {
       height: 80,
       margin: const EdgeInsets.fromLTRB(20, 20, 10, 10),
       child: Container(
-        child: ImageFactory.buildDefaultAvatar(user.profilePicture),
+        child: ImageFactory.buildDefaultAvatar(user.b2bUnit?.profilePicture),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.white, width: 0.5),
           color: Colors.white,

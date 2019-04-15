@@ -15,6 +15,31 @@ class AppVersion {
 
   AppVersion(this.context);
 
+  Future<void> initCheckVersion(bool ignoreVersionNotification,
+      String packageVersion, String name, String platform) async {
+    if (!ignoreVersionNotification) {
+      Response response;
+      try {
+        response = await http$.get(
+          Apis.appVersions(name, platform),
+        );
+      } on DioError catch (e) {
+        print(e);
+      }
+      if (response != null && response.statusCode == 200) {
+        AppVersionResponse appVersionResponse =
+            AppVersionResponse.fromJson(response.data);
+        //比较版本
+        if (VersionUtil.compareVersion(
+                appVersionResponse.releaseVersion, packageVersion) ==
+            1) {
+          _showNewVersion(appVersionResponse.releaseVersion,
+              appVersionResponse.description, appVersionResponse.url);
+        }
+      }
+    }
+  }
+
   void checkVersion(bool ignoreVersionNotification, String packageVersion,
       String name, String platform) async {
     if (!ignoreVersionNotification) {
