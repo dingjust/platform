@@ -76,12 +76,15 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <div class="block">
-            <div style="margin-top: 5px;margin-bottom: 20px;">评级</div>
-            <el-rate v-model="queryFormData.starLevel"
-                     :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
-            </el-rate>
-          </div>
+          <el-form-item label="评级" prop="startLevel">
+            <el-select class="w-100" v-model="queryFormData.starLevel" clearable filterable>
+              <el-option v-for="item in starLevels"
+                         :label="item.name"
+                         :key="item.code"
+                         :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="10">
@@ -181,6 +184,7 @@
         formData: this.$store.state.FactoriesModule.formData,
         queryFormData: this.$store.state.FactoriesModule.queryFormData,
         populationScales: this.$store.state.EnumsModule.populationScales,
+        starLevels:this.$store.state.EnumsModule.starLevels,
       }
     },
     created() {
