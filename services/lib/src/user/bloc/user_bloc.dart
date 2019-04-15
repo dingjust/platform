@@ -18,9 +18,13 @@ class UserBLoC extends BLoCBase {
   static UserBLoC get instance => _getInstance();
   static UserBLoC _instance;
 
+  //是否忽略更新提示
+  bool ignoreVersionNotification;
+
   UserBLoC._internal() {
     // 初始化
     _user = UserModel.empty();
+    ignoreVersionNotification = false;
   }
 
   static UserBLoC _getInstance() {
@@ -32,6 +36,10 @@ class UserBLoC extends BLoCBase {
 
   UserModel get currentUser {
     return _user;
+  }
+
+  void setIgnoreVersionNotification(bool value) {
+    ignoreVersionNotification = value;
   }
 
   bool get isBrandUser => _user.type == UserType.BRAND;

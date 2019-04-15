@@ -8,14 +8,18 @@ import 'package:path_provider/path_provider.dart';
 import 'package:services/src/api/apis.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/system/version/app_response.dart';
+import 'package:services/src/user/bloc/user_bloc.dart';
 // import 'package:install_plugin/install_plugin.dart';
 
 class AppVersion {
   final BuildContext context;
 
-  AppVersion(this.context);
+  //是否忽略更新提示
+  bool ignoreVersionNotification;
 
-  Future<void> initCheckVersion(bool ignoreVersionNotification,
+  AppVersion(this.context, {this.ignoreVersionNotification});
+
+  Future<void> initCheckVersion(
       String packageVersion, String name, String platform) async {
     if (!ignoreVersionNotification) {
       Response response;
@@ -40,29 +44,26 @@ class AppVersion {
     }
   }
 
-  void checkVersion(bool ignoreVersionNotification, String packageVersion,
-      String name, String platform) async {
-    if (!ignoreVersionNotification) {
-      Response response;
-      try {
-        response = await http$.get(
-          Apis.appVersions(name, platform),
-        );
-      } on DioError catch (e) {
-        print(e);
-      }
-      if (response != null && response.statusCode == 200) {
-        AppVersionResponse appVersionResponse =
-            AppVersionResponse.fromJson(response.data);
-        //比较版本
-        if (VersionUtil.compareVersion(
-                appVersionResponse.releaseVersion, packageVersion) ==
-            1) {
-          _showNewVersion(appVersionResponse.releaseVersion,
-              appVersionResponse.description, appVersionResponse.url);
-        } else {
-          _showMessage(appVersionResponse.releaseVersion);
-        }
+  void checkVersion(String packageVersion, String name, String platform) async {
+    Response response;
+    try {
+      response = await http$.get(
+        Apis.appVersions(name, platform),
+      );
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      AppVersionResponse appVersionResponse =
+          AppVersionResponse.fromJson(response.data);
+      //比较版本
+      if (VersionUtil.compareVersion(
+              appVersionResponse.releaseVersion, packageVersion) ==
+          1) {
+        _showNewVersion(appVersionResponse.releaseVersion,
+            appVersionResponse.description, appVersionResponse.url);
+      } else {
+        _showMessage(appVersionResponse.releaseVersion);
       }
     }
   }
@@ -130,6 +131,7 @@ class AppVersion {
             FlatButton(
               child: Text('稍后再说', style: TextStyle(color: Colors.grey)),
               onPressed: () {
+                UserBLoC.instance.ignoreVersionNotification = true;
                 Navigator.of(context).pop();
               },
             ),
@@ -137,9 +139,7 @@ class AppVersion {
               child: Text('立即更新',
                   style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1))),
               onPressed: () async {
-                updateApp(
-                    // 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/app-release.apk'
-                    url);
+                updateApp(url);
               },
             ),
           ],
