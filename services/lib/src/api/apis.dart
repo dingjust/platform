@@ -55,16 +55,22 @@ class Apis {
   //公司认证
   static get applyCertification => '/{baseSiteId}/companies/certification';
 
-  /// 全部工厂列表
+  /// 全部工厂列表Z
   static get factories => '/{baseSiteId}/factories';
 
   //邀请报价工厂列表 传入需求单号
   static get requestQuoteFactories => (String code) {
-     return '/{baseSiteId}/factories/requirement/$code';
-  };
+        return '/{baseSiteId}/factories/requirement/$code';
+      };
 
-    /// 获取品牌的供应商列表
-    static get factorySuppliers => '/{baseSiteId}/factories/getSuppliers';
-    /// 获取工厂的供应商列表
-    static get brandsSuppliers => '/{baseSiteId}/brands/getSuppliers';
+  /// 获取品牌的供应商列表
+  static get factorySuppliers => '/{baseSiteId}/factories/getSuppliers';
+
+  /// 获取工厂的供应商列表
+  static get brandsSuppliers => '/{baseSiteId}/brands/getSuppliers';
+
+  /// 检测版本
+  static get appVersions => (String name, String platform) {
+        return '/{baseSiteId}/appVersions/$name/$platform';
+      };
 }

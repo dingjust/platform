@@ -26,17 +26,21 @@ class AddAddress extends React.Component{
     saveAdderss = async()=>{
        
         const reg = /^[1][3,4,5,7,8][0-9]{9}$/;
-        if (!reg.test(this.state.cellphone.replace(/\s+/g, ""))) {
+        let cellphone = this.state.cellphone.replace(/\s+/g, "")
+        if (!reg.test(cellphone)) {
             Toast.fail('请输入正确手机号！',durationTime)
             return false
         }
         const {id} = queryString.parse(this.props.location.search)
-        let phone = this.state.fullname.replace(/\s+/g, "");
+        let name = this.state.fullname.replace(/\s+/g, "");
         let data = {
             id:id,
-            cellphone: this.state.cellphone,
-            fullname: phone,
+            cellphone: cellphone,
+            fullname: name,
             line1: this.state.line1,
+            country: {
+                isocode: "CN"
+            },
             region:{
                 isocode:this.state.pickerCode[0]
             },

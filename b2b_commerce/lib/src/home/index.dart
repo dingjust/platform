@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/common/app_bloc.dart';
 import 'package:b2b_commerce/src/common/coming_soon_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -73,10 +74,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
 
-    // ignoreVersionNotification = false;
-    // WidgetsBinding.instance.addPostFrameCallback((_) =>
-    //     AppVersion(homePageKey.currentContext)
-    //         .checkVersion(ignoreVersionNotification));
+    ignoreVersionNotification = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        AppVersion(homePageKey.currentContext).checkVersion(
+            ignoreVersionNotification,
+            AppBLoC.instance.packageInfo.version,
+            'nbyjy',
+            'ANDROID'));
 
     super.initState();
   }
@@ -233,7 +237,7 @@ class BrandSecondMenuSection extends StatelessWidget {
       title: '产业集群',
       icon: Icon(
         B2BIcons.industrial_cluster,
-        color: Color.fromRGBO(5, 202, 150, 1.0),
+        color: Color.fromRGBO(105, 210, 217, 1),
         size: 30,
       ),
     );
@@ -258,7 +262,7 @@ class BrandSecondMenuSection extends StatelessWidget {
       title: '优质工厂',
       icon: Icon(
         B2BIcons.factory_brand,
-        color: Color.fromRGBO(255, 189, 82, 1.0),
+        color: Color.fromRGBO(105, 224, 139, 1),
         size: 30,
       ),
     );

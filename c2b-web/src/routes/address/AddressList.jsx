@@ -67,7 +67,7 @@ class AddressList extends React.Component{
                                                         obj.defaultAddress?<span className={style.default}>默认</span>:null
                                                     }
                                                 </p>
-                                                <p className={`overflowText ${style.addressDetail}`}>{obj.region.name}{obj.city.name}{obj.district.name}{obj.line1}</p>
+                                                <p className={`overflowText ${style.addressDetail}`}>{obj.region&&obj.region.name}{obj.city&&obj.city.name}{obj.district&&obj.district.name}{obj.line1}</p>
                                             </div>
                                             <div className={`${style.alter}`} onClick={()=>{this.props.goLinke(`addAddress`,`id=${obj.id}`)}}>
                                                 <Icon  name={`icon-bianji`} ></Icon>
