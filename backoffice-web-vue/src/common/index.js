@@ -355,6 +355,15 @@ let NONE_TENANT_APIS = {
   cancellingOfPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code + '/cancelling';
   },
+  completedOfPurchaseOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/shipped';
+  },
+  completedOfProofing(code) {
+    return '/b2b/orders/proofing/' + code + '/shipped';
+  },
+  payProofings(code) {
+    return '/b2b/orders/proofing/'+code+'/paid';
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
