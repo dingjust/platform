@@ -68,7 +68,7 @@
         return this.slotData.status === 'PENDING_PAYMENT' && this.isBrand()&& this.slotData.unitPrice === 0;
       },
       canConfirmDelivery: function () {
-        return this.slotData.status === 'WAIT_FOR_OUT_OF_STORE' && this.isFactory();
+        return this.slotData.status === 'PENDING_DELIVERY' && this.isFactory();
       },
       cancelling: function () {
         return this.slotData.status === 'PENDING_PAYMENT' && this.isFactory();
@@ -119,7 +119,8 @@
         // 更新当前的地址，避免调后台
         this.$set(this.slotData, 'deliveryAddress', this.addressFormData);
 
-        this.$message.success('地址更新成功');
+        this.$message.success('确认发货成功');
+        this.fn.closeSlider();
       },
       async onCancelling() {
         const url = this.apis().cancellingOfProofing(this.slotData.code);
