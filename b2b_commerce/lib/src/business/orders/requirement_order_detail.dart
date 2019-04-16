@@ -26,10 +26,10 @@ class RequirementOrderDetailPage extends StatefulWidget {
 
 class _RequirementOrderDetailPageState
     extends State<RequirementOrderDetailPage> {
-  static Map<RequirementOrderStatus, MaterialColor> _statusColors = {
-    RequirementOrderStatus.PENDING_QUOTE: Colors.green,
-    RequirementOrderStatus.COMPLETED: Colors.orange,
-    RequirementOrderStatus.CANCELLED: Colors.red
+  static Map<RequirementOrderStatus, Color> _statusColors = {
+    RequirementOrderStatus.PENDING_QUOTE: Color(0xFFFFD600),
+    RequirementOrderStatus.COMPLETED: Colors.green,
+    RequirementOrderStatus.CANCELLED: Colors.grey,
   };
 
   void initState() {
@@ -604,6 +604,7 @@ class _RequirementOrderDetailPageState
             ),
             Expanded(
               child: Container(
+                  height: 30,
                   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
                   child: FlatButton(
                       color: Color(0xFFFFD600),
@@ -644,6 +645,7 @@ class _RequirementOrderDetailPageState
       return Container(
         width: double.infinity,
         child: Container(
+            height: 30,
           padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
           child:FlatButton(
               color: Colors.red,
@@ -668,6 +670,7 @@ class _RequirementOrderDetailPageState
       return Container(
         width: double.infinity,
         child: Container(
+          height: 30,
           padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
           child: FlatButton(
               onPressed: () async {
