@@ -180,4 +180,9 @@ class OrderApis {
   static get doRecommendation => (code,uid) {
     return '/{baseSiteId}/orders/requirement/$code/factory/$uid/recommend';
   };
+
+  //确认打样订单
+  static get proofingConfirm => (code) {
+    return '/{baseSiteId}/orders/proofing/$code/paid';
+  };
 }

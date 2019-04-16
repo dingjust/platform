@@ -125,5 +125,24 @@ class ProofingOrderRepository {
     }
   }
 
+  //确认打样订单
+  Future<bool> proofingConfirm(String code , ProofingModel form) async {
+    Response response;
+    try{
+      response =  await http$.put(
+        OrderApis.proofingConfirm(code),
+        data: ProofingModel.toJson(form),
+      );
+    }on DioError catch(e){
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
 }

@@ -213,27 +213,50 @@ class QuoteListItem extends StatelessWidget {
         buttons = <Widget>[
           Container(
             height: 30,
-            child: FlatButton(
-              onPressed: () async{
-                //获取该工厂的现款产品
-                ProductsResponse productsResponse = await ProductRepositoryImpl()
-                    .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
+            child: Row(
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(
+                    Icons.phone,
+                    color: Colors.green,
+                    size: 20,
+                  ),
+                  onTap: () async{
+                    //获取该工厂的现款产品
+                    ProductsResponse productsResponse = await ProductRepositoryImpl()
+                        .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyFactoryPage(
-                          model.belongTo,
-                          products: productsResponse.content,
-                        )));
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              child: Text(
-                '联系工厂',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyFactoryPage(
+                              model.belongTo,
+                              products: productsResponse.content,
+                            )));
+                  },
+                ),
+                FlatButton(
+                  onPressed: () async{
+                    //获取该工厂的现款产品
+                    ProductsResponse productsResponse = await ProductRepositoryImpl()
+                        .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyFactoryPage(
+                              model.belongTo,
+                              products: productsResponse.content,
+                            )));
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Text(
+                    '联系工厂',
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                )
+              ],
             ),
           ),
           Container(
@@ -255,27 +278,50 @@ class QuoteListItem extends StatelessWidget {
         buttons = <Widget>[
           Container(
             height: 30,
-            child: FlatButton(
-              onPressed: () async{
-                //获取该工厂的现款产品
-                ProductsResponse productsResponse = await ProductRepositoryImpl()
-                    .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
+            child: Row(
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(
+                    Icons.phone,
+                    color: Colors.green,
+                    size: 20,
+                  ),
+                  onTap: () async{
+                    //获取该工厂的现款产品
+                    ProductsResponse productsResponse = await ProductRepositoryImpl()
+                        .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyFactoryPage(
-                          model.belongTo,
-                          products: productsResponse.content,
-                        )));
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              child: Text(
-                '联系工厂',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyFactoryPage(
+                              model.belongTo,
+                              products: productsResponse.content,
+                            )));
+                  },
+                ),
+                FlatButton(
+                  onPressed: () async{
+                    //获取该工厂的现款产品
+                    ProductsResponse productsResponse = await ProductRepositoryImpl()
+                        .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyFactoryPage(
+                              model.belongTo,
+                              products: productsResponse.content,
+                            )));
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Text(
+                    '联系工厂',
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                )
+              ],
             ),
           ),
           Container(
