@@ -1,5 +1,13 @@
 const state = {
 
+  //工厂星级
+  starLevels: [
+    {code: 1, name: '一星'},
+    {code: 2, name: '两星'},
+    {code: 3, name: '三星'},
+    {code: 4, name: '四星'},
+    {code: 5, name: '五星'},
+  ],
   //轮播图类型
   carouselGroups: [
     {code: 'B2B', name: 'B2B'},
