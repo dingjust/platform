@@ -211,7 +211,7 @@ class _QuoteItemState extends State<QuoteItem> {
                   color: Colors.red,
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: Text(
-                    '拒绝报价',
+                    '拒绝工厂',
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   )),
             ),
@@ -223,7 +223,7 @@ class _QuoteItemState extends State<QuoteItem> {
                   color: Color.fromRGBO(255, 214, 12, 1),
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: Text(
-                    '确认报价',
+                    '确认工厂',
                     style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                   )),
             ),
