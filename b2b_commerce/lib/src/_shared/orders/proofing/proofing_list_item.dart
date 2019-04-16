@@ -317,13 +317,29 @@ class ProofingOrderItem extends StatelessWidget {
           ),
           Container(
             height: 30,
-            child: FlatButton(
+            child:
+            model.totalPrice!= null && model.totalPrice > 0 ?
+            FlatButton(
               onPressed: onProofingPaying,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
               child: Text(
                 ' 去支付 ',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ):
+            FlatButton(
+              onPressed: () async {
+                bool result = await ProofingOrderRepository()
+                    .proofingConfirm(model.code, model);
+                _showMessage(context,result,'确认订单');
+              },
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+              child: Text(
+                ' 确认 ',
                 style: TextStyle(color: Colors.black, fontSize: 16),
               ),
             ),
@@ -391,6 +407,23 @@ class ProofingOrderItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: buttons ?? [],
       ),
+    );
+  }
+
+  void _showMessage(BuildContext context, bool result, String message) {
+    _requestMessage(context, result ? '$message成功' : '$message失败');
+  }
+
+  Future<void> _requestMessage(BuildContext context, String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('提示', style: const TextStyle(fontSize: 16)),
+          children: <Widget>[SimpleDialogOption(child: Text('$message'))],
+        );
+      },
     );
   }
 }
