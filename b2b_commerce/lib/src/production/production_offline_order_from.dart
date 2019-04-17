@@ -98,13 +98,15 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       color: Colors.white,
       child: Column(
         children: <Widget>[
-          userType == 'factory' ?
-          _buildBrand(context) :
-          _buildFactory(context),
+          productModel == null || productModel.name == null
+              ? _buildSelectionProduct(context)
+              : _buildProduct(context),
           Divider(
             height: 0,
           ),
-          _buildProduct(context),
+          userType == 'factory' ?
+          _buildBrand(context) :
+          _buildFactory(context),
           Divider(
             height: 0,
           ),
@@ -159,55 +161,85 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   Widget _buildProduct(BuildContext context) {
     return GestureDetector(
         child: Container(
-          child: ListTile(
-              leading:  RichText(
-                text: TextSpan(
-                    text: '产品',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.red)
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 5),
+          padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: productModel.thumbnail != null
+                          ? NetworkImage(
+                          '${productModel.thumbnail.actualUrl}')
+                          : AssetImage(
+                        'temp/picture.png',
+                        package: "assets",
                       ),
-                    ]),
+                      fit: BoxFit.cover,
+                    )),
               ),
-            trailing: productName == null || productName == ''
-                ? Icon(Icons.keyboard_arrow_right)
-                : Container(
-              width: 150,
-              child: Text(
-                productName,
-                textAlign:TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '${productModel != null && productModel.name != null ? productModel.name : ''}',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          '货号：${productModel != null && productModel.skuID != null ? productModel.skuID : ''}',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(255, 243, 243, 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "${productModel != null && productModel.category != null ? productModel.category.name : ''}",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Color.fromRGBO(255, 133, 148, 1)),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            )
+            ],
           ),
         ),
         onTap: () async {
           dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  ApparelProductsPage(
-                    isSelectOption: true,
-                    item: _product,
-                  ),
+              builder: (context) => ApparelProductsPage(
+                isSelectOption: true,
+                item: _product,
+              ),
             ),
           );
           if (result != null) {
-            productName = result.name;
             productModel = result;
 
             if (productModel.variants != null) {
@@ -217,8 +249,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               for (int i = 0; i < productModel.variants.length; i++) {
                 colors.add(productModel.variants[i].color);
               }
-              for (int i = 0; i < colors.length - 1; i ++) {
-                for (int j = colors.length - 1; j > i; j --) {
+              for (int i = 0; i < colors.length - 1; i++) {
+                for (int j = colors.length - 1; j > i; j--) {
                   if (colors[j].code.contains(colors[i].code)) {
                     colors.removeAt(j);
                   }
@@ -229,14 +261,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               for (int i = 0; i < productModel.variants.length; i++) {
                 sizes.add(productModel.variants[i].size);
               }
-              for (int i = 0; i < sizes.length - 1; i ++) {
-                for (int j = sizes.length - 1; j > i; j --) {
+              for (int i = 0; i < sizes.length - 1; i++) {
+                for (int j = sizes.length - 1; j > i; j--) {
                   if (sizes[j].code.contains(sizes[i].code)) {
                     sizes.removeAt(j);
                   }
                 }
               }
-
 
               _newItems = Map.from(_items);
               _items.clear();
@@ -250,8 +281,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
                 if (itemColor != null) {
                   _items[itemColor] = sizes.map((size) {
-                    SizeQuantityItem item = _newItems[itemColor]
-                        .firstWhere(
+                    SizeQuantityItem item = _newItems[itemColor].firstWhere(
                             (SizeQuantityItem) =>
                         SizeQuantityItem.size.code == size.code,
                         orElse: () => null);
@@ -262,14 +292,118 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                     }
                   }).toList();
                 } else {
-                  _items[color] =
-                      sizes.map((size) => SizeQuantityItem(size: size))
-                          .toList();
+                  _items[color] = sizes
+                      .map((size) => SizeQuantityItem(size: size))
+                      .toList();
                 }
               });
             }
           }
         });
+  }
+
+  //没产品时选择产品
+  Widget _buildSelectionProduct(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 5),
+      child: GestureDetector(
+          child: Container(
+            height: 100,
+            child: Card(
+                elevation: 0,
+                color: Colors.white10,
+                child: Center(child: RichText(
+                  text: TextSpan(
+                      text: '产品选择/创建',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.red)
+                        ),
+                      ]),
+                ),)),
+          ),
+          onTap: () async {
+            dynamic result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ApparelProductsPage(
+                  isSelectOption: true,
+                  item: _product,
+                ),
+              ),
+            );
+            if (result != null) {
+              productModel = result;
+
+              if (productModel.variants != null) {
+                List<ColorModel> colors = List();
+                List<SizeModel> sizes = List();
+                //把每个款的颜色记录下,并去重
+                for (int i = 0; i < productModel.variants.length; i++) {
+                  colors.add(productModel.variants[i].color);
+                }
+                for (int i = 0; i < colors.length - 1; i++) {
+                  for (int j = colors.length - 1; j > i; j--) {
+                    if (colors[j].code.contains(colors[i].code)) {
+                      colors.removeAt(j);
+                    }
+                  }
+                }
+
+                //尺码
+                for (int i = 0; i < productModel.variants.length; i++) {
+                  sizes.add(productModel.variants[i].size);
+                }
+                for (int i = 0; i < sizes.length - 1; i++) {
+                  for (int j = sizes.length - 1; j > i; j--) {
+                    if (sizes[j].code.contains(sizes[i].code)) {
+                      sizes.removeAt(j);
+                    }
+                  }
+                }
+
+                _newItems = Map.from(_items);
+                _items.clear();
+                _newItems.clear();
+                _totalQuantity = 0;
+
+                colors.forEach((color) {
+                  ColorModel itemColor = _newItems.keys.firstWhere(
+                          (key) => key.code == color.code,
+                      orElse: () => null);
+
+                  if (itemColor != null) {
+                    _items[itemColor] = sizes.map((size) {
+                      SizeQuantityItem item = _newItems[itemColor].firstWhere(
+                              (SizeQuantityItem) =>
+                          SizeQuantityItem.size.code == size.code,
+                          orElse: () => null);
+                      if (item != null) {
+                        return item;
+                      } else {
+                        return SizeQuantityItem(size: size);
+                      }
+                    }).toList();
+                  } else {
+                    _items[color] = sizes
+                        .map((size) => SizeQuantityItem(size: size))
+                        .toList();
+                  }
+                });
+              }
+            }
+          }),
+    );
   }
 
 //生产数量
