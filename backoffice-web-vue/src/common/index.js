@@ -243,6 +243,9 @@ const COMMON_APIS = {
   updateAttributesOfApparelProduct(code) {
     return '/b2b/products/apparel/' + code + '/attributes';
   },
+  updateImagesOfApparelProduct(code) {
+    return '/b2b/products/apparel/' + code + '/images';
+  },
   getRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code;
   },
