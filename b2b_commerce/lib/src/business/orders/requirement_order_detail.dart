@@ -643,10 +643,10 @@ class _RequirementOrderDetailPageState
       );
     } else if(UserBLoC.instance.currentUser.type == UserType.BRAND && widget.order.status != RequirementOrderStatus.PENDING_QUOTE){
       return Container(
-        width: double.infinity,
         child: Container(
             height: 30,
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+          margin: EdgeInsets.only(bottom: 10),
           child:FlatButton(
               color: Colors.red,
               child: Text(

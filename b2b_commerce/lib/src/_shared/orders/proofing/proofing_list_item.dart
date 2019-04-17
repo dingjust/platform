@@ -337,7 +337,7 @@ class ProofingOrderItem extends StatelessWidget {
               },
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40),
               child: Text(
                 ' 确认 ',
                 style: TextStyle(color: Colors.black, fontSize: 16),

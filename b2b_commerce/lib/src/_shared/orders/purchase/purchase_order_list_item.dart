@@ -393,7 +393,65 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Expanded(
-                child: Container(),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                  height: 30,
+                  child: FlatButton(
+                      color: Colors.red,
+                      child: Text(
+                        '取消订单',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      onPressed: () async {
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible:
+                          true, // user must tap button!
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                '提示',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              content: Text('是否要取消订单？'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text(
+                                    '取消',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text(
+                                    '确定',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                    bool result =
+                                    await PurchaseOrderRepository()
+                                        .purchaseOrderCancelling(
+                                        widget.order.code);
+                                    _showMessage(context, result, '订单取消');
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }),
+                ),
               ),
               Expanded(
                 child: Container(
