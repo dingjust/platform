@@ -21,6 +21,9 @@ typedef void ProofingConfirmReceivedCallback();
 /// 去支付
 typedef void ProofingPayingCallback();
 
+/// 却仍订单
+typedef void ProofingConfrim();
+
 class ProofingOrderItem extends StatelessWidget {
   const ProofingOrderItem(
       {Key key,
@@ -29,7 +32,8 @@ class ProofingOrderItem extends StatelessWidget {
       this.onProofingUpdating,
       this.onProofingConfirmDelivered,
       this.onProofingConfirmReceived,
-      this.onProofingPaying})
+      this.onProofingPaying,
+      this.onProofingConfirm})
       : super(key: key);
 
   final ProofingModel model;
@@ -39,6 +43,7 @@ class ProofingOrderItem extends StatelessWidget {
   final ProofingConfirmDeliveredCallback onProofingConfirmDelivered;
   final ProofingConfirmReceivedCallback onProofingConfirmReceived;
   final ProofingPayingCallback onProofingPaying;
+  final ProofingConfrim onProofingConfirm;
 
   static Map<ProofingStatus, Color> _statusColors = {
     ProofingStatus.PENDING_PAYMENT: Colors.red,
@@ -53,10 +58,13 @@ class ProofingOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         // 查询明细
-        ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(model.code);
+        ProofingModel detailModel =
+            await ProofingOrderRepository().proofingDetail(model.code);
 
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ProofingOrderDetailPage(model: detailModel)),
+          MaterialPageRoute(
+              builder: (context) =>
+                  ProofingOrderDetailPage(model: detailModel)),
         );
       },
       child: Container(
@@ -89,18 +97,21 @@ class ProofingOrderItem extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   text: '￥',
-                  style: const TextStyle(fontSize: 16, color: Color.fromRGBO(255, 45, 45, 1)),
+                  style: const TextStyle(
+                      fontSize: 16, color: Color.fromRGBO(255, 45, 45, 1)),
                   children: <TextSpan>[
                     TextSpan(
                       text: '${model.totalPrice}',
-                      style: const TextStyle(fontSize: 20, color: Color.fromRGBO(255, 45, 45, 1)),
+                      style: const TextStyle(
+                          fontSize: 20, color: Color.fromRGBO(255, 45, 45, 1)),
                     ),
                   ],
                 ),
               ),
               Text(
                 ProofingStatusLocalizedMap[model.status],
-                style: TextStyle(color: _statusColors[model.status], fontSize: 18),
+                style:
+                    TextStyle(color: _statusColors[model.status], fontSize: 18),
               ),
             ],
           ),
@@ -118,7 +129,8 @@ class ProofingOrderItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Text('${DateFormatUtil.format(model.creationTime)}', style: const TextStyle(fontSize: 15)),
+                Text('${DateFormatUtil.format(model.creationTime)}',
+                    style: const TextStyle(fontSize: 15)),
               ],
             ),
           ),
@@ -135,7 +147,9 @@ class ProofingOrderItem extends StatelessWidget {
     });
 
     Widget _buildProductName(String name) {
-      return Text(name, style: const TextStyle(fontSize: 15), overflow: TextOverflow.ellipsis);
+      return Text(name,
+          style: const TextStyle(fontSize: 15),
+          overflow: TextOverflow.ellipsis);
     }
 
     Widget _buildProductSkuID(String skuID) {
@@ -149,7 +163,8 @@ class ProofingOrderItem extends StatelessWidget {
           color: Colors.grey[200],
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Text('货号：$skuID', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        child: Text('货号：$skuID',
+            style: const TextStyle(fontSize: 12, color: Colors.grey)),
       );
     }
 
@@ -162,7 +177,8 @@ class ProofingOrderItem extends StatelessWidget {
         ),
         child: Text(
           "$category   $sum 件",
-          style: const TextStyle(fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
+          style: const TextStyle(
+              fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
         ),
       );
     }
@@ -200,7 +216,8 @@ class ProofingOrderItem extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: const Color.fromRGBO(255, 70, 70, 1),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-        child: const Text('取消订单', style: const TextStyle(color: Colors.white, fontSize: 18)),
+        child: const Text('取消订单',
+            style: const TextStyle(color: Colors.white, fontSize: 18)),
       );
     }
 
@@ -210,7 +227,9 @@ class ProofingOrderItem extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: const Color.fromRGBO(255, 214, 12, 1),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-        child: Text('  去支付  ', style: const TextStyle(color: const Color.fromRGBO(36, 38, 41, 1), fontSize: 18)),
+        child: Text('  去支付  ',
+            style: const TextStyle(
+                color: const Color.fromRGBO(36, 38, 41, 1), fontSize: 18)),
       );
     }
 
@@ -237,7 +256,8 @@ class ProofingOrderItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
         child: Text(
           '修改订单',
-          style: const TextStyle(color: const Color.fromRGBO(255, 45, 45, 1), fontSize: 18),
+          style: const TextStyle(
+              color: const Color.fromRGBO(255, 45, 45, 1), fontSize: 18),
         ),
       );
     }
@@ -248,9 +268,11 @@ class ProofingOrderItem extends StatelessWidget {
         color: const Color(0xFFFFD600),
         child: Text(
           '确认发货',
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 18),
+          style: const TextStyle(
+              color: Colors.black, fontWeight: FontWeight.w500, fontSize: 18),
         ),
-        shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(20))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(20))),
       );
     }
 
@@ -293,7 +315,6 @@ class ProofingOrderItem extends StatelessWidget {
         children: buttons ?? [],
       ),
     );
-
   }
 
   Widget _buildActions(BuildContext context) {
@@ -317,32 +338,29 @@ class ProofingOrderItem extends StatelessWidget {
           ),
           Container(
             height: 30,
-            child:
-            model.totalPrice!= null && model.totalPrice > 0 ?
-            FlatButton(
-              onPressed: onProofingPaying,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-              child: Text(
-                ' 去支付 ',
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-            ):
-            FlatButton(
-              onPressed: () async {
-                bool result = await ProofingOrderRepository()
-                    .proofingConfirm(model.code, model);
-                _showMessage(context,result,'确认订单');
-              },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-              child: Text(
-                ' 确认 ',
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-            ),
+            child: model.totalPrice != null && model.totalPrice > 0
+                ? FlatButton(
+                    onPressed: onProofingPaying,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+                    child: Text(
+                      ' 去支付 ',
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                  )
+                : FlatButton(
+                    onPressed: onProofingConfirm,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+                    child: Text(
+                      ' 确认 ',
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                  ),
           ),
         ];
       } else if (model.status == ProofingStatus.SHIPPED) {
@@ -352,12 +370,14 @@ class ProofingOrderItem extends StatelessWidget {
             height: 30,
             child: FlatButton(
               onPressed: onProofingConfirmReceived,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '确认收货',
-                style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
               ),
             ),
           ),
@@ -388,12 +408,14 @@ class ProofingOrderItem extends StatelessWidget {
             height: 30,
             child: FlatButton(
               onPressed: onProofingConfirmDelivered,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
                 '确认发货',
-                style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
               ),
             ),
           ),
