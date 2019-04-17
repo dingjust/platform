@@ -3,11 +3,15 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>图片</span>
+        <span v-if="!isTenant()">
+          <el-button class="float-right" type="text" @click="onUpdateImages">编辑</el-button>
+      </span>
       </div>
       <apparel-product-images-form ref="imagesForm"
                                    :slot-data="slotData"
                                    :read-only="readOnly">
       </apparel-product-images-form>
+
     </el-card>
     <div class="pt-2"></div>
     <el-card class="box-card">
@@ -84,6 +88,19 @@
         <el-button type="primary" @click="onAttributesFormSubmit">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog v-if="!isTenant()" title="更新图片" :modal="false"
+               :visible.sync="imagesDialogVisible"
+               :show-close="false" append-to-body width="50%">
+      <apparel-product-images-form ref="imagesForm2"
+                                   :slot-data="slotData"
+                                   :read-only="false">
+      </apparel-product-images-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="imagesDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onUpdateImages">确 定</el-button>
+      </span>
+
+    </el-dialog>
   </div>
 </template>
 
@@ -107,6 +124,20 @@
         // TODO: validation
         return true;
         // return this.$refs['basicForm'].validate(callback);
+      },
+      onUpdateImages() {
+        this.formData = Object.assign({}, this.slotData);
+        this.imagesDialogVisible = true;
+      },
+      async onUpdateImages() {
+        const url = this.apis().updateImagesOfApparelProduct(this.slotData.code);
+        const result = await this.$http.put(url, this.slotData);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('更新图片成功');
       },
       onUpdateBasic() {
         this.formData = Object.assign({}, this.slotData);
@@ -182,6 +213,7 @@
     computed: {},
     data() {
       return {
+        imagesDialogVisible: false,
         basicDialogVisible: false,
         variantsDialogVisible: false,
         attributesDialogVisible: false,
