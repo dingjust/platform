@@ -589,6 +589,7 @@ class RequirementOrderModel extends OrderModel {
   int totalQuotesCount;
 
   ///最近报价的报价单
+  @JsonKey(toJson: _quoteModelToJson)
   List<QuoteModel> latestQuotes;
 
   ///附件
@@ -642,6 +643,10 @@ class RequirementOrderModel extends OrderModel {
   static List<Map<String, dynamic>> _mediasToJson(
           List<MediaModel> attachments) =>
       attachments.map((media) => MediaModel.toJson(media)).toList();
+
+  static List<Map<String, dynamic>> _quoteModelToJson(
+      List<QuoteModel> list) =>
+      list.map((entry) => QuoteModel.toJson(entry)).toList();
 
   static Map<String, dynamic> _brandToJson(BrandModel belongTo) =>
       BrandModel.toJson(belongTo);
@@ -963,9 +968,11 @@ class QuoteModel extends AbstractOrderModel {
   double costOfOther;
 
   //生产订单
+  @JsonKey(toJson: _purchaseOrderToJson)
   PurchaseOrderModel activePurchaseOrder;
 
   //打样订单
+  @JsonKey(toJson: _proofingToJson)
   ProofingModel activeProofing;
 
   /// 附件
@@ -1031,6 +1038,12 @@ class QuoteModel extends AbstractOrderModel {
 
   static Map<String, dynamic> _supplierToJson(CompanyModel model) =>
       CompanyModel.toJson(model);
+
+  static Map<String, dynamic> _purchaseOrderToJson(PurchaseOrderModel model) =>
+      PurchaseOrderModel.toJson(model);
+
+  static Map<String, dynamic> _proofingToJson(ProofingModel model) =>
+      ProofingModel.toJson(model);
 }
 
 /// 生产进度

@@ -65,22 +65,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey homePageKey = GlobalKey();
 
-  ///是否已查看新版本提示
-  bool ignoreVersionNotification;
+  AppVersion appVersion;
 
   _HomePageState();
 
   @override
   void initState() {
     // TODO: implement initState
-
-    ignoreVersionNotification = false;
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        AppVersion(homePageKey.currentContext).checkVersion(
-            ignoreVersionNotification,
-            AppBLoC.instance.packageInfo.version,
-            'nbyjy',
-            'ANDROID'));
+    WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
+            homePageKey.currentContext,
+            ignoreVersionNotification:
+                UserBLoC.instance.ignoreVersionNotification)
+        .initCheckVersion(
+            AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID'));
 
     super.initState();
   }

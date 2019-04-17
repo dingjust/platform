@@ -78,7 +78,7 @@ class AppActions extends StatelessWidget {
           leading: const Icon(Icons.shopping_basket),
           onTap: () {
             //TODO版本检测
-            AppVersion(context).checkVersion(false,
+            AppVersion(context).checkVersion(
                 AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID');
           },
         )

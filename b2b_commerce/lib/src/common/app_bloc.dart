@@ -2,7 +2,7 @@ import 'package:package_info/package_info.dart';
 import 'package:services/services.dart';
 
 class AppBLoC extends BLoCBase {
-  //
+  //包信息
   PackageInfo packageInfo;
 
   // 工厂模式

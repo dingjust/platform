@@ -534,7 +534,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           duration: Duration(seconds: 1),
         ),
       );
-    } else if (totalQuantity == 0) {
+    } else if (totalQuantity == 0||_unitPriceController.text=="") {
       (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
         SnackBar(
           content: Text('请填写打样费'),

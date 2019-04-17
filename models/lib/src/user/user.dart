@@ -29,6 +29,9 @@ class UserModel extends PrincipalModel {
   /// 公司名称
   String companyName;
 
+  /// 公司信息
+  B2BUnitModel b2bUnit;
+
   Image get avatar => profilePicture ?? Image.network(profilePicture.url);
 
   UserModel({
@@ -38,7 +41,8 @@ class UserModel extends PrincipalModel {
     this.loginDisabled,
     this.type,
     this.roles,
-    this.status
+    this.status,
+    this.b2bUnit
   }) : super(
           profilePicture: profilePicture,
           uid: uid,

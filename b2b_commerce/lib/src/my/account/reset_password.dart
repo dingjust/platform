@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/home/account/login.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:services/services.dart' show UserBLoC;
+import 'package:services/services.dart' show UserBLoC, UserRepositoryImpl;
 import 'package:widgets/widgets.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -20,6 +22,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   int _seconds = 0;
   Timer _timer;
   bool validate = false;
+  String phoneValidateStr = "";
 
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -131,6 +134,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           InputRow(
             label: '手机号码',
             field: _phoneField,
+            surfix: Container(
+              child: Text(
+                phoneValidateStr,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
           ),
           InputRow(
             label: '验证码',
@@ -139,10 +148,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)),
               onPressed: (_seconds == 0)
-                  ? () {
-                      setState(() {
-                        _startTimer();
-                      });
+                  ? () async {
+                      bool isExist = await validatePhone();
+                      if (isExist) {
+                        UserRepositoryImpl()
+                            .sendCaptcha(_phoneController.text)
+                            .then((a) {
+                          _startTimer();
+                        });
+                      }
                     }
                   : null,
               color: Color.fromRGBO(255, 214, 12, 1),
@@ -237,6 +251,35 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
+  Future<bool> validatePhone() async {
+    String result = "";
+    bool isExist = false;
+
+    if (_phoneController.text == '') {
+      result = '';
+    } else {
+      if (RegexUtil.isMobile(_phoneController.text)) {
+        bool exist =
+            await UserRepositoryImpl().phoneExist(_phoneController.text);
+
+        if (exist != null && exist) {
+          result = "";
+          isExist = true;
+        } else {
+          result = "账号不存在";
+        }
+      } else {
+        result = "输入正确手机号";
+      }
+    }
+
+    setState(() {
+      phoneValidateStr = result;
+    });
+
+    return isExist;
+  }
+
   void formValidate() {
     setState(() {
       validate = _phoneController.text.trim().length > 0 &&
@@ -244,12 +287,49 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           _passwordController.text.trim().length > 0 &&
           _againPasswordController.text.trim().length > 0 &&
           _passwordController.text == _againPasswordController.text;
-
-      print(validate);
     });
   }
 
-  void onSubmit() async {}
+  void onSubmit() async {
+    // 加载条
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    );
+
+    UserRepositoryImpl()
+        .resetPassword(_phoneController.text, _passwordController.text,
+            _smsCaptchaController.text)
+        .then((value) {
+      if (value) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => B2BLoginPage()),
+            ModalRoute.withName('/'));
+      } else {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        showDialog<void>(
+          context: context,
+          barrierDismissible: true, // user must tap button!
+          builder: (context) {
+            return AlertDialog(
+              title: Text('重置密码失败'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('确定'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+  }
 }
 
 class PrefixText extends StatelessWidget {
