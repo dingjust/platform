@@ -43,4 +43,9 @@ abstract class UserApis {
   static get phoneExists => (code) {
         return '/{baseSiteId}/companies/register/$code';
       };
+
+  ///短信验证重置密码
+  static get resetPassword => (id) {
+        return '/{baseSiteId}/users/anonymous/resetPasswordByCaptcha/$id';
+      };
 }

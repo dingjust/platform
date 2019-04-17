@@ -193,8 +193,6 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
       ..password = widget.password
       ..contactAddress = contactAddress;
 
-    print(CompanyRegisterDTO.toJson(form));
-
     // 加载条
     showDialog(
       context: context,
