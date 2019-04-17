@@ -41,6 +41,11 @@
         <el-button type="primary" @click="onSubmitConfirmDelivering">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="微信支付" :modal="false" :visible.sync="payDialogVisible"
+    :show-close="false" append-to-body align="center">
+      <img :src="this.imageSrc"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -185,7 +190,6 @@
             console.log("cancel");
           });
         }else if(this.slotData.unitPrice === 0){
-
           const url = this.apis().payProofings(this.slotData.code);
           const result = await this.$http.put(url,{});
           if (result["errors"]) {
@@ -193,10 +197,14 @@
             return;
           }
           this.$message.success('确认成功');
-
-
         }else {
-          // TODO: 生成支付二维码
+          const url = this.apis().payProofingsImage(this.slotData.code);
+          const result = await this.$http.get(url);
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+          this.imageSrc = result;
           this.payDialogVisible = true;
         }
 
@@ -209,6 +217,7 @@
         confirmDeliveryDialogVisible: false,
         consignmentFormData: this.$store.state.ProofingsModule.consignmentFormData,
         payDialogVisible: false,
+        imageSrc:'',
       }
     }
   }

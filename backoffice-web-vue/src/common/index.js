@@ -364,6 +364,9 @@ let NONE_TENANT_APIS = {
   payProofings(code) {
     return '/b2b/orders/proofing/'+code+'/paid';
   },
+  payProofingsImage(code) {
+    return '/b2b/checkout/multi/wechat/pay/'+code;
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
