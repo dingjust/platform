@@ -97,7 +97,7 @@
       </apparel-product-images-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="imagesDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onUpdateImages">确 定</el-button>
+        <el-button type="primary" @click="updateImagesSubmit">确 定</el-button>
       </span>
 
     </el-dialog>
@@ -129,7 +129,7 @@
         this.formData = Object.assign({}, this.slotData);
         this.imagesDialogVisible = true;
       },
-      async onUpdateImages() {
+      async updateImagesSubmit() {
         const url = this.apis().updateImagesOfApparelProduct(this.slotData.code);
         const result = await this.$http.put(url, this.slotData);
         if (result["errors"]) {
