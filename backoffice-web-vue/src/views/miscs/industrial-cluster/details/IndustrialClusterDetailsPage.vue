@@ -27,7 +27,7 @@
       onSubmit() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
-            // this._onSubmit();
+            this._onSubmit();
             return true;
           }
 

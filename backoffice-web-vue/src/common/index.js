@@ -83,6 +83,9 @@ const COMMON_APIS = {
   getIndustrialClusters() {
     return '/b2b/industrialClusters';
   },
+  getIndustrialClustersAll() {
+    return '/b2b/industrialClusters/all';
+  },
   getIndustrialCluster(code) {
     return '/b2b/industrialClusters/' + code;
   },

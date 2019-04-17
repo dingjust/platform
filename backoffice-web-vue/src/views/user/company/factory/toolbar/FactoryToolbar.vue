@@ -15,7 +15,7 @@
               <el-option v-for="item in labels"
                          :label="item.name"
                          :key="item.id"
-                         :value="item">
+                         :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -58,7 +58,7 @@
                   v-for="item in group.children"
                   :key="item.code"
                   :label="item.name"
-                  :value="item">
+                  :value="item.code">
                 </el-option>
               </el-option-group>
             </el-select>
@@ -70,7 +70,7 @@
               <el-option v-for="item in categories"
                          :label="item.name"
                          :key="item.name"
-                         :value="item">
+                         :value="item.code">
               </el-option>
             </el-select>
           </el-form-item>
@@ -81,6 +81,19 @@
               <el-option v-for="item in starLevels"
                          :label="item.name"
                          :key="item.code"
+                         :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <el-form-item label="产业集群" prop="labels">
+            <el-select class="w-100" v-model="queryFormData.industrialClusters" value-key="id" multiple filterable>
+              <el-option v-for="item in industrialClusters"
+                         :label="item.name"
+                         :key="item.id"
                          :value="item.code">
               </el-option>
             </el-select>
@@ -172,6 +185,16 @@
 
         this.adeptAtCategories = result;
       },
+      async getIndustrialClusters() {
+        const url = this.apis().getIndustrialClustersAll();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        console.log(result);
+        this.industrialClusters = result;
+      },
     },
     data() {
       return {
@@ -181,6 +204,7 @@
         regions: [],
         categories: [],
         adeptAtCategories: [],
+        industrialClusters:[],
         formData: this.$store.state.FactoriesModule.formData,
         queryFormData: this.$store.state.FactoriesModule.queryFormData,
         populationScales: this.$store.state.EnumsModule.populationScales,
@@ -192,6 +216,7 @@
       this.getRegions();
       this.getCategories();
       this.getMinorCategories();
+      this.getIndustrialClusters();
     }
   }
 </script>
