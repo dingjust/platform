@@ -11,11 +11,17 @@
       <el-button v-if="canPay" size="mini" type="primary" @click="onPaying">
         支付
       </el-button>
+      <el-button v-if="canConfirm" size="mini" type="primary" @click="onPaying">
+        确认
+      </el-button>
       <el-button v-if="cancelling" size="mini" type="primary" @click="onCancelling">
         取消
       </el-button>
       <el-button v-if="canConfirmDelivery" size="mini" type="primary" @click="onConfirmDelivering">
         确认发货
+      </el-button>
+      <el-button v-if="canConfirmCompleted" size="mini" type="primary" @click="onConfirmCompleted">
+        确认收货
       </el-button>
     </el-button-group>
 
@@ -56,14 +62,20 @@
         return this.slotData.status === 'PENDING_PAYMENT' && this.isBrand();
       },
       canPay: function () {
-        return this.slotData.status === 'PENDING_PAYMENT' && this.isBrand();
+        return this.slotData.status === 'PENDING_PAYMENT' && this.isBrand()&& this.slotData.unitPrice > 0;
+      },
+      canConfirm: function () {
+        return this.slotData.status === 'PENDING_PAYMENT' && this.isBrand()&& this.slotData.unitPrice === 0;
       },
       canConfirmDelivery: function () {
-        return this.slotData.status === 'WAIT_FOR_OUT_OF_STORE' && this.isFactory();
+        return this.slotData.status === 'PENDING_DELIVERY' && this.isFactory();
       },
       cancelling: function () {
         return this.slotData.status === 'PENDING_PAYMENT' && this.isFactory();
-      }
+      },
+      canConfirmCompleted: function () {
+        return this.slotData.status === 'SHIPPED' && this.isBrand();
+      },
     },
     methods: {
       ...mapActions({
@@ -107,7 +119,8 @@
         // 更新当前的地址，避免调后台
         this.$set(this.slotData, 'deliveryAddress', this.addressFormData);
 
-        this.$message.success('地址更新成功');
+        this.$message.success('确认发货成功');
+        this.fn.closeSlider();
       },
       async onCancelling() {
         const url = this.apis().cancellingOfProofing(this.slotData.code);
@@ -121,6 +134,19 @@
         this.$message.success('取消打样单成功');
         this.fn.closeSlider();
       },
+      async onConfirmCompleted() {
+        const url = this.apis().completedOfProofing(this.slotData.code);
+        const result = await this.$http.put(url, {});
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('确认收货成功');
+        this.fn.closeSlider();
+      },
+
       onConfirmDelivering() {
         this.confirmDeliveryDialogVisible = true;
       },
@@ -146,7 +172,7 @@
 
         this.$message.success('地址更新成功');
       },
-      onPaying() {
+      async onPaying() {
         // check the delivery address is maintain
         if (!this.slotData.deliveryAddress) {
           this.$confirm('地址未维护，支付前请先维护收货地址?', '提示', {
@@ -158,10 +184,22 @@
           }).catch(() => {
             console.log("cancel");
           });
-        } else {
+        }else if(this.slotData.unitPrice === 0){
+
+          const url = this.apis().payProofings(this.slotData.code);
+          const result = await this.$http.put(url,{});
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
+          }
+          this.$message.success('确认成功');
+
+
+        }else {
           // TODO: 生成支付二维码
           this.payDialogVisible = true;
         }
+
       },
     },
     data() {

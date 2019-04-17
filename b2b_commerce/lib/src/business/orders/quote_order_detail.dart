@@ -23,9 +23,9 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   QuoteModel pageItem;
 
   static Map<QuoteState, MaterialColor> _statesColor = {
-    QuoteState.SELLER_SUBMITTED: Colors.green,
-    QuoteState.BUYER_APPROVED: Colors.blue,
-    QuoteState.BUYER_REJECTED: Colors.red
+    QuoteState.SELLER_SUBMITTED: Colors.red,
+    QuoteState.BUYER_APPROVED: Colors.green,
+    QuoteState.BUYER_REJECTED: Colors.grey
   };
 
   TextEditingController rejectController = TextEditingController();
@@ -712,15 +712,15 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           Container(
             height: 30,
             child: FlatButton(
+              color: Colors.grey,
                 onPressed: onUpdateQuote,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
                     borderRadius: BorderRadius.circular(20)),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 120),
                 child: Text(
                   '修改报价',
                   style: TextStyle(
-                      color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                      color: Colors.white, fontSize: 16),
                 )),
           ),
         ];

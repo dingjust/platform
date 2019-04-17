@@ -203,24 +203,30 @@ class _QuoteItemState extends State<QuoteItem> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            FlatButton(
-                onPressed: onReject,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                color: Colors.red,
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                child: Text(
-                  '拒绝报价',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                )),
-            FlatButton(
-                onPressed: onApprove,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                color: Color.fromRGBO(255, 214, 12, 1),
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                child: Text(
-                  '确认报价',
-                  style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                )),
+            Container(
+              height: 30,
+              child: FlatButton(
+                  onPressed: onReject,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  color: Colors.red,
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  child: Text(
+                    '拒绝工厂',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  )),
+            ),
+            Container(
+              height: 30,
+              child: FlatButton(
+                  onPressed: onApprove,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  color: Color.fromRGBO(255, 214, 12, 1),
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  child: Text(
+                    '确认工厂',
+                    style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                  )),
+            ),
           ],
         ),
       ),
