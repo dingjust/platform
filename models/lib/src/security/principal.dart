@@ -11,14 +11,19 @@ class PrincipalModel extends ItemModel {
   String uid;
   String name;
   String phone;
+  ArticleApprovalStatus approvalStatus;
+  @JsonKey(toJson: addressToJson)
+  AddressModel contactAddress;
 
-  PrincipalModel({this.profilePicture, @required this.uid, this.name, this.phone});
+
+  PrincipalModel({this.profilePicture, @required this.uid, this.name, this.phone,this.approvalStatus,this.contactAddress,});
 
   factory PrincipalModel.fromJson(Map<String, dynamic> json) => _$PrincipalModelFromJson(json);
 
   static Map<String, dynamic> toJson(PrincipalModel model) => _$PrincipalModelToJson(model);
 
   static Map<String, dynamic> mediaToJson(MediaModel model) => MediaModel.toJson(model);
+  static Map<String, dynamic> addressToJson(AddressModel model) => AddressModel.toJson(model);
 }
 
 /// Principal Group
@@ -30,11 +35,15 @@ class PrincipalGroupModel extends PrincipalModel {
     MediaModel profilePicture,
     String uid,
     String name,
+    ArticleApprovalStatus approvalStatus,
+    AddressModel contactAddress,
     this.members,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
           name: name,
+          approvalStatus: approvalStatus,
+          contactAddress: contactAddress,
         );
 
   factory PrincipalGroupModel.fromJson(Map<String, dynamic> json) => _$PrincipalGroupModelFromJson(json);

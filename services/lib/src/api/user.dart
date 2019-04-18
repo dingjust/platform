@@ -43,4 +43,11 @@ abstract class UserApis {
   static get phoneExists => (code) {
         return '/{baseSiteId}/companies/register/$code';
       };
+
+  //获取发票抬头列表
+  static get invoiceTitles => '/{baseSiteId}/company/invoice/title';
+  //创建发票抬头
+  static get invoiceTitleCreate => '/{baseSiteId}/company/invoice/title';
+  //更新/删除发票抬头(详情)
+  static get invoiceTitleFromId => (id) => '/{baseSiteId}/company/invoice/title/$id';
 }
