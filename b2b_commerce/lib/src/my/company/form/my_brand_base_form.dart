@@ -389,7 +389,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         orElse: () => null);
                   }).toList();
 
-                  widget.brand.priceRange1s = priceRange2s;
+                  widget.brand.priceRange2s = priceRange2s;
                 }
               },
             ),
