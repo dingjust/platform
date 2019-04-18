@@ -247,7 +247,7 @@ class ItemPicture extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
             image: DecorationImage(
               image: NetworkImage(
-                  '${order.details.pictures[0].actualUrl}'),
+                  '${order.details.pictures[0].previewUrl()}'),
               fit: BoxFit.cover,
             )),
         child: Stack(

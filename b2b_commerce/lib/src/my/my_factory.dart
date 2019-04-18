@@ -75,10 +75,18 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               child: GestureDetector(
                 child: Text(
                   '查看全部>>',
-                  style: TextStyle(color: Colors.red,fontSize: 18,),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                  ),
                 ),
-                onTap: ()async{
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FactoryQuoteListPage(factoryUid: widget.factory.uid,)));
+                onTap: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FactoryQuoteListPage(
+                                factoryUid: widget.factory.uid,
+                              )));
                 },
               ),
             ),
@@ -91,7 +99,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
         Column(
           children: <Widget>[
             PurchaseOrderItem(
-              order:widget.purchaseOrder,
+              order: widget.purchaseOrder,
             ),
             Container(
               color: Colors.white,
@@ -100,10 +108,18 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                 child: GestureDetector(
                   child: Text(
                     '查看全部>>',
-                    style: TextStyle(color: Colors.red,fontSize: 18,),
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 18,
+                    ),
                   ),
-                  onTap: ()async{
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => FactoryPurchaseListPage(factoryUid: widget.factory.uid,)));
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FactoryPurchaseListPage(
+                                  factoryUid: widget.factory.uid,
+                                )));
                   },
                 ),
               ),
@@ -273,9 +289,14 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                         Stars(
                           starLevel: widget.factory.starLevel ?? 0,
                         ),
-                        Row(
-                          children: _buildFactoryHeaderRow,
-                        ),
+                        Container(
+                          height: 20,
+                          width: double.infinity,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: _buildFactoryHeaderRow,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -378,19 +399,27 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   style: const TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 GestureDetector(
-                  onTap: (){
-                    showDialog(context: (context),builder: (context){
-                      return SimpleDialog(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(left: 10,right: 5,),
-                            child: Text(formatCategoriesSelectText(
-                                widget.factory.adeptAtCategories, widget.factory.adeptAtCategories.length),
-                              style: const TextStyle(fontSize: 16),),
-                          )
-                        ],
-                      );
-                    });
+                  onTap: () {
+                    showDialog(
+                        context: (context),
+                        builder: (context) {
+                          return SimpleDialog(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(
+                                  left: 10,
+                                  right: 5,
+                                ),
+                                child: Text(
+                                  formatCategoriesSelectText(
+                                      widget.factory.adeptAtCategories,
+                                      widget.factory.adeptAtCategories.length),
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              )
+                            ],
+                          );
+                        });
                   },
                   child: Text(
                     formatCategoriesSelectText(

@@ -149,15 +149,13 @@ class _AttachmentsState extends State<Attachments> {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey,
                       image: DecorationImage(
-                        image: NetworkImage(
-                            '${model.actualUrl}'),
+                        image: NetworkImage('${model.previewUrl()}'),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   onTap: () {
-                    onPreview(context,
-                        '${model.actualUrl}');
+                    onPreview(context, '${model.detailUrl()}');
                   },
                 );
             }
@@ -428,18 +426,16 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.grey,
                   image: DecorationImage(
-                    image: NetworkImage(
-                        '${model.actualUrl}'),
+                    image: NetworkImage('${model.previewUrl()}'),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               onTap: () {
-                onPreview(
-                    context, '${model.actualUrl}');
+                onPreview(context, '${model.detailUrl()}');
               },
               onLongPress: () {
-                if(widget.editable) _deleteFile(model);
+                if (widget.editable) _deleteFile(model);
               },
             );
         }
@@ -622,13 +618,19 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
     // /// TODO: 调用上传接口,更新上传进度条
     try {
-      FormData formData = FormData.from({"file": UploadFileInfo(file, "file")});
+      FormData formData = FormData.from({
+        "file": UploadFileInfo(file, "file",
+            contentType: ContentType.parse('image/jpeg')),
+        "conversionGroup": "DefaultProductConversionGroup",
+        "imageFormat": "DefaultImageFormat"
+      });
       Response<Map<String, dynamic>> response = await http$.post(
         Apis.upload(),
         data: formData,
-        queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
+        // queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
+        // queryParameters: {'imageFormat': 'DefaultImageFormat'},
         options: Options(
-          headers: {'Content-Type': 'multipart/form-data'},
+          headers: {'Content-Type': 'application/json;charset=UTF-8'},
         ),
         onSendProgress: (int sent, int total) {
           _streamController.sink.add(sent / total);
@@ -658,13 +660,23 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消',style: TextStyle(color: Colors.grey,),),
+              child: Text(
+                '取消',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             FlatButton(
-              child: Text('确认',style: TextStyle(color: Colors.black,),),
+              child: Text(
+                '确认',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
               onPressed: () async {
                 //TODO :调用删除接口,暂时隐藏
                 // try {
@@ -672,10 +684,10 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                 //     Apis.mediaDelete(mediaModel.id),
                 //   );
                 //   if (response != null && response.statusCode == 200) {
-                    setState(() {
-                      widget.list.remove(mediaModel);
-                    });
-                    Navigator.pop(context);
+                setState(() {
+                  widget.list.remove(mediaModel);
+                });
+                Navigator.pop(context);
                 //   } else {
                 //     print('删除失败');
                 //   }
