@@ -146,7 +146,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                                     package: "assets",
                                   )
                                 : NetworkImage(
-                                    '${widget.quoteModel.requirementOrder.belongTo.profilePicture.actualUrl}'),
+                                    '${widget.quoteModel.requirementOrder.belongTo.profilePicture.previewUrl()}'),
                             fit: BoxFit.cover,
                           )),
                     ),
@@ -534,7 +534,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           duration: Duration(seconds: 1),
         ),
       );
-    } else if (totalQuantity == 0) {
+    } else if (totalQuantity == 0 || _unitPriceController.text == "") {
       (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
         SnackBar(
           content: Text('请填写打样费'),
@@ -666,12 +666,12 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                     .toList(),
               )));
     } else {
-      if(productEntries != null){
+      if (productEntries != null) {
         List<EditApparelSizeVariantProductEntry> returnEntries =
-        await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProductSizeColorNum(
-              editData: productEntries,
-            )));
+            await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProductSizeColorNum(
+                      editData: productEntries,
+                    )));
         if (returnEntries != null) {
           productEntries = returnEntries;
         }

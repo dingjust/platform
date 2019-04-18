@@ -54,7 +54,7 @@
     computed: {},
     methods: {
       async getLabels() {
-        const url = this.apis().getGroupLabels('FACTORY');
+        const url = this.apis().getGroupLabels('PLATFORM');
         const results = await this.$http.get(url);
         if (results["errors"]) {
           this.$message.error(results["errors"][0].message);

@@ -18,9 +18,13 @@ class UserBLoC extends BLoCBase {
   static UserBLoC get instance => _getInstance();
   static UserBLoC _instance;
 
+  //是否忽略更新提示
+  bool ignoreVersionNotification;
+
   UserBLoC._internal() {
     // 初始化
     _user = UserModel.empty();
+    ignoreVersionNotification = false;
   }
 
   static UserBLoC _getInstance() {
@@ -32,6 +36,10 @@ class UserBLoC extends BLoCBase {
 
   UserModel get currentUser {
     return _user;
+  }
+
+  void setIgnoreVersionNotification(bool value) {
+    ignoreVersionNotification = value;
   }
 
   bool get isBrandUser => _user.type == UserType.BRAND;
@@ -95,6 +103,17 @@ class UserBLoC extends BLoCBase {
         _user = UserModel.fromJson(infoResponse.data);
         _user.name = infoResponse.data['username'];
         _user.status = UserStatus.ONLINE;
+      }
+
+      // 获取公司信息
+      if (_user.type == UserType.BRAND) {
+        UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+          _user.b2bUnit = brand;
+        });
+      } else if (_user.type == UserType.FACTORY) {
+        UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
+          _user.b2bUnit = factory;
+        });
       }
 
       //  记录登陆用户信息
@@ -164,6 +183,17 @@ class UserBLoC extends BLoCBase {
           _user = UserModel.fromJson(infoResponse.data);
           _user.name = infoResponse.data['username'];
           _user.status = UserStatus.ONLINE;
+        }
+
+        // 获取公司信息
+        if (_user.type == UserType.BRAND) {
+          UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+            _user.b2bUnit = brand;
+          });
+        } else if (_user.type == UserType.FACTORY) {
+          UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
+            _user.b2bUnit = factory;
+          });
         }
 
         //  记录refresh_token

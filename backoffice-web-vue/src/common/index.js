@@ -83,6 +83,9 @@ const COMMON_APIS = {
   getIndustrialClusters() {
     return '/b2b/industrialClusters';
   },
+  getIndustrialClustersAll() {
+    return '/b2b/industrialClusters/all';
+  },
   getIndustrialCluster(code) {
     return '/b2b/industrialClusters/' + code;
   },
@@ -243,6 +246,9 @@ const COMMON_APIS = {
   updateAttributesOfApparelProduct(code) {
     return '/b2b/products/apparel/' + code + '/attributes';
   },
+  updateImagesOfApparelProduct(code) {
+    return '/b2b/products/apparel/' + code + '/images';
+  },
   getRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code;
   },
@@ -354,6 +360,18 @@ let NONE_TENANT_APIS = {
   },
   cancellingOfPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code + '/cancelling';
+  },
+  completedOfPurchaseOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/shipped';
+  },
+  completedOfProofing(code) {
+    return '/b2b/orders/proofing/' + code + '/shipped';
+  },
+  payProofings(code) {
+    return '/b2b/orders/proofing/'+code+'/paid';
+  },
+  payProofingsImage(code) {
+    return '/b2b/checkout/multi/wechat/pay/'+code;
   },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

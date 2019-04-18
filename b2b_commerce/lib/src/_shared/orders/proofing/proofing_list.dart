@@ -3,12 +3,11 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import './proofing_list_item.dart';
 import '../../../business/orders/form/proofing_order_form.dart';
 import '../../../common/logistics_input_page.dart';
 import '../../../common/order_payment.dart';
 import '../../widgets/scrolled_to_end_tips.dart';
-
-import './proofing_list_item.dart';
 
 class ProofingList extends StatefulWidget {
   ProofingList({Key key, this.status}) : super(key: key);
@@ -115,14 +114,13 @@ class _ProofingListState extends State<ProofingList> {
       barrierDismissible: true, // user must tap button!
       builder: (context) {
         return SimpleDialog(
-          title: const Text('提示',
-            style: TextStyle(
-                fontSize: 16
-            ),
+          title: const Text(
+            '提示',
+            style: TextStyle(fontSize: 16),
           ),
           children: <Widget>[
             SimpleDialogOption(
-              child: Text('${result?'确认收货成功':'确认收货失败'}'),
+              child: Text('${result ? '确认收货成功' : '确认收货失败'}'),
             ),
           ],
         );
@@ -154,6 +152,24 @@ class _ProofingListState extends State<ProofingList> {
             LogisticsInputPage(isProductionOrder: false, proofingModel: model),
       ),
     );
+  }
+
+  void _onProofingConfirm(ProofingModel model) async {
+    bool result =
+        await ProofingOrderRepository().proofingConfirm(model.code, model);
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('提示', style: const TextStyle(fontSize: 16)),
+          children: <Widget>[
+            SimpleDialogOption(child: Text('${result ? '确认成功' : '确认失败'}'))
+          ],
+        );
+      },
+    );
+    _handleRefresh();
   }
 
   // 子组件刷新数据方法
@@ -199,6 +215,7 @@ class _ProofingListState extends State<ProofingList> {
                         onProofingUpdating: () => _onProofingUpdating(order),
                         onProofingConfirmDelivered: () =>
                             _onProofingConfirmDelivered(order),
+                        onProofingConfirm: () => _onProofingConfirm(order),
                       );
                     }).toList(),
                   );

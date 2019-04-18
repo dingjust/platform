@@ -65,22 +65,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey homePageKey = GlobalKey();
 
-  ///是否已查看新版本提示
-  bool ignoreVersionNotification;
+  AppVersion appVersion;
 
   _HomePageState();
 
   @override
   void initState() {
     // TODO: implement initState
-
-    ignoreVersionNotification = false;
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        AppVersion(homePageKey.currentContext).checkVersion(
-            ignoreVersionNotification,
-            AppBLoC.instance.packageInfo.version,
-            'nbyjy',
-            'ANDROID'));
+    WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
+            homePageKey.currentContext,
+            ignoreVersionNotification:
+                UserBLoC.instance.ignoreVersionNotification)
+        .initCheckVersion(
+            AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID'));
 
     super.initState();
   }
@@ -145,26 +142,7 @@ class BrandFirstMenuSection extends StatelessWidget {
       GridItem(
           title: '快反工厂',
           onPressed: () async {
-            // 加载条
-            showDialog(
-              context: context,
-              builder: (context) =>
-                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
-            );
-            await ProductRepositoryImpl()
-                .cascadedCategories()
-                .then((categories) {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => CategorySelectPage(
-                        minCategorySelect: [],
-                        categories: categories,
-                        categoryActionType: CategoryActionType.TO_FACTORIES,
-                      ),
-                ),
-              );
-            });
+            _jumpToFastFactory(context);
           },
           icon: B2BImage.fastFactory(width: 60, height: 80)),
       GridItem(
@@ -195,6 +173,31 @@ class BrandFirstMenuSection extends StatelessWidget {
     ];
 
     return EasyGrid(items: items);
+  }
+
+  void _jumpToFastFactory(BuildContext context) async {
+    List<LabelModel> labels = await UserRepositoryImpl().labels();
+    labels.removeWhere((label) => label.name == '优反工厂');
+    // 加载条
+    showDialog(
+      context: context,
+      builder: (context) =>
+          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    );
+    await ProductRepositoryImpl().cascadedCategories().then((categories) {
+      Navigator.of(context).pop();
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => FactoryPage(
+                FactoryCondition(
+                    starLevel: 0,
+                    adeptAtCategories: [],
+                    labels: [LabelModel(name: '快反工厂', id: 8796158621016)],
+                    cooperationModes: []),
+              ),
+        ),
+      );
+    });
   }
 }
 
@@ -246,18 +249,7 @@ class BrandSecondMenuSection extends StatelessWidget {
   Widget _buildBrandedFactoriesMenuItem(BuildContext context) {
     return AdvanceIconButton(
       onPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => FactoryPage(
-                  FactoryCondition(
-                      starLevel: 0,
-                      adeptAtCategories: [],
-                      labels: [],
-                      cooperationModes: []),
-                  route: '优质工厂',
-                ),
-          ),
-        );
+        _jumpToQualityFactory(context);
       },
       title: '优质工厂',
       icon: Icon(
@@ -312,6 +304,23 @@ class BrandSecondMenuSection extends StatelessWidget {
             _buildAllFactoriesMenuItem(context),
           ],
         ),
+      ),
+    );
+  }
+
+  void _jumpToQualityFactory(BuildContext context) async {
+    List<LabelModel> labels = await UserRepositoryImpl().labels();
+    labels.removeWhere((label) => label.name == '优质工厂');
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => FactoryPage(
+              FactoryCondition(
+                  starLevel: 0,
+                  adeptAtCategories: [],
+                  labels: labels,
+                  cooperationModes: []),
+              route: '优质工厂',
+            ),
       ),
     );
   }

@@ -3,7 +3,7 @@
     <el-form ref="form" label-position="top" :model="slotData">
       <el-row :gutter="10">
         <el-form-item label="标签" prop="roles">
-          <<el-select class="w-100" v-model="slotData.labels" multiple placeholder="请选择"
+          <el-select class="w-100" v-model="slotData.labels" multiple placeholder="请选择"
                       value-key="id">
           <el-option
             v-for="item in labels"
@@ -42,7 +42,7 @@
           return;
         }
 
-        this.roles = results;
+        this.labels = results;
       }
     },
     data() {

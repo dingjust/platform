@@ -33,17 +33,21 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       _scaleRange.add(widget.factory.scaleRange.toString().split('.')[1]);
     }
     if (widget.factory.monthlyCapacityRange != null) {
-      _monthlyCapacityRanges.add(widget.factory.monthlyCapacityRange.toString().split('.')[1]);
+      _monthlyCapacityRanges
+          .add(widget.factory.monthlyCapacityRange.toString().split('.')[1]);
     }
     if (widget.factory.populationScale != null) {
-      _populationScale.add(widget.factory.populationScale.toString().split('.')[1]);
+      _populationScale
+          .add(widget.factory.populationScale.toString().split('.')[1]);
     }
     if (widget.factory.cooperationModes != null) {
       _cooperationModes.addAll(
-        widget.factory.cooperationModes.map((cooperationMode) => cooperationMode.toString().split('.')[1]),
+        widget.factory.cooperationModes
+            .map((cooperationMode) => cooperationMode.toString().split('.')[1]),
       );
     }
-    if (widget.factory.profilePicture != null) medias = [widget.factory.profilePicture];
+    if (widget.factory.profilePicture != null)
+      medias = [widget.factory.profilePicture];
 
     super.initState();
   }
@@ -68,11 +72,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 } else {
                   widget.factory.profilePicture = null;
                 }
-                widget.factory.name = _nameController.text == '' ? null : _nameController.text;
+                widget.factory.name =
+                    _nameController.text == '' ? null : _nameController.text;
                 widget.factory.cooperativeBrand =
-                    _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
+                    _cooperativeBrandController.text == ''
+                        ? null
+                        : _cooperativeBrandController.text;
 
-                UserRepositoryImpl().factoryUpdate(widget.factory).then((a) => Navigator.pop(context));
+                UserRepositoryImpl()
+                    .factoryUpdate(widget.factory)
+                    .then((a) => Navigator.pop(context));
               })
         ],
       ),
@@ -120,7 +129,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     )),
                     Text(widget.factory.monthlyCapacityRange == null
                         ? ''
-                        : MonthlyCapacityRangesLocalizedMap[widget.factory.monthlyCapacityRange]),
+                        : MonthlyCapacityRangesLocalizedMap[
+                            widget.factory.monthlyCapacityRange]),
                     Icon(Icons.chevron_right),
                   ],
                 ),
@@ -140,10 +150,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 if (result != null) _monthlyCapacityRanges = result;
 
                 if (_monthlyCapacityRanges.length > 0) {
-                  MonthlyCapacityRange monthlyCapacityRanges = MonthlyCapacityRange.values.singleWhere(
-                      (monthlyCapacityRanges) =>
-                          monthlyCapacityRanges.toString().split('.')[1] == _monthlyCapacityRanges[0],
-                      orElse: () => null);
+                  MonthlyCapacityRange monthlyCapacityRanges =
+                      MonthlyCapacityRange.values.singleWhere(
+                          (monthlyCapacityRanges) =>
+                              monthlyCapacityRanges.toString().split('.')[1] ==
+                              _monthlyCapacityRanges[0],
+                          orElse: () => null);
 
                   widget.factory.monthlyCapacityRange = monthlyCapacityRanges;
                 }
@@ -166,7 +178,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         fontSize: 16,
                       ),
                     )),
-                    Text(widget.factory.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.factory.scaleRange]),
+                    Text(widget.factory.scaleRange == null
+                        ? ''
+                        : ScaleRangesLocalizedMap[widget.factory.scaleRange]),
                     Icon(Icons.chevron_right),
                   ],
                 ),
@@ -187,7 +201,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
                 if (_scaleRange.length > 0) {
                   ScaleRanges scaleRange = ScaleRanges.values.singleWhere(
-                      (scaleRange) => scaleRange.toString().split('.')[1] == _scaleRange[0],
+                      (scaleRange) =>
+                          scaleRange.toString().split('.')[1] == _scaleRange[0],
                       orElse: () => null);
 
                   widget.factory.scaleRange = scaleRange;
@@ -213,7 +228,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     )),
                     Text(widget.factory.populationScale == null
                         ? ''
-                        : PopulationScaleLocalizedMap[widget.factory.populationScale]),
+                        : PopulationScaleLocalizedMap[
+                            widget.factory.populationScale]),
                     Icon(Icons.chevron_right),
                   ],
                 ),
@@ -233,9 +249,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 if (result != null) _scaleRange = result;
 
                 if (_scaleRange.length > 0) {
-                  PopulationScale populationScale = PopulationScale.values.singleWhere(
-                      (populationScale) => populationScale.toString().split('.')[1] == _populationScale[0],
-                      orElse: () => null);
+                  PopulationScale populationScale = PopulationScale.values
+                      .singleWhere(
+                          (populationScale) =>
+                              populationScale.toString().split('.')[1] ==
+                              _populationScale[0],
+                          orElse: () => null);
 
                   widget.factory.populationScale = populationScale;
                 }
@@ -258,7 +277,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         fontSize: 16,
                       ),
                     )),
-                    Text(formatCooperationModesSelectText(widget.factory.cooperationModes)),
+                    Text(formatCooperationModesSelectText(
+                        widget.factory.cooperationModes)),
                     Icon(Icons.chevron_right),
                   ],
                 ),
@@ -279,9 +299,11 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 if (result != null) _cooperationModes = result;
 
                 if (_cooperationModes.length > 0) {
-                  List<CooperationModes> cooperationModes = _cooperationModes.map((mode) {
+                  List<CooperationModes> cooperationModes =
+                      _cooperationModes.map((mode) {
                     return CooperationModes.values.singleWhere(
-                        (cooperationMode) => cooperationMode.toString().split('.')[1] == mode,
+                        (cooperationMode) =>
+                            cooperationMode.toString().split('.')[1] == mode,
                         orElse: () => null);
                   }).toList();
 
@@ -314,7 +336,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 ),
               ),
               onTap: () async {
-                List<CategoryModel> categorys = await ProductRepositoryImpl().majorCategories();
+                List<CategoryModel> categorys =
+                    await ProductRepositoryImpl().majorCategories();
 
                 dynamic result = await Navigator.push(
                   context,
@@ -351,14 +374,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatCategorySelectText(widget.factory.adeptAtCategories, 2),
+                      formatCategorySelectText(
+                          widget.factory.adeptAtCategories, 2),
                     ),
                     Icon(Icons.chevron_right),
                   ],
                 ),
               ),
               onTap: () async {
-                List<CategoryModel> categories = await ProductRepositoryImpl().cascadedCategories();
+                List<CategoryModel> categories =
+                    await ProductRepositoryImpl().cascadedCategories();
                 dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -413,7 +438,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               ),
               onTap: () async {
                 List<LabelModel> labels = await UserRepositoryImpl().labels();
-
+                labels.removeWhere((label) => label.group != 'FACTORY');
                 if (widget.factory.labels == null) widget.factory.labels = [];
                 dynamic result = await Navigator.push(
                   context,
@@ -483,7 +508,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   }
 
   //格式化合作方式
-  String formatCooperationModesSelectText(List<CooperationModes> cooperationModes) {
+  String formatCooperationModesSelectText(
+      List<CooperationModes> cooperationModes) {
     String text = '';
 
     if (cooperationModes != null) {

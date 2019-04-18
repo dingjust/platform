@@ -13,13 +13,13 @@ class AccountSecurityPage extends StatelessWidget{
       ),
       body: ListView(
         children: <Widget>[
-          ListTile(
-            title: Text('修改密码'),
-            trailing: Icon(Icons.chevron_right),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePasswordPage()));
-            },
-          ),
+          // ListTile(
+          //   title: Text('修改密码'),
+          //   trailing: Icon(Icons.chevron_right),
+          //   onTap: (){
+          //     Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePasswordPage()));
+          //   },
+          // ),
 
         ],
       ),

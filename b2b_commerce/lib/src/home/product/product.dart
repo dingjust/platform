@@ -40,7 +40,7 @@ class RecommendProductItem extends StatelessWidget {
                 image: DecorationImage(
                   image: model.thumbnail != null
                       ? NetworkImage(
-                          '${model.thumbnail.actualUrl}')
+                          '${model.thumbnail.previewUrl()}')
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",

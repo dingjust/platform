@@ -12,16 +12,16 @@ class UserRepositoryImpl implements UserRepository {
   const UserRepositoryImpl();
 
   @override
-  Future<String> sendCaptcha(String phone) async{
+  Future<String> sendCaptcha(String phone) async {
     Response response = await http$.get(UserApis.sendCaptcha(phone));
     return response.data;
   }
 
   @override
-  Future<bool> validateCaptcha(String phone, String captcha) async{
-    Response response = await http$.get(UserApis.validateCaptcha,data: {
-      'phone':phone,
-      'captcha':captcha,
+  Future<bool> validateCaptcha(String phone, String captcha) async {
+    Response response = await http$.get(UserApis.validateCaptcha, data: {
+      'phone': phone,
+      'captcha': captcha,
     });
     return response.data;
   }
@@ -43,19 +43,22 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<String> brandUpdate(BrandModel brand) async {
-    Response response = await http$.put(Apis.brandUpdate(brand.uid), data: BrandModel.toJson(brand));
+    Response response = await http$.put(Apis.brandUpdate(brand.uid),
+        data: BrandModel.toJson(brand));
     return response.data;
   }
 
   @override
   Future<String> factoryUpdate(FactoryModel factory) async {
-    Response response = await http$.put(Apis.factoryUpdate(factory.uid), data: FactoryModel.toJson(factory));
+    Response response = await http$.put(Apis.factoryUpdate(factory.uid),
+        data: FactoryModel.toJson(factory));
     return response.data;
   }
 
   @override
   Future<String> applyCertification(CompanyModel form) async {
-    Response response = await http$.put(Apis.applyCertification, data: CompanyModel.toJson(form));
+    Response response = await http$.put(Apis.applyCertification,
+        data: CompanyModel.toJson(form));
     return response.data;
   }
 
@@ -63,7 +66,8 @@ class UserRepositoryImpl implements UserRepository {
   Future<String> register({String type, CompanyRegisterDTO form}) async {
     Response response;
     try {
-      response = await http$.post(UserApis.register(type), data: CompanyRegisterDTO.toJson(form));
+      response = await http$.post(UserApis.register(type),
+          data: CompanyRegisterDTO.toJson(form));
     } on DioError catch (e) {
       print(e);
     }
@@ -76,14 +80,19 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<List<LabelModel>> industrialClustersFromLabels() async {
-    Response response = await http$.get(UserApis.getIndustrialClusterFromLabels);
-    return response.data.map<LabelModel>((label) => LabelModel.fromJson(label)).toList();
+    Response response =
+        await http$.get(UserApis.getIndustrialClusterFromLabels);
+    return response.data
+        .map<LabelModel>((label) => LabelModel.fromJson(label))
+        .toList();
   }
 
   @override
   Future<List<LabelModel>> labels() async {
     Response response = await http$.get(UserApis.labels);
-    return response.data.map<LabelModel>((label) => LabelModel.fromJson(label)).toList();
+    return response.data
+        .map<LabelModel>((label) => LabelModel.fromJson(label))
+        .toList();
   }
 
   @override
@@ -119,5 +128,22 @@ class UserRepositoryImpl implements UserRepository {
       data: params,
     );
     return FactoriesResponse.fromJson(response.data);
+  }
+
+  @override
+  Future<bool> resetPassword(
+      String phone, String newPassword, String captcha) async {
+    Response response;
+    try {
+      response = await http$.post(UserApis.resetPassword(phone),
+          data: {"newPassword": newPassword, "captcha": captcha});
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

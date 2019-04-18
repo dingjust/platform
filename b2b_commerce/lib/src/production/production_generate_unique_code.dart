@@ -398,7 +398,7 @@ class GenerateUniqueCodeItem extends StatelessWidget {
                       'temp/picture.png',
                       package: "assets",
                     ):
-                    NetworkImage('${order.product.thumbnail.actualUrl}'),
+                    NetworkImage('${order.product.thumbnail.previewUrl()}'),
                     fit: BoxFit.cover,
                   )),
             ),

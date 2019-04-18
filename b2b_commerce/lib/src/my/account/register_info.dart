@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class RegisterInfoPage extends StatefulWidget {
   final String phone;
@@ -192,7 +193,13 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
       ..password = widget.password
       ..contactAddress = contactAddress;
 
-    print(CompanyRegisterDTO.toJson(form));
+    // 加载条
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    );
 
     String response = await UserRepositoryImpl().register(
         type: UserTypeMap[UserBLoC.instance.currentUser.type], form: form);
@@ -207,6 +214,8 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
         ModalRoute.withName('/'),
       );
     } else {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
       showDialog<void>(
         context: context,
         barrierDismissible: true, // user must tap button!

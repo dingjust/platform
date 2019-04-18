@@ -477,7 +477,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: NetworkImage(
-                                  '${order.purchaser.profilePicture.actualUrl}'),
+                                  '${order.purchaser.profilePicture.previewUrl()}'),
                               fit: BoxFit.cover,
                             )),
                       ),
@@ -842,7 +842,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: NetworkImage(
-                                  '${productionProgress.medias[0].actualUrl}'),
+                                  '${productionProgress.medias[0].previewUrl()}'),
                               fit: BoxFit.fill,
                             )),
                       ),

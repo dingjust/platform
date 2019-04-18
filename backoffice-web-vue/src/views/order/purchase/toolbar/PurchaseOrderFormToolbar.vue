@@ -17,6 +17,9 @@
       <el-button v-if="canConfirmDelivery" size="mini" type="primary" @click="onConfirmDelivering">
         确认发货
       </el-button>
+      <el-button v-if="canConfirmCompleted" size="mini" type="primary" @click="onConfirmCompleted">
+        确认收货
+      </el-button>
     </el-button-group>
 
     <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
@@ -60,6 +63,9 @@
       },
       canConfirmDelivery: function () {
         return this.slotData.status === 'WAIT_FOR_OUT_OF_STORE' && this.isFactory();
+      },
+      canConfirmCompleted: function () {
+        return this.slotData.status === 'OUT_OF_STORE' && this.isBrand();
       },
       cancelling: function () {
         return this.slotData.status === 'PENDING_PAYMENT' && this.isFactory();
@@ -121,6 +127,19 @@
         }
 
         this.$message.success('取消生产单成功');
+        this.fn.closeSlider();
+      },
+
+      async onConfirmCompleted() {
+        const url = this.apis().completedOfPurchaseOrder(this.slotData.code);
+        const result = await this.$http.put(url, {});
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.$message.success('确认收货成功');
         this.fn.closeSlider();
       },
       onConfirmDelivering() {

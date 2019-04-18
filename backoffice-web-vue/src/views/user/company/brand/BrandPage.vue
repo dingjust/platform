@@ -5,7 +5,7 @@
       <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch">
         <template slot="operations" slot-scope="props">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
-          <el-button type="text" icon="el-icon-edit" @click="onLabels(props.item)">标签评级</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">标签评级</el-button>
         </template>
       </brand-list>
     </el-card>
