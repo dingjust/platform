@@ -784,7 +784,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                             ? Container(
                                 margin: const EdgeInsets.all(5),
                                 child: Image.network(
-                                  '${profile.medias[0].previewUrl()}',
+                                  '${profile.medias[0].detailUrl()}',
                                   height: 200,
                                   width: double.infinity,
                                   fit: BoxFit.fill,
