@@ -69,11 +69,8 @@ class MediaModel extends ItemModel {
         getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
 
     if (mediaModel != null) {
-      print('==========================');
-      print('${GlobalConfigs.CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.CONTEXT_PATH}${mediaModel.url}';
     } else {
-      print('!!!!!!!!!!!!!!!!!!!!!!!');
       return actualUrl;
     }
   }
@@ -103,8 +100,17 @@ class MediaModel extends ItemModel {
   }
 
   MediaModel getFormatMedia(String mediaFormat) {
-    return convertedMedias
-        .firstWhere((media) => media.mediaFormat == mediaFormat);
+    MediaModel result;
+    if (convertedMedias == null || convertedMedias.isEmpty) {
+      return null;
+    } else {
+      convertedMedias.forEach((media) {
+        if (media.mediaFormat == mediaFormat) {
+          result = media;
+        }
+      });
+      return result;
+    }
   }
 }
 

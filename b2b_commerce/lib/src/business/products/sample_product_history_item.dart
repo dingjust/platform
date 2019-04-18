@@ -36,7 +36,7 @@ class SampleProductHistoryItem extends StatelessWidget {
                 offstage: isSampleProductHistory,
                 child: item.images != null && item.images.length > 0?
                       Image.network(
-                        '${item.images[0].actualUrl}',
+                        '${item.images[0].previewUrl()}',
                           width: 80,
                           height: 80,
                           fit: BoxFit.fill,

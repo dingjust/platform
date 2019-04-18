@@ -217,7 +217,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                             'temp/picture.png',
                             package: "assets",
                           )
-                        : NetworkImage('${widget.purchaseOrder.product.thumbnail.actualUrl}'),
+                        : NetworkImage('${widget.purchaseOrder.product.thumbnail.previewUrl()}'),
                     fit: BoxFit.cover,
                   )),
             ),
@@ -376,7 +376,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                         image: widget.brand.profilePicture != null
-                            ? NetworkImage('${widget.brand.profilePicture.actualUrl}')
+                            ? NetworkImage('${widget.brand.profilePicture.previewUrl()}')
                             : AssetImage(
                                 'temp/picture.png',
                                 package: "assets",

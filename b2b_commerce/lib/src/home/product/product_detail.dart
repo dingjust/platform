@@ -32,7 +32,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             mediaType: thumbnail.mediaType,
             mime: thumbnail.mime,
             name: thumbnail.name,
-            url: '${thumbnail.actualUrl}',
+            url: '${thumbnail.previewUrl()}',
             id: thumbnail.id))
         .toList();
 

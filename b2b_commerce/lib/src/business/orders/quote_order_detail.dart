@@ -152,7 +152,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                                 package: "assets",
                               )
                             : NetworkImage(
-                                '${widget.item.supplier.profilePicture.actualUrl}'),
+                                '${widget.item.supplier.profilePicture.previewUrl()}'),
                         fit: BoxFit.cover,
                       )),
                 ),
@@ -369,7 +369,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 image: pageItem.requirementOrder.details?.pictures != null &&
                         pageItem.requirementOrder.details.pictures.isNotEmpty
                     ? NetworkImage(
-                        '${pageItem.requirementOrder.details.pictures[0].actualUrl}')
+                        '${pageItem.requirementOrder.details.pictures[0].previewUrl()}')
                     : AssetImage(
                         'temp/picture.png',
                         package: "assets",
