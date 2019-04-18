@@ -62,7 +62,8 @@ const state = {
     starLevel: null,
     machiningTypes: [],
     categories: [],
-    adeptAtCategories: []
+    adeptAtCategories: [],
+    industrialClusters:[],
   }
 };
 

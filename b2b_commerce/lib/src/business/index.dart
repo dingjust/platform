@@ -213,7 +213,7 @@ class FactoryMenusSection extends StatelessWidget {
                 MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
             AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',
                 AppRoutes.ROUTE_SUPPLIERS),
-            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣管理',
+            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣借还',
                 AppRoutes.ROUTE_SAMPLE_GARMENTS),
           ])
         ],

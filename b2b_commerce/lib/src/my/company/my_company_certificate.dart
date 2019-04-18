@@ -46,7 +46,7 @@ class MyCompanyCertificatePageState extends State<MyCompanyCertificatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('认证资料'),
+        title: Text('企业认证'),
         centerTitle: true,
         elevation: 0.5,
       ),
