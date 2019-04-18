@@ -138,6 +138,7 @@
         }
 
         this.$message.success('更新图片成功');
+        this.imagesDialogVisible = false;
       },
       onUpdateBasic() {
         this.formData = Object.assign({}, this.slotData);
