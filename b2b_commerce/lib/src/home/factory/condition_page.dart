@@ -50,9 +50,63 @@ class _ConditionPageState extends State<ConditionPage> {
                       _buildAddressBlock(),
                       _buildStarsBlock(),
                     ]),
-                  )
+                  ),
                 ],
               )),
+          persistentFooterButtons: <Widget>[
+            Container(
+              width: 150,
+              height: 40,
+              child: Center(
+                child: FlatButton(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 0, horizontal: 50),
+                    color: Colors.grey,
+                    child: const Text(
+                      '重置',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: const BorderRadius.all(Radius.circular(20))),
+                    onPressed: () {
+                        setState(() {
+                          widget.factoryCondition.populationScale = null;
+                          widget.factoryCondition.cooperationModes = new List<CooperationModes>();
+                          widget.factoryCondition.adeptAtCategories = new List<CategoryModel>();
+                          widget.factoryCondition.categories = null;
+                          widget.factoryCondition.starLevel = 0;
+                          widget.factoryCondition.productiveOrientations = null;
+                        });
+                    }),
+              ),
+            ),
+            Container(
+              width: 150,
+              margin: EdgeInsets.only(right: 50),
+              height: 40,
+              child:Center(
+                child:  FlatButton(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 0, horizontal: 50),
+                    color: Color(0xFFFFD600),
+                    child: const Text(
+                      '确定',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: const BorderRadius.all(Radius.circular(20))),
+                    onPressed: () {
+                      Navigator.pop(context, widget.factoryCondition);
+                    }),
+              )
+            ),
+          ],
         ));
   }
 
