@@ -52,7 +52,6 @@ class QuoteOrdersBLoC extends BLoCBase {
         Map data = {};
         if (status != 'ALL') {
           data = {
-            'code' : '6004',
             'states': [status]
           };
         }
