@@ -39,7 +39,7 @@ class OrderByProductBLoc extends BLoCBase {
   //锁
   bool lock = false;
 
-  getData(List<CategoryModel> categories, String keywords) async {
+  getData(ProductCondition productCondition) async {
     if (!lock) {
       lock = true;
       //重置参数
@@ -47,8 +47,8 @@ class OrderByProductBLoc extends BLoCBase {
       Response<Map<String, dynamic>> response;
       try {
         response = await http$.post(ProductApis.factoriesApparel, data: {
-          "categories": categories.map((category) => category.code).toList(),
-          "keyword": keywords ?? ''
+          "categories": productCondition.categories.map((category) => category.code).toList(),
+          "keyword": productCondition.keyword ?? ''
         }, queryParameters: {
           'page': currentPage,
           'size': pageSize
@@ -70,7 +70,7 @@ class OrderByProductBLoc extends BLoCBase {
     }
   }
 
-  loadingMore(List<CategoryModel> categories, String keywords) async {
+  loadingMore(ProductCondition productCondition) async {
     if (!lock) {
       lock = true;
 
@@ -83,8 +83,8 @@ class OrderByProductBLoc extends BLoCBase {
         try {
           currentPage++;
           response = await http$.post(ProductApis.factoriesApparel, data: {
-            "categories": categories.map((category) => category.code).toList(),
-            "keyword": keywords ?? ''
+            "categories": productCondition.categories.map((category) => category.code).toList(),
+            "keyword": productCondition.keyword ?? ''
           }, queryParameters: {
             'page': currentPage,
             'size': pageSize
@@ -125,4 +125,13 @@ class OrderByProductBLoc extends BLoCBase {
 
     super.dispose();
   }
+}
+
+class ProductCondition {
+  /// 品类
+  List<CategoryModel> categories;
+
+  String keyword;
+
+  ProductCondition(this.categories, this.keyword);
 }

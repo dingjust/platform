@@ -9,7 +9,9 @@ import '../../home/product/product.dart';
 import '../../home/search/order_product_search.dart';
 
 class ProductsPage extends StatefulWidget {
-  ProductsPage({Key key}) : super(key: key);
+  String keyword;
+
+  ProductsPage({Key key, this.keyword}) : super(key: key);
 
   _ProductsPageState createState() => _ProductsPageState();
 }
@@ -25,7 +27,7 @@ class _ProductsPageState extends State<ProductsPage> {
     // TODO: implement initState
     WidgetsBinding.instance
         .addPostFrameCallback((_) => getCascadedCategories());
-    productCondition = ProductCondition([], '');
+    productCondition = ProductCondition([], widget.keyword ?? '');
     super.initState();
   }
 
@@ -40,10 +42,9 @@ class _ProductsPageState extends State<ProductsPage> {
           centerTitle: true,
           elevation: 0.5,
           title: Text(
-            productCondition.keywords == null ||
-                    productCondition.keywords == ''
+            productCondition.keyword == null || productCondition.keyword == ''
                 ? '看款下单'
-                : '${productCondition.keywords}',
+                : '${productCondition.keyword}',
             style: TextStyle(color: Colors.black),
             overflow: TextOverflow.ellipsis,
           ),
@@ -54,18 +55,14 @@ class _ProductsPageState extends State<ProductsPage> {
                   size: 22,
                 ),
                 onPressed: () async {
-                  String keywords = await showSearch(
+                  String keyword = await showSearch(
                     context: context,
                     delegate: OrderProductSearchDelegate(),
                   );
                   setState(() {
-                    productCondition.keywords = keywords;
+                    productCondition.keyword = keyword;
                   });
-                  print(
-                      '${productCondition.hashCode}  ${productCondition.keywords}');
-                  OrderByProductBLoc.instance.getData(
-                      productCondition.categories,
-                      productCondition.keywords);
+                  OrderByProductBLoc.instance.getData(productCondition);
                 }),
           ],
           bottom: PreferredSize(
@@ -88,11 +85,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                 ),
                           ),
                         );
-                        print(
-                            '${productCondition.hashCode}  ${productCondition.keywords}');
-                        OrderByProductBLoc.instance.getData(
-                            productCondition.categories,
-                            productCondition.keywords);
+                        OrderByProductBLoc.instance.getData(productCondition);
                       },
                       child: Text(
                         '${generateCategoryStr()}',
@@ -104,8 +97,7 @@ class _ProductsPageState extends State<ProductsPage> {
               )),
         ),
         body: ProductsView(
-          categories: productCondition.categories,
-          keywords: productCondition.keywords,
+          productCondition: productCondition,
         ),
         floatingActionButton: ScrollToTopButton<OrderByProductBLoc>(),
       ),
@@ -139,11 +131,9 @@ class _ProductsPageState extends State<ProductsPage> {
 }
 
 class ProductsView extends StatelessWidget {
-  List<CategoryModel> categories;
+  ProductCondition productCondition;
 
-  String keywords;
-
-  ProductsView({this.categories, this.keywords});
+  ProductsView({this.productCondition});
 
   ScrollController _scrollController = ScrollController();
 
@@ -181,7 +171,7 @@ class ProductsView extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMore(categories, keywords);
+        bloc.loadingMore(productCondition);
       }
     });
 
@@ -201,7 +191,7 @@ class ProductsView extends StatelessWidget {
                       AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                     //数据为空查询数据，显示加载条
                     if (snapshot.data == null) {
-                      bloc.getData(categories, keywords);
+                      bloc.getData(productCondition);
                       return SliverToBoxAdapter(
                         child: ProgressIndicatorFactory
                             .buildPaddedProgressIndicator(),
@@ -294,13 +284,4 @@ class ProductsView extends StatelessWidget {
           ),
         ));
   }
-}
-
-class ProductCondition {
-  /// 品类
-  List<CategoryModel> categories;
-
-  String keywords;
-
-  ProductCondition(this.categories, this.keywords);
 }

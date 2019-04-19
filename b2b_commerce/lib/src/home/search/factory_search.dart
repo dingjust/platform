@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
 /// 产品搜索页
-class OrderProductSearchDelegate extends SearchDelegate<String> {
+class FactorySearchDelegate extends SearchDelegate<String> {
   List<String> history_keywords;
 
-  OrderProductSearchDelegate() {
+  FactorySearchDelegate() {
     getHistory();
   }
 
@@ -16,7 +16,7 @@ class OrderProductSearchDelegate extends SearchDelegate<String> {
   void getHistory() async {
     //解析
     String jsonStr =
-        await LocalStorage.get(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY);
+        await LocalStorage.get(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
     if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
       history_keywords = list.map((item) => item as String).toList();
@@ -28,10 +28,6 @@ class OrderProductSearchDelegate extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
-      // IconButton(
-      //   icon: Icon(Icons.done),
-      //   onPressed: () => close(context, null), //TODO: 选中的数据返回到前一页
-      // ),
       query != ''
           ? IconButton(
               icon: Icon(
@@ -65,7 +61,7 @@ class OrderProductSearchDelegate extends SearchDelegate<String> {
     //记录搜索关键字
     if (query != '' && query.isNotEmpty) {
       history_keywords.add(query);
-      LocalStorage.save(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
+      LocalStorage.save(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
           json.encode(history_keywords));
     }
     Navigator.pop(context, query);
