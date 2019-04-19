@@ -60,9 +60,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
   void _jumpToProducts(CategoryModel category) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => ProductsPage(
-              categories: [category],
-            ),
+        builder: (context) => ProductsPage(),
       ),
     );
   }

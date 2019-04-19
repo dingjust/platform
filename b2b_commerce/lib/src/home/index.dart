@@ -166,9 +166,7 @@ class BrandFirstMenuSection extends StatelessWidget {
                       //       categories: categories,
                       //       categoryActionType: CategoryActionType.TO_PRODUCTS,
                       //     ),
-                      ProductsPage(
-                        categories: [],
-                      ),
+                      ProductsPage(),
                 ),
               );
             });

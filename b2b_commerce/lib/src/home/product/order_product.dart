@@ -9,28 +9,23 @@ import '../../home/product/product.dart';
 import '../../home/search/order_product_search.dart';
 
 class ProductsPage extends StatefulWidget {
-  /// 品类
-  List<CategoryModel> categories;
-
-  String keywords;
-
-  ProductsPage({Key key, this.categories}) : super(key: key);
+  ProductsPage({Key key}) : super(key: key);
 
   _ProductsPageState createState() => _ProductsPageState();
 }
 
 class _ProductsPageState extends State<ProductsPage> {
   GlobalKey _ProductsPageKey = GlobalKey();
+  ProductCondition productCondition;
 
   List<CategoryModel> cascadedCategories;
-
-  String titleKeywords;
 
   @override
   void initState() {
     // TODO: implement initState
     WidgetsBinding.instance
         .addPostFrameCallback((_) => getCascadedCategories());
+    productCondition = ProductCondition([], '');
     super.initState();
   }
 
@@ -45,9 +40,10 @@ class _ProductsPageState extends State<ProductsPage> {
           centerTitle: true,
           elevation: 0.5,
           title: Text(
-            titleKeywords == null || titleKeywords == ''
+            productCondition.keywords == null ||
+                    productCondition.keywords == ''
                 ? '看款下单'
-                : '${titleKeywords}',
+                : '${productCondition.keywords}',
             style: TextStyle(color: Colors.black),
             overflow: TextOverflow.ellipsis,
           ),
@@ -63,11 +59,13 @@ class _ProductsPageState extends State<ProductsPage> {
                     delegate: OrderProductSearchDelegate(),
                   );
                   setState(() {
-                    widget.keywords = keywords;
-                    titleKeywords = keywords;
+                    productCondition.keywords = keywords;
                   });
-                  OrderByProductBLoc.instance
-                      .getData(widget.categories, widget.keywords);
+                  print(
+                      '${productCondition.hashCode}  ${productCondition.keywords}');
+                  OrderByProductBLoc.instance.getData(
+                      productCondition.categories,
+                      productCondition.keywords);
                 }),
           ],
           bottom: PreferredSize(
@@ -82,15 +80,19 @@ class _ProductsPageState extends State<ProductsPage> {
                         await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => CategorySelectPage(
-                                  minCategorySelect: widget.categories,
+                                  minCategorySelect:
+                                      productCondition.categories,
                                   categories: cascadedCategories,
                                   categoryActionType: CategoryActionType.none,
                                   multiple: true,
                                 ),
                           ),
                         );
-                        OrderByProductBLoc.instance
-                            .getData(widget.categories, widget.keywords);
+                        print(
+                            '${productCondition.hashCode}  ${productCondition.keywords}');
+                        OrderByProductBLoc.instance.getData(
+                            productCondition.categories,
+                            productCondition.keywords);
                       },
                       child: Text(
                         '${generateCategoryStr()}',
@@ -102,8 +104,8 @@ class _ProductsPageState extends State<ProductsPage> {
               )),
         ),
         body: ProductsView(
-          categories: widget.categories,
-          keywords: widget.keywords,
+          categories: productCondition.categories,
+          keywords: productCondition.keywords,
         ),
         floatingActionButton: ScrollToTopButton<OrderByProductBLoc>(),
       ),
@@ -111,7 +113,7 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   String generateCategoryStr() {
-    String result = widget.categories
+    String result = productCondition.categories
         .map((category) => category.name)
         .toList()
         .toString()
@@ -292,4 +294,13 @@ class ProductsView extends StatelessWidget {
           ),
         ));
   }
+}
+
+class ProductCondition {
+  /// 品类
+  List<CategoryModel> categories;
+
+  String keywords;
+
+  ProductCondition(this.categories, this.keywords);
 }
