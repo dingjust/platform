@@ -58,7 +58,7 @@ const state = {
   queryFormData: {
     labels: [],
     populationScales: [],
-    regions: [],
+    productiveOrientations: [],
     starLevel: null,
     machiningTypes: [],
     categories: [],
