@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class FactoryQuoteListPage extends StatefulWidget{
-  FactoryQuoteListPage({
+class CompanyQuoteListPage extends StatefulWidget{
+  CompanyQuoteListPage({
     Key key,
-    @required this.factoryUid,
+    @required this.companyUid,
   }) : super(key: key);
 
-  final String factoryUid;
+  final String companyUid;
 
-  _FactoryQuoteListPageState createState() => _FactoryQuoteListPageState();
+  _CompanyQuoteListPageState createState() => _CompanyQuoteListPageState();
 }
 
-class _FactoryQuoteListPageState extends State<FactoryQuoteListPage>{
-  final GlobalKey _globalKey = GlobalKey<_FactoryQuoteListPageState>();
+class _CompanyQuoteListPageState extends State<CompanyQuoteListPage>{
+  final GlobalKey _globalKey = GlobalKey<_CompanyQuoteListPageState>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _FactoryQuoteListPageState extends State<FactoryQuoteListPage>{
           elevation: 0.5,
           centerTitle: true,
         ),
-        body: QuoteList(factoryUid: widget.factoryUid,),
+        body: QuoteList(companyUid: widget.companyUid,),
         floatingActionButton: ScrollToTopButton<QuoteOrdersBLoC>(),
       ),
     );

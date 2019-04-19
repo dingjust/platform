@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class FactoryPurchaseListPage extends StatefulWidget{
-  FactoryPurchaseListPage({
+class CompanyPurchaseListPage extends StatefulWidget{
+  CompanyPurchaseListPage({
     Key key,
-    @required this.factoryUid,
+    @required this.companyUid,
   }) : super(key: key);
 
-  final String factoryUid;
+  final String companyUid;
 
-  _FactoryPurchaseListPageState createState() => _FactoryPurchaseListPageState();
+  _CompanyPurchaseListPageState createState() => _CompanyPurchaseListPageState();
 }
 
-class _FactoryPurchaseListPageState extends State<FactoryPurchaseListPage>{
-  final GlobalKey _globalKey = GlobalKey<_FactoryPurchaseListPageState>();
+class _CompanyPurchaseListPageState extends State<CompanyPurchaseListPage>{
+  final GlobalKey _globalKey = GlobalKey<_CompanyPurchaseListPageState>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _FactoryPurchaseListPageState extends State<FactoryPurchaseListPage>{
           elevation: 0.5,
           centerTitle: true,
         ),
-        body: PurchaseOrderList(factoryUid: widget.factoryUid,),
+        body: PurchaseOrderList(companyUid: widget.companyUid,),
         floatingActionButton: ScrollToTopButton<PurchaseOrderBLoC>(),
       ),
     );
