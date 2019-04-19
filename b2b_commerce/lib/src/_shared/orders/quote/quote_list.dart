@@ -187,6 +187,8 @@ class _QuoteListState extends State<QuoteList> {
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
     if(widget.factoryUid != null){
       bloc.getData(widget.factoryUid);
+    }else if(widget.keyword != null){
+      bloc.filterByKeyword(widget.keyword);
     }else{
       bloc.refreshData(widget.status.code);
     }
