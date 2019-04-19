@@ -790,18 +790,19 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                                   fit: BoxFit.fill,
                                 ),
                               )
-                            : Container(
-                                height: 50,
-                              ),
-                        Container(
-                          margin: EdgeInsets.all(5),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '${profile.description ?? ''}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
+                            : Container(),
+                        Offstage(
+                          offstage: profile.description == null,
+                          child: Container(
+                            margin: EdgeInsets.all(5),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${profile.description}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
                           ),
