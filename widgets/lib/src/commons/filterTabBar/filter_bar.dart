@@ -19,7 +19,7 @@ class FilterBar extends StatefulWidget implements PreferredSizeWidget {
   final double itemWidth;
   final Color unselectedColor;
   final Color color;
-  final Widget action;
+  final List<Widget> action;
   final List<FilterConditionEntry> filterConditionEntries;
 
   final ValueChanged<FilterConditionEntry> onChanged;
@@ -80,7 +80,9 @@ class _FilterBarState extends State<FilterBar> {
                           ))
                       .toList(),
                 )),
-            widget.action
+            Row(
+              children: widget.action,
+            )
           ],
         ));
   }

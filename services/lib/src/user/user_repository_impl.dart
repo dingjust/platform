@@ -135,7 +135,7 @@ class UserRepositoryImpl implements UserRepository {
       String phone, String newPassword, String captcha) async {
     Response response;
     try {
-      response = await http$.post(UserApis.resetPassword(phone),
+      response = await http$.put(UserApis.resetPassword(phone),
           data: {"newPassword": newPassword, "captcha": captcha});
     } on DioError catch (e) {
       print(e);

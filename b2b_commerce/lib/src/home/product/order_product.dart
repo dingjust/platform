@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -9,15 +10,25 @@ import '../../home/search/order_product_search.dart';
 
 class ProductsPage extends StatefulWidget {
   /// 品类
-  CategoryModel categoryModel;
+  List<CategoryModel> categories;
 
-  ProductsPage({Key key, this.categoryModel}) : super(key: key);
+  ProductsPage({Key key, this.categories}) : super(key: key);
 
   _ProductsPageState createState() => _ProductsPageState();
 }
 
 class _ProductsPageState extends State<ProductsPage> {
   GlobalKey _ProductsPageKey = GlobalKey();
+
+  List<CategoryModel> cascadedCategories;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => getCascadedCategories());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,21 +55,62 @@ class _ProductsPageState extends State<ProductsPage> {
                     delegate: OrderProductSearchDelegate(),
                   ),
             ),
-            // IconButton(
-            //   icon: Icon(
-            //     B2BIcons.condition,
-            //     size: 18,
-            //   ),
-            //   onPressed: () {},
-            // )
           ],
+          bottom: PreferredSize(
+              preferredSize: Size(200, 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Container(
+                    width: 150,
+                    child: FlatButton(
+                      onPressed: () async {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => CategorySelectPage(
+                                  minCategorySelect: widget.categories,
+                                  categories: cascadedCategories,
+                                  categoryActionType: CategoryActionType.none,
+                                  multiple: true,
+                                ),
+                          ),
+                        );
+                        print(widget.categories.length);
+                        OrderByProductBLoc.instance.getData(widget.categories);
+                      },
+                      child: Text(
+                        '${generateCategoryStr()}',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
+                ],
+              )),
         ),
         body: ProductsView(
-          categoryCode: widget.categoryModel.code,
+          categories: widget.categories,
         ),
         floatingActionButton: ScrollToTopButton<OrderByProductBLoc>(),
       ),
     );
+  }
+
+  String generateCategoryStr() {
+    String result = widget.categories
+        .map((category) => category.name)
+        .toList()
+        .toString()
+        .replaceAll('[', '')
+        .replaceAll(']', '');
+    if (result.isEmpty) {
+      return '全部品类';
+    } else {
+      return result;
+    }
+  }
+
+  void getCascadedCategories() async {
+    cascadedCategories = await ProductRepositoryImpl().cascadedCategories();
   }
 
   @override
@@ -70,9 +122,9 @@ class _ProductsPageState extends State<ProductsPage> {
 }
 
 class ProductsView extends StatelessWidget {
-  String categoryCode;
+  List<CategoryModel> categories;
 
-  ProductsView({this.categoryCode});
+  ProductsView({this.categories});
 
   ScrollController _scrollController = ScrollController();
 
@@ -101,14 +153,16 @@ class ProductsView extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMore(categoryCode);
+        bloc.loadingMore(categories);
       }
     });
 
@@ -124,12 +178,14 @@ class ProductsView extends StatelessWidget {
               StreamBuilder<List<ApparelProductModel>>(
                   stream: bloc.stream,
                   initialData: null,
-                  builder: (BuildContext context, AsyncSnapshot<List<ApparelProductModel>> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                     //数据为空查询数据，显示加载条
                     if (snapshot.data == null) {
-                      bloc.getData(categoryCode);
+                      bloc.getData(categories);
                       return SliverToBoxAdapter(
-                        child: ProgressIndicatorFactory.buildPaddedProgressIndicator(),
+                        child: ProgressIndicatorFactory
+                            .buildPaddedProgressIndicator(),
                       );
                     } else {
                       return SliverToBoxAdapter(
@@ -140,25 +196,29 @@ class ProductsView extends StatelessWidget {
               StreamBuilder<List<ApparelProductModel>>(
                   stream: bloc.stream,
                   initialData: bloc.products,
-                  builder: (BuildContext context, AsyncSnapshot<List<ApparelProductModel>> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                     if (snapshot.data.isNotEmpty) {
-                      List<RecommendProductItem> recommendProductItems = snapshot.data
-                          .map((product) => RecommendProductItem(
-                                model: product,
-                                showAddress: true,
-                              ))
-                          .toList();
+                      List<RecommendProductItem> recommendProductItems =
+                          snapshot.data
+                              .map((product) => RecommendProductItem(
+                                    model: product,
+                                    showAddress: true,
+                                  ))
+                              .toList();
 
                       return SliverPadding(
                         padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                         sliver: SliverGrid(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2, //Grid按两列显示
                             mainAxisSpacing: 10.0,
                             crossAxisSpacing: 10.0,
                             childAspectRatio: 0.61,
                           ),
-                          delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                          delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
                             return recommendProductItems[index];
                           }, childCount: snapshot.data.length),
                         ),
@@ -199,7 +259,8 @@ class ProductsView extends StatelessWidget {
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   return SliverToBoxAdapter(
-                    child: ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                    child: ProgressIndicatorFactory
+                        .buildPaddedOpacityProgressIndicator(
                       opacity: snapshot.data ? 1.0 : 0,
                     ),
                   );

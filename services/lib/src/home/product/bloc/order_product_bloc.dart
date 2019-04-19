@@ -39,7 +39,7 @@ class OrderByProductBLoc extends BLoCBase {
   //锁
   bool lock = false;
 
-  getData(String categoryCode) async {
+  getData(List<CategoryModel> categories) async {
     if (!lock) {
       lock = true;
       //重置参数
@@ -47,13 +47,15 @@ class OrderByProductBLoc extends BLoCBase {
       Response<Map<String, dynamic>> response;
       try {
         response = await http$.post(ProductApis.factoriesApparel,
-            data: {"categories": categoryCode}, queryParameters: {'page': currentPage, 'size': pageSize});
+            data: {"categories": categories.map((category) => category.code).toList()},
+            queryParameters: {'page': currentPage, 'size': pageSize});
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        ApparelProductResponse productResponse = ApparelProductResponse.fromJson(response.data);
+        ApparelProductResponse productResponse =
+            ApparelProductResponse.fromJson(response.data);
         totalPages = productResponse.totalPages;
         totalElements = productResponse.totalElements;
         _products.clear();
@@ -64,7 +66,7 @@ class OrderByProductBLoc extends BLoCBase {
     }
   }
 
-  loadingMore(String categoryCode) async {
+  loadingMore(List<CategoryModel> categories) async {
     if (!lock) {
       lock = true;
 
@@ -77,13 +79,15 @@ class OrderByProductBLoc extends BLoCBase {
         try {
           currentPage++;
           response = await http$.post(ProductApis.factoriesApparel,
-              data: {"categories": categoryCode}, queryParameters: {'page': currentPage, 'size': pageSize});
+              data: {"categories": categories.map((category) => category.code).toList()},
+              queryParameters: {'page': currentPage, 'size': pageSize});
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          ApparelProductResponse productResponse = ApparelProductResponse.fromJson(response.data);
+          ApparelProductResponse productResponse =
+              ApparelProductResponse.fromJson(response.data);
           totalPages = productResponse.totalPages;
           totalElements = productResponse.totalElements;
           _products.addAll(productResponse.content);

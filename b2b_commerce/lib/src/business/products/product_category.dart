@@ -61,7 +61,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ProductsPage(
-              categoryModel: category,
+              categories: [category],
             ),
       ),
     );

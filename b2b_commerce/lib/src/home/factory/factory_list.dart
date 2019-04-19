@@ -86,10 +86,10 @@ class _FactoryPageState extends State<FactoryPage> {
                 bottom: FilterBar(
                   onChanged: (condition) => changeCondition(condition),
                   filterConditionEntries: filterConditionEntries,
-                  action: ConditionPageButton(
+                  action: [ConditionPageButton(
                     factoryCondition: widget.factoryCondition,
                     requirementCode: widget.requirementCode,
-                  ),
+                  )],
                 ),
               ),
               body: FactoryListView(
