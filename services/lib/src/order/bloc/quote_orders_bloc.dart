@@ -52,6 +52,7 @@ class QuoteOrdersBLoC extends BLoCBase {
         Map data = {};
         if (status != 'ALL') {
           data = {
+            'code' : '6004',
             'states': [status]
           };
         }
@@ -74,6 +75,32 @@ class QuoteOrdersBLoC extends BLoCBase {
       _controller.sink.add(_quotesMap[status].data);
       lock = false;
     }
+  }
+
+  filterByKeyword(String keyword) async {
+      //若没有数据则查询
+        //请求参数
+        Map data = {
+          'code': keyword,
+          'skuID': keyword,
+          'belongto': keyword,
+        };
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.quotes,
+              data: data, queryParameters: {'page': _quotesMap['ALL'].currentPage, 'size': _quotesMap['ALL'].size});
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
+          _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
+          _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
+          _quotesMap['ALL'].data.clear();
+          _quotesMap['ALL'].data.addAll(ordersResponse.content);
+        }
+      _controller.sink.add(_quotesMap['ALL'].data);
   }
 
   loadingMoreByStatuses(String status) async {
@@ -107,6 +134,40 @@ class QuoteOrdersBLoC extends BLoCBase {
       }
       loadingController.sink.add(false);
       _controller.sink.add(_quotesMap[status].data);
+      lock = false;
+    }
+  }
+
+  loadingMoreByKeyword(String keyword) async {
+    if (!lock) {
+      lock = true;
+      //数据到底
+      if (_quotesMap['ALL'].currentPage + 1 == _quotesMap['ALL'].totalPages) {
+        //通知显示已经到底部
+        bottomController.sink.add(true);
+      } else {
+        Map data = {
+          'code': keyword,
+          'skuID': keyword,
+          'belongto': keyword,
+        };
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.quotes,
+              data: data, queryParameters: {'page': ++_quotesMap['ALL'].currentPage, 'size': _quotesMap['ALL'].size});
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
+          _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
+          _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
+          _quotesMap['ALL'].data.addAll(ordersResponse.content);
+        }
+      }
+      loadingController.sink.add(false);
+      _controller.sink.add(_quotesMap['ALL'].data);
       lock = false;
     }
   }
