@@ -5,11 +5,11 @@
       <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch">
         <template slot="operations" slot-scope="props">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
-          <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">更新</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">标签</el-button>
         </template>
       </factory-list>
     </el-card>
-    <el-dialog title="更新" width="30%" :visible.sync="dialogFormVisible" :before-close="handleClose" append-to-body>
+    <el-dialog title="标签" width="30%" :visible.sync="dialogFormVisible" :before-close="handleClose" append-to-body>
       <factory-labels-form :slotData="item"></factory-labels-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
