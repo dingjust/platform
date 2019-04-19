@@ -39,7 +39,7 @@ class ImageFactory {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         image: DecorationImage(
-          image: NetworkImage('${media.actualUrl}'),
+          image: NetworkImage('${media.previewUrl()}'),
           fit: fit,
         ),
       ),
@@ -77,7 +77,7 @@ class ImageFactory {
     }
 
     return CircleAvatar(
-      backgroundImage: NetworkImage('${profilePicture.actualUrl}'),
+      backgroundImage: NetworkImage('${profilePicture.previewUrl()}'),
       radius: radius,
     );
   }

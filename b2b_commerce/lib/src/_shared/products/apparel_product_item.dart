@@ -59,7 +59,7 @@ class ApparelProductItem extends StatelessWidget {
                 image: DecorationImage(
                   image: item.thumbnail != null
                       ? NetworkImage(
-                          '${item.thumbnail.actualUrl}')
+                          '${item.thumbnail.previewUrl()}')
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",

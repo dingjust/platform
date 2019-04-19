@@ -37,7 +37,7 @@ class SampleProductFormPageState extends State<SampleProductFormPage> {
       appBar: AppBar(
         elevation: 0.5,
         centerTitle: true,
-        title: Text('编辑样衣'),
+        title: Text(widget.isCreate ? '新建样衣':'编辑样衣'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

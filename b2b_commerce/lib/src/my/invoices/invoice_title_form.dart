@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class InvoiceTitleFormPage extends StatefulWidget {
+  final bool isCreate;
   final InvoiceTitleModel invoiceTitle;
 
-  InvoiceTitleFormPage({this.invoiceTitle});
+  InvoiceTitleFormPage({this.invoiceTitle,this.isCreate = false,});
 
   @override
   InvoiceTitleFormState createState() => InvoiceTitleFormState();
@@ -18,6 +21,12 @@ class InvoiceTitleFormState extends State<InvoiceTitleFormPage> {
   TextEditingController _adressController;
   TextEditingController _bankOfDepositController;
   TextEditingController _bankAccountController;
+  FocusNode _companyFocusNode = FocusNode();
+  FocusNode _taxNumberFocusNode = FocusNode();
+  FocusNode _phoneFocusNode = FocusNode();
+  FocusNode _adressFocusNode = FocusNode();
+  FocusNode _bankOfDepositFocusNode = FocusNode();
+  FocusNode _bankAccountFocusNode = FocusNode();
   bool _isDefault;
 
   @override
@@ -44,11 +53,24 @@ class InvoiceTitleFormState extends State<InvoiceTitleFormPage> {
       appBar: AppBar(
         elevation: 0.5,
         centerTitle: true,
-        title: Text('编辑发票抬头'),
+        title: Text(widget.isCreate ? '新建发票抬头':'编辑发票抬头'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.done),
+            icon: Text('保存'),
             onPressed: () {
+              widget.invoiceTitle.company = _companyController.text;
+              widget.invoiceTitle.phone = _phoneController.text;
+              widget.invoiceTitle.address = _adressController.text;
+              widget.invoiceTitle.bankAccount = _bankAccountController.text;
+              widget.invoiceTitle.bankOfDeposit = _bankOfDepositController.text;
+              widget.invoiceTitle.taxNumber = _taxNumController.text;
+              widget.invoiceTitle.defaultTitle = _isDefault;
+
+              if(widget.isCreate){
+                InvoiceTitleRepositoryImpl().create(widget.invoiceTitle);
+              }else{
+                InvoiceTitleRepositoryImpl().update(widget.invoiceTitle);
+              }
               Navigator.pop(context);
             },
           )
@@ -62,45 +84,43 @@ class InvoiceTitleFormState extends State<InvoiceTitleFormPage> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                TextFormField(
+                TextFieldComponent(
+                  focusNode: _companyFocusNode,
                   controller: _companyController,
-                  decoration: InputDecoration(
-                    labelText: '公司名称',
-                  ),
+                  leadingText: '公司名称',
+                  hintText: '请输入公司名称',
                 ),
-                TextFormField(
+                TextFieldComponent(
+                  focusNode: _taxNumberFocusNode,
                   controller: _taxNumController,
-                  decoration: InputDecoration(
-                    labelText: '税号',
-                    hintText: '15-20位（企业报销时必填）',
-                  ),
+                  leadingText: '税号',
+                  hintText: '15-20位（企业报销时必填）',
                 ),
-                TextFormField(
+                TextFieldComponent(
+                  focusNode: _adressFocusNode,
                   controller: _adressController,
-                  decoration: InputDecoration(
-                    labelText: '单位地址',
-                  ),
+                  leadingText: '单位地址',
+                  hintText: '请输入单位地址',
                 ),
-                TextFormField(
+                TextFieldComponent(
+                  focusNode: _phoneFocusNode,
                   controller: _phoneController,
-                  decoration: InputDecoration(
-                    labelText: '电话号码',
-                  ),
+                  leadingText: '电话号码',
+                  hintText: '请输入电话号码',
                 ),
-                TextFormField(
+                TextFieldComponent(
+                  focusNode: _bankOfDepositFocusNode,
                   controller: _bankOfDepositController,
-                  decoration: InputDecoration(
-                    labelText: '开户银行',
-                  ),
+                  leadingText: '开户银行',
+                  hintText: '请输入开户银行',
                 ),
-                TextFormField(
+                TextFieldComponent(
+                  focusNode: _bankAccountFocusNode,
                   controller: _bankAccountController,
-                  decoration: InputDecoration(
-                    labelText: '银行账户',
-                  ),
+                  leadingText: '银行账户',
+                  hintText: '请输入银行账户',
                 ),
                 ListTile(
-                  contentPadding: EdgeInsets.all(0),
                   title: Text('默认抬头'),
                   trailing: Switch(
                     activeColor: Colors.pink,

@@ -19,7 +19,7 @@ class ExistingProductItem extends StatelessWidget{
                   Container(
                     child: product.thumbnail != null ?
                     Image.network(
-                      '${product.thumbnail.actualUrl}',
+                      '${product.thumbnail.previewUrl()}',
                       width: 100,
                       height: 100,
                       fit: BoxFit.fill,
@@ -86,7 +86,7 @@ class ExistingProductItem extends StatelessWidget{
                     padding: EdgeInsets.all(20),
                     child: product.thumbnail != null ?
                     Image.network(
-                      '${product.thumbnail.actualUrl}',
+                      '${product.thumbnail.previewUrl()}',
                       fit: BoxFit.scaleDown,
                     )
                         : Container(

@@ -64,7 +64,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         appBar: AppBar(
           elevation: 0.5,
           centerTitle: true,
-          title: Text('编辑产品'),
+          title: Text(widget.isCreate ? '新建产品':'编辑产品'),
           actions: <Widget>[
             IconButton(
               icon: Text(

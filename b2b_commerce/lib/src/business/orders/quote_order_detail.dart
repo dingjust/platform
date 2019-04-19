@@ -152,7 +152,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                                 package: "assets",
                               )
                             : NetworkImage(
-                                '${widget.item.supplier.profilePicture.actualUrl}'),
+                                '${widget.item.supplier.profilePicture.previewUrl()}'),
                         fit: BoxFit.cover,
                       )),
                 ),
@@ -369,7 +369,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 image: pageItem.requirementOrder.details?.pictures != null &&
                         pageItem.requirementOrder.details.pictures.isNotEmpty
                     ? NetworkImage(
-                        '${pageItem.requirementOrder.details.pictures[0].actualUrl}')
+                        '${pageItem.requirementOrder.details.pictures[0].previewUrl()}')
                     : AssetImage(
                         'temp/picture.png',
                         package: "assets",
@@ -716,7 +716,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 onPressed: onUpdateQuote,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 120),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
                 child: Text(
                   '修改报价',
                   style: TextStyle(
@@ -729,7 +729,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           pageItem.activeProofing == null ?
           Container(
             height: 30,
-            margin: EdgeInsets.only(right: 20),
+            margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             child: FlatButton(
                 onPressed: onCreateProofings,
                 shape: RoundedRectangleBorder(
@@ -742,6 +742,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                       color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 )),
           ):Container(
+            margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             height: 30,
             child: FlatButton(
               onPressed: () async{
@@ -797,6 +798,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           ),
           pageItem.activePurchaseOrder == null ?
           Container(
+            margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             height: 30,
             child: FlatButton(
                 onPressed: onCreateProduction,
@@ -810,6 +812,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                       color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                 )),
           ):Container(
+            margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             height: 30,
             child: FlatButton(
               onPressed: () async {

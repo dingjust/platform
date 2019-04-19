@@ -219,7 +219,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image: NetworkImage('${progress.medias[0].actualUrl}'),
+                        image: NetworkImage('${progress.medias[0].previewUrl()}'),
                         fit: BoxFit.fill,
                       )),
                 ),

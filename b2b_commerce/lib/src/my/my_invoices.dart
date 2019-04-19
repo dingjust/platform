@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 import 'invoices/invoice_title_detail.dart';
 import 'invoices/invoice_title_form.dart';
@@ -7,43 +8,67 @@ import 'invoices/tax_invoices.dart';
 
 /// 发票管理
 class MyInvoicesPage extends StatelessWidget {
-  final List<InvoiceTitleModel> invoiceTitles = <InvoiceTitleModel>[
-    InvoiceTitleModel(
-      company: "宁波衣加衣供应链管理有限公司",
-      taxNumber: "55555555MA2CJBWF1P",
-      address: "浙江省宁波高新区扬帆广场8、20、32号9-5-033室",
-      phone: "020-83303330",
-      bankOfDeposit: "中国农业银行",
-      bankAccount: "39152001040014999",
-      defaultTitle: true,
-    ),
-    InvoiceTitleModel(
-      company: "宁波衣加衣供应链管理有限公司广州分公司",
-      taxNumber: "66666666MA2CJBWF1P",
-      address: "广东省广州市海珠区云顶同创汇C03",
-      phone: "020-84474866",
-      bankOfDeposit: "中国农业银行",
-      bankAccount: "39152001040014000",
-      defaultTitle: false,
-    ),
+  List<InvoiceTitleModel> invoiceTitles = <InvoiceTitleModel>[
+//    InvoiceTitleModel(
+//      company: "宁波衣加衣供应链管理有限公司",
+//      taxNumber: "55555555MA2CJBWF1P",
+//      address: "浙江省宁波高新区扬帆广场8、20、32号9-5-033室",
+//      phone: "020-83303330",
+//      bankOfDeposit: "中国农业银行",
+//      bankAccount: "39152001040014999",
+//      defaultTitle: true,
+//    ),
+//    InvoiceTitleModel(
+//      company: "宁波衣加衣供应链管理有限公司广州分公司",
+//      taxNumber: "66666666MA2CJBWF1P",
+//      address: "广东省广州市海珠区云顶同创汇C03",
+//      phone: "020-84474866",
+//      bankOfDeposit: "中国农业银行",
+//      bankAccount: "39152001040014000",
+//      defaultTitle: false,
+//    ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    List<Card> cardList = <Card>[
-      Card(
-        elevation: 0,
-        margin: EdgeInsets.all(0),
-        child: ListTile(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => TaxInvoicesPage()));
-          },
-          leading: Icon(Icons.portrait),
-          title: Text('我的发票'),
-          trailing: Icon(Icons.chevron_right),
-        ),
+
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.5,
+        centerTitle: true,
+        title: Text('发票管理'),
       ),
-    ];
+      body: FutureBuilder(
+        future: InvoiceTitleRepositoryImpl().list(),
+        builder: (context,snapshot){
+          if (!snapshot.hasData) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 200),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+          if(snapshot.hasData){
+            return ListView(
+              children:  buildInvoiceTitleList(snapshot.data ?? [], context),
+            );
+          }
+        }
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          InvoiceTitleModel invoiceTitleModel = InvoiceTitleModel();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InvoiceTitleFormPage(isCreate: true,invoiceTitle: invoiceTitleModel,)),
+          );
+        },
+      ),
+    );
+  }
+
+  List<Widget> buildInvoiceTitleList(List<InvoiceTitleModel> invoiceTitles, BuildContext context) {
+    List<Widget> widgetList = [];
 
     invoiceTitles.forEach((invoiceTitle) {
       ListTile tile = ListTile(
@@ -75,7 +100,7 @@ class MyInvoicesPage extends StatelessWidget {
         );
       }
 
-      cardList.add(
+      widgetList.add(
         Card(
           elevation: 0,
           margin: EdgeInsets.only(top: 10),
@@ -115,24 +140,6 @@ class MyInvoicesPage extends StatelessWidget {
       );
     });
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.5,
-        centerTitle: true,
-        title: Text('发票管理'),
-      ),
-      body: ListView(
-        children: cardList,
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => InvoiceTitleFormPage()),
-          );
-        },
-      ),
-    );
+    return widgetList;
   }
 }
