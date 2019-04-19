@@ -1,7 +1,7 @@
 import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
-import 'package:b2b_commerce/src/business/supplier/factory_purchase_list.dart';
-import 'package:b2b_commerce/src/business/supplier/factory_quote_list.dart';
+import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
+import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -84,8 +84,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => FactoryQuoteListPage(
-                                factoryUid: widget.factory.uid,
+                          builder: (context) => CompanyQuoteListPage(
+                                companyUid: widget.factory.uid,
                               )));
                 },
               ),
@@ -117,8 +117,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => FactoryPurchaseListPage(
-                                  factoryUid: widget.factory.uid,
+                            builder: (context) => CompanyPurchaseListPage(
+                                  companyUid: widget.factory.uid,
                                 )));
                   },
                 ),

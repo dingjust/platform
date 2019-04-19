@@ -3,6 +3,23 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 class PurchaseOrderRepository {
+  //获取生产订单列表
+  Future<PurchaseOrdersResponse> getPurchaseOrders(dynamic data,Map<String,dynamic> parames) async {
+    PurchaseOrdersResponse purchaseOrdersResponse;
+    Response response;
+    try {
+      response = await http$.post(OrderApis.purchaseOrders, data: data, queryParameters: parames);
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      purchaseOrdersResponse = PurchaseOrdersResponse.fromJson(response.data);
+    }
+
+    return purchaseOrdersResponse;
+  }
+
   /// 创建线下采购订单
   Future<String> offlinePurchaseOrder(PurchaseOrderModel form) async {
     Response response;
