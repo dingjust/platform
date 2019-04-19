@@ -16,10 +16,12 @@ class QuoteList extends StatefulWidget {
     Key key,
     this.status,
     this.factoryUid,
+    this.keyword,
   }) : super(key: key);
 
   final EnumModel status;
   final String factoryUid;
+  final String keyword;
 
   final ScrollController scrollController = ScrollController();
   final TextEditingController rejectController = TextEditingController();
@@ -223,9 +225,12 @@ class _QuoteListState extends State<QuoteList> {
                 if (snapshot.data == null) {
                   if(widget.factoryUid != null){
                     bloc.getData(widget.factoryUid);
+                  }else if(widget.keyword != null){
+                    bloc.filterByKeyword(widget.keyword);
                   }else{
                     bloc.filterByStatuses(widget.status.code);
                   }
+
 
                   return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                 }
