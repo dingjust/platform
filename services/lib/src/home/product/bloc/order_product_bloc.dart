@@ -39,16 +39,20 @@ class OrderByProductBLoc extends BLoCBase {
   //锁
   bool lock = false;
 
-  getData(List<CategoryModel> categories) async {
+  getData(List<CategoryModel> categories, String keywords) async {
     if (!lock) {
       lock = true;
       //重置参数
       reset();
       Response<Map<String, dynamic>> response;
       try {
-        response = await http$.post(ProductApis.factoriesApparel,
-            data: {"categories": categories.map((category) => category.code).toList()},
-            queryParameters: {'page': currentPage, 'size': pageSize});
+        response = await http$.post(ProductApis.factoriesApparel, data: {
+          "categories": categories.map((category) => category.code).toList(),
+          "keyword": keywords ?? ''
+        }, queryParameters: {
+          'page': currentPage,
+          'size': pageSize
+        });
       } on DioError catch (e) {
         print(e);
       }
@@ -66,7 +70,7 @@ class OrderByProductBLoc extends BLoCBase {
     }
   }
 
-  loadingMore(List<CategoryModel> categories) async {
+  loadingMore(List<CategoryModel> categories, String keywords) async {
     if (!lock) {
       lock = true;
 
@@ -78,9 +82,13 @@ class OrderByProductBLoc extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
-          response = await http$.post(ProductApis.factoriesApparel,
-              data: {"categories": categories.map((category) => category.code).toList()},
-              queryParameters: {'page': currentPage, 'size': pageSize});
+          response = await http$.post(ProductApis.factoriesApparel, data: {
+            "categories": categories.map((category) => category.code).toList(),
+            "keyword": keywords ?? ''
+          }, queryParameters: {
+            'page': currentPage,
+            'size': pageSize
+          });
         } on DioError catch (e) {
           print(e);
         }

@@ -10,7 +10,6 @@ import 'package:widgets/widgets.dart';
 class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
   List<String> history_keywords;
 
-
   ProductionSearchDelegate() {
     getHistory();
   }
@@ -88,11 +87,7 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container(
-      child: query == ''
-          ? _buildHistoryListView(context)
-          : _buildSuggestionsListView(context),
-    );
+    return Container(child: _buildHistoryListView(context));
   }
 
   Widget _buildHistoryListView(BuildContext context) {
@@ -125,73 +120,6 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
                         },
                       ))
                   .toList()),
-        )
-      ],
-    );
-  }
-
-  Widget _buildSuggestionsListView(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        SuggestionsRow(
-          value: query,
-          onIconPressed: () {
-            query = query;
-          },
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductionResultPage(
-                          keyword: query,
-                        )));
-          },
-        ),
-        SuggestionsRow(
-          value: '${query} 1',
-          onIconPressed: () {
-            query = '${query} 1';
-          },
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductionResultPage(
-                          keyword: '${query} 1',
-                        )));
-          },
-        ),
-        SuggestionsRow(
-          value: '${query} 2',
-          onIconPressed: () {
-            query = '${query} 2';
-          },
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductionResultPage(
-                          keyword: '${query} 2',
-                        )));
-          },
-        ),
-        SuggestionsRow(
-          value: '${query} 3',
-          onIconPressed: () {
-            query = '${query} 3';
-          },
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductionResultPage(
-                          keyword: '${query} 3',
-                        )));
-          },
         )
       ],
     );

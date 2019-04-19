@@ -12,6 +12,8 @@ class ProductsPage extends StatefulWidget {
   /// 品类
   List<CategoryModel> categories;
 
+  String keywords;
+
   ProductsPage({Key key, this.categories}) : super(key: key);
 
   _ProductsPageState createState() => _ProductsPageState();
@@ -21,6 +23,8 @@ class _ProductsPageState extends State<ProductsPage> {
   GlobalKey _ProductsPageKey = GlobalKey();
 
   List<CategoryModel> cascadedCategories;
+
+  String titleKeywords;
 
   @override
   void initState() {
@@ -41,20 +45,30 @@ class _ProductsPageState extends State<ProductsPage> {
           centerTitle: true,
           elevation: 0.5,
           title: Text(
-            '看款下单',
+            titleKeywords == null || titleKeywords == ''
+                ? '看款下单'
+                : '${titleKeywords}',
             style: TextStyle(color: Colors.black),
+            overflow: TextOverflow.ellipsis,
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(
-                B2BIcons.search,
-                size: 22,
-              ),
-              onPressed: () => showSearch(
+                icon: Icon(
+                  B2BIcons.search,
+                  size: 22,
+                ),
+                onPressed: () async {
+                  String keywords = await showSearch(
                     context: context,
                     delegate: OrderProductSearchDelegate(),
-                  ),
-            ),
+                  );
+                  setState(() {
+                    widget.keywords = keywords;
+                    titleKeywords = keywords;
+                  });
+                  OrderByProductBLoc.instance
+                      .getData(widget.categories, widget.keywords);
+                }),
           ],
           bottom: PreferredSize(
               preferredSize: Size(200, 30),
@@ -75,8 +89,8 @@ class _ProductsPageState extends State<ProductsPage> {
                                 ),
                           ),
                         );
-                        print(widget.categories.length);
-                        OrderByProductBLoc.instance.getData(widget.categories);
+                        OrderByProductBLoc.instance
+                            .getData(widget.categories, widget.keywords);
                       },
                       child: Text(
                         '${generateCategoryStr()}',
@@ -89,6 +103,7 @@ class _ProductsPageState extends State<ProductsPage> {
         ),
         body: ProductsView(
           categories: widget.categories,
+          keywords: widget.keywords,
         ),
         floatingActionButton: ScrollToTopButton<OrderByProductBLoc>(),
       ),
@@ -124,7 +139,9 @@ class _ProductsPageState extends State<ProductsPage> {
 class ProductsView extends StatelessWidget {
   List<CategoryModel> categories;
 
-  ProductsView({this.categories});
+  String keywords;
+
+  ProductsView({this.categories, this.keywords});
 
   ScrollController _scrollController = ScrollController();
 
@@ -162,7 +179,7 @@ class ProductsView extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMore(categories);
+        bloc.loadingMore(categories, keywords);
       }
     });
 
@@ -182,7 +199,7 @@ class ProductsView extends StatelessWidget {
                       AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                     //数据为空查询数据，显示加载条
                     if (snapshot.data == null) {
-                      bloc.getData(categories);
+                      bloc.getData(categories, keywords);
                       return SliverToBoxAdapter(
                         child: ProgressIndicatorFactory
                             .buildPaddedProgressIndicator(),
