@@ -8,8 +8,9 @@ import '../../widgets/scrolled_to_end_tips.dart';
 import './purchase_order_list_item.dart';
 
 class PurchaseOrderList extends StatefulWidget {
-  PurchaseOrderList({Key key, this.status,this.companyUid});
+  PurchaseOrderList({Key key, this.status,this.companyUid,this.keyword});
 
+  final String keyword;
   final EnumModel status;
   final String companyUid;
 

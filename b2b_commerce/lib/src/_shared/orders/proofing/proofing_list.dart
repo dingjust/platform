@@ -10,8 +10,9 @@ import '../../../common/order_payment.dart';
 import '../../widgets/scrolled_to_end_tips.dart';
 
 class ProofingList extends StatefulWidget {
-  ProofingList({Key key, this.status}) : super(key: key);
+  ProofingList({Key key, this.status,this.keyword}) : super(key: key);
 
+  final String keyword;
   final EnumModel status;
   final ScrollController scrollController = ScrollController();
 
@@ -30,7 +31,11 @@ class _ProofingListState extends State<ProofingList> {
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(widget.status.code);
+        if(widget.keyword != null){
+          bloc.loadingMoreByKeyword(widget.keyword);
+        }else{
+          bloc.loadingMoreByStatuses(widget.status.code);
+        }
       }
     });
 
@@ -175,8 +180,11 @@ class _ProofingListState extends State<ProofingList> {
   // 子组件刷新数据方法
   void _handleRefresh() {
     var bloc = BLoCProvider.of<ProofingOrdersBLoC>(context);
-
-    bloc.refreshData(widget.status.code);
+    if(widget.keyword != null){
+      bloc.filterByKeyword(widget.keyword);
+    }else{
+      bloc.refreshData(widget.status.code);
+    }
   }
 
   @override
@@ -188,7 +196,11 @@ class _ProofingListState extends State<ProofingList> {
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: RefreshIndicator(
         onRefresh: () async {
-          return await bloc.refreshData(widget.status.code);
+          if(widget.keyword != null){
+            return await bloc.filterByKeyword(widget.keyword);
+          }else{
+            return await bloc.refreshData(widget.status.code);
+          }
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -199,7 +211,11 @@ class _ProofingListState extends State<ProofingList> {
               builder: (BuildContext context,
                   AsyncSnapshot<List<ProofingModel>> snapshot) {
                 if (snapshot.data == null) {
-                  bloc.filterByStatuses(widget.status.code);
+                  if(widget.keyword != null){
+                    bloc.filterByKeyword(widget.keyword);
+                  }else{
+                    bloc.filterByStatuses(widget.status.code);
+                  }
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
                 }

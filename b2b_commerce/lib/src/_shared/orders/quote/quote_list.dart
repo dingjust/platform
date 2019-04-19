@@ -43,6 +43,8 @@ class _QuoteListState extends State<QuoteList> {
         bloc.loadingStart();
         if(widget.companyUid != null && UserBLoC.instance.currentUser.type == UserType.FACTORY){
           bloc.lodingMoreByCompany(widget.companyUid);
+        }else if(widget.keyword != null){
+          bloc.loadingMoreByKeyword(widget.keyword);
         }else{
           bloc.loadingMoreByStatuses(widget.status.code);
         }
@@ -188,6 +190,8 @@ class _QuoteListState extends State<QuoteList> {
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
     if(widget.companyUid != null){
       bloc.getQuoteDataByCompany(widget.companyUid);
+    }else if(widget.keyword != null){
+      bloc.filterByKeyword(widget.keyword);
     }else{
       bloc.refreshData(widget.status.code);
     }
