@@ -27,8 +27,9 @@ class InvoiceTitleModel extends ItemModel {
   /// 是否默认抬头
   bool defaultTitle;
 
-  /// 所有人
-  PrincipalModel owner;
+  /// 抬头归属
+  @JsonKey(toJson: principalToJson)
+  PrincipalModel belongTo;
 
   InvoiceTitleModel({
     this.company,
@@ -38,12 +39,13 @@ class InvoiceTitleModel extends ItemModel {
     this.bankOfDeposit,
     this.bankAccount,
     this.defaultTitle = false,
-    this.owner,
+    this.belongTo,
   });
 
   factory InvoiceTitleModel.fromJson(Map<String, dynamic> json) => _$InvoiceTitleModelFromJson(json);
 
   static Map<String, dynamic> toJson(InvoiceTitleModel model) => _$InvoiceTitleModelToJson(model);
+  static Map<String, dynamic> principalToJson(PrincipalModel model) => PrincipalModel.toJson(model);
 }
 
 /// 开票信息

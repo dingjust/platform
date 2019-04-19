@@ -44,6 +44,13 @@ abstract class UserApis {
         return '/{baseSiteId}/companies/register/$code';
       };
 
+  //获取发票抬头列表
+  static get invoiceTitles => '/{baseSiteId}/company/invoice/title';
+  //创建发票抬头
+  static get invoiceTitleCreate => '/{baseSiteId}/company/invoice/title';
+  //更新/删除发票抬头(详情)
+  static get invoiceTitleFromId => (id) => '/{baseSiteId}/company/invoice/title/$id';
+
   ///短信验证重置密码
   static get resetPassword => (id) {
         return '/{baseSiteId}/users/anonymous/resetPasswordByCaptcha/$id';

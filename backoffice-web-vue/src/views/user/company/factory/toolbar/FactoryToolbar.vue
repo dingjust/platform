@@ -32,8 +32,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="生产地区" prop="regions">
-            <el-select v-model="queryFormData.regions" class="w-100" multiple filterable>
+          <el-form-item label="生产地区" prop="productiveOrientations">
+            <el-select v-model="queryFormData.productiveOrientations" class="w-100" multiple filterable>
               <el-option v-for="item in regions"
                          :key="item.isocode"
                          :label="item.name"

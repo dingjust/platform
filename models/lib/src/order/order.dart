@@ -222,6 +222,9 @@ class AbstractOrderModel extends ItemModel {
   @JsonKey(toJson: _consignmentModelToJson)
   ConsignmentModel consignment;
 
+  //合作方
+  PrincipalModel supplier;
+
   AbstractOrderModel(
       {@required this.code,
       this.totalQuantity = 0,
@@ -231,7 +234,9 @@ class AbstractOrderModel extends ItemModel {
       this.remarks,
       this.unitPrice,
       this.salesApplication,
-      this.consignment});
+      this.consignment,
+      this.supplier,
+      });
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
@@ -255,6 +260,7 @@ class OrderModel extends AbstractOrderModel {
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
+      PrincipalModel supplier,
       //线上线下订单
       SalesApplication salesApplication,
       //物流信息
@@ -268,6 +274,7 @@ class OrderModel extends AbstractOrderModel {
             remarks: remarks,
             salesApplication: salesApplication,
             consignment: consignment,
+            supplier:supplier,
             unitPrice: unitPrice);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
@@ -339,6 +346,7 @@ class CartModel extends AbstractOrderModel {
     DateTime creationTime,
     AddressModel deliveryAddress,
     String remarks,
+    PrincipalModel supplier,
     this.belongTo,
     this.entries,
   }) : super(
@@ -348,6 +356,7 @@ class CartModel extends AbstractOrderModel {
           creationTime: creationTime,
           deliveryAddress: deliveryAddress,
           remarks: remarks,
+          supplier:supplier,
         );
 
   factory CartModel.fromJson(Map<String, dynamic> json) =>
@@ -619,6 +628,7 @@ class RequirementOrderModel extends OrderModel {
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
+      PrincipalModel supplier,
       this.editable,
       this.attachments,
       this.labels})
@@ -629,6 +639,7 @@ class RequirementOrderModel extends OrderModel {
           creationTime: creationTime,
           deliveryAddress: deliveryAddress,
           remarks: remarks,
+          supplier:supplier,
         );
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) =>
@@ -754,6 +765,7 @@ class PurchaseOrderModel extends OrderModel {
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
+      PrincipalModel supplier,
       this.purchaser,
       this.belongTo,
       this.entries,
@@ -790,6 +802,7 @@ class PurchaseOrderModel extends OrderModel {
             deliveryAddress: deliveryAddress,
             remarks: remarks,
             salesApplication: salesApplication,
+            supplier:supplier,
             consignment: consignment);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
@@ -882,6 +895,7 @@ class SalesOrderModel extends OrderModel {
     DateTime creationTime,
     AddressModel deliveryAddress,
     String remarks,
+    PrincipalModel supplier,
     this.belongTo,
     this.entries,
   }) : super(
@@ -891,6 +905,7 @@ class SalesOrderModel extends OrderModel {
           creationTime: creationTime,
           deliveryAddress: deliveryAddress,
           remarks: remarks,
+          supplier:supplier,
         );
 
   factory SalesOrderModel.fromJson(Map<String, dynamic> json) =>
@@ -949,8 +964,8 @@ class QuoteModel extends AbstractOrderModel {
   FactoryModel belongTo;
 
   ///合作商信息
-  @JsonKey(toJson: _supplierToJson)
-  CompanyModel supplier;
+//  @JsonKey(toJson: _supplierToJson)
+//  CompanyModel supplier;
 
   /// 面料单价
   double unitPriceOfFabric;
@@ -992,6 +1007,7 @@ class QuoteModel extends AbstractOrderModel {
       AddressModel deliveryAddress,
       String remarks,
       double unitPrice,
+      PrincipalModel supplier,
       this.state,
       this.requirementOrder,
       this.purchaseOrderCode,
@@ -1003,7 +1019,6 @@ class QuoteModel extends AbstractOrderModel {
       this.costOfSamples,
       this.costOfOther,
       this.expectedDeliveryDate,
-      this.supplier,
       this.activePurchaseOrder,
       this.activeProofing,
       this.comment})
@@ -1014,6 +1029,7 @@ class QuoteModel extends AbstractOrderModel {
             creationTime: creationTime,
             deliveryAddress: deliveryAddress,
             remarks: remarks,
+            supplier:supplier,
             unitPrice: unitPrice);
 
   factory QuoteModel.fromJson(Map<String, dynamic> json) =>
@@ -1140,8 +1156,8 @@ class ProofingModel extends OrderModel {
   FactoryModel belongTo;
 
   ///合作商信息
-  @JsonKey(toJson: _companyToJson)
-  CompanyModel supplier;
+//  @JsonKey(toJson: _companyToJson)
+//  CompanyModel supplier;
 
   // ApparelProductModel product;
   @JsonKey(toJson: _quoteToJson)
@@ -1166,10 +1182,10 @@ class ProofingModel extends OrderModel {
       int totalQuantity,
       double totalPrice,
       this.belongTo,
-      this.supplier,
       DateTime creationTime,
       AddressModel deliveryAddress,
       String remarks,
+      PrincipalModel supplier,
       this.order,
       double unitPrice,
       this.requirementOrderRef,
@@ -1181,6 +1197,7 @@ class ProofingModel extends OrderModel {
             creationTime: creationTime,
             deliveryAddress: deliveryAddress,
             remarks: remarks,
+            supplier:supplier,
             unitPrice: unitPrice);
 
   factory ProofingModel.fromJson(Map<String, dynamic> json) =>
