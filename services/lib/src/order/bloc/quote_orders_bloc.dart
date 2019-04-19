@@ -143,10 +143,6 @@ class QuoteOrdersBLoC extends BLoCBase {
     if (!lock) {
       lock = true;
       //数据到底
-      if (_quotesMap['ALL'].currentPage + 1 == _quotesMap['ALL'].totalPages) {
-        //通知显示已经到底部
-        bottomController.sink.add(true);
-      } else {
         Map data = {
           'code': keyword,
           'skuID': keyword,
@@ -166,7 +162,6 @@ class QuoteOrdersBLoC extends BLoCBase {
           _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
           _quotesMap['ALL'].data.addAll(ordersResponse.content);
         }
-      }
       loadingController.sink.add(false);
       _controller.sink.add(_quotesMap['ALL'].data);
       lock = false;
