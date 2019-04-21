@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class FactoryQuoteListPage extends StatefulWidget{
-  FactoryQuoteListPage({
+class QuoteSearchResultPage extends StatefulWidget{
+  QuoteSearchResultPage({
     Key key,
-    @required this.factoryUid,
+    @required this.keyword,
   }) : super(key: key);
 
-  final String factoryUid;
+  final String keyword;
 
-  _FactoryQuoteListPageState createState() => _FactoryQuoteListPageState();
+  _QuoteSearchResultPageState createState() => _QuoteSearchResultPageState();
 }
 
-class _FactoryQuoteListPageState extends State<FactoryQuoteListPage>{
-  final GlobalKey _globalKey = GlobalKey<_FactoryQuoteListPageState>();
+class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
+  final GlobalKey _globalKey = GlobalKey<_QuoteSearchResultPageState>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +25,11 @@ class _FactoryQuoteListPageState extends State<FactoryQuoteListPage>{
       bloc: QuoteOrdersBLoC.instance,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('全部报价单'),
+          title: Text('查询结果'),
           elevation: 0.5,
           centerTitle: true,
         ),
-        body: QuoteList(factoryUid: widget.factoryUid,),
+        body: QuoteList(keyword: widget.keyword,),
         floatingActionButton: ScrollToTopButton<QuoteOrdersBLoC>(),
       ),
     );

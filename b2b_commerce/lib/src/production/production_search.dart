@@ -10,6 +10,7 @@ import 'package:widgets/widgets.dart';
 class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
   List<String> history_keywords;
 
+
   ProductionSearchDelegate() {
     getHistory();
   }
@@ -31,19 +32,18 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
-      // IconButton(
-      //   icon: Icon(Icons.done),
-      //   onPressed: () => close(context, null), //TODO: 选中的数据返回到前一页
-      // ),
       query != ''
           ? IconButton(
-              icon: Icon(
-                B2BIcons.del_blank_card,
-                size: 15,
-              ),
-              onPressed: () {
-                query = '';
-              },
+        icon: Icon(Icons.search),
+        onPressed:(){
+          Navigator.pop(context);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProductionResultPage(
+                    keyword: query,
+                  )));
+        },
             )
           : Container(),
     ];
@@ -87,7 +87,9 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container(child: _buildHistoryListView(context));
+    return Container(
+      child: _buildHistoryListView(context)
+    );
   }
 
   Widget _buildHistoryListView(BuildContext context) {
@@ -124,4 +126,5 @@ class ProductionSearchDelegate extends SearchDelegate<PurchaseOrderModel> {
       ],
     );
   }
+
 }

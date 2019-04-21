@@ -321,35 +321,11 @@ class BrandSuppliersItem extends StatelessWidget {
         ),
       ),
       onTap: () async {
-        //获取与该品牌最新的报价单
-        QuoteModel quoteModel;
-        QuoteOrdersResponse quoteResponse = await QuoteOrderRepository().getQuotesByBrand(supplierModel.uid, {
-          'size': 1,
-        });
-        if (quoteResponse.content.length > 0) quoteModel = quoteResponse.content[0];
-
-        //获取与该品牌最新的生产订单
-        Response<Map<String, dynamic>> response1 = await http$.post(OrderApis.purchaseOrders, data: {
-          'purchasers': supplierModel.uid,
-        }, queryParameters: {
-          'size': 1,
-        });
-
-        PurchaseOrderModel purchaseOrderModel;
-        if (response1 != null && response1.statusCode == 200) {
-          PurchaseOrdersResponse ordersResponse = PurchaseOrdersResponse.fromJson(response1.data);
-          if (ordersResponse != null && ordersResponse.content.length > 0) {
-            purchaseOrderModel = ordersResponse.content[0];
-          }
-        }
-
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => MyBrandPage(
                   supplierModel,
-                  quoteModel: quoteModel,
-                  purchaseOrder: purchaseOrderModel,
                 ),
           ),
         );
