@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
 import 'package:b2b_commerce/src/common/app_bloc.dart';
 import 'package:b2b_commerce/src/common/coming_soon_page.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
@@ -44,9 +45,9 @@ class HomePage extends StatefulWidget {
   };
 
   final Map<UserType, Widget> searchInputWidgets = <UserType, Widget>{
-    UserType.BRAND: GlobalSearchInput<FactoryModel>(
-      tips: ' 找工厂...',
-      delegate: FactorySearchDelegatePage(),
+    UserType.BRAND: GlobalSearchInput<String>(
+      tips: ' 找工厂、找款式...',
+      delegate: BrandIndexSearchDelegatePage(),
     ),
     UserType.FACTORY: GlobalSearchInput<RequirementOrderModel>(
       tips: ' 找需求...',

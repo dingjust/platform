@@ -26,6 +26,8 @@ class FactoryPage extends StatefulWidget {
 class _FactoryPageState extends State<FactoryPage> {
   final GlobalKey _factoryBLoCProviderKey = GlobalKey();
 
+  FactoryCondition factoryCondition;
+
   List<FilterConditionEntry> filterConditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(label: '综合', value: 'comprehensive', checked: true),
     FilterConditionEntry(label: '星级', value: 'starLevel'),
@@ -40,16 +42,14 @@ class _FactoryPageState extends State<FactoryPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    if (widget.factoryCondition.adeptAtCategories == null) {
-      widget.factoryCondition.adeptAtCategories = [];
-    }
-    if (widget.factoryCondition.labels == null) {
-      widget.factoryCondition.labels = [];
-    }
-
-    if (widget.factoryCondition.cooperationModes == null) {
-      widget.factoryCondition.cooperationModes = [];
+    if (widget.factoryCondition != null) {
+      factoryCondition = widget.factoryCondition;
+    } else {
+      factoryCondition = FactoryCondition(
+          starLevel: 0,
+          adeptAtCategories: [],
+          labels: [],
+          cooperationModes: []);
     }
 
     super.initState();
@@ -88,9 +88,9 @@ class _FactoryPageState extends State<FactoryPage> {
                       delegate: FactorySearchDelegate(),
                     );
 
-                    widget.factoryCondition.setKeyword(keyword);
+                    factoryCondition.setKeyword(keyword);
 
-                    print(widget.factoryCondition.keyword);
+                    print(factoryCondition.keyword);
                     FactoryBLoC.instance.clear();
                   }),
             ],
@@ -103,14 +103,14 @@ class _FactoryPageState extends State<FactoryPage> {
                   filterConditionEntries: filterConditionEntries,
                   action: [
                     ConditionPageButton(
-                      factoryCondition: widget.factoryCondition,
+                      factoryCondition: factoryCondition,
                       requirementCode: widget.requirementCode,
                     )
                   ],
                 ),
               ),
               body: FactoryListView(
-                factoryCondition: widget.factoryCondition,
+                factoryCondition: factoryCondition,
                 showButton: widget.requirementCode != null,
                 requirementCode: widget.requirementCode,
                 currentCondition: currentCondition,
@@ -119,11 +119,10 @@ class _FactoryPageState extends State<FactoryPage> {
   }
 
   String generateTitle() {
-    if (widget.factoryCondition.keyword == null ||
-        widget.factoryCondition.keyword == '') {
+    if (factoryCondition.keyword == null || factoryCondition.keyword == '') {
       return widget.route ?? '全部工厂';
     } else {
-      return '${widget.factoryCondition.keyword}';
+      return '${factoryCondition.keyword}';
     }
   }
 }
