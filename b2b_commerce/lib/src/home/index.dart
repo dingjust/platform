@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/common/app_bloc.dart';
 import 'package:b2b_commerce/src/common/coming_soon_page.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -72,14 +73,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
-            homePageKey.currentContext,
-            ignoreVersionNotification:
-                UserBLoC.instance.ignoreVersionNotification)
-        .initCheckVersion(
-            AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID'));
-
+    // 安卓端自动更新
+    TargetPlatform platform = defaultTargetPlatform;
+    if (platform != TargetPlatform.iOS) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
+              homePageKey.currentContext,
+              ignoreVersionNotification:
+                  UserBLoC.instance.ignoreVersionNotification)
+          .initCheckVersion(
+              AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID'));
+    }
     super.initState();
   }
 
