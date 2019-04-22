@@ -2,7 +2,7 @@ import 'package:b2b_commerce/src/production/production_search.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
-/// 首页搜索框
+/// 生产搜索框
 class ProductionSearchInputBox extends StatelessWidget {
   // final
   final double width;

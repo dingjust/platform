@@ -1,7 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
-import 'package:b2b_commerce/src/home/search/quick_reaction_factory_search.dart';
+import 'package:b2b_commerce/src/home/search/factory_search.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -26,6 +26,8 @@ class FactoryPage extends StatefulWidget {
 class _FactoryPageState extends State<FactoryPage> {
   final GlobalKey _factoryBLoCProviderKey = GlobalKey();
 
+  FactoryCondition factoryCondition;
+
   List<FilterConditionEntry> filterConditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(label: '综合', value: 'comprehensive', checked: true),
     FilterConditionEntry(label: '星级', value: 'starLevel'),
@@ -40,16 +42,14 @@ class _FactoryPageState extends State<FactoryPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    if (widget.factoryCondition.adeptAtCategories == null) {
-      widget.factoryCondition.adeptAtCategories = [];
-    }
-    if (widget.factoryCondition.labels == null) {
-      widget.factoryCondition.labels = [];
-    }
-
-    if (widget.factoryCondition.cooperationModes == null) {
-      widget.factoryCondition.cooperationModes = [];
+    if (widget.factoryCondition != null) {
+      factoryCondition = widget.factoryCondition;
+    } else {
+      factoryCondition = FactoryCondition(
+          starLevel: 0,
+          adeptAtCategories: [],
+          labels: [],
+          cooperationModes: []);
     }
 
     super.initState();
@@ -57,7 +57,7 @@ class _FactoryPageState extends State<FactoryPage> {
 
   void changeCondition(FilterConditionEntry condition) {
     setState(() {
-      currentCondition=condition;
+      currentCondition = condition;
     });
     FactoryBLoC.instance.clear();
   }
@@ -73,11 +73,26 @@ class _FactoryPageState extends State<FactoryPage> {
             centerTitle: true,
             elevation: 0.5,
             title: Text(
-              widget.route ?? '全部工厂',
+              '${generateTitle()}',
               style: TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
-              QuickReactionFactoryButton(),
+              IconButton(
+                  icon: Icon(
+                    B2BIcons.search,
+                    size: 22,
+                  ),
+                  onPressed: () async {
+                    String keyword = await showSearch(
+                      context: context,
+                      delegate: FactorySearchDelegate(),
+                    );
+
+                    factoryCondition.setKeyword(keyword);
+
+                    print(factoryCondition.keyword);
+                    FactoryBLoC.instance.clear();
+                  }),
             ],
           ),
           body: Scaffold(
@@ -86,37 +101,29 @@ class _FactoryPageState extends State<FactoryPage> {
                 bottom: FilterBar(
                   onChanged: (condition) => changeCondition(condition),
                   filterConditionEntries: filterConditionEntries,
-                  action: ConditionPageButton(
-                    factoryCondition: widget.factoryCondition,
-                    requirementCode: widget.requirementCode,
-                  ),
+                  action: [
+                    ConditionPageButton(
+                      factoryCondition: factoryCondition,
+                      requirementCode: widget.requirementCode,
+                    )
+                  ],
                 ),
               ),
               body: FactoryListView(
-                factoryCondition: widget.factoryCondition,
+                factoryCondition: factoryCondition,
                 showButton: widget.requirementCode != null,
                 requirementCode: widget.requirementCode,
                 currentCondition: currentCondition,
               )),
         ));
   }
-}
 
-class QuickReactionFactoryButton extends StatelessWidget {
-  const QuickReactionFactoryButton({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        B2BIcons.search,
-        size: 22,
-      ),
-      onPressed: () => showSearch(
-            context: context,
-            delegate: QuickReactionFactorySearchDelegate(),
-          ),
-    );
+  String generateTitle() {
+    if (factoryCondition.keyword == null || factoryCondition.keyword == '') {
+      return widget.route ?? '全部工厂';
+    } else {
+      return '${factoryCondition.keyword}';
+    }
   }
 }
 
@@ -164,7 +171,7 @@ class FactoryListView extends StatefulWidget {
       this.requirementCode,
       @required this.currentCondition});
 
-  final FactoryCondition factoryCondition;
+  FactoryCondition factoryCondition;
 
   final String requirementCode;
 

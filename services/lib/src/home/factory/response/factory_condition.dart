@@ -35,17 +35,20 @@ class FactoryCondition {
   /// 加工类型
   List<CooperationModes> cooperationModes;
 
-  FactoryCondition({
-    this.starLevel,
-    this.historyOrdersCount,
-    this.categories,
-    @required this.adeptAtCategories,
-    this.productiveOrientations,
-    this.populationScale,
-    @required this.labels,
-    @required this.cooperationModes,
-    this.industrialCuster,
-  });
+  ///关键字
+  String keyword;
+
+  FactoryCondition(
+      {this.starLevel,
+      this.historyOrdersCount,
+      this.categories,
+      @required this.adeptAtCategories,
+      this.productiveOrientations,
+      this.populationScale,
+      @required this.labels,
+      @required this.cooperationModes,
+      this.industrialCuster,
+      this.keyword});
 
   factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
       _$FactoryConditionFromJson(json);
@@ -91,11 +94,16 @@ class FactoryCondition {
       'cooperationModes': cooperationModesArray,
       'populationScales': populationScale != null
           ? [_$PopulationScaleEnumMap[populationScale]]
-          : []
+          : [],
+      'keyword': keyword ?? ''
     };
 
     print(result);
 
     return result;
+  }
+
+  void setKeyword(String value) {
+    keyword = value;
   }
 }

@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
 import 'package:b2b_commerce/src/common/app_bloc.dart';
 import 'package:b2b_commerce/src/common/coming_soon_page.dart';
+import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -10,7 +13,6 @@ import 'package:widgets/widgets.dart';
 
 import '../_shared/shares.dart';
 import '../_shared/widgets/broadcast_factory.dart';
-import '../business/products/product_category.dart';
 import '../common/app_image.dart';
 import '../common/app_keys.dart';
 import '../home/factory/factory_list.dart';
@@ -44,9 +46,9 @@ class HomePage extends StatefulWidget {
   };
 
   final Map<UserType, Widget> searchInputWidgets = <UserType, Widget>{
-    UserType.BRAND: GlobalSearchInput<FactoryModel>(
-      tips: ' 找工厂...',
-      delegate: FactorySearchDelegatePage(),
+    UserType.BRAND: GlobalSearchInput<String>(
+      tips: ' 找工厂、找款式...',
+      delegate: BrandIndexSearchDelegatePage(),
     ),
     UserType.FACTORY: GlobalSearchInput<RequirementOrderModel>(
       tips: ' 找需求...',
@@ -71,14 +73,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
-            homePageKey.currentContext,
-            ignoreVersionNotification:
-                UserBLoC.instance.ignoreVersionNotification)
-        .initCheckVersion(
-            AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID'));
-
+    // 安卓端自动更新
+    TargetPlatform platform = defaultTargetPlatform;
+    if (platform != TargetPlatform.iOS) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
+              homePageKey.currentContext,
+              ignoreVersionNotification:
+                  UserBLoC.instance.ignoreVersionNotification)
+          .initCheckVersion(
+              AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID'));
+    }
     super.initState();
   }
 
@@ -160,11 +164,13 @@ class BrandFirstMenuSection extends StatelessWidget {
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => CategorySelectPage(
-                        minCategorySelect: [],
-                        categories: categories,
-                        categoryActionType: CategoryActionType.TO_PRODUCTS,
-                      ),
+                  builder: (context) =>
+                      // CategorySelectPage(
+                      //       minCategorySelect: [],
+                      //       categories: categories,
+                      //       categoryActionType: CategoryActionType.TO_PRODUCTS,
+                      //     ),
+                      ProductsPage(),
                 ),
               );
             });

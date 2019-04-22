@@ -1,22 +1,34 @@
 import 'dart:convert';
 
+import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-/// 产品搜索页
-class OrderProductSearchDelegate extends SearchDelegate<String> {
+/// 品牌首页搜索
+class BrandIndexSearchDelegatePage extends SearchDelegate<String> {
   List<String> history_keywords;
 
-  OrderProductSearchDelegate() {
+  BrandIndexSearchDelegatePage() {
     getHistory();
   }
+
+  List<FilterConditionEntry> entries = <FilterConditionEntry>[
+    FilterConditionEntry(label: '工厂', value: 'factory', checked: true),
+    FilterConditionEntry(
+      label: '款式',
+      value: 'product',
+    )
+  ];
 
   //获取本地搜索历史记录
   void getHistory() async {
     //解析
     String jsonStr =
-        await LocalStorage.get(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY);
+        await LocalStorage.get(GlobalConfigs.BRAND_INDEX_HISTORY_KEYWORD_KEY);
     if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
       history_keywords = list.map((item) => item as String).toList();
@@ -28,10 +40,6 @@ class OrderProductSearchDelegate extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
-      // IconButton(
-      //   icon: Icon(Icons.done),
-      //   onPressed: () => close(context, null), //TODO: 选中的数据返回到前一页
-      // ),
       query != ''
           ? IconButton(
               icon: Icon(
@@ -65,10 +73,11 @@ class OrderProductSearchDelegate extends SearchDelegate<String> {
     //记录搜索关键字
     if (query != '' && query.isNotEmpty) {
       history_keywords.add(query);
-      LocalStorage.save(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
+      LocalStorage.save(GlobalConfigs.BRAND_INDEX_HISTORY_KEYWORD_KEY,
           json.encode(history_keywords));
     }
-    Navigator.pop(context, query);
+
+    _jumpToResult(context, query);
   }
 
   @override
@@ -78,7 +87,10 @@ class OrderProductSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container(child: _buildHistoryListView(context));
+    return Scaffold(
+      appBar: IndexSearchBar(entries: entries),
+      body: Container(child: _buildHistoryListView(context)),
+    );
   }
 
   Widget _buildHistoryListView(BuildContext context) {
@@ -102,12 +114,54 @@ class OrderProductSearchDelegate extends SearchDelegate<String> {
                   .map((keyword) => HistoryTag(
                         value: keyword,
                         onTap: () {
-                          Navigator.pop(context, keyword);
+                          _jumpToResult(context, keyword);
                         },
                       ))
                   .toList()),
         )
       ],
     );
+  }
+
+  void _jumpToResult(BuildContext context, String keyword) async {
+    entries.forEach((entry) {
+      if (entry.checked) {
+        if (entry.value == 'factory') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FactoryPage(
+                    FactoryCondition(
+                        starLevel: 0,
+                        adeptAtCategories: [],
+                        labels: [],
+                        cooperationModes: [],
+                        keyword: keyword),
+                    route: '全部工厂',
+                  ),
+            ),
+          );
+        } else {
+          // 加载条
+          showDialog(
+            context: context,
+            builder: (context) =>
+                ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+          );
+          jumpToProducts(context,keyword);
+        }
+      }
+    });
+  }
+
+  void jumpToProducts(BuildContext context,String keyword) async {
+    await ProductRepositoryImpl().cascadedCategories().then((categories) {
+      Navigator.of(context).pop();
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ProductsPage(keyword: keyword,),
+        ),
+      );
+    });
   }
 }

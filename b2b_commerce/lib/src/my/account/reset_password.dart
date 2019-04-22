@@ -95,7 +95,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         formValidate();
       },
       decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
-      // 校验用户名
+      
     );
 
     TextFormField _againPasswordField = TextFormField(

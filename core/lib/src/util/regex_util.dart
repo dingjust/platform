@@ -7,6 +7,19 @@ class RegexUtil {
   static final String regexEmail =
       "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*\$";
 
+  ///首字符不能为特殊字符
+  static final String regexNotAllowed = '^.*[a-zA-Z0-9!@#\$%^*()_\-+{};:.,]\$';
+
+  ///至少一个数字
+  static final String regexOneNumber = "(?=(?:.*?[0-9]){1}).*";
+
+  ///至少一个大写
+  static final String regexOneUppercase = "(?=(?:.*?[A-Z]){1}).*";
+
+  ///至少一个特殊字符
+  static final String regexOneSpecial =
+      "(?=(?:.*?[!@#\$%^*()_\-+{};:.,]){1}).*";
+
   ///校验手机
   static bool isMobile(String input) {
     return matches(regexMobile, input);
@@ -14,7 +27,27 @@ class RegexUtil {
 
   ///校验邮箱
   static bool isEmail(String input) {
-    return matches(regexMobile, input);
+    return matches(regexEmail, input);
+  }
+
+  ///校验首字符不能为特殊字符
+  static bool notAllowed(String input) {
+    return matches(regexNotAllowed, input);
+  }
+
+  ///至少一个数字
+  static bool oneNumber(String input) {
+    return matches(regexOneNumber, input);
+  }
+
+  ///至少一个大写
+  static bool oneUppercase(String input) {
+    return matches(regexOneUppercase, input);
+  }
+
+  ///至少一个特殊字符
+  static bool oneSpecial(String input) {
+    return matches(regexOneUppercase, input);
   }
 
   static bool matches(String regex, String input) {

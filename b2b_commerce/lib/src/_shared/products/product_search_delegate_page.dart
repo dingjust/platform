@@ -18,7 +18,7 @@ class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
   void getHistory() async {
     //解析
     String jsonStr =
-    await LocalStorage.get(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY);
+        await LocalStorage.get(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY);
     if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
       history_keywords = list.map((item) => item as String).toList();
@@ -37,14 +37,14 @@ class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
       // ),
       query != ''
           ? IconButton(
-        icon: Icon(
-          B2BIcons.del_blank_card,
-          size: 15,
-        ),
-        onPressed: () {
-          query = '';
-        },
-      )
+              icon: Icon(
+                B2BIcons.del_blank_card,
+                size: 15,
+              ),
+              onPressed: () {
+                query = '';
+              },
+            )
           : Container(),
     ];
   }
@@ -67,7 +67,7 @@ class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
     super.showResults(context);
     //记录搜索关键字
     if (query != '' && query.isNotEmpty) {
-      if(history_keywords.contains(query)){
+      if (history_keywords.contains(query)) {
         history_keywords.remove(query);
       }
       history_keywords.add(query);
@@ -79,8 +79,8 @@ class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
         context,
         MaterialPageRoute(
             builder: (context) => ProductSearchResultPage(
-              keyword: query,
-            )));
+                  keyword: query,
+                )));
   }
 
   @override
@@ -90,11 +90,7 @@ class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container(
-      child: query == ''
-          ? _buildHistoryListView(context)
-          : _buildSuggestionsListView(context),
-    );
+    return Container(child: _buildHistoryListView(context));
   }
 
   Widget _buildHistoryListView(BuildContext context) {
@@ -116,86 +112,87 @@ class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
               alignment: WrapAlignment.start, //沿主轴方向居中
               children: history_keywords
                   .map((keyword) => HistoryTag(
-                value: keyword,
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductSearchResultPage(
-                            keyword: keyword,
-                          )));
-                },
-              ))
+                        value: keyword,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProductSearchResultPage(
+                                        keyword: keyword,
+                                      )));
+                        },
+                      ))
                   .toList()),
         )
       ],
     );
   }
 
-  Widget _buildSuggestionsListView(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        SuggestionsRow(
-          value: query,
-          onIconPressed: () {
-            query = query;
-          },
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductSearchResultPage(
-                      keyword: query,
-                    )));
-          },
-        ),
-        SuggestionsRow(
-          value: '${query} 1',
-          onIconPressed: () {
-            query = '${query} 1';
-          },
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductSearchResultPage(
-                      keyword: '${query} 1',
-                    )));
-          },
-        ),
-        SuggestionsRow(
-          value: '${query} 2',
-          onIconPressed: () {
-            query = '${query} 2';
-          },
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductSearchResultPage(
-                      keyword: '${query} 2',
-                    )));
-          },
-        ),
-        SuggestionsRow(
-          value: '${query} 3',
-          onIconPressed: () {
-            query = '${query} 3';
-          },
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductSearchResultPage(
-                      keyword: '${query} 3',
-                    )));
-          },
-        )
-      ],
-    );
-  }
+  /// 提示
+  // Widget _buildSuggestionsListView(BuildContext context) {
+  //   return ListView(
+  //     children: <Widget>[
+  //       SuggestionsRow(
+  //         value: query,
+  //         onIconPressed: () {
+  //           query = query;
+  //         },
+  //         onTap: () {
+  //           Navigator.pop(context);
+  //           Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                   builder: (context) => ProductSearchResultPage(
+  //                         keyword: query,
+  //                       )));
+  //         },
+  //       ),
+  //       SuggestionsRow(
+  //         value: '${query} 1',
+  //         onIconPressed: () {
+  //           query = '${query} 1';
+  //         },
+  //         onTap: () {
+  //           Navigator.pop(context);
+  //           Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                   builder: (context) => ProductSearchResultPage(
+  //                         keyword: '${query} 1',
+  //                       )));
+  //         },
+  //       ),
+  //       SuggestionsRow(
+  //         value: '${query} 2',
+  //         onIconPressed: () {
+  //           query = '${query} 2';
+  //         },
+  //         onTap: () {
+  //           Navigator.pop(context);
+  //           Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                   builder: (context) => ProductSearchResultPage(
+  //                         keyword: '${query} 2',
+  //                       )));
+  //         },
+  //       ),
+  //       SuggestionsRow(
+  //         value: '${query} 3',
+  //         onIconPressed: () {
+  //           query = '${query} 3';
+  //         },
+  //         onTap: () {
+  //           Navigator.pop(context);
+  //           Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                   builder: (context) => ProductSearchResultPage(
+  //                         keyword: '${query} 3',
+  //                       )));
+  //         },
+  //       )
+  //     ],
+  //   );
+  // }
 }
