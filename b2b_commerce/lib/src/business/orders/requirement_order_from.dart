@@ -39,6 +39,12 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   RequirementOrderModel model;
   bool _isShowMore = true;
   DateTime selectDate = DateTime.now();
+  FocusNode _quantityFocusNode = FocusNode();
+  TextEditingController _quantityController = TextEditingController();
+  FocusNode _priceFocusNode = FocusNode();
+  TextEditingController _priceController = TextEditingController();
+  FocusNode _remakesFocusNode = FocusNode();
+  TextEditingController _remakesController = TextEditingController();
 
   @override
   void initState() {
@@ -151,7 +157,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             _buildhead(context),
             _buildHideBody(context),
             _buildBottom(context),
-
           ],
         ),
       ),
@@ -169,19 +174,45 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
            widget.product == null?
            _buildProductName(context):
            ProductField(widget.product),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Divider(height: 0,color: Colors.grey[400],),
+          ),
           CategoryField(
             model,
             product: widget.product,
           ),
-          new Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Divider(height: 0,color: Colors.grey[400],),
+          ),
           MajorCategoryField(model),
-          new Divider(height: 0),
-          ExpectedMachiningQuantityField(model),
-          new Divider(height: 0),
-          MaxExpectedPriceField(model),
-          new Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Divider(height: 0,color: Colors.grey[400],),
+          ),
+          TextFieldComponent(
+            focusNode: _quantityFocusNode,
+            controller: _quantityController,
+            inputType: TextInputType.number,
+            leadingText: Text('订单数量',style: TextStyle(fontSize: 16,)),
+            isRequired: true,
+            hintText: '填写',
+          ),
+//          ExpectedMachiningQuantityField(model),
+          TextFieldComponent(
+            focusNode: _priceFocusNode,
+            controller: _priceController,
+            inputType: TextInputType.number,
+            leadingText: Text('期望价格',style: TextStyle(fontSize: 16,)),
+            hintText: '填写',
+          ),
+//          MaxExpectedPriceField(model),
           ExpectedDeliveryDateField(model),
-          new Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Divider(height: 0,color: Colors.grey[400],),
+          ),
           ContactWayField(model),
         ],
       ),
@@ -243,8 +274,13 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       color: Colors.white,
       child: Column(
         children: <Widget>[
-          RemarksField(model),
-          new Divider(height: 0),
+          TextFieldComponent(
+            focusNode: _remakesFocusNode,
+            controller: _remakesController,
+            leadingText: Text('备注',style: TextStyle(fontSize: 16,)),
+            hintText: '填写',
+          ),
+//          RemarksField(model),
           Column(
             children: <Widget>[
               Container(
@@ -278,13 +314,25 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         child: Column(
           children: <Widget>[
             ProductionAreasField(model),
-            new Divider(height: 0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Colors.grey[400],),
+            ),
             MachiningTypeField(model),
-            new Divider(height: 0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Colors.grey[400],),
+            ),
             IsProofingField(model),
-            new Divider(height: 0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Colors.grey[400],),
+            ),
             IsProvideSampleProductField(model),
-            new Divider(height: 0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Colors.grey[400],),
+            ),
             IsInvoiceField(model),
 
           ],

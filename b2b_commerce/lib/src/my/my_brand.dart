@@ -66,9 +66,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
     ];
 
     //获取与该品牌最新的报价单
-    _widgets.add(buildQuoteItem());
+//    _widgets.add(buildQuoteItem());
     //获取与该品牌最新的生产订单
-    _widgets.add(buildPurchaseOrderItem());
+//    _widgets.add(buildPurchaseOrderItem());
 
     _widgets.add(_buildBrandCertificate(context));
     _widgets.add(_buildBrandRegisterDate());

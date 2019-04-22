@@ -262,7 +262,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             dividerPadding: EdgeInsets.only(),
             focusNode: _unitPriceFocusNode,
             leadingText: Text('订单报价',style: TextStyle(fontSize: 16,)),
-            leadingText2: Text('*',style: TextStyle(fontSize: 16,color: Colors.red,),),
+            isRequired: true,
             hintText: '必填',
             prefix: '￥',
             autofocus: false,
@@ -515,14 +515,12 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: expectedDeliveryDate,
-        firstDate: new DateTime(1999),
-        lastDate: new DateTime(2999));
+        firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+        lastDate: DateTime(2999));
 
-    if (_picked != null) {
       setState(() {
         quoteDate = _picked;
       });
-    }
   }
 
   void onSubmit() {

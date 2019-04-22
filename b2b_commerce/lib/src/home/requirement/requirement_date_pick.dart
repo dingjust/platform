@@ -70,7 +70,7 @@ class _RequirementDatePickState extends State<RequirementDatePick> {
                   widget.fastRequirementForm.deliveryDate = date;
                 });
               },
-              firstDate: widget.nowTime,
+              firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
               lastDate: DateTime(2099),
               selectedDate: widget.fastRequirementForm.deliveryDate,
             ),

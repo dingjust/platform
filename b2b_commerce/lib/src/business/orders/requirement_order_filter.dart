@@ -149,7 +149,7 @@ class RequirementOrderFilterPageState
                     initialDate: widget.params['startDate'] == null
                         ? DateTime.now()
                         : widget.params['startDate'],
-                    firstDate: DateTime(2015, 8),
+                    firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
                     lastDate: DateTime(2101),
                   ).then((value) {
                     setState(() {
@@ -175,7 +175,7 @@ class RequirementOrderFilterPageState
                     initialDate: widget.params['endDate'] == null
                         ? DateTime.now()
                         : widget.params['endDate'],
-                    firstDate: DateTime(2015, 8),
+                    firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
                     lastDate: DateTime(2101),
                   ).then((value) {
                     setState(() {

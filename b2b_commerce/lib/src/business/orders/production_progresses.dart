@@ -422,9 +422,9 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   Future<Null> _selectDate(BuildContext context,ProductionProgressModel model) async {
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: nowTime,
-        lastDate: new DateTime(2999)
+        initialDate: nowTime,
+        firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+        lastDate: DateTime(2999)
     );
 
     if(_picked != null){

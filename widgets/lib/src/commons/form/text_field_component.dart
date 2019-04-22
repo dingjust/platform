@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class TextFieldComponent extends StatefulWidget {
   final Text leadingText;
-  Text leadingText2;
+  bool isRequired;
   String prefix;
   final String hintText;
   final Text helperText;
@@ -29,7 +29,7 @@ class TextFieldComponent extends StatefulWidget {
 
   TextFieldComponent({
     this.leadingText,
-    this.leadingText2,
+    this.isRequired = false,
     this.prefix,
     this.hintText,
     this.helperText,
@@ -124,7 +124,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   child: Wrap(
                     children: <Widget>[
                       widget.leadingText ?? Text(''),
-                      widget.leadingText2 ?? Text(''),
+                      widget.isRequired ? Text(' *',style: TextStyle(fontSize: widget.leadingText.style.fontSize,color: Colors.red,)) : Text(''),
                     ],
                   ),
 //                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16,color: widget.leadingColor),),

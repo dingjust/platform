@@ -370,7 +370,7 @@ class SampleProductHistoryFormPageState
     return showDatePicker(
       context: context,
       initialDate: widget.model.expectedReturningDate ?? DateTime.now(),
-      firstDate: DateTime(2015, 8),
+      firstDate: DateTime(1999),
       lastDate: DateTime(2101),
     );
   }
