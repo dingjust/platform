@@ -141,12 +141,12 @@ class SampleProductHistoryFormPageState
                   if(widget.isCreated){
                     ProductRepositoryImpl().createSampleHistory(widget.model).then((a){
                       Navigator.pop(context);
-                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', LendBorrowType.BORROW.toString());
+                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', widget.model.type.toString());
                     });
                   }else{
                     ProductRepositoryImpl().updateSampleHistory(widget.model).then((a){
                       Navigator.pop(context);
-                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', LendBorrowType.BORROW.toString());
+                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', widget.model.type.toString());
                     });
                   }
 
@@ -480,6 +480,7 @@ class SampleProductHistoryFormPageState
             leadingText: '样衣名称',
             hintText: '请输入样衣名称',
             leadingWidth: 100,
+            enabled: !_onlyRead,
           ),
           TextFieldComponent(
             style: TextStyle(
@@ -491,6 +492,7 @@ class SampleProductHistoryFormPageState
             leadingText: '货号',
             hintText: '请输入货号',
             leadingWidth: 100,
+            enabled: !_onlyRead,
           ),
         ],
       );
