@@ -99,9 +99,8 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _nameFocusNode,
-                leadingText: '公司名称',
+                leadingText: Text('公司名称',style: TextStyle(fontSize: 16,color: Colors.grey,)),
                 controller: _nameController,
-                leadingColor: Colors.grey,
                 hintText: '请输入',
               ),
             ),
@@ -110,9 +109,8 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _brandFocusNode,
-                leadingText: '品牌名称',
+                leadingText: Text('品牌名称',style: TextStyle(fontSize: 16,color: Colors.grey,)),
                 controller: _brandController,
-                leadingColor: Colors.grey,
                 hintText: '请输入',
               ),
             ),
@@ -121,9 +119,8 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _cooperativeBrandFocusNode,
-                leadingText: '合作品牌',
+                leadingText: Text('合作品牌',style: TextStyle(fontSize: 16,color: Colors.grey,)),
                 controller: _cooperativeBrandController,
-                leadingColor: Colors.grey,
                 hintText: '请输入',
               ),
             ),

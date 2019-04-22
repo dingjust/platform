@@ -73,7 +73,7 @@ class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInpu
               focusNode: _nameFocusNode,
               controller: _nameController,
               autofocus: true,
-              leadingText: '联系人名',
+              leadingText: Text('联系人名',style: TextStyle(fontSize: 16,)),
               hintText: '请输入联系人名',
             ),
           ),
@@ -83,7 +83,7 @@ class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInpu
             child: TextFieldComponent(
               focusNode: _phoneFocusNode,
               controller: _phoneController,
-              leadingText: '联系电话',
+              leadingText: Text('联系电话',style: TextStyle(fontSize: 16,)),
               hintText: '请输入联系电话',
               inputType: TextInputType.phone,
             ),

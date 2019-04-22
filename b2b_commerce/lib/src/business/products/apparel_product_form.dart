@@ -134,7 +134,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _nameFocusNode,
                 controller: _nameController,
-                leadingText: '产品名称',
+                leadingText: Text('产品名称',style: TextStyle(fontSize: 16,)),
                 hintText: '请输入产品名称',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
@@ -148,7 +148,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _skuIDFocusNode,
                 controller: _skuIDController,
-                leadingText: '产品货号',
+                leadingText: Text('产品货号',style: TextStyle(fontSize: 16,)),
                 hintText: '请输入产品货号',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
@@ -164,7 +164,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _brandFocusNode,
                 controller: _brandController,
-                leadingText: '品牌',
+                leadingText: Text('品牌',style: TextStyle(fontSize: 16,)),
                 hintText: '请输入品牌',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
@@ -185,7 +185,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   focusNode: _priceFocusNode,
                   controller: _priceController,
                   inputType: TextInputType.number,
-                  leadingText: '供货价',
+                  leadingText: Text('供货价',style: TextStyle(fontSize: 16,)),
                   hintText: '请输入供货价',
                   textInputAction: TextInputAction.next,
                   onChanged: (value) {
@@ -205,7 +205,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 focusNode: _gramWeightFocusNode,
                 controller: _gramWeightController,
                 inputType: TextInputType.number,
-                leadingText: '重量（kg）',
+                leadingText: Text('重量（kg）',style: TextStyle(fontSize: 16,)),
                 hintText: '请输入重量',
                 onChanged: (value) {
                   widget.item.gramWeight = double.parse(value);

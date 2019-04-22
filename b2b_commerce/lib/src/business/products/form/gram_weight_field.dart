@@ -27,7 +27,7 @@ class _GramWeightFieldState extends State<GramWeightField> {
       focusNode: _gramWeightFocusNode,
       controller: _gramWeightController,
       inputType: TextInputType.number,
-      leadingText: '重量',
+      leadingText: Text('重量',style: TextStyle(fontSize: 16,)),
       hintText: '请输入重量',
     );
   }

@@ -87,37 +87,37 @@ class InvoiceTitleFormState extends State<InvoiceTitleFormPage> {
                 TextFieldComponent(
                   focusNode: _companyFocusNode,
                   controller: _companyController,
-                  leadingText: '公司名称',
+                  leadingText: Text('公司名称',style: TextStyle(fontSize: 16,)),
                   hintText: '请输入公司名称',
                 ),
                 TextFieldComponent(
                   focusNode: _taxNumberFocusNode,
                   controller: _taxNumController,
-                  leadingText: '税号',
+                  leadingText: Text('税号',style: TextStyle(fontSize: 16,)),
                   hintText: '15-20位（企业报销时必填）',
                 ),
                 TextFieldComponent(
                   focusNode: _adressFocusNode,
                   controller: _adressController,
-                  leadingText: '单位地址',
+                  leadingText: Text('单位地址',style: TextStyle(fontSize: 16,)),
                   hintText: '请输入单位地址',
                 ),
                 TextFieldComponent(
                   focusNode: _phoneFocusNode,
                   controller: _phoneController,
-                  leadingText: '电话号码',
+                  leadingText: Text('电话号码',style: TextStyle(fontSize: 16,)),
                   hintText: '请输入电话号码',
                 ),
                 TextFieldComponent(
                   focusNode: _bankOfDepositFocusNode,
                   controller: _bankOfDepositController,
-                  leadingText: '开户银行',
+                  leadingText: Text('开户银行',style: TextStyle(fontSize: 16,)),
                   hintText: '请输入开户银行',
                 ),
                 TextFieldComponent(
                   focusNode: _bankAccountFocusNode,
                   controller: _bankAccountController,
-                  leadingText: '银行账户',
+                  leadingText: Text('银行账户',style: TextStyle(fontSize: 16,)),
                   hintText: '请输入银行账户',
                 ),
                 ListTile(

@@ -26,7 +26,7 @@ class _BrandFieldState extends State<BrandField> {
     return TextFieldComponent(
       focusNode: _brandFocusNode,
       controller: _brandController,
-      leadingText: '品牌',
+      leadingText: Text('品牌',style: TextStyle(fontSize: 16,)),
       hintText: '请输入品牌',
     );
   }

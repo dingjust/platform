@@ -177,7 +177,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                       style: TextStyle(color: Colors.grey,fontSize: 16,),
                       enabled: isEditing,
                       focusNode: _phoneFocusNode,
-                      leadingText: '座机号码',
+                      leadingText: Text('座机号码',style: TextStyle(fontSize: 16,)),
                       controller: _phoneController,
                       dividerPadding: EdgeInsets.all(0),
                       trailing: isEditing
@@ -197,7 +197,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                     style: TextStyle(color: Colors.grey,fontSize: 16,),
                     enabled: isEditing,
                     focusNode: _emailFocusNode,
-                    leadingText: '邮箱地址',
+                    leadingText: Text('邮箱地址',style: TextStyle(fontSize: 16,)),
                     controller: _emailController,
                     dividerPadding: EdgeInsets.all(0),
                     trailing: isEditing
@@ -217,7 +217,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                     style: TextStyle(color: Colors.grey,fontSize: 16,),
                     enabled: isEditing,
                     focusNode: _qqFocusNode,
-                    leadingText: 'QQ号',
+                    leadingText: Text('QQ号',style: TextStyle(fontSize: 16,)),
                     controller: _qqController,
                     dividerPadding: EdgeInsets.all(0),
                     trailing: isEditing
@@ -237,7 +237,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                     style: TextStyle(color: Colors.grey,fontSize: 16,),
                     enabled: isEditing,
                     focusNode: _wechatFocusNode,
-                    leadingText: '微信号',
+                    leadingText: Text('微信号',style: TextStyle(fontSize: 16,)),
                     controller: _wechatController,
                     dividerPadding: EdgeInsets.all(0),
                     trailing: isEditing

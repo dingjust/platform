@@ -264,14 +264,14 @@ class SampleProductHistoryFormPageState
                       TextFieldComponent(
                         focusNode: _nameFocusNode,
                         controller: _nameController,
-                        leadingText: '样衣名称',
+                        leadingText: Text('样衣名称',style: TextStyle(fontSize: 16,)),
                         hintText: '请输入样衣名称',
                         leadingWidth: 100,
                       ),
                       TextFieldComponent(
                         focusNode: _skuIDFocusNode,
                         controller: _skuIDController,
-                        leadingText: '货号',
+                        leadingText: Text('货号',style: TextStyle(fontSize: 16,)),
                         hintText: '请输入货号',
                         leadingWidth: 100,
                       ),
@@ -280,8 +280,7 @@ class SampleProductHistoryFormPageState
                   TextFieldComponent(
                     focusNode: _quantityFocusNode,
                     controller: _quantityController,
-                    leadingText:
-                    _type == LendBorrowType.BORROW ? '借出数量' : '借入数量',
+                    leadingText: Text(_type == LendBorrowType.BORROW ? '借出数量' : '借入数量',style: TextStyle(fontSize: 16,)),
                     hintText:
                     _type == LendBorrowType.BORROW ? '请输入借出数量' : '请输入借入数量',
                     leadingWidth: 100,
@@ -331,7 +330,7 @@ class SampleProductHistoryFormPageState
                   TextFieldComponent(
                     focusNode: _remakeFocusNode,
                     controller: _remakeController,
-                    leadingText: '备注',
+                    leadingText: Text('备注',style: TextStyle(fontSize: 16,)),
                     hintText: '请输入备注',
                     leadingWidth: 100,
                   ),
@@ -349,7 +348,7 @@ class SampleProductHistoryFormPageState
                   TextFieldComponent(
                     focusNode: _relatedPartyFocusNode,
                     controller: _relatedPartyController,
-                    leadingText: '关联方',
+                    leadingText: Text('关联方',style: TextStyle(fontSize: 16,)),
                     hintText:
                     _type == LendBorrowType.BORROW ? '我借给谁的' : '谁借给我的',
                     leadingWidth: 100,
@@ -357,7 +356,7 @@ class SampleProductHistoryFormPageState
                   TextFieldComponent(
                     focusNode: _contactWayFocusNode,
                     controller: _contactWayController,
-                    leadingText: '联系方式',
+                    leadingText: Text('联系方式',style: TextStyle(fontSize: 16,)),
                     hintText: '请输入联系方式',
                     leadingWidth: 100,
                   ),

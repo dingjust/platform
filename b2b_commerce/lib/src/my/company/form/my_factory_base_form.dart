@@ -107,9 +107,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _nameFocusNode,
-                leadingText: '公司名称',
+                leadingText: Text('公司名称',style: TextStyle(fontSize: 16,color: Colors.grey,)),
                 controller: _nameController,
-                leadingColor: Colors.grey,
               ),
             ),
             SizedBox(height: 2),
@@ -407,9 +406,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _cooperativeBrandFocusNode,
-                leadingText: '合作品牌商',
+                leadingText: Text('合作品牌商',style: TextStyle(fontSize: 16,color: Colors.grey,)),
                 controller: _cooperativeBrandController,
-                leadingColor: Colors.grey,
               ),
             ),
             SizedBox(

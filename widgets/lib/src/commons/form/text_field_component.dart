@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TextFieldComponent extends StatefulWidget {
-  final String leadingText;
+  final Text leadingText;
   final String hintText;
-  final String helperText;
+  final Text helperText;
   double leadingWidth;
   TextEditingController controller;
   //必传
@@ -19,7 +19,6 @@ class TextFieldComponent extends StatefulWidget {
   bool enabled;
   TextInputAction textInputAction;
   TextAlign textAlign;
-  Color leadingColor;
   bool hideDivider;
   TextStyle style;
   List<TextInputFormatter> inputFormatters;
@@ -43,7 +42,6 @@ class TextFieldComponent extends StatefulWidget {
     this.enabled,
     this.textInputAction,
     this.textAlign = TextAlign.right,
-    this.leadingColor = Colors.black,
     this.hideDivider = false,
     this.style,
     this.inputFormatters,
@@ -109,7 +107,8 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                 offstage: widget.leadingText == null,
                 child: Container(
                   width: widget.leadingWidth,
-                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16,color: widget.leadingColor),),
+                  child:widget.leadingText,
+//                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16,color: widget.leadingColor),),
                 ),
               ),
               Expanded(
@@ -152,10 +151,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                 ),
                 Offstage(
                   offstage: widget.helperText == null,
-                  child: Text(
-                    widget.helperText ?? '',
-                    style: TextStyle(color: Colors.red),
-                  ),
+                  child: widget.helperText,
                 ),
               ],
             ),
