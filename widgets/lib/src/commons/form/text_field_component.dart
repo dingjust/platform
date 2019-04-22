@@ -49,9 +49,7 @@ class TextFieldComponent extends StatefulWidget {
     this.hideDivider = false,
     this.style,
     this.inputFormatters,
-  }){
-    if(leadingText2 == null && leadingText != null) leadingText2 = Text('');
-  }
+  });
 
   TextFieldComponentState createState() => TextFieldComponentState();
 }
@@ -125,8 +123,8 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   width: widget.leadingWidth,
                   child: Wrap(
                     children: <Widget>[
-                      widget.leadingText,
-                      widget.leadingText2,
+                      widget.leadingText ?? Text(''),
+                      widget.leadingText2 ?? Text(''),
                     ],
                   ),
 //                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16,color: widget.leadingColor),),
