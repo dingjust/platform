@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 class TextFieldComponent extends StatefulWidget {
   final Text leadingText;
+  Text leadingText2;
+  String prefix;
   final String hintText;
   final Text helperText;
   double leadingWidth;
@@ -27,6 +29,8 @@ class TextFieldComponent extends StatefulWidget {
 
   TextFieldComponent({
     this.leadingText,
+    this.leadingText2,
+    this.prefix,
     this.hintText,
     this.helperText,
     this.leadingWidth = 85,
@@ -45,7 +49,9 @@ class TextFieldComponent extends StatefulWidget {
     this.hideDivider = false,
     this.style,
     this.inputFormatters,
-  });
+  }){
+    if(leadingText2 == null && leadingText != null) leadingText2 = Text('');
+  }
 
   TextFieldComponentState createState() => TextFieldComponentState();
 }
@@ -59,13 +65,23 @@ class TextFieldComponentState extends State<TextFieldComponent> {
       if (widget.focusNode.hasFocus) {
         setState(() {
           _dividerColor = Color.fromRGBO(255,214,12, 1);
+          if(widget.prefix != null){
+            widget.controller.text = widget.controller.text.replaceFirst(widget.prefix, '');
+          }
         });
       } else {
         setState(() {
           _dividerColor = Colors.grey[400];
+          if(widget.prefix != null){
+            widget.controller.text = widget.prefix + widget.controller.text;
+          }
         });
       }
     });
+
+    if(widget.prefix != null){
+      widget.controller.text = widget.prefix + widget.controller.text;
+    }
 
     if (widget.leadingText == null || widget.leadingText == '') {
       widget.leadingWidth = 0.0;
@@ -107,10 +123,19 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                 offstage: widget.leadingText == null,
                 child: Container(
                   width: widget.leadingWidth,
-                  child:widget.leadingText,
+                  child: Wrap(
+                    children: <Widget>[
+                      widget.leadingText,
+                      widget.leadingText2,
+                    ],
+                  ),
 //                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16,color: widget.leadingColor),),
                 ),
               ),
+//              Offstage(
+//                offstage: widget.leadingText2 == null,
+//                child: widget.leadingText2,
+//              ),
               Expanded(
                 child: TextField(
                   style: widget.style,
