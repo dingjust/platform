@@ -222,10 +222,12 @@ class CategoriesText extends StatelessWidget {
 
   Widget _buildTag(int i) {
     return Container(
-      margin: EdgeInsets.only(right: 10),
+      margin: EdgeInsets.only(right: 5),
       child: Text(
-        '${model.categories[i].name}',
-        style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+        '${model.adeptAtCategories[i].name}',
+        style: TextStyle(
+          fontSize: 14,
+            color: Color.fromRGBO(180, 180, 180, 1)),
       ),
     );
   }
@@ -233,14 +235,14 @@ class CategoriesText extends StatelessWidget {
   Widget _buildTags() {
     // 取前3条
     List<Container> tags = <Container>[];
-    if (model.categories != null) {
+    if (model.adeptAtCategories != null) {
       // TODO: 用更好的方法实现：先截取，再生成
-      if (model.categories.length > 6) {
-        for (int i = 0; i < model.categories.length && i < 6; i++) {
+      if (model.adeptAtCategories.length > 5) {
+        for (int i = 0; i < model.adeptAtCategories.length && i < 5; i++) {
           tags.add(_buildTag(i));
         }
       } else {
-        for (int i = 0; i < model.categories.length; i++) {
+        for (int i = 0; i < model.adeptAtCategories.length; i++) {
           tags.add(_buildTag(i));
         }
       }

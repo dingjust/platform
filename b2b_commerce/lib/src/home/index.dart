@@ -235,7 +235,6 @@ class BrandSecondMenuSection extends StatelessWidget {
       onPressed: () async {
         List<LabelModel> labels =
             await UserRepositoryImpl().industrialClustersFromLabels();
-
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -268,7 +267,10 @@ class BrandSecondMenuSection extends StatelessWidget {
 
   Widget _buildAllFactoriesMenuItem(BuildContext context) {
     return AdvanceIconButton(
-      onPressed: () {
+      onPressed: () async {
+        List<CategoryModel> categories = await ProductRepositoryImpl().majorCategories();
+        List<LabelModel> labels = await UserRepositoryImpl().labels();
+        labels.removeWhere((label)=>label.group!='FACTORY');
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -276,9 +278,11 @@ class BrandSecondMenuSection extends StatelessWidget {
                   FactoryCondition(
                       starLevel: 0,
                       adeptAtCategories: [],
-                      labels: [],
+                      labels: labels,
                       cooperationModes: []),
                   route: '全部工厂',
+                  categories: categories,
+              labels: labels,
                 ),
           ),
         );
@@ -315,6 +319,7 @@ class BrandSecondMenuSection extends StatelessWidget {
   }
 
   void _jumpToQualityFactory(BuildContext context) async {
+    List<CategoryModel> categories = await ProductRepositoryImpl().majorCategories();
     List<LabelModel> labels = await UserRepositoryImpl().labels();
     labels.removeWhere((label) => label.name == '优质工厂');
     Navigator.of(context).push(
@@ -326,6 +331,7 @@ class BrandSecondMenuSection extends StatelessWidget {
                   labels: labels,
                   cooperationModes: []),
               route: '优质工厂',
+              categories: categories,
             ),
       ),
     );
