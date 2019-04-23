@@ -52,13 +52,13 @@ class EnumSelectPageState extends State<EnumSelectPage> {
   @override
   Widget build(BuildContext context) {
     //当有键盘的状态进来时，widget.codes会被清空，所以在build的时候重新赋值
-    if(widget.models != null) widget.codes = widget.models.map<String>((model) {
-      if(model is LabelModel){
-        return model.name;
-      }else{
-        return model.code;
-      }
-    }).toList();
+//    if(widget.models != null) widget.codes = widget.models.map<String>((model) {
+//      if(model is LabelModel){
+//        return model.name;
+//      }else{
+//        return model.code;
+//      }
+//    }).toList();
     final List<dynamic> _items = widget.items.map((item) {
 //      print(widget.codes.toString() + '-----'+ item.code);
       return Container(

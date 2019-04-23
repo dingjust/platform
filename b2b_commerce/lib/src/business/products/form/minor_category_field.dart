@@ -58,13 +58,10 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
             }
           },
           child: ShowSelectTile(
+            isRequired: true,
             leadingText: '产品品类',
             tralingText: _minorCategoryText,
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(height: 0, color: Colors.grey[400]),
         ),
       ],
     );

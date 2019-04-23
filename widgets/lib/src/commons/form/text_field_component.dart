@@ -59,10 +59,14 @@ class TextFieldComponent extends StatefulWidget {
 }
 
 class TextFieldComponentState extends State<TextFieldComponent> {
-  Color _dividerColor = Colors.grey[400];
+  Color _dividerColor = Color(0x1F000000);
 
   @override
   void initState() {
+    if(widget.prefix != null && widget.controller.text != ''){
+      widget.controller.text = widget.prefix + widget.controller.text;
+    }
+
     widget.focusNode.addListener(() {
       if (widget.focusNode.hasFocus) {
         setState(() {
@@ -73,17 +77,13 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         });
       } else {
         setState(() {
-          _dividerColor = Colors.grey[400];
-          if(widget.prefix != null){
+          _dividerColor = Color(0x1F000000);
+          if(widget.prefix != null && widget.controller.text != ''){
             widget.controller.text = widget.prefix + widget.controller.text;
           }
         });
       }
     });
-
-    if(widget.prefix != null){
-      widget.controller.text = widget.prefix + widget.controller.text;
-    }
 
     if (widget.leadingText == null || widget.leadingText == '') {
       widget.leadingWidth = 0.0;
@@ -140,7 +140,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 //              ),
               Expanded(
                 child: TextField(
-                  style: widget.style,
+                  style: widget.style ?? TextStyle(color: Colors.grey,fontSize: 16,),
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
