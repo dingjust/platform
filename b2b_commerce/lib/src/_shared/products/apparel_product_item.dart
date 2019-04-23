@@ -88,7 +88,7 @@ class ApparelProductItem extends StatelessWidget {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      '货号：' + item.skuID,
+                      '货号：' + item.skuID ?? '',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
@@ -101,7 +101,7 @@ class ApparelProductItem extends StatelessWidget {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${item?.category?.name}",
+                      "${item?.category?.name ?? ''}",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),

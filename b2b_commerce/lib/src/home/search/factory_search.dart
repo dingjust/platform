@@ -1,17 +1,14 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/business/search/requirement_search_result.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-/// 生产搜索页
-class RequirementOrderSearchDelegate extends SearchDelegate<RequirementOrderModel> {
+/// 产品搜索页
+class FactorySearchDelegate extends SearchDelegate<String> {
   List<String> history_keywords;
 
-
-  RequirementOrderSearchDelegate() {
+  FactorySearchDelegate() {
     getHistory();
   }
 
@@ -19,11 +16,10 @@ class RequirementOrderSearchDelegate extends SearchDelegate<RequirementOrderMode
   void getHistory() async {
     //解析
     String jsonStr =
-    await LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY);
+        await LocalStorage.get(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
     if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
       history_keywords = list.map((item) => item as String).toList();
-      print(history_keywords);
     } else {
       history_keywords = [];
     }
@@ -32,18 +28,17 @@ class RequirementOrderSearchDelegate extends SearchDelegate<RequirementOrderMode
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
-     IconButton(
-        icon: Icon(Icons.search),
-        onPressed:(){
-          Navigator.pop(context);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => RequirementSearchResultPage(
-                    keyword: query,
-                  )));
-        },
-      )
+      query != ''
+          ? IconButton(
+              icon: Icon(
+                B2BIcons.del_blank_card,
+                size: 15,
+              ),
+              onPressed: () {
+                query = '';
+              },
+            )
+          : Container(),
     ];
   }
 
@@ -66,16 +61,10 @@ class RequirementOrderSearchDelegate extends SearchDelegate<RequirementOrderMode
     //记录搜索关键字
     if (query != '' && query.isNotEmpty) {
       history_keywords.add(query);
-      LocalStorage.save(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
+      LocalStorage.save(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
           json.encode(history_keywords));
     }
-    Navigator.pop(context);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => RequirementSearchResultPage(
-              keyword: query,
-            )));
+    Navigator.pop(context, query);
   }
 
   @override
@@ -85,9 +74,7 @@ class RequirementOrderSearchDelegate extends SearchDelegate<RequirementOrderMode
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container(
-        child: _buildHistoryListView(context)
-    );
+    return Container(child: _buildHistoryListView(context));
   }
 
   Widget _buildHistoryListView(BuildContext context) {
@@ -109,20 +96,14 @@ class RequirementOrderSearchDelegate extends SearchDelegate<RequirementOrderMode
               alignment: WrapAlignment.start, //沿主轴方向居中
               children: history_keywords
                   .map((keyword) => HistoryTag(
-                value: keyword,
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RequirementSearchResultPage(
-                            keyword: keyword,
-                          )));
-                },
-              ))
+                        value: keyword,
+                        onTap: () {
+                          Navigator.pop(context, keyword);
+                        },
+                      ))
                   .toList()),
         )
       ],
     );
   }
-
 }

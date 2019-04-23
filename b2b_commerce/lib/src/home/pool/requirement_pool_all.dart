@@ -1,8 +1,8 @@
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_search_delegate_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
-import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +16,10 @@ class RequirementPoolAllPage extends StatefulWidget {
   RequirementPoolAllPage({
     Key key,
     this.categories,
+    this.requirementFilterCondition,
   });
 
-  ///当前选中条件
-  final RequirementFilterCondition currentCodition = RequirementFilterCondition(
-      categories: [],
-      dateRange: RequirementOrderDateRange.ALL,
-      machiningType: null);
+  final RequirementFilterCondition requirementFilterCondition;
 
   _RequirementPoolAllPageState createState() => _RequirementPoolAllPageState();
 }
@@ -37,6 +34,9 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   List<CategoryModel> _minCategorySelect = [];
 
   String filterBarLabel = '综合排序';
+
+  ///当前选中条件
+  RequirementFilterCondition currentCodition;
 
   List<FilterConditionEntry> dateRangeConditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(
@@ -69,6 +69,15 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
         .map((category) =>
             FilterConditionEntry(label: category.name, value: category))
         .toList());
+
+    if (widget.requirementFilterCondition != null) {
+      currentCodition = widget.requirementFilterCondition;
+    } else {
+      currentCodition = RequirementFilterCondition(
+          categories: [],
+          dateRange: RequirementOrderDateRange.ALL,
+          machiningType: null);
+    }
     super.initState();
   }
 
@@ -83,7 +92,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
             centerTitle: true,
             elevation: 0.5,
             title: Text(
-              '全部需求',
+              '${generateTitle()}',
               style: TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
@@ -94,7 +103,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                 ),
                 onPressed: () => showSearch(
                     context: context,
-                    delegate: RequirementOrderSearchDelegate()),
+                    delegate: RequirementOrderSearchDelegatePage()),
               ),
             ],
           ),
@@ -175,13 +184,21 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                 ),
                 Expanded(
                   child: OrdersListView(
-                    currentCodition: widget.currentCodition,
+                    currentCodition: currentCodition,
                   ),
                 )
               ],
             ),
           ),
         ));
+  }
+
+  String generateTitle() {
+    if (currentCodition.keyword == null || currentCodition.keyword == '') {
+      return '推荐需求';
+    } else {
+      return '${currentCodition.keyword}';
+    }
   }
 }
 
@@ -396,16 +413,18 @@ class RequirementPoolOrderItem extends StatelessWidget {
             ],
           ),
         ),
-        RichText(
-          text: TextSpan(
-              text: '￥',
-              style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
-              children: <TextSpan>[
-                TextSpan(
-                    text: '${order.details.maxExpectedPrice ?? 0}',
-                    style: TextStyle(fontSize: 18))
-              ]),
-        )
+        order.details.maxExpectedPrice != null
+            ? RichText(
+                text: TextSpan(
+                    text: '￥',
+                    style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '${order.details.maxExpectedPrice}',
+                          style: TextStyle(fontSize: 18))
+                    ]),
+              )
+            : Container()
       ],
     );
   }
@@ -506,8 +525,8 @@ class Logo extends StatelessWidget {
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
-              image: NetworkImage(
-                  '${order.belongTo.profilePicture.previewUrl()}'),
+              image:
+                  NetworkImage('${order.belongTo.profilePicture.previewUrl()}'),
               fit: BoxFit.cover,
             )),
       );

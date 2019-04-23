@@ -3,15 +3,15 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../../widgets/scrolled_to_end_tips.dart';
-
 import './requirement_order_list_item.dart';
+import '../../widgets/scrolled_to_end_tips.dart';
 
 /// 需求订单列表
 class RequirementOrderList extends StatefulWidget {
-  RequirementOrderList({Key key, @required this.status}) : super(key: key);
+  RequirementOrderList({Key key, @required this.status,this.keyword}) : super(key: key);
 
   final EnumModel status;
+  final String keyword;
 
   final ScrollController scrollController = ScrollController();
 
@@ -29,7 +29,11 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(widget.status.code);
+        if(widget.keyword != null){
+          bloc.loadingMoreByKeyword(widget.keyword);
+        }else{
+          bloc.loadingMoreByStatuses(widget.status.code);
+        }
       }
     });
 
@@ -75,7 +79,11 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
               // initialData: null,
               builder: (BuildContext context, AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
                 if (snapshot.data == null) {
-                  bloc.filterByStatuses(widget.status.code);
+                  if (widget.keyword != null) {
+                    bloc.filterByKeyword(widget.keyword);
+                  } else {
+                    bloc.filterByStatuses(widget.status.code);
+                  }
                   return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                 }
                 if (snapshot.hasData) {

@@ -11,6 +11,13 @@ enum ArticleApprovalStatus {
   unapproved,
 }
 
+// TODO: i18n处理
+const ArticleApprovalStatusMap = {
+  ArticleApprovalStatus.check: "check",
+  ArticleApprovalStatus.approved: "approved",
+  ArticleApprovalStatus.unapproved: "unapproved"
+};
+
 /// 样衣归还状态
 enum ReturnState {
   /// 未还
@@ -67,7 +74,8 @@ class CategoryModel extends ItemModel {
   static Map<String, dynamic> _mediaToJson(MediaModel model) =>
       MediaModel.toJson(model);
 
-  static List<Map<String, dynamic>> _categorysToJson(List<CategoryModel> models) =>
+  static List<Map<String, dynamic>> _categorysToJson(
+          List<CategoryModel> models) =>
       models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
@@ -649,7 +657,6 @@ class SampleProductModel extends ItemModel {
 
 @JsonSerializable()
 class SampleBorrowReturnHistoryModel extends ItemModel {
-
   //样衣名
   String name;
   //样衣货号
@@ -684,7 +691,7 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
   //备注
   String remarks;
 
-  @JsonKey(name: 'creationtime',fromJson: _dateTimefromMilliseconds)
+  @JsonKey(name: 'creationtime', fromJson: _dateTimefromMilliseconds)
   DateTime creationDate;
 
   SampleBorrowReturnHistoryModel({

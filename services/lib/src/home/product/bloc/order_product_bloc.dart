@@ -39,21 +39,27 @@ class OrderByProductBLoc extends BLoCBase {
   //锁
   bool lock = false;
 
-  getData(String categoryCode) async {
+  getData(ProductCondition productCondition) async {
     if (!lock) {
       lock = true;
       //重置参数
       reset();
       Response<Map<String, dynamic>> response;
       try {
-        response = await http$.post(ProductApis.factoriesApparel,
-            data: {"categories": categoryCode}, queryParameters: {'page': currentPage, 'size': pageSize});
+        response = await http$.post(ProductApis.factoriesApparel, data: {
+          "categories": productCondition.categories.map((category) => category.code).toList(),
+          "keyword": productCondition.keyword ?? ''
+        }, queryParameters: {
+          'page': currentPage,
+          'size': pageSize
+        });
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        ApparelProductResponse productResponse = ApparelProductResponse.fromJson(response.data);
+        ApparelProductResponse productResponse =
+            ApparelProductResponse.fromJson(response.data);
         totalPages = productResponse.totalPages;
         totalElements = productResponse.totalElements;
         _products.clear();
@@ -64,7 +70,7 @@ class OrderByProductBLoc extends BLoCBase {
     }
   }
 
-  loadingMore(String categoryCode) async {
+  loadingMore(ProductCondition productCondition) async {
     if (!lock) {
       lock = true;
 
@@ -76,14 +82,20 @@ class OrderByProductBLoc extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
-          response = await http$.post(ProductApis.factoriesApparel,
-              data: {"categories": categoryCode}, queryParameters: {'page': currentPage, 'size': pageSize});
+          response = await http$.post(ProductApis.factoriesApparel, data: {
+            "categories": productCondition.categories.map((category) => category.code).toList(),
+            "keyword": productCondition.keyword ?? ''
+          }, queryParameters: {
+            'page': currentPage,
+            'size': pageSize
+          });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          ApparelProductResponse productResponse = ApparelProductResponse.fromJson(response.data);
+          ApparelProductResponse productResponse =
+              ApparelProductResponse.fromJson(response.data);
           totalPages = productResponse.totalPages;
           totalElements = productResponse.totalElements;
           _products.addAll(productResponse.content);
@@ -113,4 +125,13 @@ class OrderByProductBLoc extends BLoCBase {
 
     super.dispose();
   }
+}
+
+class ProductCondition {
+  /// 品类
+  List<CategoryModel> categories;
+
+  String keyword;
+
+  ProductCondition(this.categories, this.keyword);
 }

@@ -170,20 +170,7 @@ class MyHomePage extends StatelessWidget {
       );
     } else {
       return Container(
-        child: Container(
-          width: 200,
-          margin: EdgeInsets.only(left: 10),
-          child: RaisedButton(
-            color: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            onPressed: () {
-              Navigator.of(context).push(
-                  (MaterialPageRoute(builder: (context) => B2BLoginPage())));
-            },
-            child: Text('登录'),
-          ),
-        ),
+        child: Text('未登录'),
       );
     }
   }

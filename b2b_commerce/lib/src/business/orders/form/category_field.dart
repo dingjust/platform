@@ -39,23 +39,22 @@ class CategoryFieldState extends State<CategoryField> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-              leading: RichText(
-                  text: TextSpan(
-                      text: '产品品类',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.red)
+              leading: Wrap(
+                    children: <Widget>[
+                      Text(
+                        '产品品类',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black
                         ),
-                      ]),
+                      ),
+                      Text(
+                          ' *',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red)
+                      ),
+                    ],
                   ),
               trailing: Container(
                   width: 150,

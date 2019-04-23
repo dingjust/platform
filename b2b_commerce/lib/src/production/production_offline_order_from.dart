@@ -1045,8 +1045,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: new DateTime(1990),
-        lastDate: new DateTime(2999));
+        firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+        lastDate: DateTime(2999));
 
     if (_picked != null) {
       print(_picked);

@@ -75,6 +75,29 @@ class RequirementOrderBLoC extends BLoCBase {
     }
   }
 
+  filterByKeyword(String keyword) async {
+        //请求参数
+        Map data = {
+          'code': keyword,
+        };
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.requirementOrders,
+              data: data, queryParameters: {'page': _ordersMap['ALL'].currentPage, 'size': _ordersMap['ALL'].size});
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
+          _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
+          _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
+          _ordersMap['ALL'].data.clear();
+          _ordersMap['ALL'].data.addAll(ordersResponse.content);
+        }
+      _controller.sink.add(_ordersMap['ALL'].data);
+  }
+
   loadingMoreByStatuses(String status) async {
     if (!lock) {
       lock = true;
@@ -108,6 +131,29 @@ class RequirementOrderBLoC extends BLoCBase {
       _controller.sink.add(_ordersMap[status].data);
       lock = false;
     }
+  }
+
+  loadingMoreByKeyword(String keyword) async {
+      //数据到底
+      Map data = {
+        'code': keyword,
+      };
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.requirementOrders,
+              data: data, queryParameters: {'page': ++_ordersMap['ALL'].currentPage, 'size': _ordersMap['ALL'].size});
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
+          _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
+          _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
+          _ordersMap['ALL'].data.addAll(ordersResponse.content);
+        }
+      loadingController.sink.add(false);
+      _controller.sink.add(_ordersMap['ALL'].data);
   }
 
   //下拉刷新

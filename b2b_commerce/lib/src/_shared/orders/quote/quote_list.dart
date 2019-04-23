@@ -1,25 +1,26 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../../widgets/scrolled_to_end_tips.dart';
-
+import './quote_list_item.dart';
 import '../../../business/orders/form/proofing_order_form.dart';
 import '../../../home/pool/requirement_quote_order_form.dart';
 import '../../../production/production_online_order_from.dart';
-
-import './quote_list_item.dart';
+import '../../widgets/scrolled_to_end_tips.dart';
 
 class QuoteList extends StatefulWidget {
   QuoteList({
     Key key,
     this.status,
-    this.factoryUid,
+    this.companyUid,
+    this.keyword,
   }) : super(key: key);
 
   final EnumModel status;
-  final String factoryUid;
+  final String companyUid;
+  final String keyword;
 
   final ScrollController scrollController = ScrollController();
   final TextEditingController rejectController = TextEditingController();
@@ -38,8 +39,10 @@ class _QuoteListState extends State<QuoteList> {
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        if(widget.factoryUid != null){
-          bloc.lodingMoreByFactory(widget.factoryUid);
+        if(widget.companyUid != null && UserBLoC.instance.currentUser.type == UserType.FACTORY){
+          bloc.lodingMoreByCompany(widget.companyUid);
+        }else if(widget.keyword != null){
+          bloc.loadingMoreByKeyword(widget.keyword);
         }else{
           bloc.loadingMoreByStatuses(widget.status.code);
         }
@@ -183,8 +186,10 @@ class _QuoteListState extends State<QuoteList> {
   // 子组件刷新数据方法
   void _handleRefresh() {
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
-    if(widget.factoryUid != null){
-      bloc.getData(widget.factoryUid);
+    if(widget.companyUid != null){
+      bloc.getQuoteDataByCompany(widget.companyUid);
+    }else if(widget.keyword != null){
+      bloc.filterByKeyword(widget.keyword);
     }else{
       bloc.refreshData(widget.status.code);
     }
@@ -221,8 +226,10 @@ class _QuoteListState extends State<QuoteList> {
               stream: bloc.stream,
               builder: (BuildContext context, AsyncSnapshot<List<QuoteModel>> snapshot) {
                 if (snapshot.data == null) {
-                  if(widget.factoryUid != null){
-                    bloc.getData(widget.factoryUid);
+                  if(widget.companyUid != null){
+                    bloc.getQuoteDataByCompany(widget.companyUid);
+                  }else if(widget.keyword != null){
+                    bloc.filterByKeyword(widget.keyword);
                   }else{
                     bloc.filterByStatuses(widget.status.code);
                   }

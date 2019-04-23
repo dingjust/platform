@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -210,18 +212,31 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Color.fromRGBO(243, 243, 243, 1)),
-                ):
-              Container(
-                  margin: EdgeInsets.fromLTRB(0,10,15,0),
-                  padding: EdgeInsets.fromLTRB(0,10, 15,0),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
+                ) :
+                Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                    padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                    width: 80,
+                    height: 80,
+                    child: CachedNetworkImage(
+                        imageUrl: '${progress.medias[0].previewUrl()}',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30.0,
+                            ),
+                        errorWidget: (context, url, error) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            )
+                    ),
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage('${progress.medias[0].previewUrl()}'),
-                        fit: BoxFit.fill,
-                      )),
+                    )
                 ),
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(
@@ -422,9 +437,9 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   Future<Null> _selectDate(BuildContext context,ProductionProgressModel model) async {
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: nowTime,
-        lastDate: new DateTime(2999)
+        initialDate: nowTime,
+        firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+        lastDate: DateTime(2999)
     );
 
     if(_picked != null){

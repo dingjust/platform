@@ -212,6 +212,10 @@ class RequirementPoolBLoC extends BLoCBase {
           conditions.categories.map((category) => category.code).toList();
     }
 
+    if(conditions.keyword!=null){
+      data['keyword']=conditions.keyword;
+    }
+
     return data;
   }
 }
@@ -228,8 +232,10 @@ class RequirementFilterCondition {
 
   List<CategoryModel> categories;
 
+  String keyword;
+
   RequirementFilterCondition(
-      {this.dateRange, this.machiningType, this.categories});
+      {this.dateRange, this.machiningType, this.categories,this.keyword});
 }
 
 enum RequirementOrderDateRange {

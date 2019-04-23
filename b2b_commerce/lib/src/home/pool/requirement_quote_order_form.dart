@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -177,16 +179,21 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               color: Color.fromRGBO(200, 200, 200, 1), size: 60),
         );
       } else {
-        _pictureWidget = Container(
-          width: 80,
+        _pictureWidget =Container(
           height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: DecorationImage(
-                image: NetworkImage(
-                    '${widget.model.details.pictures[0].previewUrl()}'),
-                fit: BoxFit.cover,
-              )),
+          width: 80,
+          child: CachedNetworkImage(
+              imageUrl: '${widget.model.details.pictures[0].previewUrl()}',
+              fit: BoxFit.fill,
+              placeholder: (context, url) =>  SpinKitRing(
+                color: Colors.white,
+                size: 50.0,
+              ),
+              errorWidget: (context, url, error) => SpinKitRing(
+                color: Color(0xFF24292E),
+                size: 50,
+              )
+          ),
         );
       }
     }
@@ -261,8 +268,10 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
             focusNode: _unitPriceFocusNode,
-            leadingText: '订单报价￥',
+            leadingText: Text('订单报价',style: TextStyle(fontSize: 16,)),
+            isRequired: true,
             hintText: '必填',
+            prefix: '￥',
             autofocus: false,
             inputType: TextInputType.number,
             textAlign: TextAlign.right,
@@ -321,8 +330,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _fabricFocusNode,
-                  leadingText: '面料价格￥',
+                  leadingText: Text('面料价格',style: TextStyle(fontSize: 16,)),
                   hintText: '填写',
+                  prefix: '￥',
                   autofocus: false,
                   inputType: TextInputType.number,
                   textAlign: TextAlign.right,
@@ -336,8 +346,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _excipientsFocusNode,
-                  leadingText: '辅料价格￥',
+                  leadingText: Text('辅料价格',style: TextStyle(fontSize: 16,)),
                   hintText: '填写',
+                  prefix: '￥',
                   autofocus: false,
                   inputType: TextInputType.number,
                   textAlign: TextAlign.right,
@@ -350,8 +361,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _processingFocusNode,
-                  leadingText: '加工价格￥',
+                  leadingText: Text('加工价格',style: TextStyle(fontSize: 16,)),
                   hintText: '填写',
+                  prefix: '￥',
                   autofocus: false,
                   inputType: TextInputType.number,
                   textAlign: TextAlign.right,
@@ -364,8 +376,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _otherFocusNode,
-                  leadingText: '其他价格￥',
+                  leadingText: Text('其他价格',style: TextStyle(fontSize: 16,)),
                   hintText: '填写',
+                  prefix: '￥',
                   autofocus: false,
                   inputType: TextInputType.number,
                   textAlign: TextAlign.right,
@@ -387,8 +400,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
         padding: EdgeInsets.symmetric(vertical: 5),
         dividerPadding: EdgeInsets.only(),
         focusNode: _sampleFocusNode,
-        leadingText: '打样费￥',
+        leadingText: Text('打样费',style: TextStyle(fontSize: 16,)),
         hintText: '填写',
+        prefix: '￥',
         autofocus: false,
         inputType: TextInputType.number,
         textAlign: TextAlign.right,
@@ -467,18 +481,37 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: TextFieldComponent(
-        padding: EdgeInsets.symmetric(vertical: 5),
-        dividerPadding: EdgeInsets.only(),
-        focusNode: _remarksFocusNode,
-        leadingText: '备注',
-        hintText: '填写',
-        autofocus: false,
-        inputType: TextInputType.text,
-        textAlign: TextAlign.right,
-        controller: _remarksController,
-      ),
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Column(children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "备注",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 10),
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: _remarksFocusNode,
+            hintText: '填写',
+            autofocus: false,
+            inputType: TextInputType.text,
+            textAlign: TextAlign.left,
+            hideDivider: true,
+            maxLines: null,
+            maxLength: 120,
+            controller: _remarksController,
+          ),
+        )
+      ]),
     );
   }
 
@@ -507,15 +540,13 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: new DateTime(1999),
-        lastDate: new DateTime(2999));
+        initialDate: expectedDeliveryDate,
+        firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+        lastDate: DateTime(2999));
 
-    if (_picked != null) {
       setState(() {
         quoteDate = _picked;
       });
-    }
   }
 
   void onSubmit() {
@@ -566,25 +597,33 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
       model = QuoteModel();
     }
     //拼装数据
-    model.unitPriceOfFabric = _fabricController.text.isEmpty
+    String unitPriceOfFabric = _fabricController.text.substring(_fabricController.text.indexOf('￥')+1,_fabricController.text.length);
+    String unitPriceOfExcipients = _excipientsController.text.substring(_excipientsController.text.indexOf('￥')+1,_excipientsController.text.length);
+    String unitPriceOfProcessing = _processingController.text.substring(_processingController.text.indexOf('￥')+1,_processingController.text.length);
+    String costOfOther = _otherController.text.substring(_otherController.text.indexOf('￥')+1,_otherController.text.length);
+    String costOfSamples = _sampleController.text.substring(_sampleController.text.indexOf('￥')+1,_sampleController.text.length);
+    String unitPrice = _unitPriceController.text.substring(_unitPriceController.text.indexOf('￥')+1,_unitPriceController.text.length);
+    model.unitPriceOfFabric = unitPriceOfFabric ==null || unitPriceOfFabric == ''?
+         0
+        : double.parse(unitPriceOfFabric);
+
+    model.unitPriceOfExcipients = unitPriceOfExcipients == null|| unitPriceOfExcipients == '' ?
+        0
+        : double.parse(unitPriceOfExcipients);
+    model.unitPriceOfProcessing = unitPriceOfProcessing == null || unitPriceOfProcessing == ''
         ? 0
-        : double.parse(_fabricController.text);
-    model.unitPriceOfExcipients = _processingController.text.isEmpty
-        ? 0
-        : double.parse(_excipientsController.text);
-    model.unitPriceOfProcessing = _processingController.text.isEmpty
-        ? 0
-        : double.parse(_processingController.text);
+        : double.parse(unitPriceOfProcessing);
     model.costOfOther =
-        _otherController.text.isEmpty ? 0 : double.parse(_otherController.text);
-    model.costOfSamples = _sampleController.text.isEmpty
+    costOfOther == null || costOfOther == '' ? 0
+            : double.parse(costOfOther);
+    model.costOfSamples = costOfSamples == null || costOfSamples == ''
         ? 0
-        : double.parse(_sampleController.text);
+        : double.parse(costOfSamples);
     model.requirementOrder = RequirementOrderModel(code: widget.model.code);
     model.remarks = _remarksController.text;
     model.expectedDeliveryDate = quoteDate;
     model.attachments = attachments;
-    model.unitPrice = double.parse(_unitPriceController.text);
+    model.unitPrice = unitPrice == null || unitPrice == '' ? null: double.parse(unitPrice);
     String response;
     if (widget.update) {
       model.code = widget.quoteModel.code;
@@ -615,17 +654,37 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           );
         },
       );
-    } else {
       if (!widget.update) {
         //查询明细
         QuoteModel detailModel =
-            await QuoteOrderRepository().getQuoteDetails(response);
+        await QuoteOrderRepository().getQuoteDetails(response);
         widget.quoteModel = detailModel;
         Navigator.of(context).pop(detailModel);
       } else {
         //成功回调传递
         Navigator.of(context).pop(true);
       }
+    } else {
+      Navigator.of(context).pop();
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text(
+              '提示',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            children: <Widget>[
+              SimpleDialogOption(
+                child: Text(widget.update ? '修改失败' : '报价失败'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }

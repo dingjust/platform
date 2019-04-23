@@ -61,7 +61,7 @@ class AddressFormState extends State<AddressFormPage> {
       TextFieldComponent(
         focusNode: _nameFocusNode,
         controller: _fullnameController,
-        leadingText: '联系人',
+        leadingText: Text('联系人',style: TextStyle(fontSize: 16,)),
         hintText: '请输入联系人',
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
         dividerPadding: EdgeInsets.symmetric(),
@@ -69,7 +69,7 @@ class AddressFormState extends State<AddressFormPage> {
       TextFieldComponent(
         focusNode: _cellphoneFocusNode,
         controller: _cellphoneController,
-        leadingText: '联系号码',
+        leadingText: Text('联系号码',style: TextStyle(fontSize: 16,)),
         hintText: '请输入联系号码',
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
         dividerPadding: EdgeInsets.symmetric(),
@@ -92,7 +92,7 @@ class AddressFormState extends State<AddressFormPage> {
       TextFieldComponent(
         focusNode: _line1FocusNode,
         controller: _line1Controller,
-        leadingText: '详细地址',
+        leadingText: Text('详细地址',style: TextStyle(fontSize: 16,)),
         hintText: '道路、门牌号、小区、楼栋号、单元室等',
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
         dividerPadding: EdgeInsets.symmetric(),

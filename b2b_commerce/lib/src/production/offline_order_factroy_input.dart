@@ -80,7 +80,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
               focusNode: _factoryFocusNode,
               controller: _factoryController,
               autofocus: true,
-              leadingText: '${widget.type}名称',
+              leadingText: Text('${widget.type}名称',style: TextStyle(fontSize: 16,)),
               hintText: widget.model == null || widget.model.name == null ? '请输入${widget.type}名称': widget.model.name,
               onChanged: (value) {
                 setState(() {
@@ -96,7 +96,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
               textAlign: TextAlign.left,
               focusNode: _nameFocusNode,
               controller: _nameController,
-              leadingText: '联系人名',
+              leadingText: Text('联系人名',style: TextStyle(fontSize: 16,)),
               hintText: widget.model == null || widget.model.contactPerson == null ?'请输入联系人名':widget.model.contactPerson,
               onChanged: (value) {
                 setState(() {
@@ -112,7 +112,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
               textAlign: TextAlign.left,
               focusNode: _phoneFocusNode,
               controller: _phoneController,
-              leadingText: '联系电话',
+              leadingText: Text('联系电话',style: TextStyle(fontSize: 16,)),
               hintText: widget.model == null || widget.model.contactPhone == null ?'请输入联系电话':widget.model.contactPhone,
               inputType: TextInputType.phone,
               onChanged: (value) {

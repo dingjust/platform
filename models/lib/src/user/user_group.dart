@@ -624,31 +624,22 @@ class SupplierModel extends ItemModel {
 
 //合作方式枚举
 enum CooperationModes {
-  ///  纯加工
-  PURE_PROCESSING,
+  ///  清加工
+  LIGHT_PROCESSING,
 
-  /// FOB
-  FOB,
+  /// 包工包料
+  LABOR_AND_MATERIAL,
 
-  /// ODM
-  ODM,
-
-  /// OEM
-  OEM,
 }
 
 const CooperationModesMap = {
-  CooperationModes.PURE_PROCESSING: "PURE_PROCESSING",
-  CooperationModes.FOB: "FOB",
-  CooperationModes.ODM: "ODM",
-  CooperationModes.OEM: "OEM",
+  CooperationModes.LIGHT_PROCESSING: "LIGHT_PROCESSING",
+  CooperationModes.LABOR_AND_MATERIAL: "LABOR_AND_MATERIAL",
 };
 
 const CooperationModesLocalizedMap = {
-  CooperationModes.PURE_PROCESSING: "纯加工",
-  CooperationModes.FOB: "FOB",
-  CooperationModes.ODM: "ODM",
-  CooperationModes.OEM: "OEM",
+  CooperationModes.LIGHT_PROCESSING: "清加工",
+  CooperationModes.LABOR_AND_MATERIAL: "包工包料",
 };
 
 //月均产能
@@ -716,8 +707,8 @@ enum PopulationScale {
 const PopulationScaleLocalizedMap = {
   PopulationScale.N01: "50人以下",
   PopulationScale.N02: "51~100人",
-  PopulationScale.N03: "101到200人",
-  PopulationScale.N04: "200人以下",
+  PopulationScale.N03: "101~200人",
+  PopulationScale.N04: "200人以上",
 };
 
 //年龄段

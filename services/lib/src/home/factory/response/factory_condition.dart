@@ -35,17 +35,20 @@ class FactoryCondition {
   /// 加工类型
   List<CooperationModes> cooperationModes;
 
-  FactoryCondition({
-    this.starLevel,
-    this.historyOrdersCount,
-    this.categories,
-    @required this.adeptAtCategories,
-    this.productiveOrientations,
-    this.populationScale,
-    @required this.labels,
-    @required this.cooperationModes,
-    this.industrialCuster,
-  });
+  ///关键字
+  String keyword;
+
+  FactoryCondition(
+      {this.starLevel,
+      this.historyOrdersCount,
+      this.categories,
+      @required this.adeptAtCategories,
+      this.productiveOrientations,
+      this.populationScale,
+      @required this.labels,
+      @required this.cooperationModes,
+      this.industrialCuster,
+      this.keyword});
 
   factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
       _$FactoryConditionFromJson(json);
@@ -61,6 +64,7 @@ class FactoryCondition {
     List<String> adeptAtCategoryArray = [];
     List<int> labelsArray = [];
     List<String> cooperationModesArray = [];
+    String approvalStatus;
 
     if (adeptAtCategories != null) {
       adeptAtCategories.forEach((category) {
@@ -70,7 +74,12 @@ class FactoryCondition {
 
     if (labels != null) {
       labels.forEach((label) {
-        labelsArray.add(label.id);
+        if (label.name != '已认证') {
+          labelsArray.add(label.id);
+        } else {
+          approvalStatus =
+              ArticleApprovalStatusMap[ArticleApprovalStatus.approved];
+        }
       });
     }
 
@@ -91,11 +100,17 @@ class FactoryCondition {
       'cooperationModes': cooperationModesArray,
       'populationScales': populationScale != null
           ? [_$PopulationScaleEnumMap[populationScale]]
-          : []
+          : [],
+      'keyword': keyword ?? '',
+      'approvalStatuses': approvalStatus ?? ''
     };
 
     print(result);
 
     return result;
+  }
+
+  void setKeyword(String value) {
+    keyword = value;
   }
 }

@@ -64,215 +64,221 @@ class SampleProductHistoryFormPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('新建记录'),
-        actions: <Widget>[
-          _onlyRead ?
-          IconButton(
-            icon: Text(
-            '编辑',
-            style: TextStyle(),
-          ),onPressed: (){
-              setState(() {
-                _onlyRead = false;
-              });
-          },):
-          IconButton(
+    return WillPopScope(
+      onWillPop: (){
+        widget.model.expectedReturningDate = null;
+        return Future.value(true);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('新建记录'),
+          elevation: 0.5,
+          actions: <Widget>[
+            _onlyRead ?
+            IconButton(
               icon: Text(
-                '确定',
-                style: TextStyle(),
-              ),
-              onPressed: () async {
-                if (_type == LendBorrowType.BORROW) {
-                  if (_sampleProduct == null) {
-                    showDialog(
-                        context: (context),
-                        builder: (context) => AlertDialog(
-                              content: Text('样衣不能为空'),
-                            ));
-                    return;
-                  } else {
-                    widget.model.name = _sampleProduct.name;
-                    widget.model.code = _sampleProduct.code;
+              '编辑',
+              style: TextStyle(),
+            ),onPressed: (){
+                setState(() {
+                  _onlyRead = false;
+                });
+            },):
+            IconButton(
+                icon: Text(
+                  '确定',
+                  style: TextStyle(),
+                ),
+                onPressed: () async {
+                  if (_type == LendBorrowType.BORROW) {
+                    if (_sampleProduct == null) {
+                      showDialog(
+                          context: (context),
+                          builder: (context) => AlertDialog(
+                                content: Text('样衣不能为空'),
+                              ));
+                      return;
+                    } else {
+                      widget.model.name = _sampleProduct.name;
+                      widget.model.code = _sampleProduct.code;
 //                    widget.model.images = _sampleProduct.pictures;
-                  }
-                } else {
-                  if (_nameController.text == '' &&
-                      _skuIDController.text == '') {
-                    showDialog(
-                        context: (context),
-                        builder: (context) => AlertDialog(
-                              content: Text('样衣名称和货号不能为空'),
-                            ));
-                    return;
+                    }
                   } else {
-                    widget.model.name = _nameController.text;
-                    widget.model.code = _skuIDController.text;
+                    if (_nameController.text == '' &&
+                        _skuIDController.text == '') {
+                      showDialog(
+                          context: (context),
+                          builder: (context) => AlertDialog(
+                                content: Text('样衣名称和货号不能为空'),
+                              ));
+                      return;
+                    } else {
+                      widget.model.name = _nameController.text;
+                      widget.model.code = _skuIDController.text;
+                    }
                   }
-                }
 
 
-                widget.model.images = _pictures;
-                widget.model.state = ReturnState.NOT_RETURNED;
-                widget.model.type = _type;
-                widget.model.quantity = _quantityController.text == ''
-                    ? 0
-                    : int.parse(_quantityController.text);
-                widget.model.contact = _contactWayController.text == ''
-                    ? null
-                    : _contactWayController.text;
-                widget.model.remarks = _remakeController.text == ''
-                    ? null
-                    : _remakeController.text;
-                widget.model.relatedParty = _relatedPartyController.text == ''
-                    ? null
-                    : _relatedPartyController.text;
+                  widget.model.images = _pictures;
+                  widget.model.state = ReturnState.NOT_RETURNED;
+                  widget.model.type = _type;
+                  widget.model.quantity = _quantityController.text == ''
+                      ? 0
+                      : int.parse(_quantityController.text);
+                  widget.model.contact = _contactWayController.text == ''
+                      ? null
+                      : _contactWayController.text;
+                  widget.model.remarks = _remakeController.text == ''
+                      ? null
+                      : _remakeController.text;
+                  widget.model.relatedParty = _relatedPartyController.text == ''
+                      ? null
+                      : _relatedPartyController.text;
 
 
-                print(SampleBorrowReturnHistoryModel.toJson(widget.model));
-                if(widget.isCreated){
-                  ProductRepositoryImpl().createSampleHistory(widget.model).then((a){
-                    Navigator.pop(context);
-                    SampleProductHistoryBLoC.instance.filterByStatuses('ALL', LendBorrowType.BORROW.toString());
-                  });
-                }else{
-                  ProductRepositoryImpl().updateSampleHistory(widget.model).then((a){
-                    Navigator.pop(context);
-                    SampleProductHistoryBLoC.instance.filterByStatuses('ALL', LendBorrowType.BORROW.toString());
-                  });
-                }
+                  print(SampleBorrowReturnHistoryModel.toJson(widget.model));
+                  if(widget.isCreated){
+                    ProductRepositoryImpl().createSampleHistory(widget.model).then((a){
+                      Navigator.pop(context);
+                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', widget.model.type.toString());
+                    });
+                  }else{
+                    ProductRepositoryImpl().updateSampleHistory(widget.model).then((a){
+                      Navigator.pop(context);
+                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', widget.model.type.toString());
+                    });
+                  }
 
 
-              }),
-        ],
-      ),
-      body: ListView(
-        children: <Widget>[
-          SizedBox(
-            height: 15,
-          ),
-          buildTypeSelectBtn(),
-          buildPictures(),
-          Card(
-            elevation: 0,
-            margin: EdgeInsets.only(top: 10, bottom: 10),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Column(
-                children: <Widget>[
-                  buildProduct(),
-                  TextFieldComponent(
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
+                }),
+          ],
+        ),
+        body: ListView(
+          children: <Widget>[
+            SizedBox(
+              height: 15,
+            ),
+            buildTypeSelectBtn(),
+            buildPictures(),
+            Card(
+              elevation: 0,
+              margin: EdgeInsets.only(top: 10, bottom: 10),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Column(
+                  children: <Widget>[
+                    buildProduct(),
+                    TextFieldComponent(
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                      enabled: !_onlyRead,
+                      focusNode: _quantityFocusNode,
+                      controller: _quantityController,
+                      inputType: TextInputType.number,
+                      leadingText: Text(_type == LendBorrowType.BORROW ? '借出数量' : '借入数量',style: TextStyle(fontSize: 16,)),
+                      hintText:
+                          _onlyRead ? '' : _type == LendBorrowType.BORROW ? '请输入借出数量' : '请输入借入数量',
+                      leadingWidth: 100,
                     ),
-                    enabled: !_onlyRead,
-                    focusNode: _quantityFocusNode,
-                    controller: _quantityController,
-                    inputType: TextInputType.number,
-                    leadingText:
-                        _type == LendBorrowType.BORROW ? '借出数量' : '借入数量',
-                    hintText:
-                        _onlyRead ? '' : _type == LendBorrowType.BORROW ? '请输入借出数量' : '请输入借入数量',
-                    leadingWidth: 100,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 18),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          width: 100,
-                          child: Text(
-                            '预计归还时间',
-                            style: TextStyle(fontSize: 16),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 18),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            width: 100,
+                            child: Text(
+                              '预计归还时间',
+                              style: TextStyle(fontSize: 16),
+                            ),
                           ),
-                        ),
-                        GestureDetector(
-                          child: Text(
-                            _onlyRead
-                                ? DateFormatUtil.formatYMD(
-                                        widget.model.expectedReturningDate) ??
-                                    ''
-                                : DateFormatUtil.formatYMD(
-                                        widget.model.expectedReturningDate) ??
-                                    '点击选择日期',
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
-                          ),
-                          onTap: () {
-                            if (_onlyRead) return;
-                              _selectDate(context).then((value) {
-                                setState(() {
-                                  widget.model.expectedReturningDate = value;
+                          GestureDetector(
+                            child: Text(
+                              _onlyRead
+                                  ? DateFormatUtil.formatYMD(
+                                          widget.model.expectedReturningDate) ??
+                                      ''
+                                  : DateFormatUtil.formatYMD(
+                                          widget.model.expectedReturningDate) ??
+                                      '点击选择日期',
+                              style: TextStyle(color: Colors.grey, fontSize: 16),
+                            ),
+                            onTap: () {
+                              if (_onlyRead) return;
+                                _selectDate(context).then((value) {
+                                  setState(() {
+                                    widget.model.expectedReturningDate = value;
+                                  });
                                 });
-                              });
-                          },
-                        )
-                      ],
+                            },
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Divider(
-                      height: 0,
-                      color: Colors.grey[400],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Divider(
+                        height: 0,
+                        color: Colors.grey[400],
+                      ),
                     ),
-                  ),
-                  TextFieldComponent(
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
+                    TextFieldComponent(
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                      enabled: !_onlyRead,
+                      focusNode: _remakeFocusNode,
+                      controller: _remakeController,
+                      leadingText: Text('备注',style: TextStyle(fontSize: 16,)),
+                      hintText:  _onlyRead ? '' : '请输入备注',
+                      leadingWidth: 100,
                     ),
-                    enabled: !_onlyRead,
-                    focusNode: _remakeFocusNode,
-                    controller: _remakeController,
-                    leadingText: '备注',
-                    hintText:  _onlyRead ? '' : '请输入备注',
-                    leadingWidth: 100,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Card(
-            elevation: 0,
-            margin: EdgeInsets.only(top: 10, bottom: 10),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Column(
-                children: <Widget>[
-                  TextFieldComponent(
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
+            Card(
+              elevation: 0,
+              margin: EdgeInsets.only(top: 10, bottom: 10),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Column(
+                  children: <Widget>[
+                    TextFieldComponent(
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                      enabled: !_onlyRead,
+                      focusNode: _relatedPartyFocusNode,
+                      controller: _relatedPartyController,
+                      leadingText: Text('关联方',style: TextStyle(fontSize: 16,)),
+                      hintText:
+                        _onlyRead ? '' : _type == LendBorrowType.BORROW ? '我借给谁的' : '谁借给我的',
+                      leadingWidth: 100,
                     ),
-                    enabled: !_onlyRead,
-                    focusNode: _relatedPartyFocusNode,
-                    controller: _relatedPartyController,
-                    leadingText: '关联方',
-                    hintText:
-                      _onlyRead ? '' : _type == LendBorrowType.BORROW ? '我借给谁的' : '谁借给我的',
-                    leadingWidth: 100,
-                  ),
-                  TextFieldComponent(
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
+                    TextFieldComponent(
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                      enabled: !_onlyRead,
+                      focusNode: _contactWayFocusNode,
+                      controller: _contactWayController,
+                      leadingText: Text('联系方式',style: TextStyle(fontSize: 16,)),
+                      hintText:  _onlyRead ? '' : '请输入联系方式',
+                      leadingWidth: 100,
                     ),
-                    enabled: !_onlyRead,
-                    focusNode: _contactWayFocusNode,
-                    controller: _contactWayController,
-                    leadingText: '联系方式',
-                    hintText:  _onlyRead ? '' : '请输入联系方式',
-                    leadingWidth: 100,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -364,7 +370,7 @@ class SampleProductHistoryFormPageState
     return showDatePicker(
       context: context,
       initialDate: widget.model.expectedReturningDate ?? DateTime.now(),
-      firstDate: DateTime(2015, 8),
+      firstDate: DateTime(1999),
       lastDate: DateTime(2101),
     );
   }
@@ -470,9 +476,10 @@ class SampleProductHistoryFormPageState
             ),
             focusNode: _nameFocusNode,
             controller: _nameController,
-            leadingText: '样衣名称',
+            leadingText: Text('样衣名称',style: TextStyle(fontSize: 16,)),
             hintText: '请输入样衣名称',
             leadingWidth: 100,
+            enabled: !_onlyRead,
           ),
           TextFieldComponent(
             style: TextStyle(
@@ -481,9 +488,10 @@ class SampleProductHistoryFormPageState
             ),
             focusNode: _skuIDFocusNode,
             controller: _skuIDController,
-            leadingText: '货号',
+            leadingText: Text('货号',style: TextStyle(fontSize: 16,)),
             hintText: '请输入货号',
             leadingWidth: 100,
+            enabled: !_onlyRead,
           ),
         ],
       );

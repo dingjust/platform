@@ -668,10 +668,10 @@ class _RequirementOrderDetailPageState
       );
     }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       return Container(
-        width: double.infinity,
         child: Container(
           height: 30,
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          margin: EdgeInsets.only(bottom: 20),
           child: FlatButton(
               onPressed: () async {
                 QuoteModel newQuote =
@@ -690,13 +690,11 @@ class _RequirementOrderDetailPageState
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               child: Text(
                 '去报价',
                 style: TextStyle(
                     color: Color.fromRGBO(36, 38, 41, 1),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
+                    fontSize: 16,),
               )),
         ),
       );

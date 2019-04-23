@@ -1,5 +1,5 @@
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_search_delegate_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
-import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -9,13 +9,9 @@ import 'package:widgets/widgets.dart';
 class RequirementPoolRecommend extends StatefulWidget {
   final List<CategoryModel> categories;
 
-  RequirementPoolRecommend({this.categories});
+  RequirementPoolRecommend({this.categories, this.requirementFilterCondition});
 
-  ///当前选中条件
-  final RequirementFilterCondition currentCodition = RequirementFilterCondition(
-      categories: [],
-      dateRange: RequirementOrderDateRange.ALL,
-      machiningType: null);
+  final RequirementFilterCondition requirementFilterCondition;
 
   _RequirementPoolRecommendState createState() =>
       _RequirementPoolRecommendState();
@@ -31,6 +27,9 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
   List<CategoryModel> _minCategorySelect = [];
 
   String filterBarLabel = '综合排序';
+
+  ///当前选中条件
+  RequirementFilterCondition currentCodition;
 
   List<FilterConditionEntry> dateRangeConditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(
@@ -63,6 +62,15 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
         .map((category) =>
             FilterConditionEntry(label: category.name, value: category))
         .toList());
+
+    if (widget.requirementFilterCondition != null) {
+      currentCodition = widget.requirementFilterCondition;
+    } else {
+      currentCodition = RequirementFilterCondition(
+          categories: [],
+          dateRange: RequirementOrderDateRange.ALL,
+          machiningType: null);
+    }
     super.initState();
   }
 
@@ -77,7 +85,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
             centerTitle: true,
             elevation: 0.5,
             title: Text(
-              '推荐需求',
+              '${generateTitle()}',
               style: TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
@@ -88,7 +96,8 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                 ),
                 onPressed: () => showSearch(
                     context: context,
-                    delegate: RequirementOrderSearchDelegate()),
+                    delegate:
+                        RequirementOrderSearchDelegatePage(isRecommend: true)),
               ),
             ],
           ),
@@ -169,13 +178,21 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                 ),
                 Expanded(
                   child: OrdersListView(
-                    currentCodition: widget.currentCodition,
+                    currentCodition: currentCodition,
                   ),
                 )
               ],
             ),
           ),
         ));
+  }
+
+  String generateTitle() {
+    if (currentCodition.keyword == null || currentCodition.keyword == '') {
+      return '推荐需求';
+    } else {
+      return '${currentCodition.keyword}';
+    }
   }
 }
 

@@ -22,7 +22,7 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
                 text: TextSpan(
                     text: '交货时间',
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: Colors.black
                     ),
@@ -30,7 +30,7 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
                       TextSpan(
                           text: ' *',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Colors.red)
                       ),
@@ -54,8 +54,8 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
         onTap: () {
           showDatePicker(
             context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime.now(),
+            initialDate: widget.item.details?.expectedDeliveryDate ?? now,
+            firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
             lastDate: DateTime(2999),
           ).then((value) {
             setState(() {

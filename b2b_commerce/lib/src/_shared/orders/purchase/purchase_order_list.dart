@@ -3,15 +3,15 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import './purchase_order_list_item.dart';
 import '../../widgets/scrolled_to_end_tips.dart';
 
-import './purchase_order_list_item.dart';
-
 class PurchaseOrderList extends StatefulWidget {
-  PurchaseOrderList({Key key, this.status,this.factoryUid});
+  PurchaseOrderList({Key key, this.status,this.companyUid,this.keyword});
 
+  final String keyword;
   final EnumModel status;
-  final String factoryUid;
+  final String companyUid;
 
   final ScrollController scrollController = ScrollController();
 
@@ -28,8 +28,8 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        if(widget.factoryUid != null){
-          bloc.lodingMoreByFactory(widget.factoryUid);
+        if(widget.companyUid != null){
+          bloc.lodingMoreByCompany(widget.companyUid);
         }else{
           bloc.loadingMoreByStatuses(widget.status.code);
         }
@@ -63,8 +63,8 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: RefreshIndicator(
         onRefresh: () async {
-          if(widget.factoryUid != null){
-            return await bloc.getData(widget.factoryUid);
+          if(widget.companyUid != null){
+            return await bloc.getPurchaseDataByCompany(widget.companyUid);
           }else{
             return await bloc.refreshData(widget.status.code);
           }
@@ -78,8 +78,8 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
               // initialData: null,
               builder: (BuildContext context, AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                 if (snapshot.data == null) {
-                  if(widget.factoryUid != null){
-                    bloc.getData(widget.factoryUid);
+                  if(widget.companyUid != null){
+                    bloc.getPurchaseDataByCompany(widget.companyUid);
                   }else{
                     bloc.filterByStatuses(widget.status.code);
                   }

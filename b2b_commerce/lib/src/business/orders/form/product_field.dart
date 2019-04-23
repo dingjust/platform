@@ -36,7 +36,10 @@ class ProductFieldState extends State<ProductField> {
             ),
           ),
         ),
-        Divider(height: 0,),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Divider(height: 0,color: Colors.grey[400],),
+        ),
         ListTile(
           leading: Text(
             '产品货号',
@@ -58,7 +61,10 @@ class ProductFieldState extends State<ProductField> {
             ),
           ),
         ),
-        Divider(height: 0,),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Divider(height: 0,color: Colors.grey[400],),
+        ),
       ],
     );
   }

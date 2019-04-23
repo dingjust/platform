@@ -45,8 +45,13 @@ class FactoryBLoC extends BLoCBase {
   bool lock = false;
 
   //查询所有工厂列表
-  filterByCondition(FactoryCondition factoryCondition,
-      {String condition, String sort, String requirementCode}) async {
+  filterByCondition(
+    FactoryCondition factoryCondition, {
+    String condition,
+    String sort,
+    String requirementCode,
+  }) async {
+    print('${factoryCondition.hashCode}');
     if (!lock) {
       lock = true;
       //重置参数
@@ -67,11 +72,10 @@ class FactoryBLoC extends BLoCBase {
         }
       } else {
         try {
-          
-          response = await http$
-              .post(Apis.factories, data: factoryCondition.toDataJson(),
-                  // data:{},
-                  queryParameters: {
+          response = await http$.post(Apis.factories,
+              data: factoryCondition.toDataJson(),
+              // data:{},
+              queryParameters: {
                 'page': currentPage,
                 'size': pageSize,
                 'sort': '${condition},${sort}'
@@ -95,8 +99,12 @@ class FactoryBLoC extends BLoCBase {
   }
 
   //邀请报价的工厂列表
-  filterRequestQuoteByCondition(FactoryCondition factoryCondition,
-      {String condition, String sort, String requirementCode}) async {
+  filterRequestQuoteByCondition(
+    FactoryCondition factoryCondition, {
+    String condition,
+    String sort,
+    String requirementCode,
+  }) async {
     if (!lock) {
       lock = true;
       //重置参数
@@ -127,8 +135,12 @@ class FactoryBLoC extends BLoCBase {
     }
   }
 
-  loadingMoreByCondition(FactoryCondition factoryCondition,
-      {String condition, String sort, String requirementCode}) async {
+  loadingMoreByCondition(
+    FactoryCondition factoryCondition, {
+    String condition,
+    String sort,
+    String requirementCode,
+  }) async {
     if (!lock) {
       lock = true;
 
@@ -182,8 +194,12 @@ class FactoryBLoC extends BLoCBase {
   }
 
   //邀请报价的工厂列表
-  loadingMoreRequestQuoteByCondition(FactoryCondition factoryCondition,
-      {String condition, String sort, String requirementCode}) async {
+  loadingMoreRequestQuoteByCondition(
+    FactoryCondition factoryCondition, {
+    String condition,
+    String sort,
+    String requirementCode,
+  }) async {
     if (!lock) {
       lock = true;
 

@@ -149,7 +149,8 @@ class CertifiedTagsAndLabelsText extends StatelessWidget {
       _isApproved()
           ? Tag(
               label: '  已认证  ',
-              backgroundColor: Color.fromRGBO(254, 252, 235, 1),
+              color: Colors.black,
+              backgroundColor: Color.fromRGBO(255,214,12,1),
             )
           : Tag(
               label: '  未认证  ',
@@ -160,7 +161,7 @@ class CertifiedTagsAndLabelsText extends StatelessWidget {
     model.labels.forEach((label) {
       tags.add(Tag(
         label: label.name,
-        color: Colors.grey,
+        color:Color.fromRGBO(255, 133, 148, 1),
       ));
     });
 
@@ -222,10 +223,12 @@ class CategoriesText extends StatelessWidget {
 
   Widget _buildTag(int i) {
     return Container(
-      margin: EdgeInsets.only(right: 10),
+      margin: EdgeInsets.only(right: 5),
       child: Text(
-        '${model.categories[i].name}',
-        style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+        '${model.adeptAtCategories[i].name}',
+        style: TextStyle(
+          fontSize: 14,
+            color: Color.fromRGBO(180, 180, 180, 1)),
       ),
     );
   }
@@ -233,14 +236,14 @@ class CategoriesText extends StatelessWidget {
   Widget _buildTags() {
     // 取前3条
     List<Container> tags = <Container>[];
-    if (model.categories != null) {
+    if (model.adeptAtCategories != null) {
       // TODO: 用更好的方法实现：先截取，再生成
-      if (model.categories.length > 6) {
-        for (int i = 0; i < model.categories.length && i < 6; i++) {
+      if (model.adeptAtCategories.length > 5) {
+        for (int i = 0; i < model.adeptAtCategories.length && i < 5; i++) {
           tags.add(_buildTag(i));
         }
       } else {
-        for (int i = 0; i < model.categories.length; i++) {
+        for (int i = 0; i < model.adeptAtCategories.length; i++) {
           tags.add(_buildTag(i));
         }
       }
@@ -316,11 +319,11 @@ class InviteFactoryButton extends StatelessWidget {
 class Tag extends StatelessWidget {
   const Tag({
     Key key,
-    this.width = 32,
-    this.height = 20,
+    this.width = 30,
+    this.height = 18,
     @required this.label,
-    this.color = const Color.fromRGBO(244, 143, 177, 1.0),
-    this.backgroundColor = const Color.fromRGBO(248, 187, 208, 0.3),
+    this.color = const Color.fromRGBO(255, 133, 148, 1.0),
+    this.backgroundColor = const Color.fromRGBO(255, 243, 243, 1),
   }) : super(key: key);
 
   final double width;
@@ -332,16 +335,15 @@ class Tag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 1, 4, 1),
       height: height,
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: Center(
         child: Text(
           label,
-          style: TextStyle(color: color, fontSize: 14),
+          style: TextStyle(color: color, fontSize: 12),
         ),
       ),
-      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(2)),
+      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(6)),
     );
   }
 }

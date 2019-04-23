@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:widgets/src/commons/carousel/banner_jump_detail.dart';
 
 /// 轮播图
 class Carousel<T extends MediaModel> extends StatefulWidget {
@@ -135,24 +138,32 @@ class _CarouselState extends State<Carousel> {
 
   Widget _buildItem(BuildContext context, int index) {
     MediaModel item = _items[index];
-    return GestureDetector(
-      onTap: () {
-        /// TODO: router
-//        RouteUtil.route2Detail(context, '${item.id}'); // 通过路由跳转到详情
-      },
-      child: GestureDetector(
+    return  GestureDetector(
         onTapDown: (down) {
           _isEndScroll = false;
         },
         onTapUp: (up) {
           _isEndScroll = true;
         },
-        child: FadeInImage.memoryNetwork(
-          placeholder: kTransparentImage,
-          image: item.url,
-          fit: BoxFit.cover,
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => BannerJumpDetailPage())
+          );
+        },
+        child: CachedNetworkImage(
+            imageUrl: item.url,
+            fit: BoxFit.cover,
+            placeholder: (context, url) =>  SpinKitRing(
+              color: Colors.black12,
+              lineWidth:2,
+              size: 30.0,
+            ),
+            errorWidget: (context, url, error) => SpinKitRing(
+              color: Colors.black12,
+              lineWidth:2,
+              size: 30,
+            )
         ),
-      ),
     );
   }
 
