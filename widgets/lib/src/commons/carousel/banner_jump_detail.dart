@@ -34,15 +34,17 @@ class _BannerJumpDetailPage extends State<BannerJumpDetailPage> {
     return Container(
       height: 600,
       child: CachedNetworkImage(
-          imageUrl: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556530085&di=d23b57d9f5abf60b3544f27199943803&imgtype=jpg&er=1&src=http%3A%2F%2Fimg001.hc360.cn%2Fm7%2FM01%2F5A%2F4F%2FwKhQpFWjbZCEYEkpAAAAAATIxUw568.jpg",
+          imageUrl: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=270792303,1544523664&fm=26&gp=0.jpg",
           fit: BoxFit.fill,
           placeholder: (context, url) =>  SpinKitRing(
-            color: Colors.white,
-            size: 50.0,
+            color: Colors.black12,
+            size: 30.0,
+            lineWidth: 2,
           ),
           errorWidget: (context, url, error) => SpinKitRing(
-            color: Color(0xFF24292E),
-            size: 50,
+            color: Colors.black12,
+            size: 30.0,
+            lineWidth: 2,
           )
       ),
     );
@@ -52,7 +54,7 @@ class _BannerJumpDetailPage extends State<BannerJumpDetailPage> {
     return Container(
       height: 600,
       child: CachedNetworkImage(
-          imageUrl: "https://img.alicdn.com/imgextra/i2/116883537/O1CN01PEI4Zv1bzzNviK22y_!!116883537.jpg",
+          imageUrl: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=270792303,1544523664&fm=26&gp=0.jpg",
           fit: BoxFit.fill,
           placeholder: (context, url) =>  SpinKitRing(
             color: Colors.black12,
@@ -72,15 +74,17 @@ class _BannerJumpDetailPage extends State<BannerJumpDetailPage> {
     return Container(
       height: 600,
       child: CachedNetworkImage(
-        imageUrl: "https://img.alicdn.com/imgextra/i2/116883537/O1CN01PEI4Zv1bzzNviK22y_!!116883537.jpg",
+        imageUrl: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=270792303,1544523664&fm=26&gp=0.jpg",
         fit: BoxFit.fill,
         placeholder: (context, url) =>  SpinKitRing(
-          color: Colors.white,
-          size: 50.0,
+          color: Colors.black12,
+          size: 30.0,
+          lineWidth: 2,
         ),
         errorWidget: (context, url, error) => SpinKitRing(
-            color: Color(0xFF24292E),
-          size: 50,
+          color: Colors.black12,
+          size: 30.0,
+          lineWidth: 2,
         )
       ),
     );
