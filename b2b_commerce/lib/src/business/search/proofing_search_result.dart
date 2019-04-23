@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/_shared/orders/proofing/proofing_list.dart';
-import 'package:b2b_commerce/src/_shared/orders/quote/quote_list.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';

@@ -3,9 +3,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../../widgets/scrolled_to_end_tips.dart';
-
 import './requirement_order_list_item.dart';
+import '../../widgets/scrolled_to_end_tips.dart';
 
 /// 需求订单列表
 class RequirementOrderList extends StatefulWidget {
