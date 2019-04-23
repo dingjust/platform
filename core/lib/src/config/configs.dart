@@ -28,7 +28,10 @@ class GlobalConfigs {
   static const ORDER_PRODUCT_HISTORY_KEYWORD_KEY =
       'order_product_history_keyword_key';
   static const FACTORY_HISTORY_KEYWORD_KEY = 'factory_history_keyword_key';
-  static const BRAND_INDEX_HISTORY_KEYWORD_KEY = 'brand_index_history_keyword_key';
+  static const BRAND_INDEX_HISTORY_KEYWORD_KEY =
+      'brand_index_history_keyword_key';
+  static const Requirement_HISTORY_KEYWORD_KEY =
+      'requirement_history_keyword_key';
 
   /// grant types
   static const GRANT_TYPE_PASSWORD = 'password';
