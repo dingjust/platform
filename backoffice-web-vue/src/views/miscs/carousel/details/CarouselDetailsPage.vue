@@ -1,11 +1,23 @@
 <template>
   <div class="animated fadeIn">
-    <carousel-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <carousel-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" @onUpdate="onUpdate"/>
     <div class="pt-2"></div>
     <carousel-form ref="form" :slot-data="slotData" :read-only="isNewlyCreated"/>
     <div class="pt-2"></div>
-    <carousel-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <carousel-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" @onUpdate="onUpdate"/>
+    <el-dialog v-if="isTenant()" title="修改" :modal="false"
+               :visible.sync="updateDialogVisible"
+               :show-close="false" append-to-body width="50%">
+      <carousel-form ref="form2" :slot-data="slotData" :read-only="true"/>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateSubmit">确 定</el-button>
+      </span>
+
+    </el-dialog>
   </div>
+
+
 </template>
 
 <script>
@@ -24,10 +36,26 @@
       ...mapActions({
         refresh: 'refresh'
       }),
+      onUpdate(){
+        this.updateDialogVisible = true;
+      },
+      async updateSubmit(){
+          const url = this.apis().updateCarousel(this.slotData.id);
+          const result = await this.$http.put(url, this.slotData);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          this.$message.success('修改成功');
+          this.updateDialogVisible = false;
+      },
       onSubmit() {
-        if (this.$refs['form'].validate()) {
-          this._onSubmit();
-        }
+        this.$refs['form'].validate((valid)=> {
+          if(valid){
+            this._onSubmit();
+          }
+
+        })
       },
       onCancel() {
         this.fn.closeSlider();
@@ -51,11 +79,11 @@
     },
     computed: {
       isNewlyCreated: function () {
-        return this.slotData.id === null;
+        return this.slotData.id == null;
       }
     },
     data() {
-      return {}
+      return {updateDialogVisible:false,}
     }
   }
 </script>

@@ -62,6 +62,7 @@
       uploadFormData: function () {
         return {
           fileFormat: 'DefaultFileFormat',
+          conversionGroup: 'DefaultProductConversionGroup',
         };
       },
       headers: function () {
