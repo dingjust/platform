@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:widgets/src/commons/carousel/banner_jump_detail.dart';
@@ -148,10 +150,19 @@ class _CarouselState extends State<Carousel> {
               builder: (context) => BannerJumpDetailPage())
           );
         },
-        child: FadeInImage.memoryNetwork(
-          placeholder: kTransparentImage,
-          image: item.url,
-          fit: BoxFit.cover,
+        child: CachedNetworkImage(
+            imageUrl: item.url,
+            fit: BoxFit.cover,
+            placeholder: (context, url) =>  SpinKitRing(
+              color: Colors.black12,
+              lineWidth:2,
+              size: 30.0,
+            ),
+            errorWidget: (context, url, error) => SpinKitRing(
+              color: Colors.black12,
+              lineWidth:2,
+              size: 30,
+            )
         ),
     );
   }

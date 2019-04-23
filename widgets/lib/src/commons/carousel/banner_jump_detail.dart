@@ -55,12 +55,14 @@ class _BannerJumpDetailPage extends State<BannerJumpDetailPage> {
           imageUrl: "https://img.alicdn.com/imgextra/i2/116883537/O1CN01PEI4Zv1bzzNviK22y_!!116883537.jpg",
           fit: BoxFit.fill,
           placeholder: (context, url) =>  SpinKitRing(
-            color: Colors.white,
-            size: 50.0,
+            color: Colors.black12,
+            lineWidth: 2,
+            size: 30,
           ),
           errorWidget: (context, url, error) => SpinKitRing(
-            color: Color(0xFF24292E),
-            size: 50,
+            color: Colors.black12,
+            lineWidth: 2,
+            size: 30,
           )
       ),
     );

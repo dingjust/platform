@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
 import 'package:open_file/open_file.dart';
@@ -174,14 +176,28 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                 ],
               ),
               child: Container(
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image:
-                      NetworkImage('${widget.medias[index].actualUrl}'),
+                  padding: EdgeInsets.all(5),
+                  width: 80,
+                  height: 80,
+                  child: CachedNetworkImage(
+                      imageUrl: '${widget.medias[index].actualUrl}',
                       fit: BoxFit.cover,
-                    )),
+                      placeholder: (context, url) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30.0,
+                          ),
+                      errorWidget: (context, url, error) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          )
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  )
               ),
           ),
           onTap: () {

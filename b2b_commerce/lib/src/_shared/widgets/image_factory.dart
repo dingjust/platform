@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
@@ -36,12 +38,19 @@ class ImageFactory {
       margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
       width: 80,
       height: 80,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        image: DecorationImage(
-          image: NetworkImage('${media.previewUrl()}'),
-          fit: fit,
-        ),
+      child: CachedNetworkImage(
+          imageUrl: '${media.previewUrl()}',
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>  SpinKitRing(
+            color: Colors.black12,
+            lineWidth:2,
+            size: 30.0,
+          ),
+          errorWidget: (context, url, error) => SpinKitRing(
+            color: Colors.black12,
+            lineWidth:2,
+            size: 30,
+          )
       ),
     );
   }
@@ -77,7 +86,8 @@ class ImageFactory {
     }
 
     return CircleAvatar(
-      backgroundImage: NetworkImage('${profilePicture.previewUrl()}'),
+      backgroundImage:
+      NetworkImage('${profilePicture.previewUrl()}'),
       radius: radius,
     );
   }
