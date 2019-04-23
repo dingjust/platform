@@ -396,16 +396,18 @@ class RequirementPoolOrderItem extends StatelessWidget {
             ],
           ),
         ),
-        RichText(
-          text: TextSpan(
-              text: '￥',
-              style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
-              children: <TextSpan>[
-                TextSpan(
-                    text: '${order.details.maxExpectedPrice ?? 0}',
-                    style: TextStyle(fontSize: 18))
-              ]),
-        )
+        order.details.maxExpectedPrice != null
+            ? RichText(
+                text: TextSpan(
+                    text: '￥',
+                    style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '${order.details.maxExpectedPrice}',
+                          style: TextStyle(fontSize: 18))
+                    ]),
+              )
+            : Container()
       ],
     );
   }
@@ -506,8 +508,8 @@ class Logo extends StatelessWidget {
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
-              image: NetworkImage(
-                  '${order.belongTo.profilePicture.previewUrl()}'),
+              image:
+                  NetworkImage('${order.belongTo.profilePicture.previewUrl()}'),
               fit: BoxFit.cover,
             )),
       );

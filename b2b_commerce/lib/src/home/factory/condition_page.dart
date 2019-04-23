@@ -8,10 +8,14 @@ import 'package:widgets/widgets.dart';
 class ConditionPage extends StatefulWidget {
   final FactoryCondition factoryCondition;
 
+  final String requirementCode;
+
+  List<LabelModel> labels;
+
   /// 大类
   final List<CategoryModel> categories;
 
-  ConditionPage({Key key, @required this.categories, this.factoryCondition})
+  ConditionPage({Key key, @required this.categories, this.factoryCondition,this.requirementCode,this.labels})
       : super(key: key);
 
   @override
@@ -22,45 +26,54 @@ class _ConditionPageState extends State<ConditionPage> {
   PopulationScale populationScale;
 
   @override
+  void initState() {
+    if(widget.factoryCondition.labels == null){
+      widget.factoryCondition.labels = new List();
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () {
           Navigator.pop(context, widget.factoryCondition);
         },
         child: Scaffold(
-          appBar: AppBar(
-            title: Text('更多'),
-            centerTitle: true,
-            elevation: 0.5,
-          ),
+//          appBar: AppBar(
+//            title: Text('更多'),
+//            centerTitle: true,
+//            elevation: 0.5,
+//          ),
           body: Container(
               color: Colors.white,
               padding: const EdgeInsets.only(left: 10, top: 5),
               child: CustomScrollView(
                 slivers: <Widget>[
-                  _buildLabel('规模'),
-                  _buildPopulationBlock(),
+                  _buildLabel('面料类别'),
+                  _buildMajorCategoryBlock(),
                   _buildLabel('加工方式'),
                   _buildCooperationBlock(),
-                  _buildLabel('大类'),
-                  _buildMajorCategoryBlock(),
+                  _buildLabel('规模'),
+                  _buildPopulationBlock(),
                   SliverList(
                     delegate: SliverChildListDelegate(<Widget>[
-                      _buildCategoryBlock(),
-                      _buildAddressBlock(),
+//                      _buildCategoryBlock(),
+//                      _buildAddressBlock(),
                       _buildStarsBlock(),
                     ]),
                   ),
+                  _buildLabel('工厂属性'),
+                  _buildLabelsBlock(),
                 ],
               )),
           persistentFooterButtons: <Widget>[
             Container(
-              width: 150,
               height: 40,
               child: Center(
                 child: FlatButton(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 50),
+                        vertical: 0, horizontal: 20),
                     color: Colors.grey,
                     child: const Text(
                       '重置',
@@ -84,13 +97,12 @@ class _ConditionPageState extends State<ConditionPage> {
               ),
             ),
             Container(
-              width: 150,
               margin: EdgeInsets.only(right: 50),
               height: 40,
               child:Center(
                 child:  FlatButton(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 50),
+                        vertical: 0, horizontal: 20),
                     color: Color(0xFFFFD600),
                     child: const Text(
                       '确定',
@@ -102,6 +114,11 @@ class _ConditionPageState extends State<ConditionPage> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: const BorderRadius.all(Radius.circular(20))),
                     onPressed: () {
+                      ///条件更新数据
+                      FactoryBLoC.instance.filterByCondition(
+                        widget.factoryCondition,
+                        requirementCode: widget.requirementCode,
+                      );
                       Navigator.pop(context, widget.factoryCondition);
                     }),
               )
@@ -214,7 +231,7 @@ class _ConditionPageState extends State<ConditionPage> {
               label: Text(
                   '${CooperationModesLocalizedMap[CooperationModes.values[index]]}',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
                   )),
               selectedColor: Color.fromRGBO(255, 214, 12, 1),
               backgroundColor: Colors.white,
@@ -238,6 +255,47 @@ class _ConditionPageState extends State<ConditionPage> {
       ),
     );
   }
+
+  Widget _buildLabelsBlock() {
+      return SliverPadding(
+        padding: EdgeInsets.all(10),
+        sliver: SliverGrid(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, //Grid按两列显示
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            childAspectRatio: 4.0,
+          ),
+          delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+              //创建子widget
+              return FilterChip(
+                label: Text('${widget.labels[index].name}',
+                    style: TextStyle(
+                      fontSize: 18,
+                    )),
+                selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                backgroundColor: Colors.white,
+                selected: widget.factoryCondition.labels.contains(widget.labels[index])
+                    ,
+                onSelected: ((value) {
+                  print(value);
+                  setState(() {
+                    if (value) {
+                      widget.factoryCondition.labels.add(
+                          widget.labels[index]);
+                    } else {
+                      widget.factoryCondition.labels.remove(widget.labels[index]);
+                    }
+                  });
+                }),
+              );
+            },
+            childCount: widget.labels.length,
+          ),
+        ),
+      );
+    }
 
   Widget _buildAddressBlock() {
     return ConditionBlock(

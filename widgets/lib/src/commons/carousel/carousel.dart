@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:widgets/src/commons/carousel/banner_jump_detail.dart';
 
 /// 轮播图
 class Carousel<T extends MediaModel> extends StatefulWidget {
@@ -135,24 +136,23 @@ class _CarouselState extends State<Carousel> {
 
   Widget _buildItem(BuildContext context, int index) {
     MediaModel item = _items[index];
-    return GestureDetector(
-      onTap: () {
-        /// TODO: router
-//        RouteUtil.route2Detail(context, '${item.id}'); // 通过路由跳转到详情
-      },
-      child: GestureDetector(
+    return  GestureDetector(
         onTapDown: (down) {
           _isEndScroll = false;
         },
         onTapUp: (up) {
           _isEndScroll = true;
         },
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => BannerJumpDetailPage())
+          );
+        },
         child: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
           image: item.url,
           fit: BoxFit.cover,
         ),
-      ),
     );
   }
 

@@ -35,6 +35,8 @@ class FactoryCondition {
   /// 加工类型
   List<CooperationModes> cooperationModes;
 
+
+
   ///关键字
   String keyword;
 

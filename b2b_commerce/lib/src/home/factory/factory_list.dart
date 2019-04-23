@@ -9,10 +9,16 @@ import 'package:widgets/widgets.dart';
 
 class FactoryPage extends StatefulWidget {
   FactoryPage(
-    this.factoryCondition, {
+      this.factoryCondition, {
     this.route,
     this.requirementCode,
+    this.categories,
+        this.labels,
   });
+
+  final List<CategoryModel> categories ;
+
+  List<LabelModel> labels;
 
   final String route;
 
@@ -53,6 +59,7 @@ class _FactoryPageState extends State<FactoryPage> {
     }
 
     super.initState();
+
   }
 
   void changeCondition(FilterConditionEntry condition) {
@@ -61,6 +68,7 @@ class _FactoryPageState extends State<FactoryPage> {
     });
     FactoryBLoC.instance.clear();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,15 +106,23 @@ class _FactoryPageState extends State<FactoryPage> {
           body: Scaffold(
               appBar: AppBar(
                 elevation: 0,
-                bottom: FilterBar(
+                title: FilterBar(
                   onChanged: (condition) => changeCondition(condition),
                   filterConditionEntries: filterConditionEntries,
                   action: [
-                    ConditionPageButton(
-                      factoryCondition: factoryCondition,
-                      requirementCode: widget.requirementCode,
-                    )
+//                    ConditionPageButton(
+//                      factoryCondition: factoryCondition,
+//                      requirementCode: widget.requirementCode,
+//                    )
                   ],
+                ),
+                  automaticallyImplyLeading: false,
+              ),
+              endDrawer: Drawer(
+                child:  ConditionPage(
+                    factoryCondition: factoryCondition,
+                    categories: widget.categories,
+                    labels: widget.labels,
                 ),
               ),
               body: FactoryListView(
@@ -147,7 +163,6 @@ class ConditionPageButton extends StatelessWidget {
               await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ConditionPage(
-                    categories: categories,
                     factoryCondition: factoryCondition,
                   ),
             ),

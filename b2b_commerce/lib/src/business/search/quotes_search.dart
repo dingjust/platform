@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/_shared/orders/quote/quote_list.dart';
 import 'package:b2b_commerce/src/business/search/quotes_search_result.dart';
-import 'package:b2b_commerce/src/production/production_search_result.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
