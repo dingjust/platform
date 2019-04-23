@@ -141,12 +141,12 @@ class SampleProductHistoryFormPageState
                   if(widget.isCreated){
                     ProductRepositoryImpl().createSampleHistory(widget.model).then((a){
                       Navigator.pop(context);
-                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', LendBorrowType.BORROW.toString());
+                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', widget.model.type.toString());
                     });
                   }else{
                     ProductRepositoryImpl().updateSampleHistory(widget.model).then((a){
                       Navigator.pop(context);
-                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', LendBorrowType.BORROW.toString());
+                      SampleProductHistoryBLoC.instance.filterByStatuses('ALL', widget.model.type.toString());
                     });
                   }
 
@@ -178,8 +178,7 @@ class SampleProductHistoryFormPageState
                       focusNode: _quantityFocusNode,
                       controller: _quantityController,
                       inputType: TextInputType.number,
-                      leadingText:
-                          _type == LendBorrowType.BORROW ? '借出数量' : '借入数量',
+                      leadingText: Text(_type == LendBorrowType.BORROW ? '借出数量' : '借入数量',style: TextStyle(fontSize: 16,)),
                       hintText:
                           _onlyRead ? '' : _type == LendBorrowType.BORROW ? '请输入借出数量' : '请输入借入数量',
                       leadingWidth: 100,
@@ -234,7 +233,7 @@ class SampleProductHistoryFormPageState
                       enabled: !_onlyRead,
                       focusNode: _remakeFocusNode,
                       controller: _remakeController,
-                      leadingText: '备注',
+                      leadingText: Text('备注',style: TextStyle(fontSize: 16,)),
                       hintText:  _onlyRead ? '' : '请输入备注',
                       leadingWidth: 100,
                     ),
@@ -257,7 +256,7 @@ class SampleProductHistoryFormPageState
                       enabled: !_onlyRead,
                       focusNode: _relatedPartyFocusNode,
                       controller: _relatedPartyController,
-                      leadingText: '关联方',
+                      leadingText: Text('关联方',style: TextStyle(fontSize: 16,)),
                       hintText:
                         _onlyRead ? '' : _type == LendBorrowType.BORROW ? '我借给谁的' : '谁借给我的',
                       leadingWidth: 100,
@@ -270,7 +269,7 @@ class SampleProductHistoryFormPageState
                       enabled: !_onlyRead,
                       focusNode: _contactWayFocusNode,
                       controller: _contactWayController,
-                      leadingText: '联系方式',
+                      leadingText: Text('联系方式',style: TextStyle(fontSize: 16,)),
                       hintText:  _onlyRead ? '' : '请输入联系方式',
                       leadingWidth: 100,
                     ),
@@ -371,7 +370,7 @@ class SampleProductHistoryFormPageState
     return showDatePicker(
       context: context,
       initialDate: widget.model.expectedReturningDate ?? DateTime.now(),
-      firstDate: DateTime(2015, 8),
+      firstDate: DateTime(1999),
       lastDate: DateTime(2101),
     );
   }
@@ -477,9 +476,10 @@ class SampleProductHistoryFormPageState
             ),
             focusNode: _nameFocusNode,
             controller: _nameController,
-            leadingText: '样衣名称',
+            leadingText: Text('样衣名称',style: TextStyle(fontSize: 16,)),
             hintText: '请输入样衣名称',
             leadingWidth: 100,
+            enabled: !_onlyRead,
           ),
           TextFieldComponent(
             style: TextStyle(
@@ -488,9 +488,10 @@ class SampleProductHistoryFormPageState
             ),
             focusNode: _skuIDFocusNode,
             controller: _skuIDController,
-            leadingText: '货号',
+            leadingText: Text('货号',style: TextStyle(fontSize: 16,)),
             hintText: '请输入货号',
             leadingWidth: 100,
+            enabled: !_onlyRead,
           ),
         ],
       );

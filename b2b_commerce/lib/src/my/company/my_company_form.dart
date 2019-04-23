@@ -344,7 +344,7 @@ class RegisterDateWell extends StatelessWidget {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime(1799),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) selectDate(picked);
   }

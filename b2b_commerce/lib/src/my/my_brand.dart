@@ -65,10 +65,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
     ];
 
     //获取与该品牌最新的报价单
-    _widgets.add(buildAllQuoteItem(context));
-
+//    _widgets.add(buildQuoteItem());
     //获取与该品牌最新的生产订单
-    _widgets.add(buildAllPurchaseItem(context));
+//    _widgets.add(buildPurchaseOrderItem());
 
     _widgets.add(_buildBrandCertificate(context));
     _widgets.add(_buildBrandRegisterDate());
@@ -88,77 +87,42 @@ class _MyBrandPageState extends State<MyBrandPage> {
     );
   }
 
-  Column buildAllPurchaseItem(BuildContext context) {
-    return Column(
-    children: <Widget>[
-      buildPurchaseOrderItem(),
-      Container(
-        color: Colors.white,
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Center(
-          child: GestureDetector(
-            child: Text(
-              '查看全部>>',
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 18,
-              ),
-            ),
-            onTap: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CompanyPurchaseListPage(
-                        companyUid: widget.brand.uid,
-                      )));
-            },
-          ),
-        ),
-      )
-    ],
-  );
-  }
-
-  Column buildAllQuoteItem(BuildContext context) {
-    return Column(
-    children: <Widget>[
-      buildQuoteItem(),
-      Container(
-        color: Colors.white,
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Center(
-          child: GestureDetector(
-            child: Text(
-              '查看全部>>',
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 18,
-              ),
-            ),
-            onTap: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CompanyQuoteListPage(
-                        companyUid: widget.brand.uid,
-                      )));
-            },
-          ),
-        ),
-      )
-    ],
-  );
-  }
-
   FutureBuilder<PurchaseOrderModel> buildPurchaseOrderItem() {
     return FutureBuilder(
       future: getPurchaseOrderItem(),
       builder: (context, snapshot) {
         return Offstage(
           offstage: !(snapshot.hasData && snapshot.data != null),
-          child: PurchaseOrderItem(
-            order: snapshot.data,
-          ),
+          child: Column(
+            children: <Widget>[
+              PurchaseOrderItem(
+                order: snapshot.data,
+              ),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Center(
+                  child: GestureDetector(
+                    child: Text(
+                      '查看全部>>',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CompanyPurchaseListPage(
+                                companyUid: widget.brand.uid,
+                              )));
+                    },
+                  ),
+                ),
+              )
+            ],
+          )
         );
       },
     );
@@ -171,10 +135,37 @@ class _MyBrandPageState extends State<MyBrandPage> {
         print(snapshot.data);
         return Offstage(
           offstage: !(snapshot.hasData && snapshot.data != null),
-          child: QuoteListItem(
-            model: snapshot.data,
-            showActions: false,
-          ),
+          child: Column(
+            children: <Widget>[
+              QuoteListItem(
+                model: snapshot.data,
+                showActions: false,
+              ),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Center(
+                  child: GestureDetector(
+                    child: Text(
+                      '查看全部>>',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CompanyQuoteListPage(
+                                companyUid: widget.brand.uid,
+                              )));
+                    },
+                  ),
+                ),
+              )
+            ],
+          )
         );
       },
     );

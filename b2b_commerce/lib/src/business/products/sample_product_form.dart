@@ -55,13 +55,13 @@ class SampleProductFormPageState extends State<SampleProductFormPage> {
           TextFieldComponent(
             focusNode: _nameFocusNode,
             controller: _nameController,
-            leadingText: '样衣名称',
+            leadingText: Text('样衣名称',style: TextStyle(fontSize: 16,)),
             hintText: '请输入样衣名称',
           ),
           TextFieldComponent(
             focusNode: _skuIDFocusNode,
             controller: _skuIDController,
-            leadingText: '货号',
+            leadingText: Text('货号',style: TextStyle(fontSize: 16,)),
             hintText: '请输入样衣名称',
           ),
           Expanded(

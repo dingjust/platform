@@ -261,8 +261,10 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
             focusNode: _unitPriceFocusNode,
-            leadingText: '订单报价￥',
+            leadingText: Text('订单报价',style: TextStyle(fontSize: 16,)),
+            isRequired: true,
             hintText: '必填',
+            prefix: '￥',
             autofocus: false,
             inputType: TextInputType.number,
             textAlign: TextAlign.right,
@@ -321,8 +323,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _fabricFocusNode,
-                  leadingText: '面料价格￥',
+                  leadingText: Text('面料价格',style: TextStyle(fontSize: 16,)),
                   hintText: '填写',
+                  prefix: '￥',
                   autofocus: false,
                   inputType: TextInputType.number,
                   textAlign: TextAlign.right,
@@ -336,8 +339,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _excipientsFocusNode,
-                  leadingText: '辅料价格￥',
+                  leadingText: Text('辅料价格',style: TextStyle(fontSize: 16,)),
                   hintText: '填写',
+                  prefix: '￥',
                   autofocus: false,
                   inputType: TextInputType.number,
                   textAlign: TextAlign.right,
@@ -350,8 +354,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _processingFocusNode,
-                  leadingText: '加工价格￥',
+                  leadingText: Text('加工价格',style: TextStyle(fontSize: 16,)),
                   hintText: '填写',
+                  prefix: '￥',
                   autofocus: false,
                   inputType: TextInputType.number,
                   textAlign: TextAlign.right,
@@ -364,8 +369,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   dividerPadding: EdgeInsets.only(),
                   focusNode: _otherFocusNode,
-                  leadingText: '其他价格￥',
+                  leadingText: Text('其他价格',style: TextStyle(fontSize: 16,)),
                   hintText: '填写',
+                  prefix: '￥',
                   autofocus: false,
                   inputType: TextInputType.number,
                   textAlign: TextAlign.right,
@@ -387,8 +393,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
         padding: EdgeInsets.symmetric(vertical: 5),
         dividerPadding: EdgeInsets.only(),
         focusNode: _sampleFocusNode,
-        leadingText: '打样费￥',
+        leadingText: Text('打样费',style: TextStyle(fontSize: 16,)),
         hintText: '填写',
+        prefix: '￥',
         autofocus: false,
         inputType: TextInputType.number,
         textAlign: TextAlign.right,
@@ -472,7 +479,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
         padding: EdgeInsets.symmetric(vertical: 5),
         dividerPadding: EdgeInsets.only(),
         focusNode: _remarksFocusNode,
-        leadingText: '备注',
+        leadingText: Text('备注',style: TextStyle(fontSize: 16,)),
         hintText: '填写',
         autofocus: false,
         inputType: TextInputType.text,
@@ -507,15 +514,13 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: new DateTime(1999),
-        lastDate: new DateTime(2999));
+        initialDate: expectedDeliveryDate,
+        firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+        lastDate: DateTime(2999));
 
-    if (_picked != null) {
       setState(() {
         quoteDate = _picked;
       });
-    }
   }
 
   void onSubmit() {

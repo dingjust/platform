@@ -118,7 +118,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
               TextFieldComponent(
                 controller: _nameController,
                 focusNode: _nameFocusNode,
-                leadingText: '姓名',
+                leadingText: Text('姓名',style: TextStyle(fontSize: 16,)),
                 hintText: '请输入姓名',
                 onChanged: (value) {
                   widget.item.name = value;
@@ -133,7 +133,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
               TextFieldComponent(
                 controller: _mobileNumberController,
                 focusNode: _mobileNumberFocusNode,
-                leadingText: '手机号码',
+                leadingText: Text('手机号码',style: TextStyle(fontSize: 16,)),
                 hintText: '请输入手机号码',
                 inputType: TextInputType.number,
                 onChanged: (value) {

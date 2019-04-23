@@ -72,7 +72,7 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
               focusNode: _minPriceFocusNode,
               controller: _minPriceController,
               autofocus: true,
-              leadingText: '价格下限',
+              leadingText: Text('价格下限',style: TextStyle(fontSize: 16,)),
               hintText: '请输入价格下限',
               inputType: TextInputType.number,
             ),
@@ -83,7 +83,7 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
             child: TextFieldComponent(
               focusNode: _maxPriceFocusNode,
               controller: _maxPriceController,
-              leadingText: '价格上限',
+              leadingText: Text('价格上限',style: TextStyle(fontSize: 16,)),
               hintText: '请输入价格上限',
               inputType: TextInputType.number,
             ),

@@ -38,14 +38,14 @@ class _TextFieldWidgetState extends State<TextFieldWidget> with WidgetsBindingOb
 //      }
 //    });
     super.initState();
-    widget.focusNode.addListener(_focusNodeListener);
-    WidgetsBinding.instance.addObserver(this);
+//    widget.focusNode.addListener(_focusNodeListener);
+//    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    widget.focusNode.removeListener(_focusNodeListener);
+//    WidgetsBinding.instance.removeObserver(this);
+//    widget.focusNode.removeListener(_focusNodeListener);
     super.dispose();
   }
 
@@ -114,7 +114,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> with WidgetsBindingOb
         autofocus: true,
         inputType: TextInputType.number,
         textAlign: TextAlign.right,
-        leadingText: '${widget.leadText}',
+        leadingText: Text(widget.leadText,style: TextStyle(fontSize: 16,)),
         hintText: '填写',
         controller: widget.controller,
         onEditingComplete: () {

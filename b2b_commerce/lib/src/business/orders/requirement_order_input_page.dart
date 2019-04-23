@@ -66,7 +66,7 @@ class _RequirementOrderInputPageState extends State<RequirementOrderInputPage>{
               controller: _controller,
               inputType: widget.inputType,
               autofocus:true,
-              leadingText: '${widget.fieldText}',
+              leadingText: Text('${widget.fieldText}',style: TextStyle(fontSize: 16,)),
               hintText: '请输入${widget.fieldText}',
                   onChanged: (value){
                     result = value;

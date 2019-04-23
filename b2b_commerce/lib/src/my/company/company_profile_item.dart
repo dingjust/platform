@@ -41,8 +41,7 @@ class CompanyProfileItemState extends State<CompanyProfileItem> {
         TextFieldComponent(
           focusNode: _descriptionFocusNode,
           controller: _descriptionController,
-          leadingText: '说明',
-          leadingColor: Colors.grey,
+          leadingText: Text('说明',style: TextStyle(fontSize: 16,color: Colors.grey,)),
           textAlign: TextAlign.start,
           onChanged: (value){
             widget.companyProfile.description = value == '' ? null : value;

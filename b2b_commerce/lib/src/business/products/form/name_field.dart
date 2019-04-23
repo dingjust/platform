@@ -33,7 +33,7 @@ class _NameFieldState extends State<NameField> {
     return TextFieldComponent(
       focusNode: _nameFocusNode,
       controller: _nameController,
-      leadingText: '产品名称',
+      leadingText: Text('产品名称',style: TextStyle(fontSize: 16,)),
       hintText: '请输入产品名称',
     );
   }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TextFieldComponent extends StatefulWidget {
-  final String leadingText;
+  final Text leadingText;
+  bool isRequired;
+  String prefix;
   final String hintText;
-  final String helperText;
+  final Text helperText;
   double leadingWidth;
   TextEditingController controller;
   //必传
@@ -19,7 +21,6 @@ class TextFieldComponent extends StatefulWidget {
   bool enabled;
   TextInputAction textInputAction;
   TextAlign textAlign;
-  Color leadingColor;
   bool hideDivider;
   TextStyle style;
   List<TextInputFormatter> inputFormatters;
@@ -28,6 +29,8 @@ class TextFieldComponent extends StatefulWidget {
 
   TextFieldComponent({
     this.leadingText,
+    this.isRequired = false,
+    this.prefix,
     this.hintText,
     this.helperText,
     this.leadingWidth = 85,
@@ -43,7 +46,6 @@ class TextFieldComponent extends StatefulWidget {
     this.enabled,
     this.textInputAction,
     this.textAlign = TextAlign.right,
-    this.leadingColor = Colors.black,
     this.hideDivider = false,
     this.style,
     this.inputFormatters,
@@ -61,13 +63,23 @@ class TextFieldComponentState extends State<TextFieldComponent> {
       if (widget.focusNode.hasFocus) {
         setState(() {
           _dividerColor = Color.fromRGBO(255,214,12, 1);
+          if(widget.prefix != null){
+            widget.controller.text = widget.controller.text.replaceFirst(widget.prefix, '');
+          }
         });
       } else {
         setState(() {
           _dividerColor = Colors.grey[400];
+          if(widget.prefix != null){
+            widget.controller.text = widget.prefix + widget.controller.text;
+          }
         });
       }
     });
+
+    if(widget.prefix != null){
+      widget.controller.text = widget.prefix + widget.controller.text;
+    }
 
     if (widget.leadingText == null || widget.leadingText == '') {
       widget.leadingWidth = 0.0;
@@ -109,9 +121,19 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                 offstage: widget.leadingText == null,
                 child: Container(
                   width: widget.leadingWidth,
-                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16,color: widget.leadingColor),),
+                  child: Wrap(
+                    children: <Widget>[
+                      widget.leadingText ?? Text(''),
+                      widget.isRequired ? Text(' *',style: TextStyle(fontSize: widget.leadingText.style.fontSize,color: Colors.red,)) : Text(''),
+                    ],
+                  ),
+//                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16,color: widget.leadingColor),),
                 ),
               ),
+//              Offstage(
+//                offstage: widget.leadingText2 == null,
+//                child: widget.leadingText2,
+//              ),
               Expanded(
                 child: TextField(
                   style: widget.style,
@@ -152,10 +174,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                 ),
                 Offstage(
                   offstage: widget.helperText == null,
-                  child: Text(
-                    widget.helperText ?? '',
-                    style: TextStyle(color: Colors.red),
-                  ),
+                  child: widget.helperText,
                 ),
               ],
             ),
