@@ -119,12 +119,10 @@ class _FactoryPageState extends State<FactoryPage> {
                   automaticallyImplyLeading: false,
               ),
               endDrawer: Drawer(
-                child: GestureDetector(
-                  child: ConditionPage(
+                child:  ConditionPage(
                     factoryCondition: factoryCondition,
                     categories: widget.categories,
                     labels: widget.labels,
-                  ),
                 ),
               ),
               body: FactoryListView(
