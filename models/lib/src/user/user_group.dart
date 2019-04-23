@@ -707,8 +707,8 @@ enum PopulationScale {
 const PopulationScaleLocalizedMap = {
   PopulationScale.N01: "50人以下",
   PopulationScale.N02: "51~100人",
-  PopulationScale.N03: "101到200人",
-  PopulationScale.N04: "200人以下",
+  PopulationScale.N03: "101~200人",
+  PopulationScale.N04: "200人以上",
 };
 
 //年龄段

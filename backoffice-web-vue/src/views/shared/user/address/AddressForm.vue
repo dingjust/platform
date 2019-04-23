@@ -49,7 +49,17 @@
     <el-row :gutter="10">
       <el-col :span="8">
         <el-form-item label="详细地址" prop="line1">
-          <el-input v-model="slotData.line1"></el-input>
+          <el-autocomplete
+            v-model="slotData.line1"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="请输入详细地址"
+            @select="handleSelect"
+          >
+            <template slot-scope="{ item }">
+              <div class="addr">{{ item.name }}</div>
+            </template>
+          </el-autocomplete>
+          <!--<el-input v-model="slotData.line1"></el-input>-->
         </el-form-item>
       </el-col>
       <el-col :span="8">
@@ -86,6 +96,20 @@
         }
 
         return true;
+      },
+      async querySearchAsync(queryString, cb) {
+        const url = this.apis().getAmapTips('777b518967c72f5f761efc88ecc8310c',this.slotData.line1,this.slotData.city.name);
+        const result = await this.$http.get(url);
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          cb(result.tips);
+        }, 500 * Math.random());
+      },
+      handleSelect(item) {
+        this.slotData.line1 = item.name;
+        let locals = item.location.split(',');
+        this.slotData.longitude =locals[0];
+        this.slotData.latitude =locals[1];
       },
       async getRegions() {
         const url = this.apis().getRegions();

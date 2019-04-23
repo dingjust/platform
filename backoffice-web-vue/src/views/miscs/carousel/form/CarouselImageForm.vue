@@ -59,9 +59,34 @@
       }
     },
     computed: {
+      fileList:function(){
+        let files = [];
+        console.log(this.slotData.media);
+        if(this.slotData.media&&this.slotData.media.id){
+            let file = {
+              id:"",
+              url:"",
+              artworkUrl:"",
+            }
+            file.id = this.slotData.media.id;
+            file.artworkUrl = this.slotData.media.url;
+            file.url = this.slotData.media.url;
+            // image.url = '';
+            if(this.slotData.media.convertedMedias&&this.slotData.media.convertedMedias.length > 0){
+              this.slotData.media.convertedMedias.forEach(convertedMedia=>{
+                  if(convertedMedia.mediaFormat === 'DefaultProductPreview')
+                    file.url = convertedMedia.url;
+                }
+              )
+            }
+            files.push(file);
+          }
+        return files;
+      },
       uploadFormData: function () {
         return {
           fileFormat: 'DefaultFileFormat',
+          conversionGroup: 'DefaultProductConversionGroup',
         };
       },
       headers: function () {
@@ -72,7 +97,6 @@
     },
     data() {
       return {
-        fileList:[],
         dialogImageUrl: '',
         dialogVisible: false
       }

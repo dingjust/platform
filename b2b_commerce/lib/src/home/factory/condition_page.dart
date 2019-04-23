@@ -186,22 +186,24 @@ class _ConditionPageState extends State<ConditionPage> {
       padding: EdgeInsets.all(10),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, //Grid按两列显示
-          mainAxisSpacing: 10.0,
+          crossAxisCount: 3, //Grid按两列显示
+          mainAxisSpacing: 5.0,
           crossAxisSpacing: 10.0,
-          childAspectRatio: 4.0,
+          childAspectRatio: 2.0,
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             //创建子widget
-            return FilterChip(
-              label: Text(
-                  '${PopulationScaleLocalizedMap[PopulationScale.values[index]]}',
-                  style: TextStyle(
-                    fontSize: 18,
-                  )),
+            return ChoiceChip(
+              label:Container(
+                child:  Text(
+                    '${PopulationScaleLocalizedMap[PopulationScale.values[index]]}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black
+                    )),
+              ),
               selectedColor: Color.fromRGBO(255, 214, 12, 1),
-              backgroundColor: Colors.white,
               selected: widget.factoryCondition.populationScale ==
                   PopulationScale.values[index],
               onSelected: ((value) {
@@ -227,22 +229,22 @@ class _ConditionPageState extends State<ConditionPage> {
       padding: EdgeInsets.all(10),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, //Grid按两列显示
-          mainAxisSpacing: 10.0,
+          crossAxisCount: 3, //Grid按两列显示
+          mainAxisSpacing: 5.0,
           crossAxisSpacing: 10.0,
-          childAspectRatio: 4.0,
+          childAspectRatio: 2.0,
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             //创建子widget
-            return FilterChip(
+            return ChoiceChip(
               label: Text(
                   '${CooperationModesLocalizedMap[CooperationModes.values[index]]}',
                   style: TextStyle(
                     fontSize: 14,
+                    color: Colors.black,
                   )),
               selectedColor: Color.fromRGBO(255, 214, 12, 1),
-              backgroundColor: Colors.white,
               selected: widget.factoryCondition.cooperationModes
                   .contains(CooperationModes.values[index]),
               onSelected: ((value) {
@@ -269,21 +271,21 @@ class _ConditionPageState extends State<ConditionPage> {
       padding: EdgeInsets.all(10),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, //Grid按两列显示
-          mainAxisSpacing: 10.0,
+          crossAxisCount: 3, //Grid按两列显示
+          mainAxisSpacing: 5.0,
           crossAxisSpacing: 10.0,
-          childAspectRatio: 4.0,
+          childAspectRatio: 2.0,
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             //创建子widget
-            return FilterChip(
+            return ChoiceChip(
               label: Text('${widget.labels[index].name}',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
+                    color: Colors.black
                   )),
               selectedColor: Color.fromRGBO(255, 214, 12, 1),
-              backgroundColor: Colors.white,
               selected:
                   widget.factoryCondition.labels.contains(widget.labels[index]),
               onSelected: ((value) {
@@ -367,21 +369,21 @@ class _ConditionPageState extends State<ConditionPage> {
       padding: EdgeInsets.all(10),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, //Grid按两列显示
+          crossAxisCount: 3, //Grid按两列显示
           mainAxisSpacing: 10.0,
           crossAxisSpacing: 10.0,
-          childAspectRatio: 4.0,
+          childAspectRatio: 2.0,
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             //创建子widget
-            return FilterChip(
+            return ChoiceChip(
               label: Text('${widget.categories[index].name}',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
+                    color: Colors.black,
                   )),
               selectedColor: Color.fromRGBO(255, 214, 12, 1),
-              backgroundColor: Colors.white,
               selected: widget.factoryCondition.categories ==
                   widget.categories[index].code,
               onSelected: ((value) {
