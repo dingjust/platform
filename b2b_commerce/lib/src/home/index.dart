@@ -470,9 +470,8 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                       .then((categories) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => RequirementPoolAllPage(
-                              categories: categories,
-                            ),
+                        builder: (context) =>
+                            RequirementPoolAllPage(categories: categories),
                       ),
                     );
                   });

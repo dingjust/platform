@@ -16,13 +16,10 @@ class RequirementPoolAllPage extends StatefulWidget {
   RequirementPoolAllPage({
     Key key,
     this.categories,
+    this.requirementFilterCondition,
   });
 
-  ///当前选中条件
-  final RequirementFilterCondition currentCodition = RequirementFilterCondition(
-      categories: [],
-      dateRange: RequirementOrderDateRange.ALL,
-      machiningType: null);
+  final RequirementFilterCondition requirementFilterCondition;
 
   _RequirementPoolAllPageState createState() => _RequirementPoolAllPageState();
 }
@@ -37,6 +34,9 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   List<CategoryModel> _minCategorySelect = [];
 
   String filterBarLabel = '综合排序';
+
+  ///当前选中条件
+  RequirementFilterCondition currentCodition;
 
   List<FilterConditionEntry> dateRangeConditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(
@@ -69,6 +69,15 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
         .map((category) =>
             FilterConditionEntry(label: category.name, value: category))
         .toList());
+
+    if (widget.requirementFilterCondition != null) {
+      currentCodition = widget.requirementFilterCondition;
+    } else {
+      currentCodition = RequirementFilterCondition(
+          categories: [],
+          dateRange: RequirementOrderDateRange.ALL,
+          machiningType: null);
+    }
     super.initState();
   }
 
@@ -175,7 +184,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                 ),
                 Expanded(
                   child: OrdersListView(
-                    currentCodition: widget.currentCodition,
+                    currentCodition: currentCodition,
                   ),
                 )
               ],
