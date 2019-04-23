@@ -4,13 +4,11 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../../widgets/scrolled_to_end_tips.dart';
-
+import './quote_list_item.dart';
 import '../../../business/orders/form/proofing_order_form.dart';
 import '../../../home/pool/requirement_quote_order_form.dart';
 import '../../../production/production_online_order_from.dart';
-
-import './quote_list_item.dart';
+import '../../widgets/scrolled_to_end_tips.dart';
 
 class QuoteList extends StatefulWidget {
   QuoteList({
