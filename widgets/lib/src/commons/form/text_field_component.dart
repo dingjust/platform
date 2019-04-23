@@ -24,6 +24,8 @@ class TextFieldComponent extends StatefulWidget {
   bool hideDivider;
   TextStyle style;
   List<TextInputFormatter> inputFormatters;
+  final int maxLines;
+  final int maxLength;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -49,6 +51,8 @@ class TextFieldComponent extends StatefulWidget {
     this.hideDivider = false,
     this.style,
     this.inputFormatters,
+    this.maxLength,
+    this.maxLines,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
@@ -142,7 +146,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: widget.hintText,
-                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    hintStyle: TextStyle(color: Colors.grey),
                   ),
                   autofocus: widget.autofocus,
                   focusNode: widget.focusNode,
@@ -152,6 +156,8 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   textInputAction: widget.textInputAction,
                   textAlign: widget.textAlign,
                   inputFormatters: widget.inputFormatters,
+                  maxLines: widget.maxLines,
+                  maxLength: widget.maxLength,
                 ),
               ),
               Offstage(
