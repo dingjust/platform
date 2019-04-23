@@ -11,7 +11,7 @@
           :before-upload="onBeforeUpload"
           :on-success="onSuccess"
           :headers="headers"
-          :file-list="slotData.images"
+          :file-list="fileList"
           :on-preview="handlePreview"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
@@ -49,11 +49,16 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-
-        const images = this.slotData.images || [];
+        const images = this.fileList || [];
         const index = images.indexOf(file);
         images.splice(index, 1);
-
+        let newImages = [];
+        this.slotData.images.forEach(image=>{
+          if(image.id != file.id){
+            newImages.push(image);
+          }
+        });
+        this.slotData.images = newImages;
         this.$message.success("删除成功");
       },
       handlePreview(file) {
@@ -62,9 +67,35 @@
       }
     },
     computed: {
+      fileList:function(){
+        let files = [];
+        if(this.slotData.images&&this.slotData.images.length >0){
+          this.slotData.images.forEach(image=>{
+            let file = {
+              id:"",
+              url:"",
+              artworkUrl:"",
+            }
+            file.id = image.id;
+            file.artworkUrl = image.url;
+            file.url = image.url;
+            // image.url = '';
+            if(image.convertedMedias.length > 0){
+              image.convertedMedias.forEach(convertedMedia=>{
+                  if(convertedMedia.mediaFormat === 'DefaultProductPreview')
+                    file.url = convertedMedia.url;
+                }
+              )
+            }
+            files.push(file);
+          })
+        }
+        return files;
+      },
       uploadFormData: function () {
         return {
           fileFormat: 'DefaultFileFormat',
+          conversionGroup: 'DefaultProductConversionGroup',
         };
       },
       headers: function () {

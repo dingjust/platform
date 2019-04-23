@@ -68,7 +68,15 @@ module.exports = {
         pathRewrite: {
           '^/c2b': 'djwebservices/v2/c2b-apparel-zh'
         }
-      }
+      },
+      '/amap': {
+        target: 'https://restapi.amap.com',
+        changeOrigin: true,
+        "secure": false,
+        pathRewrite: {
+          '^/amap': ''
+        }
+      },
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

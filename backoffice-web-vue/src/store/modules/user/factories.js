@@ -53,7 +53,9 @@ const state = {
     legalRepresentative: '',
     certificateOfLegal: '',
     labels: [],
-    industrialCluster: null
+    industrialCluster: null,
+    longitude: 0,
+    latitude: 0
   },
   queryFormData: {
     labels: [],

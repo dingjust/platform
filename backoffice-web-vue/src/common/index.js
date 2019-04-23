@@ -1,4 +1,7 @@
 const COMMON_APIS = {
+  getAmapTips(key,keyWord,city) {
+    return '/amap/v3/assistant/inputtips?key=' + key + '&keywords='+keyWord+'&city='+city;
+  },
   changePassword(username) {
     return '/b2b/users/' + username + '/password';
   },

@@ -1,8 +1,8 @@
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_search_delegate_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
-import 'package:b2b_commerce/src/business/search/requirement_order_search.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +92,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
             centerTitle: true,
             elevation: 0.5,
             title: Text(
-              '全部需求',
+              '${generateTitle()}',
               style: TextStyle(color: Colors.black),
             ),
             actions: <Widget>[
@@ -103,7 +103,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                 ),
                 onPressed: () => showSearch(
                     context: context,
-                    delegate: RequirementOrderSearchDelegate()),
+                    delegate: RequirementOrderSearchDelegatePage()),
               ),
             ],
           ),
@@ -191,6 +191,14 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
             ),
           ),
         ));
+  }
+
+  String generateTitle() {
+    if (currentCodition.keyword == null || currentCodition.keyword == '') {
+      return '推荐需求';
+    } else {
+      return '${currentCodition.keyword}';
+    }
   }
 }
 

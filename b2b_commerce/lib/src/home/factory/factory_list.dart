@@ -114,10 +114,10 @@ class _FactoryPageState extends State<FactoryPage> {
                 automaticallyImplyLeading: false,
               ),
               endDrawer: Drawer(
-                child:  ConditionPage(
-                    factoryCondition: factoryCondition,
-                    categories: widget.categories,
-                    labels: widget.labels,
+                child: ConditionPage(
+                  factoryCondition: factoryCondition,
+                  categories: widget.categories,
+                  labels: widget.labels,
                 ),
               ),
               body: FactoryListView(
