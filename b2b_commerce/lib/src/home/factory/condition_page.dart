@@ -15,7 +15,12 @@ class ConditionPage extends StatefulWidget {
   /// 大类
   final List<CategoryModel> categories;
 
-  ConditionPage({Key key, @required this.categories, this.factoryCondition,this.requirementCode,this.labels})
+  ConditionPage(
+      {Key key,
+      @required this.categories,
+      this.factoryCondition,
+      this.requirementCode,
+      this.labels})
       : super(key: key);
 
   @override
@@ -27,8 +32,8 @@ class _ConditionPageState extends State<ConditionPage> {
 
   @override
   void initState() {
-    if(widget.factoryCondition.labels == null){
-      widget.factoryCondition.labels = new List();
+    if (widget.factoryCondition.labels == null) {
+      widget.factoryCondition.labels = [];
     }
     super.initState();
   }
@@ -72,8 +77,8 @@ class _ConditionPageState extends State<ConditionPage> {
               height: 40,
               child: Center(
                 child: FlatButton(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 20),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                     color: Colors.grey,
                     child: const Text(
                       '重置',
@@ -83,46 +88,49 @@ class _ConditionPageState extends State<ConditionPage> {
                       ),
                     ),
                     shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(Radius.circular(20))),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20))),
                     onPressed: () {
-                        setState(() {
-                          widget.factoryCondition.populationScale = null;
-                          widget.factoryCondition.cooperationModes = new List<CooperationModes>();
-                          widget.factoryCondition.adeptAtCategories = new List<CategoryModel>();
-                          widget.factoryCondition.categories = null;
-                          widget.factoryCondition.starLevel = 0;
-                          widget.factoryCondition.productiveOrientations = null;
-                        });
+                      setState(() {
+                        widget.factoryCondition.populationScale = null;
+                        widget.factoryCondition.cooperationModes =
+                            new List<CooperationModes>();
+                        widget.factoryCondition.adeptAtCategories =
+                            new List<CategoryModel>();
+                        widget.factoryCondition.categories = null;
+                        widget.factoryCondition.starLevel = 0;
+                        widget.factoryCondition.productiveOrientations = null;
+                      });
                     }),
               ),
             ),
             Container(
-              margin: EdgeInsets.only(right: 50),
-              height: 40,
-              child:Center(
-                child:  FlatButton(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 20),
-                    color: Color(0xFFFFD600),
-                    child: const Text(
-                      '确定',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
+                margin: EdgeInsets.only(right: 50),
+                height: 40,
+                child: Center(
+                  child: FlatButton(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 20),
+                      color: Color(0xFFFFD600),
+                      child: const Text(
+                        '确定',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(Radius.circular(20))),
-                    onPressed: () {
-                      ///条件更新数据
-                      FactoryBLoC.instance.filterByCondition(
-                        widget.factoryCondition,
-                        requirementCode: widget.requirementCode,
-                      );
-                      Navigator.pop(context, widget.factoryCondition);
-                    }),
-              )
-            ),
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20))),
+                      onPressed: () {
+                        ///条件更新数据
+                        FactoryBLoC.instance.filterByCondition(
+                          widget.factoryCondition,
+                          requirementCode: widget.requirementCode,
+                        );
+                        Navigator.pop(context, widget.factoryCondition);
+                      }),
+                )),
           ],
         ));
   }
@@ -257,45 +265,43 @@ class _ConditionPageState extends State<ConditionPage> {
   }
 
   Widget _buildLabelsBlock() {
-      return SliverPadding(
-        padding: EdgeInsets.all(10),
-        sliver: SliverGrid(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, //Grid按两列显示
-            mainAxisSpacing: 10.0,
-            crossAxisSpacing: 10.0,
-            childAspectRatio: 4.0,
-          ),
-          delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-              //创建子widget
-              return FilterChip(
-                label: Text('${widget.labels[index].name}',
-                    style: TextStyle(
-                      fontSize: 18,
-                    )),
-                selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                backgroundColor: Colors.white,
-                selected: widget.factoryCondition.labels.contains(widget.labels[index])
-                    ,
-                onSelected: ((value) {
-                  print(value);
-                  setState(() {
-                    if (value) {
-                      widget.factoryCondition.labels.add(
-                          widget.labels[index]);
-                    } else {
-                      widget.factoryCondition.labels.remove(widget.labels[index]);
-                    }
-                  });
-                }),
-              );
-            },
-            childCount: widget.labels.length,
-          ),
+    return SliverPadding(
+      padding: EdgeInsets.all(10),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, //Grid按两列显示
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: 4.0,
         ),
-      );
-    }
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            //创建子widget
+            return FilterChip(
+              label: Text('${widget.labels[index].name}',
+                  style: TextStyle(
+                    fontSize: 18,
+                  )),
+              selectedColor: Color.fromRGBO(255, 214, 12, 1),
+              backgroundColor: Colors.white,
+              selected:
+                  widget.factoryCondition.labels.contains(widget.labels[index]),
+              onSelected: ((value) {
+                setState(() {
+                  if (value) {
+                    widget.factoryCondition.labels.add(widget.labels[index]);
+                  } else {
+                    widget.factoryCondition.labels.remove(widget.labels[index]);
+                  }
+                });
+              }),
+            );
+          },
+          childCount: widget.labels.length,
+        ),
+      ),
+    );
+  }
 
   Widget _buildAddressBlock() {
     return ConditionBlock(

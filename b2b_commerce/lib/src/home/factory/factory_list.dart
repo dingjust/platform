@@ -9,14 +9,14 @@ import 'package:widgets/widgets.dart';
 
 class FactoryPage extends StatefulWidget {
   FactoryPage(
-      this.factoryCondition, {
+    this.factoryCondition, {
     this.route,
     this.requirementCode,
     this.categories,
-        this.labels,
+    this.labels,
   });
 
-  final List<CategoryModel> categories ;
+  final List<CategoryModel> categories;
 
   List<LabelModel> labels;
 
@@ -59,7 +59,6 @@ class _FactoryPageState extends State<FactoryPage> {
     }
 
     super.initState();
-
   }
 
   void changeCondition(FilterConditionEntry condition) {
@@ -68,7 +67,6 @@ class _FactoryPageState extends State<FactoryPage> {
     });
     FactoryBLoC.instance.clear();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +93,7 @@ class _FactoryPageState extends State<FactoryPage> {
                       context: context,
                       delegate: FactorySearchDelegate(),
                     );
-
                     factoryCondition.setKeyword(keyword);
-
-                    print(factoryCondition.keyword);
                     FactoryBLoC.instance.clear();
                   }),
             ],
@@ -116,7 +111,7 @@ class _FactoryPageState extends State<FactoryPage> {
 //                    )
                   ],
                 ),
-                  automaticallyImplyLeading: false,
+                automaticallyImplyLeading: false,
               ),
               endDrawer: Drawer(
                 child: GestureDetector(

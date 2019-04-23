@@ -182,28 +182,29 @@ class BrandFirstMenuSection extends StatelessWidget {
   }
 
   void _jumpToFastFactory(BuildContext context) async {
+    List<CategoryModel> categories =
+        await ProductRepositoryImpl().majorCategories();
     List<LabelModel> labels = await UserRepositoryImpl().labels();
-    labels.removeWhere((label) => label.name == '优反工厂');
-    // 加载条
-    showDialog(
-      context: context,
-      builder: (context) =>
-          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    List<LabelModel> conditionLabels =
+        labels.where((label) => label.name == '快反工厂').toList();
+    labels = labels
+        .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
+        .toList();
+    labels.add(LabelModel(name: '已认证', id: 000000));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => FactoryPage(
+              FactoryCondition(
+                  starLevel: 0,
+                  adeptAtCategories: [],
+                  labels: conditionLabels,
+                  cooperationModes: []),
+              route: '快反工厂',
+              categories: categories,
+              labels: labels,
+            ),
+      ),
     );
-    await ProductRepositoryImpl().cascadedCategories().then((categories) {
-      Navigator.of(context).pop();
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => FactoryPage(
-                FactoryCondition(
-                    starLevel: 0,
-                    adeptAtCategories: [],
-                    labels: [LabelModel(name: '快反工厂', id: 8796158621016)],
-                    cooperationModes: []),
-              ),
-        ),
-      );
-    });
   }
 }
 
@@ -268,9 +269,14 @@ class BrandSecondMenuSection extends StatelessWidget {
   Widget _buildAllFactoriesMenuItem(BuildContext context) {
     return AdvanceIconButton(
       onPressed: () async {
-        List<CategoryModel> categories = await ProductRepositoryImpl().majorCategories();
+        List<CategoryModel> categories =
+            await ProductRepositoryImpl().majorCategories();
         List<LabelModel> labels = await UserRepositoryImpl().labels();
-        labels.removeWhere((label)=>label.group!='FACTORY');
+        labels = labels
+            .where((label) =>
+                label.group == 'FACTORY' || label.group == 'PLATFORM')
+            .toList();
+        labels.add(LabelModel(name: '已认证', id: 1000000));
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -278,11 +284,11 @@ class BrandSecondMenuSection extends StatelessWidget {
                   FactoryCondition(
                       starLevel: 0,
                       adeptAtCategories: [],
-                      labels: labels,
+                      labels: [],
                       cooperationModes: []),
                   route: '全部工厂',
                   categories: categories,
-              labels: labels,
+                  labels: labels,
                 ),
           ),
         );
@@ -319,19 +325,26 @@ class BrandSecondMenuSection extends StatelessWidget {
   }
 
   void _jumpToQualityFactory(BuildContext context) async {
-    List<CategoryModel> categories = await ProductRepositoryImpl().majorCategories();
+    List<CategoryModel> categories =
+        await ProductRepositoryImpl().majorCategories();
     List<LabelModel> labels = await UserRepositoryImpl().labels();
-    labels.removeWhere((label) => label.name == '优质工厂');
+    List<LabelModel> conditionLabels =
+        labels.where((label) => label.name == '优质工厂').toList();
+    labels = labels
+        .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
+        .toList();
+    labels.add(LabelModel(name: '已认证', id: 1000000));
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FactoryPage(
               FactoryCondition(
                   starLevel: 0,
                   adeptAtCategories: [],
-                  labels: labels,
+                  labels: conditionLabels,
                   cooperationModes: []),
               route: '优质工厂',
               categories: categories,
+              labels: labels,
             ),
       ),
     );

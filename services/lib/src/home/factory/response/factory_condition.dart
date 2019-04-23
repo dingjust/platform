@@ -35,8 +35,6 @@ class FactoryCondition {
   /// 加工类型
   List<CooperationModes> cooperationModes;
 
-
-
   ///关键字
   String keyword;
 
@@ -66,6 +64,7 @@ class FactoryCondition {
     List<String> adeptAtCategoryArray = [];
     List<int> labelsArray = [];
     List<String> cooperationModesArray = [];
+    String approvalStatus;
 
     if (adeptAtCategories != null) {
       adeptAtCategories.forEach((category) {
@@ -75,7 +74,12 @@ class FactoryCondition {
 
     if (labels != null) {
       labels.forEach((label) {
-        labelsArray.add(label.id);
+        if (label.name != '已认证') {
+          labelsArray.add(label.id);
+        } else {
+          approvalStatus =
+              ArticleApprovalStatusMap[ArticleApprovalStatus.approved];
+        }
       });
     }
 
@@ -97,7 +101,8 @@ class FactoryCondition {
       'populationScales': populationScale != null
           ? [_$PopulationScaleEnumMap[populationScale]]
           : [],
-      'keyword': keyword ?? ''
+      'keyword': keyword ?? '',
+      'approvalStatuses': approvalStatus ?? ''
     };
 
     print(result);
