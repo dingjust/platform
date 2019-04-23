@@ -33,6 +33,8 @@ dependencies:
   path_provider: ^0.5.0+1
   open_file: 1.1.1
   month_picker_dialog: ^0.0.8
+  cached_network_image: ^0.7.0
+  flutter_spinkit: ^3.1.0
 
 dev_dependencies:
   flutter_test:

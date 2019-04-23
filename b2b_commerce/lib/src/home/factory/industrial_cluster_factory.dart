@@ -103,7 +103,8 @@ class IndustrialClusterItem extends StatelessWidget {
 
   final IndustrialClusterModel item;
 
-  void _onTap(BuildContext context) {
+  void _onTap(BuildContext context) async{
+    List<CategoryModel> categories = await ProductRepositoryImpl().majorCategories();
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -114,6 +115,7 @@ class IndustrialClusterItem extends StatelessWidget {
                   industrialCuster: item,
                   labels: [],
                   cooperationModes: []),
+              categories: categories,
               route: item.name,
             ),
       ),
