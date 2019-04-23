@@ -31,6 +31,11 @@ class OrderByProductBLoc extends BLoCBase {
 
   Stream<List<ApparelProductModel>> get stream => _controller.stream;
 
+  var conditionController = StreamController<FilterConditionEntry>.broadcast();
+
+  Stream<FilterConditionEntry> get conditionStream =>
+      conditionController.stream;
+
   int pageSize = 10;
   int currentPage = 0;
   int totalPages = 0;
@@ -47,11 +52,14 @@ class OrderByProductBLoc extends BLoCBase {
       Response<Map<String, dynamic>> response;
       try {
         response = await http$.post(ProductApis.factoriesApparel, data: {
-          "categories": productCondition.categories.map((category) => category.code).toList(),
+          "categories": productCondition.categories
+              .map((category) => category.code)
+              .toList(),
           "keyword": productCondition.keyword ?? ''
         }, queryParameters: {
           'page': currentPage,
-          'size': pageSize
+          'size': pageSize,
+          // 'sort': '${condition},'
         });
       } on DioError catch (e) {
         print(e);
@@ -83,7 +91,9 @@ class OrderByProductBLoc extends BLoCBase {
         try {
           currentPage++;
           response = await http$.post(ProductApis.factoriesApparel, data: {
-            "categories": productCondition.categories.map((category) => category.code).toList(),
+            "categories": productCondition.categories
+                .map((category) => category.code)
+                .toList(),
             "keyword": productCondition.keyword ?? ''
           }, queryParameters: {
             'page': currentPage,

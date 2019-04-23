@@ -22,6 +22,14 @@ class _ProductsPageState extends State<ProductsPage> {
 
   List<CategoryModel> cascadedCategories;
 
+  bool showFilterMenu = false;
+
+  List<FilterConditionEntry> conditionEntries = <FilterConditionEntry>[
+    FilterConditionEntry(label: '最新', value: null, checked: true),
+    FilterConditionEntry(label: '价格', value: 'minPrice'),
+    FilterConditionEntry(label: '订单数', value: 'totalOrdersCount'),
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -68,8 +76,29 @@ class _ProductsPageState extends State<ProductsPage> {
           bottom: PreferredSize(
               preferredSize: Size(200, 30),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          showFilterMenu = !showFilterMenu;
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            '${conditionEntries.firstWhere((entry) => entry.checked).label}',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromRGBO(255, 219, 0, 1)),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Color.fromRGBO(255, 219, 0, 1),
+                          )
+                        ],
+                      )),
                   Container(
                     width: 150,
                     child: FlatButton(
@@ -96,8 +125,26 @@ class _ProductsPageState extends State<ProductsPage> {
                 ],
               )),
         ),
-        body: ProductsView(
-          productCondition: productCondition,
+        body: Column(
+          children: <Widget>[
+            FilterSelectMenu(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              height: showFilterMenu ? 150 : 0,
+              entries: conditionEntries,
+              streamController: OrderByProductBLoc.instance.conditionController,
+              afterPressed: (String str) {
+                setState(() {
+                  showFilterMenu = !showFilterMenu;
+                });
+              },
+            ),
+            Expanded(
+              flex: 1,
+              child: ProductsView(
+                productCondition: productCondition,
+              ),
+            ),
+          ],
         ),
         floatingActionButton: ScrollToTopButton<OrderByProductBLoc>(),
       ),
@@ -140,6 +187,13 @@ class ProductsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<OrderByProductBLoc>(context);
+
+        //监听筛选条件更改
+    bloc.conditionStream.listen((condition) {
+// productCondition.
+      // bloc.filterByCondition(currentCodition);
+      bloc.clear();
+    });
 
     //监听是否已经到底
     bloc.bottomStream.listen((isBottom) {
