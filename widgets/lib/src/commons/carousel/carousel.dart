@@ -146,9 +146,9 @@ class _CarouselState extends State<Carousel> {
           _isEndScroll = true;
         },
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => BannerJumpDetailPage())
-          );
+//          Navigator.of(context).push(MaterialPageRoute(
+//              builder: (context) => BannerJumpDetailPage())
+//          );
         },
         child: CachedNetworkImage(
             imageUrl: item.url,

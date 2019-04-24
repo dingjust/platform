@@ -95,6 +95,9 @@ const COMMON_APIS = {
   createLabel() {
     return '/b2b/labels/create';
   },
+  updateLabel() {
+    return '/b2b/labels/update';
+  },
   getAllLabels() {
     return '/b2b/labels/all';
   },

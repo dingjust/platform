@@ -84,8 +84,10 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                 if (userType == 'factory') {
                   //带参数返回
                   if(widget.isUpload) {
-                    widget.medias.removeAt(0);
-                    Navigator.of(context).pop(widget.medias);
+                    setState(() {
+                      widget.medias.removeAt(0);
+                      Navigator.of(context).pop(widget.medias);
+                    });
                   }else{
                     Navigator.of(context).pop();
                   }
@@ -109,8 +111,10 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
         if (userType == 'factory') {
           //带参数返回
           if(widget.isUpload) {
-            widget.medias.removeAt(0);
-            Navigator.of(context).pop(widget.medias);
+            setState(() {
+              widget.medias.removeAt(0);
+              Navigator.of(context).pop(widget.medias);
+            });
           }else{
             Navigator.of(context).pop();
           }
@@ -189,10 +193,20 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                             size: 30.0,
                           ),
                       errorWidget: (context, url, error) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
+                          Container(
+                            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            child: Center(
+                              child: Icon(
+                                B2BIcons.noPicture,
+                                color: Color.fromRGBO(200, 200, 200, 1),
+                                size: 60,
+                              ),
+                            ),
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color.fromRGBO(243, 243, 243, 1)),
                           )
                   ),
                   decoration: BoxDecoration(
@@ -201,6 +215,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
               ),
           ),
           onTap: () {
+            print('${widget.medias[index].actualUrl}');
             onPreview(
                 context,'${widget.medias[index].actualUrl}');
           },
@@ -353,6 +368,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
     // TODO： 引入StreamBuilder实时更新进度条
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[
@@ -394,14 +410,21 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
       },
     );
 
+    // /// TODO: 调用上传接口,更新上传进度条
     try {
-      FormData formData = FormData.from({"file": UploadFileInfo(file, "file")});
+      FormData formData = FormData.from({
+        "file": UploadFileInfo(file, "file",
+            contentType: ContentType.parse('image/jpeg')),
+        "conversionGroup": "DefaultProductConversionGroup",
+        "imageFormat": "DefaultImageFormat"
+      });
       Response<Map<String, dynamic>> response = await http$.post(
         Apis.upload(),
         data: formData,
-        queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
+        // queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
+        // queryParameters: {'imageFormat': 'DefaultImageFormat'},
         options: Options(
-          headers: {'Content-Type': 'multipart/form-data'},
+          headers: {'Content-Type': 'application/json;charset=UTF-8'},
         ),
         onSendProgress: (int sent, int total) {
           _streamController.sink.add(sent / total);
@@ -410,11 +433,8 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
 
       Navigator.of(context).pop();
       Navigator.of(context).pop();
-      //写入具体url
-      String baseUrl = response.data['url'];
-      String url = '${GlobalConfigs.CONTEXT_PATH}$baseUrl';
-      response.data['url'] = url;
       setState(() {
+        ///  TODO:用上传图片回调的URL更新图片列表
         widget.medias.add(MediaModel.fromJson(response.data));
       });
     } catch (e) {

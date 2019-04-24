@@ -245,10 +245,13 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                         isUpload: userType != null && userType == 'factory' && (sequence >= _index)  && order.status == PurchaseOrderStatus.IN_PRODUCTION? true : false,
                       ))
                   ).then((value){
+                    print(value);
                     if(value != null){
-                      progress.medias = value;
-                      progress.updateOnly = true;
-                      uploadPicture(progress);
+                      setState(() {
+                        progress.medias = value;
+                        progress.updateOnly = true;
+                        uploadPicture(progress);
+                      });
                     }
                   });
                 },

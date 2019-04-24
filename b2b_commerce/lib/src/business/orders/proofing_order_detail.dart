@@ -244,7 +244,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
             ),
           ),
-          Text('${widget.model.remarks==null?'':widget.model.remarks}')
+          Text('${widget.model.remarks == null ? '' : widget.model.remarks}')
         ],
       ),
     );
@@ -321,7 +321,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                       ),
                       Container(
                         child: Text(
-                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null && widget.model.consignment.trackingID != null? widget.model.consignment.trackingID : ''}',
+                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null && widget.model.consignment.trackingID != null ? widget.model.consignment.trackingID : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -501,7 +501,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         children: <Widget>[
                           Text('历史接单'),
                           Text(
-                            '${widget.model.belongTo.historyOrdersCount==null?'':widget.model.belongTo.historyOrdersCount}',
+                            '${widget.model.belongTo.historyOrdersCount == null ? '' : widget.model.belongTo.historyOrdersCount}',
                             style: TextStyle(color: Colors.red),
                           ),
                           Text('单')
@@ -583,8 +583,8 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => OrderPaymentPage(
-                        order: widget.model,
-                      )));
+                            order: widget.model,
+                          )));
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
@@ -646,8 +646,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
                 child: Text(
                   '修改订单',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 )),
           ),
         ];
@@ -659,9 +658,9 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => LogisticsInputPage(
-                      isProductionOrder: false,
-                      proofingModel: widget.model,
-                    )));
+                          isProductionOrder: false,
+                          proofingModel: widget.model,
+                        )));
               },
               color: Color(0xFFFFD600),
               child: Text(
