@@ -93,7 +93,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                       Text(
                         '   急速发布需求   ',
                         style: TextStyle(
-                            color: Colors.red,
+                            // color: Colors.red,
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
                       ),

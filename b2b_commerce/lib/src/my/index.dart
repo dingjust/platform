@@ -178,7 +178,10 @@ class MyHomePage extends StatelessWidget {
       );
     } else {
       return Container(
-        child: Text('登录/注册'),
+        child: Text(
+          '登录/注册',
+          style: TextStyle(fontSize: 20),
+        ),
       );
     }
   }
