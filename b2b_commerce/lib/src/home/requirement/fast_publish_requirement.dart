@@ -87,7 +87,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                     children: <Widget>[
                       Icon(
                         B2BIcons.left_quotation,
-                        color: Color.fromRGBO(255, 234, 234, 1),
+                        color: Color.fromRGBO(255, 214, 12, 1),
                         size: 12,
                       ),
                       Text(
@@ -99,7 +99,7 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                       ),
                       Icon(
                         B2BIcons.right_quotation,
-                        color: Color.fromRGBO(255, 234, 234, 1),
+                        color: Color.fromRGBO(255, 214, 12, 1),
                         size: 12,
                       )
                     ],

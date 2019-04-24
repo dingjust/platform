@@ -437,21 +437,33 @@ class BrandTrackingProgressSection extends StatelessWidget {
 
   Widget _buildNoUniqueCode(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ProductionOfflineOrder()));
-      },
+      onTap: () {},
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            '没有唯一码？点击这里',
-            style: TextStyle(color: Colors.red, fontSize: 15),
+            '没有唯一码？',
+            style:
+                TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 15),
           ),
-          Icon(
-            B2BIcons.arrow_right,
-            color: Colors.red,
-            size: 12,
+          Container(
+            height: 25,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProductionOfflineOrder()));
+              },
+              child: Text(
+                '去创建',
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+              ),
+            ),
           )
         ],
       ),
