@@ -73,6 +73,11 @@ const state = {
       name: ''
     },
     line1: ''
+  },
+  queryFormData: {
+    keyword:'',
+    creationTimeFrom:'',
+    creationTimeTo:'',
   }
 };
 
@@ -80,6 +85,7 @@ const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
+  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page
 };
 
@@ -103,6 +109,22 @@ const actions = {
       commit('page', response);
     }
   },
+  async advancedSearch({dispatch, commit, state}, {url, queryFormData, page, size}) {
+    commit('queryFormData', queryFormData);
+    commit('currentPageNumber', page);
+    if (size) {
+      commit('currentPageSize', size);
+    }
+    console.log(queryFormData);
+    const response = await http.post(url, queryFormData, {
+      page: state.currentPageNumber,
+      size: state.currentPageSize
+    });
+
+    if (!response['errors']) {
+      commit('page', response);
+    }
+  },
   refresh({dispatch, commit, state}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
@@ -114,6 +136,7 @@ const actions = {
 
 const getters = {
   keyword: state => state.keyword,
+  queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page

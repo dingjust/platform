@@ -99,6 +99,26 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="8">
+          <el-form-item label="创建时间从">
+            <el-date-picker
+              v-model="queryFormData.creationTimeFrom"
+              value-format="timestamp"
+              type="date"
+              placeholder="请选择工厂创建时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="创建时间到">
+            <el-date-picker
+              v-model="queryFormData.creationTimeTo"
+              value-format="timestamp"
+              type="date"
+              placeholder="请选择工厂创建时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">

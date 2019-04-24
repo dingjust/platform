@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <brand-toolbar @onNew="onNew" @onSearch="onSearch"/>
+      <brand-toolbar @onNew="onNew" @onSearch="onSearch"  @onAdvancedSearch="onAdvancedSearch"/>
       <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch">
         <template slot="operations" slot-scope="props">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
@@ -43,11 +43,14 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
+        queryFormData: 'queryFormData',
+
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
+        advancedSearch: 'advancedSearch',
       }),
       handleClose(done) {
         this.dialogFormVisible = false;
@@ -68,6 +71,13 @@
         const keyword = this.keyword;
         const url = this.apis().getBrands();
         this.search({url, keyword, page, size});
+      },
+      onAdvancedSearch(page, size) {
+        const queryFormData = this.queryFormData;
+        const url = this.apis().getBrands();
+        console.log("lhj");
+        console.log(this.queryFormData);
+        this.advancedSearch({url, queryFormData, page, size});
       },
       async onDetails(item) {
         const url = this.apis().getBrand(item.uid);
