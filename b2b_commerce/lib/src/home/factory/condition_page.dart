@@ -75,10 +75,11 @@ class _ConditionPageState extends State<ConditionPage> {
           persistentFooterButtons: <Widget>[
             Container(
               height: 40,
+              margin: EdgeInsets.only(right: 10),
               child: Center(
                 child: FlatButton(
                     padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 45),
                     color: Colors.grey,
                     child: const Text(
                       '重置',
@@ -89,7 +90,7 @@ class _ConditionPageState extends State<ConditionPage> {
                     ),
                     shape: const RoundedRectangleBorder(
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(20))),
+                            const BorderRadius.all(Radius.circular(8))),
                     onPressed: () {
                       setState(() {
                         widget.factoryCondition.populationScale = null;
@@ -105,12 +106,12 @@ class _ConditionPageState extends State<ConditionPage> {
               ),
             ),
             Container(
-                margin: EdgeInsets.only(right: 50),
                 height: 40,
+                margin: EdgeInsets.only(right: 10),
                 child: Center(
                   child: FlatButton(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 20),
+                          vertical: 0, horizontal: 45),
                       color: Color(0xFFFFD600),
                       child: const Text(
                         '确定',
@@ -121,7 +122,7 @@ class _ConditionPageState extends State<ConditionPage> {
                       ),
                       shape: const RoundedRectangleBorder(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(20))),
+                              const BorderRadius.all(Radius.circular(8))),
                       onPressed: () {
                         ///条件更新数据
                         FactoryBLoC.instance.filterByCondition(

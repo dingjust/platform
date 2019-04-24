@@ -50,12 +50,27 @@ class _RequirementOrderDetailPageState
         actions: <Widget>[
           widget.order.editable != null &&
                   widget.order.editable &&
-                  UserBLoC.instance.currentUser.type == UserType.BRAND
-              ? FlatButton(
-                  onPressed: onEdit,
-                  child: Text('修改'),
-                )
-              : Container()
+              UserBLoC.instance.currentUser.type == UserType.BRAND
+              ? Container(
+              width: 60,
+              margin: const EdgeInsets.symmetric(
+                  vertical: 12, horizontal: 10),
+              child: FlatButton(
+                  color: Color(0xFFFFD600),
+                  child: Text(
+                    '修改',
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                  ),
+                  onPressed: onEdit
+              )
+          ) : Container()
         ],
       ),
       body: Container(
@@ -594,7 +609,7 @@ class _RequirementOrderDetailPageState
                       ),
                       shape: const RoundedRectangleBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(20),
+                          Radius.circular(5),
                         ),
                       ),
                       onPressed: () async {
@@ -617,7 +632,7 @@ class _RequirementOrderDetailPageState
                       ),
                       shape: const RoundedRectangleBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(20),
+                          Radius.circular(5),
                         ),
                       ),
                       onPressed: () {
@@ -658,7 +673,7 @@ class _RequirementOrderDetailPageState
               ),
               shape: const RoundedRectangleBorder(
                 borderRadius: const BorderRadius.all(
-                  Radius.circular(20),
+                  Radius.circular(5),
                 ),
               ),
               onPressed: () async {
@@ -688,7 +703,7 @@ class _RequirementOrderDetailPageState
                 }
               },
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(5)),
               color: Color.fromRGBO(255, 214, 12, 1),
               child: Text(
                 '去报价',

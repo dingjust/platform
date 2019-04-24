@@ -207,7 +207,7 @@ class _QuoteItemState extends State<QuoteItem> {
               height: 30,
               child: FlatButton(
                   onPressed: onReject,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                   color: Colors.red,
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: Text(
@@ -219,7 +219,7 @@ class _QuoteItemState extends State<QuoteItem> {
               height: 30,
               child: FlatButton(
                   onPressed: onApprove,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                   color: Color.fromRGBO(255, 214, 12, 1),
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: Text(

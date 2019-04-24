@@ -107,7 +107,7 @@ class QuotesListView extends StatelessWidget {
                       .map((quote) => Container(
                             margin: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(5),
                               color: Colors.white,
                             ),
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),

@@ -153,7 +153,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius:
-                    BorderRadius.all(Radius.circular(20))),
+                    BorderRadius.all(Radius.circular(5))),
                 onPressed: () async{
                   bool result = false;
                   //把选中的物流公司放到Model
@@ -240,7 +240,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius:
-                    BorderRadius.all(Radius.circular(20))),
+                    BorderRadius.all(Radius.circular(5))),
                 onPressed: () async{
                   bool result = false;
                   if(widget.isProductionOrder){

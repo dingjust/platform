@@ -439,7 +439,7 @@ class _ScreenConditionsState extends State<ScreenConditions> {
             ),
           ),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(5))),
           onPressed: () {
             String _selected = '';
             if (_isShowA) {

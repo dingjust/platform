@@ -569,7 +569,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             child: FlatButton(
                 onPressed: onCancelling,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color.fromRGBO(255, 70, 70, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                 child: Text(
@@ -587,7 +587,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                       )));
                 },
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 45),
                 child: Text(
@@ -602,7 +602,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           // FlatButton(
           //     onPressed: () {},
           //     shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(20)),
+          //         borderRadius: BorderRadius.circular(5)),
           //     color: Color.fromRGBO(150, 150, 150, 1),
           //     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
           //     child: Text(
@@ -620,7 +620,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                   _showMessage(context, result, '确认收货');
                 },
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color(0xFFFFD600),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 150),
                 child: Text(
@@ -641,7 +641,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             child: FlatButton(
                 onPressed: onUpdate,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Colors.grey,
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
                 child: Text(
@@ -673,7 +673,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               ),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
             ),
           ),
         ];
@@ -684,7 +684,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       //     FlatButton(
       //         onPressed: () {},
       //         shape: RoundedRectangleBorder(
-      //             borderRadius: BorderRadius.circular(20)),
+      //             borderRadius: BorderRadius.circular(5)),
       //         color: Color.fromRGBO(150, 150, 150, 1),
       //         padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       //         child: Text(

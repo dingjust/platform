@@ -784,7 +784,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                     ),
                   ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
                   onPressed: onSubmit)),
         ],
       ),
