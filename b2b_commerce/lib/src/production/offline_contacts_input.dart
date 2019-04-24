@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -139,7 +140,7 @@ class _OfflineContactsInputState extends State<OfflineContactsInput>{
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Divider(height: 0,color: Colors.grey,),
+                  child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
                 ),
               ],
             ),

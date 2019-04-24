@@ -192,7 +192,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   textInputAction: TextInputAction.next,
                   prefix: '￥',
                   onChanged: (value) {
-                    widget.item.price = value == '' ? null : double.parse(StringUtil.removeSymbolForRMB(value));
+                    widget.item.price = StringUtil.removeSymbolRMBToDouble(value);
                   },
                   onEditingComplete: (){
                     FocusScope.of(context).requestFocus(_gramWeightFocusNode);

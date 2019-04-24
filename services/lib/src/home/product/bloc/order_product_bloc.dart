@@ -31,6 +31,11 @@ class OrderByProductBLoc extends BLoCBase {
 
   Stream<List<ApparelProductModel>> get stream => _controller.stream;
 
+  var conditionController = StreamController<FilterConditionEntry>.broadcast();
+
+  Stream<FilterConditionEntry> get conditionStream =>
+      conditionController.stream;
+
   int pageSize = 10;
   int currentPage = 0;
   int totalPages = 0;
@@ -47,11 +52,16 @@ class OrderByProductBLoc extends BLoCBase {
       Response<Map<String, dynamic>> response;
       try {
         response = await http$.post(ProductApis.factoriesApparel, data: {
-          "categories": productCondition.categories.map((category) => category.code).toList(),
+          "categories": productCondition.categories
+              .map((category) => category.code)
+              .toList(),
           "keyword": productCondition.keyword ?? ''
         }, queryParameters: {
           'page': currentPage,
-          'size': pageSize
+          'size': pageSize,
+          'sort': productCondition.sortCondition != null
+              ? '${productCondition.sortCondition},${productCondition.sort}'
+              : ''
         });
       } on DioError catch (e) {
         print(e);
@@ -83,7 +93,9 @@ class OrderByProductBLoc extends BLoCBase {
         try {
           currentPage++;
           response = await http$.post(ProductApis.factoriesApparel, data: {
-            "categories": productCondition.categories.map((category) => category.code).toList(),
+            "categories": productCondition.categories
+                .map((category) => category.code)
+                .toList(),
             "keyword": productCondition.keyword ?? ''
           }, queryParameters: {
             'page': currentPage,
@@ -109,7 +121,7 @@ class OrderByProductBLoc extends BLoCBase {
 
   clear() async {
     //清空
-    _products.clear();
+    reset();
     _controller.sink.add(_products);
   }
 
@@ -133,5 +145,10 @@ class ProductCondition {
 
   String keyword;
 
-  ProductCondition(this.categories, this.keyword);
+  String sortCondition;
+
+  String sort;
+
+  ProductCondition(this.categories, this.keyword,
+      {this.sortCondition, this.sort});
 }

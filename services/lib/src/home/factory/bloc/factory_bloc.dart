@@ -51,7 +51,6 @@ class FactoryBLoC extends BLoCBase {
     String sort,
     String requirementCode,
   }) async {
-    print('${factoryCondition.hashCode}');
     if (!lock) {
       lock = true;
       //重置参数

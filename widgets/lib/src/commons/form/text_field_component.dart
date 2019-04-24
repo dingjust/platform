@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -59,7 +60,7 @@ class TextFieldComponent extends StatefulWidget {
 }
 
 class TextFieldComponentState extends State<TextFieldComponent> {
-  Color _dividerColor = Color(0x1F000000);
+  Color _dividerColor = Color(Constants.DIVIDER_COLOR);
 
   @override
   void initState() {
@@ -77,7 +78,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         });
       } else {
         setState(() {
-          _dividerColor = Color(0x1F000000);
+          _dividerColor = Color(Constants.DIVIDER_COLOR);
           if(widget.prefix != null && widget.controller.text != ''){
             widget.controller.text = widget.prefix + widget.controller.text;
           }
@@ -103,17 +104,17 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   Widget build(BuildContext context) {
-      widget.controller.value = TextEditingValue(
-        // 设置内容
-        text: widget.controller.text,
-        // 保持光标在最后
-        selection: TextSelection.fromPosition(
-          TextPosition(
-              affinity: TextAffinity.upstream,
-              offset: widget.controller.text.length,
-          ),
+    widget.controller.value = TextEditingValue(
+      // 设置内容
+      text: widget.controller.text,
+      // 保持光标在最后
+      selection: TextSelection.fromPosition(
+        TextPosition(
+          affinity: TextAffinity.upstream,
+          offset: widget.controller.text.length,
         ),
-      );
+      ),
+    );
     return Column(
       children: <Widget>[
         Container(
@@ -131,16 +132,11 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                       widget.isRequired ? Text(' *',style: TextStyle(fontSize: widget.leadingText.style.fontSize,color: Colors.red,)) : Text(''),
                     ],
                   ),
-//                  child: Text(widget.leadingText ?? '',style: TextStyle(fontSize: 16,color: widget.leadingColor),),
                 ),
               ),
-//              Offstage(
-//                offstage: widget.leadingText2 == null,
-//                child: widget.leadingText2,
-//              ),
               Expanded(
                 child: TextField(
-                  style: widget.style ?? TextStyle(color: Colors.grey,fontSize: 16,),
+                  style: widget.style ?? TextStyle(color: Colors.grey,fontSize: widget.leadingText == null ? 16 : widget.leadingText.style.fontSize,),
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
