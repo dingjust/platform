@@ -107,7 +107,9 @@ class _HomePageState extends State<HomePage> {
                 background: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    HomeBannerSection(),
+                    UserBLoC.instance.currentUser.type == UserType.BRAND
+                        ? HomeBrandBannerSection()
+                        : HomeFactoryBannerSection(),
                   ],
                 ),
               ),
@@ -122,13 +124,33 @@ class _HomePageState extends State<HomePage> {
 }
 
 /// 首页Banner
-class HomeBannerSection extends StatelessWidget {
+class HomeBrandBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
-      url: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/banner.png',
+      url:
+          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE1.png',
     ),
     MediaModel(
-      url: 'https://dingjust.oss-cn-shenzhen.aliyuncs.com/banner2.png',
+      url:
+          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+    )
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Carousel(items, 240);
+  }
+}
+
+class HomeFactoryBannerSection extends StatelessWidget {
+  final List<MediaModel> items = <MediaModel>[
+    MediaModel(
+      url:
+          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE1.png',
+    ),
+    MediaModel(
+      url:
+          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
     )
   ];
 
@@ -257,7 +279,7 @@ class BrandSecondMenuSection extends StatelessWidget {
       onPressed: () {
         _jumpToQualityFactory(context);
       },
-      title: '优质工厂',
+      title: '优选工厂',
       icon: Icon(
         B2BIcons.factory_brand,
         color: Color.fromRGBO(105, 224, 139, 1),
@@ -342,7 +364,7 @@ class BrandSecondMenuSection extends StatelessWidget {
                   adeptAtCategories: [],
                   labels: conditionLabels,
                   cooperationModes: []),
-              route: '优质工厂',
+              route: '优选工厂',
               categories: categories,
               labels: labels,
             ),

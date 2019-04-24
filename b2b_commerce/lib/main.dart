@@ -172,7 +172,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       ),
       NavigationMenu(
         BottomNavigationBarItem(
-            icon: Container(
+            icon: Container(  
               child: const Icon(B2BIcons.business),
             ),
             activeIcon: Container(

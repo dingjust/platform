@@ -17,7 +17,7 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  GlobalKey _ProductsPageKey = GlobalKey();
+  GlobalKey _productsPageKey = GlobalKey();
   ProductCondition productCondition;
 
   List<CategoryModel> cascadedCategories;
@@ -42,7 +42,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return BLoCProvider<OrderByProductBLoc>(
-      key: _ProductsPageKey,
+      key: _productsPageKey,
       bloc: OrderByProductBLoc.instance,
       child: Scaffold(
         appBar: AppBar(
@@ -188,11 +188,17 @@ class ProductsView extends StatelessWidget {
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<OrderByProductBLoc>(context);
 
-        //监听筛选条件更改
+    //监听筛选条件更改
     bloc.conditionStream.listen((condition) {
-// productCondition.
-      // bloc.filterByCondition(currentCodition);
       bloc.clear();
+      productCondition.sortCondition = condition.value;
+      //默认价格升序
+      if (condition.value == 'minPrice') {
+        productCondition.sort = 'ASC';
+      } else {
+        productCondition.sort = 'desc';
+      }
+      bloc.getData(productCondition);
     });
 
     //监听是否已经到底

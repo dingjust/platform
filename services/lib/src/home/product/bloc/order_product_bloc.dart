@@ -59,7 +59,9 @@ class OrderByProductBLoc extends BLoCBase {
         }, queryParameters: {
           'page': currentPage,
           'size': pageSize,
-          // 'sort': '${condition},'
+          'sort': productCondition.sortCondition != null
+              ? '${productCondition.sortCondition},${productCondition.sort}'
+              : ''
         });
       } on DioError catch (e) {
         print(e);
@@ -119,7 +121,7 @@ class OrderByProductBLoc extends BLoCBase {
 
   clear() async {
     //清空
-    _products.clear();
+    reset();
     _controller.sink.add(_products);
   }
 
@@ -143,5 +145,10 @@ class ProductCondition {
 
   String keyword;
 
-  ProductCondition(this.categories, this.keyword);
+  String sortCondition;
+
+  String sort;
+
+  ProductCondition(this.categories, this.keyword,
+      {this.sortCondition, this.sort});
 }

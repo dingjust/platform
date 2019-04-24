@@ -102,16 +102,24 @@ class MyHomePage extends StatelessWidget {
   }
 
   Widget _buildTopBackground(BuildContext context, UserModel user) {
-    return Container(
-      padding: const EdgeInsets.only(top: 50),
-      child: Row(
-        children: <Widget>[
-          _buildPortrait(context, user),
-          _buildInformation(context, user),
-        ],
-      ),
-      decoration: const BoxDecoration(
-        color: const Color.fromRGBO(255, 219, 0, 1),
+    return GestureDetector(
+      onTap: () {
+        if (user.status != UserStatus.ONLINE) {
+          Navigator.of(context)
+              .push((MaterialPageRoute(builder: (context) => B2BLoginPage())));
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.only(top: 50),
+        child: Row(
+          children: <Widget>[
+            _buildPortrait(context, user),
+            _buildInformation(context, user),
+          ],
+        ),
+        decoration: const BoxDecoration(
+          color: const Color.fromRGBO(255, 219, 0, 1),
+        ),
       ),
     );
   }
@@ -170,7 +178,7 @@ class MyHomePage extends StatelessWidget {
       );
     } else {
       return Container(
-        child: Text('未登录'),
+        child: Text('登录/注册'),
       );
     }
   }

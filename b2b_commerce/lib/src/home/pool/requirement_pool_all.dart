@@ -195,7 +195,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   String generateTitle() {
     if (currentCodition.keyword == null || currentCodition.keyword == '') {
-      return '推荐需求';
+      return '全部需求';
     } else {
       return '${currentCodition.keyword}';
     }
