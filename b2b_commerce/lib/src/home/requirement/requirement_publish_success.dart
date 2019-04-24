@@ -258,7 +258,7 @@ class _PublishRequirementSuccessDialogState
                 },
                 color: Color.fromRGBO(255, 214, 12, 1),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 child: Text(
                   '邀请工厂',
                   style: TextStyle(
@@ -283,7 +283,7 @@ class _PublishRequirementSuccessDialogState
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 shape: RoundedRectangleBorder(
                     side: BorderSide(color: Color.fromRGBO(255, 45, 45, 1)),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 child: Text(
                   '完善需求',
                   style: TextStyle(
@@ -301,7 +301,7 @@ class _PublishRequirementSuccessDialogState
                 },
                 color: Color.fromRGBO(255, 245, 193, 1),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 child: Text(
                   '回到首页',
                   style: TextStyle(

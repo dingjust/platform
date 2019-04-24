@@ -5,9 +5,9 @@
       <el-table-column label="名称" prop="name"></el-table-column>
       <el-table-column label="联系电话" prop="contactPhone"></el-table-column>
       <el-table-column label="联系人" prop="contactPerson"></el-table-column>
-      <el-table-column label="创建时间" prop="creationtime">
+      <el-table-column label="创建时间" prop="creationTime">
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | formatDate}}</span>
+          <span>{{scope.row.creationTime | formatDate}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">

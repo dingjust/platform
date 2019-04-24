@@ -50,6 +50,7 @@
       <el-col :span="8">
         <el-form-item label="详细地址" prop="line1">
           <el-autocomplete
+            v-if="isCompany"
             v-model="slotData.line1"
             :fetch-suggestions="querySearchAsync"
             placeholder="请输入详细地址"
@@ -59,7 +60,7 @@
               <div class="addr">{{ item.name }}</div>
             </template>
           </el-autocomplete>
-          <!--<el-input v-model="slotData.line1"></el-input>-->
+          <el-input v-if="!isCompany" v-model="slotData.line1"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="8">
@@ -79,7 +80,7 @@
 <script>
   export default {
     name: 'AddressForm',
-    props: ['slotData', 'readOnly'],
+    props: ['slotData', 'readOnly','isCompany'],
     mixins: [],
     computed: {},
     methods: {

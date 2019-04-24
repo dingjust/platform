@@ -66,6 +66,8 @@ const state = {
     categories: [],
     adeptAtCategories: [],
     industrialClusters:[],
+    creationTimeFrom:'',
+    creationTimeTo:'',
   }
 };
 

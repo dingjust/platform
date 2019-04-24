@@ -569,7 +569,7 @@ class _RequirementOrderDetailForFactoryState
             ),
           ),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(5))),
           onPressed: () {
             Navigator.push(
               context,

@@ -94,7 +94,7 @@ class _RequirementImportProductState extends State<RequirementImportProduct> {
                     fontSize: 18,
                   ),
                 ),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                 onPressed: () {}),
           ))
         ],

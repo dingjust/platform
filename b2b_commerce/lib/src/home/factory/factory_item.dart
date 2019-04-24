@@ -309,7 +309,7 @@ class InviteFactoryButton extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         ),
       );
     }

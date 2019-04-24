@@ -99,7 +99,7 @@ class _ProductionGenerateUniqueCodePageState
                       style: TextStyle(color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
                   ),
                 ),
 //                Container(
@@ -160,7 +160,7 @@ class _ProductionGenerateUniqueCodePageState
           disabledColor : Colors.black12,
           disabledTextColor: Colors.black26,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))
+              borderRadius: BorderRadius.all(Radius.circular(5))
           ),
         ),
         uniqueCode != null && uniqueCode != ''
@@ -189,7 +189,7 @@ class _ProductionGenerateUniqueCodePageState
           shape: RoundedRectangleBorder(
               side: BorderSide(
                   width: 0.5, color: Colors.white),
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(5))),
         )
       ],
     );
@@ -250,7 +250,7 @@ class _ProductionGenerateUniqueCodePageState
                     ),
                     shape: RoundedRectangleBorder(
                         side: BorderSide(width: 0.5, color: Color.fromRGBO(255,214,12, 1)),
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
                   ),
                 ),
                 Container(
@@ -266,7 +266,7 @@ class _ProductionGenerateUniqueCodePageState
                       style: TextStyle(color: Colors.black),
                     ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
                   ),
                 ),
               ],
@@ -541,7 +541,7 @@ class CompleteTextFieldDialog extends StatelessWidget {
                 ),
                 shape: RoundedRectangleBorder(
                     side: BorderSide(width: 0.5, color: Color.fromRGBO(255,214,12, 1)),
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
               ),
             ),
             Container(
@@ -556,7 +556,7 @@ class CompleteTextFieldDialog extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
               ),
             ),
           ],

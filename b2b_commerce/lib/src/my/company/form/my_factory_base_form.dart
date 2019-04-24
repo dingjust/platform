@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -107,11 +108,11 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _nameFocusNode,
-                leadingText: Text('公司名称',style: TextStyle(fontSize: 16,color: Colors.grey,)),
+                leadingText: Text('公司名称',style: TextStyle(fontSize: 16,)),
                 controller: _nameController,
+                hintText: '请输入公司名称',
               ),
             ),
-            SizedBox(height: 2),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -122,7 +123,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         child: Text(
                       '月均产能',
                       style: TextStyle(
-                        color: Colors.grey,
                         fontSize: 16,
                       ),
                     )),
@@ -130,7 +130,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         ? ''
                         : MonthlyCapacityRangesLocalizedMap[
                             widget.factory.monthlyCapacityRange]),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
               ),
@@ -160,8 +160,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 }
               },
             ),
-            SizedBox(
-              height: 2,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             ),
             InkWell(
               child: Container(
@@ -173,14 +174,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         child: Text(
                       '产值规模',
                       style: TextStyle(
-                        color: Colors.grey,
                         fontSize: 16,
                       ),
                     )),
                     Text(widget.factory.scaleRange == null
                         ? ''
                         : ScaleRangesLocalizedMap[widget.factory.scaleRange]),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
               ),
@@ -208,8 +208,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 }
               },
             ),
-            SizedBox(
-              height: 2,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             ),
             InkWell(
               child: Container(
@@ -221,7 +222,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         child: Text(
                       '工厂规模',
                       style: TextStyle(
-                        color: Colors.grey,
                         fontSize: 16,
                       ),
                     )),
@@ -229,7 +229,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         ? ''
                         : PopulationScaleLocalizedMap[
                             widget.factory.populationScale]),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
               ),
@@ -259,8 +259,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 }
               },
             ),
-            SizedBox(
-              height: 2,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             ),
             InkWell(
               child: Container(
@@ -272,13 +273,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         child: Text(
                       '合作方式',
                       style: TextStyle(
-                        color: Colors.grey,
                         fontSize: 16,
                       ),
                     )),
                     Text(formatCooperationModesSelectText(
                         widget.factory.cooperationModes)),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
               ),
@@ -310,8 +310,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 }
               },
             ),
-            SizedBox(
-              height: 2,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             ),
             InkWell(
               child: Container(
@@ -323,14 +324,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         child: Text(
                       '生产大类',
                       style: TextStyle(
-                        color: Colors.grey,
                         fontSize: 16,
                       ),
                     )),
                     Text(
                       formatCategorySelectText(widget.factory.categories, 5),
                     ),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
               ),
@@ -355,8 +355,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 }
               },
             ),
-            SizedBox(
-              height: 2,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             ),
             InkWell(
               child: Container(
@@ -368,7 +369,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         child: Text(
                       '优势类目',
                       style: TextStyle(
-                        color: Colors.grey,
                         fontSize: 16,
                       ),
                     )),
@@ -376,7 +376,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       formatCategorySelectText(
                           widget.factory.adeptAtCategories, 2),
                     ),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
               ),
@@ -399,19 +399,21 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 }
               },
             ),
-            SizedBox(
-              height: 2,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _cooperativeBrandFocusNode,
-                leadingText: Text('合作品牌商',style: TextStyle(fontSize: 16,color: Colors.grey,)),
+                leadingText: Text('合作品牌商',style: TextStyle(fontSize: 16,)),
                 controller: _cooperativeBrandController,
               ),
             ),
-            SizedBox(
-              height: 2,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             ),
             InkWell(
               child: Container(
@@ -423,14 +425,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         child: Text(
                       '我的标签',
                       style: TextStyle(
-                        color: Colors.grey,
                         fontSize: 16,
                       ),
                     )),
                     Text(
                       formatLabelsSelectText(widget.factory.labels),
                     ),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
               ),

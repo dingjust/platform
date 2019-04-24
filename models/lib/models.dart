@@ -349,10 +349,8 @@ const PopulationScaleEnum = <EnumModel>[
 
 //合作方式枚举
 const CooperationModesEnum  = <EnumModel>[
-  EnumModel('PURE_PROCESSING', '纯加工'),
-  EnumModel('FOB', 'FOB'),
-  EnumModel('ODM', 'ODM'),
-  EnumModel('OEM', 'OEM'),
+  EnumModel('LIGHT_PROCESSING', '清加工'),
+  EnumModel('LABOR_AND_MATERIAL', '包工包料'),
 ];
 
 

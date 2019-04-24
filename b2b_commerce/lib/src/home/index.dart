@@ -258,10 +258,11 @@ class BrandSecondMenuSection extends StatelessWidget {
       onPressed: () async {
         List<LabelModel> labels =
             await UserRepositoryImpl().industrialClustersFromLabels();
+        List<LabelModel> factoryLabels = await UserRepositoryImpl().labels();
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => IndustrialClusterPage(labels: labels),
+            builder: (context) => IndustrialClusterPage(labels: labels,factoryLabels: factoryLabels,),
           ),
         );
       },
@@ -298,7 +299,7 @@ class BrandSecondMenuSection extends StatelessWidget {
             .where((label) =>
                 label.group == 'FACTORY' || label.group == 'PLATFORM')
             .toList();
-        labels.add(LabelModel(name: '已认证', id: 1000000));
+//        labels.add(LabelModel(name: '已认证', id: 1000000));
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -703,7 +704,7 @@ class FactoryCollaborationSection extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: FlatButton(
         color: Color.fromRGBO(255, 214, 12, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         onPressed: () {
           Navigator.push(
             context,

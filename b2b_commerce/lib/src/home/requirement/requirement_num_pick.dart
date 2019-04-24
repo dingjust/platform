@@ -157,7 +157,7 @@ class _RequirementNumPickState extends State<RequirementNumPick> {
                   ),
                 ),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
                 onPressed: () async {
                   if (Form.of(context).validate()) {
                     //验证通过提交数据

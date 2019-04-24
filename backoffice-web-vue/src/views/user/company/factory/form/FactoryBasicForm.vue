@@ -158,7 +158,7 @@
     </el-form>
     <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
                :show-close="false" append-to-body width="50%">
-      <address-form ref="addressForm" :slot-data="addressFormData"/>
+      <address-form ref="addressForm" :slot-data="addressFormData" :isCompany = "true"/>
       <span slot="footer" class="dialog-footer">
         <el-button @click="onAddressInputCanceled">取 消</el-button>
         <el-button type="primary" @click="onAddressInputConfirmed">确 定</el-button>
@@ -213,6 +213,10 @@
       onAddressInputConfirmed() {
         if (this.$refs['addressForm'].validate()) {
           this.$set(this.slotData, 'contactAddress', this.addressFormData);
+          if(this.addressFormData.longitude){
+            this.slotData.longitude = this.addressFormData.longitude;
+            this.slotData.latitude = this.addressFormData.latitude;
+          }
           this.addressDialogVisible = false;
         }
       },

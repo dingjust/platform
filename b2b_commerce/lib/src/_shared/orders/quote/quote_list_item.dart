@@ -250,7 +250,7 @@ class QuoteListItem extends StatelessWidget {
                             )));
                   },
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   child: Text(
                     '联系工厂',
                     style: TextStyle(color: Colors.black, fontSize: 16),
@@ -264,7 +264,7 @@ class QuoteListItem extends StatelessWidget {
             child: FlatButton(
               onPressed: onQuoteConfirming,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(5)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -315,7 +315,7 @@ class QuoteListItem extends StatelessWidget {
                             )));
                   },
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   child: Text(
                     '联系工厂',
                     style: TextStyle(color: Colors.black, fontSize: 16),
@@ -338,7 +338,7 @@ class QuoteListItem extends StatelessWidget {
             child: FlatButton(
               onPressed: onQuoteUpdating,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(5)),
               color: Colors.grey,
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: const Text('修改报价',
@@ -353,7 +353,7 @@ class QuoteListItem extends StatelessWidget {
             height: 30,
             child: FlatButton(
               onPressed: onProofingCreating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -406,7 +406,7 @@ class QuoteListItem extends StatelessWidget {
                   );
                 }
               },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               color: Colors.grey,
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -420,7 +420,7 @@ class QuoteListItem extends StatelessWidget {
             height: 30,
             child: FlatButton(
               onPressed: onProductionOrderCreating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -473,7 +473,7 @@ class QuoteListItem extends StatelessWidget {
                   );
                 }
               },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               color: Colors.grey,
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -490,7 +490,7 @@ class QuoteListItem extends StatelessWidget {
             height: 30,
             child: FlatButton(
               onPressed: onQuoteAgain,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               color: Color.fromRGBO(255, 70, 70, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(

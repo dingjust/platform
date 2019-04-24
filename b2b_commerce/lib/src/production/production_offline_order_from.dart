@@ -79,6 +79,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text('创建线下订单'),
           elevation: 0.5,
@@ -90,9 +91,30 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               children: <Widget>[
                 _buildCenter(context),
                 _buildBottom(context),
-                _buildCommitButton(context),
+//                _buildCommitButton(context),
               ],
-            ))
+            )
+        ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+        height: 50,
+        child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              '确认',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: () async {
+              onSubmit();
+            }),
+      ),
     );
   }
 
@@ -461,7 +483,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               '生产工厂',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                
               ),
             ),
             trailing: company == null || company.name == null
@@ -598,7 +620,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 '定金尾款',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             trailing: earnest == null || earnest.earnestMoney == null || earnest.earnestMoney == ''
@@ -635,7 +656,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               '送货地址',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
               ),
             ),
             trailing: address == null || address == ''
@@ -813,7 +833,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Container(
               width: double.infinity,
               height: 50,
-              margin: EdgeInsets.fromLTRB(20, 15, 20, 0),
+              margin: EdgeInsets.fromLTRB(20, 15, 20, 20),
               child: RaisedButton(
                   color: Color.fromRGBO(255, 214, 12, 1),
                   child: Text(
@@ -825,7 +845,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                     ),
                   ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
                   onPressed: () async {
                     onSubmit();
                   })
@@ -898,7 +918,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
     //单价
     if (price != null && double.parse(price) > 0) {
-      purchaseOrder.unitPrice = double.parse(price);
+      purchaseOrder.unitPrice = StringUtil.removeSymbolRMBToDouble(price);
     }else{
       purchaseOrder.unitPrice = 0;
     }
@@ -910,7 +930,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       //定金
       if (earnest.earnestMoney != null) {
         purchaseOrder.deposit =
-            double.parse(earnest.earnestMoney);
+            StringUtil.removeSymbolRMBToDouble(earnest.tailMoney);
       }else{
         purchaseOrder.deposit = 0;
       }
@@ -918,7 +938,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       purchaseOrder.depositPaidDate = earnest.estimatePaymentDate;
       //尾款
       if (earnest.tailMoney != null) {
-        purchaseOrder.balance = double.parse(earnest.tailMoney);
+        purchaseOrder.balance = StringUtil.removeSymbolRMBToDouble(earnest.tailMoney);
       }
       purchaseOrder.balancePaid = earnest.isTailPayment;
       purchaseOrder.balancePaidDate = earnest.tailPaymentDate;

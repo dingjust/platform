@@ -270,7 +270,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius:
-                    BorderRadius.all(Radius.circular(20))),
+                    BorderRadius.all(Radius.circular(5))),
                 onPressed: () {
                   if((phase == currentPhase) && (progress.phase == ProductionProgressPhase.INSPECTION) && order.salesApplication == SalesApplication.ONLINE){
                     _showBalanceDialog(context, order);
@@ -802,7 +802,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       ),
                       shape: RoundedRectangleBorder(
                           borderRadius:
-                          BorderRadius.all(Radius.circular(20))),
+                          BorderRadius.all(Radius.circular(5))),
                       onPressed: () async {
                         bool result = false;
                         print(dialogText.text);

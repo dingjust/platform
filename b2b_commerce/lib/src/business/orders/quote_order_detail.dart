@@ -681,7 +681,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             child: FlatButton(
                 onPressed: onReject,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Colors.red,
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 45),
                 child: Text(
@@ -694,7 +694,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             child: FlatButton(
                 onPressed: onApprove,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 45),
                 child: Text(
@@ -715,7 +715,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               color: Colors.grey,
                 onPressed: onUpdateQuote,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
                 child: Text(
                   '修改报价',
@@ -733,7 +733,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             child: FlatButton(
                 onPressed: onCreateProofings,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 child: Text(
@@ -787,7 +787,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   );
                 }
               },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               color: Colors.grey,
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -803,7 +803,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             child: FlatButton(
                 onPressed: onCreateProduction,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 child: Text(
@@ -857,7 +857,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   );
                 }
               },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               color: Colors.grey,
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -874,7 +874,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             child: FlatButton(
                 onPressed: onQuoteAgain,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color.fromRGBO(255, 70, 70, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 120),
                 child: Text(
