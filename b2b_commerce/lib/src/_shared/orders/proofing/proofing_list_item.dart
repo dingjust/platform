@@ -213,7 +213,7 @@ class ProofingOrderItem extends StatelessWidget {
     Widget _buildCancelButton(BuildContext context) {
       return FlatButton(
         onPressed: onProofingCanceling,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         color: const Color.fromRGBO(255, 70, 70, 1),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
         child: const Text('取消订单',
@@ -224,7 +224,7 @@ class ProofingOrderItem extends StatelessWidget {
     Widget _buildPayButton(BuildContext context) {
       return FlatButton(
         onPressed: onProofingPaying,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         color: const Color.fromRGBO(255, 214, 12, 1),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
         child: Text('  去支付  ',
@@ -236,7 +236,7 @@ class ProofingOrderItem extends StatelessWidget {
     Widget _buildConfirmReceivedButton(BuildContext context) {
       return FlatButton(
         onPressed: onProofingConfirmReceived,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         color: const Color(0xFFFFD600),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         child: Text(
@@ -251,7 +251,7 @@ class ProofingOrderItem extends StatelessWidget {
         onPressed: onProofingUpdating,
         shape: RoundedRectangleBorder(
           side: const BorderSide(color: const Color.fromRGBO(255, 45, 45, 1)),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(5),
         ),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
         child: Text(
@@ -272,7 +272,7 @@ class ProofingOrderItem extends StatelessWidget {
               color: Colors.black, fontWeight: FontWeight.w500, fontSize: 18),
         ),
         shape: const RoundedRectangleBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(20))),
+            borderRadius: const BorderRadius.all(Radius.circular(5))),
       );
     }
 
@@ -329,7 +329,7 @@ class ProofingOrderItem extends StatelessWidget {
             child: FlatButton(
               onPressed: onProofingCanceling,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(5)),
               color: const Color.fromRGBO(255, 70, 70, 1),
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
               child: const Text('取消订单',
@@ -342,7 +342,7 @@ class ProofingOrderItem extends StatelessWidget {
                 ? FlatButton(
                     onPressed: onProofingPaying,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(5)),
                     color: Color.fromRGBO(255, 214, 12, 1),
                     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
                     child: Text(
@@ -353,7 +353,7 @@ class ProofingOrderItem extends StatelessWidget {
                 : FlatButton(
                     onPressed: onProofingConfirm,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(5)),
                     color: Color.fromRGBO(255, 214, 12, 1),
                     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                     child: Text(
@@ -371,7 +371,7 @@ class ProofingOrderItem extends StatelessWidget {
             child: FlatButton(
               onPressed: onProofingConfirmReceived,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(5)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(
@@ -393,7 +393,7 @@ class ProofingOrderItem extends StatelessWidget {
             child: FlatButton(
               onPressed: onProofingUpdating,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(5)),
               color: Colors.grey,
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: const Text('修改订单',
@@ -409,7 +409,7 @@ class ProofingOrderItem extends StatelessWidget {
             child: FlatButton(
               onPressed: onProofingConfirmDelivered,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(5)),
               color: Color.fromRGBO(255, 214, 12, 1),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Text(

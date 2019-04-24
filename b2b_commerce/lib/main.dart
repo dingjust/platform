@@ -37,10 +37,14 @@ void main() async {
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 
-  runApp(BLoCProvider<AppBLoC>(
-    bloc: AppBLoC.instance,
-    child: MyApp(),
-  ));
+  //强制竖屏
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
+    runApp(BLoCProvider<AppBLoC>(
+      bloc: AppBLoC.instance,
+      child: MyApp(),
+    ));
+  });
 }
 
 class MyApp extends StatefulWidget {

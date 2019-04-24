@@ -195,7 +195,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   String generateTitle() {
     if (currentCodition.keyword == null || currentCodition.keyword == '') {
-      return '推荐需求';
+      return '全部需求';
     } else {
       return '${currentCodition.keyword}';
     }
@@ -455,7 +455,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
             height: 25,
             width: 65,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(5),
                 color: Color.fromRGBO(255, 214, 12, 1)),
             child: Center(
               child: Text('去报价'),

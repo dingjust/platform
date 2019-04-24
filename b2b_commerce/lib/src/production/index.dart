@@ -295,7 +295,7 @@ class LoginRemind extends StatelessWidget {
             child: FlatButton(
               color: Color.fromRGBO(255, 214, 12, 1),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(5)),
               onPressed: () {
                 Navigator.of(context).push(
                     (MaterialPageRoute(builder: (context) => B2BLoginPage())));

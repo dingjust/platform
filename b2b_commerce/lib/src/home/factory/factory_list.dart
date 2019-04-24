@@ -46,6 +46,15 @@ class _FactoryPageState extends State<FactoryPage> {
     checked: true,
   );
 
+  bool showDateFilterMenu = false;
+  bool showMachineTypeFilterMenu = false;
+  bool showCategoriesFilterMenu = false;
+
+  String labText = '综合';
+
+  List<CategoryModel> _category;
+  List<CategoryModel> _categorySelected = [];
+
   @override
   void initState() {
     if (widget.factoryCondition != null) {
@@ -57,6 +66,10 @@ class _FactoryPageState extends State<FactoryPage> {
           labels: [],
           cooperationModes: []);
     }
+
+    ProductRepositoryImpl()
+        .cascadedCategories()
+        .then((categorys) => _category = categorys);
 
     super.initState();
   }
@@ -101,15 +114,52 @@ class _FactoryPageState extends State<FactoryPage> {
           body: Scaffold(
               appBar: AppBar(
                 elevation: 0,
-                title: FilterBar(
-                  onChanged: (condition) => changeCondition(condition),
-                  filterConditionEntries: filterConditionEntries,
-                  action: [
-//                    ConditionPageButton(
-//                      factoryCondition: factoryCondition,
-//                      requirementCode: widget.requirementCode,
-//                    )
+                title: RequirementFilterBar(
+                  entries: [
+                    FilterEntry('${labText}⇂', () {
+                      setState(() {
+                        showDateFilterMenu = !showDateFilterMenu;
+                        showCategoriesFilterMenu = false;
+                        showMachineTypeFilterMenu = false;
+                      });
+                    }),
+                    FilterEntry('分类', () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            child: CategorySelect(
+                              categories: _category,
+                              multiple: false,
+                              verticalDividerOpacity: 1,
+                              categorySelect: _categorySelected,
+                            ),
+                          );
+                        },
+                      ).then((a) {
+                        setState(() {
+                          if (_categorySelected.isEmpty) {
+                            widget.factoryCondition.categories = null;
+                          } else {
+                            widget.factoryCondition.adeptAtCategories = _categorySelected;
+                          }
+                          FactoryBLoC.instance.filterByCondition(
+                            widget.factoryCondition,
+                            requirementCode: widget.requirementCode,
+                          );
+                        });
+                      });
+                      setState(() {
+                        showDateFilterMenu = false;
+                      });
+                    }),
+                    FilterEntry('地区', () {
+                      setState(() {
+                        showDateFilterMenu = false;
+                      });
+                    })
                   ],
+                  action: Container(),
                 ),
                 automaticallyImplyLeading: false,
               ),
@@ -120,12 +170,41 @@ class _FactoryPageState extends State<FactoryPage> {
                   labels: widget.labels,
                 ),
               ),
-              body: FactoryListView(
-                factoryCondition: factoryCondition,
-                showButton: widget.requirementCode != null,
-                requirementCode: widget.requirementCode,
-                currentCondition: currentCondition,
-              )),
+              body: Column(
+                children: <Widget>[
+                  FilterSelectMenu(
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    height: showDateFilterMenu ? 150 : 0,
+                    entries: filterConditionEntries,
+                    streamController:
+                    RequirementPoolBLoC.instance.conditionController,
+                    afterPressed: (String str) {
+                      print(str);
+                      setState(() {
+                        labText = str;
+                       FilterConditionEntry selected;
+                       for(int i =0;i<filterConditionEntries.length;i++){
+                         if(str == filterConditionEntries[i].label){
+                           currentCondition = filterConditionEntries[i];
+                         }
+                       }
+                        changeCondition(currentCondition);
+//                        currentCondition
+                        showDateFilterMenu = !showDateFilterMenu;
+                      });
+                    },
+                  ),
+                  Expanded(
+                    child: FactoryListView(
+                      factoryCondition: factoryCondition,
+                      showButton: widget.requirementCode != null,
+                      requirementCode: widget.requirementCode,
+                      currentCondition: currentCondition,
+                    )
+                  )
+                ],
+              ),
+              ),
         ));
   }
 
@@ -136,6 +215,9 @@ class _FactoryPageState extends State<FactoryPage> {
       return '${factoryCondition.keyword}';
     }
   }
+
+
+
 }
 
 class ConditionPageButton extends StatelessWidget {

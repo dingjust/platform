@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -99,32 +100,33 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _nameFocusNode,
-                leadingText: Text('公司名称',style: TextStyle(fontSize: 16,color: Colors.grey,)),
+                leadingText: Text('公司名称',style: TextStyle(fontSize: 16,)),
                 controller: _nameController,
-                hintText: '请输入',
+                hintText: '请输入公司名称',
               ),
             ),
-            SizedBox(height: 2),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _brandFocusNode,
-                leadingText: Text('品牌名称',style: TextStyle(fontSize: 16,color: Colors.grey,)),
+                leadingText: Text('品牌名称',style: TextStyle(fontSize: 16,)),
                 controller: _brandController,
-                hintText: '请输入',
+                hintText: '请输入品牌名称',
               ),
             ),
-            SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _cooperativeBrandFocusNode,
-                leadingText: Text('合作品牌',style: TextStyle(fontSize: 16,color: Colors.grey,)),
+                leadingText: Text('合作品牌',style: TextStyle(fontSize: 16,)),
                 controller: _cooperativeBrandController,
-                hintText: '请输入',
+                hintText: '请输入合作品牌',
               ),
             ),
-            SizedBox(height: 2),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -135,12 +137,12 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         child: Text(
                       '产值规模',
                       style: TextStyle(
-                        color: Colors.grey,
+
                         fontSize: 16,
                       ),
                     )),
                     Text(widget.brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.brand.scaleRange]),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color: Colors.grey,),
                   ],
                 ),
               ),
@@ -167,7 +169,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 }
               },
             ),
-            SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -178,14 +183,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         child: Text(
                       '优势类目',
                       style: TextStyle(
-                        color: Colors.grey,
+
                         fontSize: 16,
                       ),
                     )),
                     Text(
                       formatCategorySelectText(widget.brand.adeptAtCategories),
                     ),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color: Colors.grey),
                   ],
                 ),
               ),
@@ -207,7 +212,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 }
               },
             ),
-            SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -218,14 +226,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         child: Text(
                       '风格',
                       style: TextStyle(
-                        color: Colors.grey,
+
                         fontSize: 16,
                       ),
                     )),
                     Text(
                       formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),
                     ),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color: Colors.grey),
                   ],
                 ),
               ),
@@ -247,7 +255,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 }
               },
             ),
-            SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -258,14 +269,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         child: Text(
                       '年龄段',
                       style: TextStyle(
-                        color: Colors.grey,
+
                         fontSize: 16,
                       ),
                     )),
                     Text(
                       formatEnumSelectsText(_ageRanges, AgeRangesEnum, 3),
                     ),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color: Colors.grey),
                   ],
                 ),
               ),
@@ -294,7 +305,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 }
               },
             ),
-            SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -305,14 +319,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         child: Text(
                       '春夏款价格段',
                       style: TextStyle(
-                        color: Colors.grey,
+
                         fontSize: 16,
                       ),
                     )),
                     Text(
                       formatEnumSelectsText(_priceRange1s, PriceRangesEnum, 3),
                     ),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color: Colors.grey),
                   ],
                 ),
               ),
@@ -342,7 +356,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 }
               },
             ),
-            SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            ),
             InkWell(
               child: Container(
                 color: Colors.white,
@@ -353,14 +370,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         child: Text(
                       '秋冬款价格段',
                       style: TextStyle(
-                        color: Colors.grey,
+
                         fontSize: 16,
                       ),
                     )),
                     Text(
                       formatEnumSelectsText(_priceRange2s, PriceRangesEnum, 3),
                     ),
-                    Icon(Icons.chevron_right),
+                    Icon(Icons.chevron_right,color: Colors.grey),
                   ],
                 ),
               ),

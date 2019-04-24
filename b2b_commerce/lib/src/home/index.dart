@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
               ignoreVersionNotification:
                   UserBLoC.instance.ignoreVersionNotification)
           .initCheckVersion(
-              AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID'));
+              AppBLoC.instance.packageInfo.version, 'nbyjy'));
     }
     super.initState();
   }
@@ -107,7 +107,9 @@ class _HomePageState extends State<HomePage> {
                 background: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    HomeBannerSection(),
+                    UserBLoC.instance.currentUser.type == UserType.BRAND
+                        ? HomeBrandBannerSection()
+                        : HomeFactoryBannerSection(),
                   ],
                 ),
               ),
@@ -122,13 +124,33 @@ class _HomePageState extends State<HomePage> {
 }
 
 /// 首页Banner
-class HomeBannerSection extends StatelessWidget {
+class HomeBrandBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
-      url: 'http://dingjust.oss-cn-shenzhen.aliyuncs.com/banner.png',
+      url:
+          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE1.png',
     ),
     MediaModel(
-      url: 'https://dingjust.oss-cn-shenzhen.aliyuncs.com/banner2.png',
+      url:
+          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+    )
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Carousel(items, 240);
+  }
+}
+
+class HomeFactoryBannerSection extends StatelessWidget {
+  final List<MediaModel> items = <MediaModel>[
+    MediaModel(
+      url:
+          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE1.png',
+    ),
+    MediaModel(
+      url:
+          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
     )
   ];
 
@@ -236,10 +258,11 @@ class BrandSecondMenuSection extends StatelessWidget {
       onPressed: () async {
         List<LabelModel> labels =
             await UserRepositoryImpl().industrialClustersFromLabels();
+        List<LabelModel> factoryLabels = await UserRepositoryImpl().labels();
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => IndustrialClusterPage(labels: labels),
+            builder: (context) => IndustrialClusterPage(labels: labels,factoryLabels: factoryLabels,),
           ),
         );
       },
@@ -257,7 +280,7 @@ class BrandSecondMenuSection extends StatelessWidget {
       onPressed: () {
         _jumpToQualityFactory(context);
       },
-      title: '优质工厂',
+      title: '优选工厂',
       icon: Icon(
         B2BIcons.factory_brand,
         color: Color.fromRGBO(105, 224, 139, 1),
@@ -276,7 +299,7 @@ class BrandSecondMenuSection extends StatelessWidget {
             .where((label) =>
                 label.group == 'FACTORY' || label.group == 'PLATFORM')
             .toList();
-        labels.add(LabelModel(name: '已认证', id: 1000000));
+//        labels.add(LabelModel(name: '已认证', id: 1000000));
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -342,7 +365,7 @@ class BrandSecondMenuSection extends StatelessWidget {
                   adeptAtCategories: [],
                   labels: conditionLabels,
                   cooperationModes: []),
-              route: '优质工厂',
+              route: '优选工厂',
               categories: categories,
               labels: labels,
             ),
@@ -415,21 +438,33 @@ class BrandTrackingProgressSection extends StatelessWidget {
 
   Widget _buildNoUniqueCode(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ProductionOfflineOrder()));
-      },
+      onTap: () {},
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            '没有唯一码？点击这里',
-            style: TextStyle(color: Colors.red, fontSize: 15),
+            '没有唯一码？',
+            style:
+                TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 15),
           ),
-          Icon(
-            B2BIcons.arrow_right,
-            color: Colors.red,
-            size: 12,
+          Container(
+            height: 25,
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProductionOfflineOrder()));
+              },
+              child: Text(
+                '去创建',
+                style: TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+              ),
+            ),
           )
         ],
       ),
@@ -669,7 +704,7 @@ class FactoryCollaborationSection extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: FlatButton(
         color: Color.fromRGBO(255, 214, 12, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         onPressed: () {
           Navigator.push(
             context,

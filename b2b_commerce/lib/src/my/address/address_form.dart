@@ -127,7 +127,7 @@ class AddressFormState extends State<AddressFormPage> {
                 ),
               ),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
                   side: BorderSide(
                       color:  Colors.red[200],
                       style: BorderStyle.solid,

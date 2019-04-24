@@ -79,6 +79,8 @@ class B2BIcons {
       const IconData(0xe6cc, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData wechat =
       const IconData(0xe63d, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData question =
+      const IconData(0xe639, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

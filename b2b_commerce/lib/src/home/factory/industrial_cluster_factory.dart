@@ -5,9 +5,11 @@ import 'package:services/services.dart';
 import './factory_list.dart';
 
 class IndustrialClusterPage extends StatefulWidget {
-  IndustrialClusterPage({Key key, this.labels}) : super(key: key);
+  IndustrialClusterPage({Key key, this.labels,this.factoryLabels}) : super(key: key);
 
   final List<LabelModel> labels;
+
+  final List<LabelModel> factoryLabels;
 
   _IndustrialClusterPageState createState() => _IndustrialClusterPageState();
 }
@@ -88,7 +90,7 @@ class _IndustrialClusterPageState extends State<IndustrialClusterPage> {
                 childAspectRatio: 2,
               ),
               children: List.generate(_valueItem.length, (index) {
-                return IndustrialClusterItem(item: _valueItem[index]);
+                return IndustrialClusterItem(item: _valueItem[index],);
               }),
             ),
           ),
@@ -99,12 +101,17 @@ class _IndustrialClusterPageState extends State<IndustrialClusterPage> {
 }
 
 class IndustrialClusterItem extends StatelessWidget {
-  const IndustrialClusterItem({Key key, this.item}) : super(key: key);
+  const IndustrialClusterItem({Key key, this.item,}) : super(key: key);
 
   final IndustrialClusterModel item;
 
   void _onTap(BuildContext context) async{
     List<CategoryModel> categories = await ProductRepositoryImpl().majorCategories();
+    List<LabelModel> factoryLabels = await UserRepositoryImpl().labels();
+    factoryLabels = factoryLabels
+        .where((label) =>
+    label.group == 'FACTORY' || label.group == 'PLATFORM')
+        .toList();
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -117,6 +124,7 @@ class IndustrialClusterItem extends StatelessWidget {
                   cooperationModes: []),
               categories: categories,
               route: item.name,
+              labels: factoryLabels,
             ),
       ),
     );

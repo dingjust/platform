@@ -310,7 +310,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           ),
                           shape: const RoundedRectangleBorder(
                             borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
+                              Radius.circular(5),
                             ),
                           ),
                           onPressed: () async {
@@ -371,7 +371,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           ),
                           shape: const RoundedRectangleBorder(
                             borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
+                              Radius.circular(5),
                             ),
                           ),
                           onPressed: () {
@@ -407,7 +407,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       ),
                       shape: const RoundedRectangleBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(20),
+                          Radius.circular(5),
                         ),
                       ),
                       onPressed: () async {
@@ -468,7 +468,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                         ),
                         shape: const RoundedRectangleBorder(
                           borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
+                            Radius.circular(5),
                           ),
                         ),
                         onPressed: () async {
@@ -511,7 +511,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                         ),
                         shape: const RoundedRectangleBorder(
                           borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
+                            Radius.circular(5),
                           ),
                         ),
                         onPressed: () async {
@@ -554,7 +554,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       ),
                       shape: const RoundedRectangleBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(20),
+                          Radius.circular(5),
                         ),
                       ),
                       onPressed: () async {
@@ -593,7 +593,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       ),
                       shape: const RoundedRectangleBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(20),
+                          Radius.circular(5),
                         ),
                       ),
                       onPressed: () async {
@@ -636,7 +636,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       ),
                     ),
                     shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(Radius.circular(20))),
+                        borderRadius: const BorderRadius.all(Radius.circular(5))),
                     onPressed: () {
                       _showDepositDialog(context, widget.order);
                     }),
@@ -703,7 +703,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                   padding: const EdgeInsets.symmetric(
                       vertical: 0, horizontal: 20),
                   shape: const RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+                      borderRadius: const BorderRadius.all(Radius.circular(5))),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -741,7 +741,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                     ),
                   ),
                   shape: const RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+                      borderRadius: const BorderRadius.all(Radius.circular(5))),
                   onPressed: () {
                     _showBalanceDialog(context, widget.order);
                   },
@@ -840,7 +840,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       ),
                       shape: const RoundedRectangleBorder(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(20))),
+                              const BorderRadius.all(Radius.circular(5))),
                       onPressed: () async {
                         bool result = false;
                         if (dialogText.text != null && dialogText.text != '') {
@@ -953,7 +953,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                   ),
                   shape: const RoundedRectangleBorder(
                       borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
+                          const BorderRadius.all(Radius.circular(5))),
                   onPressed: () async {
                     bool result = false;
                     double unit = unitText.text == null || unitText.text == ''

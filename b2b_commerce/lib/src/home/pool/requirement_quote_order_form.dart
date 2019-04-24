@@ -79,8 +79,6 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           title: Text(widget.update ? '修改报价' : '填写报价'),
         ),
         body: Container(
-            color: Color.fromRGBO(245, 245, 245, 1),
-            margin: EdgeInsets.only(bottom: 70),
             child: ListView(
               children: <Widget>[
                 _buildRequirementInfo(),
@@ -91,30 +89,26 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                 _buildRemarks()
               ],
             )),
-        floatingActionButton: FloatingActionButton.extended(
-          icon: Container(
-            width: 0,
-            child: Icon(
-              null,
-              color: Colors.white,
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          height: 50,
+          child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              widget.update ? '修改报价' : '提交报价',
+              style: TextStyle(
+                color: Colors.black,
+
+                fontSize: 18,
+              ),
             ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: onSubmit,
           ),
-          label: Container(
-              width: 300,
-              child: Center(
-                child: Text(
-                  widget.update ? '修改报价' : '提交报价',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Color.fromRGBO(36, 38, 41, 1),
-                  ),
-                ),
-              )),
-          onPressed: onSubmit,
-          backgroundColor: Colors.amberAccent,
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        backgroundColor: Colors.white);
+    );
   }
 
   Widget _buildRequirementInfo() {

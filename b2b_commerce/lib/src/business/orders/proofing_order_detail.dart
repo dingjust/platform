@@ -244,7 +244,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
             ),
           ),
-          Text('${widget.model.remarks==null?'':widget.model.remarks}')
+          Text('${widget.model.remarks == null ? '' : widget.model.remarks}')
         ],
       ),
     );
@@ -321,7 +321,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                       ),
                       Container(
                         child: Text(
-                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null && widget.model.consignment.trackingID != null? widget.model.consignment.trackingID : ''}',
+                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null && widget.model.consignment.trackingID != null ? widget.model.consignment.trackingID : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -501,7 +501,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         children: <Widget>[
                           Text('历史接单'),
                           Text(
-                            '${widget.model.belongTo.historyOrdersCount==null?'':widget.model.belongTo.historyOrdersCount}',
+                            '${widget.model.belongTo.historyOrdersCount == null ? '' : widget.model.belongTo.historyOrdersCount}',
                             style: TextStyle(color: Colors.red),
                           ),
                           Text('单')
@@ -569,7 +569,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             child: FlatButton(
                 onPressed: onCancelling,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color.fromRGBO(255, 70, 70, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                 child: Text(
@@ -583,11 +583,11 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => OrderPaymentPage(
-                        order: widget.model,
-                      )));
+                            order: widget.model,
+                          )));
                 },
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 45),
                 child: Text(
@@ -602,7 +602,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           // FlatButton(
           //     onPressed: () {},
           //     shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(20)),
+          //         borderRadius: BorderRadius.circular(5)),
           //     color: Color.fromRGBO(150, 150, 150, 1),
           //     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
           //     child: Text(
@@ -620,7 +620,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                   _showMessage(context, result, '确认收货');
                 },
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color(0xFFFFD600),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 150),
                 child: Text(
@@ -641,13 +641,12 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             child: FlatButton(
                 onPressed: onUpdate,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 color: Colors.grey,
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
                 child: Text(
                   '修改订单',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 )),
           ),
         ];
@@ -659,9 +658,9 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => LogisticsInputPage(
-                      isProductionOrder: false,
-                      proofingModel: widget.model,
-                    )));
+                          isProductionOrder: false,
+                          proofingModel: widget.model,
+                        )));
               },
               color: Color(0xFFFFD600),
               child: Text(
@@ -673,7 +672,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               ),
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
             ),
           ),
         ];
@@ -684,7 +683,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       //     FlatButton(
       //         onPressed: () {},
       //         shape: RoundedRectangleBorder(
-      //             borderRadius: BorderRadius.circular(20)),
+      //             borderRadius: BorderRadius.circular(5)),
       //         color: Color.fromRGBO(150, 150, 150, 1),
       //         padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       //         child: Text(
