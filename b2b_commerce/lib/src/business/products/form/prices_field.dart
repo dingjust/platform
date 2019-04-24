@@ -30,12 +30,8 @@ class _PricesFieldState extends State<PricesField> {
           },
           child: ShowSelectTile(
             leadingText: '价格',
-            tralingText: '￥${widget.item.minPrice ?? ''} ~ ￥${widget.item.maxPrice ?? ''}',
+            tralingText: widget.item.minPrice == null && widget.item.maxPrice == null ? '' : '￥${widget.item.minPrice ?? ''} ~ ￥${widget.item.maxPrice ?? ''}',
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(height: 0, color: Colors.grey[400]),
         ),
       ],
     );

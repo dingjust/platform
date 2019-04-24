@@ -4,8 +4,6 @@ import 'package:b2b_commerce/src/business/orders/form/is_invoice_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/max_expected_price_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/remarks_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -15,7 +13,6 @@ import 'package:widgets/widgets.dart';
 import '../../home/requirement/requirement_publish_success.dart';
 import '../apparel_products.dart';
 import 'form/category_field.dart';
-import 'form/expected_machining_quantity.dart';
 import 'form/major_category_field.dart';
 import 'form/pictures_field.dart';
 import 'form/product_field.dart';
@@ -39,6 +36,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   RequirementOrderModel model;
   bool _isShowMore = true;
   DateTime selectDate = DateTime.now();
+  FocusNode _nameFocusNode = FocusNode();
+  TextEditingController _nameController = TextEditingController();
   FocusNode _quantityFocusNode = FocusNode();
   TextEditingController _quantityController = TextEditingController();
   FocusNode _priceFocusNode = FocusNode();
@@ -164,6 +163,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   }
 
   Widget _buildhead(BuildContext context){
+
     return Container(
       color: Colors.white,
       child: Column(
@@ -171,25 +171,35 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           PicturesField(
             model: model,
           ),
-           widget.product == null?
-           _buildProductName(context):
-           ProductField(widget.product),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Divider(height: 0,color: Colors.grey[400],),
-          ),
+           GestureDetector(
+             behavior: HitTestBehavior.translucent,
+             onTap: () {
+               // 触摸收起键盘
+               _nameFocusNode.unfocus();
+             },
+             child: widget.product == null?
+             TextFieldComponent(
+               focusNode: _nameFocusNode,
+               controller: _nameController,
+               leadingText: Text('产品名称',style: TextStyle(fontSize: 16,)),
+               isRequired: true,
+               hintText: '填写',
+               style: TextStyle(color: Colors.grey,fontSize: 16,),
+             ):
+             ProductField(widget.product),
+           ),
           CategoryField(
             model,
             product: widget.product,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Divider(height: 0,color: Colors.grey[400],),
+            child: Divider(height: 0,),
           ),
           MajorCategoryField(model),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Divider(height: 0,color: Colors.grey[400],),
+            child: Divider(height: 0,),
           ),
           TextFieldComponent(
             focusNode: _quantityFocusNode,
@@ -198,6 +208,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             leadingText: Text('订单数量',style: TextStyle(fontSize: 16,)),
             isRequired: true,
             hintText: '填写',
+            style: TextStyle(color: Colors.grey,fontSize: 16,),
           ),
 //          ExpectedMachiningQuantityField(model),
           TextFieldComponent(
@@ -206,65 +217,17 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             inputType: TextInputType.number,
             leadingText: Text('期望价格',style: TextStyle(fontSize: 16,)),
             hintText: '填写',
+            style: TextStyle(color: Colors.grey,fontSize: 16,),
           ),
 //          MaxExpectedPriceField(model),
           ExpectedDeliveryDateField(model),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Divider(height: 0,color: Colors.grey[400],),
+            child: Divider(height: 0,),
           ),
           ContactWayField(model),
         ],
       ),
-    );
-  }
-
-  Widget _buildProductName(BuildContext context){
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Text(
-              '产品名称',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: Container(
-              width: 235,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(model.details.productName ?? '填写',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                    overflow: TextOverflow.ellipsis),
-              ),
-            ),
-          ),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  PopupWindowPage(
-                    fieldText: '产品名称',
-                    text: model.details.productName  == null
-                        ? null
-                        : model.details.productName.toString(),
-                  ),
-            ),
-            //接收返回数据并处理
-          ).then((value) {
-            if (value.trim() == '') {
-              model.details.productName  = null;
-            } else {
-              model.details.productName  = value;
-            }
-          });
-        }
     );
   }
 
@@ -279,6 +242,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             controller: _remakesController,
             leadingText: Text('备注',style: TextStyle(fontSize: 16,)),
             hintText: '填写',
+            style: TextStyle(color: Colors.grey,fontSize: 16,),
           ),
 //          RemarksField(model),
           Column(
@@ -316,22 +280,22 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             ProductionAreasField(model),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Colors.grey[400],),
+              child: Divider(height: 0,),
             ),
             MachiningTypeField(model),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Colors.grey[400],),
+              child: Divider(height: 0,),
             ),
             IsProofingField(model),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Colors.grey[400],),
+              child: Divider(height: 0,),
             ),
             IsProvideSampleProductField(model),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Colors.grey[400],),
+              child: Divider(height: 0,),
             ),
             IsInvoiceField(model),
 

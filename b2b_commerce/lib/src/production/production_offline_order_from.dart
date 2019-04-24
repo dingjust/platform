@@ -59,6 +59,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   EarnestMoney earnest = new EarnestMoney();
   PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
   String userType;
+  FocusNode _priceFocusNode = FocusNode();
+  TextEditingController _priceController = TextEditingController();
+  FocusNode _remarksFocusNode = FocusNode();
+  TextEditingController _remarksController = TextEditingController();
 
   @override
   void initState() {
@@ -115,9 +119,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             height: 0,
           ),
           _buildExpectPrice(context),
-          Divider(
-            height: 0,
-          ),
           _buildDeliveryDate(context),
           Divider(
             height: 0,
@@ -145,9 +146,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           userType == 'brand' ?
           _buildAddressPick(context):
           _buildAddress(context),
-          Divider(
-            height: 0,
-          ),
           Divider(
             height: 0,
           ),
@@ -411,23 +409,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-            leading:  RichText(
-              text: TextSpan(
-                  text: '生产数量',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red)
-                    ),
-                  ]),
+            leading:  Wrap(
+              children: <Widget>[
+                Text('生产数量',style: TextStyle(fontSize: 16,)),
+                Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+              ],
             ),
             trailing: _totalQuantity == null || _totalQuantity < 0
                 ? Icon(Icons.keyboard_arrow_right)
@@ -556,37 +542,18 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   //价格
   Widget _buildExpectPrice(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Text(
-              '订单报价',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: Text(price == null || price == ''? '0' : price,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
-            ),
-          ),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(fieldText: '订单报价',inputType: TextInputType.number)),
-            //接收返回数据并处理
-          ).then((value) {
-            setState(() {
-              price = value;
-            });
-          });
-        });
+    return TextFieldComponent(
+      focusNode: _priceFocusNode,
+      leadingText: Text('订单报价',style: TextStyle(fontSize: 16),),
+      controller: _priceController,
+      inputType: TextInputType.number,
+      hintText: '请输入订单报价',
+      prefix: '￥',
+      dividerPadding: EdgeInsets.symmetric(horizontal: 0,),
+      onChanged: (value){
+        price = value;
+      },
+    );
   }
 
   //交货日期
@@ -594,23 +561,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-              leading:  RichText(
-                text: TextSpan(
-                    text: '交货日期',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.red)
-                      ),
-                    ]),
+              leading:  Wrap(
+                children: <Widget>[
+                  Text('交货日期',style: TextStyle(fontSize: 16,)),
+                  Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+                ],
               ),
               trailing: deliveryDate == null
                   ? Icon(Icons.keyboard_arrow_right)
@@ -762,23 +717,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-            leading: RichText(
-              text: TextSpan(
-                  text: '合作方式',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red)
-                    ),
-                  ]),
+            leading: Wrap(
+              children: <Widget>[
+                Text('合作方式',style: TextStyle(fontSize: 16,)),
+                Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+              ],
             ),
             trailing: machiningType == null
                 ? Icon(Icons.keyboard_arrow_right)
@@ -802,23 +745,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return GestureDetector(
         child: Container(
           child: ListTile(
-            leading: RichText(
-              text: TextSpan(
-                  text: '是否开具发票',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red)
-                    ),
-                  ]),
+            leading: Wrap(
+              children: <Widget>[
+                Text('是否开具发票',style: TextStyle(fontSize: 16,)),
+                Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+              ],
             ),
             trailing: isInvoice == null
                 ? Icon(Icons.keyboard_arrow_right)
@@ -839,48 +770,40 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   //订单备注
   Widget _buildRemarks(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Text(
-              '订单备注',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+      child: Column(children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "备注",
+            style: TextStyle(
+              fontSize: 16,
             ),
-            trailing: remarks == null || remarks == '' ?
-              Icon(Icons.keyboard_arrow_right)
-                :
-            Container(
-              width: 150,
-              child: Text(
-                remarks,
-                textAlign:TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey
-                ),
-              ),
-            )
           ),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OfflineOrderInputRemarksPage(fieldText: '订单备注',inputType: TextInputType.text,content: remarks)),
-            //接收返回数据并处理
-          ).then((value) {
-            setState(() {
-              remarks = value;
-            });
-          });
-        });
+        Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          child: TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: _remarksFocusNode,
+            hintText: '填写',
+            autofocus: false,
+            inputType: TextInputType.text,
+            textAlign: TextAlign.left,
+            hideDivider: true,
+            maxLines: null,
+            maxLength: 120,
+            controller: _remarksController,
+          ),
+        )
+      ]),
+    );
   }
-
 
   Widget _buildCommitButton(BuildContext context) {
     return Container(
