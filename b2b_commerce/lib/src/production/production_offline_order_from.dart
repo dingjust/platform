@@ -96,7 +96,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             )
         ),
       bottomNavigationBar: Container(
-        color: Colors.white,
         margin: EdgeInsets.all(10),
         padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
         height: 50,
@@ -484,7 +483,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               '生产工厂',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                
               ),
             ),
             trailing: company == null || company.name == null
@@ -621,7 +620,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 '定金尾款',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             trailing: earnest == null || earnest.earnestMoney == null || earnest.earnestMoney == ''
@@ -658,7 +656,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               '送货地址',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
               ),
             ),
             trailing: address == null || address == ''

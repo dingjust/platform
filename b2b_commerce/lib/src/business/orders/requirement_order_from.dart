@@ -130,22 +130,27 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           ],
         ),
       ),
-      persistentFooterButtons: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width - 16,
-          child: ActionChip(
-            labelPadding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 2.8,
-                vertical: 8),
-            backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-            label: Text(widget.order != null && widget.isReview == false ? '修改需求' : '确定发布'),
-            labelStyle: TextStyle(color: Colors.black, fontSize: 20),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          height: 50,
+          child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              widget.order != null && widget.isReview == false ? '修改需求' : '确定发布',
+              style: TextStyle(
+                color: Colors.black,
+
+                fontSize: 18,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () {
               widget.order != null && widget.isReview == false ? onUpdate() : onPublish(widget.factoryUid);
             },
           ),
-        ),
-      ],
+        )
     );
   }
 

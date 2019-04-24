@@ -80,7 +80,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         title: Text('创建打样订单'),
       ),
       body: Container(
-          color: Color.fromRGBO(245, 245, 245, 1),
           margin: EdgeInsets.only(bottom: 70),
           child: ListView(
             children: <Widget>[
@@ -89,29 +88,25 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               _buildProofingInfo(),
             ],
           )),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Container(
-          width: 0,
-          child: Icon(
-            null,
-            color: Colors.white,
-          ),
-        ),
-        label: Container(
-            width: 300,
-            child: Center(
-              child: Text(
-                widget.update ? '修改订单' : '提交订单',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          height: 50,
+          child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              widget.update ? '修改订单' : '提交订单',
+              style: TextStyle(
+                color: Colors.black,
+
+                fontSize: 18,
               ),
-            )),
-        onPressed: widget.update ? onUpdate : onCreate,
-        backgroundColor: Colors.amberAccent,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: widget.update ? onUpdate : onCreate,
+          ),
+        )
     );
   }
 
@@ -124,6 +119,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         },
         child: Container(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          margin: EdgeInsets.only(bottom: 15),
           color: Colors.white,
           child: Column(
             children: <Widget>[

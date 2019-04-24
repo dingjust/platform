@@ -76,20 +76,39 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           _buildInvoice(context),
           _buildAnnex(context),
           _buildRemarks(context),
-          _buildCommitButton(context),
+//          _buildCommitButton(context),
         ],
+      ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+        height: 50,
+        child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              '提交订单',
+              style: TextStyle(
+                color: Colors.black,
+                
+                fontSize: 18,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: () async {
+              onSubmit();
+            }),
       ),
     );
   }
 
   Widget _buildBrandInfo(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      margin: EdgeInsets.only(bottom: 15),
       color: Colors.white,
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
             child: Row(
               children: <Widget>[
                 Container(
@@ -163,7 +182,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                       text: '产品选择/创建',
                       style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                          
                           color: Colors.black
                       ),
                       children: <TextSpan>[
@@ -171,7 +190,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                             text: ' *',
                             style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                                
                                 color: Colors.red)
                         ),
                       ]),
@@ -414,7 +433,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                     _totalQuantity.toString(),
                     style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        
                         color: Colors.grey),
                   ),
           ),
@@ -484,14 +503,14 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                   child: Text('合计：',
                       style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                          
                           color: Colors.grey)),
                 ),
                 Container(
                   child: Text(totalPrice == null ? '${0.00}' : '￥ ${totalPrice}',
                       style: TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.w500,
+                          
                           color: Colors.red)),
                 ),
               ],
@@ -536,7 +555,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
               '预计交货时间',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                
               ),
             ),
             trailing: widget.quoteModel == null || widget.quoteModel.expectedDeliveryDate == null
@@ -545,7 +564,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
               '${DateFormatUtil.formatYMD(widget.quoteModel.expectedDeliveryDate)}',
               style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  
                   color: Colors.grey),
             ),
           ),
@@ -572,7 +591,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                     MachiningTypeLocalizedMap[machiningType],
                     style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        
                         color: Colors.grey),
                   ),
           ),
@@ -601,7 +620,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                     isInvoice == true ? '开发票' : '不开发票',
                     style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        
                         color: Colors.grey),
                   ),
           ),
@@ -675,9 +694,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   Widget _buildCommitButton(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 20),
-      child: Column(
-        children: <Widget>[
-          Container(
+      child: Container(
               width: double.infinity,
               height: 50,
               margin: EdgeInsets.fromLTRB(20, 15, 20, 0),
@@ -687,15 +704,13 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                     '提交订单',
                     style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
+                      
                       fontSize: 18,
                     ),
                   ),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   onPressed: onSubmit)),
-        ],
-      ),
       decoration: BoxDecoration(
         color: Color.fromRGBO(242, 242, 242, 1),
       ),
