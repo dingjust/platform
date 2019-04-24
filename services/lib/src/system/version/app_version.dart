@@ -10,7 +10,7 @@ import 'package:services/src/api/apis.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/system/version/app_response.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:store_redirect/store_redirect.dart';
 
 class AppVersion {
   final BuildContext context;
@@ -115,12 +115,9 @@ class AppVersion {
   }
 
   _jumpToAppStore() async {
-    const url = 'itms-apps://itunes.apple.com/cn/app/钉单/id1459206673?mt=8';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+    // const url = 'itms-apps://itunes.apple.com/cn/app/钉单/id1459206673?mt=8';
+    StoreRedirect.redirect(
+        androidAppId: "net.nbyjy.b2b", iOSAppId: "1459206673");
   }
 
   void _showNewVersionForIos(String releaseVersion) {

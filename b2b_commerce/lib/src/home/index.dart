@@ -74,15 +74,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // 安卓端自动更新
-    TargetPlatform platform = defaultTargetPlatform;
-    if (platform != TargetPlatform.iOS) {
+    // TargetPlatform platform = defaultTargetPlatform;
+    // if (platform != TargetPlatform.iOS) {
       WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
               homePageKey.currentContext,
               ignoreVersionNotification:
                   UserBLoC.instance.ignoreVersionNotification)
           .initCheckVersion(
               AppBLoC.instance.packageInfo.version, 'nbyjy'));
-    }
+    // }
     super.initState();
   }
 
