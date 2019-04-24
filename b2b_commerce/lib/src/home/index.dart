@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
               ignoreVersionNotification:
                   UserBLoC.instance.ignoreVersionNotification)
           .initCheckVersion(
-              AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID'));
+              AppBLoC.instance.packageInfo.version, 'nbyjy'));
     }
     super.initState();
   }

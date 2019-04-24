@@ -79,7 +79,7 @@ class AppActions extends StatelessWidget {
           onTap: () {
             //TODO版本检测
             AppVersion(context).checkVersion(
-                AppBLoC.instance.packageInfo.version, 'nbyjy', 'ANDROID');
+                AppBLoC.instance.packageInfo.version, 'nbyjy');
           },
         )
       ],
