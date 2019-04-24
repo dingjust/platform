@@ -40,7 +40,7 @@ class ClientSelectPage extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: FlatButton(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       color: Color.fromRGBO(255, 214, 12, 1),
                       onPressed: () {
                         UserBLoC.instance.changeUserType(UserType.BRAND);
@@ -57,7 +57,7 @@ class ClientSelectPage extends StatelessWidget {
                     height: 50,
                     child: FlatButton(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       color: Color.fromRGBO(255, 214, 12, 1),
                       onPressed: () {
                         UserBLoC.instance.changeUserType(UserType.FACTORY);
