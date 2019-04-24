@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -12,23 +15,29 @@ class ProductionAreasField extends StatefulWidget {
 }
 
 class ProductionAreasFieldState extends State<ProductionAreasField> {
-  List<EnumModel> _productionAreasSelected = [];
+  List<RegionModel> _regionSelects = [];
+  List<String> _regionCodeSelects = [];
   List<RegionModel> _regions = [];
 
   @override
   void initState() {
-    RegionRepositoryImpl().list().then((regions)=>_regions.addAll(regions));
-
+    //获取所有省份
+    rootBundle.loadString('data/province.json').then((v) {
+      List data = json.decode(v);
+      _regions = data
+          .map<RegionModel>((region) => RegionModel.fromJson(region))
+          .toList();
+    });
     // TODO: implement initState
     super.initState();
   }
 
   //格式选中的地区（多选）
-  String formatAreaSelectsText(List<EnumModel> selects,int count) {
+  String formatAreaSelectsText(List<RegionModel> selects, int count) {
     String text = '';
 
     for (int i = 0; i < selects.length; i++) {
-      if (i > count-1) {
+      if (i > count - 1) {
         text += '...';
         break;
       }
@@ -58,7 +67,7 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
             trailing: Text(
               widget.item.details?.productiveOrientations == null
                   ? '选取'
-                  : formatAreaSelectsText(_productionAreasSelected, 2),
+                  : formatAreaSelectsText(_regionSelects, 2),
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -67,31 +76,112 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
           ),
         ),
         onTap: () {
-//          CityPickers.showCityPicker(
-//            context: context,
-//            showType: ShowType.p,
-//            theme: ThemeData(primaryColor: Color.fromRGBO(255,214,12, 1)),
-//          ).then((result) {
-//            print(result);
-//          });
           showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
-              return Container(
-                height: 300,
-                child: EnumSelection(
-                  enumModels: _regions.map((region)=>EnumModel(region.isocode, region.name)).toList(),
-                  multiple: true,
-                  enumSelect: _productionAreasSelected,
-                  hasButton: true,
-                ),
-              );
+              return StatefulBuilder(builder: (context, mSetState) {
+                return Container(
+                  color: Colors.white,
+                  height: 360,
+                  child: Column(
+                    children: <Widget>[
+                      Card(
+                        elevation: 2,
+                        margin: EdgeInsets.only(bottom: 3),
+//                        color: Colors.grey[300],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            InkWell(
+                              onTap: () {
+                                mSetState(() {
+                                  _regionCodeSelects.clear();
+                                  _regionSelects.clear();
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Text('重置'),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 15),
+                              child: ActionChip(
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                ),
+                                label: Text('确定'),
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                },
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 300,
+                        child: ListView(
+                          shrinkWrap: true,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          children: _regions.map((region) {
+                            return InkWell(
+                              onTap: () {
+                                mSetState(() {
+                                  if (_regionCodeSelects
+                                      .contains(region.isocode)) {
+                                    _regionCodeSelects.remove(region.isocode);
+                                    _regionSelects.removeWhere(
+                                        (reg) => region.isocode == reg.isocode);
+                                  } else {
+                                    _regionSelects.add(region);
+                                    _regionCodeSelects.add(region.isocode);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 1),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: _regionCodeSelects
+                                          .contains(region.isocode)
+                                      ? Color.fromRGBO(255, 214, 12, 1)
+                                      : Colors.white,
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(region.name),
+//                                    Offstage(
+//                                      offstage: !_regionCodeSelects
+//                                          .contains(region.isocode),
+//                                      child: Icon(
+//                                        Icons.done,
+//                                        size: 12,
+//                                      ),
+//                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              });
             },
           ).then((val) {
             setState(() {
-              if (_productionAreasSelected.length > 0) {
-                widget.item.details.productiveOrientations =
-                    _productionAreasSelected.map((area) => RegionModel(isocode: area.code,name: area.name)).toList();
+              if (_regionSelects.length > 0) {
+                widget.item.details.productiveOrientations = _regionSelects;
               } else {
                 widget.item.details.productiveOrientations = null;
               }

@@ -101,10 +101,6 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
             tralingText: colorSizeSelectText(),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(height: 0, color: Colors.grey[400]),
-        ),
 //        InkWell(
 //          onTap: () async{
 //            if(_colorFilters.length <= 0){
@@ -143,10 +139,6 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
 //            trailing: Icon(Icons.chevron_right),
 //          ),
 //        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(height: 0, color: Colors.grey[400]),
-        ),
       ],
     );
   }

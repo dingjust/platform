@@ -132,6 +132,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 //            DetailPictureField(widget.item),
               TextFieldComponent(
                 style: TextStyle(fontSize: 16,color: Colors.grey,),
+                isRequired: true,
                 focusNode: _nameFocusNode,
                 controller: _nameController,
                 leadingText: Text('产品名称',style: TextStyle(fontSize: 16,)),
@@ -146,6 +147,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               ),
               TextFieldComponent(
                 style: TextStyle(fontSize: 16,color: Colors.grey,),
+                isRequired: true,
                 focusNode: _skuIDFocusNode,
                 controller: _skuIDController,
                 leadingText: Text('产品货号',style: TextStyle(fontSize: 16,)),
@@ -188,8 +190,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   leadingText: Text('供货价',style: TextStyle(fontSize: 16,)),
                   hintText: '请输入供货价',
                   textInputAction: TextInputAction.next,
+                  prefix: '￥',
                   onChanged: (value) {
-                    widget.item.price = double.parse(value);
+                    widget.item.price = value == '' ? null : double.parse(StringUtil.removeSymbolForRMB(value));
                   },
                   onEditingComplete: (){
                     FocusScope.of(context).requestFocus(_gramWeightFocusNode);

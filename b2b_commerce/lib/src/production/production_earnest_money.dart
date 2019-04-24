@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:widgets/widgets.dart';
 
 class ProductionEarnestMoney extends StatefulWidget {
   final ApparelProductModel product;
@@ -18,10 +19,16 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
   DateTime estimatePaymentDate;
   bool isTailPayment = false;
   DateTime tailPaymentDate;
+  FocusNode _earnestMoneyFocusNode = FocusNode();
+  TextEditingController _earnestMoneyController = TextEditingController();
+  FocusNode _tailMoneyFocusNode = FocusNode();
+  TextEditingController _tailMoneyController = TextEditingController();
 
   @override
   void initState() {
     if(widget.earnest != null){
+      _earnestMoneyController.text = widget.earnest.earnestMoney;
+      _tailMoneyController.text = widget.earnest.tailMoney;
       earnestMoney = widget.earnest.earnestMoney;
       tailMoney = widget.earnest.tailMoney;
       if (widget.earnest.isEarnestPayment != null) {
@@ -129,39 +136,17 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
   }
 
   Widget _buildEarnestMoney(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Text(
-              '定金金额',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: earnestMoney == null || earnestMoney == ''
-                ? Icon(Icons.keyboard_arrow_right)
-                : Text(earnestMoney,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
-            ),
-          ),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(fieldText: '定金金额',inputType: TextInputType.number)),
-            //接收返回数据并处理
-          ).then((value) {
-            setState(() {
-              earnestMoney = value;
-            });
-          });
-        });
+    return TextFieldComponent(
+      leadingText: Text('定金金额',style: TextStyle(fontSize: 16,),),
+      focusNode: _earnestMoneyFocusNode,
+      controller: _earnestMoneyController,
+      inputType: TextInputType.number,
+      hintText: '请输入定金金额',
+      prefix: '￥',
+      onChanged: (value){
+        earnestMoney = value;
+      },
+    );
   }
 
   Widget _buildPaymentSelection(BuildContext context) {
@@ -224,39 +209,17 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
 
   //尾款金额
   Widget _buildTailMoney(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Text(
-              '尾款金额',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: tailMoney == null || tailMoney == ''
-                ? Icon(Icons.keyboard_arrow_right)
-                : Text(tailMoney,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey
-              ),
-            ),
-          ),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(fieldText: '尾款金额',inputType: TextInputType.number)),
-            //接收返回数据并处理
-          ).then((value) {
-            setState(() {
-              tailMoney = value;
-            });
-          });
-        });
+    return TextFieldComponent(
+      leadingText: Text('尾款金额',style: TextStyle(fontSize: 16,),),
+      focusNode: _tailMoneyFocusNode,
+      controller: _tailMoneyController,
+      inputType: TextInputType.number,
+      hintText: '请输入尾款金额',
+      prefix: '￥',
+      onChanged: (value){
+        tailMoney = value;
+      },
+    );
   }
 
   Widget _buildTailPaymentSelection(BuildContext context) {
