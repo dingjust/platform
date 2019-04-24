@@ -35,6 +35,12 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   ApparelProductModel _product;
   PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
   double totalPrice;
+  FocusNode _priceFocusNode = FocusNode();
+  TextEditingController _priceController = TextEditingController();
+  FocusNode _earnestMoneyFocusNode = FocusNode();
+  TextEditingController _earnestMoneyController = TextEditingController();
+  FocusNode _remarksFocusNode = FocusNode();
+  TextEditingController _remarksController = TextEditingController();
 
   @override
   void initState() {
@@ -56,6 +62,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
         elevation: 0.5,
       ),
       body: ListView(
+        physics: AlwaysScrollableScrollPhysics(),
         children: <Widget>[
           _buildBrandInfo(context),
           productModel == null || productModel.name == null
@@ -395,25 +402,13 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           color: Colors.white,
           margin: EdgeInsets.only(top: 5),
           child: ListTile(
-            leading: RichText(
-              text: TextSpan(
-                  text: '生产数量',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red)
-                    ),
-                  ]),
+            leading: Wrap(
+              children: <Widget>[
+                Text('生产数量',style: TextStyle(fontSize: 16,)),
+                Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+              ],
             ),
-            trailing: _totalQuantity == null || _totalQuantity < 0
+            trailing: _totalQuantity == null || _totalQuantity <= 0
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
                     _totalQuantity.toString(),
@@ -462,55 +457,25 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
       margin: EdgeInsets.only(top: 3),
       child: Column(
         children: <Widget>[
-          GestureDetector(
-              child: Container(
-                child: ListTile(
-                  leading: RichText(
-                    text: TextSpan(
-                        text: '订单报价',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: ' *',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.red)
-                          ),
-                        ]),
-                  ),
-                  trailing: widget.quoteModel == null || widget.quoteModel.unitPrice == null
-                      ? Icon(Icons.keyboard_arrow_right)
-                      : Text(
-                          '￥${widget.quoteModel.unitPrice}',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey),
-                        ),
-                ),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => OfflineOrderInputPage(
-                          fieldText: '订单报价', inputType: TextInputType.number)),
-                  //接收返回数据并处理
-                ).then((value) {
-                  setState(() {
-                    price = value;
-                    widget.quoteModel.unitPrice = double.parse(price);
-                    totalPrice = double.parse(price) * _totalQuantity;
-                  });
-                });
-              }),
+          TextFieldComponent(
+            focusNode: _priceFocusNode,
+            controller: _priceController,
+            inputType: TextInputType.number,
+            leadingText: Text('订单报价',style: TextStyle(fontSize: 16,),),
+            hintText: '请输入订单报价',
+            hideDivider: true,
+            prefix: '￥',
+            isRequired: true,
+            onChanged: (value){
+              setState(() {
+                price = value;
+                widget.quoteModel.unitPrice = double.parse(price);
+                totalPrice = double.parse(price) * _totalQuantity;
+              });
+            },
+          ),
           Container(
-            padding: EdgeInsets.only(right: 20),
+            padding: EdgeInsets.only(right: 20,top: 15,bottom: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -523,7 +488,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                           color: Colors.grey)),
                 ),
                 Container(
-                  child: Text('￥ ${totalPrice == null ? '' : totalPrice}',
+                  child: Text(totalPrice == null ? '${0.00}' : '￥ ${totalPrice}',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
@@ -539,53 +504,25 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
 
   //定金
   Widget _buildEarnestMoney(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(top: 3),
-          child: ListTile(
-            leading: RichText(
-              text: TextSpan(
-                  text: '定金',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red)
-                    ),
-                  ]),
-            ),
-            trailing: earnestMoney == null || earnestMoney == ''
-                ? Icon(Icons.keyboard_arrow_right)
-                : Text(
-                    '￥${earnestMoney}',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-          ),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OfflineOrderInputPage(
-                    fieldText: '定金', inputType: TextInputType.number)),
-            //接收返回数据并处理
-          ).then((value) {
-            setState(() {
-              earnestMoney = value;
-            });
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 3),
+      child: TextFieldComponent(
+        focusNode: _earnestMoneyFocusNode,
+        controller: _earnestMoneyController,
+        inputType: TextInputType.number,
+        leadingText: Text('定金',style: TextStyle(fontSize: 16,),),
+        hintText: '请输入定金',
+        hideDivider: true,
+        prefix: '￥',
+        isRequired: true,
+        onChanged: (value){
+          setState(() {
+            earnestMoney = value;
           });
-        });
+        },
+      ),
+    );
   }
 
   //预计交货时间
@@ -623,23 +560,11 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           color: Colors.white,
           margin: EdgeInsets.only(top: 3),
           child: ListTile(
-            leading: RichText(
-              text: TextSpan(
-                  text: '合作方式',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red)
-                    ),
-                  ]),
+            leading: Wrap(
+              children: <Widget>[
+                Text('合作方式',style: TextStyle(fontSize: 16,)),
+                Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+              ],
             ),
             trailing: machiningType == null
                 ? Icon(Icons.keyboard_arrow_right)
@@ -664,23 +589,11 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           color: Colors.white,
           margin: EdgeInsets.only(top: 3),
           child: ListTile(
-            leading: RichText(
-              text: TextSpan(
-                  text: '是否开具发票',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red)
-                    ),
-                  ]),
+            leading: Wrap(
+              children: <Widget>[
+                Text('是否开具发票',style: TextStyle(fontSize: 16,)),
+                Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+              ],
             ),
             trailing: isInvoice == null
                 ? Icon(Icons.keyboard_arrow_right)
@@ -722,46 +635,41 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
 
   //订单备注
   Widget _buildRemarks(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(top: 3),
-          child: ListTile(
-              leading: Text(
-                '订单备注',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              trailing: remarks == null || remarks == ''
-                  ? Icon(Icons.keyboard_arrow_right)
-                  : Container(
-                      width: 150,
-                      child: Text(
-                        remarks,
-                        textAlign: TextAlign.end,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey),
-                      ),
-                    )),
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(10),
+      child: Column(children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "备注",
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OfflineOrderInputRemarksPage(
-                    fieldText: '订单备注', inputType: TextInputType.text,content: remarks,)),
-            //接收返回数据并处理
-          ).then((value) {
-            setState(() {
-              remarks = value;
-            });
-          });
-        });
+        Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          child: TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: _remarksFocusNode,
+            hintText: '填写',
+            autofocus: false,
+            inputType: TextInputType.text,
+            textAlign: TextAlign.left,
+            hideDivider: true,
+            maxLines: null,
+            maxLength: 120,
+            controller: _remarksController,
+            onChanged: (val){
+              remarks = _remarksController.text;
+            },
+          ),
+        )
+      ]),
+    );
   }
 
   Widget _buildCommitButton(BuildContext context) {

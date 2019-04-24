@@ -40,4 +40,18 @@ class ShowDialogUtil{
       },
     );
   }
+
+  //提示弹框
+  static Future<void> showSimapleDialog(BuildContext context,String message){
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text('提示', style: const TextStyle(fontSize: 16)),
+            children: <Widget>[SimpleDialogOption(child: Text('$message'))],
+          );
+        },
+      );
+  }
 }

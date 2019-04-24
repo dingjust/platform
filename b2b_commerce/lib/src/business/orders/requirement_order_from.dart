@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -185,6 +186,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                isRequired: true,
                hintText: '填写',
                style: TextStyle(color: Colors.grey,fontSize: 16,),
+               onChanged: (val){
+                 model.details.productName = _nameController.text;
+               },
              ):
              ProductField(widget.product),
            ),
@@ -217,6 +221,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             inputType: TextInputType.number,
             leadingText: Text('期望价格',style: TextStyle(fontSize: 16,)),
             hintText: '填写',
+            prefix: '￥',
             style: TextStyle(color: Colors.grey,fontSize: 16,),
           ),
 //          MaxExpectedPriceField(model),
@@ -358,6 +363,31 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     if(widget.isReview){
       model.code = '';
     }
+    model.details.expectedMachiningQuantity = StringUtil.transInt(_quantityController.text);
+    model.details.maxExpectedPrice = StringUtil.removeSymbolRMBToDouble(_priceController.text);
+    model.remarks = _remakesController.text;
+
+    if(model.details.productName == null){
+      ShowDialogUtil.showSimapleDialog(context,'产品名称不可以为空');
+      return;
+    }
+    if(model.details.category == null){
+      ShowDialogUtil.showSimapleDialog(context,'产品品类不可以为空');
+      return;
+    }
+    if(model.details.expectedMachiningQuantity == null){
+      ShowDialogUtil.showSimapleDialog(context,'订单数量不可以为空');
+      return;
+    }
+    if(model.details.expectedDeliveryDate == null){
+      ShowDialogUtil.showSimapleDialog(context,'交货时间不可以为空');
+      return;
+    }
+    if(model.details.contactPerson == null && model.details.contactPhone == null){
+      ShowDialogUtil.showSimapleDialog(context,'联系方式不可以为空');
+      return;
+    }
+
     String code = await RequirementOrderRepository().publishNewRequirement(
         model, factoryUid, factoryUid != null ? true : false);
     if (code != null && code != '') {

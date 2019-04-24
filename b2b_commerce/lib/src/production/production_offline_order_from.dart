@@ -898,7 +898,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
     //单价
     if (price != null && double.parse(price) > 0) {
-      purchaseOrder.unitPrice = double.parse(price);
+      purchaseOrder.unitPrice = StringUtil.removeSymbolRMBToDouble(price);
     }else{
       purchaseOrder.unitPrice = 0;
     }
@@ -910,7 +910,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       //定金
       if (earnest.earnestMoney != null) {
         purchaseOrder.deposit =
-            double.parse(earnest.earnestMoney);
+            StringUtil.removeSymbolRMBToDouble(earnest.tailMoney);
       }else{
         purchaseOrder.deposit = 0;
       }
@@ -918,7 +918,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       purchaseOrder.depositPaidDate = earnest.estimatePaymentDate;
       //尾款
       if (earnest.tailMoney != null) {
-        purchaseOrder.balance = double.parse(earnest.tailMoney);
+        purchaseOrder.balance = StringUtil.removeSymbolRMBToDouble(earnest.tailMoney);
       }
       purchaseOrder.balancePaid = earnest.isTailPayment;
       purchaseOrder.balancePaidDate = earnest.tailPaymentDate;

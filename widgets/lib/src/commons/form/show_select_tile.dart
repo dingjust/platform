@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class ShowSelectTile extends StatelessWidget {
@@ -57,7 +58,7 @@ class ShowSelectTile extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(height: 0,color: Color(0x1F000000),),
+          child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
         ),
       ],
     );

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -44,8 +45,8 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
                     ),
                   ),
                   onTap: () async {
-                    widget.item.minPrice = _minPriceController.text == '' ? null : double.parse(_minPriceController.text);
-                    widget.item.maxPrice = _maxPriceController.text == '' ? null : double.parse(_maxPriceController.text);
+                    widget.item.minPrice = StringUtil.removeSymbolRMBToDouble(_minPriceController.text);
+                    widget.item.maxPrice = StringUtil.removeSymbolRMBToDouble(_maxPriceController.text);
                     Navigator.pop(context);
                   }
               )
@@ -75,6 +76,7 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
               leadingText: Text('价格下限',style: TextStyle(fontSize: 16,)),
               hintText: '请输入价格下限',
               inputType: TextInputType.number,
+              prefix: '￥',
             ),
           ),
           Container(
@@ -86,6 +88,7 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
               leadingText: Text('价格上限',style: TextStyle(fontSize: 16,)),
               hintText: '请输入价格上限',
               inputType: TextInputType.number,
+              prefix: '￥',
             ),
           ),
         ],

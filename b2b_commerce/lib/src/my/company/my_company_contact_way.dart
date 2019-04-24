@@ -163,12 +163,9 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                         if (result != null) address = result;
                       },
                     ),
-                    Container(
-//                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Divider(
-                        height: 0,
-                        color: Colors.grey,
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
                     ),
                   ],
                 ),
@@ -179,7 +176,6 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                       focusNode: _phoneFocusNode,
                       leadingText: Text('座机号码',style: TextStyle(fontSize: 16,)),
                       controller: _phoneController,
-                      dividerPadding: EdgeInsets.all(0),
                       trailing: isEditing
                           ? null
                           : Icon(
@@ -199,7 +195,6 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                     focusNode: _emailFocusNode,
                     leadingText: Text('邮箱地址',style: TextStyle(fontSize: 16,)),
                     controller: _emailController,
-                    dividerPadding: EdgeInsets.all(0),
                     trailing: isEditing
                         ? null
                         : Icon(
@@ -219,7 +214,6 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                     focusNode: _qqFocusNode,
                     leadingText: Text('QQ号',style: TextStyle(fontSize: 16,)),
                     controller: _qqController,
-                    dividerPadding: EdgeInsets.all(0),
                     trailing: isEditing
                         ? null
                         : Icon(
@@ -239,7 +233,6 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                     focusNode: _wechatFocusNode,
                     leadingText: Text('微信号',style: TextStyle(fontSize: 16,)),
                     controller: _wechatController,
-                    dividerPadding: EdgeInsets.all(0),
                     trailing: isEditing
                         ? null
                         : Icon(
