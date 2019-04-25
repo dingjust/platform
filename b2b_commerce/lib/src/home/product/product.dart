@@ -1,5 +1,7 @@
 import 'package:b2b_commerce/src/home/product/product_detail.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
@@ -31,6 +33,28 @@ class RecommendProductItem extends StatelessWidget {
             color: Colors.white, borderRadius: BorderRadius.circular(5)),
         child: Column(
           children: <Widget>[
+            model.thumbnail != null ?
+            Container(
+              // width: imageSize,
+              height: imageSize,
+              child: CachedNetworkImage(
+                  imageUrl: '${model.thumbnail.previewUrl()}',
+                  height: imageSize,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      SpinKitRing(
+                        color: Colors.black12,
+                        lineWidth: 2,
+                        size: 30,
+                      ),
+                  errorWidget: (context, url, error) =>
+                      SpinKitRing(
+                        color: Colors.black12,
+                        lineWidth: 2,
+                        size: 30,
+                      )
+              ),
+            ):
             Container(
               // width: imageSize,
               height: imageSize,
@@ -38,10 +62,7 @@ class RecommendProductItem extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5), topRight: Radius.circular(5)),
                 image: DecorationImage(
-                  image: model.thumbnail != null
-                      ? NetworkImage(
-                          '${model.thumbnail.previewUrl()}')
-                      : AssetImage(
+                  image:AssetImage(
                           'temp/picture.png',
                           package: "assets",
                         ),

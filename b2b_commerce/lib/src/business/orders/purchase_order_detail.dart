@@ -843,7 +843,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             image: DecorationImage(
                               image: NetworkImage(
                                   '${productionProgress.medias[0].previewUrl()}'),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             )),
                       ),
                 onTap: () {

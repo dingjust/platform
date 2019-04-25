@@ -178,7 +178,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           width: 80,
           child: CachedNetworkImage(
               imageUrl: '${widget.model.details.pictures[0].previewUrl()}',
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               placeholder: (context, url) =>  SpinKitRing(
                 color: Colors.white,
                 size: 50.0,

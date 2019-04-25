@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/home/product/product.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 
 class ProductHotCategoryPage extends StatefulWidget {
@@ -238,10 +240,21 @@ class CategoryItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.network(
-              imageUrl,
-              width: width,
-              height: height,
+            CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                width: width,
+                height: height,
+                placeholder: (context, url) =>  SpinKitRing(
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: 30,
+                ),
+                errorWidget: (context, url, error) => SpinKitRing(
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: 30,
+                )
             ),
             Text(
               name,
