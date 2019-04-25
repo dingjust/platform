@@ -30,17 +30,20 @@ class ApparelProductItem extends StatelessWidget {
         if (isSelectOption) Navigator.pop(context, item);
         // if(widget.isSelectOption)
       },
-      child: Card(
-        margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-        elevation: 0,
-        child: Column(
-          children: <Widget>[
-            _buildProduct(context),
-            Offstage(
-              offstage: isSelectOption,
-              child: _buildButtons(context),
-            ),
-          ],
+      child: GestureDetector(
+        onLongPress: onPrdouctDeleting,
+        child: Card(
+          margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+          elevation: 0,
+          child: Column(
+            children: <Widget>[
+              _buildProduct(context),
+              Offstage(
+                offstage: isSelectOption,
+                child: _buildButtons(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -58,8 +61,7 @@ class ApparelProductItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
                   image: item.thumbnail != null
-                      ? NetworkImage(
-                          '${item.thumbnail.previewUrl()}')
+                      ? NetworkImage('${item.thumbnail.previewUrl()}')
                       : AssetImage(
                           'temp/picture.png',
                           package: "assets",
@@ -128,48 +130,61 @@ class ApparelProductItem extends StatelessWidget {
       return Container(
         padding: EdgeInsets.only(bottom: 10),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            ActionChip(
-              shape: StadiumBorder(side: BorderSide(color: Colors.grey)),
-              labelPadding: EdgeInsets.symmetric(horizontal: 15),
-              backgroundColor: Colors.white,
-              label: Text('删除'),
-              labelStyle: TextStyle(color: Colors.grey),
-              onPressed: onPrdouctDeleting,
+//            ActionChip(
+////              shape: StadiumBorder(side: BorderSide(color: Colors.grey)),
+////              labelPadding: EdgeInsets.symmetric(horizontal: 15),
+////              backgroundColor: Colors.white,
+////              label: Text('删除'),
+////              labelStyle: TextStyle(color: Colors.grey),
+////              onPressed: onPrdouctDeleting,
+////            ),
+            GestureDetector(
+              child: Container(
+                width: 60,
+                height: 25,
+                decoration: BoxDecoration(
+                  color: Colors.grey[350],
+                  borderRadius: BorderRadius.circular(5)
+                ),
+                child: Center(child: Text('编辑')),
+              ),
+              onTap: onPrdouctUpdating,
             ),
-            ActionChip(
-              shape: StadiumBorder(side: BorderSide()),
-              labelPadding: EdgeInsets.symmetric(horizontal: 15),
-              backgroundColor: Colors.white,
-              label: Text('编辑'),
-              labelStyle: TextStyle(color: Colors.black),
-              onPressed: onPrdouctUpdating,
-            ),
-//          ActionChip(
-//            shape: StadiumBorder(side: BorderSide(color: Color.fromRGBO(255,214,12, 1))),
-//            labelPadding: EdgeInsets.symmetric(horizontal: 15),
-//            backgroundColor: Colors.white,
-//            label: Text(_approvalStatusText),
-//            labelStyle: TextStyle(color: Color.fromRGBO(255,214,12, 1)),
-//            onPressed: () {},
-//          ),
+//            ActionChip(
+//              shape: StadiumBorder(side: BorderSide()),
+//              labelPadding: EdgeInsets.symmetric(horizontal: 15),
+//              backgroundColor: Colors.white,
+//              label: Text('编辑'),
+//              labelStyle: TextStyle(color: Colors.black),
+//              onPressed: onPrdouctUpdating,
+//            ),
             UserBLoC.instance.currentUser.type != UserType.FACTORY
-                ? ActionChip(
-                    labelPadding:
-                        EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-                    backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-                    label: Text('生产'),
-                    labelStyle: TextStyle(color: Colors.black),
-                    onPressed: onPrdouctProduction,
+                ? GestureDetector(
+                    child: Container(
+                      width: 60,
+                      height: 25,
+                      margin: EdgeInsets.only(right: 10,left: 10),
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          borderRadius: BorderRadius.circular(5)
+                      ),
+                      child: Center(child: Text('发需求')),
+                    ),
+                    onTap: onPrdouctProduction,
                   )
-                : ActionChip(
-                    labelPadding:
-                        EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-                    backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-                    label: Text(_approvalStatusText),
-                    labelStyle: TextStyle(color: Colors.black),
-                    onPressed: onProductShlefing,
+                : GestureDetector(
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          borderRadius: BorderRadius.circular(5)
+                      ),
+                      child: Text(_approvalStatusText),
+                    ),
+                    onTap: onProductShlefing,
                   ),
           ],
         ),
