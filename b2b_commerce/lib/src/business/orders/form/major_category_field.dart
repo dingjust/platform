@@ -37,7 +37,6 @@ class MajorCategoryFieldState extends State<MajorCategoryField>{
                 '面料类别',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
               trailing: Container(

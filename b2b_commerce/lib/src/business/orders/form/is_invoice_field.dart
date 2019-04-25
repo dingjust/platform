@@ -20,7 +20,6 @@ class IsInvoiceFieldState extends State<IsInvoiceField> {
               '是否开具发票',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
               ),
             ),
             trailing: Text(

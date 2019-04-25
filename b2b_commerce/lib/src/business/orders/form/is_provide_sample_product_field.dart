@@ -20,7 +20,6 @@ class IsProvideSampleProductFieldState extends State<IsProvideSampleProductField
               '是否提供样衣',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
               ),
             ),
             trailing: Text(

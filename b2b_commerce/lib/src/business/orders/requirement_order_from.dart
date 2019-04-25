@@ -188,7 +188,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                focusNode: _nameFocusNode,
                controller: _nameController,
                leadingText: Text('产品名称',style: TextStyle(fontSize: 16,)),
-               isRequired: true,
                hintText: '填写',
                style: TextStyle(color: Colors.grey,fontSize: 16,),
                onChanged: (val){
@@ -372,10 +371,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     model.details.maxExpectedPrice = StringUtil.removeSymbolRMBToDouble(_priceController.text);
     model.remarks = _remakesController.text;
 
-    if(model.details.productName == null){
-      ShowDialogUtil.showSimapleDialog(context,'产品名称不可以为空');
-      return;
-    }
     if(model.details.category == null){
       ShowDialogUtil.showSimapleDialog(context,'产品品类不可以为空');
       return;
