@@ -22,8 +22,7 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
                 text: TextSpan(
                     text: '交货时间',
                     style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
                         color: Colors.black
                     ),
                     children: <TextSpan>[

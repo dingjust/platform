@@ -20,7 +20,6 @@ class IsProofingFieldState extends State<IsProofingField> {
               '是否需要打样',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
               ),
             ),
             trailing: Text(
