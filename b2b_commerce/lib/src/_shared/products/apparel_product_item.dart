@@ -176,8 +176,9 @@ class ApparelProductItem extends StatelessWidget {
                   )
                 : GestureDetector(
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      width: 60,
+                      height: 25,
+                      margin: EdgeInsets.only(right: 10,left: 10),
                       decoration: BoxDecoration(
                           color: Color.fromRGBO(255, 214, 12, 1),
                           borderRadius: BorderRadius.circular(5)
