@@ -75,6 +75,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   Widget _buildProgresses(BuildContext context) {
     return Container(
+      color: Color.fromRGBO(245, 245, 245, 30),
       padding: EdgeInsets.only(bottom: 5),
       child: ListView(
         children:
@@ -92,13 +93,21 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       }
     }
     for (int i = 0; i < order.progresses.length; i++) {
-      _list.add(Container(
-        child: _buildProductionProgress(context,
-          order.progresses[i],
-            ProductionProgressPhaseLocalizedMap[order.currentPhase],
-            order.progresses[i].sequence,_index
+      _list.add(
+        Card(
+          margin: EdgeInsets.fromLTRB(10, 5, 10, 8),
+          color: order.progresses[i].sequence == _index
+              ? Color.fromARGB(255,255, 214, 12)
+              : Colors.white,
+          elevation: 1.5,
+          child: _buildProgressTimeLine(context,
+              order.progresses[i],
+              ProductionProgressPhaseLocalizedMap[order.currentPhase],
+              order.progresses[i].sequence, _index
+          ),
+
         ),
-      ));
+      );
     }
     _list.add(Container(
       padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
@@ -125,7 +134,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           child: Container(
             height: double.infinity,
             width: 1.3,
-            color: sequence == _index ? Color(0xFFFFD600) : Colors.black45,
+            color: Colors.black45,
           ),
         ),
         Positioned(
@@ -140,7 +149,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               width: 16.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: sequence == _index ? Color(0xFFFFD600) : Colors.black
+                  color: Colors.black
               ),
             ),
           ),
@@ -153,18 +162,24 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   Widget _buildProgressTimeLine(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index) {
     phase = ProductionProgressPhaseLocalizedMap[progress.phase];
     return Container(
+      padding: EdgeInsets.all(10),
 //      width: double.infinity,
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index   && order.status == PurchaseOrderStatus.IN_PRODUCTION ?'（当前进行中）':''}' ,
+                  child:
+            phase == '验货'?
+            Text('■ ${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index   && order.status == PurchaseOrderStatus.IN_PRODUCTION ?'（当前进行中）':''}' ,
+                style: TextStyle(
+                    color:  Colors.black,
+                    fontSize: 18)
+            ):
+                  Text('▼ ${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index   && order.status == PurchaseOrderStatus.IN_PRODUCTION ?'（当前进行中）':''}' ,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: sequence == _index ? Color(0xFFFFD600) : Colors.black54,
+                          color:  Colors.black,
                           fontSize: 18)
                   ),
                 ),
@@ -172,7 +187,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   padding: EdgeInsets.only(right: 10),
                   child: Text(
                     '${progress.delayedDays >0 ? '已延期${progress.delayedDays}天': '' }',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 18),
+                    style: TextStyle(color: Colors.red, fontSize: 18),
                   ),
                 ),
               ],
@@ -189,8 +204,11 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           currentPhase == ProductionProgressPhaseLocalizedMap[ProductionProgressPhase.INSPECTION])?
                       _buildFinishDate(context,progress,currentPhase,sequence,_index):
                       _buildEstimatedDate(context,progress,currentPhase,sequence,_index),
+                      Divider(height: 1,color: Color.fromRGBO(245, 245, 245, 30),),
                       _buildQuantity(context,progress,currentPhase,sequence,_index),
+                      Divider(height: 1,color: Color.fromRGBO(245, 245, 245, 30)),
                       _buildRemarks(context,progress,currentPhase,sequence,_index),
+                      Divider(height: 1,color: Color.fromRGBO(245, 245, 245, 30)),
                     ],
                   ),
                 ),
@@ -198,8 +216,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               GestureDetector(
                 child: progress.medias == null || progress.medias.isEmpty?
                 Container(
-                  margin: EdgeInsets.fromLTRB(0,0,15,0),
-                  padding: EdgeInsets.fromLTRB(0,0, 10,0),
+                  margin: EdgeInsets.fromLTRB(20,15,15,0),
+                  padding: EdgeInsets.fromLTRB(5,10, 15,0),
                   child: Center(
                     child: Icon(
                       B2BIcons.noPicture,
@@ -207,17 +225,16 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       size: 60,
                     ),
                   ),
-                  width: 80,
-                  height: 80,
+                  width: 100,
+                  height: 100,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Color.fromRGBO(243, 243, 243, 1)),
                 ) :
                 Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 15, 0),
-                    padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
-                    width: 80,
-                    height: 80,
+                    margin: EdgeInsets.fromLTRB(20, 15, 15, 0),
+                    width: 100,
+                    height: 100,
                     child: CachedNetworkImage(
                         imageUrl: '${progress.medias[0].previewUrl()}',
                         fit: BoxFit.cover,
@@ -264,7 +281,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
               child: phase == currentPhase && progress.finishDate == null && userType != null && userType == 'factory'
                   ? RaisedButton(
-                color: Color(0xFFFFD600),
+                color: Colors.white,
                 child: Text('${ProductionProgressPhaseLocalizedMap[progress.phase]}完成',
                   style: TextStyle(color: Colors.black),
                 ),
@@ -287,32 +304,29 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   Widget _buildEstimatedDate(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index){
     return Container(
-      height: 30,
-      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      padding: EdgeInsets.all(8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Expanded(
-            child: GestureDetector(
-                child: Text('预计完成时间',
-                    style: TextStyle(fontWeight: FontWeight.w500)),
+           GestureDetector(
+                child: Text('预计完成时间：',
+                    style: TextStyle()),
                 onTap: () {
                   userType != null && userType == 'factory' && (sequence >= _index)  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                   _showDatePicker(progress) : null;
-                }),
+                }
           ),
           GestureDetector(
               child:Container(
-                padding: EdgeInsets.only(right: 15),
+                margin: EdgeInsets.only(left: 15),
                 child: Align(
                   alignment: Alignment.centerRight,
                   child:
                   progress.estimatedDate == null?
-                  Text('选择日期',
-                      style: TextStyle(color: Colors.grey,fontWeight: FontWeight.w500)) :
+                  Text('${userType=='brand' ? '':'选择日期'}',
+                      style: TextStyle(color: Colors.grey,)) :
                   Text('${DateFormatUtil.formatYMD(
                       progress.estimatedDate)}',
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                      style: TextStyle()),
                 ),
               ),
               onTap: () {
@@ -327,19 +341,16 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   Widget _buildFinishDate(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index){
     return Container(
-      height: 30,
-      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      padding: EdgeInsets.all(8),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: Text('实际完成时间', style: TextStyle(fontWeight: FontWeight.w500)),
-          ),
+          Text('实际完成时间：', style: TextStyle()),
           Container(
-            margin: EdgeInsets.only(right: 15),
+            margin: EdgeInsets.only(left: 15),
             child:
             progress.finishDate == null ? Container() :
             Text('${DateFormatUtil.formatYMD(progress.finishDate)}',
-                style: TextStyle(fontWeight: FontWeight.w500)),
+                style: TextStyle()),
           ),
         ],
       ),
@@ -349,26 +360,28 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   Widget _buildQuantity(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index){
     return Container(
       child: Container(
-            height: 30,
-            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        padding: EdgeInsets.all(8),
             child: Row(
               children: <Widget>[
-                Expanded(
-                  child: GestureDetector(
-                      child: Text('数量',
-                          style: TextStyle(fontWeight: FontWeight.w500)),
+                GestureDetector(
+                      child: Text('数量：',
+                          style: TextStyle()),
                       onTap: () {
                         userType != null && userType == 'factory' && (sequence >= _index )  && order.status == PurchaseOrderStatus.IN_PRODUCTION?
                         _showDialog(progress,'数量'): null;
-                      }),
-                ),
+                      }
+                 ),
                 GestureDetector(
                     child: Container(
-                      padding:  EdgeInsets.only(right: 15),
+                      margin:  EdgeInsets.only(left: 15),
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: Text('${progress.quantity}',
-                            style: TextStyle(fontWeight: FontWeight.w500)),
+                        child:
+                        progress.quantity == 0 || progress.quantity == null ?
+                          Text('${userType=='brand' ? '':'填写'}',
+                              style: TextStyle(color: Colors.grey,)) :
+                          Text('${progress.quantity}',
+                        style: TextStyle()),
                       ),
                     ),
                     onTap: () {
@@ -398,39 +411,36 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     return Container(
       child: GestureDetector(
         child: Container(
-            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            padding: EdgeInsets.all(8),
             child: Row(
                 children: <Widget>[
-                  Text('备注', style: TextStyle(fontWeight: FontWeight.w500)),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
+                  Text('备注：', style: TextStyle()),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(15, 0, 5, 0),
                       child: Align(
-                          alignment: Alignment.centerRight,
-                          child: progress.remarks == null?
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '${userType=='brand'? '':'填写'}',
+                          alignment: Alignment.centerLeft,
+                          child: progress.remarks == null || progress.remarks == ''?
+                           Text(
+                              '${userType=='brand' ? '':'填写'}',
                               style: TextStyle(
                                 color: Colors.grey,
                               ),
-                            ),
-                          ):
+                            )
+                          :
                           Container(
+                            width: 140,
                             child: Text(
                               '${progress.remarks}',
-                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           )
                       ),
-                    ),
                   )
                 ])
         ),
         onTap: () async {
           userType != null && userType == 'factory' && (sequence >= _index) && order.status == PurchaseOrderStatus.IN_PRODUCTION?
-          _showRemarksDialog(progress,'备注','${progress.remarks==null?'':progress.remarks}') : null;
+          _showRemarksDialog(progress,'备注','${progress.remarks==null?'':progress.remarks}') : __neverShowMsg('${progress.remarks==null?'':progress.remarks}');
         },
       )
     );
@@ -579,6 +589,28 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         );
       },
     );
+  }
+
+  __neverShowMsg(String text) {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text(
+              '备注',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            children: <Widget>[
+              SimpleDialogOption(
+                child: Text('${text}'),
+              ),
+            ],
+          );
+        },
+      );
   }
 
   Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type,String remarks) async {
@@ -796,7 +828,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                         '确定',
                         style: TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.w500,
                           fontSize: 18,
                         ),
                       ),
