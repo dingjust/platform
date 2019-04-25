@@ -74,15 +74,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // 安卓端自动更新
-    TargetPlatform platform = defaultTargetPlatform;
-    if (platform != TargetPlatform.iOS) {
+    // TargetPlatform platform = defaultTargetPlatform;
+    // if (platform != TargetPlatform.iOS) {
       WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
               homePageKey.currentContext,
               ignoreVersionNotification:
                   UserBLoC.instance.ignoreVersionNotification)
           .initCheckVersion(
               AppBLoC.instance.packageInfo.version, 'nbyjy'));
-    }
+    // }
     super.initState();
   }
 
@@ -421,7 +421,7 @@ class BrandTrackingProgressSection extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Color.fromRGBO(248, 248, 248, 1),
+          color: Color.fromRGBO(232, 232, 232, 1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -759,7 +759,7 @@ class FactoryCollaborationSection extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
         margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
         decoration: BoxDecoration(
-          color: Color.fromRGBO(240, 240, 240, 1),
+          color: Color.fromRGBO(232, 232, 232, 1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(

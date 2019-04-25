@@ -20,7 +20,6 @@ class MachiningTypeFieldState extends State<MachiningTypeField> {
               '加工类型',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
               ),
             ),
             trailing: Text(

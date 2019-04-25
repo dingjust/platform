@@ -1,4 +1,7 @@
+import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
+import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -63,7 +66,74 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
             ),
           ),
         ),
-        floatingActionButton: ScrollToTopButton<PurchaseOrderBLoC>(),
+//        floatingActionButton: ScrollToTopButton<PurchaseOrderBLoC>(),
+        floatingActionButton: SpeedDial(
+          // animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          // this is ignored if animatedIcon is non null
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '线下订单',
+                style: TextStyle(color: Colors.black, fontSize: 12),
+              )
+            ],
+          ),
+          visible: true,
+          curve: Curves.bounceIn,
+          // overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          onOpen: () => print('OPENING DIAL'),
+          onClose: () => print('DIAL CLOSED'),
+          tooltip: 'Speed Dial',
+          heroTag: 'speed-dial-hero-tag',
+          // backgroundColor: Color.fromRGBO(255,214,12, 1),
+          foregroundColor: Colors.black,
+          elevation: 8.0,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0)),
+          children: [
+            SpeedDialChild(
+              child: Center(
+                child: Text(
+                  '唯一码',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+              backgroundColor: Colors.blue,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductionUniqueCodePage(),
+                  ),
+                );
+              },
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+            ),
+            SpeedDialChild(
+              child: Center(
+                child: Text(
+                  '创建',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+              backgroundColor: Colors.red,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductionOfflineOrder(),
+                  ),
+                );
+              },
+              shape: new RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+            ),
+          ],
+        ),
       ),
     );
   }

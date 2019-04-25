@@ -61,7 +61,6 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
               '生产地区',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
               ),
             ),
             trailing: Text(

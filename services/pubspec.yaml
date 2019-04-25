@@ -26,7 +26,8 @@ dependencies:
   fluwx: ^0.5.4
   rxdart: ^0.20.0
   open_file: 1.1.1
-  url_launcher: ^3.0.3
+  store_redirect: ^1.0.1
+
 
 
 
