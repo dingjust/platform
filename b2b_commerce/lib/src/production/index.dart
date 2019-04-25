@@ -28,6 +28,7 @@ class _ProductionPageState extends State<ProductionPage> {
             elevation: 0,
             title: ProductionSearchInputBox(),
             brightness: Brightness.light,
+            automaticallyImplyLeading: false,
             actions: <Widget>[
 //              IconButton(
 //                padding: EdgeInsets.only(right: 20),
@@ -46,43 +47,39 @@ class _ProductionPageState extends State<ProductionPage> {
             ],
           ),
           body: Scaffold(
-            appBar: ProductionFilterBar(
-              leading: IconButton(
-                icon: Icon(null),
-                onPressed: () {},
-              ),
-              entries: <FilterConditionEntry>[
-                FilterConditionEntry(
-                    label: '当前生产', value: 'producting', checked: true),
-                FilterConditionEntry(
-                  label: '延期预警',
-                  value: 'delayWarning',
+            appBar: AppBar(
+              title: ProductionFilterBar(
+                leading: IconButton(
+                  icon: Icon(null),
+                  onPressed: () {},
+                ),
+                entries: <FilterConditionEntry>[
+                  FilterConditionEntry(
+                      label: '当前生产', value: 'producting', checked: true),
+                  FilterConditionEntry(
+                    label: '延期预警',
+                    value: 'delayWarning',
 //                    onRemind: true,
 //                    remindNum: ''
-                ),
+                  ),
 //                FilterConditionEntry(
 //                  label: '已完成',
 //                  value: 'complete',
 //                )
-              ],
-              action: FlatButton(
-                child: Icon(
-                  B2BIcons.menu,
-                  size: 12,
-                  color: Color.fromRGBO(50, 50, 50, 1),
+                ],
+                action: Container(),
+                streamController: ProductionBLoC.instance.conditionController,
+              ),
+            ),
+            endDrawer: Drawer(
+              child: GestureDetector(
+                child: ProductionFilterPage(
+                  bloc: ProductionBLoC.instance,
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductionFilterPage(
-                            bloc: ProductionBLoC.instance,
-                          ),
-                    ),
-                  );
+                onTap: (){
+
                 },
               ),
-              streamController: ProductionBLoC.instance.conditionController,
             ),
             body: ProductionListView(),
           ),

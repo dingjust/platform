@@ -37,41 +37,78 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('筛选条件'),
-        centerTitle: true,
-        elevation: 0.5,
-        actions: <Widget>[
-          GestureDetector(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: Center(
-                  child: Text(
-                    '确定',
-                    style: TextStyle(
-                        color: Colors.black),
-                  ),
-                ),
-              ),
-              onTap: () async {
-                widget.bloc.setOrderType(widget._orderType);
-                widget.bloc.setCurrentStatus(widget._currentStatus);
-                widget.bloc.setStartDate(widget._startDate);
-                widget.bloc.setEndDate(widget._endDate);
-                widget.bloc.clear();
-                widget.bloc.getData();
-                Navigator.pop(context);
-              }
-          ),
-        ],
-      ),
       body: Container(
         color: Color.fromRGBO(245, 245, 245, 1),
         child: ListView(
           children: <Widget>[
             _buildConditionArea('订单类型', widget._orderType, 3),
-            _buildConditionArea('目前节点', widget._currentStatus, 4),
-            _buildDateArea()
+            _buildConditionArea('目前节点', widget._currentStatus, 3),
+            _buildDateArea(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  height: 40,
+                  margin: EdgeInsets.only(right: 15),
+                  child: Center(
+                    child: FlatButton(
+                        padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 45),
+                        color: Colors.grey,
+                        child: const Text(
+                          '重置',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(8))),
+                        onPressed: () {
+                          setState(() {
+                            for(int i=0;i< widget._orderType.length;i++){
+                              widget._orderType[i].checked = false;
+                            }
+                            for(int i=0;i< widget._currentStatus.length;i++){
+                              widget._currentStatus[i].checked = false;
+                            }
+                            widget._startDate = null;
+                            widget._endDate = null;
+                          });
+                        }),
+                  ),
+                ),
+                Container(
+                    height: 40,
+                    margin: EdgeInsets.only(left: 10),
+                    child: Center(
+                      child: FlatButton(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 45),
+                          color: Color(0xFFFFD600),
+                          child: const Text(
+                            '确定',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                          ),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                              const BorderRadius.all(Radius.circular(8))),
+                          onPressed: () {
+                            widget.bloc.setOrderType(widget._orderType);
+                            widget.bloc.setCurrentStatus(widget._currentStatus);
+                            widget.bloc.setStartDate(widget._startDate);
+                            widget.bloc.setEndDate(widget._endDate);
+                            widget.bloc.clear();
+                            widget.bloc.getData();
+                            Navigator.pop(context);
+                          }),
+                    )),
+              ],
+            )
           ],
         ),
       ),
@@ -86,28 +123,48 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
       margin: EdgeInsets.only(bottom: 10),
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                label,
-                style: TextStyle(
-                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 18),
-              )
-            ],
+          Container(
+            margin: EdgeInsets.only(bottom: 5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 50,
+                  height: 1,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+                ),
+                Text(
+                  '$label',
+                  style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+                ),
+                Container(
+                  width: 50,
+                  height: 1,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+                )
+              ],
+            ),
           ),
           GridView.count(
             primary: false,
             shrinkWrap: true,
             crossAxisCount: rowNum,
             // padding: const EdgeInsets.all(5),
-            mainAxisSpacing: 0,
-            crossAxisSpacing: 0,
+            mainAxisSpacing: 5.0,
+            crossAxisSpacing: 10.0,
+            childAspectRatio: 2.0,
             children: conditions
                 .map(
-                  (entry) => FilterChip(
+                  (entry) => ChoiceChip(
                         label: Text('${entry.label}',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
+                              color: Colors.black
                             )),
                         selectedColor: Color.fromRGBO(255,214,12, 1),
                         backgroundColor: Colors.white,
@@ -148,11 +205,26 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
       child: Column(
         children: <Widget>[
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Container(
+                width: 50,
+                height: 1,
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+              ),
               Text(
                 '交货日期',
-                style: TextStyle(
-                    color: Color.fromRGBO(150, 150, 150, 1), fontSize: 18),
+                style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+              ),
+              Container(
+                width: 50,
+                height: 1,
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
               )
             ],
           ),
@@ -177,28 +249,25 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
                     });
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(10,5,10,5),
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(245, 245, 245, 1),
+                        color: Colors.black12,
                         borderRadius: BorderRadius.circular(20)),
-                    child: Row(
-                      children: <Widget>[
+                    child:
                         Text(widget._startDate == null
                             ? '选择起始日期'
-                            : '${DateFormatUtil.formatYMD(widget._startDate)}'),
-                        Icon(Icons.date_range)
-                      ],
-                    ),
+                            : '${DateFormatUtil.formatYMD(widget._startDate)}',
+                        style: TextStyle(fontSize: 14),),
                   ),
                 ),
                 Container(
-                  width: 50,
+                  width: 10,
                   decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
-                    width: 1,
-                    color: Colors.grey[400],
-                  ))),
+                            width: 1,
+                            color: Colors.grey[400],
+                          ))),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -216,18 +285,15 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
                     });
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(10,5,10,5),
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(245, 245, 245, 1),
+                        color: Colors.black12,
                         borderRadius: BorderRadius.circular(20)),
-                    child: Row(
-                      children: <Widget>[
+                    child:
                         Text(widget._endDate == null
                             ? '选择结束日期'
-                            : '${DateFormatUtil.formatYMD(widget._endDate)}'),
-                        Icon(Icons.date_range)
-                      ],
-                    ),
+                            : '${DateFormatUtil.formatYMD(widget._endDate)}',
+                          style: TextStyle(fontSize: 14),),
                   ),
                 )
               ],
