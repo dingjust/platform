@@ -183,7 +183,7 @@ class ApparelProductItem extends StatelessWidget {
                           color: Color.fromRGBO(255, 214, 12, 1),
                           borderRadius: BorderRadius.circular(5)
                       ),
-                      child: Text(_approvalStatusText),
+                      child: Center(child: Text(_approvalStatusText)),
                     ),
                     onTap: onProductShlefing,
                   ),
