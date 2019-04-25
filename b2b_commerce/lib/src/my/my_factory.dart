@@ -211,14 +211,15 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     List<Widget> _buildFactoryHeaderRow = [
       widget.factory.approvalStatus == ArticleApprovalStatus.approved
           ? Tag(
-              label: '  已认证  ',
-              backgroundColor: Color.fromRGBO(254, 252, 235, 1),
-            )
+        label: '  已认证  ',
+        color: Colors.black,
+        backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+      )
           : Tag(
-              label: '  未认证  ',
-              color: Colors.black,
-              backgroundColor: Colors.grey[300],
-            )
+        label: '  未认证  ',
+        color: Colors.black,
+        backgroundColor: Colors.grey[300],
+      )
     ];
     widget.factory.labels.forEach((label) {
       return _buildFactoryHeaderRow.add(
@@ -226,7 +227,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           padding: const EdgeInsets.only(right: 5.0),
           child: Tag(
             label: label.name,
-            color: Colors.grey,
+            color:Color.fromRGBO(255, 133, 148, 1),
           ),
         ),
       );
