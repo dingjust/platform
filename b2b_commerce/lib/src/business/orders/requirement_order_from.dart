@@ -26,9 +26,10 @@ class RequirementOrderFrom extends StatefulWidget {
 
   RequirementOrderModel order;
 
-  bool isReview ;
+  bool isReview;
 
-  RequirementOrderFrom({this.product, this.order,this.factoryUid,this.isReview:false});
+  RequirementOrderFrom(
+      {this.product, this.order, this.factoryUid, this.isReview: false});
 
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
@@ -43,8 +44,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   TextEditingController _quantityController = TextEditingController();
   FocusNode _priceFocusNode = FocusNode();
   TextEditingController _priceController = TextEditingController();
-  FocusNode _remakesFocusNode = FocusNode();
-  TextEditingController _remakesController = TextEditingController();
+  FocusNode _remarksFocusNode = FocusNode();
+  TextEditingController _remarksController = TextEditingController();
 
   @override
   void initState() {
@@ -73,13 +74,13 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('需求发布'),
-        elevation: 0.5,
-        brightness: Brightness.light,
-        centerTitle: true,
-        actions: <Widget>[
-          /*IconButton(
+        appBar: AppBar(
+          title: Text('需求发布'),
+          elevation: 0.5,
+          brightness: Brightness.light,
+          centerTitle: true,
+          actions: <Widget>[
+            /*IconButton(
                 icon: Icon(Icons.play_for_work),
                 color: Color.fromRGBO(255, 149, 22, 1),
                 onPressed: () => Navigator.push(
@@ -88,48 +89,48 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                         builder: (context) => RequirementImportProduct(),
                       ),
                     )),*/
-          GestureDetector(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: Center(
-                  child: Text(
-                    '导入产品',
-                    style: TextStyle(color: Colors.black),
+            GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Center(
+                    child: Text(
+                      '导入产品',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                 ),
-              ),
-              onTap: () async {
-                dynamic result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ApparelProductsPage(
-                          isSelectOption: true,
-                          item: widget.product,
-                        ),
-                  ),
-                );
-                //TODO：导入产品后的一系列操作
-                widget.product = result;
-                if (result != null) {
-                  setState(() {
-                    model.details.pictures = widget.product.images;
-                    model.details.productName = widget.product.name;
-                    model.details.productSkuID = widget.product.skuID;
-                    if (widget.product.category != null) {
-                      model.details.category = widget.product.category;
-                    }
-                  });
-                }
-              })
-        ],
-      ),
-      body: Container(
-        child: ListView(
-          children: <Widget>[
-            _buildBody(context),
+                onTap: () async {
+                  dynamic result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ApparelProductsPage(
+                            isSelectOption: true,
+                            item: widget.product,
+                          ),
+                    ),
+                  );
+                  //TODO：导入产品后的一系列操作
+                  widget.product = result;
+                  if (result != null) {
+                    setState(() {
+                      model.details.pictures = widget.product.images;
+                      model.details.productName = widget.product.name;
+                      model.details.productSkuID = widget.product.skuID;
+                      if (widget.product.category != null) {
+                        model.details.category = widget.product.category;
+                      }
+                    });
+                  }
+                })
           ],
         ),
-      ),
+        body: Container(
+          child: ListView(
+            children: <Widget>[
+              _buildBody(context),
+            ],
+          ),
+        ),
         bottomNavigationBar: Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -137,21 +138,23 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           child: RaisedButton(
             color: Color.fromRGBO(255, 214, 12, 1),
             child: Text(
-              widget.order != null && widget.isReview == false ? '修改需求' : '确定发布',
+              widget.order != null && widget.isReview == false
+                  ? '修改需求'
+                  : '确定发布',
               style: TextStyle(
                 color: Colors.black,
-
                 fontSize: 18,
               ),
             ),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () {
-              widget.order != null && widget.isReview == false ? onUpdate() : onPublish(widget.factoryUid);
+              widget.order != null && widget.isReview == false
+                  ? onUpdate()
+                  : onPublish(widget.factoryUid);
             },
           ),
-        )
-    );
+        ));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -168,8 +171,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     );
   }
 
-  Widget _buildhead(BuildContext context){
-
+  Widget _buildhead(BuildContext context) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -177,62 +179,86 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           PicturesField(
             model: model,
           ),
-           GestureDetector(
-             behavior: HitTestBehavior.translucent,
-             onTap: () {
-               // 触摸收起键盘
-               _nameFocusNode.unfocus();
-             },
-             child: widget.product == null?
-             TextFieldComponent(
-               focusNode: _nameFocusNode,
-               controller: _nameController,
-               leadingText: Text('产品名称',style: TextStyle(fontSize: 16,)),
-               hintText: '填写',
-               style: TextStyle(color: Colors.grey,fontSize: 16,),
-               onChanged: (val){
-                 model.details.productName = _nameController.text;
-               },
-             ):
-             ProductField(widget.product),
-           ),
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              // 触摸收起键盘
+              _nameFocusNode.unfocus();
+            },
+            child: widget.product == null
+                ? TextFieldComponent(
+                    focusNode: _nameFocusNode,
+                    controller: _nameController,
+                    leadingText: Text('产品名称',
+                        style: TextStyle(
+                          fontSize: 16,
+                        )),
+                    hintText: '填写',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 16,
+                    ),
+                    onChanged: (val) {
+                      model.details.productName = _nameController.text;
+                    },
+                  )
+                : ProductField(widget.product),
+          ),
           CategoryField(
             model,
             product: widget.product,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Divider(height: 0,),
+            child: Divider(
+              height: 0,
+            ),
           ),
           MajorCategoryField(model),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Divider(height: 0,),
+            child: Divider(
+              height: 0,
+            ),
           ),
           TextFieldComponent(
             focusNode: _quantityFocusNode,
             controller: _quantityController,
             inputType: TextInputType.number,
-            leadingText: Text('订单数量',style: TextStyle(fontSize: 16,)),
+            leadingText: Text('订单数量',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
             isRequired: true,
             hintText: '填写',
-            style: TextStyle(color: Colors.grey,fontSize: 16,),
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
           ),
 //          ExpectedMachiningQuantityField(model),
           TextFieldComponent(
             focusNode: _priceFocusNode,
             controller: _priceController,
             inputType: TextInputType.number,
-            leadingText: Text('期望价格',style: TextStyle(fontSize: 16,)),
+            leadingText: Text('期望价格',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
             hintText: '填写',
             prefix: '￥',
-            style: TextStyle(color: Colors.grey,fontSize: 16,),
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
           ),
 //          MaxExpectedPriceField(model),
           ExpectedDeliveryDateField(model),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Divider(height: 0,),
+            child: Divider(
+              height: 0,
+            ),
           ),
           ContactWayField(model),
         ],
@@ -240,25 +266,52 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     );
   }
 
-  Widget _buildBottom(BuildContext context){
+  Widget _buildBottom(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 20),
       color: Colors.white,
       child: Column(
         children: <Widget>[
-          TextFieldComponent(
-            focusNode: _remakesFocusNode,
-            controller: _remakesController,
-            leadingText: Text('备注',style: TextStyle(fontSize: 16,)),
-            hintText: '填写',
-            style: TextStyle(color: Colors.grey,fontSize: 16,),
+          Container(
+            color: Colors.white,
+            margin: EdgeInsets.only(
+              top: 3,
+            ),
+            padding: EdgeInsets.all(15),
+            child: Column(children: <Widget>[
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "备注",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Container(
+                color: Colors.white,
+                child: TextFieldComponent(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  dividerPadding: EdgeInsets.only(),
+                  focusNode: _remarksFocusNode,
+                  hintText: '填写',
+                  autofocus: false,
+                  inputType: TextInputType.text,
+                  textAlign: TextAlign.left,
+                  hideDivider: true,
+                  maxLines: null,
+                  maxLength: 120,
+                  controller: _remarksController,
+                ),
+              )
+            ]),
           ),
 //          RemarksField(model),
           Column(
             children: <Widget>[
               Container(
                 margin:
-                EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+                    EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
                 child: Row(
                   children: <Widget>[
                     Text(
@@ -289,25 +342,32 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             ProductionAreasField(model),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,),
+              child: Divider(
+                height: 0,
+              ),
             ),
             MachiningTypeField(model),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,),
+              child: Divider(
+                height: 0,
+              ),
             ),
             IsProofingField(model),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,),
+              child: Divider(
+                height: 0,
+              ),
             ),
             IsProvideSampleProductField(model),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,),
+              child: Divider(
+                height: 0,
+              ),
             ),
             IsInvoiceField(model),
-
           ],
         ),
       ),
@@ -364,27 +424,30 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   /// 发布
   void onPublish(String factoryUid) async {
-    if(widget.isReview){
+    if (widget.isReview) {
       model.code = '';
     }
-    model.details.expectedMachiningQuantity = StringUtil.transInt(_quantityController.text);
-    model.details.maxExpectedPrice = StringUtil.removeSymbolRMBToDouble(_priceController.text);
-    model.remarks = _remakesController.text;
+    model.details.expectedMachiningQuantity =
+        StringUtil.transInt(_quantityController.text);
+    model.details.maxExpectedPrice =
+        StringUtil.removeSymbolRMBToDouble(_priceController.text);
+    model.remarks = _remarksController.text;
 
-    if(model.details.category == null){
-      ShowDialogUtil.showSimapleDialog(context,'产品品类不可以为空');
+    if (model.details.category == null) {
+      ShowDialogUtil.showSimapleDialog(context, '产品品类不可以为空');
       return;
     }
-    if(model.details.expectedMachiningQuantity == null){
-      ShowDialogUtil.showSimapleDialog(context,'订单数量不可以为空');
+    if (model.details.expectedMachiningQuantity == null) {
+      ShowDialogUtil.showSimapleDialog(context, '订单数量不可以为空');
       return;
     }
-    if(model.details.expectedDeliveryDate == null){
-      ShowDialogUtil.showSimapleDialog(context,'交货时间不可以为空');
+    if (model.details.expectedDeliveryDate == null) {
+      ShowDialogUtil.showSimapleDialog(context, '交货时间不可以为空');
       return;
     }
-    if(model.details.contactPerson == null && model.details.contactPhone == null){
-      ShowDialogUtil.showSimapleDialog(context,'联系方式不可以为空');
+    if (model.details.contactPerson == null &&
+        model.details.contactPhone == null) {
+      ShowDialogUtil.showSimapleDialog(context, '联系方式不可以为空');
       return;
     }
 
