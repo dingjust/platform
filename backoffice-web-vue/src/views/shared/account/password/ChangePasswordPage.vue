@@ -12,7 +12,7 @@
     </el-row>
     <el-row :gutter="10">
       <el-col :span="24">
-        <el-form-item label="密码" prop="oldPassword">
+        <el-form-item label="旧密码" prop="oldPassword">
           <el-input type="password" v-model="slotData.oldPassword"></el-input>
         </el-form-item>
       </el-col>
