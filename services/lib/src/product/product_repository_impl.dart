@@ -9,75 +9,172 @@ class ProductRepositoryImpl extends ProductRepository{
 
   @override
   Future<ProductsResponse> list(dynamic data,Map<String,dynamic> params) async{
-    Response response = await http$.post(ProductApis.list,data: data,queryParameters: params);
-    return ProductsResponse.fromJson(response.data);
+    Response response;
+    try{
+      response = await http$.post(ProductApis.list,data: data,queryParameters: params);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return ProductsResponse.fromJson(response.data);
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<ProductsResponse> getProductsOfFactories(dynamic data,Map<String,dynamic> params) async{
-    Response response = await http$.post(ProductApis.getProductsOfFactories,data: data,queryParameters: params);
-    return ProductsResponse.fromJson(response.data);
+    Response response;
+    try{
+      response = response = await http$.post(ProductApis.getProductsOfFactories,data: data,queryParameters: params);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return ProductsResponse.fromJson(response.data);
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<ProductsResponse> getProductsOfFactory(dynamic data, Map<String, Object> params,String uid) async{
-    Response response = await http$.post(ProductApis.getProductsOfFactory(uid),data: data,queryParameters: params);
-    return ProductsResponse.fromJson(response.data);
+    Response response;
+    try{
+      response = await http$.post(ProductApis.getProductsOfFactory(uid),data: data,queryParameters: params);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return ProductsResponse.fromJson(response.data);
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<ApparelProductModel> detail(String code) async{
-    Response response = await http$.get(ProductApis.detail(code));
-    return ApparelProductModel.fromJson(response.data);
+    Response response;
+    try{
+      response = response = await http$.get(ProductApis.detail(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return ApparelProductModel.fromJson(response.data);
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<String> create(ApparelProductModel form) async{
-    Response response = await http$.post(ProductApis.create,data: ApparelProductModel.toJson(form));
-    return response.data;
+    Response response;
+    try{
+      response = await http$.post(ProductApis.create,data: ApparelProductModel.toJson(form));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data;
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<String> update(ApparelProductModel form) async{
-    print(form.variants);
-    form.variants.forEach((variant){
-      print('${variant.color.name}===========${variant.size.name}');
-    });
-    Response response = await http$.put(ProductApis.update(form.code),data: ApparelProductModel.toJson(form));
-    return response.data;
+    Response response;
+    try{
+      response = await http$.put(ProductApis.update(form.code),data: ApparelProductModel.toJson(form));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data;
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<String> delete(String code) async{
-    Response response = await http$.delete(ProductApis.delete(code));
-    return response.data;
+    Response response;
+    try{
+      response = await http$.delete(ProductApis.delete(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data;
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<String> on(String code) async{
-    Response response = await http$.put(ProductApis.on(code));
-    return response.data;
+    Response response;
+    try{
+      response = await http$.put(ProductApis.on(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data;
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<String> off(String code) async{
-    Response response = await http$.put(ProductApis.off(code));
-    return response.data;
+    Response response;
+    try{
+      response = await http$.put(ProductApis.off(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data;
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<List<CategoryModel>> cascadedCategories() async{
-   Response response  = await http$.get(ProductApis.cascadedCategories);
-    return response.data.map<CategoryModel>((category){
-      return CategoryModel.fromJson(category);
-    }).toList();
+    Response response;
+    try{
+      response  = await http$.get(ProductApis.cascadedCategories);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data.map<CategoryModel>((category){
+        return CategoryModel.fromJson(category);
+      }).toList();
+    }else{
+      return null;
+    }
   }
 
 
   @override
   Future<List<CategoryModel>> majorCategories() async{
-   Response response  = await http$.get(ProductApis.majorCategories);
-    return response.data.map<CategoryModel>((category)=>CategoryModel.fromJson(category)).toList();
+    Response response;
+    try{
+      response  = await http$.get(ProductApis.majorCategories);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data.map<CategoryModel>((category){
+        return CategoryModel.fromJson(category);
+      }).toList();
+    }else{
+      return null;
+    }
   }
 
   @override
@@ -89,7 +186,12 @@ class ProductRepositoryImpl extends ProductRepository{
       print(e);
     }
 
-    return response.data.map<ColorModel>((color)=>ColorModel.fromJson(color)).toList();
+    if(response != null && response.statusCode == 200){
+      return response.data.map<ColorModel>((color)=>ColorModel.fromJson(color)).toList();
+    }else{
+      return null;
+    }
+
   }
 
   @override
@@ -100,7 +202,12 @@ class ProductRepositoryImpl extends ProductRepository{
     }on DioError catch(e){
       print(e);
     }
-    return response.data.map<SizeModel>((size)=>SizeModel.fromJson(size)).toList();
+    if(response != null && response.statusCode == 200){
+      return response.data.map<SizeModel>((size)=>SizeModel.fromJson(size)).toList();
+    }else{
+      return null;
+    }
+
   }
 
   @override
@@ -111,56 +218,133 @@ class ProductRepositoryImpl extends ProductRepository{
     }on DioError catch(e){
       print(e);
     }
-    return response.data.map<StyleModel>((style)=>StyleModel.fromJson(style)).toList();
+    if(response != null && response.statusCode == 200){
+      return response.data.map<StyleModel>((style)=>StyleModel.fromJson(style)).toList();
+    }else{
+      return null;
+    }
+
   }
 
   @override
   Future<SampleProductsResponse> samples(Map<String,dynamic> data) async {
-    Response response = await http$.get(ProductApis.samples,data: data);
-    return SampleProductsResponse.fromJson(response.data);
+    Response response;
+    try{
+      response = await http$.get(ProductApis.samples,data: data);
+    }on DioError catch(e){
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return SampleProductsResponse.fromJson(response.data);
+    }else{
+      return null;
+    }
+
   }
 
   @override
   Future<SampleProductModel> getSample(String code)async {
-   Response response = await http$.get(ProductApis.sampleDetail(code));
-   return SampleProductModel.fromJson(response.data);
+    Response response;
+    try{
+      response = await http$.get(ProductApis.sampleDetail(code));
+    }on DioError catch(e){
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return SampleProductModel.fromJson(response.data);
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<String> createSample(SampleProductModel smaple) async{
-    Response response = await http$.post(ProductApis.sampleCreate,data: SampleProductModel.toJson(smaple));
-    return response.data;
+    Response response;
+    try{
+      response = await http$.post(ProductApis.sampleCreate,data: SampleProductModel.toJson(smaple));
+    }on DioError catch(e){
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data;
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<String> updateSample(SampleProductModel smaple) async{
-    print(SampleProductModel.toJson(smaple));
-    Response response = await http$.put(ProductApis.sampleUpdate,data: SampleProductModel.toJson(smaple));
-    return response.data;
+    Response response;
+    try{
+      response = await http$.put(ProductApis.sampleUpdate,data: SampleProductModel.toJson(smaple));
+    }on DioError catch(e){
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data;
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<SampleProductHistorysResponse> sampleHistorys(dynamic data, Map<String, dynamic> params) async{
-    Response response = await http$.post(ProductApis.sampleHistorys,data: data,queryParameters: params);
-    return SampleProductHistorysResponse.fromJson(response.data);
+    Response response;
+    try{
+      response = await http$.post(ProductApis.sampleHistorys,data: data,queryParameters: params);
+    }on DioError catch(e){
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return SampleProductHistorysResponse.fromJson(response.data);
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<SampleBorrowReturnHistoryModel> getSampleHistory(String id) async{
-    Response response = await http$.get(ProductApis.getHistory(id));
-    return SampleBorrowReturnHistoryModel.fromJson(response.data);
+    Response response;
+    try{
+      response = await http$.get(ProductApis.getHistory(id));
+    }on DioError catch(e){
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return SampleBorrowReturnHistoryModel.fromJson(response.data);
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<String> createSampleHistory(SampleBorrowReturnHistoryModel sample) async{
-    Response response = await http$.post(ProductApis.sampleHistoryCreate,data: SampleBorrowReturnHistoryModel.toJson(sample));
-    return response.data;
+    Response response;
+    try{
+      response = await http$.post(ProductApis.sampleHistoryCreate,data: SampleBorrowReturnHistoryModel.toJson(sample));
+    }on DioError catch(e){
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data;
+    }else{
+      return null;
+    }
   }
 
   @override
   Future<String> updateSampleHistory(SampleBorrowReturnHistoryModel sample)async {
-    Response response = await http$.put(ProductApis.sampleHistoryUpdate(sample.id),data: SampleBorrowReturnHistoryModel.toJson(sample));
-    return response.data;
+    Response response;
+    try{
+      response = await http$.put(ProductApis.sampleHistoryUpdate(sample.id),data: SampleBorrowReturnHistoryModel.toJson(sample));
+    }on DioError catch(e){
+      print(e);
+    }
+    if(response != null && response.statusCode == 200){
+      return response.data;
+    }else{
+      return null;
+    }
   }
 
 }
