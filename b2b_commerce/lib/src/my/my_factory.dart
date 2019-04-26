@@ -457,7 +457,9 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
   //现款产品
   Widget _buildCashProducts() {
     return FutureBuilder(
-        future: ProductRepositoryImpl().getProductsOfFactory({}, {'size':3}, widget.factory.uid),
+        future: UserBLoC.instance.currentUser.type == UserType.FACTORY
+        ? ProductRepositoryImpl().list({}, {'size':3})
+        : ProductRepositoryImpl().getProductsOfFactory({}, {'size':3}, widget.factory.uid),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Padding(
@@ -531,24 +533,20 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                   builder: (context) =>
                       ProgressIndicatorFactory.buildDefaultProgressIndicator(),
                 );
-                await ProductRepositoryImpl()
-                    .cascadedCategories()
-                    .then((categories) {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          // CategorySelectPage(
-                          //       minCategorySelect: [],
-                          //       categories: categories,
-                          //       categoryActionType: CategoryActionType.TO_PRODUCTS,
-                          //     ),
-                          ProductsPage(
-                            factoryUid: widget.factory.uid,
-                          ),
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                    // CategorySelectPage(
+                    //       minCategorySelect: [],
+                    //       categories: categories,
+                    //       categoryActionType: CategoryActionType.TO_PRODUCTS,
+                    //     ),
+                    ProductsPage(
+                      factoryUid: widget.factory.uid,
                     ),
-                  );
-                });
+                  ),
+                );
               },
             ),
           );

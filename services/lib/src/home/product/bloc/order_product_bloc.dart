@@ -87,15 +87,18 @@ class OrderByProductBLoc extends BLoCBase {
     if (!lock) {
       lock = true;
       try {
-        if (UserBLoC.instance.currentUser.type != UserType.BRAND) {
-          productsResponse = await ProductRepositoryImpl().list({}, {});
+        if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+          productsResponse = await ProductRepositoryImpl().list({
+            'approvalStatuses': ['approved'],
+          }, {});
         } else {
           productsResponse = await ProductRepositoryImpl()
-              .getProductsOfFactory({}, {}, uid);
-
-          _products.clear();
-          _products.addAll(productsResponse.content);
+              .getProductsOfFactory({
+            'approvalStatuses': ['approved'],
+          }, {}, uid);
         }
+        _products.clear();
+        _products.addAll(productsResponse.content);
       } on DioError catch (e) {
         print(e);
       }
@@ -153,13 +156,17 @@ class OrderByProductBLoc extends BLoCBase {
         bottomController.sink.add(true);
       } else {
         try {
-          if (UserBLoC.instance.currentUser.type != UserType.BRAND) {
-            productsResponse = await ProductRepositoryImpl().list({}, {
+          if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+            productsResponse = await ProductRepositoryImpl().list({
+              'approvalStatuses': ['approved'],
+            }, {
               'page': productsResponse.number + 1,
             });
           } else {
             productsResponse = await ProductRepositoryImpl()
-                .getProductsOfFactory({}, {}, uid);
+                .getProductsOfFactory({}, {
+              'page': productsResponse.number + 1,
+            }, uid);
           }
 
           _products.addAll(productsResponse.content);
