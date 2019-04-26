@@ -232,10 +232,12 @@ class RequirementFilterCondition {
 
   List<CategoryModel> categories;
 
+  List<RegionModel> productiveOrientations;
+
   String keyword;
 
   RequirementFilterCondition(
-      {this.dateRange, this.machiningType, this.categories,this.keyword});
+      {this.dateRange, this.machiningType, this.categories,this.keyword,this.productiveOrientations,});
 }
 
 enum RequirementOrderDateRange {

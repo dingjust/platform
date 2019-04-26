@@ -676,6 +676,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     builder: (context) => MyAddressesPage(isJumpSource: true)),
                 //接收返回数据并处理
               ).then((value) async {
+                print(value);
                 if (value != null) {
                   setState(() {
                     order.deliveryAddress = value;

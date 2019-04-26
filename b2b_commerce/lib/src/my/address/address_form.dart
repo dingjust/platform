@@ -185,6 +185,8 @@ class AddressFormState extends State<AddressFormPage> {
               widget.address.cellphone = _cellphoneController.text;
               widget.address.line1 = _line1Controller.text;
 
+//              widget.address.region.name=null;
+
               if(widget.newlyCreated){
                 await AddressRepositoryImpl().create(widget.address).then((a)=>Navigator.pop(context));
               }else{

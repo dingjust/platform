@@ -529,8 +529,12 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                       product: variantProduct,
                     );
                   }).toList();
+                  String unitPrice = _unitPriceController.text;
+                  if(unitPrice != null && unitPrice != ''){
+                    unitPrice = unitPrice.substring(unitPrice.indexOf('￥')+1,unitPrice.length);
+                  }
                   model
-                    ..unitPrice = double.parse(_unitPriceController.text)
+                    ..unitPrice = double.parse(unitPrice)
                     ..totalPrice = totalPrice
                     ..totalQuantity = totalQuantity
                     ..remarks = remarks;

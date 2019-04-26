@@ -197,9 +197,9 @@ class _RequirementOrderDetailPageState
                   ),
                   Container(
                     child: Text(
-                      widget.order.belongTo.contactAddress?.fullname == null
+                      widget.order.belongTo.contactPerson == null
                           ? ''
-                          : '${widget.order.belongTo.contactAddress.fullname}',
+                          : '${widget.order.belongTo.contactPerson}',
                       style: TextStyle(
                           color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                     ),
@@ -222,9 +222,9 @@ class _RequirementOrderDetailPageState
                     ),
                     Container(
                       child: Text(
-                        widget.order.belongTo.contactAddress.cellphone == null
+                        widget.order.belongTo.contactPhone == null
                             ? ''
-                            : '${widget.order.belongTo.contactAddress.cellphone}',
+                            : '${widget.order.belongTo.contactPhone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
