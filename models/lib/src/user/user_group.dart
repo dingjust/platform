@@ -42,7 +42,8 @@ class CompanyModel extends UserGroupModel {
   String describe;
 
   //注册时间
-  DateTime registrationDate;
+  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
+  DateTime creationTime;
 
   //开户税号
   String taxNumber;
@@ -101,7 +102,7 @@ class CompanyModel extends UserGroupModel {
     this.address,
     this.describe,
     this.contactAddress,
-    this.registrationDate,
+    this.creationTime,
     this.taxNumber,
     this.bankOfDeposit,
     this.certificates,
@@ -142,6 +143,9 @@ class CompanyModel extends UserGroupModel {
 
   static List<Map<String, dynamic>> _labelsToJson(List<LabelModel> models) =>
       models.map((model) => LabelModel.toJson(model)).toList();
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 @JsonSerializable()
@@ -157,7 +161,7 @@ class OrgUnitModel extends CompanyModel {
     String address,
     String describe,
     AddressModel contactAddress,
-    DateTime registrationDate,
+    DateTime creationTime,
     String taxNumber,
     String bankOfDeposit,
     List<MediaModel> certificates,
@@ -183,7 +187,7 @@ class OrgUnitModel extends CompanyModel {
           address: address,
           contactAddress: contactAddress,
           describe: describe,
-          registrationDate: registrationDate,
+          creationTime: creationTime,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
           certificates: certificates,
@@ -224,7 +228,7 @@ class B2BUnitModel extends OrgUnitModel {
     AddressModel contactAddress,
     String address,
     String describe,
-    DateTime registrationDate,
+    DateTime creationTime,
     String taxNumber,
     String bankOfDeposit,
     List<MediaModel> certificates,
@@ -253,7 +257,7 @@ class B2BUnitModel extends OrgUnitModel {
           address: address,
           contactAddress: contactAddress,
           describe: describe,
-          registrationDate: registrationDate,
+    creationTime: creationTime,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
           certificates: certificates,
@@ -318,7 +322,7 @@ class BrandModel extends B2BUnitModel {
     String phone,
     AddressModel contactAddress,
     String address,
-    DateTime registrationDate,
+    DateTime creationTime,
     String taxNumber,
     String bankOfDeposit,
     List<MediaModel> certificates,
@@ -354,7 +358,7 @@ class BrandModel extends B2BUnitModel {
           contactAddress: contactAddress,
           email: email,
           phone: phone,
-          registrationDate: registrationDate,
+    creationTime: creationTime,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
           certificates: certificates,
@@ -445,7 +449,7 @@ class FactoryModel extends B2BUnitModel {
       AddressModel contactAddress,
       String address,
       String describe,
-      DateTime registrationDate,
+      DateTime creationTime,
       String taxNumber,
       String bankOfDeposit,
       List<MediaModel> certificates,
@@ -488,7 +492,7 @@ class FactoryModel extends B2BUnitModel {
           describe: describe,
           address: address,
           contactAddress: contactAddress,
-          registrationDate: registrationDate,
+    creationTime: creationTime,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
           certificates: certificates,

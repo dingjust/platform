@@ -6,9 +6,11 @@ import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -33,7 +35,6 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   bool showDateFilterMenu = false;
   bool showMachineTypeFilterMenu = false;
   bool showCategoriesFilterMenu = false;
-  bool showAreaFilterMenu = false;
 
   List<CategoryModel> _minCategorySelect = [];
 
@@ -651,14 +652,26 @@ class Logo extends StatelessWidget {
       _logo = Container(
         width: 20,
         height: 20,
+        child: CachedNetworkImage(
+            imageUrl: '${order.belongTo.profilePicture.previewUrl()}',
+            fit: BoxFit.cover,
+            placeholder: (context, url) =>
+                SpinKitRing(
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: 30,
+                ),
+            errorWidget: (context, url, error) =>
+                SpinKitRing(
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: 30,
+                )
+        ),
         margin: EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            image: DecorationImage(
-              image:
-                  NetworkImage('${order.belongTo.profilePicture.previewUrl()}'),
-              fit: BoxFit.cover,
-            )),
+            ),
       );
     }
     return _logo;

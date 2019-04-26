@@ -5,6 +5,8 @@ import 'package:meta/meta.dart';
 import 'package:models/models.dart';
 
 import 'user_group.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 part 'user.g.dart';
 
@@ -32,7 +34,24 @@ class UserModel extends PrincipalModel {
   /// 公司信息
   B2BUnitModel b2bUnit;
 
-  Image get avatar => profilePicture ?? Image.network(profilePicture.url);
+  Image get avatar => profilePicture ?? CachedNetworkImage(
+      width: 100,
+      height: 100,
+      imageUrl: '${profilePicture.url}',
+      fit: BoxFit.cover,
+      placeholder: (context, url) =>
+          SpinKitRing(
+            color: Colors.black12,
+            lineWidth: 2,
+            size: 30,
+          ),
+      errorWidget: (context, url, error) =>
+          SpinKitRing(
+            color: Colors.black12,
+            lineWidth: 2,
+            size: 30,
+          )
+  );
 
   UserModel({
     MediaModel profilePicture,

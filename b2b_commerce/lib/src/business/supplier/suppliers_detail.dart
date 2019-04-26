@@ -1,8 +1,10 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/supplier/contact_factory.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
@@ -887,7 +889,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
           ListTile(
             leading: Text('注册时间'),
             trailing: Text(
-                '${DateFormatUtil.formatYMD(widget.supplierModel.factory.registrationDate)}'),
+                '${DateFormatUtil.formatYMD(widget.supplierModel.factory.creationTime)}'),
           ),
           Divider(
             height: 5,
@@ -1134,12 +1136,30 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                               null &&
                           widget.supplierModel.quoteOrder.requirementOrder
                               .details.pictures.isNotEmpty
-                      ? NetworkImage(widget.supplierModel.quoteOrder
-                          .requirementOrder.details.pictures[0].url)
+                      ?
+                  CachedNetworkImage(
+                      width: 100,
+                      height: 100,
+                      imageUrl: widget.supplierModel.quoteOrder
+                          .requirementOrder.details.pictures[0].url,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          ),
+                      errorWidget: (context, url, error) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          )
+                  )
                       : AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ),
+                    'temp/picture.png',
+                    package: "assets",
+                  ),
                   fit: BoxFit.cover,
                 )),
           ),

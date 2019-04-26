@@ -1,8 +1,10 @@
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:models/models.dart';
@@ -204,13 +206,27 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               ? Container(
                   width: 80,
                   height: 80,
+                  child: CachedNetworkImage(
+                      width: 100,
+                      height: 100,
+                      imageUrl: '${GlobalConfigs.CONTEXT_PATH}${model.product.thumbnail.url}',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          ),
+                      errorWidget: (context, url, error) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          )
+                  ),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            '${GlobalConfigs.CONTEXT_PATH}${model.product.thumbnail.url}'),
-                        fit: BoxFit.cover,
-                      )),
+                      ),
                 )
               : Container(
                   width: 80,
@@ -369,7 +385,13 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             child: CircularProgressIndicator(),
           ));
       WechatServiceImpl.instance
-          .pay(widget.order.code, paymentFor: widget.paymentFor);
+          .pay(widget.order.code, paymentFor: widget.paymentFor)
+          .then((result) {
+        if (result == null) {
+          Navigator.of(context).pop();
+          onPaymentError();
+        }
+      });
     } else {
       showDialog<void>(
         context: context,

@@ -36,7 +36,7 @@ class WechatServiceImpl implements WechatService {
   }
 
   @override
-  Future pay(String orderCode,
+  Future<String> pay(String orderCode,
       {PaymentFor paymentFor = PaymentFor.DEFAULT}) async {
     //通过Helper获取预支付信息
     WechatPrepayModel prepayModel =
@@ -52,8 +52,10 @@ class WechatServiceImpl implements WechatService {
           timeStamp: prepayModel.timeStamp,
           sign: prepayModel.sign,
           signType: prepayModel.signType);
+          return 'success';
     } else {
       print('error get prepay');
+      return null;
     }
   }
 
