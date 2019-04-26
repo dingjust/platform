@@ -87,15 +87,29 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
     );
 
-    TextField _passwordField = TextField(
+    TextFormField _passwordField = TextFormField(
       autofocus: false,
       controller: _passwordController,
       obscureText: true,
-      onChanged: (value) {
-        formValidate();
-      },
+      // onChanged: (value) {
+      //   formValidate();
+      // },
       decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
-      
+      validator: (value) {
+        if (!RegexUtil.notAllowed(value)) {
+          return '首字母不能为特殊字符';
+        } else if (!RegexUtil.oneNumber(value)) {
+          return '至少一个数字';
+        } else if (!RegexUtil.oneSpecial(value)) {
+          return '至少一个特殊字符';
+        } else if (!RegexUtil.oneUppercase(value)) {
+          return '至少一个大写字符';
+        } else if (value.length < 6) {
+          return '长度至少6位';
+        } else {
+          return null;
+        }
+      },
     );
 
     TextFormField _againPasswordField = TextFormField(
@@ -166,9 +180,34 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               ),
             ),
           ),
-          InputRow(
-            label: '新密码',
-            field: _passwordField,
+          // InputRow(
+          //   label: '新密码',
+          //   field: _passwordField,
+          // ),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  margin: EdgeInsets.only(right: 20),
+                  child: Text(
+                    '再次输入',
+                    style: TextStyle(
+                        color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: _passwordField,
+                ),
+              ],
+            ),
           ),
           Container(
             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
