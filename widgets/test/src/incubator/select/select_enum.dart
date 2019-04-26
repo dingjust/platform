@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'enum_select.dart';
-import 'select_enum2.dart';
 import 'category_select.dart';
 
 void main() => runApp(MyApp());

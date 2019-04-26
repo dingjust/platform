@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_search_delegate_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
@@ -7,6 +9,7 @@ import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -64,8 +67,13 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
     FilterConditionEntry(label: '全部', value: "ALL2", checked: true),
   ];
 
+  List<RegionModel> _regionSelects = [];
+  List<String> _regionCodeSelects = [];
+  List<RegionModel> _regions = [];
+
   @override
   void initState() {
+
     // TODO: implement initState
     categoriesConditionEntries.addAll(widget.categories
         .map((category) =>
@@ -134,15 +142,136 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                       showDateFilterMenu = false;
                       showMachineTypeFilterMenu = false;
                     });
-                  })
+                  }),
+                  FilterEntry('生产地区', () {
+                    setState(() {
+//                      showAreaFilterMenu = !showAreaFilterMenu;
+                      showDateFilterMenu = false;
+                      showMachineTypeFilterMenu = false;
+                      showCategoriesFilterMenu = false;
+                    });
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        //获取所有省份
+                        rootBundle.loadString('data/province.json').then((v) {
+                          List data = json.decode(v);
+                          _regions = data
+                              .map<RegionModel>((region) => RegionModel.fromJson(region))
+                              .toList();
+                        });
+
+                        return StatefulBuilder(builder: (context, mSetState) {
+                          return Container(
+                            color: Colors.white,
+                            height: 360,
+                            child: Column(
+                              children: <Widget>[
+                                Card(
+                                  elevation: 2,
+                                  margin: EdgeInsets.only(bottom: 3),
+//                        color: Colors.grey[300],
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      InkWell(
+                                        onTap: () {
+                                          mSetState(() {
+                                            _regionCodeSelects.clear();
+                                            _regionSelects.clear();
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Text('重置'),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 15),
+                                        child: ActionChip(
+                                          shape: RoundedRectangleBorder(
+                                            side: BorderSide(),
+                                            borderRadius:
+                                            BorderRadius.all(Radius.circular(5)),
+                                          ),
+                                          label: Text('确定'),
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+                                          },
+                                          backgroundColor: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  height: 300,
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    children: _regions.map((region) {
+                                      return InkWell(
+                                        onTap: () {
+                                          mSetState(() {
+                                            if (_regionCodeSelects
+                                                .contains(region.isocode)) {
+                                              _regionCodeSelects.remove(region.isocode);
+                                              _regionSelects.removeWhere(
+                                                      (reg) => region.isocode == reg.isocode);
+                                            } else {
+                                              _regionSelects.add(region);
+                                              _regionCodeSelects.add(region.isocode);
+                                            }
+                                          });
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 1),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: _regionCodeSelects
+                                                .contains(region.isocode)
+                                                ? Color.fromRGBO(255, 214, 12, 1)
+                                                : Colors.white,
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 0, vertical: 10),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text(region.name),
+//                                    Offstage(
+//                                      offstage: !_regionCodeSelects
+//                                          .contains(region.isocode),
+//                                      child: Icon(
+//                                        Icons.done,
+//                                        size: 12,
+//                                      ),
+//                                    )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        });
+                      },
+                    ).then((val) {
+                      setState(() {
+                        if (_regionSelects.length > 0) {
+                          currentCodition.productiveOrientations = _regionSelects;
+                        } else {
+                          currentCodition.productiveOrientations = null;
+                        }
+                      });
+                    });
+                  }),
                 ],
-                action: IconButton(
-                  icon: Icon(
-                    B2BIcons.menu,
-                    size: 15,
-                  ),
-                  onPressed: () {},
-                ),
+                action: Container(),
               ),
             ),
             body: Column(
