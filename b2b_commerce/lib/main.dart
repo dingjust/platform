@@ -177,13 +177,15 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
             icon: Container(
+              margin: EdgeInsets.only(left: _isBrand() ? 35 : 0),
               child: const Icon(B2BIcons.business),
             ),
             activeIcon: Container(
+              margin: EdgeInsets.only(left: _isBrand() ? 35 : 0),
               child: const Icon(B2BIcons.business_active),
             ),
             title: Container(
-              // margin: EdgeInsets.only(left: 10),
+              margin: EdgeInsets.only(left: _isBrand() ? 40 : 0),
               child: const Text('工作'),
             )),
         BusinessHomePage(userType: widget.userType),
