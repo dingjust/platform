@@ -148,13 +148,15 @@ class OrderByProductBLoc extends BLoCBase {
       lock = true;
 
       //数据到底
-      if (currentPage + 1 == totalPages) {
+      if (productsResponse.number + 1 == productsResponse.totalPages) {
         //通知显示已经到底部
         bottomController.sink.add(true);
       } else {
         try {
           if (UserBLoC.instance.currentUser.type != UserType.BRAND) {
-            productsResponse = await ProductRepositoryImpl().list({}, {});
+            productsResponse = await ProductRepositoryImpl().list({}, {
+              'page': productsResponse.number + 1,
+            });
           } else {
             productsResponse = await ProductRepositoryImpl()
                 .getProductsOfFactory({}, {}, uid);
