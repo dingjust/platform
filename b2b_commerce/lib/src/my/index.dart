@@ -290,18 +290,15 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
           UserRepositoryImpl()
               .getFactory(bloc.currentUser.companyCode)
               .then((factory) {
-            ProductRepositoryImpl().list({}, {'size': 3}).then((products) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MyFactoryPage(
-                        factory,
-                        products: products.content,
-                        isCompanyIntroduction: true,
-                      ),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyFactoryPage(
+                  factory,
+                  isCompanyIntroduction: true,
                 ),
-              );
-            });
+              ),
+            );
           });
         }
       },

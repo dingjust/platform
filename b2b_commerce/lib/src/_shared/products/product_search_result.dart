@@ -83,8 +83,6 @@ class _ProductListViewState extends State<ProductListView>{
       }
     });
 
-
-
     return Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
         color: Colors.grey[200],

@@ -433,6 +433,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
               ),
               onTap: () {
                 onPreview(context, '${model.detailUrl()}');
+                print('onp');
               },
               onLongPress: () {
                 if (widget.editable) _deleteFile(model);
@@ -458,11 +459,17 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
   void onPreview(BuildContext context, String url) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return Container(
-            child: PhotoView(
-          imageProvider: NetworkImage(url),
-        ));
+        return GestureDetector(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: Container(
+              child: PhotoView(
+            imageProvider: NetworkImage(url),
+          )),
+        );
       },
     );
   }
