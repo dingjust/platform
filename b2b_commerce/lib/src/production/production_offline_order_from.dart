@@ -8,8 +8,10 @@ import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -90,6 +92,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             child: ListView(
               children: <Widget>[
                 _buildCenter(context),
+                Divider(
+                  height: 0,
+                ),
                 _buildBottom(context),
 //                _buildCommitButton(context),
               ],
@@ -153,7 +158,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   Widget _buildBottom(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
       color: Colors.white,
       child: Column(
         children: <Widget>[
@@ -186,16 +190,37 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
           child: Row(
             children: <Widget>[
+              productModel.thumbnail != null?
+              Container(
+                width: 80,
+                height: 80,
+                child: CachedNetworkImage(
+                    imageUrl: '${productModel.thumbnail.actualUrl}',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )
+                ),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    ),
+              ):
               Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                      image: productModel.thumbnail != null
-                          ? NetworkImage(
-                          '${productModel.thumbnail.actualUrl}')
-                          : AssetImage(
+                      image: AssetImage(
                         'temp/picture.png',
                         package: "assets",
                       ),

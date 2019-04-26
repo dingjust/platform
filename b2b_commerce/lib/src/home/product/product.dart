@@ -35,11 +35,12 @@ class RecommendProductItem extends StatelessWidget {
           children: <Widget>[
             model.thumbnail != null ?
             Container(
-              // width: imageSize,
-              height: imageSize,
+              width: 200,
+              height: 200,
               child: CachedNetworkImage(
                   imageUrl: '${model.thumbnail.previewUrl()}',
-                  height: imageSize,
+                  width: 200,
+                  height: 200,
                   fit: BoxFit.cover,
                   placeholder: (context, url) =>
                       SpinKitRing(

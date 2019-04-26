@@ -4,8 +4,10 @@ import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_online_order_from.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -139,6 +141,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           children: <Widget>[
             Row(
               children: <Widget>[
+                widget.item.supplier?.profilePicture == null?
                 Container(
                   margin: EdgeInsets.all(10),
                   width: 80,
@@ -146,15 +149,39 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image: widget.item.supplier?.profilePicture == null
-                            ? AssetImage(
+                        image:  AssetImage(
                                 'temp/picture.png',
                                 package: "assets",
-                              )
-                            : NetworkImage(
-                                '${widget.item.supplier.profilePicture.previewUrl()}'),
+                              ),
                         fit: BoxFit.cover,
                       )),
+                ):
+                Container(
+                  margin: EdgeInsets.all(10),
+                  width: 80,
+                  height: 80,
+                  child: CachedNetworkImage(
+                      width: 100,
+                      height: 100,
+                      imageUrl: '${widget.item.supplier.profilePicture
+                          .previewUrl()}',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          ),
+                      errorWidget: (context, url, error) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          )
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 Container(
                     child: Column(
@@ -360,17 +387,40 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   Widget _buildProduct() {
     return Row(
       children: <Widget>[
+        pageItem.requirementOrder.details?.pictures != null &&
+            pageItem.requirementOrder.details.pictures.isNotEmpty ?
+        Container(
+          width: 80,
+          height: 80,
+          child: CachedNetworkImage(
+              width: 100,
+              height: 100,
+              imageUrl: '${pageItem.requirementOrder.details.pictures[0].previewUrl()}',
+              fit: BoxFit.cover,
+              placeholder: (context, url) =>
+                  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
+              errorWidget: (context, url, error) =>
+                  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  )
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ):
         Container(
           width: 80,
           height: 80,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image: pageItem.requirementOrder.details?.pictures != null &&
-                        pageItem.requirementOrder.details.pictures.isNotEmpty
-                    ? NetworkImage(
-                        '${pageItem.requirementOrder.details.pictures[0].previewUrl()}')
-                    : AssetImage(
+                image: AssetImage(
                         'temp/picture.png',
                         package: "assets",
                       ),

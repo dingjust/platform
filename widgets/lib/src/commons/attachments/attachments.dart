@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
 import 'package:open_file/open_file.dart';
@@ -145,13 +147,27 @@ class _AttachmentsState extends State<Attachments> {
                     width: widget.imageWidth,
                     height: widget.imageHeight,
                     margin: EdgeInsets.symmetric(horizontal: 5),
+                    child: CachedNetworkImage(
+                        width: 100,
+                        height: 100,
+                        imageUrl: '${model.previewUrl()}',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            ),
+                        errorWidget: (context, url, error) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            )
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey,
-                      image: DecorationImage(
-                        image: NetworkImage('${model.previewUrl()}'),
-                        fit: BoxFit.cover,
-                      ),
                     ),
                   ),
                   onTap: () {
@@ -422,13 +438,23 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                 width: widget.imageWidth,
                 height: widget.imageHeight,
                 margin: EdgeInsets.symmetric(horizontal: 5),
+                child: CachedNetworkImage(
+                  imageUrl: '${model.previewUrl()}',
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
+                  errorWidget: (context, url, error) => SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.grey,
-                  image: DecorationImage(
-                    image: NetworkImage('${model.previewUrl()}'),
-                    fit: BoxFit.cover,
-                  ),
                 ),
               ),
               onTap: () {
