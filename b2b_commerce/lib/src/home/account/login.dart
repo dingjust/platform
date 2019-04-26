@@ -4,22 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
 class B2BLoginPage extends StatelessWidget {
-  final bool isLoginSuccess;
+  final String snackBarMessage;
 
-  const B2BLoginPage({Key key, this.isLoginSuccess = false}) : super(key: key);
+  const B2BLoginPage({Key key, this.snackBarMessage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return LoginPage(
-      logo: Image.asset(
-        'temp/login_logo.png',
-        package: 'assets',
-        width: 100.0,
-        height: 100.0,
-      ),
-      registerPage: RegisterPage(),
-      forgetPasswordPage: ResetPasswordPage(),
-      isLoginSuccess: isLoginSuccess,
-    );
+        logo: Image.asset(
+          'temp/login_logo.png',
+          package: 'assets',
+          width: 100.0,
+          height: 100.0,
+        ),
+        registerPage: RegisterPage(),
+        forgetPasswordPage: ResetPasswordPage(),
+        snackBarMessage: snackBarMessage);
   }
 }

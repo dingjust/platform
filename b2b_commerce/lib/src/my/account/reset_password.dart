@@ -96,16 +96,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       // },
       decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
       validator: (value) {
-        if (!RegexUtil.notAllowed(value)) {
-          return '首字母不能为特殊字符';
-        } else if (!RegexUtil.oneNumber(value)) {
-          return '至少一个数字';
-        } else if (!RegexUtil.oneSpecial(value)) {
-          return '至少一个特殊字符';
-        } else if (!RegexUtil.oneUppercase(value)) {
-          return '至少一个大写字符';
-        } else if (value.length < 6) {
-          return '长度至少6位';
+        if (!RegexUtil.password(value)) {
+          return '至少含有数字、大写、特殊字符,且首字母不能为字符';
         } else {
           return null;
         }
@@ -344,7 +336,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         .then((value) {
       if (value) {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => B2BLoginPage()),
+            MaterialPageRoute(
+                builder: (context) => B2BLoginPage(
+                      snackBarMessage: '重置密码成功',
+                    )),
             ModalRoute.withName('/'));
       } else {
         Navigator.of(context).pop();

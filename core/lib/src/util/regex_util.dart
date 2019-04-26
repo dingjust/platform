@@ -8,7 +8,8 @@ class RegexUtil {
       "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*\$";
 
   ///首字符不能为特殊字符
-  static final String regexNotAllowed = '^.*[a-zA-Z0-9!@#\$%^*()_\-+{};:.,]\$';
+  // static final String regexNotAllowed = '^.*[a-zA-Z0-9!@#\$%^*()_\-+{};:.,]\$';
+  static final String regexNotAllowed = '^[a-zA-Z0-9]*';
 
   ///至少一个数字
   static final String regexOneNumber = "(?=(?:.*?[0-9]){1}).*";
@@ -17,8 +18,9 @@ class RegexUtil {
   static final String regexOneUppercase = "(?=(?:.*?[A-Z]){1}).*";
 
   ///至少一个特殊字符
-  static final String regexOneSpecial =
-      "(?=(?:.*?[!@#\$%^*()_\-+{};:.,]){1}).*";
+  // static final String regexOneSpecial =
+  //     "(?=(?:.*?[!@#\$%\^\*\(\)_\-\+{};:\.,]){1}).*";
+  static final String regexOneSpecial = ".*[^A-Za-z0-9]+.*";
 
   ///校验手机
   static bool isMobile(String input) {
@@ -47,7 +49,39 @@ class RegexUtil {
 
   ///至少一个特殊字符
   static bool oneSpecial(String input) {
-    return matches(regexOneUppercase, input);
+    return matches(regexOneSpecial, input);
+  }
+
+  static bool password(String input) {
+    if (input.isEmpty) {
+      return false;
+    }
+    // 长度6~20
+    if (input.length < 6 || input.length > 20) {
+      return false;
+    }
+    int typecount = 0;
+    // 如果含有数字
+    if (matches(regexOneNumber, input)) {
+      typecount++;
+    }
+    // 如果含有大写字母
+    if (matches(regexOneUppercase, input)) {
+      typecount++;
+    }
+    // 如果含有特殊字符
+    if (matches(regexOneSpecial, input)) {
+      typecount++;
+    }
+    // 如果含有特殊字符
+    if (matches(regexNotAllowed, input)) {
+      typecount++;
+    }
+    // 至少含有数字、大写、小写、特殊字符中的3种,且首字母不能为字符
+    if (typecount < 4) {
+      return false;
+    }
+    return true;
   }
 
   static bool matches(String regex, String input) {

@@ -13,13 +13,13 @@ class LoginPage extends StatefulWidget {
     @required this.logo,
     this.registerPage,
     this.forgetPasswordPage,
-    this.isLoginSuccess = false,
+    this.snackBarMessage,
   }) : super(key: key);
 
   final Image logo;
   final Widget registerPage;
   final Widget forgetPasswordPage;
-  final bool isLoginSuccess;
+  final String snackBarMessage;
 
   _LoginPageState createState() => _LoginPageState();
 }
@@ -358,10 +358,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void showSnackBar(BuildContext context) {
-    if (widget.isLoginSuccess) {
+    if (widget.snackBarMessage != null && widget.snackBarMessage != '') {
       (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
         SnackBar(
-          content: Text('注册成功'),
+          content: Text('${widget.snackBarMessage}'),
           duration: Duration(seconds: 1),
         ),
       );

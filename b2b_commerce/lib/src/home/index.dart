@@ -76,12 +76,11 @@ class _HomePageState extends State<HomePage> {
     // 安卓端自动更新
     // TargetPlatform platform = defaultTargetPlatform;
     // if (platform != TargetPlatform.iOS) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
-              homePageKey.currentContext,
-              ignoreVersionNotification:
-                  UserBLoC.instance.ignoreVersionNotification)
-          .initCheckVersion(
-              AppBLoC.instance.packageInfo.version, 'nbyjy'));
+    WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
+            homePageKey.currentContext,
+            ignoreVersionNotification:
+                UserBLoC.instance.ignoreVersionNotification)
+        .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy'));
     // }
     super.initState();
   }
@@ -262,7 +261,10 @@ class BrandSecondMenuSection extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => IndustrialClusterPage(labels: labels,factoryLabels: factoryLabels,),
+            builder: (context) => IndustrialClusterPage(
+                  labels: labels,
+                  factoryLabels: factoryLabels,
+                ),
           ),
         );
       },
@@ -545,10 +547,12 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                   await ProductRepositoryImpl()
                       .majorCategories()
                       .then((categories) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RequirementPoolRecommend(
-                              categories: categories,
-                            )));
+                    if (categories != null) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RequirementPoolRecommend(
+                                categories: categories,
+                              )));
+                    }
                   });
                 },
                 child: RecommendedRequirementMenuItem(
