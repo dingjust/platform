@@ -210,7 +210,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
       child: ListTile(
         title: Text('注册时间'),
         trailing:
-            Text(DateFormatUtil.formatYMD(widget.brand.registrationDate) ?? ''),
+            Text(DateFormatUtil.formatYMD(widget.brand.creationTime) ?? ''),
       ),
     );
   }

@@ -695,7 +695,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       child: ListTile(
         title: Text('注册时间'),
         trailing: Text(
-            DateFormatUtil.formatYMD(widget.factory.registrationDate) ?? ''),
+            DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''),
       ),
     );
   }
