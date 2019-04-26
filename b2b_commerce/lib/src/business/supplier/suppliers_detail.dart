@@ -889,7 +889,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
           ListTile(
             leading: Text('注册时间'),
             trailing: Text(
-                '${DateFormatUtil.formatYMD(widget.supplierModel.factory.registrationDate)}'),
+                '${DateFormatUtil.formatYMD(widget.supplierModel.factory.creationTime)}'),
           ),
           Divider(
             height: 5,
