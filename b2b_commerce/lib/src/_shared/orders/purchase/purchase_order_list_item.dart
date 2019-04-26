@@ -253,7 +253,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
-                            '货号：${widget.order.product == null ? '' : widget.order.product.skuID}',
+                            '货号：${widget.order.product == null || widget.order.product.skuID == null ? '' : widget.order.product.skuID}',
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.grey),
                           ),

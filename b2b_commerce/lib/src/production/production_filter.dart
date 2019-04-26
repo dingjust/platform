@@ -240,7 +240,7 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
                       initialDate: widget._startDate == null
                           ? DateTime.now()
                           : widget._startDate,
-                      firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+                      firstDate: DateTime(1999),
                       lastDate: DateTime(2101),
                     ).then((value) {
                       setState(() {
@@ -276,7 +276,7 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
                       initialDate: widget._endDate == null
                           ? DateTime.now()
                           : widget._endDate,
-                      firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+                      firstDate: DateTime(1999),
                       lastDate: DateTime(2101),
                     ).then((value) {
                       setState(() {

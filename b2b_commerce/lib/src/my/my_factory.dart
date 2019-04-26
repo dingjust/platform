@@ -603,17 +603,18 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               width: double.infinity,
               child: Container(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: widget.factory.profiles.map((profile) {
                     return Column(
                       children: <Widget>[
                         profile.medias != null && profile.medias.length > 0
                             ? Container(
-                                margin: EdgeInsets.only(bottom: 10),
+                                margin: EdgeInsets.only(bottom: 5),
                                 child: CachedNetworkImage(
                                     imageUrl:
                                         '${profile.medias[0].detailUrl()}',
-                                    height: 200,
                                     width: double.infinity,
+                                    height: 200,
                                     fit: BoxFit.fill,
                                     placeholder: (context, url) => SpinKitRing(
                                           color: Colors.black12,
@@ -635,7 +636,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                         Offstage(
                           offstage: profile.description == null,
                           child: Container(
-                            margin: EdgeInsets.all(5),
+                            margin: EdgeInsets.fromLTRB(5,0,5,10),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
