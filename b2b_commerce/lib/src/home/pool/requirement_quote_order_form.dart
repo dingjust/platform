@@ -418,7 +418,6 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                 '确认交货日期',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
               trailing:
@@ -534,7 +533,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: expectedDeliveryDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
         lastDate: DateTime(2999));
 
@@ -658,27 +657,6 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
         //成功回调传递
         Navigator.of(context).pop(true);
       }
-    } else {
-      Navigator.of(context).pop();
-      showDialog<void>(
-        context: context,
-        barrierDismissible: true, // user must tap button!
-        builder: (context) {
-          return SimpleDialog(
-            title: const Text(
-              '提示',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            children: <Widget>[
-              SimpleDialogOption(
-                child: Text(widget.update ? '修改失败' : '报价失败'),
-              ),
-            ],
-          );
-        },
-      );
     }
   }
 }

@@ -184,13 +184,19 @@ class _AttachmentsState extends State<Attachments> {
   //图片预览
   void onPreview(BuildContext context, String url) {
     showDialog(
-      barrierDismissible: true,
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return Container(
-            child: PhotoView(
-          imageProvider: NetworkImage(url),
-        ));
+        return GestureDetector(
+          child: Container(
+              child: PhotoView(
+                imageProvider: NetworkImage(url),
+              )
+          ),
+          onTap: (){
+            Navigator.of(context).pop();
+          },
+        );
       },
     );
   }
@@ -199,6 +205,7 @@ class _AttachmentsState extends State<Attachments> {
   Future<String> _previewFile(String url, String name, String mediaType) async {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[
@@ -504,6 +511,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
   Future<String> _previewFile(String url, String name, String mediaType) async {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[
