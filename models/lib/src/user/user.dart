@@ -180,8 +180,9 @@ class RegionModel extends ItemModel {
   String name;
   String isocodeShort;
   String countryIso;
+  List<CityModel> cities;
 
-  RegionModel({this.isocode, this.name, this.isocodeShort, this.countryIso});
+  RegionModel({this.isocode, this.name, this.isocodeShort, this.countryIso,this.cities,});
 
   factory RegionModel.fromJson(Map<String, dynamic> json) =>
       _$RegionModelFromJson(json);

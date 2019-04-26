@@ -136,21 +136,19 @@ class SampleProductHistoryFormPageState
                       ? null
                       : _relatedPartyController.text;
 
-
-                  print(SampleBorrowReturnHistoryModel.toJson(widget.model));
                   if(widget.isCreated){
                     ProductRepositoryImpl().createSampleHistory(widget.model).then((a){
+                      widget.model.expectedReturningDate = null;
                       Navigator.pop(context);
                       SampleProductHistoryBLoC.instance.filterByStatuses('ALL', widget.model.type.toString());
                     });
                   }else{
                     ProductRepositoryImpl().updateSampleHistory(widget.model).then((a){
+                      widget.model.expectedReturningDate = null;
                       Navigator.pop(context);
                       SampleProductHistoryBLoC.instance.filterByStatuses('ALL', widget.model.type.toString());
                     });
                   }
-
-
                 }),
           ],
         ),

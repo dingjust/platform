@@ -24,6 +24,10 @@ class FactoryCondition {
   @JsonKey(toJson: _regionToJson)
   RegionModel productiveOrientations;
 
+  ///市
+  @JsonKey(toJson: _citiesToJson)
+  List<CityModel> cities;
+
   /// 规模
   PopulationScale populationScale;
 
@@ -48,6 +52,7 @@ class FactoryCondition {
       @required this.labels,
       @required this.cooperationModes,
       this.industrialCuster,
+      this.cities,
       this.keyword});
 
   factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
@@ -59,6 +64,10 @@ class FactoryCondition {
   static Map<String, dynamic> _regionToJson(
           RegionModel productiveOrientations) =>
       RegionModel.toJson(productiveOrientations);
+
+  static List<Map<String, dynamic>> _citiesToJson(
+      List<CityModel> models) =>
+      models.map((model) => CityModel.toJson(model)).toList();
 
   Map<String, dynamic> toDataJson() {
     List<String> adeptAtCategoryArray = [];
@@ -92,9 +101,10 @@ class FactoryCondition {
     var result = {
       'categories': categories != null ? [categories] : [],
       'adeptAtCategories': adeptAtCategoryArray,
-      'productiveOrientations': productiveOrientations != null
+      'productiveOrientations': productiveOrientations != null && productiveOrientations.isocode != null
           ? [productiveOrientations.isocode]
           : [],
+      'cities': cities == null ? [] : cities.map((city) => city.code).toList(),
       'starLevel': starLevel > 0 ? starLevel : '',
       'labels': labelsArray,
       'cooperationModes': cooperationModesArray,
