@@ -209,7 +209,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
         context,
         MaterialPageRoute(
             builder: (BuildContext context) => B2BLoginPage(
-                  isLoginSuccess: true,
+                  snackBarMessage: '注册成功',
                 )),
         ModalRoute.withName('/'),
       );

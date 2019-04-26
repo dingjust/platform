@@ -61,7 +61,7 @@ class MediaModel extends ItemModel {
   //           mediaType: media.mediaType);
   //     }).toList();
 
-  String get actualUrl => '${GlobalConfigs.CONTEXT_PATH}${url}';
+  String get actualUrl => '${GlobalConfigs.MEDIA_CONTEXT_PATH}${url}';
 
   ///预览图
   String previewUrl() {
@@ -69,8 +69,10 @@ class MediaModel extends ItemModel {
         getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
 
     if (mediaModel != null) {
-      return '${GlobalConfigs.CONTEXT_PATH}${mediaModel.url}';
+      print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
+      return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
+      print(actualUrl);
       return actualUrl;
     }
   }
@@ -81,8 +83,10 @@ class MediaModel extends ItemModel {
         getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_THUMBNAIL]);
 
     if (mediaModel != null) {
-      return '${GlobalConfigs.CONTEXT_PATH}${mediaModel.url}';
+      print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
+      return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
+      print(actualUrl);
       return actualUrl;
     }
   }
@@ -93,8 +97,10 @@ class MediaModel extends ItemModel {
         getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_DETAIL]);
 
     if (mediaModel != null) {
-      return '${GlobalConfigs.CONTEXT_PATH}${mediaModel.url}';
+      print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
+      return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
+      print(actualUrl);
       return actualUrl;
     }
   }
