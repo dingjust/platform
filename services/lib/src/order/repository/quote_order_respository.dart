@@ -36,8 +36,7 @@ class QuoteOrderRepository {
   Future<int> quoteReject(String code, String reason) async {
     Response response;
     try {
-      response = await http$
-          .put(OrderApis.quoteReject(code), data: reason);
+      response = await http$.put(OrderApis.quoteReject(code), data: reason);
     } on DioError catch (e) {
       print(e);
     }
@@ -69,7 +68,9 @@ class QuoteOrderRepository {
     } on DioError catch (e) {
       print(e);
     }
+    print('====================${response}');
     if (response != null && response.statusCode == 200) {
+      print('====================${response.data}');
       return response.data;
     } else {
       return null;
@@ -77,30 +78,34 @@ class QuoteOrderRepository {
   }
 
   //工厂获取与该品牌的报价单列表
-  Future<QuoteOrdersResponse> getQuotesByBrand(String uid,Map<String,Object> params) async {
-    Response response = await http$.post(OrderApis.quotes,
-        data: {
-          "requirementOrderBelongTos" : uid,
-        },
-        queryParameters: params,
+  Future<QuoteOrdersResponse> getQuotesByBrand(
+      String uid, Map<String, Object> params) async {
+    Response response = await http$.post(
+      OrderApis.quotes,
+      data: {
+        "requirementOrderBelongTos": uid,
+      },
+      queryParameters: params,
     );
 
-    QuoteOrdersResponse quoteResponse = QuoteOrdersResponse.fromJson(response.data);
+    QuoteOrdersResponse quoteResponse =
+        QuoteOrdersResponse.fromJson(response.data);
     return quoteResponse;
   }
 
   //品牌获取与该工厂的报价单列表
-  Future<QuoteOrdersResponse> getQuotesByFactory(String uid,Map<String,Object> params) async {
-    Response response = await http$.post(OrderApis.quotes,
-        data: {
-          "belongTos" : uid,
-        },
-        queryParameters: params,
+  Future<QuoteOrdersResponse> getQuotesByFactory(
+      String uid, Map<String, Object> params) async {
+    Response response = await http$.post(
+      OrderApis.quotes,
+      data: {
+        "belongTos": uid,
+      },
+      queryParameters: params,
     );
 
-    QuoteOrdersResponse quoteResponse = QuoteOrdersResponse.fromJson(response.data);
+    QuoteOrdersResponse quoteResponse =
+        QuoteOrdersResponse.fromJson(response.data);
     return quoteResponse;
   }
-
-
 }

@@ -257,7 +257,7 @@ class B2BUnitModel extends OrgUnitModel {
           address: address,
           contactAddress: contactAddress,
           describe: describe,
-    creationTime: creationTime,
+          creationTime: creationTime,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
           certificates: certificates,
@@ -358,7 +358,7 @@ class BrandModel extends B2BUnitModel {
           contactAddress: contactAddress,
           email: email,
           phone: phone,
-    creationTime: creationTime,
+          creationTime: creationTime,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
           certificates: certificates,
@@ -492,7 +492,7 @@ class FactoryModel extends B2BUnitModel {
           describe: describe,
           address: address,
           contactAddress: contactAddress,
-    creationTime: creationTime,
+          creationTime: creationTime,
           taxNumber: taxNumber,
           bankOfDeposit: bankOfDeposit,
           certificates: certificates,
@@ -634,6 +634,13 @@ enum CooperationModes {
   /// 包工包料
   LABOR_AND_MATERIAL,
 
+  ODM,
+
+  OEM,
+
+  FOB,
+
+  PURE_PROCESSING
 }
 
 const CooperationModesMap = {

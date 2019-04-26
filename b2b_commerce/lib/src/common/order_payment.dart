@@ -494,9 +494,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     String confirmResult = await WechatServiceImpl.instance
         .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
 
-    if (confirmResult == null) {
-      onPaymentError();
-    } else {
+    if (confirmResult != null) {
       onPaymentSucess();
     }
   }

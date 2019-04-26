@@ -128,7 +128,7 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: widget.entries
                       .map((entry) => Container(
-                            width: entry.label == '最新发布' ? 108 : (MediaQuery.of(context).size.width - 108)/3,
+                            width: entry.label == '最新发布' ? 116 : (MediaQuery.of(context).size.width - 116)/3,
                             child: FlatButton(
                                 onPressed: entry.onPressed,
                                 child: Row(

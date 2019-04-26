@@ -1,12 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:models/models.dart';
 
 import 'user_group.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 part 'user.g.dart';
 
@@ -181,7 +181,7 @@ class AddressModel extends ItemModel {
 
   static Map<String, dynamic> toJson(AddressModel model) =>
 //      _$AddressModelToJson(model);
-      _addressToJson(model);
+      addressToJson(model);
 
   static Map<String, dynamic> _regionToJson(RegionModel model) =>
       RegionModel.toJson(model);
@@ -192,7 +192,7 @@ class AddressModel extends ItemModel {
   static Map<String, dynamic> _cityDistrictToJson(DistrictModel model) =>
       DistrictModel.toJson(model);
 
-  static Map<String, dynamic> _addressToJson(AddressModel model) {
+  static Map<String, dynamic> addressToJson(AddressModel model) {
     return {
       'fullname': model.fullname,
       'cellphone': model.cellphone,
