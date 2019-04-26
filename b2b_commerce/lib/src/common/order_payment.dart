@@ -385,7 +385,13 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             child: CircularProgressIndicator(),
           ));
       WechatServiceImpl.instance
-          .pay(widget.order.code, paymentFor: widget.paymentFor);
+          .pay(widget.order.code, paymentFor: widget.paymentFor)
+          .then((result) {
+        if (result == null) {
+          Navigator.of(context).pop();
+          onPaymentError();
+        }
+      });
     } else {
       showDialog<void>(
         context: context,
