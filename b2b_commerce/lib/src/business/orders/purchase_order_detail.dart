@@ -828,22 +828,22 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             size: 60,
                           ),
                         ),
-                        width: 80,
-                        height: 80,
+                        width: 100,
+                        height: 100,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Color.fromRGBO(243, 243, 243, 1)),
                       )
                     : Container(
                         margin: EdgeInsets.only(right: 20),
-                        width: 80,
-                        height: 80,
+                        width: 100,
+                        height: 100,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: NetworkImage(
                                   '${productionProgress.medias[0].previewUrl()}'),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             )),
                       ),
                 onTap: () {
@@ -876,13 +876,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildEstimatedDate(BuildContext context,
       ProductionProgressModel progress, bool isCurrentStatus) {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      padding: EdgeInsets.all(8),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: GestureDetector(
+          GestureDetector(
                 child: Text('预计完成时间',
-                    style: TextStyle(fontWeight: FontWeight.w500)),
+                    style: TextStyle()),
                 onTap: () {
                   userType != null &&
                           userType == 'factory' &&
@@ -891,20 +890,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       ? _showDatePicker(progress)
                       : null;
                 }),
-          ),
           GestureDetector(
               child: Container(
-                padding: EdgeInsets.only(right: 15),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: progress.estimatedDate == null
+                margin: EdgeInsets.only(left: 15),
+                child:  progress.estimatedDate == null
                       ? Text('选择日期',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, color: Colors.grey))
+                          style: TextStyle( color: Colors.grey))
                       : Text(
                           '${DateFormatUtil.formatYMD(progress.estimatedDate)}',
-                          style: TextStyle(fontWeight: FontWeight.w500)),
-                ),
+                          style: TextStyle()),
               ),
               onTap: () {
                 userType != null &&
@@ -920,39 +914,35 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   Widget _buildFinishDate(BuildContext context,
-      ProductionProgressModel progress, bool isCurrentStatus) {
+      ProductionProgressModel progress, bool isCurrentStatus){
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
+      padding: EdgeInsets.all(8),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child:
-                Text('实际完成时间', style: TextStyle(fontWeight: FontWeight.w500)),
-          ),
+          Text('实际完成时间：', style: TextStyle()),
           Container(
-            margin: EdgeInsets.only(right: 15),
-            child: progress.finishDate == null
-                ? Container()
-                : Text('${DateFormatUtil.formatYMD(progress.finishDate)}',
-                    style: TextStyle(fontWeight: FontWeight.w500)),
+            margin: EdgeInsets.only(left: 15),
+            child:
+            progress.finishDate == null ? Container() :
+            Text('${DateFormatUtil.formatYMD(progress.finishDate)}',
+                style: TextStyle()),
           ),
         ],
       ),
     );
   }
 
+
   Widget _buildQuantity(BuildContext context, ProductionProgressModel progress,
       bool isCurrentStatus) {
     return Container(
       child: Container(
-        height: 35,
-        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        padding: EdgeInsets.all(8),
         child: Row(
           children: <Widget>[
-            Expanded(
-              child: GestureDetector(
+            GestureDetector(
                   child:
-                      Text('数量', style: TextStyle(fontWeight: FontWeight.w500)),
+                      Text('数量', style: TextStyle()),
                   onTap: () {
                     userType != null &&
                             userType == 'factory' &&
@@ -961,14 +951,17 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         ? _showDialog(progress)
                         : null;
                   }),
-            ),
             GestureDetector(
                 child: Container(
-                  padding: EdgeInsets.only(right: 15),
+                  margin:  EdgeInsets.only(left: 15),
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text('${progress.quantity}',
-                        style: TextStyle(fontWeight: FontWeight.w500)),
+                    child:
+                    progress.quantity == 0 || progress.quantity == null ?
+                    Text('${userType=='brand' ? '':'填写'}',
+                        style: TextStyle(color: Colors.grey,)) :
+                    Text('${progress.quantity}',
+                        style: TextStyle()),
                   ),
                 ),
                 onTap: () {
@@ -1008,33 +1001,26 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return Container(
         child: GestureDetector(
       child: Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          padding: EdgeInsets.all(8),
           child: Row(children: <Widget>[
-            Text('备注', style: TextStyle(fontWeight: FontWeight.w500)),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
-                child: Align(
-                    alignment: Alignment.centerRight,
-                    child: progress.remarks == null
-                        ? Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
+            Text('备注', style: TextStyle()),
+            Container(
+                margin: EdgeInsets.fromLTRB(15, 0, 5, 0),
+                child: progress.remarks == null || progress.remarks == ''
+                        ? Text(
                               '${userType == 'brand' ? '' : '填写'}',
                               style: TextStyle(
                                 color: Colors.grey,
                               ),
-                            ),
                           )
                         : Container(
-                            margin: EdgeInsets.only(right: 20),
+                  width: 140,
                             child: Text(
                               '${progress.remarks}',
-                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          )),
+                          )
               ),
-            )
           ])),
       onTap: () async {
         userType != null &&
@@ -1042,7 +1028,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 isCurrentStatus == true &&
                 order.status == PurchaseOrderStatus.IN_PRODUCTION
             ? _showRemarksDialog(progress, '备注', progress.remarks)
-            : null;
+            : __neverShowMsg('${progress.remarks==null?'':progress.remarks}');
       },
     ));
   }
@@ -1886,6 +1872,28 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 //打开数量输入弹框
   void _showDialog(ProductionProgressModel model) {
     _neverSatisfied(context, model);
+  }
+
+  __neverShowMsg(String text) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text(
+            '备注',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('${text}'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   //备注输入框

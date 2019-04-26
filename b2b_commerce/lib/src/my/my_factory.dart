@@ -2,8 +2,10 @@ import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_ite
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -211,14 +213,15 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
     List<Widget> _buildFactoryHeaderRow = [
       widget.factory.approvalStatus == ArticleApprovalStatus.approved
           ? Tag(
-              label: '  已认证  ',
-              backgroundColor: Color.fromRGBO(254, 252, 235, 1),
-            )
+        label: '  已认证  ',
+        color: Colors.black,
+        backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+      )
           : Tag(
-              label: '  未认证  ',
-              color: Colors.black,
-              backgroundColor: Colors.grey[300],
-            )
+        label: '  未认证  ',
+        color: Colors.black,
+        backgroundColor: Colors.grey[300],
+      )
     ];
     widget.factory.labels.forEach((label) {
       return _buildFactoryHeaderRow.add(
@@ -226,7 +229,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           padding: const EdgeInsets.only(right: 5.0),
           child: Tag(
             label: label.name,
-            color: Colors.grey,
+            color:Color.fromRGBO(255, 133, 148, 1),
           ),
         ),
       );
@@ -589,13 +592,29 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
                       children: <Widget>[
                         profile.medias != null && profile.medias.length > 0
                             ? Container(
-                                margin: const EdgeInsets.all(5),
-                                child: Image.network(
-                                  '${profile.medias[0].detailUrl()}',
-                                  height: 200,
-                                  width: double.infinity,
-                                  fit: BoxFit.fill,
+                          margin: EdgeInsets.only(bottom: 10),
+                                child: CachedNetworkImage(
+                                    imageUrl: '${profile.medias[0].detailUrl()}',
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.fill,
+                                    placeholder: (context, url) =>
+                                        SpinKitRing(
+                                          color: Colors.black12,
+                                          lineWidth: 2,
+                                          size: 30,
+                                        ),
+                                    errorWidget: (context, url, error) =>
+                                        SpinKitRing(
+                                          color: Colors.black12,
+                                          lineWidth: 2,
+                                          size: 30,
+                                        )
                                 ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black38,width: 1)
+                          ),
                               )
                             : Container(),
                         Offstage(

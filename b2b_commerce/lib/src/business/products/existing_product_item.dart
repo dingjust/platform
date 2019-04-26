@@ -22,7 +22,7 @@ class ExistingProductItem extends StatelessWidget{
                       '${product.thumbnail.previewUrl()}',
                       width: 100,
                       height: 100,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     )
                         : Container(
                       width: 100,

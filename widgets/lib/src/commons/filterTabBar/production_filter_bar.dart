@@ -59,12 +59,6 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                   children: _buildBody(),
                 ),
               ),
-              Container(
-                width: widget.itemWidth,
-                height: widget.height,
-                padding: EdgeInsets.only(bottom: 10),
-                child: widget.action,
-              )
             ],
           ),
         ));
