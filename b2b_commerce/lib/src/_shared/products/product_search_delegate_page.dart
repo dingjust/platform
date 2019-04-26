@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-/// 生产搜索页
+/// 产品搜索页
 class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
   List<String> history_keywords;
 

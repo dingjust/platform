@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -11,6 +12,8 @@ class OrderByProductBLoc extends BLoCBase {
 
   static OrderByProductBLoc get instance => _getInstance();
   static OrderByProductBLoc _instance;
+
+  ProductsResponse productsResponse;
 
   OrderByProductBLoc._internal() {
     // 初始化
@@ -80,6 +83,27 @@ class OrderByProductBLoc extends BLoCBase {
     }
   }
 
+  getCashProducts(String uid)async{
+    if (!lock) {
+      lock = true;
+      try {
+        if (UserBLoC.instance.currentUser.type != UserType.BRAND) {
+          productsResponse = await ProductRepositoryImpl().list({}, {});
+        } else {
+          productsResponse = await ProductRepositoryImpl()
+              .getProductsOfFactory({}, {}, uid);
+
+          _products.clear();
+          _products.addAll(productsResponse.content);
+        }
+      } on DioError catch (e) {
+        print(e);
+      }
+      _controller.sink.add(_products);
+      lock = false;
+    }
+  }
+
   loadingMore(ProductCondition productCondition) async {
     if (!lock) {
       lock = true;
@@ -112,6 +136,35 @@ class OrderByProductBLoc extends BLoCBase {
           totalElements = productResponse.totalElements;
           _products.addAll(productResponse.content);
         }
+      }
+      loadingController.sink.add(false);
+      _controller.sink.add(_products);
+      lock = false;
+    }
+  }
+
+  loadingMoreByCastProducts(String uid) async {
+    if (!lock) {
+      lock = true;
+
+      //数据到底
+      if (currentPage + 1 == totalPages) {
+        //通知显示已经到底部
+        bottomController.sink.add(true);
+      } else {
+        try {
+          if (UserBLoC.instance.currentUser.type != UserType.BRAND) {
+            productsResponse = await ProductRepositoryImpl().list({}, {});
+          } else {
+            productsResponse = await ProductRepositoryImpl()
+                .getProductsOfFactory({}, {}, uid);
+          }
+
+          _products.addAll(productsResponse.content);
+        } on DioError catch (e) {
+          print(e);
+        }
+
       }
       loadingController.sink.add(false);
       _controller.sink.add(_products);

@@ -10,8 +10,9 @@ import '../../home/search/order_product_search.dart';
 
 class ProductsPage extends StatefulWidget {
   String keyword;
+  String factoryUid;
 
-  ProductsPage({Key key, this.keyword}) : super(key: key);
+  ProductsPage({Key key, this.keyword,this.factoryUid}) : super(key: key);
 
   _ProductsPageState createState() => _ProductsPageState();
 }
@@ -30,6 +31,8 @@ class _ProductsPageState extends State<ProductsPage> {
     FilterConditionEntry(label: '订单数', value: 'totalOrdersCount'),
   ];
 
+  String _title = '看款下单';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -41,6 +44,12 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.factoryUid != null){
+      _title = '现款商品';
+    }else if(productCondition.keyword == null || productCondition.keyword == ''){
+      _title = '${productCondition.keyword}';
+    }
+
     return BLoCProvider<OrderByProductBLoc>(
       key: _productsPageKey,
       bloc: OrderByProductBLoc.instance,
@@ -50,9 +59,7 @@ class _ProductsPageState extends State<ProductsPage> {
           centerTitle: true,
           elevation: 0.5,
           title: Text(
-            productCondition.keyword == null || productCondition.keyword == ''
-                ? '看款下单'
-                : '${productCondition.keyword}',
+            _title,
             style: TextStyle(color: Colors.black),
             overflow: TextOverflow.ellipsis,
           ),
@@ -70,7 +77,11 @@ class _ProductsPageState extends State<ProductsPage> {
                   setState(() {
                     productCondition.keyword = keyword;
                   });
-                  OrderByProductBLoc.instance.getData(productCondition);
+                  if(widget.factoryUid == null){
+                    OrderByProductBLoc.instance.getData(productCondition);
+                  }else{
+                    OrderByProductBLoc.instance.getCashProducts(widget.factoryUid);
+                  }
                 }),
           ],
           bottom: PreferredSize(
@@ -114,7 +125,11 @@ class _ProductsPageState extends State<ProductsPage> {
                                 ),
                           ),
                         );
-                        OrderByProductBLoc.instance.getData(productCondition);
+                        if(widget.factoryUid == null){
+                          OrderByProductBLoc.instance.getData(productCondition);
+                        }else{
+                          OrderByProductBLoc.instance.getCashProducts(widget.factoryUid);
+                        }
                       },
                       child: Text(
                         '${generateCategoryStr()}',
@@ -142,6 +157,7 @@ class _ProductsPageState extends State<ProductsPage> {
               flex: 1,
               child: ProductsView(
                 productCondition: productCondition,
+                factoryUid: widget.factoryUid,
               ),
             ),
           ],
@@ -179,8 +195,9 @@ class _ProductsPageState extends State<ProductsPage> {
 
 class ProductsView extends StatelessWidget {
   ProductCondition productCondition;
+  String factoryUid;
 
-  ProductsView({this.productCondition});
+  ProductsView({this.productCondition,this.factoryUid,});
 
   ScrollController _scrollController = ScrollController();
 
@@ -198,7 +215,11 @@ class ProductsView extends StatelessWidget {
       } else {
         productCondition.sort = 'desc';
       }
-      bloc.getData(productCondition);
+      if(factoryUid == null){
+        OrderByProductBLoc.instance.getData(productCondition);
+      }else{
+        OrderByProductBLoc.instance.getCashProducts(factoryUid);
+      }
     });
 
     //监听是否已经到底
@@ -231,7 +252,11 @@ class ProductsView extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMore(productCondition);
+        if(factoryUid == null){
+          bloc.loadingMore(productCondition);
+        }else{
+          bloc.loadingMoreByCastProducts(factoryUid);
+        }
       }
     });
 
@@ -239,7 +264,12 @@ class ProductsView extends StatelessWidget {
         decoration: BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
         child: RefreshIndicator(
           onRefresh: () async {
-            bloc.clear();
+//            bloc.clear();
+            if(factoryUid == null){
+              OrderByProductBLoc.instance.getData(productCondition);
+            }else{
+              OrderByProductBLoc.instance.getCashProducts(factoryUid);
+            }
           },
           child: CustomScrollView(
             controller: _scrollController,
@@ -251,7 +281,11 @@ class ProductsView extends StatelessWidget {
                       AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                     //数据为空查询数据，显示加载条
                     if (snapshot.data == null) {
-                      bloc.getData(productCondition);
+                      if(factoryUid == null){
+                        OrderByProductBLoc.instance.getData(productCondition);
+                      }else{
+                        OrderByProductBLoc.instance.getCashProducts(factoryUid);
+                      }
                       return SliverToBoxAdapter(
                         child: ProgressIndicatorFactory
                             .buildPaddedProgressIndicator(),
