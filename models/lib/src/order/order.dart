@@ -151,25 +151,16 @@ enum MachiningType {
 
   ///清加工
   LIGHT_PROCESSING,
-
-  ODM,
-
-  OEM,
-
-  FOB,
-
-  PURE_PROCESSING
 }
 
-const MachiningTypeMap = {};
+const MachiningTypeMap = {
+  MachiningType.LABOR_AND_MATERIAL: "LABOR_AND_MATERIAL",
+  MachiningType.LIGHT_PROCESSING: "LIGHT_PROCESSING"
+};
 
 const MachiningTypeLocalizedMap = {
   MachiningType.LABOR_AND_MATERIAL: '包工包料',
   MachiningType.LIGHT_PROCESSING: '清加工',
-  MachiningType.ODM: 'ODM',
-  MachiningType.OEM: 'OEM',
-  MachiningType.FOB: 'FOB',
-  MachiningType.PURE_PROCESSING: 'PURE_PROCESSING'
 };
 
 enum ProductionProgressPhase {

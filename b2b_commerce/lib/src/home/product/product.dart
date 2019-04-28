@@ -33,44 +33,42 @@ class RecommendProductItem extends StatelessWidget {
             color: Colors.white, borderRadius: BorderRadius.circular(5)),
         child: Column(
           children: <Widget>[
-            model.thumbnail != null ?
-            Container(
-              width: 200,
-              height: 200,
-              child: CachedNetworkImage(
-                  imageUrl: '${model.thumbnail.previewUrl()}',
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                      SpinKitRing(
-                        color: Colors.black12,
-                        lineWidth: 2,
-                        size: 30,
-                      ),
-                  errorWidget: (context, url, error) =>
-                      SpinKitRing(
-                        color: Colors.black12,
-                        lineWidth: 2,
-                        size: 30,
-                      )
-              ),
-            ):
-            Container(
-              // width: imageSize,
-              height: imageSize,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5), topRight: Radius.circular(5)),
-                image: DecorationImage(
-                  image:AssetImage(
+            model.thumbnail != null
+                ? Container(
+                    width: 200,
+                    height: 200,
+                    child: CachedNetworkImage(
+                        imageUrl: '${model.thumbnail.detailUrl()}',
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            ),
+                        errorWidget: (context, url, error) => SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            )),
+                  )
+                : Container(
+                    // width: imageSize,
+                    height: imageSize,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5)),
+                      image: DecorationImage(
+                        image: AssetImage(
                           'temp/picture.png',
                           package: "assets",
                         ),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
             Expanded(
               flex: 1,
               child: Container(
@@ -98,33 +96,34 @@ class RecommendProductItem extends StatelessWidget {
                             children: <TextSpan>[
                               TextSpan(
                                   text:
-                                  '${model.minPrice ?? 0}—${model.maxPrice ?? 0}',
+                                      '${model.minPrice ?? 0}—${model.maxPrice ?? 0}',
                                   style: TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold)),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
                             ]),
                       ),
                     ),
                     showAddress
                         ? Container(
-                      padding: EdgeInsets.all(5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            '${model.belongTo.contactAddress.region.name}${model.belongTo.contactAddress.city.name}',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Color.fromRGBO(149, 149, 149, 1)),
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Color.fromRGBO(149, 149, 149, 1)),
+                            padding: EdgeInsets.all(5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  '${model.belongTo.contactAddress.region.name}${model.belongTo.contactAddress.city.name}',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color.fromRGBO(149, 149, 149, 1)),
+                                ),
+                                Text(
+                                  '',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color.fromRGBO(149, 149, 149, 1)),
+                                )
+                              ],
+                            ),
                           )
-                        ],
-                      ),
-                    )
                         : Container()
                   ],
                 ),
