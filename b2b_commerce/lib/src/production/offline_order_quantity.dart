@@ -182,10 +182,19 @@ class OfflineOrderQuantityInputItemState
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  row.key.colorCode!=null&&row.key.colorCode!=''?
                   Container(
                     width: 20,
                     decoration: BoxDecoration(
-                      color: Color(int.parse('0xff' + row.key.colorCode.substring(1))),
+                      color: Color(int.parse('0xff'+ row.key.colorCode.substring(1))),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(''),
+                  )
+                  :Container(
+                    width: 20,
+                    decoration: BoxDecoration(
+                      color: Color(int.parse('0xfffffff')),
                       shape: BoxShape.circle,
                     ),
                     child: Text(''),
