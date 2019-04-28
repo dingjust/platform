@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/_shared/products/product_search_result.dart';
+import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -9,8 +9,11 @@ import 'package:widgets/widgets.dart';
 /// 产品搜索页
 class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
   List<String> history_keywords;
+  bool isSelectOption;
 
-  ProductSearchDelegatePage() {
+  ProductSearchDelegatePage({
+    this.isSelectOption,
+  }){
     getHistory();
   }
 
@@ -74,13 +77,7 @@ class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
       LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
           json.encode(history_keywords));
     }
-    Navigator.pop(context);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ProductSearchResultPage(
-                  keyword: query,
-                )));
+    Navigator.pop(context,ApparelProductModel(name: query));
   }
 
   @override
@@ -114,12 +111,7 @@ class ProductSearchDelegatePage extends SearchDelegate<ApparelProductModel> {
                   .map((keyword) => HistoryTag(
                         value: keyword,
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProductSearchResultPage(
-                                        keyword: keyword,
-                                      )));
+                          Navigator.pop(context,ApparelProductModel(name: keyword));
                         },
                       ))
                   .toList()),
