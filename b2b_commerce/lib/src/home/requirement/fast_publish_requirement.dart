@@ -48,20 +48,23 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
             //加载条
             showDialog(
               context: context,
+              barrierDismissible: false,
               builder: (context) =>
                   ProgressIndicatorFactory.buildDefaultProgressIndicator(),
             );
             await ProductRepositoryImpl()
                 .cascadedCategories()
                 .then((categories) {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => CategorySelectPage(
-                        minCategorySelect: fastRequirementForm.categories,
-                        fastRequirementForm: fastRequirementForm,
-                        categories: categories,
-                        hasNextPage: true,
-                      )));
+              if (categories != null) {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => CategorySelectPage(
+                          minCategorySelect: fastRequirementForm.categories,
+                          fastRequirementForm: fastRequirementForm,
+                          categories: categories,
+                          hasNextPage: true,
+                        )));
+              }
             });
           },
           child: Container(

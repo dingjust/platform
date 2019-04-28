@@ -93,7 +93,7 @@ class RequirementFilterBar extends StatefulWidget
   RequirementFilterBar({
     Key key,
     this.itemHeight = 20,
-    this.itemWidth = 100,
+    this.itemWidth = 120,
     this.unselectedColor = Colors.black54,
     this.color = const Color.fromRGBO(255, 214, 12, 1),
     this.action,
@@ -119,7 +119,7 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
-        preferredSize: Size(widget.itemWidth, widget.itemHeight),
+        preferredSize: Size(double.infinity, widget.itemHeight),
         child: Row(
           children: <Widget>[
             Expanded(
@@ -128,23 +128,26 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: widget.entries
                       .map((entry) => Container(
-                            width: entry.label == '最新发布' ? 116 : (MediaQuery.of(context).size.width - 116)/3,
-                            child: FlatButton(
-                                onPressed: entry.onPressed,
+                          // width: entry.label == '最新发布' ? 116 : (MediaQuery.of(context).size.width - 116)/3,
+                          child: GestureDetector(
+                              onTap: entry.onPressed,
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 10),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
                                       entry.label,
                                       style: TextStyle(
-                                          fontSize: 15, color: Colors.black),
+                                          fontSize: 14, color: Colors.black),
                                     ),
                                     entry.label == '最新发布'
                                         ? Icon(Icons.keyboard_arrow_down)
                                         : Container()
                                   ],
-                                )),
-                          ))
+                                ),
+                              ))))
                       .toList(),
                 )),
             widget.action

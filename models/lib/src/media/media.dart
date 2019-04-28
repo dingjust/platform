@@ -69,10 +69,8 @@ class MediaModel extends ItemModel {
         getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
 
     if (mediaModel != null) {
-      print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
-      print(actualUrl);
       return actualUrl;
     }
   }
@@ -83,10 +81,8 @@ class MediaModel extends ItemModel {
         getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_THUMBNAIL]);
 
     if (mediaModel != null) {
-      print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
-      print(actualUrl);
       return actualUrl;
     }
   }
@@ -97,10 +93,8 @@ class MediaModel extends ItemModel {
         getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_DETAIL]);
 
     if (mediaModel != null) {
-      print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
-      print(actualUrl);
       return actualUrl;
     }
   }
@@ -120,7 +114,7 @@ class MediaModel extends ItemModel {
   }
 }
 
-/// 样衣归还状态
+/// 图片类型
 enum MediaFormat {
   /// 默认
   DEFAULT_IMAGE_FORMAT,

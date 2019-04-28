@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
+import 'package:b2b_commerce/src/my/company/my_company_contact_from.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -198,9 +199,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyCompanyContactWayPage(
-                    widget.factory,
-                    isCompanyIntroduction: widget.isCompanyIntroduction,
+              builder: (context) => MyCompanyContactFromPage(
+                    company:widget.factory,
                   ),
             ),
           );

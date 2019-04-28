@@ -89,13 +89,16 @@ class FactoryItem extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  CategoriesText(
-                    model: model,
-                  )
-                ],
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: <Widget>[
+              //     CategoriesText(
+              //       model: model,
+              //     )
+              //   ],
+              // )
+              CategoriesText(
+                model: model,
               )
             ],
           ),
@@ -237,6 +240,7 @@ class CategoriesText extends StatelessWidget {
       margin: EdgeInsets.only(right: 5),
       child: Text(
         '${model.adeptAtCategories[i].name}',
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(fontSize: 14, color: Color.fromRGBO(180, 180, 180, 1)),
       ),
     );
@@ -247,8 +251,8 @@ class CategoriesText extends StatelessWidget {
     List<Container> tags = <Container>[];
     if (model.adeptAtCategories != null) {
       // TODO: 用更好的方法实现：先截取，再生成
-      if (model.adeptAtCategories.length > 5) {
-        for (int i = 0; i < model.adeptAtCategories.length && i < 5; i++) {
+      if (model.adeptAtCategories.length > 4) {
+        for (int i = 0; i < model.adeptAtCategories.length && i < 4; i++) {
           tags.add(_buildTag(i));
         }
       } else {
@@ -258,25 +262,32 @@ class CategoriesText extends StatelessWidget {
       }
     }
 
-    return 
-    // Expanded(
-    //   flex: 1,
+    return
+        // Expanded(
+        //   flex: 1,
+        //   child: ListView(
+        //     scrollDirection: Axis.horizontal,
+        //     children: tags,
+        //   ),
+        // );
+
+        Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: tags,
+    );
+
+    //     Container(
+    //   width: 300,
     //   child: ListView(
     //     scrollDirection: Axis.horizontal,
     //     children: tags,
     //   ),
     // );
-    Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: tags,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: _buildTags(),
-    );
+    return _buildTags();
   }
 }
 
