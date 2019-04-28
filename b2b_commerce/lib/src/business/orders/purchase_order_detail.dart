@@ -6,9 +6,11 @@ import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -452,35 +454,47 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             Row(
               children: <Widget>[
                 order.purchaser == null ||
-                        order.purchaser.profilePicture == null
+                    order.purchaser.profilePicture == null
                     ? Container(
-                        margin: EdgeInsets.all(10),
-                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                        child: Center(
-                          child: Icon(
-                            B2BIcons.noPicture,
-                            color: Color.fromRGBO(200, 200, 200, 1),
-                            size: 60,
-                          ),
-                        ),
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Color.fromRGBO(243, 243, 243, 1)),
-                      )
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Center(
+                    child: Icon(
+                      B2BIcons.noPicture,
+                      color: Color.fromRGBO(200, 200, 200, 1),
+                      size: 60,
+                    ),
+                  ),
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Color.fromRGBO(243, 243, 243, 1)),
+                )
                     : Container(
-                        margin: EdgeInsets.all(10),
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  '${order.purchaser.profilePicture.previewUrl()}'),
-                              fit: BoxFit.cover,
-                            )),
-                      ),
+                  margin: EdgeInsets.all(10),
+                  width: 80,
+                  height: 80,
+                  child: CachedNetworkImage(
+                    imageUrl: '${order.purchaser.profilePicture.previewUrl()}',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
                 Container(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -662,6 +676,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     builder: (context) => MyAddressesPage(isJumpSource: true)),
                 //接收返回数据并处理
               ).then((value) async {
+                print(value);
                 if (value != null) {
                   setState(() {
                     order.deliveryAddress = value;
@@ -833,19 +848,31 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Color.fromRGBO(243, 243, 243, 1)),
-                      )
+                )
                     : Container(
-                        margin: EdgeInsets.only(right: 20),
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  '${productionProgress.medias[0].previewUrl()}'),
-                              fit: BoxFit.fill,
-                            )),
-                      ),
+                  margin: EdgeInsets.only(right: 20),
+                  width: 100,
+                  height: 100,
+                  child: CachedNetworkImage(
+                    imageUrl: '${productionProgress.medias[0].previewUrl()}',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
                 onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(

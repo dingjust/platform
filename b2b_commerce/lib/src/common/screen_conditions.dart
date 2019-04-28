@@ -18,10 +18,12 @@ final List<CategoryModel> _majorCategory = [
 ];
 
 final List<EnumModel> processingTypeList = [
-  EnumModel.fromJson({'code': 'FOB', 'name': 'FOB'}),
-  EnumModel.fromJson({'code': 'PURE_PROCESSING', 'name': 'PURE_PROCESSING'}),
+  EnumModel.fromJson({'code': 'LABOR_AND_MATERIAL', 'name': '包工包料'}),
+  EnumModel.fromJson({'code': 'LIGHT_PROCESSING', 'name': '清加工'}),
   EnumModel.fromJson({'code': 'ODM', 'name': 'ODM'}),
   EnumModel.fromJson({'code': 'OEM', 'name': 'OEM'}),
+  EnumModel.fromJson({'code': 'FOB', 'name': 'FOB'}),
+  EnumModel.fromJson({'code': 'PURE_PROCESSING', 'name': 'PURE_PROCESSING'}),
 ];
 
 final List<EnumModel> technologyList = [

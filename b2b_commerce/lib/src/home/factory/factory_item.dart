@@ -30,7 +30,8 @@ class FactoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         // 获取该工厂的现款产品
-        ProductsResponse productsResponse = await ProductRepositoryImpl().getProductsOfFactories({
+        ProductsResponse productsResponse =
+            await ProductRepositoryImpl().getProductsOfFactories({
           'factory': model.uid,
         }, {
           'size': 3
@@ -57,7 +58,12 @@ class FactoryItem extends StatelessWidget {
               Row(
                 children: <Widget>[
                   FactoryNameText(model: model),
-                  showButton ? InviteFactoryButton(factoryModel: model,requirementCode: requirementCode,) : Container(),
+                  showButton
+                      ? InviteFactoryButton(
+                          factoryModel: model,
+                          requirementCode: requirementCode,
+                        )
+                      : Container(),
                 ],
               ),
               Container(
@@ -83,13 +89,16 @@ class FactoryItem extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  CategoriesText(
-                    model: model,
-                  )
-                ],
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: <Widget>[
+              //     CategoriesText(
+              //       model: model,
+              //     )
+              //   ],
+              // )
+              CategoriesText(
+                model: model,
               )
             ],
           ),
@@ -150,7 +159,7 @@ class CertifiedTagsAndLabelsText extends StatelessWidget {
           ? Tag(
               label: '  已认证  ',
               color: Colors.black,
-              backgroundColor: Color.fromRGBO(255,214,12,1),
+              backgroundColor: Color.fromRGBO(255, 214, 12, 1),
             )
           : Tag(
               label: '  未认证  ',
@@ -161,7 +170,7 @@ class CertifiedTagsAndLabelsText extends StatelessWidget {
     model.labels.forEach((label) {
       tags.add(Tag(
         label: label.name,
-        color:Color.fromRGBO(255, 133, 148, 1),
+        color: Color.fromRGBO(255, 133, 148, 1),
       ));
     });
 
@@ -179,7 +188,8 @@ class CertifiedTagsAndLabelsText extends StatelessWidget {
 }
 
 class StarLevelAndOrdersCountText extends StatelessWidget {
-  StarLevelAndOrdersCountText({Key key, @required this.model}) : super(key: key);
+  StarLevelAndOrdersCountText({Key key, @required this.model})
+      : super(key: key);
 
   final FactoryModel model;
 
@@ -202,13 +212,17 @@ class StarLevelAndOrdersCountText extends StatelessWidget {
             ),
           ),
           RichText(
-            text: TextSpan(text: '已接', style: TextStyle(color: Colors.grey), children: <TextSpan>[
-              TextSpan(
-                text: '${model.historyOrdersCount}',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-              ),
-              TextSpan(text: '单')
-            ]),
+            text: TextSpan(
+                text: '已接',
+                style: TextStyle(color: Colors.grey),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: '${model.historyOrdersCount}',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: '单')
+                ]),
           ),
         ],
       ),
@@ -226,9 +240,8 @@ class CategoriesText extends StatelessWidget {
       margin: EdgeInsets.only(right: 5),
       child: Text(
         '${model.adeptAtCategories[i].name}',
-        style: TextStyle(
-          fontSize: 14,
-            color: Color.fromRGBO(180, 180, 180, 1)),
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: 14, color: Color.fromRGBO(180, 180, 180, 1)),
       ),
     );
   }
@@ -238,8 +251,8 @@ class CategoriesText extends StatelessWidget {
     List<Container> tags = <Container>[];
     if (model.adeptAtCategories != null) {
       // TODO: 用更好的方法实现：先截取，再生成
-      if (model.adeptAtCategories.length > 5) {
-        for (int i = 0; i < model.adeptAtCategories.length && i < 5; i++) {
+      if (model.adeptAtCategories.length > 4) {
+        for (int i = 0; i < model.adeptAtCategories.length && i < 4; i++) {
           tags.add(_buildTag(i));
         }
       } else {
@@ -249,22 +262,38 @@ class CategoriesText extends StatelessWidget {
       }
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+    return
+        // Expanded(
+        //   flex: 1,
+        //   child: ListView(
+        //     scrollDirection: Axis.horizontal,
+        //     children: tags,
+        //   ),
+        // );
+
+        Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: tags,
     );
+
+    //     Container(
+    //   width: 300,
+    //   child: ListView(
+    //     scrollDirection: Axis.horizontal,
+    //     children: tags,
+    //   ),
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: _buildTags(),
-    );
+    return _buildTags();
   }
 }
 
 class InviteFactoryButton extends StatelessWidget {
-  InviteFactoryButton({Key key, this.factoryModel,this.requirementCode}) : super(key: key);
+  InviteFactoryButton({Key key, this.factoryModel, this.requirementCode})
+      : super(key: key);
   FactoryModel factoryModel;
   String requirementCode;
 
@@ -280,7 +309,8 @@ class InviteFactoryButton extends StatelessWidget {
             style: TextStyle(color: Colors.white, fontSize: 16),
           ),
         ),
-        decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+            color: Colors.grey, borderRadius: BorderRadius.circular(20)),
       );
     } else {
       return Container(
@@ -288,14 +318,17 @@ class InviteFactoryButton extends StatelessWidget {
         width: 100,
         child: FlatButton(
           onPressed: () async {
-            bool result = await RequirementOrderRepository().doRecommendation(requirementCode, factoryModel.uid);
+            bool result = await RequirementOrderRepository()
+                .doRecommendation(requirementCode, factoryModel.uid);
             showDialog<void>(
               context: context,
               barrierDismissible: true, // user must tap button!
               builder: (context) {
                 return SimpleDialog(
                   title: const Text('提示', style: const TextStyle(fontSize: 16)),
-                  children: <Widget>[SimpleDialogOption(child: Text('邀请${result?'成功':'失败'}'))],
+                  children: <Widget>[
+                    SimpleDialogOption(child: Text('邀请${result ? '成功' : '失败'}'))
+                  ],
                 );
               },
             );
@@ -343,7 +376,8 @@ class Tag extends StatelessWidget {
           style: TextStyle(color: color, fontSize: 12),
         ),
       ),
-      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(6)),
+      decoration: BoxDecoration(
+          color: backgroundColor, borderRadius: BorderRadius.circular(6)),
     );
   }
 }

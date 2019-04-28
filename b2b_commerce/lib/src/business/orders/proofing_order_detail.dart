@@ -3,9 +3,11 @@ import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -79,6 +81,37 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                   child: Stack(
                     alignment: const Alignment(0.6, 1.1),
                     children: <Widget>[
+                      widget.model.product != null &&
+                          widget.model.product.thumbnail != null &&
+                          widget.model.product.thumbnail.url != null ?
+                      Container(
+                        margin: EdgeInsets.only(right: 15),
+                        padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                        width: 80,
+                        height: 80,
+                        child: CachedNetworkImage(
+                            width: 100,
+                            height: 100,
+                            imageUrl: '${widget.model.product.thumbnail
+                                .previewUrl()}',
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                SpinKitRing(
+                                  color: Colors.black12,
+                                  lineWidth: 2,
+                                  size: 30,
+                                ),
+                            errorWidget: (context, url, error) =>
+                                SpinKitRing(
+                                  color: Colors.black12,
+                                  lineWidth: 2,
+                                  size: 30,
+                                )
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ) :
                       Container(
                         margin: EdgeInsets.only(right: 15),
                         padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
@@ -87,18 +120,14 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: widget.model.product != null &&
-                                      widget.model.product.thumbnail != null &&
-                                      widget.model.product.thumbnail.url != null
-                                  ? NetworkImage(
-                                      '${widget.model.product.thumbnail.previewUrl()}')
-                                  : AssetImage(
+                              image: AssetImage(
                                       'temp/picture.png',
                                       package: "assets",
                                     ),
                               fit: BoxFit.cover,
                             )),
-                      ),
+                      )
+                      ,
                       Container(
                         child: Icon(
                           Icons.photo_size_select_actual,
@@ -379,6 +408,8 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             children: <Widget>[
               Row(
                 children: <Widget>[
+                  widget.model.supplier == null ||
+                      widget.model.supplier.profilePicture == null?
                   Container(
                     margin: EdgeInsets.all(10),
                     width: 80,
@@ -386,16 +417,38 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                          image: widget.model.supplier == null ||
-                                  widget.model.supplier.profilePicture == null
-                              ? AssetImage(
+                          image: AssetImage(
                                   'temp/picture.png',
                                   package: "assets",
-                                )
-                              : NetworkImage(
-                                  '${widget.model.supplier.profilePicture.previewUrl()}'),
+                                ),
                           fit: BoxFit.cover,
                         )),
+                  ):
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    width: 80,
+                    height: 80,
+                    child: CachedNetworkImage(
+                        width: 100,
+                        height: 100,
+                        imageUrl: '${widget.model.supplier.profilePicture.previewUrl()}',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            ),
+                        errorWidget: (context, url, error) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            )
+                    ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        ),
                   ),
                   Container(
                       child: Column(

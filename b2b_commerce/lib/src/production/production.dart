@@ -155,7 +155,7 @@ class ProductionItem extends StatelessWidget {
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(5)),
                               child: Text(
-                                '货号：${order.product == null ? '' : order.product.skuID}',
+                                '货号：${order.product == null || order.product.skuID == null ? '' : order.product.skuID}',
                                 style:
                                     TextStyle(fontSize: 12, color: Colors.grey),
                               ),

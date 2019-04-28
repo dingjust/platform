@@ -1,8 +1,10 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -131,13 +133,20 @@ class _PublishRequirementSuccessDialogState
         _pictureWidget = Container(
           width: 80,
           height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: DecorationImage(
-                image: NetworkImage(
-                    '${widget.model.details.pictures[0].previewUrl()}'),
-                fit: BoxFit.cover,
-              )),
+          child: CachedNetworkImage(
+              imageUrl: '${widget.model.details.pictures[0].previewUrl()}',
+              fit: BoxFit.cover,
+              placeholder: (context, url) =>  SpinKitRing(
+                color: Colors.black12,
+                lineWidth: 2,
+                size: 30,
+              ),
+              errorWidget: (context, url, error) => SpinKitRing(
+                color: Colors.black12,
+                lineWidth: 2,
+                size: 30,
+              )
+          ),
         );
       }
     }

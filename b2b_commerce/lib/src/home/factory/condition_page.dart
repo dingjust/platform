@@ -101,6 +101,7 @@ class _ConditionPageState extends State<ConditionPage> {
                         widget.factoryCondition.categories = null;
                         widget.factoryCondition.starLevel = 0;
                         widget.factoryCondition.productiveOrientations = null;
+                        widget.factoryCondition.labels =  new List<LabelModel>();
                       });
                     }),
               ),

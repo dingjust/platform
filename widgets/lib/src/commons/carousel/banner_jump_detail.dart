@@ -35,7 +35,7 @@ class _BannerJumpDetailPage extends State<BannerJumpDetailPage> {
       height: 600,
       child: CachedNetworkImage(
           imageUrl: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=270792303,1544523664&fm=26&gp=0.jpg",
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
           placeholder: (context, url) =>  SpinKitRing(
             color: Colors.black12,
             size: 30.0,
@@ -55,7 +55,7 @@ class _BannerJumpDetailPage extends State<BannerJumpDetailPage> {
       height: 600,
       child: CachedNetworkImage(
           imageUrl: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=270792303,1544523664&fm=26&gp=0.jpg",
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
           placeholder: (context, url) =>  SpinKitRing(
             color: Colors.black12,
             lineWidth: 2,
@@ -75,7 +75,7 @@ class _BannerJumpDetailPage extends State<BannerJumpDetailPage> {
       height: 600,
       child: CachedNetworkImage(
         imageUrl: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=270792303,1544523664&fm=26&gp=0.jpg",
-        fit: BoxFit.fill,
+        fit: BoxFit.cover,
         placeholder: (context, url) =>  SpinKitRing(
           color: Colors.black12,
           size: 30.0,

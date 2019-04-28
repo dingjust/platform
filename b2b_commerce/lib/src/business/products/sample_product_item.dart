@@ -1,5 +1,7 @@
 import 'package:b2b_commerce/src/business/products/sample_product_detail.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
@@ -29,15 +31,37 @@ class SampleProductItem extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: <Widget>[
+              item.pictures.length > 0?
+              Container(
+                width: 80,
+                height: 80,
+                child: CachedNetworkImage(
+                    imageUrl: '${item.pictures[0].previewUrl()}',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ):
               Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   image: DecorationImage(
-                    image: item.pictures.length > 0
-                        ? NetworkImage('${item.pictures[0].previewUrl()}')
-                        : AssetImage(
+                    image: AssetImage(
                             'temp/picture.png',
                             package: "assets",
                           ),

@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/search/factory_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -55,6 +58,10 @@ class _FactoryPageState extends State<FactoryPage> {
   List<CategoryModel> _category;
   List<CategoryModel> _categorySelected = [];
 
+  List<RegionModel> _regions = [];
+  RegionModel _regionSelect = RegionModel();
+  List<CityModel> _citySelects = [];
+
   @override
   void initState() {
     if (widget.factoryCondition != null) {
@@ -66,10 +73,6 @@ class _FactoryPageState extends State<FactoryPage> {
           labels: [],
           cooperationModes: []);
     }
-
-    ProductRepositoryImpl()
-        .cascadedCategories()
-        .then((categorys) => _category = categorys);
 
     super.initState();
   }
@@ -123,7 +126,8 @@ class _FactoryPageState extends State<FactoryPage> {
                         showMachineTypeFilterMenu = false;
                       });
                     }),
-                    FilterEntry('分类', () {
+                    FilterEntry('分类', () async{
+                      _category = await ProductRepositoryImpl().cascadedCategories();
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
@@ -157,6 +161,32 @@ class _FactoryPageState extends State<FactoryPage> {
                       setState(() {
                         showDateFilterMenu = false;
                       });
+                      //获取所有省份
+                      rootBundle.loadString('data/province.json').then((v) {
+                        List data = json.decode(v);
+                        _regions = data
+                            .map<RegionModel>((region) => RegionModel.fromJson(region))
+                            .toList();
+
+                        showModalBottomSheet(context: context, builder: (context){
+                          //地区选择器
+                          return RegionCitySelector(
+                            regions: _regions,
+                            regionSelect: _regionSelect,
+                            citySelects: _citySelects,
+                          );
+                        }).then((a){
+                          setState(() {
+                            factoryCondition.productiveOrientations = _regionSelect;
+                            factoryCondition.cities = _citySelects;
+                            FactoryBLoC.instance.filterByCondition(
+                              factoryCondition,
+                              requirementCode: widget.requirementCode,
+                            );
+                          });
+                        });
+                      });
+
                     })
                   ],
                   action: Container(),

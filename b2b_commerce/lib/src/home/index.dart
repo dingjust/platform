@@ -76,12 +76,11 @@ class _HomePageState extends State<HomePage> {
     // 安卓端自动更新
     // TargetPlatform platform = defaultTargetPlatform;
     // if (platform != TargetPlatform.iOS) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
-              homePageKey.currentContext,
-              ignoreVersionNotification:
-                  UserBLoC.instance.ignoreVersionNotification)
-          .initCheckVersion(
-              AppBLoC.instance.packageInfo.version, 'nbyjy'));
+    WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
+            homePageKey.currentContext,
+            ignoreVersionNotification:
+                UserBLoC.instance.ignoreVersionNotification)
+        .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy'));
     // }
     super.initState();
   }
@@ -213,20 +212,22 @@ class BrandFirstMenuSection extends StatelessWidget {
         .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
         .toList();
     labels.add(LabelModel(name: '已认证', id: 000000));
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => FactoryPage(
-              FactoryCondition(
-                  starLevel: 0,
-                  adeptAtCategories: [],
-                  labels: conditionLabels,
-                  cooperationModes: []),
-              route: '快反工厂',
-              categories: categories,
-              labels: labels,
-            ),
-      ),
-    );
+    if (categories != null && labels != null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => FactoryPage(
+                FactoryCondition(
+                    starLevel: 0,
+                    adeptAtCategories: [],
+                    labels: conditionLabels,
+                    cooperationModes: []),
+                route: '快反工厂',
+                categories: categories,
+                labels: labels,
+              ),
+        ),
+      );
+    }
   }
 }
 
@@ -262,7 +263,10 @@ class BrandSecondMenuSection extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => IndustrialClusterPage(labels: labels,factoryLabels: factoryLabels,),
+            builder: (context) => IndustrialClusterPage(
+                  labels: labels,
+                  factoryLabels: factoryLabels,
+                ),
           ),
         );
       },
@@ -300,21 +304,23 @@ class BrandSecondMenuSection extends StatelessWidget {
                 label.group == 'FACTORY' || label.group == 'PLATFORM')
             .toList();
 //        labels.add(LabelModel(name: '已认证', id: 1000000));
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FactoryPage(
-                  FactoryCondition(
-                      starLevel: 0,
-                      adeptAtCategories: [],
-                      labels: [],
-                      cooperationModes: []),
-                  route: '全部工厂',
-                  categories: categories,
-                  labels: labels,
-                ),
-          ),
-        );
+        if (categories != null && labels != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FactoryPage(
+                    FactoryCondition(
+                        starLevel: 0,
+                        adeptAtCategories: [],
+                        labels: [],
+                        cooperationModes: []),
+                    route: '全部工厂',
+                    categories: categories,
+                    labels: labels,
+                  ),
+            ),
+          );
+        }
       },
       title: '全部工厂',
       icon: Icon(
@@ -522,12 +528,14 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                   await ProductRepositoryImpl()
                       .majorCategories()
                       .then((categories) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            RequirementPoolAllPage(categories: categories),
-                      ),
-                    );
+                    if (categories != null) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              RequirementPoolAllPage(categories: categories),
+                        ),
+                      );
+                    }
                   });
                 },
                 child:
@@ -545,10 +553,12 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                   await ProductRepositoryImpl()
                       .majorCategories()
                       .then((categories) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RequirementPoolRecommend(
-                              categories: categories,
-                            )));
+                    if (categories != null) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RequirementPoolRecommend(
+                                categories: categories,
+                              )));
+                    }
                   });
                 },
                 child: RecommendedRequirementMenuItem(

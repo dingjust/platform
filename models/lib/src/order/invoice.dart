@@ -45,6 +45,7 @@ class InvoiceTitleModel extends ItemModel {
   factory InvoiceTitleModel.fromJson(Map<String, dynamic> json) => _$InvoiceTitleModelFromJson(json);
 
   static Map<String, dynamic> toJson(InvoiceTitleModel model) => _$InvoiceTitleModelToJson(model);
+  
   static Map<String, dynamic> principalToJson(PrincipalModel model) => PrincipalModel.toJson(model);
 }
 

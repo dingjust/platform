@@ -1,5 +1,7 @@
 import 'package:b2b_commerce/src/home/product/product_detail.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
@@ -18,11 +20,23 @@ class ExistingProductItem extends StatelessWidget{
                 children: <Widget>[
                   Container(
                     child: product.thumbnail != null ?
-                    Image.network(
-                      '${product.thumbnail.previewUrl()}',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.fill,
+                    CachedNetworkImage(
+                        width: 100,
+                        height: 100,
+                        imageUrl: '${product.thumbnail.previewUrl()}',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            ),
+                        errorWidget: (context, url, error) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            )
                     )
                         : Container(
                       width: 100,
@@ -85,9 +99,19 @@ class ExistingProductItem extends StatelessWidget{
                     height: 200,
                     padding: EdgeInsets.all(20),
                     child: product.thumbnail != null ?
-                    Image.network(
-                      '${product.thumbnail.previewUrl()}',
-                      fit: BoxFit.scaleDown,
+                    CachedNetworkImage(
+                        imageUrl: '${product.thumbnail.previewUrl()}',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>  SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                        errorWidget: (context, url, error) => SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )
                     )
                         : Container(
                       width: 180,

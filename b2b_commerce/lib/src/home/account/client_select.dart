@@ -79,17 +79,18 @@ class ClientSelectPage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(
-                          B2BIcons.question,
-                          color: Colors.red,
-                        ),
                         Container(
-                          margin: EdgeInsets.only(left: 10),
+                          margin: EdgeInsets.only(right: 10),
                           child: Text(
                             '如何选择身份',
                             style: TextStyle(fontSize: 16),
                           ),
-                        )
+                        ),
+                        Icon(
+                          B2BIcons.question,
+                          color: Colors.red,
+                          size: 18,
+                        ),
                       ],
                     ),
                   ))
@@ -105,32 +106,57 @@ class ClientSelectPage extends StatelessWidget {
       context: context,
       barrierDismissible: true, // user must tap button!
       builder: (context) {
-        return FutureBuilder(
-            future: DefaultAssetBundle.of(context)
-                .loadString("packages/assets/document/selectIdentity.txt"),
-            initialData: null,
-            builder: (context, snapshot) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Center(
-                          child: Text(
-                            '如何选择用户身份类型',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      snapshot.data != null
-                          ? Text(snapshot.data)
-                          : Center(child: CircularProgressIndicator())
-                    ],
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Center(
+                    child: Text(
+                      '如何选择用户身份类型',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-              );
-            });
+                RichText(
+                  text: TextSpan(
+                      text: '品牌商：',
+                      style: TextStyle(fontSize: 16, color: Colors.red),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:
+                                '服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。',
+                            style: TextStyle(color: Colors.black))
+                      ]),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: RichText(
+                    text: TextSpan(
+                        text: '工 厂：',
+                        style: TextStyle(fontSize: 16, color: Colors.red),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text:
+                                  '服装生产工厂，需要在钉单APP上寻找各类服装加工订单，管理生产进度的企业选择“工厂”注册。',
+                              style: TextStyle(color: Colors.black))
+                        ]),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  color: Color.fromRGBO(255, 214, 12, 1),
+                  child: Text('我知道了'),
+                )
+              ],
+            ),
+          ),
+        );
       },
     );
   }

@@ -1,8 +1,10 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/existing_product.dart';
 import 'package:b2b_commerce/src/business/supplier/contact_factory.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
@@ -666,7 +668,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                                           .products[index].thumbnail.url,
                                       width: 80,
                                       height: 80,
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
                                     )
                                   : Container(
                                       width: 80,
@@ -819,7 +821,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                         'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548324012344&di=9d970990f5941d68919dfbe264b328c9&imgtype=0&src=http%3A%2F%2Fwww.gdhangying.com%2Fewinupfile%2F2016102911390175014.jpg',
                         height: 200,
                         width: double.infinity,
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     Container(
@@ -841,7 +843,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                         'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548324406887&di=065efea8f76ed217de5dbaaed0178471&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F6a600c338744ebf835dc43c9d3f9d72a6159a792.jpg',
                         height: 200,
                         width: double.infinity,
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     Container(
@@ -887,7 +889,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
           ListTile(
             leading: Text('注册时间'),
             trailing: Text(
-                '${DateFormatUtil.formatYMD(widget.supplierModel.factory.registrationDate)}'),
+                '${DateFormatUtil.formatYMD(widget.supplierModel.factory.creationTime)}'),
           ),
           Divider(
             height: 5,
@@ -1024,7 +1026,7 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                 entry.product.thumbnail.url,
                 width: 110,
                 height: 110,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
               ),
               Expanded(
                   child: Container(
@@ -1134,12 +1136,30 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
                               null &&
                           widget.supplierModel.quoteOrder.requirementOrder
                               .details.pictures.isNotEmpty
-                      ? NetworkImage(widget.supplierModel.quoteOrder
-                          .requirementOrder.details.pictures[0].url)
+                      ?
+                  CachedNetworkImage(
+                      width: 100,
+                      height: 100,
+                      imageUrl: widget.supplierModel.quoteOrder
+                          .requirementOrder.details.pictures[0].url,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          ),
+                      errorWidget: (context, url, error) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          )
+                  )
                       : AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ),
+                    'temp/picture.png',
+                    package: "assets",
+                  ),
                   fit: BoxFit.cover,
                 )),
           ),

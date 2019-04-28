@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:models/models.dart';
@@ -16,7 +18,6 @@ class UserModel extends PrincipalModel {
   /// 用户类型
   UserType type;
 
-
   /// 用户状态
   UserStatus status;
 
@@ -32,18 +33,34 @@ class UserModel extends PrincipalModel {
   /// 公司信息
   B2BUnitModel b2bUnit;
 
-  Image get avatar => profilePicture ?? Image.network(profilePicture.url);
+  Image get avatar =>
+      profilePicture ??
+      CachedNetworkImage(
+          width: 100,
+          height: 100,
+          imageUrl: '${profilePicture.url}',
+          fit: BoxFit.cover,
+          placeholder: (context, url) => SpinKitRing(
+                color: Colors.black12,
+                lineWidth: 2,
+                size: 30,
+              ),
+          errorWidget: (context, url, error) => SpinKitRing(
+                color: Colors.black12,
+                lineWidth: 2,
+                size: 30,
+              ));
 
-  UserModel({
-    MediaModel profilePicture,
-    String uid,
-    String name,
-    this.loginDisabled,
-    this.type,
-    this.roles,
-    this.status,
-    this.b2bUnit
-  }) : super(
+  UserModel(
+      {MediaModel profilePicture,
+      String uid,
+      String name,
+      this.loginDisabled,
+      this.type,
+      this.roles,
+      this.status,
+      this.b2bUnit})
+      : super(
           profilePicture: profilePicture,
           uid: uid,
           name: name,
@@ -55,7 +72,7 @@ class UserModel extends PrincipalModel {
     this.name = "未登录用户";
     this.loginDisabled = false;
     this.type = UserType.ANONYMOUS;
-    this.status=UserStatus.OFFLINE;
+    this.status = UserStatus.OFFLINE;
   }
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -150,18 +167,21 @@ class AddressModel extends ItemModel {
     this.line1,
     this.defaultAddress = false,
   });
+
   String get regionCityAndDistrict =>
       region.name == city.name && region.name == cityDistrict.name
           ? region.name
-          :  region.name + city.name + cityDistrict.name;
+          : region.name + city.name + cityDistrict.name;
 
-  String get details => (region.name + city.name + cityDistrict.name + '${line1 ?? ''}');
+  String get details =>
+      (region.name + city.name + cityDistrict.name + '${line1 ?? ''}');
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);
 
   static Map<String, dynamic> toJson(AddressModel model) =>
-      _$AddressModelToJson(model);
+//      _$AddressModelToJson(model);
+      addressToJson(model);
 
   static Map<String, dynamic> _regionToJson(RegionModel model) =>
       RegionModel.toJson(model);
@@ -171,6 +191,18 @@ class AddressModel extends ItemModel {
 
   static Map<String, dynamic> _cityDistrictToJson(DistrictModel model) =>
       DistrictModel.toJson(model);
+
+  static Map<String, dynamic> addressToJson(AddressModel model) {
+    return {
+      'fullname': model.fullname,
+      'cellphone': model.cellphone,
+      'line1': model.line1,
+      'defaultAddress': model.defaultAddress,
+      'region': {'isocode': model.region.isocode},
+      'city': {'code': model.city.code},
+      'cityDistrict': {'code': model.cityDistrict.code}
+    };
+  }
 }
 
 /// 省份
@@ -180,8 +212,9 @@ class RegionModel extends ItemModel {
   String name;
   String isocodeShort;
   String countryIso;
+  List<CityModel> cities;
 
-  RegionModel({this.isocode, this.name, this.isocodeShort, this.countryIso});
+  RegionModel({this.isocode, this.name, this.isocodeShort, this.countryIso,this.cities,});
 
   factory RegionModel.fromJson(Map<String, dynamic> json) =>
       _$RegionModelFromJson(json);
@@ -248,5 +281,3 @@ class RoleModel extends ItemModel {
   static Map<String, dynamic> toJson(RoleModel model) =>
       _$RoleModelToJson(model);
 }
-
-

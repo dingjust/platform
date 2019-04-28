@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
@@ -54,18 +56,42 @@ class ApparelProductItem extends StatelessWidget {
       padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
       child: Row(
         children: <Widget>[
+          item.thumbnail != null?
+          Container(
+            width: 80,
+            height: 80,
+            child: CachedNetworkImage(
+                width: 100,
+                height: 100,
+                imageUrl: '${item.thumbnail.previewUrl()}',
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    SpinKitRing(
+                      color: Colors.black12,
+                      lineWidth: 2,
+                      size: 30,
+                    ),
+                errorWidget: (context, url, error) =>
+                    SpinKitRing(
+                      color: Colors.black12,
+                      lineWidth: 2,
+                      size: 30,
+                    )
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ) :
           Container(
             width: 80,
             height: 80,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image: item.thumbnail != null
-                      ? NetworkImage('${item.thumbnail.previewUrl()}')
-                      : AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ),
+                  image: AssetImage(
+                    'temp/picture.png',
+                    package: "assets",
+                  ),
                   fit: BoxFit.cover,
                 )),
           ),
@@ -183,7 +209,7 @@ class ApparelProductItem extends StatelessWidget {
                           color: Color.fromRGBO(255, 214, 12, 1),
                           borderRadius: BorderRadius.circular(5)
                       ),
-                      child: Text(_approvalStatusText),
+                      child: Center(child: Text(_approvalStatusText)),
                     ),
                     onTap: onProductShlefing,
                   ),

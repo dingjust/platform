@@ -18,6 +18,7 @@ class WechatPayHelper {
           data: {"paymentFor": PaymentForEnumMap[paymentFor]});
     } on DioError catch (e) {
       print(e);
+      return null;
     }
     if (response != null && response.statusCode == 200) {
       WechatPrepayModel wechatPrepayModel =

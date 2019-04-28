@@ -4,8 +4,10 @@ import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -104,6 +106,7 @@ class _RequirementOrderDetailPageState
           children: <Widget>[
             Row(
               children: <Widget>[
+                widget.order.belongTo.profilePicture == null?
                 Container(
                   margin: EdgeInsets.all(10),
                   width: 80,
@@ -111,15 +114,38 @@ class _RequirementOrderDetailPageState
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image: widget.order.belongTo.profilePicture == null
-                            ? AssetImage(
+                        image: AssetImage(
                                 'temp/picture.png',
                                 package: "assets",
-                              )
-                            : NetworkImage(
-                                '${widget.order.belongTo.profilePicture.previewUrl()}'),
+                              ),
                         fit: BoxFit.cover,
                       )),
+                ):
+                Container(
+                  margin: EdgeInsets.all(10),
+                  width: 80,
+                  height: 80,
+                  child: CachedNetworkImage(
+                      width: 100,
+                      height: 100,
+                      imageUrl: '${widget.order.belongTo.profilePicture.previewUrl()}',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          ),
+                      errorWidget: (context, url, error) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          )
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      ),
                 ),
                 Container(
                     child: Column(
@@ -171,9 +197,9 @@ class _RequirementOrderDetailPageState
                   ),
                   Container(
                     child: Text(
-                      widget.order.belongTo.contactAddress?.fullname == null
+                      widget.order.belongTo.contactPerson == null
                           ? ''
-                          : '${widget.order.belongTo.contactAddress.fullname}',
+                          : '${widget.order.belongTo.contactPerson}',
                       style: TextStyle(
                           color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                     ),
@@ -196,9 +222,9 @@ class _RequirementOrderDetailPageState
                     ),
                     Container(
                       child: Text(
-                        widget.order.belongTo.contactAddress.cellphone == null
+                        widget.order.belongTo.contactPhone == null
                             ? ''
-                            : '${widget.order.belongTo.contactAddress.cellphone}',
+                            : '${widget.order.belongTo.contactPhone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
@@ -374,20 +400,32 @@ class _RequirementOrderDetailPageState
       } else {
         _pictureWidget = GestureDetector(
           child: Stack(
-            alignment: const Alignment(0.6, 1.1),
+            alignment: const Alignment(1.0, 1.1),
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(right: 15),
-                padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
                 width: 80,
                 height: 80,
+                child: CachedNetworkImage(
+                    width: 100,
+                    height: 100,
+                    imageUrl: '${widget.order.details.pictures[0].previewUrl()}',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )
+                ),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          '${widget.order.details.pictures[0].previewUrl()}'),
-                      fit: BoxFit.cover,
-                    )),
+                    ),
               ),
               Container(
                 child: Icon(

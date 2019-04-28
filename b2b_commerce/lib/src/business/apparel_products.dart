@@ -13,7 +13,7 @@ class ApparelProductsPage extends StatefulWidget {
   final bool isSelectOption;
   final ApparelProductModel item;
 
-  ApparelProductsPage({this.isSelectOption = false, this.item});
+  ApparelProductsPage({this.isSelectOption = false, this.item,});
 
   _ApparelProductsPageState createState() => _ApparelProductsPageState();
 }
@@ -25,6 +25,8 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>{
   ] : [
     EnumModel('ALL', '全部产品'),
   ];
+
+  String _keyword;
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +41,26 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>{
           appBar: AppBar(
             elevation: 0.5,
             centerTitle: true,
-            title: Text('产品管理'),
+            title: Text(_keyword == null ? '产品管理' : _keyword),
             actions: <Widget>[
               IconButton(
                 icon: Icon(
                   B2BIcons.search,
                   size: 20,
                 ),
-                onPressed: () => showSearch(
-                      context: context,
-                      delegate: ProductSearchDelegatePage(),
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: ProductSearchDelegatePage(
+                        isSelectOption:widget.isSelectOption
                     ),
+                  ).then((a){
+                    setState(() {
+                      _keyword = a?.name;
+                      ApparelProductBLoC.instance.clear();
+                    });
+                  });
+                },
               ),
             ],
           ),
@@ -75,6 +86,7 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>{
                   child:ApparelProductList(
                   isSelectOption: widget.isSelectOption,
                   status:status.code,
+                  keyword: _keyword,
                 ),))
                     .toList(),
               ),

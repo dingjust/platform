@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
 import 'package:open_file/open_file.dart';
@@ -145,13 +147,27 @@ class _AttachmentsState extends State<Attachments> {
                     width: widget.imageWidth,
                     height: widget.imageHeight,
                     margin: EdgeInsets.symmetric(horizontal: 5),
+                    child: CachedNetworkImage(
+                        width: 100,
+                        height: 100,
+                        imageUrl: '${model.previewUrl()}',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            ),
+                        errorWidget: (context, url, error) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            )
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey,
-                      image: DecorationImage(
-                        image: NetworkImage('${model.previewUrl()}'),
-                        fit: BoxFit.cover,
-                      ),
                     ),
                   ),
                   onTap: () {
@@ -168,13 +184,19 @@ class _AttachmentsState extends State<Attachments> {
   //图片预览
   void onPreview(BuildContext context, String url) {
     showDialog(
-      barrierDismissible: true,
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return Container(
-            child: PhotoView(
-          imageProvider: NetworkImage(url),
-        ));
+        return GestureDetector(
+          child: Container(
+              child: PhotoView(
+                imageProvider: NetworkImage(url),
+              )
+          ),
+          onTap: (){
+            Navigator.of(context).pop();
+          },
+        );
       },
     );
   }
@@ -183,6 +205,7 @@ class _AttachmentsState extends State<Attachments> {
   Future<String> _previewFile(String url, String name, String mediaType) async {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[
@@ -422,17 +445,28 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                 width: widget.imageWidth,
                 height: widget.imageHeight,
                 margin: EdgeInsets.symmetric(horizontal: 5),
+                child: CachedNetworkImage(
+                  imageUrl: '${model.previewUrl()}',
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
+                  errorWidget: (context, url, error) => SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.grey,
-                  image: DecorationImage(
-                    image: NetworkImage('${model.previewUrl()}'),
-                    fit: BoxFit.cover,
-                  ),
                 ),
               ),
               onTap: () {
                 onPreview(context, '${model.detailUrl()}');
+                print('onp');
               },
               onLongPress: () {
                 if (widget.editable) _deleteFile(model);
@@ -458,11 +492,17 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
   void onPreview(BuildContext context, String url) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return Container(
-            child: PhotoView(
-          imageProvider: NetworkImage(url),
-        ));
+        return GestureDetector(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: Container(
+              child: PhotoView(
+            imageProvider: NetworkImage(url),
+          )),
+        );
       },
     );
   }
@@ -471,6 +511,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
   Future<String> _previewFile(String url, String name, String mediaType) async {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[

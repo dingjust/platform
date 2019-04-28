@@ -153,7 +153,10 @@ enum MachiningType {
   LIGHT_PROCESSING,
 }
 
-const MachiningTypeMap = {};
+const MachiningTypeMap = {
+  MachiningType.LABOR_AND_MATERIAL: "LABOR_AND_MATERIAL",
+  MachiningType.LIGHT_PROCESSING: "LIGHT_PROCESSING"
+};
 
 const MachiningTypeLocalizedMap = {
   MachiningType.LABOR_AND_MATERIAL: '包工包料',
@@ -223,20 +226,21 @@ class AbstractOrderModel extends ItemModel {
   ConsignmentModel consignment;
 
   //合作方
+  @JsonKey(toJson: _principalToJson)
   PrincipalModel supplier;
 
-  AbstractOrderModel(
-      {@required this.code,
-      this.totalQuantity = 0,
-      this.totalPrice = 0,
-      this.creationTime,
-      this.deliveryAddress,
-      this.remarks,
-      this.unitPrice,
-      this.salesApplication,
-      this.consignment,
-      this.supplier,
-      });
+  AbstractOrderModel({
+    @required this.code,
+    this.totalQuantity = 0,
+    this.totalPrice = 0,
+    this.creationTime,
+    this.deliveryAddress,
+    this.remarks,
+    this.unitPrice,
+    this.salesApplication,
+    this.consignment,
+    this.supplier,
+  });
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
@@ -246,6 +250,9 @@ class AbstractOrderModel extends ItemModel {
 
   static Map<String, dynamic> _consignmentModelToJson(ConsignmentModel model) =>
       ConsignmentModel.toJson(model);
+
+  static Map<String, dynamic> _principalToJson(PrincipalModel model) =>
+      PrincipalModel.toJson(model);
 }
 
 /// 订单
@@ -274,7 +281,7 @@ class OrderModel extends AbstractOrderModel {
             remarks: remarks,
             salesApplication: salesApplication,
             consignment: consignment,
-            supplier:supplier,
+            supplier: supplier,
             unitPrice: unitPrice);
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
@@ -356,7 +363,7 @@ class CartModel extends AbstractOrderModel {
           creationTime: creationTime,
           deliveryAddress: deliveryAddress,
           remarks: remarks,
-          supplier:supplier,
+          supplier: supplier,
         );
 
   factory CartModel.fromJson(Map<String, dynamic> json) =>
@@ -639,7 +646,7 @@ class RequirementOrderModel extends OrderModel {
           creationTime: creationTime,
           deliveryAddress: deliveryAddress,
           remarks: remarks,
-          supplier:supplier,
+          supplier: supplier,
         );
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) =>
@@ -655,8 +662,7 @@ class RequirementOrderModel extends OrderModel {
           List<MediaModel> attachments) =>
       attachments.map((media) => MediaModel.toJson(media)).toList();
 
-  static List<Map<String, dynamic>> _quoteModelToJson(
-      List<QuoteModel> list) =>
+  static List<Map<String, dynamic>> _quoteModelToJson(List<QuoteModel> list) =>
       list.map((entry) => QuoteModel.toJson(entry)).toList();
 
   static Map<String, dynamic> _brandToJson(BrandModel belongTo) =>
@@ -802,7 +808,7 @@ class PurchaseOrderModel extends OrderModel {
             deliveryAddress: deliveryAddress,
             remarks: remarks,
             salesApplication: salesApplication,
-            supplier:supplier,
+            supplier: supplier,
             consignment: consignment);
 
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> json) =>
@@ -905,7 +911,7 @@ class SalesOrderModel extends OrderModel {
           creationTime: creationTime,
           deliveryAddress: deliveryAddress,
           remarks: remarks,
-          supplier:supplier,
+          supplier: supplier,
         );
 
   factory SalesOrderModel.fromJson(Map<String, dynamic> json) =>
@@ -997,8 +1003,6 @@ class QuoteModel extends AbstractOrderModel {
   /// 拒绝报价理由
   String comment;
 
-
-
   QuoteModel(
       {String code,
       int totalQuantity,
@@ -1029,7 +1033,7 @@ class QuoteModel extends AbstractOrderModel {
             creationTime: creationTime,
             deliveryAddress: deliveryAddress,
             remarks: remarks,
-            supplier:supplier,
+            supplier: supplier,
             unitPrice: unitPrice);
 
   factory QuoteModel.fromJson(Map<String, dynamic> json) =>
@@ -1197,7 +1201,7 @@ class ProofingModel extends OrderModel {
             creationTime: creationTime,
             deliveryAddress: deliveryAddress,
             remarks: remarks,
-            supplier:supplier,
+            supplier: supplier,
             unitPrice: unitPrice);
 
   factory ProofingModel.fromJson(Map<String, dynamic> json) =>

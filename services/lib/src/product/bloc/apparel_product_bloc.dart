@@ -10,6 +10,8 @@ class ApparelProductBLoC extends BLoCBase {
 
   ApparelProductModel newProduct;
 
+  bool lock = false;
+
   // 工厂模式
   factory ApparelProductBLoC() => _getInstance();
 
@@ -81,13 +83,38 @@ class ApparelProductBLoC extends BLoCBase {
   }
 
   getData(String keyword) async {
-    products.clear();
-    productsResponse = await ProductRepositoryImpl().list({
-      'keyword':keyword,
-    }, {});
-    print(productsResponse.content);
-    products.addAll(productsResponse.content);
+    print(lock);
+    if(!lock){
+      print(keyword);
+      lock=true;
+      products.clear();
+      productsResponse = await ProductRepositoryImpl().list({
+        'keyword':keyword
+      }, {});
+      print(productsResponse.content);
+      products.addAll(productsResponse.content);
+      _controller.sink.add(products);
+      lock = false;
+    }
+  }
+
+  loadingMore(String keyword) async {
+    if (productsResponse.number < productsResponse.totalPages - 1) {
+      productsResponse = await ProductRepositoryImpl().list({
+        'keyword':keyword
+      },{
+        'page':productsResponse.number+1,
+      });
+      products.addAll(productsResponse.content);
+    } else {
+      bottomController.sink.add(true);
+    }
+    loadingController.sink.add(false);
     _controller.sink.add(products);
+  }
+
+  clear(){
+    _controller.sink.add(null);
   }
 
   //下拉刷新

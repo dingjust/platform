@@ -39,7 +39,7 @@ class SampleProductHistoryItem extends StatelessWidget {
                         '${item.images[0].previewUrl()}',
                           width: 80,
                           height: 80,
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                         )
                         : Container(
                     width: 80,

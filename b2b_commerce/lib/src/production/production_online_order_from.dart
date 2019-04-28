@@ -4,8 +4,10 @@ import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -45,6 +47,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   @override
   void initState() {
     _product = productModel;
+    price = widget.quoteModel.unitPrice.toString();
 //    if (widget.quoteModel.attachments != null) {
 //      mediaList = widget.quoteModel.attachments;
 //    } else {
@@ -111,6 +114,8 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           Container(
             child: Row(
               children: <Widget>[
+                widget.quoteModel.requirementOrder.belongTo == null ||
+                    widget.quoteModel.requirementOrder.belongTo.profilePicture == null?
                 Container(
                   margin: EdgeInsets.all(10),
                   width: 80,
@@ -118,16 +123,36 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image: widget.quoteModel.requirementOrder.belongTo == null ||
-                            widget.quoteModel.requirementOrder.belongTo.profilePicture == null
-                            ? AssetImage(
+                        image:AssetImage(
                           'temp/picture.png',
                           package: "assets",
-                        )
-                            : NetworkImage(
-                            '${widget.quoteModel.requirementOrder.belongTo.profilePicture.previewUrl()}'),
+                        ),
                         fit: BoxFit.cover,
                       )),
+                ):
+                Container(
+                  margin: EdgeInsets.all(10),
+                  width: 80,
+                  height: 80,
+                  child: CachedNetworkImage(
+                      imageUrl: '${widget.quoteModel.requirementOrder.belongTo.profilePicture.previewUrl()}',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          ),
+                      errorWidget: (context, url, error) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          )
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      ),
                 ),
                 Container(
                     child: Column(
@@ -278,16 +303,37 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
           child: Row(
             children: <Widget>[
+              productModel.thumbnail != null?
+              Container(
+                width: 80,
+                height: 80,
+                child: CachedNetworkImage(
+                    imageUrl: '${productModel.thumbnail.previewUrl()}',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )
+                ),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    ),
+              ):
               Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                      image: productModel.thumbnail != null
-                          ? NetworkImage(
-                              '${productModel.thumbnail.previewUrl()}')
-                          : AssetImage(
+                      image: AssetImage(
                               'temp/picture.png',
                               package: "assets",
                             ),
@@ -471,6 +517,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
 
   //价格
   Widget _buildExpectPrice(BuildContext context) {
+    _priceController.text = price;
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 3),
@@ -481,14 +528,12 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             controller: _priceController,
             inputType: TextInputType.number,
             leadingText: Text('订单报价',style: TextStyle(fontSize: 16,),),
-            hintText: '请输入订单报价',
             hideDivider: true,
             prefix: '￥',
             isRequired: true,
             onChanged: (value){
               setState(() {
                 price = value;
-                widget.quoteModel.unitPrice = double.parse(price);
                 totalPrice = double.parse(price) * _totalQuantity;
               });
             },

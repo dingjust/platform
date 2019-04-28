@@ -9,12 +9,13 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ApparelProductList extends StatefulWidget {
-  ApparelProductList({Key key, this.status, this.isSelectOption})
+  ApparelProductList({Key key, this.status, this.isSelectOption,this.keyword,})
       : super(key: key);
   final String status;
 
   //是否选择项
   final bool isSelectOption;
+  final String keyword;
 
   final ScrollController scrollController = ScrollController();
 
@@ -25,6 +26,7 @@ class _ApparelProductListState extends State<ApparelProductList>{
 
   @override
   Widget build(BuildContext context) {
+    print(widget.keyword);
     var bloc = BLoCProvider.of<ApparelProductBLoC>(context);
 
     widget.scrollController.addListener(() {
@@ -58,7 +60,11 @@ class _ApparelProductListState extends State<ApparelProductList>{
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.filterByStatuses(widget.status);
+            if(widget.keyword == null){
+              return await bloc.filterByStatuses(widget.status);
+            }else{
+              return await bloc.getData(widget.keyword);
+            }
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -70,7 +76,12 @@ class _ApparelProductListState extends State<ApparelProductList>{
                 builder: (BuildContext context,
                     AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByStatuses(widget.status);
+                    if(widget.keyword == null){
+                      bloc.filterByStatuses(widget.status);
+                    }else{
+                      print('${widget.keyword}------------');
+                      bloc.getData(widget.keyword);
+                    }
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
                       child: Center(child: CircularProgressIndicator()),
@@ -137,7 +148,11 @@ class _ApparelProductListState extends State<ApparelProductList>{
           seconds: 2,
         ),
       ));
-      ApparelProductBLoC.instance.filterByStatuses(widget.status);
+      if(widget.keyword == null){
+        ApparelProductBLoC.instance.filterByStatuses(widget.status);
+      }else{
+        ApparelProductBLoC.instance.getData(widget.keyword);
+      }
     });
   }
 
@@ -171,14 +186,20 @@ class _ApparelProductListState extends State<ApparelProductList>{
     if (product.approvalStatus ==
         ArticleApprovalStatus.approved) {
       ProductRepositoryImpl().off(product.code).then((a) {
-        ApparelProductBLoC.instance
-            .filterByStatuses(widget.status);
+        if(widget.keyword == null){
+          ApparelProductBLoC.instance.filterByStatuses(widget.status);
+        }else{
+          ApparelProductBLoC.instance.getData(widget.keyword);
+        }
       });
     } else if (product.approvalStatus ==
         ArticleApprovalStatus.unapproved) {
       ProductRepositoryImpl().on(product.code).then((a) {
-        ApparelProductBLoC.instance
-            .filterByStatuses(widget.status);
+        if(widget.keyword == null){
+          ApparelProductBLoC.instance.filterByStatuses(widget.status);
+        }else{
+          ApparelProductBLoC.instance.getData(widget.keyword);
+        }
       });
     }
   }

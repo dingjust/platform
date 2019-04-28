@@ -1,8 +1,7 @@
+import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:flutter/material.dart';
-import 'change_password.dart';
 
-class AccountSecurityPage extends StatelessWidget{
-
+class AccountSecurityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,14 +12,14 @@ class AccountSecurityPage extends StatelessWidget{
       ),
       body: ListView(
         children: <Widget>[
-          // ListTile(
-          //   title: Text('修改密码'),
-          //   trailing: Icon(Icons.chevron_right),
-          //   onTap: (){
-          //     Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePasswordPage()));
-          //   },
-          // ),
-
+          ListTile(
+            title: Text('修改密码'),
+            trailing: Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ResetPasswordPage()));
+            },
+          ),
         ],
       ),
     );

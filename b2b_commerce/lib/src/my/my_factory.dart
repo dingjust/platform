@@ -2,8 +2,12 @@ import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_ite
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
+import 'package:b2b_commerce/src/home/product/order_product.dart';
+import 'package:b2b_commerce/src/my/company/my_company_contact_from.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -195,9 +199,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyCompanyContactWayPage(
-                    widget.factory,
-                    isCompanyIntroduction: widget.isCompanyIntroduction,
+              builder: (context) => MyCompanyContactFromPage(
+                    company:widget.factory,
                   ),
             ),
           );
@@ -212,7 +215,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       widget.factory.approvalStatus == ArticleApprovalStatus.approved
           ? Tag(
               label: '  已认证  ',
-              backgroundColor: Color.fromRGBO(254, 252, 235, 1),
+              color: Colors.black,
+              backgroundColor: Color.fromRGBO(255, 214, 12, 1),
             )
           : Tag(
               label: '  未认证  ',
@@ -226,7 +230,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           padding: const EdgeInsets.only(right: 5.0),
           child: Tag(
             label: label.name,
-            color: Colors.grey,
+            color: Color.fromRGBO(255, 133, 148, 1),
           ),
         ),
       );
@@ -451,87 +455,102 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
   }
 
   //现款产品
-  Card _buildCashProducts() {
-    return Card(
-      elevation: 0,
-      margin: const EdgeInsets.only(top: 10),
-      child: GestureDetector(
-        child: Container(
-          margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.fromLTRB(15, 10, 10, 10),
-                child: Row(
+  Widget _buildCashProducts() {
+    return FutureBuilder(
+        future: UserBLoC.instance.currentUser.type == UserType.FACTORY
+        ? ProductRepositoryImpl().list({}, {'size':3})
+        : ProductRepositoryImpl().getProductsOfFactory({}, {'size':3}, widget.factory.uid),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 200),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+          return Card(
+            elevation: 0,
+            margin: const EdgeInsets.only(top: 10),
+            child: GestureDetector(
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                child: Column(
                   children: <Widget>[
                     Container(
-                      width: 110,
-                      child: Text(
-                        '现款产品',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      padding: const EdgeInsets.fromLTRB(15, 10, 10, 10),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 110,
+                            child: Text(
+                              '现款产品',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                                margin: const EdgeInsets.all(5),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: const Icon(Icons.chevron_right),
+                                )),
+                          )
+                        ],
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                          margin: const EdgeInsets.all(5),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: const Icon(Icons.chevron_right),
-                          )),
+                    Container(
+                      height: 150,
+                      width: double.infinity,
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: GridView.count(
+                        physics: NeverScrollableScrollPhysics(),
+                        crossAxisCount: 3,
+                        childAspectRatio: 2.5 / 5,
+                        children: List.generate(
+                          snapshot.data.content.length,
+                          (index) {
+                            return ExistingProductItem(
+                              snapshot.data.content[index],
+                              isFactoryDetail: true,
+                            );
+                          },
+                        ),
+                      ),
                     )
                   ],
                 ),
-              ),
-              Container(
-                height: 150,
-                width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: GridView.count(
-                  physics: NeverScrollableScrollPhysics(),
-                  crossAxisCount: 3,
-                  childAspectRatio: 2.5 / 5,
-                  children: List.generate(
-                    widget.products.length,
-                    (index) {
-                      return ExistingProductItem(
-                        widget.products[index],
-                        isFactoryDetail: true,
-                      );
-                    },
-                  ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
                 ),
-              )
-            ],
-          ),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-        ),
-        onTap: () async {
-          ProductsResponse productsResponse;
-          if (UserBLoC.instance.currentUser.type != UserType.BRAND) {
-            productsResponse = await ProductRepositoryImpl().list({}, {});
-          } else {
-            productsResponse = await ProductRepositoryImpl()
-                .getProductsOfFactory({}, {}, widget.factory.uid);
-          }
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ExistingProductsPage(
-                    productsResponse.content,
-                    isFactoryDetail: true,
+              ),
+              onTap: () async {
+                // 加载条
+                showDialog(
+                  context: context,
+                  builder: (context) =>
+                      ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+                );
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                    // CategorySelectPage(
+                    //       minCategorySelect: [],
+                    //       categories: categories,
+                    //       categoryActionType: CategoryActionType.TO_PRODUCTS,
+                    //     ),
+                    ProductsPage(
+                      factoryUid: widget.factory.uid,
+                    ),
                   ),
+                );
+              },
             ),
           );
-        },
-      ),
-    );
+        });
   }
 
   //图文详情
@@ -584,24 +603,40 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
               width: double.infinity,
               child: Container(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: widget.factory.profiles.map((profile) {
                     return Column(
                       children: <Widget>[
                         profile.medias != null && profile.medias.length > 0
                             ? Container(
-                                margin: const EdgeInsets.all(5),
-                                child: Image.network(
-                                  '${profile.medias[0].detailUrl()}',
-                                  height: 200,
-                                  width: double.infinity,
-                                  fit: BoxFit.fill,
-                                ),
+                                margin: EdgeInsets.only(bottom: 5),
+                                child: CachedNetworkImage(
+                                    imageUrl:
+                                        '${profile.medias[0].detailUrl()}',
+                                    width: double.infinity,
+                                    height: 200,
+                                    fit: BoxFit.fill,
+                                    placeholder: (context, url) => SpinKitRing(
+                                          color: Colors.black12,
+                                          lineWidth: 2,
+                                          size: 30,
+                                        ),
+                                    errorWidget: (context, url, error) =>
+                                        SpinKitRing(
+                                          color: Colors.black12,
+                                          lineWidth: 2,
+                                          size: 30,
+                                        )),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: Colors.black38, width: 1)),
                               )
                             : Container(),
                         Offstage(
                           offstage: profile.description == null,
                           child: Container(
-                            margin: EdgeInsets.all(5),
+                            margin: EdgeInsets.fromLTRB(5,0,5,10),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -660,7 +695,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
       child: ListTile(
         title: Text('注册时间'),
         trailing: Text(
-            DateFormatUtil.formatYMD(widget.factory.registrationDate) ?? ''),
+            DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''),
       ),
     );
   }

@@ -10,11 +10,12 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductSearchResultPage extends StatefulWidget {
-  ProductSearchResultPage({Key key, this.keyword}) : super(key: key);
+  ProductSearchResultPage({Key key, this.keyword,this.isSelectOption,}) : super(key: key);
 
   _ProductSearchResultPageState createState() => _ProductSearchResultPageState();
 
   String keyword;
+  bool isSelectOption;
 }
 
 class _ProductSearchResultPageState extends State<ProductSearchResultPage> {
@@ -36,6 +37,7 @@ class _ProductSearchResultPageState extends State<ProductSearchResultPage> {
             color: Colors.grey[200],
             child: ProductListView(
               keyword: widget.keyword,
+              isSelectOption:widget.isSelectOption,
             ),
           ),
           floatingActionButton: ScrollToTopButton<ApparelProductSearchResultBLoC>(),
@@ -45,10 +47,11 @@ class _ProductSearchResultPageState extends State<ProductSearchResultPage> {
 
 class ProductListView extends StatefulWidget {
   String keyword;
+  bool isSelectOption;
 
   ScrollController scrollController = new ScrollController();
 
-  ProductListView({Key key, @required this.keyword}) : super(key: key);
+  ProductListView({Key key, @required this.keyword,this.isSelectOption,}) : super(key: key);
 
   _ProductListViewState createState() => _ProductListViewState();
 }
@@ -83,8 +86,6 @@ class _ProductListViewState extends State<ProductListView>{
       }
     });
 
-
-
     return Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
         color: Colors.grey[200],
@@ -104,6 +105,7 @@ class _ProductListViewState extends State<ProductListView>{
                       children: snapshot.data.map((product) {
                         return ApparelProductItem(
                           item: product,
+                          isSelectOption: widget.isSelectOption,
                           onPrdouctDeleting: () => _onProudctDeleting(product),
                           onPrdouctUpdating: () => _onProudctUpdating(product),
                           onPrdouctProduction: () => _onProudctProduction(product),
@@ -115,25 +117,25 @@ class _ProductListViewState extends State<ProductListView>{
                     return Text('${snapshot.error}');
                   }
                 }),
-            StreamBuilder<bool>(
-              stream: bloc.bottomStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  widget.scrollController.animateTo(widget.scrollController.offset - 70,
-                      duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                }
+                StreamBuilder<bool>(
+                  stream: bloc.bottomStream,
+                  initialData: false,
+                  builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    if (snapshot.data) {
+                      widget.scrollController.animateTo(widget.scrollController.offset - 70,
+                          duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                    }
 
-                return ScrolledToEndTips(hasContent: snapshot.data);
-              },
-            ),
-            StreamBuilder<bool>(
-              stream: bloc.loadingStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(opacity: snapshot.data ? 1.0 : 0);
-              },
-            ),
+                    return ScrolledToEndTips(hasContent: snapshot.data);
+                  },
+                ),
+                StreamBuilder<bool>(
+                  stream: bloc.loadingStream,
+                  initialData: false,
+                  builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(opacity: snapshot.data ? 1.0 : 0);
+                  },
+                ),
           ],
         ));
   }
