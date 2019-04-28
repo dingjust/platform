@@ -32,7 +32,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
 
   @override
   void initState() {
-    _phoneController.text = widget.company.phone;
+    _phoneController.text = widget.company.contactPhone;
     _emailController.text = widget.company.email;
     _qqController.text = widget.company.qq;
     _wechatController.text = widget.company.wechat;
@@ -68,7 +68,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                         });
                       } else {
                         widget.company.contactAddress = address;
-                        widget.company.phone = _phoneController.text == '' ? null : _phoneController.text;
+                        widget.company.contactPhone = _phoneController.text == '' ? null : _phoneController.text;
                         widget.company.email = _emailController.text == '' ? null : _emailController.text;
                         widget.company.qq = _qqController.text == '' ? null : _qqController.text;
                         widget.company.wechat = _wechatController.text == '' ? null : _wechatController.text;
@@ -115,11 +115,11 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text('联系人',style: TextStyle(fontSize: 16,),),
-                                Text('${address.fullname ?? ''}',style: TextStyle(color: Colors.grey,fontSize: 16,),),
+                                Text('${widget.company.contactPerson ?? ''}',style: TextStyle(color: Colors.grey,fontSize: 16,),),
                               ],
                             ),
-                            SizedBox(height: 5,),
-                            Text('${address.cellphone ?? ''}',style: TextStyle(color: Colors.grey,fontSize: 16,),),
+//                            SizedBox(height: 5,),
+//                            Text('${widget.company.contactPhone ?? ''}',style: TextStyle(color: Colors.grey,fontSize: 16,),),
                             SizedBox(height: 5,),
                             Row(
                               children: <Widget>[
@@ -174,7 +174,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                       style: TextStyle(color: Colors.grey,fontSize: 16,),
                       enabled: isEditing,
                       focusNode: _phoneFocusNode,
-                      leadingText: Text('座机号码',style: TextStyle(fontSize: 16,)),
+                      leadingText: Text('联系电话',style: TextStyle(fontSize: 16,)),
                       controller: _phoneController,
                       trailing: isEditing
                           ? null
