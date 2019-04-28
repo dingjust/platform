@@ -71,7 +71,6 @@ class MediaModel extends ItemModel {
     if (mediaModel != null) {
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
-      print(actualUrl);
       return actualUrl;
     }
   }
@@ -84,7 +83,6 @@ class MediaModel extends ItemModel {
     if (mediaModel != null) {
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
-      print(actualUrl);
       return actualUrl;
     }
   }
@@ -97,7 +95,6 @@ class MediaModel extends ItemModel {
     if (mediaModel != null) {
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
-      print(actualUrl);
       return actualUrl;
     }
   }
