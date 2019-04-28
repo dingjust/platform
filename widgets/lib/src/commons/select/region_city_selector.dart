@@ -34,45 +34,47 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 351,
+      height: 353,
       child: Column(
         children: <Widget>[
-          Card(
-            elevation: 2,
-            margin: EdgeInsets.only(bottom: 3),
-//                        color: Colors.grey[300],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      widget.regionSelect.isocode = null;
-                      widget.regionSelect.name = null;
-                      widget.regionSelect.id = null;
-                      widget.regionSelect.cities = null;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text('重置'),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: ActionChip(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(),
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    label: Text('确定'),
-                    onPressed: () async {
-                      Navigator.pop(context);
+          Container(
+            height: 51,
+            child: Card(
+              elevation: 2,
+              margin: EdgeInsets.only(bottom: 3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        widget.regionSelect.isocode = null;
+                        widget.regionSelect.name = null;
+                        widget.regionSelect.id = null;
+                        widget.regionSelect.cities = null;
+                      });
                     },
-                    backgroundColor: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text('重置'),
+                    ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: ActionChip(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(),
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      label: Text('确定'),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                      },
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Wrap(

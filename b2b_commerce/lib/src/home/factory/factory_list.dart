@@ -161,30 +161,32 @@ class _FactoryPageState extends State<FactoryPage> {
                       setState(() {
                         showDateFilterMenu = false;
                       });
-                      showModalBottomSheet(context: context, builder: (context){
-                        //获取所有省份
-                        rootBundle.loadString('data/province.json').then((v) {
-                          List data = json.decode(v);
-                          _regions = data
-                              .map<RegionModel>((region) => RegionModel.fromJson(region))
-                              .toList();
-                        });
-                        //地区选择器
-                        return RegionCitySelector(
-                          regions: _regions,
-                          regionSelect: _regionSelect,
-                          citySelects: _citySelects,
-                        );
-                      }).then((a){
-                        setState(() {
+                      //获取所有省份
+                      rootBundle.loadString('data/province.json').then((v) {
+                        List data = json.decode(v);
+                        _regions = data
+                            .map<RegionModel>((region) => RegionModel.fromJson(region))
+                            .toList();
+
+                        showModalBottomSheet(context: context, builder: (context){
+                          //地区选择器
+                          return RegionCitySelector(
+                            regions: _regions,
+                            regionSelect: _regionSelect,
+                            citySelects: _citySelects,
+                          );
+                        }).then((a){
+                          setState(() {
                             factoryCondition.productiveOrientations = _regionSelect;
                             factoryCondition.cities = _citySelects;
                             FactoryBLoC.instance.filterByCondition(
                               factoryCondition,
                               requirementCode: widget.requirementCode,
                             );
+                          });
                         });
                       });
+
                     })
                   ],
                   action: Container(),
