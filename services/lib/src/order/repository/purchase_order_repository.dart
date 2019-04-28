@@ -4,11 +4,13 @@ import 'package:services/services.dart';
 
 class PurchaseOrderRepository {
   //获取生产订单列表
-  Future<PurchaseOrdersResponse> getPurchaseOrders(dynamic data,Map<String,dynamic> parames) async {
+  Future<PurchaseOrdersResponse> getPurchaseOrders(
+      dynamic data, Map<String, dynamic> parames) async {
     PurchaseOrdersResponse purchaseOrdersResponse;
     Response response;
     try {
-      response = await http$.post(OrderApis.purchaseOrders, data: data, queryParameters: parames);
+      response = await http$.post(OrderApis.purchaseOrders,
+          data: data, queryParameters: parames);
     } on DioError catch (e) {
       print(e);
     }
@@ -90,56 +92,53 @@ class PurchaseOrderRepository {
       return null;
   }
 
-
-    //修改生产进度时间或数量
-    Future<bool> productionProgressUpload(String code, String id, ProductionProgressModel form) async {
-      Response response;
-      try{
-        response = await http$.put(
-          OrderApis.productionProgressUpload(code,id),
+  //修改生产进度时间或数量
+  Future<bool> productionProgressUpload(
+      String code, String id, ProductionProgressModel form) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.productionProgressUpload(code, id),
           data: ProductionProgressModel.toJson(form),
-            options: Options(responseType: ResponseType.plain)
-        );
-      }on DioError catch(e){
-        print(e);
-      }
-      if (response != null && response.statusCode == 200) {
-        return true;
-      } else {
-        return false;
-      }
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
     }
-
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   /// 修改订单尾款金额
-  Future<bool> purchaseOrderBalanceUpdate(String code , PurchaseOrderModel form) async {
-      Response response;
-      try{
-        response =  await http$.put(
-          OrderApis.purchaseOrderBalanceUpdate(code),
+  Future<bool> purchaseOrderBalanceUpdate(
+      String code, PurchaseOrderModel form) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.purchaseOrderBalanceUpdate(code),
           data: PurchaseOrderModel.toJson(form),
-            options: Options(responseType: ResponseType.plain)
-        );
-      }on DioError catch(e){
-        print(e);
-      }
-
-      if (response != null && response.statusCode == 200) {
-        return true;
-      } else {
-        return false;
-      }
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
     }
 
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /// 修改订单定金金额
-  Future<bool> purchaseOrderDepositUpdate(String code , PurchaseOrderModel form) async {
+  Future<bool> purchaseOrderDepositUpdate(
+      String code, PurchaseOrderModel form) async {
     Response<String> response;
-    try{
-      response =  await http$.put(
+    try {
+      response = await http$.put(
         OrderApis.purchaseOrderDepositUpdate(code),
         data: PurchaseOrderModel.toJson(form),
       );
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -153,11 +152,11 @@ class PurchaseOrderRepository {
   ///取消订单
   Future<bool> purchaseOrderCancelling(String code) async {
     Response<String> response;
-    try{
-      response =  await http$.put(
+    try {
+      response = await http$.put(
         OrderApis.purchaseOrderCancelling(code),
       );
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -169,14 +168,15 @@ class PurchaseOrderRepository {
   }
 
   //确认发货
-  Future<bool> purchaseOrderDelivering(String code , PurchaseOrderModel form) async {
+  Future<bool> purchaseOrderDelivering(
+      String code, PurchaseOrderModel form) async {
     Response response;
-    try{
-      response =  await http$.put(
+    try {
+      response = await http$.put(
         OrderApis.purchaseOrderDelivering(code),
         data: PurchaseOrderModel.toJson(form),
       );
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -188,14 +188,15 @@ class PurchaseOrderRepository {
   }
 
   //确认收货
-  Future<bool> purchaseOrderShipped(String code , PurchaseOrderModel form) async {
+  Future<bool> purchaseOrderShipped(
+      String code, PurchaseOrderModel form) async {
     Response<String> response;
-    try{
-      response =  await http$.put(
+    try {
+      response = await http$.put(
         OrderApis.purchaseOrderShipped(code),
         data: PurchaseOrderModel.toJson(form),
       );
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -209,10 +210,10 @@ class PurchaseOrderRepository {
   //生成唯一码
   Future<String> generateUniqueCode(String code) async {
     Response<String> response;
-    try{
-      response =  await http$.put(OrderApis.generateUniqueCode(code),
+    try {
+      response = await http$.put(OrderApis.generateUniqueCode(code),
           options: Options(responseType: ResponseType.plain));
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -226,11 +227,10 @@ class PurchaseOrderRepository {
   //关联唯一码
   Future<bool> linkUniqueCode(String code) async {
     Response<String> response;
-    try{
-      response =  await http$.put(
-        OrderApis.linkUniqueCode(code),
+    try {
+      response = await http$.put(OrderApis.linkUniqueCode(code),
           options: Options(responseType: ResponseType.plain));
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -242,14 +242,14 @@ class PurchaseOrderRepository {
   }
 
   //确认生产
-  Future<bool> confirmProduction(String code,PurchaseOrderModel form) async {
+  Future<bool> confirmProduction(String code, PurchaseOrderModel form) async {
     Response<String> response;
-    try{
-      response =  await http$.put(
+    try {
+      response = await http$.put(
         OrderApis.confirmProduction(code),
         data: PurchaseOrderModel.toJson(form),
       );
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -261,14 +261,15 @@ class PurchaseOrderRepository {
   }
 
   //品牌修改送货地址
-  Future<bool> updateAddress(String code , PurchaseOrderModel form) async {
+  Future<bool> updateAddress(String code, PurchaseOrderModel form) async {
     Response<String> response;
-    try{
-      response =  await http$.put(
-          OrderApis.updateAddress(code),
+    try {
+      print(PurchaseOrderModel.toJson(form));
+      // form.supplier = null;
+      response = await http$.put(OrderApis.updateAddress(code),
           data: PurchaseOrderModel.toJson(form),
           options: Options(responseType: ResponseType.plain));
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -280,29 +281,34 @@ class PurchaseOrderRepository {
   }
 
 //工厂获取与该品牌的生产订单列表
-  Future<PurchaseOrdersResponse> getPurchaseOrdersByBrand(String uid,Map<String,Object> params)async{
-    Response response = await http$.post(OrderApis.purchaseOrders,
+  Future<PurchaseOrdersResponse> getPurchaseOrdersByBrand(
+      String uid, Map<String, Object> params) async {
+    Response response = await http$.post(
+      OrderApis.purchaseOrders,
       data: {
-        "purchasers" : uid,
+        "purchasers": uid,
       },
       queryParameters: params,
     );
 
-    PurchaseOrdersResponse purchaseResponse = PurchaseOrdersResponse.fromJson(response.data);
+    PurchaseOrdersResponse purchaseResponse =
+        PurchaseOrdersResponse.fromJson(response.data);
     return purchaseResponse;
   }
 
 //品牌获取与该工厂的生产订单列表
-  Future<PurchaseOrdersResponse> getPurchaseOrdersByFactory(String uid,Map<String,Object> params)async{
-    Response response = await http$.post(OrderApis.purchaseOrders,
+  Future<PurchaseOrdersResponse> getPurchaseOrdersByFactory(
+      String uid, Map<String, Object> params) async {
+    Response response = await http$.post(
+      OrderApis.purchaseOrders,
       data: {
-        "belongTos" : uid,
+        "belongTos": uid,
       },
       queryParameters: params,
     );
 
-    PurchaseOrdersResponse purchaseResponse = PurchaseOrdersResponse.fromJson(response.data);
+    PurchaseOrdersResponse purchaseResponse =
+        PurchaseOrdersResponse.fromJson(response.data);
     return purchaseResponse;
   }
-
 }

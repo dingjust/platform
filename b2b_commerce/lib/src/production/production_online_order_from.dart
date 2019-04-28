@@ -47,6 +47,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   @override
   void initState() {
     _product = productModel;
+    price = widget.quoteModel.unitPrice.toString();
 //    if (widget.quoteModel.attachments != null) {
 //      mediaList = widget.quoteModel.attachments;
 //    } else {
@@ -516,6 +517,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
 
   //价格
   Widget _buildExpectPrice(BuildContext context) {
+    _priceController.text = price;
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 3),
@@ -526,14 +528,12 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             controller: _priceController,
             inputType: TextInputType.number,
             leadingText: Text('订单报价',style: TextStyle(fontSize: 16,),),
-            hintText: '请输入订单报价',
             hideDivider: true,
             prefix: '￥',
             isRequired: true,
             onChanged: (value){
               setState(() {
                 price = value;
-                widget.quoteModel.unitPrice = double.parse(price);
                 totalPrice = double.parse(price) * _totalQuantity;
               });
             },

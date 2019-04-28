@@ -26,7 +26,7 @@ class OrderPaymentPage extends StatefulWidget {
 
 class _OrderPaymentPageState extends State<OrderPaymentPage> {
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => checkDeliveryAddress());
+    WidgetsBinding.instance.addPostFrameCallback((_) => initCheck());
     //监听微信回调
     fluwx.responseFromPayment.listen((WeChatPaymentResponse data) async {
       print('========Fluwx response');
@@ -209,24 +209,22 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                   child: CachedNetworkImage(
                       width: 100,
                       height: 100,
-                      imageUrl: '${GlobalConfigs.CONTEXT_PATH}${model.product.thumbnail.url}',
+                      imageUrl:
+                          '${GlobalConfigs.CONTEXT_PATH}${model.product.thumbnail.url}',
                       fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          SpinKitRing(
+                      placeholder: (context, url) => SpinKitRing(
                             color: Colors.black12,
                             lineWidth: 2,
                             size: 30,
                           ),
-                      errorWidget: (context, url, error) =>
-                          SpinKitRing(
+                      errorWidget: (context, url, error) => SpinKitRing(
                             color: Colors.black12,
                             lineWidth: 2,
                             size: 30,
-                          )
-                  ),
+                          )),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
                 )
               : Container(
                   width: 80,
@@ -483,6 +481,22 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         );
       },
     );
+  }
+
+  void initCheck() {
+    checkOrder();
+    checkDeliveryAddress();
+  }
+
+  //先确认订单是否已支付
+  void checkOrder() async {
+    //成功，调用确认支付接口
+    String confirmResult = await WechatServiceImpl.instance
+        .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
+
+    if (confirmResult != null) {
+      onPaymentSucess();
+    }
   }
 
   void checkDeliveryAddress() {
