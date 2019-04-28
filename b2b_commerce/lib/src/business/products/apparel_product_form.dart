@@ -11,12 +11,13 @@ import 'form/minor_category_field.dart';
 import 'form/normal_picture_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
-  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false,this.status = 'ALL',})
+  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false,this.status = 'ALL',this.keyword,})
       : super(key: const Key('__apparelProductFormPage__'));
 
   final ApparelProductModel item;
   final bool isCreate;
   String status;
+  String keyword;
 
   ApparelProductFormState createState() => ApparelProductFormState();
 }
@@ -118,7 +119,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 //                Navigator.of(context).pushAndRemoveUntil(
 //                    MaterialPageRoute(builder: (context) => ApparelProductsPage()
 //                    ), ModalRoute.withName('/'));
-                ApparelProductBLoC.instance.filterByStatuses(widget.status);
+                if(widget.keyword == null){
+                  ApparelProductBLoC.instance.filterByStatuses(widget.status);
+                }else{
+                  ApparelProductBLoC.instance.getData(widget.keyword);
+                }
 //              print(widget.item.attributes.styles[0]);
               },
             )

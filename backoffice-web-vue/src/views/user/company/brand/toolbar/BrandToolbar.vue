@@ -15,6 +15,64 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
+          <el-form-item label="联系方式">
+            <el-input placeholder="请输入联系方式" v-model="queryFormData.contactPhone"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="合作品牌">
+            <el-input placeholder="请输入合作品牌" v-model="queryFormData.cooperativeBrand"></el-input>
+          </el-form-item>
+        </el-col>
+
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <el-form-item label="优势品类">
+            <el-select class="w-100"
+                       placeholder="请选择"
+                       v-model="queryFormData.adeptAtCategories"
+                       value-key="code" multiple>
+              <el-option-group
+                v-for="group in adeptAtCategories"
+                :key="group.code"
+                :label="group.name">
+                <el-option
+                  v-for="item in group.children"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code">
+                </el-option>
+              </el-option-group>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="省" prop="productiveOrientations">
+            <el-select v-model="region" class="w-100" filterable @change="onRegionChanged">
+              <el-option v-for="item in regions"
+                         :key="item.isocode"
+                         :label="item.name"
+                         :value="item.isocode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="市" prop="cities">
+            <el-select class="w-100" v-model="queryFormData.cities" multiple filterable>
+              <el-option
+                v-for="item in cities"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+        <el-row :gutter="10">
+        <el-col :span="8">
           <el-form-item label="创建时间从">
             <el-date-picker
               v-model="queryFormData.creationTimeFrom"
@@ -62,6 +120,52 @@
         setKeyword: 'keyword',
         setQueryFormData: 'queryFormData',
       }),
+      async getCategories() {
+        const url = this.apis().getMinorCategories();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.adeptAtCategories = result;
+      },
+      async getRegions() {
+        const url = this.apis().getRegions();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.regions = result;
+      },
+      onRegionChanged(current) {
+        if (!current||current=='') {
+          this.queryFormData.regions = [];
+          this.queryFormData.cities = [];
+          this.cities = [];
+        }
+        if(this.queryFormData.regions.length==0){
+          this.queryFormData.regions.push(current);
+        }else {
+          this.queryFormData.regions[0]=current;
+        }
+        console.log(this.queryFormData.regions);
+        this.cities = [];
+        this.getCities(current);
+      },
+      async getCities(isocode) {
+        const url = this.apis().getCities(isocode);
+        const result = await this.$http.get(url);
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.cities = result;
+      },
       onAdvancedSearch() {
         this.setQueryFormData(this.queryFormData);
         console.log(this.queryFormData);
@@ -85,8 +189,16 @@
         keyword: '',
         formData: this.$store.state.BrandsModule.formData,
         queryFormData: this.$store.state.BrandsModule.queryFormData,
-        categories: [],
+        adeptAtCategories: [],
+        regions: [],
+        cities:[],
+        region:''
+
       }
+    },
+    created() {
+      this.getCategories();
+      this.getRegions();
     }
   }
 </script>

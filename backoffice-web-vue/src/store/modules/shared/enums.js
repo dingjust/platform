@@ -283,10 +283,8 @@ const state = {
     {code: 'MCR004', name: '30000件以上'}
   ],
   cooperationModes: [
-    {code: 'PURE_PROCESSING', name: '纯加工'},
-    {code: 'FOB', name: 'FOB'},
-    {code: 'ODM', name: 'ODM'},
-    {code: 'OEM', name: 'OEM'}
+    {code: 'LABOR_AND_MATERIAL', name: '包工包料'},
+    {code: 'LIGHT_PROCESSING', name: '清加工'}
   ],
   populationScales: [
     {code: 'N01', name: '50人以下'},

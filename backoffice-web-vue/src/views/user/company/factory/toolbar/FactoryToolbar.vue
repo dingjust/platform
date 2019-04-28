@@ -10,41 +10,6 @@
     <el-popover placement="bottom" width="800" trigger="click" v-model="visible">
       <el-row :gutter="10">
         <el-col :span="8">
-          <el-form-item label="标签" prop="labels">
-            <el-select class="w-100" v-model="queryFormData.labels" value-key="id" multiple filterable>
-              <el-option v-for="item in labels"
-                         :label="item.name"
-                         :key="item.id"
-                         :value="item.id">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="公司规模" prop="populationScales">
-            <el-select v-model="queryFormData.populationScales" class="w-100" multiple filterable>
-              <el-option v-for="item in populationScales"
-                         :key="item.code"
-                         :label="item.name"
-                         :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="生产地区" prop="productiveOrientations">
-            <el-select v-model="queryFormData.productiveOrientations" class="w-100" multiple filterable>
-              <el-option v-for="item in regions"
-                         :key="item.isocode"
-                         :label="item.name"
-                         :value="item.isocode">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="8">
           <el-form-item label="分类" prop="adeptAtCategories">
             <el-select class="w-100"
                        placeholder="请选择"
@@ -89,6 +54,28 @@
       </el-row>
       <el-row :gutter="10">
         <el-col :span="8">
+          <el-form-item label="标签" prop="labels">
+            <el-select class="w-100" v-model="queryFormData.labels" value-key="id" multiple filterable>
+              <el-option v-for="item in labels"
+                         :label="item.name"
+                         :key="item.id"
+                         :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="公司规模" prop="populationScales">
+            <el-select v-model="queryFormData.populationScales" class="w-100" multiple filterable>
+              <el-option v-for="item in populationScales"
+                         :key="item.code"
+                         :label="item.name"
+                         :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
           <el-form-item label="产业集群" prop="labels">
             <el-select class="w-100" v-model="queryFormData.industrialClusters" value-key="id" multiple filterable>
               <el-option v-for="item in industrialClusters"
@@ -99,6 +86,33 @@
             </el-select>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <el-form-item label="省" prop="productiveOrientations">
+            <el-select v-model="region" class="w-100" filterable @change="onRegionChanged">
+              <el-option v-for="item in regions"
+                         :key="item.isocode"
+                         :label="item.name"
+                         :value="item.isocode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="市" prop="cities">
+            <el-select class="w-100" v-model="queryFormData.cities" multiple filterable>
+              <el-option
+                v-for="item in cities"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
         <el-col :span="8">
           <el-form-item label="创建时间从">
             <el-date-picker
@@ -147,6 +161,34 @@
         setKeyword: 'keyword',
         setQueryFormData: 'queryFormData',
       }),
+      onRegionChanged(current) {
+        if (!current||current=='') {
+          this.queryFormData.productiveOrientations = [];
+          this.queryFormData.cities = [];
+          this.cities = [];
+        }
+        console.log(current);
+        console.log(this.queryFormData.productiveOrientations);
+        if(this.queryFormData.productiveOrientations.length==0){
+          this.queryFormData.productiveOrientations.push(current);
+        }else {
+          this.queryFormData.productiveOrientations[0]=current;
+        }
+        console.log(this.queryFormData.productiveOrientations);
+        this.cities = [];
+        this.getCities(current);
+      },
+      async getCities(isocode) {
+        const url = this.apis().getCities(isocode);
+        const result = await this.$http.get(url);
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.cities = result;
+      },
       onSearch() {
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
@@ -222,6 +264,7 @@
         keyword: '',
         labels: [],
         regions: [],
+        cities:[],
         categories: [],
         adeptAtCategories: [],
         industrialClusters:[],
@@ -229,6 +272,8 @@
         queryFormData: this.$store.state.FactoriesModule.queryFormData,
         populationScales: this.$store.state.EnumsModule.populationScales,
         starLevels:this.$store.state.EnumsModule.starLevels,
+        region:'',
+        // region:this.$store.state.FactoriesModule.formData.
       }
     },
     created() {

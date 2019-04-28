@@ -61,6 +61,7 @@ const state = {
     labels: [],
     populationScales: [],
     productiveOrientations: [],
+    cities:[],
     starLevel: null,
     machiningTypes: [],
     categories: [],
