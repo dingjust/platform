@@ -68,9 +68,7 @@ class QuoteOrderRepository {
     } on DioError catch (e) {
       print(e);
     }
-    print('====================${response}');
     if (response != null && response.statusCode == 200) {
-      print('====================${response.data}');
       return response.data;
     } else {
       return null;

@@ -633,14 +633,6 @@ enum CooperationModes {
 
   /// 包工包料
   LABOR_AND_MATERIAL,
-
-  ODM,
-
-  OEM,
-
-  FOB,
-
-  PURE_PROCESSING
 }
 
 const CooperationModesMap = {
