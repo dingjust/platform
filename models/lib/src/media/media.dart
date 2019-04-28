@@ -99,6 +99,18 @@ class MediaModel extends ItemModel {
     }
   }
 
+    ///常规图
+  String normalUrl() {
+    MediaModel mediaModel =
+        getFormatMedia(MediaFormatMap[MediaFormat.NORMAL]);
+
+    if (mediaModel != null) {
+      return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
+    } else {
+      return actualUrl;
+    }
+  }
+
   MediaModel getFormatMedia(String mediaFormat) {
     MediaModel result;
     if (convertedMedias == null || convertedMedias.isEmpty) {
@@ -128,7 +140,9 @@ enum MediaFormat {
   DEFAULT_PRODUCT_THUMBNAIL,
 
   ///缩略图
-  DEFAULT_PRODUCT_PREVIEW
+  DEFAULT_PRODUCT_PREVIEW,
+
+  NORMAL
 }
 
 const MediaFormatMap = {
@@ -137,4 +151,5 @@ const MediaFormatMap = {
   MediaFormat.DEFAULT_PRODUCT_DETAIL: "DefaultProductDetail",
   MediaFormat.DEFAULT_PRODUCT_THUMBNAIL: "DefaultProductThumbnail",
   MediaFormat.DEFAULT_PRODUCT_PREVIEW: "DefaultProductPreview",
+  MediaFormat.NORMAL: 'Normal'
 };
