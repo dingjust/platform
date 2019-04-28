@@ -38,7 +38,7 @@ class RecommendProductItem extends StatelessWidget {
                     width: 200,
                     height: 200,
                     child: CachedNetworkImage(
-                        imageUrl: '${model.thumbnail.detailUrl()}',
+                        imageUrl: '${model.thumbnail.normalUrl()}',
                         width: 200,
                         height: 200,
                         fit: BoxFit.cover,
@@ -56,16 +56,19 @@ class RecommendProductItem extends StatelessWidget {
                 : Container(
                     // width: imageSize,
                     height: imageSize,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          topRight: Radius.circular(5)),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
+                    padding: EdgeInsets.all(20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            topRight: Radius.circular(5)),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'temp/picture.png',
+                            package: "assets",
+                          ),
+                          fit: BoxFit.contain,
                         ),
-                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -79,16 +82,17 @@ class RecommendProductItem extends StatelessWidget {
                 padding: EdgeInsets.all(5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(5),
+                      // padding: EdgeInsets.all(5),
                       child: Text(
                         '${model.name}',
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(5),
+                      // padding: EdgeInsets.all(5),
                       child: RichText(
                         text: TextSpan(
                             text: '￥',
@@ -105,7 +109,7 @@ class RecommendProductItem extends StatelessWidget {
                     ),
                     showAddress
                         ? Container(
-                            padding: EdgeInsets.all(5),
+                            // padding: EdgeInsets.all(5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[

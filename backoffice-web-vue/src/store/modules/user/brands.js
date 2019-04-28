@@ -76,6 +76,11 @@ const state = {
   },
   queryFormData: {
     keyword:'',
+    contactPhone:'',
+    cooperativeBrand:'',
+    adeptAtCategories:[],
+    regions:[],
+    cities:[],
     creationTimeFrom:'',
     creationTimeTo:'',
   }
