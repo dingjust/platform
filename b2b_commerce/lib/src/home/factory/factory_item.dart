@@ -272,7 +272,7 @@ class CategoriesText extends StatelessWidget {
         // );
 
         Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: tags,
     );
 
