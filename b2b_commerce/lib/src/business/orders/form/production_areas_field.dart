@@ -180,7 +180,7 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
           ).then((val) {
             setState(() {
               if (_regionSelects.length > 0) {
-                widget.item.details.productiveOrientations = _regionSelects;
+                widget.item.details.productiveOrientations = _regionSelects.map((region) => RegionModel(isocode: region.isocode,name: region.name,)).toList();
               } else {
                 widget.item.details.productiveOrientations = null;
               }
