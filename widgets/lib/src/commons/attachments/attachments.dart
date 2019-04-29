@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
@@ -13,6 +16,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:services/services.dart';
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
+// import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 ///横向滚动图片列表
 class Attachments extends StatefulWidget {
@@ -152,26 +156,23 @@ class _AttachmentsState extends State<Attachments> {
                         height: 100,
                         imageUrl: '${model.previewUrl()}',
                         fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            SpinKitRing(
+                        placeholder: (context, url) => SpinKitRing(
                               color: Colors.black12,
                               lineWidth: 2,
                               size: 30,
                             ),
-                        errorWidget: (context, url, error) =>
-                            SpinKitRing(
+                        errorWidget: (context, url, error) => SpinKitRing(
                               color: Colors.black12,
                               lineWidth: 2,
                               size: 30,
-                            )
-                    ),
+                            )),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey,
                     ),
                   ),
                   onTap: () {
-                    onPreview(context, '${model.detailUrl()}');
+                    onPreview(context, '${model.detailUrl()}', '${model.name}');
                   },
                 );
             }
@@ -182,7 +183,7 @@ class _AttachmentsState extends State<Attachments> {
   }
 
   //图片预览
-  void onPreview(BuildContext context, String url) {
+  void onPreview(BuildContext context, String url, String name) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -190,10 +191,9 @@ class _AttachmentsState extends State<Attachments> {
         return GestureDetector(
           child: Container(
               child: PhotoView(
-                imageProvider: NetworkImage(url),
-              )
-          ),
-          onTap: (){
+            imageProvider: NetworkImage(url),
+          )),
+          onTap: () {
             Navigator.of(context).pop();
           },
         );
@@ -205,7 +205,7 @@ class _AttachmentsState extends State<Attachments> {
   Future<String> _previewFile(String url, String name, String mediaType) async {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[
@@ -268,6 +268,7 @@ class _AttachmentsState extends State<Attachments> {
       print(e);
     }
     //打开文件
+    Navigator.of(context).pop();
     OpenFile.open(filePath);
     return filePath;
   }
@@ -448,16 +449,16 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                 child: CachedNetworkImage(
                   imageUrl: '${model.previewUrl()}',
                   fit: BoxFit.cover,
-                  placeholder: (context, url) =>  SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30,
-                  ),
+                  placeholder: (context, url) => SpinKitRing(
+                        color: Colors.black12,
+                        lineWidth: 2,
+                        size: 30,
+                      ),
                   errorWidget: (context, url, error) => SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30,
-                  ),
+                        color: Colors.black12,
+                        lineWidth: 2,
+                        size: 30,
+                      ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -465,7 +466,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                 ),
               ),
               onTap: () {
-                onPreview(context, '${model.detailUrl()}');
+                onPreview(context, '${model.detailUrl()}', '${model.name}');
                 print('onp');
               },
               onLongPress: () {
@@ -489,14 +490,18 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
   }
 
   //图片预览
-  void onPreview(BuildContext context, String url) {
+  void onPreview(BuildContext context, String url, String name) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return GestureDetector(
-          onTap: (){
+          onTap: () {
             Navigator.pop(context);
+          },
+          onLongPress: () async {
+            _previewFile(url, name, 'jpeg');
+            // downLoadImage(url, name, 'jpeg');
           },
           child: Container(
               child: PhotoView(
@@ -511,7 +516,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
   Future<String> _previewFile(String url, String name, String mediaType) async {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[
@@ -571,9 +576,26 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     } catch (e) {
       print(e);
     }
+
+    Navigator.of(context).pop();
     //打开文件
     OpenFile.open(filePath);
+    print('${filePath}');
+
     return filePath;
+  }
+
+  void downLoadImage(String url, String name, String mediaType) async {
+    var dio = new Dio();
+
+    Response response =
+        await dio.get(url, options: Options(responseType: ResponseType.stream));
+
+    HttpClientResponse resp = response.data;
+
+    final Uint8List bytes = await consolidateHttpClientResponseBytes(resp);
+
+    // final result = await ImageGallerySaver.save(bytes);
   }
 
   void _selectPapersImages() async {
