@@ -197,9 +197,9 @@ class _RequirementOrderDetailPageState
                   ),
                   Container(
                     child: Text(
-                      widget.order.belongTo.contactPerson == null
+                      widget.order.details.contactPerson == null
                           ? ''
-                          : '${widget.order.belongTo.contactPerson}',
+                          : '${widget.order.details.contactPerson}',
                       style: TextStyle(
                           color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                     ),
@@ -222,9 +222,9 @@ class _RequirementOrderDetailPageState
                     ),
                     Container(
                       child: Text(
-                        widget.order.belongTo.contactPhone == null
+                        widget.order.details.contactPhone == null
                             ? ''
-                            : '${widget.order.belongTo.contactPhone}',
+                            : '${widget.order.details.contactPhone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
@@ -233,10 +233,10 @@ class _RequirementOrderDetailPageState
                 ),
               ),
               onTap: () {
-                widget.order.belongTo.contactAddress.cellphone == null
+                widget.order.details.contactPhone == null
                     ? null
                     : _selectActionButton(
-                        widget.order.belongTo.contactAddress.cellphone);
+                        widget.order.details.contactPhone);
               },
             ),
           ],
