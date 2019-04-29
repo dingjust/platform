@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 class ProductionAreasField extends StatefulWidget {
   RequirementOrderModel item;
@@ -180,7 +178,7 @@ class ProductionAreasFieldState extends State<ProductionAreasField> {
           ).then((val) {
             setState(() {
               if (_regionSelects.length > 0) {
-                widget.item.details.productiveOrientations = _regionSelects;
+                widget.item.details.productiveOrientations = _regionSelects.map((region) => RegionModel(isocode: region.isocode,name: region.name,)).toList();
               } else {
                 widget.item.details.productiveOrientations = null;
               }

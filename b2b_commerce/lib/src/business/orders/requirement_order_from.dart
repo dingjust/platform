@@ -64,6 +64,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
     if (widget.product != null) {
       model.details.category = widget.product.category;
+      model.details.pictures = widget.product.images;
       if (widget.product?.category != null) {}
     }
 
@@ -428,9 +429,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       model.code = '';
     }
     model.details.expectedMachiningQuantity =
-        StringUtil.transInt(_quantityController.text);
+        ClassHandleUtil.transInt(_quantityController.text);
     model.details.maxExpectedPrice =
-        StringUtil.removeSymbolRMBToDouble(_priceController.text);
+        ClassHandleUtil.removeSymbolRMBToDouble(_priceController.text);
     model.remarks = _remarksController.text;
 
     if (model.details.category == null) {

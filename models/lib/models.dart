@@ -257,6 +257,12 @@ const SeasonEnum = <EnumModel>[
   EnumModel('L007','四季'),
 ];
 
+//吊牌
+const TaggableEnum = <EnumModel>[
+  EnumModel('true','有'),
+  EnumModel('false','沒有'),
+];
+
 /// 门襟
 const PlacketEnum = <EnumModel>[
   EnumModel('M001','拉链'),
