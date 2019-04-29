@@ -112,13 +112,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     widget.item.images = null;
                   }
                 } else {
+                  print('${ApparelProductAttributesModel.toJson(widget.item.attributes)}----------------------');
                   await ProductRepositoryImpl().update(widget.item);
                 }
 
                 Navigator.pop(context);
-//                Navigator.of(context).pushAndRemoveUntil(
-//                    MaterialPageRoute(builder: (context) => ApparelProductsPage()
-//                    ), ModalRoute.withName('/'));
                 if(widget.keyword == null){
                   ApparelProductBLoC.instance.filterByStatuses(widget.status);
                 }else{
@@ -197,7 +195,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   textInputAction: TextInputAction.next,
                   prefix: '￥',
                   onChanged: (value) {
-                    widget.item.price = StringUtil.removeSymbolRMBToDouble(value);
+                    widget.item.price = ClassHandleUtil.removeSymbolRMBToDouble(value);
                   },
                   onEditingComplete: (){
                     FocusScope.of(context).requestFocus(_gramWeightFocusNode);

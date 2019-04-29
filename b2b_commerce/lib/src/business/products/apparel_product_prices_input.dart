@@ -45,8 +45,8 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
                     ),
                   ),
                   onTap: () async {
-                    widget.item.minPrice = StringUtil.removeSymbolRMBToDouble(_minPriceController.text);
-                    widget.item.maxPrice = StringUtil.removeSymbolRMBToDouble(_maxPriceController.text);
+                    widget.item.minPrice = ClassHandleUtil.removeSymbolRMBToDouble(_minPriceController.text);
+                    widget.item.maxPrice = ClassHandleUtil.removeSymbolRMBToDouble(_maxPriceController.text);
                     Navigator.pop(context);
                   }
               )
