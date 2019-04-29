@@ -110,18 +110,18 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
           elevation: 0.5,
           centerTitle: true,
           title: Text(_type == LendBorrowType.BORROW ? '样衣借出' : '样衣借入'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                B2BIcons.search,
-                size: 20,
-              ),
-              onPressed: () => showSearch(
-                    context: context,
-                    delegate: ProductSearchDelegatePage(),
-                  ),
-            ),
-          ],
+//          actions: <Widget>[
+//            IconButton(
+//              icon: Icon(
+//                B2BIcons.search,
+//                size: 20,
+//              ),
+//              onPressed: () => showSearch(
+//                    context: context,
+//                    delegate: ProductSearchDelegatePage(),
+//                  ),
+//            ),
+//          ],
         ),
         body: DefaultTabController(
           length: _states.length,
