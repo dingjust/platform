@@ -57,93 +57,99 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
       ),
       body: Container(
         color: Colors.white,
-        child: Wrap(
-          alignment: WrapAlignment.spaceBetween,
+        child: Row(
           children: <Widget>[
-            Container(
-              color: Colors.grey[200],
-              width: MediaQuery.of(context).size.width / 5,
-              height: MediaQuery.of(context).size.height - 75,
-              child: ListView(
-                shrinkWrap: true,
-                children: widget.attributes.map((attribute) {
-                  return GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        _keySelect = attribute.code;
-                        _valueController.animateTo(attribute.offset,duration: Duration(milliseconds: 500),curve: Curves.ease);
-                      });
-                    },
-                    child: Container(
-                      height: 40,
-                      color:  _keySelect == attribute.code ? Colors.white : Colors.grey[200],
-                      child: Center(child: Text(attribute.name)),
-                    ),
-                  );
-                }).toList(),
+            Expanded(
+              flex: 1,
+              child: Container(
+                color: Colors.grey[200],
+//              width: MediaQuery.of(context).size.width / 5,
+                height: MediaQuery.of(context).size.height - 75,
+                child: ListView(
+                  shrinkWrap: true,
+                  children: widget.attributes.map((attribute) {
+                    return GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          _keySelect = attribute.code;
+                          _valueController.animateTo(attribute.offset,duration: Duration(milliseconds: 500),curve: Curves.ease);
+                        });
+                      },
+                      child: Container(
+                        height: 40,
+                        color:  _keySelect == attribute.code ? Colors.white : Colors.grey[200],
+                        child: Center(child: Text(attribute.name)),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height - 75,
-              child: ListView(
-                shrinkWrap: true,
-                controller: _valueController,
-                children: widget.attributes.map((item) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10,bottom: 10,),
-                        child: Center(
-                          child: Text(
-                            item.name,
-                            style: TextStyle(color: Colors.grey),
+            Expanded(
+              flex: 4,
+              child: Container(
+//              width: MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width / 5 ),
+                height: MediaQuery.of(context).size.height - 75,
+                child: ListView(
+                  shrinkWrap: true,
+                  controller: _valueController,
+                  children: widget.attributes.map((item) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10,bottom: 10,),
+                          child: Center(
+                            child: Text(
+                              item.name,
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           ),
                         ),
-                      ),
-                      Wrap(
-                        children: item.values.map((valueItem) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (item.valueSelects
-                                    .contains(valueItem.code)) {
-                                  item.valueSelects.remove(valueItem.code);
-                                } else {
-                                  if(!item.multiple){
-                                    item.valueSelects.clear();
+                        Wrap(
+                          children: item.values.map((valueItem) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (item.valueSelects
+                                      .contains(valueItem.code)) {
+                                    item.valueSelects.remove(valueItem.code);
+                                  } else {
+                                    if(!item.multiple){
+                                      item.valueSelects.clear();
+                                    }
+                                    item.valueSelects.add(valueItem.code);
                                   }
-                                  item.valueSelects.add(valueItem.code);
-                                }
-                              });
+                                });
 
-                              print(item.valueSelects);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,),
-                              child: Container(
-                                height: widget.valueItemHeight,
-                                width: MediaQuery.of(context).size.width * 0.8/3 - 10,
-                                decoration: BoxDecoration(
+                                print(item.valueSelects);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,),
+                                child: Container(
+                                  height: widget.valueItemHeight,
+                                  width: MediaQuery.of(context).size.width * 0.8/3 - 15,
+                                  decoration: BoxDecoration(
 //                                  border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(8),
-                                    color:
-                                        item.valueSelects.contains(valueItem.code)
-                                            ? Color.fromRGBO(255, 214, 12, 1)
-                                            : Colors.grey[250]),
-                                child: Center(child: Text(valueItem.name),),
+                                      borderRadius: BorderRadius.circular(8),
+                                      color:
+                                      item.valueSelects.contains(valueItem.code)
+                                          ? Color.fromRGBO(255, 214, 12, 1)
+                                          : Colors.grey[250]),
+                                  child: Center(child: Text(valueItem.name),),
+                                ),
                               ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  );
-                }).toList(),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
               ),
             ),
+
           ],
         ),
       ),

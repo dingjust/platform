@@ -12,7 +12,7 @@ class AppConstants with GlobalConfigs {
 
   static get supportedLocales => [
     //此处
-    const Locale('zh', 'CN'),
+//    const Locale('zh', 'CN'),
     const Locale('en', 'US'),
   ];
 }
