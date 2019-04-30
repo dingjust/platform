@@ -99,7 +99,7 @@
         return true;
       },
       async querySearchAsync(queryString, cb) {
-        const url = this.apis().getAmapTips('777b518967c72f5f761efc88ecc8310c',this.slotData.line1,this.slotData.city.name);
+        const url = this.apis().getAmapTips('16019b7f1babc4b2d81010730bad2504',this.slotData.line1,this.slotData.city.name);
         const result = await this.$http.get(url);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
