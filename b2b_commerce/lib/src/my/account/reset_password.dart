@@ -97,7 +97,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
       validator: (value) {
         if (!RegexUtil.password(value)) {
-          return '至少含有数字、大写、特殊字符,且首字母不能为字符';
+          return '限定数字加字母，6-20位';
         } else {
           return null;
         }

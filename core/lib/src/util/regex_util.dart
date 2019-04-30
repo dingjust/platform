@@ -17,10 +17,16 @@ class RegexUtil {
   ///至少一个大写
   static final String regexOneUppercase = "(?=(?:.*?[A-Z]){1}).*";
 
+  ///至少一个字母
+  static final String regexOneLetter = "^[a-zA-Z]+";
+
   ///至少一个特殊字符
   // static final String regexOneSpecial =
   //     "(?=(?:.*?[!@#\$%\^\*\(\)_\-\+{};:\.,]){1}).*";
   static final String regexOneSpecial = ".*[^A-Za-z0-9]+.*";
+
+  //数字、字母，6-20位
+  static final String regexLegal = "^[a-zA-Z0-9]{6,20}\$";
 
   ///校验手机
   static bool isMobile(String input) {
@@ -52,6 +58,13 @@ class RegexUtil {
     return matches(regexOneSpecial, input);
   }
 
+  ///含有非法字符
+  static bool legal(String input) {
+    return matches(regexLegal, input);
+  }
+
+  ///密码
+
   static bool password(String input) {
     if (input.isEmpty) {
       return false;
@@ -65,20 +78,16 @@ class RegexUtil {
     if (matches(regexOneNumber, input)) {
       typecount++;
     }
-    // 如果含有大写字母
-    if (matches(regexOneUppercase, input)) {
+    // 如果含有字母
+    if (matches(regexOneLetter, input)) {
       typecount++;
     }
-    // 如果含有特殊字符
-    if (matches(regexOneSpecial, input)) {
+    // 只能字母数字
+    if (matches(regexLegal, input)) {
       typecount++;
     }
-    // 如果含有特殊字符
-    if (matches(regexNotAllowed, input)) {
-      typecount++;
-    }
-    // 至少含有数字、大写、小写、特殊字符中的3种,且首字母不能为字符
-    if (typecount < 4) {
+    // 至少含有一个数字、一个字母，长度6-20位
+    if (typecount < 3) {
       return false;
     }
     return true;
