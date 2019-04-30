@@ -65,8 +65,7 @@ class FactoryCondition {
           RegionModel productiveOrientations) =>
       RegionModel.toJson(productiveOrientations);
 
-  static List<Map<String, dynamic>> _citiesToJson(
-      List<CityModel> models) =>
+  static List<Map<String, dynamic>> _citiesToJson(List<CityModel> models) =>
       models.map((model) => CityModel.toJson(model)).toList();
 
   Map<String, dynamic> toDataJson() {
@@ -101,7 +100,8 @@ class FactoryCondition {
     var result = {
       'categories': categories != null ? [categories] : [],
       'adeptAtCategories': adeptAtCategoryArray,
-      'productiveOrientations': productiveOrientations != null && productiveOrientations.isocode != null
+      'productiveOrientations': productiveOrientations != null &&
+              productiveOrientations.isocode != null
           ? [productiveOrientations.isocode]
           : [],
       'cities': cities == null ? [] : cities.map((city) => city.code).toList(),
@@ -112,7 +112,9 @@ class FactoryCondition {
           ? [_$PopulationScaleEnumMap[populationScale]]
           : [],
       'keyword': keyword ?? '',
-      'approvalStatuses': approvalStatus ?? ''
+      'approvalStatuses': approvalStatus ?? '',
+      'industrialClusters':
+          industrialCuster != null ? [industrialCuster.code] : []
     };
 
     print(result);

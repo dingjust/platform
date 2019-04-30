@@ -44,6 +44,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode flutterVersionCode.toInteger()
+//        versionCode 2
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -68,7 +69,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-
 
 //    android.applicationVariants.all { variant ->
 //        if (variant.buildType.name.equals('release')) {
