@@ -58,7 +58,8 @@ class OrderByProductBLoc extends BLoCBase {
           "categories": productCondition.categories
               .map((category) => category.code)
               .toList(),
-          "keyword": productCondition.keyword ?? ''
+          "keyword": productCondition.keyword ?? '',
+          'approvalStatuses': ['approved'],
         }, queryParameters: {
           'page': currentPage,
           'size': pageSize,
@@ -83,7 +84,7 @@ class OrderByProductBLoc extends BLoCBase {
     }
   }
 
-  getCashProducts(String uid)async{
+  getCashProducts(String uid) async {
     if (!lock) {
       lock = true;
       try {
@@ -92,8 +93,8 @@ class OrderByProductBLoc extends BLoCBase {
             'approvalStatuses': ['approved'],
           }, {});
         } else {
-          productsResponse = await ProductRepositoryImpl()
-              .getProductsOfFactory({
+          productsResponse =
+              await ProductRepositoryImpl().getProductsOfFactory({
             'approvalStatuses': ['approved'],
           }, {}, uid);
         }
@@ -123,7 +124,8 @@ class OrderByProductBLoc extends BLoCBase {
             "categories": productCondition.categories
                 .map((category) => category.code)
                 .toList(),
-            "keyword": productCondition.keyword ?? ''
+            "keyword": productCondition.keyword ?? '',
+            'approvalStatuses': ['approved'],
           }, queryParameters: {
             'page': currentPage,
             'size': pageSize
@@ -163,8 +165,8 @@ class OrderByProductBLoc extends BLoCBase {
               'page': productsResponse.number + 1,
             });
           } else {
-            productsResponse = await ProductRepositoryImpl()
-                .getProductsOfFactory({}, {
+            productsResponse =
+                await ProductRepositoryImpl().getProductsOfFactory({}, {
               'page': productsResponse.number + 1,
             }, uid);
           }
@@ -173,7 +175,6 @@ class OrderByProductBLoc extends BLoCBase {
         } on DioError catch (e) {
           print(e);
         }
-
       }
       loadingController.sink.add(false);
       _controller.sink.add(_products);

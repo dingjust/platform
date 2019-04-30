@@ -69,6 +69,7 @@ class MediaModel extends ItemModel {
         getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
 
     if (mediaModel != null) {
+      print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
       return actualUrl;
@@ -99,14 +100,14 @@ class MediaModel extends ItemModel {
     }
   }
 
-    ///常规图
+  ///常规图
   String normalUrl() {
-    MediaModel mediaModel =
-        getFormatMedia(MediaFormatMap[MediaFormat.NORMAL]);
-
+    MediaModel mediaModel = getFormatMedia(MediaFormatMap[MediaFormat.NORMAL]);
     if (mediaModel != null) {
+      print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
+      print('${actualUrl}');
       return actualUrl;
     }
   }

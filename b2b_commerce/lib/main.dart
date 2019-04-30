@@ -204,7 +204,6 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
                 B2BIcons.my_active,
               ),
             ),
-            
             title: Container(
               margin: EdgeInsets.only(right: 10),
               child: const Text('我的'),
@@ -253,7 +252,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: AppConstants.supportedLocales,
+      supportedLocales: AppConstants.supportedLocales(),
     );
   }
 }
