@@ -112,7 +112,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     widget.item.images = null;
                   }
                 } else {
-                  print('${ApparelProductAttributesModel.toJson(widget.item.attributes)}----------------------');
                   await ProductRepositoryImpl().update(widget.item);
                 }
 
