@@ -88,6 +88,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           IconButton(
             icon: Text('确定',style: TextStyle(),),
             onPressed: () async{
+              widget.address.line1 = _line1Controller.text;
               Navigator.of(context).pop(widget.address);
             },
           )

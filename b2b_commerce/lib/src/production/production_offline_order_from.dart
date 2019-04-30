@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
@@ -552,7 +553,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 '采购商家',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
               trailing: company == null || company.name == null
@@ -991,11 +991,24 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         isSubmit = true;
       }
       if(isSubmit){
-        String code = await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
-        if(code != null){
-          result = true;
-        }
-        _showMessage(context,result,'添加线下单',code);
+//        String code = await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
+//        if(code != null){
+//          result = true;
+//        }
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoadingPage(
+                requestCallBack: PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder),
+                outsideDismiss: false,
+                loadingText: '保存中。。。',
+                entrance: 'createPurchaseOrder',
+              );
+            }
+        );
+
+//        _showMessage(context,result,'添加线下单',code);
       }
 
     }catch(e){

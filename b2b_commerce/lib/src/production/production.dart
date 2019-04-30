@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -11,19 +12,36 @@ class ProductionItem extends StatelessWidget {
 
   final PurchaseOrderModel order;
 
+  Future<void> requestCallBack(BuildContext context)async{
+    PurchaseOrderModel model =
+    await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => ProductionProgressesPage(
+          order: model,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        PurchaseOrderModel model =
-            await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+      onTap: () async{
 
-        if (model != null) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ProductionProgressesPage(
-                    order: model,
-                  )));
-        }
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoadingPage(
+                requestCallBack: PurchaseOrderRepository().getPurchaseOrderDetail(order.code),
+                outsideDismiss: false,
+                loadingText: '加载中。。。',
+                entrance: 'production',
+              );
+            }
+        );
+
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -41,6 +59,13 @@ class ProductionItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> openPage(BuildContext context,PurchaseOrderModel model) async {
+
+    if (model != null) {
+
+    }
   }
 
   Widget _buildCompanyName(BuildContext context) {

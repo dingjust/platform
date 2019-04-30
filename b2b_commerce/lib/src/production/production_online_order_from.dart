@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
@@ -942,21 +943,36 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
       }
 
       if(isSubmit){
-        String response = await PurchaseOrderRepository()
-            .onlinePurchaseOrder(widget.quoteModel.code, purchaseOrder);
-        if (response != null && response != '') {
-          //根据code查询明
-          PurchaseOrderModel model =
-          await PurchaseOrderRepository().getPurchaseOrderDetail(response);
-          if (model != null) {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (context) => PurchaseOrderDetailPage(
-                      order: model,
-                    )),
-                ModalRoute.withName('/'));
-          }
-        }
+        Navigator.of(context).pop();
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoadingPage(
+                requestCallBack: PurchaseOrderRepository()
+                    .onlinePurchaseOrder(widget.quoteModel.code, purchaseOrder),
+                outsideDismiss: false,
+                loadingText: '保存中。。。',
+                entrance: 'createPurchaseOrder',
+              );
+            }
+        );
+
+//        String response = await PurchaseOrderRepository()
+//            .onlinePurchaseOrder(widget.quoteModel.code, purchaseOrder);
+//        if (response != null && response != '') {
+//          //根据code查询明
+//          PurchaseOrderModel model =
+//          await PurchaseOrderRepository().getPurchaseOrderDetail(response);
+//          if (model != null) {
+//            Navigator.of(context).pushAndRemoveUntil(
+//                MaterialPageRoute(
+//                    builder: (context) => PurchaseOrderDetailPage(
+//                      order: model,
+//                    )),
+//                ModalRoute.withName('/'));
+//          }
+//        }
       }
     } catch (e) {
       print(e);

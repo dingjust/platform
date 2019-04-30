@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -301,7 +302,7 @@ class InviteFactoryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (factoryModel.invited) {
       return Container(
-        height: 35,
+        height: 30,
         width: 100,
         child: Center(
           child: Text(
@@ -310,29 +311,29 @@ class InviteFactoryButton extends StatelessWidget {
           ),
         ),
         decoration: BoxDecoration(
-            color: Colors.grey, borderRadius: BorderRadius.circular(20)),
+            color: Colors.grey, borderRadius: BorderRadius.circular(5)),
       );
     } else {
       return Container(
-        height: 35,
+        height: 30,
         width: 100,
         child: FlatButton(
           onPressed: () async {
-            bool result = await RequirementOrderRepository()
-                .doRecommendation(requirementCode, factoryModel.uid);
-            showDialog<void>(
-              context: context,
-              barrierDismissible: true, // user must tap button!
-              builder: (context) {
-                return SimpleDialog(
-                  title: const Text('提示', style: const TextStyle(fontSize: 16)),
-                  children: <Widget>[
-                    SimpleDialogOption(child: Text('邀请${result ? '成功' : '失败'}'))
-                  ],
-                );
-              },
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) {
+                  return RequestDataLoadingPage(
+                    requestCallBack: RequirementOrderRepository()
+                        .doRecommendation(requirementCode, factoryModel.uid),
+                    outsideDismiss: false,
+                    loadingText: '邀请中。。。',
+                    entrance: '0',
+                  );
+                }
             );
             FactoryBLoC().clear();
+            FactoryBLoC().refreshData();
           },
           color: Color.fromRGBO(255, 214, 12, 1),
           child: Text(

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -342,11 +343,20 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                       ),
                                       onPressed: () async {
                                         Navigator.of(context).pop();
-                                        bool result =
-                                        await PurchaseOrderRepository()
-                                            .purchaseOrderCancelling(
-                                            widget.order.code);
-                                        _showMessage(context, result, '订单取消');
+                                        showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (_) {
+                                              return RequestDataLoadingPage(
+                                                requestCallBack: PurchaseOrderRepository()
+                                                    .purchaseOrderCancelling(
+                                                    widget.order.code),
+                                                outsideDismiss: false,
+                                                loadingText: '正在取消。。。',
+                                                entrance: 'purchaseOrders',
+                                              );
+                                            }
+                                        );
                                       },
                                     ),
                                   ],
@@ -439,11 +449,20 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                   ),
                                   onPressed: () async {
                                     Navigator.of(context).pop();
-                                    bool result =
-                                    await PurchaseOrderRepository()
-                                        .purchaseOrderCancelling(
-                                        widget.order.code);
-                                    _showMessage(context, result, '订单取消');
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (_) {
+                                          return RequestDataLoadingPage(
+                                            requestCallBack: PurchaseOrderRepository()
+                                                .purchaseOrderCancelling(
+                                                widget.order.code),
+                                            outsideDismiss: false,
+                                            loadingText: '正在取消。。。',
+                                            entrance: 'purchaseOrders',
+                                          );
+                                        }
+                                    );
                                   },
                                 ),
                               ],
@@ -472,10 +491,20 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           ),
                         ),
                         onPressed: () async {
-                          bool result = await PurchaseOrderRepository()
-                              .confirmProduction(
-                              widget.order.code, widget.order);
-                          _showMessage(context, result, '确认生产');
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) {
+                                return RequestDataLoadingPage(
+                                  requestCallBack: PurchaseOrderRepository()
+                                      .confirmProduction(
+                                      widget.order.code, widget.order),
+                                  outsideDismiss: false,
+                                  loadingText: '保存中。。。',
+                                  entrance: 'purchaseOrders',
+                                );
+                              }
+                          );
                         }
                     )
                 ),
@@ -558,10 +587,19 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                         ),
                       ),
                       onPressed: () async {
-                        bool result = false;
-                        result = await PurchaseOrderRepository()
-                            .purchaseOrderShipped(widget.order.code, widget.order);
-                        _showMessage(context, result, '确认收货');
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) {
+                              return RequestDataLoadingPage(
+                                requestCallBack: PurchaseOrderRepository()
+                                    .purchaseOrderShipped(widget.order.code, widget.order),
+                                outsideDismiss: false,
+                                loadingText: '保存中。。。',
+                                entrance: 'purchaseOrders',
+                              );
+                            }
+                        );
                       }
                   )
               ),
@@ -597,10 +635,20 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                         ),
                       ),
                       onPressed: () async {
-                        bool result = false;
-                        result = await PurchaseOrderRepository()
-                            .purchaseOrderShipped(widget.order.code, widget.order);
-                        _showMessage(context, result, '确认收货');
+
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) {
+                              return RequestDataLoadingPage(
+                                requestCallBack: PurchaseOrderRepository()
+                                    .purchaseOrderShipped(widget.order.code, widget.order),
+                                outsideDismiss: false,
+                                loadingText: '保存中。。。',
+                                entrance: 'purchaseOrders',
+                              );
+                            }
+                        );
                       }
                   )
               ),
@@ -842,7 +890,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5))),
                       onPressed: () async {
-                        bool result = false;
+                        Navigator.of(context).pop();
                         if (dialogText.text != null && dialogText.text != '') {
                           double balance =
                               dialogText.text == null || dialogText.text == ''
@@ -851,8 +899,19 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           model.balance = balance;
                           model.skipPayBalance = false;
                           try {
-                            result = await PurchaseOrderRepository()
-                                .purchaseOrderBalanceUpdate(model.code, model);
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (_) {
+                                  return RequestDataLoadingPage(
+                                    requestCallBack: PurchaseOrderRepository()
+                                        .purchaseOrderBalanceUpdate(model.code, model),
+                                    outsideDismiss: false,
+                                    loadingText: '保存中。。。',
+                                    entrance: 'purchaseOrders',
+                                  );
+                                }
+                            );
                           } catch (e) {
                             print(e);
                           }
@@ -864,7 +923,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                   i++) {
                                 if (widget.order.currentPhase ==
                                     widget.order.progresses[i].phase) {
-                                  result = await PurchaseOrderRepository()
+                                  await PurchaseOrderRepository()
                                       .productionProgressUpload(
                                           widget.order.code,
                                           widget.order.progresses[i].id
@@ -876,8 +935,6 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                               print(e);
                             }
                           }
-                          Navigator.of(context).pop();
-                          _showMessage(context, result, '修改尾款');
                         }
                       }),
                 ),
@@ -955,25 +1012,37 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       borderRadius:
                           const BorderRadius.all(Radius.circular(5))),
                   onPressed: () async {
-                    bool result = false;
                     double unit = unitText.text == null || unitText.text == ''
                         ? model.unitPrice
                         : double.parse(unitText.text);
                     double deposit =
-                        depositText.text == null || depositText.text == ''
-                            ? model.deposit
-                            : double.parse(depositText.text);
-                    model.deposit = deposit;
-                    model.unitPrice = unit;
+                    depositText.text == null || depositText.text == ''
+                        ? model.deposit
+                        : double.parse(depositText.text);
+                    setState(() {
+                      model.deposit = deposit;
+                      model.unitPrice = unit;
+                    });
                     model.skipPayBalance = false;
+                    Navigator.of(context).pop();
                     try {
-                      result = await PurchaseOrderRepository()
-                          .purchaseOrderDepositUpdate(model.code, model);
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return RequestDataLoadingPage(
+                              requestCallBack: PurchaseOrderRepository()
+                                  .purchaseOrderDepositUpdate(model.code, model),
+                              outsideDismiss: false,
+                              loadingText: '保存中。。。',
+                              entrance: '0',
+                            );
+                          }
+                      );
                     } catch (e) {
                       print(e);
                     }
                     Navigator.of(context).pop();
-                    _showMessage(context, result, '修改定金');
                   }),
             ),
           ],
@@ -1028,8 +1097,19 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                 model.balance = 0;
                 model.skipPayBalance = true;
                 try {
-                  result = await PurchaseOrderRepository()
-                      .purchaseOrderBalanceUpdate(model.code, model);
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoadingPage(
+                          requestCallBack: PurchaseOrderRepository()
+                              .purchaseOrderBalanceUpdate(model.code, model),
+                          outsideDismiss: false,
+                          loadingText: '保存中。。。',
+                          entrance: 'purchaseOrders',
+                        );
+                      }
+                  );
                   if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
                     try {
                       for (int i = 0; i < widget.order.progresses.length; i++) {
@@ -1051,7 +1131,6 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                   print(e);
                 } finally {
                   Navigator.of(context).pop();
-                  _showMessage(context, result, '操作');
                 }
               },
             ),
