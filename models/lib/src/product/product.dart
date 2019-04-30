@@ -9,13 +9,15 @@ enum ArticleApprovalStatus {
   check,
   approved,
   unapproved,
+  deleted,
 }
 
 // TODO: i18n处理
 const ArticleApprovalStatusMap = {
   ArticleApprovalStatus.check: "check",
   ArticleApprovalStatus.approved: "approved",
-  ArticleApprovalStatus.unapproved: "unapproved"
+  ArticleApprovalStatus.unapproved: "unapproved",
+  ArticleApprovalStatus.deleted: "deleted",
 };
 
 /// 样衣归还状态

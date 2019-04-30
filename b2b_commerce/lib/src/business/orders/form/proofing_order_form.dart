@@ -654,7 +654,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     setState(() {
       totalQuantity = sum;
       if (_unitPriceController.text != '') {
-        totalPrice = sum * StringUtil.removeSymbolRMBToDouble(_unitPriceController.text);
+        totalPrice = sum * ClassHandleUtil.removeSymbolRMBToDouble(_unitPriceController.text);
       }
     });
   }

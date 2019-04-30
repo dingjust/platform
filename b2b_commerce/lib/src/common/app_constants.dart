@@ -1,4 +1,5 @@
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,11 +11,21 @@ class AppConstants with GlobalConfigs {
 
   static get currentContextKey => GlobalConfigs.CURRENT_CONTEXT_KEY;
 
-  static get supportedLocales => [
-    //此处
-    const Locale('zh', 'CN'),
-    const Locale('en', 'US'),
-  ];
+  static List<Locale> supportedLocales() {
+    TargetPlatform platform = defaultTargetPlatform;
+    if (platform != TargetPlatform.iOS) {
+      return [
+        //此处
+        const Locale('zh', 'CN'),
+        const Locale('en', 'US'),
+      ];
+    } else {
+      return [
+        // ios国际化
+        const Locale('en', 'US'),
+      ];
+    }
+  }
 }
 
 class FontSizeConstants {

@@ -38,6 +38,17 @@ class ImageFactory {
       margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
       width: 80,
       height: 80,
+      child:
+//      Image.network(
+//        '${media.previewUrl()}',
+//        fit: BoxFit.cover,
+//      )
+//        ,
+//    );
+    Container(
+      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      width: 80,
+      height: 80,
       child: CachedNetworkImage(
           imageUrl: '${media.previewUrl()}',
           fit: BoxFit.cover,
@@ -52,6 +63,7 @@ class ImageFactory {
             size: 30,
           )
       ),
+    )
     );
   }
 
