@@ -63,12 +63,12 @@ class _AttributesFieldState extends State<AttributesField> {
               context,
               MaterialPageRoute(
                 builder: (context) => PositioningRollPage(
+                  crossAxisCount: 3,
                   attributes: _attributes,
                   title: '选择属性',
                 ),
               ),
             );
-            print(result);
             if(result != null){
               result['editionType'] = ClassHandleUtil.isNotEmpty(result['editionType']) ? result['editionType'][0] : null;
               result['pattern'] = ClassHandleUtil.isNotEmpty(result['pattern']) ? result['pattern'][0] : null;
@@ -80,10 +80,8 @@ class _AttributesFieldState extends State<AttributesField> {
               result['placket'] = ClassHandleUtil.isNotEmpty(result['placket']) ? result['placket'][0] : null;
               result['taggable'] = ClassHandleUtil.isNotEmpty(result['taggable']) ? ClassHandleUtil.strToBool(result['taggable'][0]) : null;
               var model = ApparelProductAttributesModel.fromJson(result);
-              print('${result}-=-=-=-=-=---=-');
               widget.item.attributes = model;
             }
-
 
           },
           child: ListTile(

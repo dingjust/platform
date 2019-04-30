@@ -48,6 +48,37 @@ class UserRepositoryImpl implements UserRepository {
     return response.data;
   }
 
+  Future<bool> brandUpdateContact(BrandModel brand) async {
+    Response response;
+    try {
+      response = await http$.put(Apis.brandUpdate(brand.uid),
+          data: BrandModel.toJson(brand));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> factoryUpdateContact(FactoryModel factory) async {
+    Response response;
+    try {
+      response = await http$.put(Apis.factoryUpdate(factory.uid),
+          data: FactoryModel.toJson(factory));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
   @override
   Future<String> factoryUpdate(FactoryModel factory) async {
     Response response = await http$.put(Apis.factoryUpdate(factory.uid),

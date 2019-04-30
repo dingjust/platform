@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -538,23 +539,21 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                     ..totalPrice = totalPrice
                     ..totalQuantity = totalQuantity
                     ..remarks = remarks;
-                  String response = await ProofingOrderRepository()
-                      .proofingCreate(widget.quoteModel.code, model);
-                  //TODOS:跳转到打样订单详情
-                  if (response != null && response != '') {
-                    //查询明细
-                    ProofingModel detailModel = await ProofingOrderRepository()
-                        .proofingDetail(response);
+                  Navigator.of(context).pop();
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoadingPage(
+                          requestCallBack: ProofingOrderRepository()
+                              .proofingCreate(widget.quoteModel.code, model),
+                          outsideDismiss: false,
+                          loadingText: '保存中。。。',
+                          entrance: 'proofingOrder',
+                        );
+                      }
+                  );
 
-                    if (detailModel != null) {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => ProofingOrderDetailPage(
-                                    model: detailModel,
-                                  )),
-                          ModalRoute.withName('/'));
-                    }
-                  }
                 },
               ),
             ],
@@ -588,22 +587,19 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   ..unitPrice = double.parse(_unitPriceController.text)
                   ..totalPrice = totalPrice
                   ..remarks = remarks;
-                String response =
-                    await ProofingOrderRepository().proofingUpdate(model);
-                //TODOS:跳转到打样订单详情
-                if (response != null && response != '') {
-                  //查询明细
-                  ProofingModel detailModel = await ProofingOrderRepository()
-                      .proofingDetail(widget.model.code);
-                  if (detailModel != null) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => ProofingOrderDetailPage(
-                                  model: detailModel,
-                                )),
-                        ModalRoute.withName('/'));
-                  }
-                }
+                Navigator.of(context).pop();
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return RequestDataLoadingPage(
+                        requestCallBack: ProofingOrderRepository().proofingUpdate(model),
+                        outsideDismiss: false,
+                        loadingText: '保存中。。。',
+                        entrance: 'proofingOrder',
+                      );
+                    }
+                );
               },
             ),
           ],

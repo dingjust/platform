@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -428,7 +429,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                             )
                           :
                           Container(
-                            width: 140,
+                            width: 130,
                             child: Text(
                               '${progress.remarks}',
                               overflow: TextOverflow.ellipsis,
@@ -459,7 +460,18 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       model.estimatedDate = _picked;
       try{
         model.updateOnly = true;
-        await PurchaseOrderRepository().productionProgressUpload(order.code,model.id.toString(),model);
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoadingPage(
+                requestCallBack: PurchaseOrderRepository().productionProgressUpload(order.code,model.id.toString(),model),
+                outsideDismiss: false,
+                loadingText: '保存中。。。',
+                entrance: '',
+              );
+            }
+        );
       }catch(e){
         print(e);
       }
@@ -503,22 +515,45 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 ),
               ),
               onPressed: () async {
-                bool result;
+                bool result = false;
+                Navigator.of(context).pop();
                 try {
                   model.updateOnly = false;
-                  result = await PurchaseOrderRepository().productionProgressUpload(
-                  order.code, model.id.toString(), model);
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoadingPage(
+                          requestCallBack: PurchaseOrderRepository().productionProgressUpload(
+                            order.code, model.id.toString(), model),
+                          outsideDismiss: false,
+                          loadingText: '保存中。。。',
+                          entrance: '',
+                        );
+                      }
+                  ).then((value){
+                    refreshData();
+                  });
                 } catch (e) {
                 print(e);
                 }
-                Navigator.of(context).pop();
-                _showMessage(context,result);
               },
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> refreshData() async {
+    order = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+    setState(() {
+      phase = ProductionProgressPhaseLocalizedMap[order.currentPhase];
+    });
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) =>
+            ProductionProgressesPage(order: order)
+        ), ModalRoute.withName('/'));
   }
 
 
@@ -572,9 +607,21 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     model.quantity = int.parse(dialogText.text);
                   }
                   try {
+                    Navigator.of(context).pop();
                     model.updateOnly = true;
-                   result =  await PurchaseOrderRepository().productionProgressUpload(
-                        order.code, model.id.toString(), model);
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoadingPage(
+                            requestCallBack: PurchaseOrderRepository().productionProgressUpload(
+                                order.code, model.id.toString(), model),
+                            outsideDismiss: false,
+                            loadingText: '保存中。。。',
+                            entrance: '',
+                          );
+                        }
+                    );
                   } catch (e) {
                     print(e);
                   }
@@ -582,7 +629,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     _blNumber = dialogText.text;
                   });
                 }
-                Navigator.of(context).pop();
+
               },
             ),
           ],
@@ -660,13 +707,24 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 ),
               ),
               onPressed: () async {
-                bool result = false;
+                Navigator.of(context).pop();
                 if(dialogText.text != null){
                   model.remarks = dialogText.text;
                   try {
                     model.updateOnly = true;
-                    result =  await PurchaseOrderRepository().productionProgressUpload(
-                        order.code, model.id.toString(), model);
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoadingPage(
+                            requestCallBack: PurchaseOrderRepository().productionProgressUpload(
+                                order.code, model.id.toString(), model),
+                            outsideDismiss: false,
+                            loadingText: '保存中。。。',
+                            entrance: '',
+                          );
+                        }
+                    );
                   } catch (e) {
                     print(e);
                   }
@@ -674,7 +732,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     _blNumber = dialogText.text;
                   });
                 }
-                Navigator.of(context).pop();
               },
             ),
           ],
@@ -836,14 +893,25 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           BorderRadius.all(Radius.circular(5))),
                       onPressed: () async {
                         bool result = false;
-                        print(dialogText.text);
+                        Navigator.of(context).pop();
                         if (dialogText.text != null && dialogText.text != '') {
                           double balance = double.parse(dialogText.text);
                           model.balance = balance;
                           model.skipPayBalance = false;
                           try {
-                            result =  await PurchaseOrderRepository()
-                                .purchaseOrderBalanceUpdate(model.code, model);
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (_) {
+                                  return RequestDataLoadingPage(
+                                    requestCallBack: PurchaseOrderRepository()
+                                        .purchaseOrderBalanceUpdate(model.code, model),
+                                    outsideDismiss: false,
+                                    loadingText: '保存中。。。',
+                                    entrance: 'purchaseOrders',
+                                  );
+                                }
+                            );
                           } catch (e) {
                             print(e);
                           }
@@ -863,8 +931,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                               }
                             }
                           }
-                          Navigator.of(context).pop();
-                          _showMessage(context, result);
                         }
 
                       }
@@ -919,8 +985,21 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 bool result = false;
                 model.balance = 0;
                 model.skipPayBalance = true;
+                Navigator.of(context).pop();
                 try {
-                  await PurchaseOrderRepository().purchaseOrderBalanceUpdate(model.code , model);
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoadingPage(
+                          requestCallBack: PurchaseOrderRepository()
+                              .purchaseOrderBalanceUpdate(model.code, model),
+                          outsideDismiss: false,
+                          loadingText: '保存中。。。',
+                          entrance: 'purchaseOrders',
+                        );
+                      }
+                  );
                   if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
                     try {
                       for(int i=0;i<order.progresses.length;i++){
@@ -935,8 +1014,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 } catch (e) {
                   print(e);
                 }
-                Navigator.of(context).pop();
-                _showMessage(context,result);
               },
             ),
           ],

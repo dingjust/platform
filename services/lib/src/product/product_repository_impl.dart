@@ -84,7 +84,6 @@ class ProductRepositoryImpl extends ProductRepository{
 
   @override
   Future<String> update(ApparelProductModel form) async{
-    print('${form.images}========================');
     Response response;
     try{
       response = await http$.put(ProductApis.update(form.code),data: ApparelProductModel.toJson(form));

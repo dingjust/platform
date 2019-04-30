@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -52,10 +53,10 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text('填写物流信息'),
-            elevation: 0.5,
-            brightness: Brightness.light,
-            centerTitle: true,
+          title: Text('填写物流信息'),
+          elevation: 0.5,
+          brightness: Brightness.light,
+          centerTitle: true,
         ),
         body: Container(
             color: Colors.white,
@@ -85,7 +86,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                             ? '选择快递/物流公司'
                             : carrierName}',
                         style: TextStyle(
-                          fontSize: 16
+                            fontSize: 16
                         ),
                       ),
                     ),
@@ -155,7 +156,6 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                     borderRadius:
                     BorderRadius.all(Radius.circular(5))),
                 onPressed: () async{
-                  bool result = false;
                   //把选中的物流公司放到Model
                   CarrierModel carrier = new CarrierModel();
                   carrier.code = carrierCode;
@@ -170,42 +170,43 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                     if (widget.isProductionOrder && widget.purchaseOrderModel != null) {
                       //把内容放到生产订单里
                       widget.purchaseOrderModel.consignment = consignment;
-                      result = await PurchaseOrderRepository()
-                          .purchaseOrderDelivering(
-                          widget.purchaseOrderModel.code,
-                          widget.purchaseOrderModel);
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) =>
-                              PurchaseOrdersPage()), ModalRoute.withName('/'));
-                      PurchaseOrderBLoC().refreshData('ALL');
+
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return RequestDataLoadingPage(
+                              requestCallBack: PurchaseOrderRepository()
+                                  .purchaseOrderDelivering(
+                                  widget.purchaseOrderModel.code,
+                                  widget.purchaseOrderModel),
+                              outsideDismiss: false,
+                              loadingText: '保存中。。。',
+                              entrance: 'purchaseOrders',
+                            );
+                          }
+                      );
                     }
                     //打样单的确认发货
                     else if(!widget.isProductionOrder && widget.proofingModel != null) {
                       widget.proofingModel.consignment = consignment;
-                      result = await ProofingOrderRepository()
-                          .proofingDelivering(
-                          widget.proofingModel.code,
-                          widget.proofingModel);
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) =>
-                              ProofingOrdersPage()), ModalRoute.withName('/'));
-                      ProofingOrdersBLoC().refreshData('ALL');
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return RequestDataLoadingPage(
+                              requestCallBack: ProofingOrderRepository()
+                                  .proofingDelivering(
+                                  widget.proofingModel.code,
+                                  widget.proofingModel),
+                              outsideDismiss: false,
+                              loadingText: '保存中。。。',
+                              entrance: 'returnProofingOrders',
+                            );
+                          }
+                      );
                     }
 
-                    showDialog<void>(
-                      context: context,
-                      barrierDismissible: true, // user must tap button!
-                      builder: (context) {
-                        return SimpleDialog(
-                          title: const Text('提示'),
-                          children: <Widget>[
-                            SimpleDialogOption(
-                              child: Text('发货${result ? '成功' : '失败'}'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
                   }else{
                     showDialog<void>(
                       context: context,
@@ -244,38 +245,38 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 onPressed: () async{
                   bool result = false;
                   if(widget.isProductionOrder){
-                     result = await PurchaseOrderRepository()
-                            .purchaseOrderDelivering(
-                        widget.purchaseOrderModel.code,
-                        widget.purchaseOrderModel);
-                     Navigator.of(context).pushAndRemoveUntil(
-                         MaterialPageRoute(builder: (context) =>
-                             PurchaseOrdersPage()), ModalRoute.withName('/'));
-                     PurchaseOrderBLoC().refreshData('ALL');
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoadingPage(
+                            requestCallBack: PurchaseOrderRepository()
+                                .purchaseOrderDelivering(
+                                widget.purchaseOrderModel.code,
+                                widget.purchaseOrderModel),
+                            outsideDismiss: false,
+                            loadingText: '保存中。。。',
+                            entrance: 'purchaseOrders',
+                          );
+                        }
+                    );
                   }else{
-                    result = await ProofingOrderRepository()
-                        .proofingDelivering(
-                        widget.proofingModel.code,
-                        widget.proofingModel);
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) =>
-                            ProofingOrdersPage()), ModalRoute.withName('/'));
-                    ProofingOrdersBLoC().refreshData('ALL');
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoadingPage(
+                            requestCallBack: ProofingOrderRepository()
+                                .proofingDelivering(
+                                widget.proofingModel.code,
+                                widget.proofingModel),
+                            outsideDismiss: false,
+                            loadingText: '保存中。。。',
+                            entrance: 'returnProofingOrders',
+                          );
+                        }
+                    );
                   }
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: true, // user must tap button!
-                    builder: (context) {
-                      return SimpleDialog(
-                        title: const Text('提示'),
-                        children: <Widget>[
-                          SimpleDialogOption(
-                            child: Text('发货${result ? '成功' : '失败'}'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
                 }
             ),
           ),
@@ -292,7 +293,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
       builder: (BuildContext context) {
         return Container(
             child: ListView(
-              children: _builItems(context,list)
+                children: _builItems(context,list)
             )
         );
       },
@@ -303,16 +304,16 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
     List<Widget> widgets = new List();
     for(int i=0;i<list.length;i++){
       widgets.add(
-        ListTile(
-          title: Text('${list[i].name}'),
-          onTap: () async {
-            setState(() {
-              carrierName = list[i].name;
-              carrierCode = list[i].code;
-            });
-            Navigator.pop(context);
-          },
-        )
+          ListTile(
+            title: Text('${list[i].name}'),
+            onTap: () async {
+              setState(() {
+                carrierName = list[i].name;
+                carrierCode = list[i].code;
+              });
+              Navigator.pop(context);
+            },
+          )
       );
     }
     return widgets;

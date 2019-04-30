@@ -196,11 +196,14 @@ class _MyFactoryPageState extends State<MyFactoryPage> {
           style: TextStyle(),
         ),
         onPressed: () {
+          print( widget.isCompanyIntroduction);
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => MyCompanyContactFromPage(
                     company:widget.factory,
+                  isCompanyIntroduction:widget.isCompanyIntroduction,
+                  isEditing: widget.isCompanyIntroduction,
                   ),
             ),
           );
