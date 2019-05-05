@@ -43,3 +43,4 @@ export 'src/commons/table/attribute_table.dart';
 export 'src/commons/table/color_size_num_table.dart';
 export 'src/commons/select/region_city_selector.dart';
 export 'src/commons/select/positioning_roll_select.dart';
+export 'src/commons/carousel/carousel_stack_text.dart';
