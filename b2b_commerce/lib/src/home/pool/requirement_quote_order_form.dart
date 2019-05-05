@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -204,7 +205,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  widget.model.details.productName != null
+                  widget.model.details!=null && widget.model.details.productName != null
                       ? Text(
                           widget.model.details.productName,
                           style: TextStyle(fontSize: 15),
@@ -214,7 +215,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                           ' ',
                           style: TextStyle(fontSize: 15, color: Colors.red),
                         ),
-                  widget.model.details.productSkuID != null
+                  widget.model.details!=null && widget.model.details.productSkuID != null
                       ? Container(
                           padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                           decoration: BoxDecoration(
@@ -233,8 +234,8 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.details.majorCategory == null || widget.model.details.majorCategory.name == null ? '' : widget.model.details.majorCategory.name}   ${widget.model.details.category == null || widget.model.details.category.name == null ? '' : widget.model.details.category.name}  "
-                          " ${widget.model.details.expectedMachiningQuantity == null ? '' : widget.model.details.expectedMachiningQuantity}件",
+                      "${widget.model.details == null || widget.model.details.majorCategory == null || widget.model.details.majorCategory.name == null ? '' : widget.model.details.majorCategory.name}   ${widget.model.details==null || widget.model.details.category == null || widget.model.details.category.name == null ? '' : widget.model.details.category.name}  "
+                          " ${widget.model.details==null || widget.model.details.expectedMachiningQuantity == null ? '' : widget.model.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -638,47 +639,37 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
     model.attachments = attachments;
     model.unitPrice =
         unitPrice == null || unitPrice == '' ? null : double.parse(unitPrice);
-    String response;
+    Navigator.of(context).pop();
     if (widget.update) {
       model.code = widget.quoteModel.code;
-      response = await QuoteOrderRepository().quoteUpdate(model);
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoadingPage(
+              requestCallBack:  QuoteOrderRepository().quoteUpdate(model),
+              outsideDismiss: false,
+              loadingText: '保存中。。。',
+              entrance: 'quoteOrder',
+            );
+          }
+      );
     } else {
-      response = await QuoteOrderRepository().quoteCreate(model);
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoadingPage(
+              requestCallBack: QuoteOrderRepository().quoteCreate(model),
+              outsideDismiss: false,
+              loadingText: '保存中。。。',
+              entrance: 'quoteOrder',
+            );
+          }
+      );
     }
-
-    Navigator.of(context).pop();
-    // Navigator.of(context).pop();
-
-    // if (response != null) {
-    // showDialog<void>(
-    //   context: context,
-    //   barrierDismissible: true, // user must tap button!
-    //   builder: (context) {
-    //     return AlertDialog(
-    //       title: Text(widget.update ? '修改成功' : '报价成功'),
-    //       actions: <Widget>[
-    //         FlatButton(
-    //           child: Text('确定', style: TextStyle(color: Colors.black)),
-    //           onPressed: () {
-    //             Navigator.of(context).pop();
-    //           },
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
-    if (!widget.update) {
-      //查询明细
-      QuoteModel detailModel =
-          await QuoteOrderRepository().getQuoteDetails(response);
-      widget.quoteModel = detailModel;
-      Navigator.of(context).pop(detailModel);
-    } else {
-      //成功回调传递
-      Navigator.of(context).pop(true);
-    }
-    // }
   }
+
 }
 
 class InputRow extends StatelessWidget {
