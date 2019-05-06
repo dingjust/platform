@@ -1,0 +1,339 @@
+import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/home/factory/factory_item.dart';
+import 'package:core/core.dart';
+import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
+
+class MyFactoryBaseInfo extends StatefulWidget {
+  MyFactoryBaseInfo(this.factory);
+
+  final FactoryModel factory;
+
+  @override
+  State createState() => MyFactoryBaseInfoState();
+}
+
+class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _cooperativeBrandController = TextEditingController();
+  FocusNode _nameFocusNode = FocusNode();
+  FocusNode _cooperativeBrandFocusNode = FocusNode();
+
+  List<MediaModel> medias = [];
+  List<String> _scaleRange = [];
+  List<String> _monthlyCapacityRanges = [];
+  List<String> _populationScale = [];
+  List<String> _cooperationModes = [];
+
+  @override
+  void initState() {
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> _buildFactoryHeaderRow = [
+      widget.factory.approvalStatus == ArticleApprovalStatus.approved
+          ? Tag(
+        label: '  已认证  ',
+        color: Colors.black,
+        backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+      )
+          : Tag(
+        label: '  未认证  ',
+        color: Colors.black,
+        backgroundColor: Colors.grey[300],
+      )
+    ];
+    widget.factory.labels.forEach((label) {
+      return _buildFactoryHeaderRow.add(
+        Padding(
+          padding: const EdgeInsets.only(right: 5.0),
+          child: Tag(
+            label: label.name,
+            color: Color.fromRGBO(255, 133, 148, 1),
+          ),
+        ),
+      );
+    });
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+      child: ListView(
+        physics: NeverScrollableScrollPhysics(),
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              ImageFactory.buildThumbnailImage(widget.factory.profilePicture),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        widget.factory.name,
+                        style: const TextStyle(fontSize: 18),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Stars(
+                        starLevel: widget.factory.starLevel ?? 0,
+                      ),
+                      Container(
+                        height: 20,
+                        width: double.infinity,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: _buildFactoryHeaderRow,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              children: <Widget>[
+                const Text('历史接单'),
+                Text(
+                  '${widget.factory.historyOrdersCount ?? 0}',
+                  style: const TextStyle(color: Colors.red),
+                ),
+                const Text('单')
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '月均产能',
+                style: const TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              Text(
+                MonthlyCapacityRangesLocalizedMap[
+                widget.factory.monthlyCapacityRange] ??
+                    '',
+                style: const TextStyle(fontSize: 16,color: Colors.grey,),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '产值规模',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              Text(
+                "${ScaleRangesLocalizedMap[widget.factory.scaleRange] ?? ''}",
+                style: const TextStyle(fontSize: 16,color: Colors.grey,),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '工厂规模',
+                style: const TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              Text(
+                PopulationScaleLocalizedMap[widget.factory.populationScale] ??
+                    '',
+                style: const TextStyle(fontSize: 16,color: Colors.grey,),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '合作方式',
+                style: const TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              Text(
+                formatCooperationModesSelectText(
+                    widget.factory.cooperationModes),
+                style: const TextStyle(fontSize: 16,color: Colors.grey,),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '生产大类',
+                style: const TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              Text(
+                formatCategoriesSelectText(widget.factory.categories, 5),
+                style: const TextStyle(fontSize: 16,color: Colors.grey,),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '优势品类',
+                style: const TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: (context),
+                      builder: (context) {
+                        return SimpleDialog(
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.only(
+                                left: 10,
+                                right: 5,
+                              ),
+                              child: Text(
+                                formatCategoriesSelectText(
+                                    widget.factory.adeptAtCategories,
+                                    widget.factory.adeptAtCategories.length),
+                                style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                              ),
+                            )
+                          ],
+                        );
+                      });
+                },
+                child: Text(
+                  formatCategoriesSelectText(
+                      widget.factory.adeptAtCategories, 2),
+                  style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '合作品牌商',
+                style: const TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              Text(
+                widget.factory.cooperativeBrand ?? '',
+                style: const TextStyle(fontSize: 16,color: Colors.grey,),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  //格式化类别
+  String formatCategoriesSelectText(List<CategoryModel> categories, int count) {
+    String text = '';
+
+    if (categories != null) {
+      text = '';
+      for (int i = 0; i < categories.length; i++) {
+        if (i > count - 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == categories.length - 1) {
+          text += categories[i].name;
+        } else {
+          text += categories[i].name + '、';
+        }
+      }
+    }
+
+    return text;
+  }
+
+  String formatCategorySelectText(List<CategoryModel> categorys) {
+    String text = '';
+
+    if (categorys != null) {
+      text = '';
+      for (int i = 0; i < categorys.length; i++) {
+        if (i > 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == categorys.length - 1) {
+          text += categorys[i].name;
+        } else {
+          text += categorys[i].name + '、';
+        }
+      }
+    }
+
+    return text;
+  }
+
+  String formatLabelsSelectText(List<LabelModel> labels) {
+    String text = '';
+
+    if (labels != null) {
+      text = '';
+      for (int i = 0; i < labels.length; i++) {
+        if (i > 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == labels.length - 1) {
+          text += labels[i].name;
+        } else {
+          text += labels[i].name + '、';
+        }
+      }
+    }
+
+    return text;
+  }
+
+  //格式化合作方式
+  String formatCooperationModesSelectText(
+      List<CooperationModes> cooperationModes) {
+    String text = '';
+
+    if (cooperationModes != null) {
+      text = '';
+      for (int i = 0; i < cooperationModes.length; i++) {
+        if (i > 2) {
+          text += '...';
+          break;
+        }
+
+        if (i == cooperationModes.length - 1) {
+          text += CooperationModesLocalizedMap[cooperationModes[i]];
+        } else {
+          text += CooperationModesLocalizedMap[cooperationModes[i]] + '、';
+        }
+      }
+    }
+
+    return text;
+  }
+}

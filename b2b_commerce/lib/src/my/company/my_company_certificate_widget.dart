@@ -55,7 +55,7 @@ class MyCompanyCertificateWidgetState extends State<MyCompanyCertificateWidget> 
             children: <Widget>[
               Text(
                 '企业名称',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
+                style: TextStyle(color: Colors.black, fontSize: 16),
               ),
               TextFieldComponent(
                 focusNode: _nameFocusNode,
@@ -79,7 +79,7 @@ class MyCompanyCertificateWidgetState extends State<MyCompanyCertificateWidget> 
               children: <Widget>[
                 Text(
                   '工商注册号或统一社会信用代码',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 TextFieldComponent(
                   focusNode: _businessRegistrationNoFocusNode,
@@ -104,7 +104,7 @@ class MyCompanyCertificateWidgetState extends State<MyCompanyCertificateWidget> 
               children: <Widget>[
                 Text(
                   '法定代表人',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 TextFieldComponent(
                   focusNode: _legalRepresentativeFocusNode,
@@ -129,7 +129,7 @@ class MyCompanyCertificateWidgetState extends State<MyCompanyCertificateWidget> 
               children: <Widget>[
                 Text(
                   '法定代表人证件',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 TextFieldComponent(
                   focusNode: _certificateOfLegalFocusNode,
@@ -154,7 +154,7 @@ class MyCompanyCertificateWidgetState extends State<MyCompanyCertificateWidget> 
               children: <Widget>[
                 Text(
                   '认证证件',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 EditableAttachments(
                   list: widget.company.certificates,

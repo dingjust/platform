@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-import './company/my_company_certificate.dart';
-import './company/my_personal_certificate.dart';
+import 'package:b2b_commerce/src/my/company/form/my_company_certificate.dart';
+import 'package:b2b_commerce/src/my/company/form/my_personal_certificate.dart';
 
 class MyCompanyCertificateSelectPage extends StatefulWidget {
   MyCompanyCertificateSelectPage(this.company);

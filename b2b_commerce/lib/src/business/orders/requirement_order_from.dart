@@ -190,7 +190,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 ? TextFieldComponent(
                     focusNode: _nameFocusNode,
                     controller: _nameController,
-                    leadingText: Text('产品名称',
+                    leadingText: Text('标题',
                         style: TextStyle(
                           fontSize: 16,
                         )),

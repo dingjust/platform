@@ -6,9 +6,9 @@ import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
-import 'package:b2b_commerce/src/my/company/my_company_contact_from.dart';
+import 'package:b2b_commerce/src/my/company/form/my_company_contact_from.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_from_widget.dart';
-import 'package:b2b_commerce/src/my/company/my_company_form.dart';
+import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,6 @@ import 'package:widgets/widgets.dart';
 
 import './company/form/my_company_profile_form.dart';
 import './company/form/my_factory_base_form.dart';
-import './company/my_company_certificate.dart';
 import '../_shared/widgets/image_factory.dart';
 import '../business/orders/requirement_order_from.dart';
 import '../business/products/existing_product_item.dart';
@@ -238,47 +237,30 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
           SliverToBoxAdapter(
             child: InkWell(
               onTap: () {
-                PopupMenuButton(
-                    onSelected: (String value){
-                      setState(() {
-//                        _bodyStr = value;
-                      });
-                    },
-                    itemBuilder: (BuildContext context) =><PopupMenuItem<String>>[
-                      new PopupMenuItem(
-                          value:"选项一的内容",
-                          child: new Text("选项一")
+                showMenu(
+                    context: context,
+                    items:[
+                      PopupMenuItem(
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MyCompanyProfileFormPage(
+                                    widget.factory
+                                ),
+                              ),
+                            );
+                          },
+                          child: ListTile(
+                            title: Text('更换轮播图'),
+                          ),
+                        ),
                       ),
-                      new PopupMenuItem(
-                          value: "选项二的内容",
-                          child: new Text("选项二")
-                      )
-                    ]
+                    ],
+                    position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-180)/2, 100, (MediaQueryData.fromWindow(window).size.width)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
                 );
-//                showMenu(
-//                    context: context,
-//                    items:[
-//                      PopupMenuItem(
-//                        child: GestureDetector(
-//                          onTap: (){
-//                            Navigator.pop(context);
-//                            Navigator.push(
-//                              context,
-//                              MaterialPageRoute(
-//                                builder: (context) => MyCompanyProfileFormPage(
-//                                    widget.factory
-//                                ),
-//                              ),
-//                            );
-//                          },
-//                          child: ListTile(
-//                            title: Text('更换轮播图'),
-//                          ),
-//                        ),
-//                      ),
-//                    ],
-//                    position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-180)/2, 100, (MediaQueryData.fromWindow(window).size.width)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
-//                );
               },
               child: Container(
                 height: 188,
@@ -365,6 +347,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
             MaterialPageRoute(
               builder: (context) => MyCompanyContactFromPage(
                     company: widget.factory,
+                    isEditing: true,
                   ),
             ),
           );
@@ -375,243 +358,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
 
   //基本资料
   Widget _buildBaseInfo() {
-    List<Widget> _buildFactoryHeaderRow = [
-      widget.factory.approvalStatus == ArticleApprovalStatus.approved
-          ? Tag(
-              label: '  已认证  ',
-              color: Colors.black,
-              backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-            )
-          : Tag(
-              label: '  未认证  ',
-              color: Colors.black,
-              backgroundColor: Colors.grey[300],
-            )
-    ];
-    widget.factory.labels.forEach((label) {
-      return _buildFactoryHeaderRow.add(
-        Padding(
-          padding: const EdgeInsets.only(right: 5.0),
-          child: Tag(
-            label: label.name,
-            color: Color.fromRGBO(255, 133, 148, 1),
-          ),
-        ),
-      );
-    });
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-      child: ListView(
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[
-//            Padding(
-//              padding: const EdgeInsets.only(top: 5),
-//              child: Offstage(
-//                offstage: !widget.isCompanyIntroduction,
-//                child: Row(
-//                  mainAxisAlignment: MainAxisAlignment.end,
-//                  children: <Widget>[
-//                    GestureDetector(
-//                      child: Container(
-//                        padding: const EdgeInsets.symmetric(
-//                            horizontal: 15, vertical: 5),
-//                        decoration: BoxDecoration(
-//                          color: const Color.fromRGBO(255, 214, 12, 1),
-//                          borderRadius: BorderRadius.circular(5),
-//                        ),
-//                        child: const Text('编辑'),
-//                      ),
-//                      onTap: () {
-//                        Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                              builder: (context) =>
-//                                  MyFactoryBaseFormPage(widget.factory)),
-//                        );
-//                      },
-//                    )
-//                  ],
-//                ),
-//              ),
-//            ),
-          Row(
-            children: <Widget>[
-              ImageFactory.buildThumbnailImage(widget.factory.profilePicture),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  height: 80,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        widget.factory.name,
-                        style: const TextStyle(fontSize: 18),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Stars(
-                        starLevel: widget.factory.starLevel ?? 0,
-                      ),
-                      Container(
-                        height: 20,
-                        width: double.infinity,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: _buildFactoryHeaderRow,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 10),
-            child: Row(
-              children: <Widget>[
-                const Text('历史接单'),
-                Text(
-                  '${widget.factory.historyOrdersCount ?? 0}',
-                  style: const TextStyle(color: Colors.red),
-                ),
-                const Text('单')
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '月均产能',
-                style: const TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              Text(
-                MonthlyCapacityRangesLocalizedMap[
-                        widget.factory.monthlyCapacityRange] ??
-                    '',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '产值规模',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              Text(
-                "${ScaleRangesLocalizedMap[widget.factory.scaleRange] ?? ''}",
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '工厂规模',
-                style: const TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              Text(
-                PopulationScaleLocalizedMap[widget.factory.populationScale] ??
-                    '',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '合作方式',
-                style: const TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              Text(
-                formatCooperationModesSelectText(
-                    widget.factory.cooperationModes),
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '生产大类',
-                style: const TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              Text(
-                formatCategoriesSelectText(widget.factory.categories, 5),
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '优势品类',
-                style: const TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: (context),
-                      builder: (context) {
-                        return SimpleDialog(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.only(
-                                left: 10,
-                                right: 5,
-                              ),
-                              child: Text(
-                                formatCategoriesSelectText(
-                                    widget.factory.adeptAtCategories,
-                                    widget.factory.adeptAtCategories.length),
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            )
-                          ],
-                        );
-                      });
-                },
-                child: Text(
-                  formatCategoriesSelectText(
-                      widget.factory.adeptAtCategories, 2),
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '合作品牌商',
-                style: const TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              Text(
-                widget.factory.cooperativeBrand ?? '',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-        ],
-      ),
-    );
+    return MyFactoryBaseInfo(widget.factory);
   }
 
   Widget _buildContactWay(){
