@@ -37,6 +37,10 @@ class _NormalPictureFieldState extends State<NormalPictureField> {
               Text(
                 '（最多5张）',
                 style: TextStyle(color: Colors.grey, fontSize: 16),
+              ),
+              Text(
+                '*',
+                style: TextStyle(color: Colors.red, fontSize: 16),
               )
             ],
           ),

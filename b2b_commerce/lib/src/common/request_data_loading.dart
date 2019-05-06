@@ -18,6 +18,7 @@ class RequestDataLoadingPage extends StatefulWidget {
   bool callbackResult;
   Future<void> callbackExecution;
   String entrance;
+  String keyword;
 
   RequestDataLoadingPage({
     Key key,
@@ -29,6 +30,7 @@ class RequestDataLoadingPage extends StatefulWidget {
     this.callbackResult,
     this.callbackExecution,
     @required this.entrance,
+    this.keyword,
     })
       : super(key: key);
 
@@ -96,6 +98,14 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
             _requestMessage(context, '保存成功', value);
           }else{
             Navigator.of(context).pop();
+          }
+        }
+
+        if(widget.entrance == 'apparelProduct'){
+          if(widget.keyword == null){
+            ApparelProductBLoC.instance.filterByStatuses('ALL');
+          }else{
+            ApparelProductBLoC.instance.getData(widget.keyword);
           }
         }
 
