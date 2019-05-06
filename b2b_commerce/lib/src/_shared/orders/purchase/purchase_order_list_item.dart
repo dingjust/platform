@@ -1042,7 +1042,6 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                     } catch (e) {
                       print(e);
                     }
-                    Navigator.of(context).pop();
                   }),
             ),
           ],
@@ -1096,6 +1095,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                 bool result = false;
                 model.balance = 0;
                 model.skipPayBalance = true;
+                Navigator.of(context).pop();
                 try {
                   showDialog(
                       context: context,
@@ -1129,8 +1129,6 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                 } catch (e) {
                   result = false;
                   print(e);
-                } finally {
-                  Navigator.of(context).pop();
                 }
               },
             ),

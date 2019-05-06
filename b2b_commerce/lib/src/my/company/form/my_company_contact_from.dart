@@ -21,14 +21,13 @@ class MyCompanyContactFromPage extends StatefulWidget{
 class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
   String btnText = '编辑';
   AddressModel addressModel;
-  bool showButton =false;
 
-  TextEditingController personController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController telController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController QQController = TextEditingController();
-  TextEditingController weCharController = TextEditingController();
+  TextEditingController _personController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _telController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _QQController = TextEditingController();
+  TextEditingController _weCharController = TextEditingController();
 
   FocusNode personFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
@@ -40,6 +39,13 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
   @override
   void initState() {
     super.initState();
+    _personController.text = widget.company.contactPerson;
+    _phoneController.text = widget.company.contactPhone;
+    _telController.text = widget.company.phone;
+    _emailController.text = widget.company.email;
+    _QQController.text = widget.company.qq;
+    _weCharController.text = widget.company.wechat;
+
     if(widget.company.contactAddress != null){
       addressModel = widget.company.contactAddress;
     }
@@ -53,7 +59,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          widget.isCompanyIntroduction==true && widget.isEditing==true?
+          !widget.isEditing?
           Container(
                 width: 80,
                 child: ActionChip(
@@ -63,14 +69,13 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
                   label: Text('编辑'),
                   onPressed: () async{
                     setState(() {
-                      showButton = true;
                       widget.isEditing = !widget.isEditing;
-                      personController.text = widget.company.contactPerson;
-                      phoneController.text = widget.company.contactPhone;
-                      telController.text = widget.company.phone;
-                      emailController.text = widget.company.email;
-                      QQController.text = widget.company.qq;
-                      weCharController.text = widget.company.wechat;
+                      _personController.text = widget.company.contactPerson;
+                      _phoneController.text = widget.company.contactPhone;
+                      _telController.text = widget.company.phone;
+                      _emailController.text = widget.company.email;
+                      _QQController.text = widget.company.qq;
+                      _weCharController.text = widget.company.wechat;
                     });
                   },
                   backgroundColor: Color.fromRGBO(255, 214, 12, 1),
@@ -99,7 +104,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
           ],
         ),
       ),
-      bottomNavigationBar: showButton==true?Container(
+      bottomNavigationBar: widget.isEditing?Container(
         margin: EdgeInsets.all(10),
         padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
         height: 50,
@@ -118,16 +123,15 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
             onPressed: () async {
               bool result;
               setState(() {
-                widget.isEditing = true;
-                showButton = false;
+                widget.isEditing = false;
               });
               widget.company.contactAddress = addressModel;
-              widget.company.contactPerson = personController.text==''?null:personController.text;
-              widget.company.contactPhone = phoneController.text == '' ? null : phoneController.text;
-              widget.company.email = emailController.text == '' ? null : emailController.text;
-              widget.company.qq = QQController.text == '' ? null : QQController.text;
-              widget.company.wechat = weCharController.text == '' ? null : weCharController.text;
-              widget.company.phone = telController.text == ''? null : telController.text;
+              widget.company.contactPerson = _personController.text==''?null:_personController.text;
+              widget.company.contactPhone = _phoneController.text == '' ? null : _phoneController.text;
+              widget.company.email = _emailController.text == '' ? null : _emailController.text;
+              widget.company.qq = _QQController.text == '' ? null : _QQController.text;
+              widget.company.wechat = _weCharController.text == '' ? null : _weCharController.text;
+              widget.company.phone = _telController.text == ''? null : _telController.text;
               if(UserBLoC.instance.currentUser.type == UserType.BRAND){
                  showDialog(
                      context: context,
@@ -180,7 +184,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
           autofocus: false,
           inputType: TextInputType.text,
           textAlign: TextAlign.right,
-          controller: personController,
+          controller: _personController,
         ),
       )
       :Container(
@@ -226,7 +230,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
           autofocus: false,
           inputType: TextInputType.phone,
           textAlign: TextAlign.right,
-          controller: phoneController,
+          controller: _phoneController,
         ),
       )
         :GestureDetector(
@@ -318,7 +322,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
           autofocus: false,
           inputType: TextInputType.phone,
           textAlign: TextAlign.right,
-          controller: telController,
+          controller: _telController,
         ),
       )
           :GestureDetector(
@@ -367,7 +371,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
           autofocus: false,
           inputType: TextInputType.emailAddress,
           textAlign: TextAlign.right,
-          controller: emailController,
+          controller: _emailController,
         ),
       )
           :GestureDetector(
@@ -416,7 +420,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
           autofocus: false,
           inputType: TextInputType.text,
           textAlign: TextAlign.right,
-          controller: QQController,
+          controller: _QQController,
         ),
       )
           :GestureDetector(
@@ -466,7 +470,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
             autofocus: false,
             inputType: TextInputType.text,
             textAlign: TextAlign.right,
-            controller: weCharController,
+            controller: _weCharController,
           ),
         )
             :GestureDetector(

@@ -49,17 +49,20 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   @override
   void initState() {
+    model = RequirementOrderModel(
+        details: RequirementInfoModel(), attachments: []);
     if (widget.order != null) {
-      model = widget.order;
+      model.details = widget.order.details;
+      _nameController.text = model.details.productName;
+      _quantityController.text = model.details.expectedMachiningQuantity.toString();
+      _remarksController.text = model.remarks;
+      _priceController.text = model.details.maxExpectedPrice.toString() == 'null' ? '0' : model.details.maxExpectedPrice.toString();
       if (model.attachments == null) {
         model.attachments = [];
       }
       if (model.details.pictures == null) {
         model.details.pictures = [];
       }
-    } else {
-      model = RequirementOrderModel(
-          details: RequirementInfoModel(), attachments: []);
     }
 
     if (widget.product != null) {
@@ -190,7 +193,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 ? TextFieldComponent(
                     focusNode: _nameFocusNode,
                     controller: _nameController,
-                    leadingText: Text('产品名称',
+                    leadingText: Text('标题',
                         style: TextStyle(
                           fontSize: 16,
                         )),

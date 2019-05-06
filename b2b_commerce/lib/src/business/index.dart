@@ -173,7 +173,7 @@ class FactorySiteStatisticsSection extends StatelessWidget {
           SiteStatisticsModel(
               label: '报价中', value: '${snapshot.data?.ordersCount1 ?? 0}'),
           SiteStatisticsModel(
-              label: '生产中', value: '${snapshot.data?.ordersCount7 ?? 0}'),
+              label: '生产中', value: '${snapshot.data?.ordersCount6 ?? 0}'),
           SiteStatisticsModel(
               label: '已延期', value: '${snapshot.data?.ordersCount5 ?? 0}'),
         ]);

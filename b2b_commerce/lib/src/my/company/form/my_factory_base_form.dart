@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -80,9 +81,21 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         ? null
                         : _cooperativeBrandController.text;
 
-                UserRepositoryImpl()
-                    .factoryUpdate(widget.factory)
-                    .then((a) => Navigator.pop(context));
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return RequestDataLoadingPage(
+                        requestCallBack: UserRepositoryImpl()
+                            .factoryUpdate(widget.factory)
+                            .then((a) => Navigator.pop(context)),
+                        outsideDismiss: false,
+                        loadingText: '保存中。。。',
+                        entrance: 'createPurchaseOrder',
+                      );
+                    }
+                );
+
               })
         ],
       ),
@@ -129,7 +142,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     Text(widget.factory.monthlyCapacityRange == null
                         ? ''
                         : MonthlyCapacityRangesLocalizedMap[
-                            widget.factory.monthlyCapacityRange]),
+                            widget.factory.monthlyCapacityRange],style: TextStyle(color: Colors.grey),),
                     Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
@@ -179,7 +192,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     )),
                     Text(widget.factory.scaleRange == null
                         ? ''
-                        : ScaleRangesLocalizedMap[widget.factory.scaleRange]),
+                        : ScaleRangesLocalizedMap[widget.factory.scaleRange],style: TextStyle(color: Colors.grey),),
                     Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
@@ -228,7 +241,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     Text(widget.factory.populationScale == null
                         ? ''
                         : PopulationScaleLocalizedMap[
-                            widget.factory.populationScale]),
+                            widget.factory.populationScale],style: TextStyle(color: Colors.grey),),
                     Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
@@ -277,7 +290,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       ),
                     )),
                     Text(formatCooperationModesSelectText(
-                        widget.factory.cooperationModes)),
+                        widget.factory.cooperationModes),style: TextStyle(color: Colors.grey),),
                     Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
                 ),
@@ -328,7 +341,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatCategorySelectText(widget.factory.categories, 5),
+                      formatCategorySelectText(widget.factory.categories, 5),style: TextStyle(color: Colors.grey),
                     ),
                     Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
@@ -374,7 +387,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     )),
                     Text(
                       formatCategorySelectText(
-                          widget.factory.adeptAtCategories, 2),
+                          widget.factory.adeptAtCategories, 2),style: TextStyle(color: Colors.grey),
                     ),
                     Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
@@ -429,7 +442,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatLabelsSelectText(widget.factory.labels),
+                      formatLabelsSelectText(widget.factory.labels),style: TextStyle(color: Colors.grey),
                     ),
                     Icon(Icons.chevron_right,color:Colors.grey,),
                   ],
