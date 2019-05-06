@@ -90,21 +90,17 @@ class _LoginPageState extends State<LoginPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          // _isPasswordLogin?
           GestureDetector(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => widget.forgetPasswordPage));
+              setState(() {
+                _isPasswordLogin = !_isPasswordLogin;
+              });
             },
-            child: Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
-              child: Text(
-                '忘记密码',
-                style: TextStyle(color: Colors.red, fontSize: 15),
-              ),
+            child: Text(
+              _isPasswordLogin ? '短信验证码登陆' : '密码登陆',
+              style: TextStyle(fontSize: 15),
             ),
           ),
-          Container(),
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(
@@ -142,27 +138,25 @@ class _LoginPageState extends State<LoginPage> {
             border: UnderlineInputBorder(
                 borderSide:
                     BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-            suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _isPasswordHide = !_isPasswordHide;
-                });
+            suffix: FlatButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => widget.forgetPasswordPage));
               },
-              child: Icon(
-                _isPasswordHide ? B2BIcons.eye_not_see : Icons.remove_red_eye,
-                color: Colors.black54,
+              child: Text(
+                '忘记密码',
+                style: TextStyle(color: Colors.black54, fontSize: 15),
               ),
             )),
         // 校验用户名
         validator: (v) {
-          return v.trim().length > 0 ? null : '密码不能为空';
+          return v.trim().length > 0 ? null : '';
         });
 
     TextFormField _smsCaptchaField = TextFormField(
         autofocus: false,
         controller: _smsCaptchaController,
         decoration: InputDecoration(
-          labelText: '验证码',
           hintText: '请输入',
           focusedErrorBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
@@ -172,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
               borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
           border: UnderlineInputBorder(
               borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-          suffixIcon: FlatButton(
+          suffix: FlatButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
             onPressed: (_seconds == 0)
@@ -191,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         // 校验用户名
         validator: (v) {
-          return v.trim().length > 0 ? null : '验证码不能为空';
+          return v.trim().length > 0 ? null : '';
         });
 
     //监听密码输入变动、刷新表单校验
@@ -203,56 +197,91 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
       child: Column(
         children: <Widget>[
-          TextFormField(
-              autofocus: false,
-              keyboardType: TextInputType.phone,
-              controller: _phoneController,
-              maxLength: 11,
-              //只能输入数字
-              inputFormatters: <TextInputFormatter>[
-                WhitelistingTextInputFormatter.digitsOnly,
-              ],
-              decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          _phoneController.clear();
-                        });
-                      }),
-                  hintText: '请输入手机号码',
-                  focusedErrorBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-                  errorBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-                  border: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1)))),
-              // 校验用户名
-              validator: (v) {
-                return v.trim().length > 0 ? null : '手机号不能为空';
-              }),
-          _isPasswordLogin ? _passwordField : _smsCaptchaField,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                padding: EdgeInsets.only(bottom: 15),
+                child: Icon(
+                  Icons.phone_iphone,
+                  color: Colors.grey,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: TextFormField(
+                    autofocus: false,
+                    keyboardType: TextInputType.phone,
+                    controller: _phoneController,
+                    //只能输入数字
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly,
+                    ],
+                    decoration: InputDecoration(
+                        suffix: FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              _phoneController.clear();
+                            });
+                          },
+                          child: Icon(
+                            Icons.clear,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        hintText: '请输入手机号码',
+                        focusedErrorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromRGBO(200, 200, 200, 1))),
+                        errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromRGBO(200, 200, 200, 1))),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromRGBO(200, 200, 200, 1))),
+                        border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromRGBO(200, 200, 200, 1)))),
+                    // 校验用户名
+                    validator: (v) {
+                      return v.trim().length > 0 ? null : '';
+                    }),
+              )
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                  padding: EdgeInsets.only(bottom: 15),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isPasswordHide = !_isPasswordHide;
+                      });
+                    },
+                    child: _isPasswordLogin
+                        ? Icon(
+                            _isPasswordHide
+                                ? B2BIcons.eye_not_see
+                                : Icons.remove_red_eye,
+                            color: Colors.black54,
+                          )
+                        : Container(
+                            width: 25,
+                          ),
+                  )),
+              Expanded(
+                flex: 1,
+                child: _isPasswordLogin ? _passwordField : _smsCaptchaField,
+              )
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              // GestureDetector(
-              //   onTap: () {
-              //     setState(() {
-              //       _isPasswordLogin = !_isPasswordLogin;
-              //     });
-              //   },
-              //   child: Text(
-              //     _isPasswordLogin ? '短信验证码登陆' : '密码登陆',
-              //     style: TextStyle(
-              //         color: Color.fromRGBO(255, 214, 12, 1), fontSize: 15),
-              //   ),
-              // ),
               Row(
                 children: <Widget>[
                   Text(
@@ -279,7 +308,9 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildLogo() {
     return Container(
-        padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20), child: widget.logo);
+        decoration: BoxDecoration(color: Color.fromRGBO(255, 214, 12, 1)),
+        padding: const EdgeInsets.fromLTRB(0, 60.0, 0, 20.0),
+        child: widget.logo);
   }
 
   Widget _buildBody(BuildContext context) {
@@ -301,60 +332,74 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage(
-          'temp/login_background.png',
-          package: "assets",
-        ),
-        fit: BoxFit.fitWidth,
-      )),
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
-        children: <Widget>[
-          _buildLogo(),
-          _buildInputArea(),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: RaisedButton(
-              onPressed: (_formKey.currentState as FormState) == null
-                  ? null
-                  : (_formKey.currentState as FormState).validate()
-                      ? () {
-                          //加载条
-                          showDialog(
-                            context: context,
-                            builder: (context) => ProgressIndicatorFactory
-                                .buildDefaultProgressIndicator(),
-                          );
-                          bloc
-                              .login(
-                                  username: _phoneController.text,
-                                  password: _passwordController.text,
-                                  remember: _isRemember)
-                              .then((result) {
-                            if (result) {
-                              Navigator.of(context)
-                                  .popUntil(ModalRoute.withName('/'));
-                            }
-                          });
-                        }
-                      : null,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                '登陆',
-                style: TextStyle(color: Colors.black, fontSize: 18),
+      color: Colors.white,
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: 160.0,
+            pinned: true,
+            elevation: 0.5,
+            leading: Container(),
+            brightness: Brightness.light,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  _buildLogo(),
+                ],
               ),
             ),
           ),
-          _buildServiceRow()
+          SliverList(
+              delegate: SliverChildListDelegate([
+            _buildInputArea(),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: RaisedButton(
+                onPressed: (_formKey.currentState as FormState) == null
+                    ? null
+                    : (_formKey.currentState as FormState).validate()
+                        ? () {
+                            onLogin(bloc);
+                          }
+                        : null,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  '登陆',
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
+              ),
+            ),
+            _buildServiceRow()
+          ])),
         ],
       ),
     );
+  }
+
+  void onLogin(UserBLoC bloc) {
+    //加载条
+    showDialog(
+      context: context,
+      builder: (context) =>
+          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    );
+    bloc
+        .login(
+            username: _phoneController.text,
+            password: _passwordController.text,
+            remember: _isRemember)
+        .then((result) {
+      if (result) {
+        Navigator.of(context).popUntil(ModalRoute.withName('/'));
+      } else {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   void showSnackBar(BuildContext context) {

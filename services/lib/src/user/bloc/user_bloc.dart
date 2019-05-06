@@ -78,6 +78,7 @@ class UserBLoC extends BLoCBase {
         }));
       } else {
         _loginResultController.sink.add('账号不存在请注册后登陆');
+        return false;
       }
     } on DioError catch (e) {
       print(e);
@@ -137,6 +138,7 @@ class UserBLoC extends BLoCBase {
     http$.removeAuthorization();
     _controller.sink.add(_user);
   }
+
 //
   void changeUserType(UserType userType) {
     _user.type = userType;
