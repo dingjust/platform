@@ -74,11 +74,17 @@ class HttpManager {
       return response; // continue
     }, onError: (DioError e) {
       ErrorResponse errorResponse = ErrorResponse.fromJson(e.response.data);
-
       // unauthorized
+      //未登录或token失效
       if (e.response != null && e.response.statusCode == 401) {
-        //token过期，用户记录清空
-        // UserBLoC.instance.logout();
+        //已登录，token失效
+        if (UserBLoC.instance.currentUser.status == UserStatus.ONLINE) {
+          //记录当前用户类型
+          UserType userType = UserBLoC.instance.currentUser.type;
+          //token过期，用户记录清空
+          UserBLoC.instance.logout();
+          UserBLoC.instance.changeUserType(userType);
+        }
         UserBLoC.instance.loginJumpController.add(true);
         //消息流推送
         // MessageBLoC.instance.errorMessageController.add('请先登录');

@@ -137,7 +137,7 @@ class UserBLoC extends BLoCBase {
     http$.removeAuthorization();
     _controller.sink.add(_user);
   }
-
+//
   void changeUserType(UserType userType) {
     _user.type = userType;
     _controller.sink.add(_user);
