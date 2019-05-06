@@ -8,7 +8,6 @@ import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_from.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_from_widget.dart';
-import 'package:b2b_commerce/src/my/company/my_company_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ import 'package:widgets/widgets.dart';
 
 import './company/form/my_company_profile_form.dart';
 import './company/form/my_factory_base_form.dart';
-import './company/my_company_certificate.dart';
 import '../_shared/widgets/image_factory.dart';
 import '../business/orders/requirement_order_from.dart';
 import '../business/products/existing_product_item.dart';
@@ -267,7 +265,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
             ),
           ),
             SliverAppBar(
-              expandedHeight: MediaQueryData.fromWindow(window).size.height - 188,
+              expandedHeight: MediaQueryData.fromWindow(window).size.height,
               leading: Container(),
               brightness: Brightness.dark,
               pinned: true,
