@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -8,20 +7,19 @@ import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
-class MyCompanyContactFromPage extends StatefulWidget{
+class MyCompanyContactFromWidgetPage extends StatefulWidget{
   B2BUnitModel company;
-  bool isCompanyIntroduction;
   bool isEditing;
 
-  MyCompanyContactFromPage({this.company,this.isCompanyIntroduction=false,this.isEditing = false});
+  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false});
 
-  _MyCompanyContactFromPageState createState() => _MyCompanyContactFromPageState();
+  _MyCompanyContactFromWidgetPageState createState() => _MyCompanyContactFromWidgetPageState();
 }
 
-class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
+class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWidgetPage>{
   String btnText = '编辑';
+  bool isEditing = false;
   AddressModel addressModel;
-  bool showButton =false;
 
   TextEditingController personController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -47,124 +45,30 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('联系方式'),
-        centerTitle: true,
-        elevation: 0.5,
-        actions: <Widget>[
-          widget.isCompanyIntroduction==true && widget.isEditing==true?
-          Container(
-                width: 80,
-                child: ActionChip(
-                  shape:  RoundedRectangleBorder(
-                      side: BorderSide.none,
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  label: Text('编辑'),
-                  onPressed: () async{
-                    setState(() {
-                      showButton = true;
-                      widget.isEditing = !widget.isEditing;
-                      personController.text = widget.company.contactPerson;
-                      phoneController.text = widget.company.contactPhone;
-                      telController.text = widget.company.phone;
-                      emailController.text = widget.company.email;
-                      QQController.text = widget.company.qq;
-                      weCharController.text = widget.company.wechat;
-                    });
-                  },
-                  backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-                )
-          ):Container(),
-        ],
-      ),
-      body: Container(
-        color: Colors.white,
-        child: ListView(
-          children: <Widget>[
-            _buildContactPerson(context),
-            Divider(height: 1,),
-            _buildContactPhone(context),
-            Divider(height: 1,),
-            _buildContactAddress(context),
-            Divider(height: 1,),
-            _buildCellPhone(context),
-            Divider(height: 1,),
-            _buildEmail(context),
-            Divider(height: 1,),
-            _buildQQ(context),
-            Divider(height: 1,),
-            _buildWeChar(context),
-            Divider(height: 1,),
-          ],
-        ),
-      ),
-      bottomNavigationBar: showButton==true?Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-        height: 50,
-        child: RaisedButton(
-            color: Color.fromRGBO(255, 214, 12, 1),
-            child: Text(
-              '保存',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              ),
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: () async {
-              bool result;
-              setState(() {
-                widget.isEditing = true;
-                showButton = false;
-              });
-              widget.company.contactAddress = addressModel;
-              widget.company.contactPerson = personController.text==''?null:personController.text;
-              widget.company.contactPhone = phoneController.text == '' ? null : phoneController.text;
-              widget.company.email = emailController.text == '' ? null : emailController.text;
-              widget.company.qq = QQController.text == '' ? null : QQController.text;
-              widget.company.wechat = weCharController.text == '' ? null : weCharController.text;
-              widget.company.phone = telController.text == ''? null : telController.text;
-              if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-                 showDialog(
-                     context: context,
-                     barrierDismissible: false,
-                     builder: (_) {
-                       return RequestDataLoadingPage(
-                         requestCallBack: UserRepositoryImpl()
-                             .brandUpdateContact(widget.company),
-                         outsideDismiss: false,
-                         loadingText: '保存中。。。',
-                         entrance: '00',
-                       );
-                     }
-                 );
-              }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) {
-                      return RequestDataLoadingPage(
-                        requestCallBack: UserRepositoryImpl()
-                            .factoryUpdateContact(widget.company),
-                        loadingText: '保存中。。。',
-                        entrance: '00',
-                      );
-                    }
-                 );
-              }
-
-            }),
-      ):null,
+    return ListView(
+      physics: NeverScrollableScrollPhysics(),
+      children: <Widget>[
+        _buildContactPerson(context),
+        Divider(height: 1,),
+        _buildContactPhone(context),
+        Divider(height: 1,),
+        _buildContactAddress(context),
+        Divider(height: 1,),
+        _buildCellPhone(context),
+        Divider(height: 1,),
+        _buildEmail(context),
+        Divider(height: 1,),
+        _buildQQ(context),
+        Divider(height: 1,),
+        _buildWeChar(context),
+        Divider(height: 1,),
+      ],
     );
   }
 
   Widget _buildContactPerson(BuildContext context){
     return Container(
-      child: widget.isEditing?
+      child: isEditing?
       Container(
         color: Colors.white,
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -209,7 +113,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
 
   Widget _buildContactPhone(BuildContext context){
     return Container(
-      child: widget.isEditing?
+      child: isEditing?
       Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10),
@@ -250,6 +154,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
           ),
         ),
         onTap: (){
+          if (!isEditing && phoneController.text.length > 0)
           _selectActionButton(widget.company.contactPhone);
         },
       ),
@@ -269,21 +174,16 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
             ),
           ),
           trailing : Container(
-            width: 250,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                '${widget.company.contactAddress!=null && widget.company.contactAddress.details != null? widget.company.contactAddress.details:''}',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey
-                ),
+            child: Text(
+              '${widget.company.contactAddress!=null && widget.company.contactAddress.details != null? widget.company.contactAddress.details:''}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey
               ),
             ),
           ),
         ),
         onTap: (){
-          widget.isEditing == true?
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -293,7 +193,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
             ),
           ).then((value){
             addressModel = value;
-          }):null;
+          });
         },
       ),
     );
@@ -301,7 +201,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
 
   Widget _buildCellPhone(BuildContext context){
     return Container(
-      child: widget.isEditing?
+      child: isEditing?
       Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10),
@@ -342,6 +242,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
           ),
         ),
         onTap: (){
+          if (!isEditing && telController.text.length > 0)
           _selectActionButton(widget.company.phone);
         },
       ),
@@ -350,7 +251,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
 
   Widget _buildEmail(BuildContext context){
     return Container(
-      child: widget.isEditing?
+      child: isEditing?
       Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10),
@@ -399,7 +300,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
 
   Widget _buildQQ(BuildContext context){
     return Container(
-      child: widget.isEditing?
+      child: isEditing?
       Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10),
@@ -449,7 +350,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
   Widget _buildWeChar(BuildContext context){
     return Container(
       child: Container(
-        child: widget.isEditing?
+        child: isEditing?
         Container(
           color: Colors.white,
           margin: EdgeInsets.only(top: 10),
