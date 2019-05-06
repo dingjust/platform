@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/products/form/prices_field.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -209,9 +210,12 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 style: TextStyle(fontSize: 16,color: Colors.grey,),
                 focusNode: _gramWeightFocusNode,
                 controller: _gramWeightController,
-                inputType: TextInputType.number,
+//                inputType: TextInputType.number,
                 leadingText: Text('重量（kg）',style: TextStyle(fontSize: 16,)),
                 hintText: '请输入重量',
+                inputFormatters: [
+                  DecimalInputFormat(),
+                ],
                 onChanged: (value) {
                   widget.item.gramWeight = double.parse(value);
                 },
