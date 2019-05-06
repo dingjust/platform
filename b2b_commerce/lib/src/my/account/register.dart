@@ -6,8 +6,13 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class RegisterPage extends StatefulWidget {
+  final Image logo;
+
+  const RegisterPage({Key key, @required this.logo}) : super(key: key);
+
   _RegisterPageState createState() => _RegisterPageState();
 }
 
@@ -22,6 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   int _seconds = 0;
   Timer _timer;
   bool validate = false;
+  bool _isPasswordHide = true;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   String phoneValidateStr = "";
@@ -63,36 +69,56 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        elevation: 0.5,
-        iconTheme: IconThemeData(color: Color.fromRGBO(36, 38, 41, 1)),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: const Text(
-          '注册',
-          style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(10.0),
-        children: <Widget>[
-          _buildInputArea(),
-          RaisedButton(
-            onPressed: validate ? () => onNext(context) : null,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            color: Color.fromRGBO(255, 214, 12, 1),
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              '下一步',
-              style: TextStyle(color: Colors.black, fontSize: 18),
-            ),
+        key: _scaffoldKey,
+        body: Container(
+          color: Colors.white,
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                expandedHeight: 160.0,
+                pinned: true,
+                elevation: 0.5,
+                brightness: Brightness.light,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      _buildLogo(),
+                    ],
+                  ),
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildListDelegate(
+                [
+                  _buildInputArea(),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: RaisedButton(
+                      onPressed: validate ? () => onNext(context) : null,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        '下一步',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  _buildProtocolArea()
+                ],
+              )),
+            ],
           ),
-          _buildProtocolArea()
-        ],
-      ),
-    );
+        ));
+  }
+
+  Widget _buildLogo() {
+    return Container(
+        decoration: BoxDecoration(color: Color.fromRGBO(255, 214, 12, 1)),
+        padding: const EdgeInsets.fromLTRB(0, 60.0, 0, 20.0),
+        child: widget.logo);
   }
 
   Widget _buildInputArea() {
@@ -102,7 +128,15 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Column(
         children: <Widget>[
           InputRow(
-            label: '手机号',
+            // label: '手机号',
+            leading: Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+              // padding: EdgeInsets.only(top: 25),
+              child: Icon(
+                Icons.phone_iphone,
+                color: Colors.grey,
+              ),
+            ),
             field: TextField(
               autofocus: false,
               onChanged: (value) async {
@@ -125,7 +159,9 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           InputRow(
-            label: '验证码',
+            leading: Container(
+              width: 45,
+            ),
             field: TextField(
               autofocus: false,
               onChanged: (value) {
@@ -146,8 +182,8 @@ class _RegisterPageState extends State<RegisterPage> {
               color: Color.fromRGBO(255, 214, 12, 1),
               onPressed: (_seconds == 0)
                   ? () async {
-                      bool isExist = await validatePhone();
-                      if (!isExist) {
+                      bool legal = await validatePhone();
+                      if (legal) {
                         UserRepositoryImpl()
                             .sendCaptcha(_phoneController.text)
                             .then((a) {
@@ -163,7 +199,20 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           InputRow(
-              label: '设置密码',
+              leading: Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                  child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isPasswordHide = !_isPasswordHide;
+                        });
+                      },
+                      child: Icon(
+                        _isPasswordHide
+                            ? B2BIcons.eye_not_see
+                            : Icons.remove_red_eye,
+                        color: Colors.black54,
+                      ))),
               field: TextField(
                 autofocus: false,
                 obscureText: true,
@@ -178,6 +227,189 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+
+  // Widget _buildInputArea() {
+  //   TextFormField _passwordField = TextFormField(
+  //       autofocus: false,
+  //       controller: _passwordController,
+  //       obscureText: _isPasswordHide,
+  //       decoration: InputDecoration(
+  //           hintText: '请输入密码',
+  //           errorStyle: TextStyle(fontSize: 0),
+  //           focusedErrorBorder: UnderlineInputBorder(
+  //               borderSide:
+  //                   BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+  //           errorBorder: UnderlineInputBorder(
+  //               borderSide:
+  //                   BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+  //           focusedBorder: UnderlineInputBorder(
+  //               borderSide:
+  //                   BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+  //           border: UnderlineInputBorder(
+  //               borderSide:
+  //                   BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+  //           suffix: FlatButton(
+  //             onPressed: () {},
+  //             child: Text(
+  //               '',
+  //             ),
+  //           )),
+  //       // 校验用户名
+  //       validator: (v) {
+  //         return v.trim().length > 0 ? null : '';
+  //       });
+
+  //   TextFormField _smsCaptchaField = TextFormField(
+  //       autofocus: false,
+  //       controller: _captchaController,
+  //       decoration: InputDecoration(
+  //         hintText: '请输入',
+  //         errorStyle: TextStyle(fontSize: 0),
+  //         focusedErrorBorder: UnderlineInputBorder(
+  //             borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+  //         errorBorder: UnderlineInputBorder(
+  //             borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+  //         focusedBorder: UnderlineInputBorder(
+  //             borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+  //         border: UnderlineInputBorder(
+  //             borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
+  //       ),
+  //       // 校验用户名
+  //       validator: (v) {
+  //         return v.trim().length > 0 ? null : '';
+  //       });
+
+  //   //监听密码输入变动、刷新表单校验
+  //   _passwordController.addListener(() {
+  //     setState(() {});
+  //   });
+
+  //   return Container(
+  //     padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
+  //     child: Column(
+  //       children: <Widget>[
+  //         Row(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: <Widget>[
+  //             Container(
+  //               margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+  //               padding: EdgeInsets.only(top: 25),
+  //               child: Icon(
+  //                 Icons.phone_iphone,
+  //                 color: Colors.grey,
+  //               ),
+  //             ),
+  //             Expanded(
+  //               flex: 1,
+  //               child: TextFormField(
+  //                   autofocus: false,
+  //                   keyboardType: TextInputType.phone,
+  //                   controller: _phoneController,
+  //                   //只能输入数字
+  //                   inputFormatters: <TextInputFormatter>[
+  //                     WhitelistingTextInputFormatter.digitsOnly,
+  //                   ],
+  //                   decoration: InputDecoration(
+  //                       suffix: FlatButton(
+  //                         onPressed: () {
+  //                           setState(() {
+  //                             _phoneController.clear();
+  //                           });
+  //                         },
+  //                         child: Icon(
+  //                           Icons.clear,
+  //                           color: Colors.grey,
+  //                         ),
+  //                       ),
+  //                       hintText: '请输入手机号码',
+  //                       errorStyle: TextStyle(fontSize: 0),
+  //                       focusedErrorBorder: UnderlineInputBorder(
+  //                           borderSide: BorderSide(
+  //                               color: Color.fromRGBO(200, 200, 200, 1))),
+  //                       errorBorder: UnderlineInputBorder(
+  //                           borderSide: BorderSide(
+  //                               color: Color.fromRGBO(200, 200, 200, 1))),
+  //                       focusedBorder: UnderlineInputBorder(
+  //                           borderSide: BorderSide(
+  //                               color: Color.fromRGBO(200, 200, 200, 1))),
+  //                       border: UnderlineInputBorder(
+  //                           borderSide: BorderSide(
+  //                               color: Color.fromRGBO(200, 200, 200, 1)))),
+  //                   // 校验用户名
+  //                   validator: (v) {
+  //                     return v.trim().length > 0 ? null : '';
+  //                   }),
+  //             )
+  //           ],
+  //         ),
+  //         Row(
+  //           crossAxisAlignment: CrossAxisAlignment.end,
+  //           children: <Widget>[
+  //             Container(
+  //                 width: 25,
+  //                 margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+  //                 padding: EdgeInsets.only(top: 25),
+  //                 child: Container()),
+  //             Expanded(
+  //               flex: 1,
+  //               child: _smsCaptchaField,
+  //             ),
+  //             Container(
+  //               // width: 25,
+  //               margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+  //               padding: EdgeInsets.only(top: 25),
+  //               child: FlatButton(
+  //                 shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(8)),
+  //                 onPressed: (_seconds == 0)
+  //                     ? () async {
+  //                         bool isExist = await validatePhone();
+  //                         if (!isExist) {
+  //                           UserRepositoryImpl()
+  //                               .sendCaptcha(_phoneController.text)
+  //                               .then((a) {
+  //                             _startTimer();
+  //                           });
+  //                         }
+  //                       }
+  //                     : null,
+  //                 child: Text(
+  //                   '$_verifyStr',
+  //                   style: TextStyle(color: Colors.black),
+  //                 ),
+  //                 color: Color.fromRGBO(255, 214, 12, 1),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         Row(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: <Widget>[
+  //             Container(
+  //                 margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+  //                 padding: EdgeInsets.only(top: 25),
+  //                 child: GestureDetector(
+  //                     onTap: () {
+  //                       setState(() {
+  //                         _isPasswordHide = !_isPasswordHide;
+  //                       });
+  //                     },
+  //                     child: Icon(
+  //                       _isPasswordHide
+  //                           ? B2BIcons.eye_not_see
+  //                           : Icons.remove_red_eye,
+  //                       color: Colors.black54,
+  //                     ))),
+  //             Expanded(
+  //               flex: 1,
+  //               child: _passwordField,
+  //             )
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildProtocolArea() {
     return Container(
@@ -244,10 +476,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<bool> validatePhone() async {
     String result = "";
-    bool isExist = false;
+    bool legal = false;
 
-    if (_phoneController.text == '') {
-      result = '';
+    if (_phoneController.text == '' || _phoneController.text == null) {
+      result = '输入正确手机号';
     } else {
       if (RegexUtil.isMobile(_phoneController.text)) {
         bool exist =
@@ -255,9 +487,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
         if (exist != null && exist) {
           result = "账号已存在";
-          isExist = true;
         } else {
           result = "";
+          legal = true;
         }
       } else {
         result = "输入正确手机号";
@@ -268,7 +500,7 @@ class _RegisterPageState extends State<RegisterPage> {
       phoneValidateStr = result;
     });
 
-    return isExist;
+    return legal;
   }
 
   void formValidate() {

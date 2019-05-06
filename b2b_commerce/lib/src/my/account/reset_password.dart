@@ -387,11 +387,13 @@ class PrefixText extends StatelessWidget {
 class InputRow extends StatelessWidget {
   final String label;
 
+  final Widget leading;
+
   final TextField field;
 
   final Widget surfix;
 
-  const InputRow({Key key, this.label, this.field, this.surfix})
+  const InputRow({Key key, this.label, this.field, this.surfix, this.leading})
       : super(key: key);
 
   @override
@@ -405,15 +407,18 @@ class InputRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-            width: 100,
-            margin: EdgeInsets.only(right: 20),
-            child: Text(
-              label,
-              style:
-                  TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
-            ),
-          ),
+          label != null
+              ? Container(
+                  width: 100,
+                  margin: EdgeInsets.only(right: 20),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                        color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                  ),
+                )
+              : Container(),
+          leading != null ? leading : Container(),
           Expanded(
             flex: 1,
             child: field,

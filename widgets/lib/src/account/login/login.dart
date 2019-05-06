@@ -89,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
             onTap: () {
@@ -97,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
               });
             },
             child: Text(
-              _isPasswordLogin ? '短信验证码登陆' : '密码登陆',
+              _isPasswordLogin ? '验证码登陆' : '密码登陆',
               style: TextStyle(fontSize: 15),
             ),
           ),
@@ -107,7 +108,6 @@ class _LoginPageState extends State<LoginPage> {
                   MaterialPageRoute(builder: (context) => widget.registerPage));
             },
             child: Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
               child: Text(
                 '注册',
                 style: TextStyle(color: Colors.black, fontSize: 15),
