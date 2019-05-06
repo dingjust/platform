@@ -167,25 +167,28 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          IconButton(icon: Text('编辑'), onPressed: (){
-            switch(_tabController.index){
-              case 0:
-                return Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryBaseFormPage(widget.factory)));
-                break;
-              case 1:
-                return Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyContactFromPage(company:widget.factory,isEditing: true,)));
-                break;
-              case 2:
-                ShowDialogUtil.showSimapleDialog(context, '现款产品不可以编辑');
-                break;
-              case 3:
-                ShowDialogUtil.showSimapleDialog(context, '认证请移步`我的认证`进行认证');
-                break;
-              default :
-                return Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyContactFromPage(company:widget.factory,isEditing: true,)));
-                break;
-            }
-          }),
+          Offstage(
+            offstage: widget.isFactoryDetail,
+            child: IconButton(icon: Text('编辑'), onPressed: (){
+              switch(_tabController.index){
+                case 0:
+                  return Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryBaseFormPage(widget.factory)));
+                  break;
+                case 1:
+                  return Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyContactFromPage(company:widget.factory,isEditing: true,)));
+                  break;
+                case 2:
+                  ShowDialogUtil.showSimapleDialog(context, '现款产品不可以编辑');
+                  break;
+                case 3:
+                  ShowDialogUtil.showSimapleDialog(context, '认证请移步`我的认证`进行认证');
+                  break;
+                default :
+                  return Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyContactFromPage(company:widget.factory,isEditing: true,)));
+                  break;
+              }
+            }),
+          ),
         ],
       ),
       body: Container(
@@ -233,30 +236,47 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
           SliverToBoxAdapter(
             child: InkWell(
               onTap: () {
-                showMenu(
-                    context: context,
-                    items:[
-                      PopupMenuItem(
-                        child: GestureDetector(
-                          onTap: (){
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MyCompanyProfileFormPage(
-                                    widget.factory
-                                ),
-                              ),
-                            );
-                          },
-                          child: ListTile(
-                            title: Text('更换轮播图'),
-                          ),
-                        ),
+                PopupMenuButton(
+                    onSelected: (String value){
+                      setState(() {
+//                        _bodyStr = value;
+                      });
+                    },
+                    itemBuilder: (BuildContext context) =><PopupMenuItem<String>>[
+                      new PopupMenuItem(
+                          value:"选项一的内容",
+                          child: new Text("选项一")
                       ),
-                    ],
-                    position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-180)/2, 100, (MediaQueryData.fromWindow(window).size.width)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
+                      new PopupMenuItem(
+                          value: "选项二的内容",
+                          child: new Text("选项二")
+                      )
+                    ]
                 );
+//                showMenu(
+//                    context: context,
+//                    items:[
+//                      PopupMenuItem(
+//                        child: GestureDetector(
+//                          onTap: (){
+//                            Navigator.pop(context);
+//                            Navigator.push(
+//                              context,
+//                              MaterialPageRoute(
+//                                builder: (context) => MyCompanyProfileFormPage(
+//                                    widget.factory
+//                                ),
+//                              ),
+//                            );
+//                          },
+//                          child: ListTile(
+//                            title: Text('更换轮播图'),
+//                          ),
+//                        ),
+//                      ),
+//                    ],
+//                    position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-180)/2, 100, (MediaQueryData.fromWindow(window).size.width)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
+//                );
               },
               child: Container(
                 height: 188,
