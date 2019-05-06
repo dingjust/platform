@@ -126,6 +126,7 @@ class _LoginPageState extends State<LoginPage> {
         obscureText: _isPasswordHide,
         decoration: InputDecoration(
             hintText: '请输入密码',
+            errorStyle: TextStyle(fontSize: 0),
             focusedErrorBorder: UnderlineInputBorder(
                 borderSide:
                     BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
@@ -158,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
         controller: _smsCaptchaController,
         decoration: InputDecoration(
           hintText: '请输入',
+          errorStyle: TextStyle(fontSize: 0),
           focusedErrorBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
           errorBorder: UnderlineInputBorder(
@@ -198,11 +200,11 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: <Widget>[
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                padding: EdgeInsets.only(bottom: 15),
+                padding: EdgeInsets.only(top: 25),
                 child: Icon(
                   Icons.phone_iphone,
                   color: Colors.grey,
@@ -231,6 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         hintText: '请输入手机号码',
+                        errorStyle: TextStyle(fontSize: 0),
                         focusedErrorBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                                 color: Color.fromRGBO(200, 200, 200, 1))),
@@ -251,11 +254,11 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  padding: EdgeInsets.only(bottom: 15),
+                  padding: EdgeInsets.only(top: 25),
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
