@@ -59,6 +59,7 @@ class PurchaseOrderBLoC extends BLoCBase {
         data = {
           'balancePaid': false,
           'depositPaid': false,
+          'statuses': [status],
         };
       }
       Response<Map<String, dynamic>> response;

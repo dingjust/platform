@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/products/form/prices_field.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -14,7 +15,7 @@ class ApparelProductFormPage extends StatefulWidget {
   ApparelProductFormPage({Key key, @required this.item, this.isCreate = false,this.status = 'ALL',this.keyword,})
       : super(key: const Key('__apparelProductFormPage__'));
 
-  final ApparelProductModel item;
+  ApparelProductModel item;
   final bool isCreate;
   String status;
   String keyword;
@@ -73,12 +74,19 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 style: TextStyle(),
               ),
               onPressed: () async {
-                if (widget.item.name == null) {
+                if (widget.item.images == null || widget.item.images.length <= 0) {
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                            content: Text('请输入产品名称'),
+                            content: Text('请上传主图'),
                           ));
+                  return;
+                } else if (widget.item.name == null)  {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: Text('请输入产品名称'),
+                      ));
                   return;
                 } else if (widget.item.skuID == null) {
                   showDialog(
@@ -97,25 +105,38 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 }
                 if (widget.item.attributes == null)
                   widget.item.attributes = ApparelProductAttributesModel();
+                Navigator.pop(context);
                 if (widget.isCreate) {
-                  String code =
-                      await ProductRepositoryImpl().create(widget.item);
-                  if (code != null) {
-                    widget.item.name = null;
-                    widget.item.skuID = null;
-                    widget.item.attributes = null;
-                    widget.item.category = null;
-                    widget.item.brand = null;
-                    widget.item.variants = null;
-                    widget.item.price = null;
-                    widget.item.gramWeight = null;
-                    widget.item.images = null;
-                  }
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoadingPage(
+                          requestCallBack: ProductRepositoryImpl().create(widget.item),
+                          outsideDismiss: false,
+                          loadingText: '保存中。。。',
+                          entrance: 'apparelProduct',
+                          keyword: widget.keyword,
+                        );
+                      }
+                  );
+                  widget.item = new ApparelProductModel();
                 } else {
-                  await ProductRepositoryImpl().update(widget.item);
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoadingPage(
+                          requestCallBack: ProductRepositoryImpl().update(widget.item),
+                          outsideDismiss: false,
+                          loadingText: '保存中。。。',
+                          entrance: 'apparelProduct',
+                          keyword: widget.keyword,
+                        );
+                      }
+                  );
                 }
 
-                Navigator.pop(context);
                 if(widget.keyword == null){
                   ApparelProductBLoC.instance.filterByStatuses(widget.status);
                 }else{
