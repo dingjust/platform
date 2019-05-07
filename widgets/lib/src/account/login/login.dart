@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:services/services.dart' show UserBLoC;
+import 'package:services/services.dart' show UserBLoC, UserRepositoryImpl;
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 import 'package:widgets/widgets.dart';
 
@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
               });
             },
             child: Text(
-              _isPasswordLogin ? '验证码登录' : '密码登录',
+              _isPasswordLogin ? '验证码登陆' : '密码登陆',
               style: TextStyle(fontSize: 15),
             ),
           ),
@@ -174,7 +174,11 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: (_seconds == 0)
                 ? () {
                     setState(() {
-                      _startTimer();
+                      UserRepositoryImpl()
+                          .sendCaptchaForLogin(_phoneController.text)
+                          .then((a) {
+                        _startTimer();
+                      });
                     });
                   }
                 : null,
@@ -320,11 +324,11 @@ class _LoginPageState extends State<LoginPage> {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     bloc.loginStream.listen((result) {
-      Navigator.pop(context);
+      Navigator.of(context).pop();
       showDialog(
           context: context,
           child: SimpleDialog(
-            title: Text('登录失败'),
+            title: Text('登陆失败'),
             children: <Widget>[
               Container(
                 padding: EdgeInsets.all(10),
@@ -391,16 +395,33 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context) =>
           ProgressIndicatorFactory.buildDefaultProgressIndicator(),
     );
-    bloc
-        .login(
-            username: _phoneController.text,
-            password: _passwordController.text,
-            remember: _isRemember)
-        .then((result) {
-      if (result) {
-        Navigator.of(context).popUntil(ModalRoute.withName('/'));
-      }
-    });
+    if (_isPasswordLogin) {
+      bloc
+          .login(
+              username: _phoneController.text,
+              password: _passwordController.text,
+              remember: _isRemember)
+          .then((result) {
+        if (result) {
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        } else {
+          Navigator.of(context).pop();
+        }
+      });
+    } else {
+      bloc
+          .loginByCaptcha(
+              username: _phoneController.text,
+              captcha: _smsCaptchaController.text,
+              remember: _isRemember)
+          .then((result) {
+        if (result) {
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        } else {
+          Navigator.of(context).pop();
+        }
+      });
+    }
   }
 
   void showSnackBar(BuildContext context) {
@@ -416,7 +437,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ///记录账户
   void checkLocalUserName() async {
-    // 检测本地登录过的账户
+    // 检测本地登陆过的账户
     String oldUserName = await LocalStorage.get(GlobalConfigs.USER_KEY);
 
     if (oldUserName != null && oldUserName.isNotEmpty) {

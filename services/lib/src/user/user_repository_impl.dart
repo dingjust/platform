@@ -18,6 +18,12 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<String> sendCaptchaForLogin(String phone) async{
+    Response response = await http$.get(UserApis.sendCaptchaForLogin(phone));
+    return response.data;
+  }
+
+  @override
   Future<bool> validateCaptcha(String phone, String captcha) async {
     Response response = await http$.get(UserApis.validateCaptcha, data: {
       'phone': phone,
