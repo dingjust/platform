@@ -56,7 +56,11 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   List<FilterConditionEntry> machiningTypeConditionEntries =
       <FilterConditionEntry>[
-    FilterConditionEntry(label: '全部', value: "ALL1", checked: true),
+    FilterConditionEntry(
+        label: '全部',
+        value: "ALL1",
+        type: FilterConditionEntryType.ALL,
+        checked: true),
     FilterConditionEntry(
         label: '包工包料', value: MachiningType.LABOR_AND_MATERIAL),
     FilterConditionEntry(label: '清加工', value: MachiningType.LIGHT_PROCESSING),
@@ -64,7 +68,11 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   List<FilterConditionEntry> categoriesConditionEntries =
       <FilterConditionEntry>[
-    FilterConditionEntry(label: '全部', value: "ALL2", checked: true),
+    FilterConditionEntry(
+        label: '全部',
+        value: "ALL2",
+        type: FilterConditionEntryType.ALL,
+        checked: true),
   ];
 
   List<RegionModel> _regionSelects = [];
@@ -73,7 +81,6 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   @override
   void initState() {
-
     // TODO: implement initState
     categoriesConditionEntries.addAll(widget.categories
         .map((category) =>
@@ -150,96 +157,105 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                       showMachineTypeFilterMenu = false;
                       showCategoriesFilterMenu = false;
                     });
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        //获取所有省份
-                        rootBundle.loadString('data/province.json').then((v) {
-                          List data = json.decode(v);
-                          _regions = data
-                              .map<RegionModel>((region) => RegionModel.fromJson(region))
-                              .toList();
-                        });
+                    //获取所有省份
+                    rootBundle.loadString('data/province.json').then((v) {
+                      List data = json.decode(v);
+                      _regions = data
+                          .map<RegionModel>(
+                              (region) => RegionModel.fromJson(region))
+                          .toList();
 
-                        return StatefulBuilder(builder: (context, mSetState) {
-                          return Container(
-                            color: Colors.white,
-                            height: 360,
-                            child: Column(
-                              children: <Widget>[
-                                Card(
-                                  elevation: 2,
-                                  margin: EdgeInsets.only(bottom: 3),
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(builder: (context, mSetState) {
+                            return Container(
+                              color: Colors.white,
+                              height: 360,
+                              child: Column(
+                                children: <Widget>[
+                                  Card(
+                                    elevation: 2,
+                                    margin: EdgeInsets.only(bottom: 3),
 //                        color: Colors.grey[300],
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      InkWell(
-                                        onTap: () {
-                                          mSetState(() {
-                                            _regionCodeSelects.clear();
-                                            _regionSelects.clear();
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          child: Text('重置'),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 15),
-                                        child: ActionChip(
-                                          shape: RoundedRectangleBorder(
-                                            side: BorderSide(),
-                                            borderRadius:
-                                            BorderRadius.all(Radius.circular(5)),
-                                          ),
-                                          label: Text('确定'),
-                                          onPressed: () async {
-                                            Navigator.pop(context);
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        InkWell(
+                                          onTap: () {
+                                            mSetState(() {
+                                              _regionCodeSelects.clear();
+                                              _regionSelects.clear();
+                                            });
                                           },
-                                          backgroundColor: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: 300,
-                                  child: ListView(
-                                    shrinkWrap: true,
-                                    physics: AlwaysScrollableScrollPhysics(),
-                                    children: _regions.map((region) {
-                                      return InkWell(
-                                        onTap: () {
-                                          mSetState(() {
-                                            if (_regionCodeSelects
-                                                .contains(region.isocode)) {
-                                              _regionCodeSelects.remove(region.isocode);
-                                              _regionSelects.removeWhere(
-                                                      (reg) => region.isocode == reg.isocode);
-                                            } else {
-                                              _regionSelects.add(region);
-                                              _regionCodeSelects.add(region.isocode);
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 1),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            color: _regionCodeSelects
-                                                .contains(region.isocode)
-                                                ? Color.fromRGBO(255, 214, 12, 1)
-                                                : Colors.white,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: Text('重置'),
                                           ),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 0, vertical: 10),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Text(region.name),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 15),
+                                          child: ActionChip(
+                                            shape: RoundedRectangleBorder(
+                                              side: BorderSide(),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5)),
+                                            ),
+                                            label: Text('确定'),
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                            },
+                                            backgroundColor: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 300,
+                                    child: ListView(
+                                      shrinkWrap: true,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      children: _regions.map((region) {
+                                        return InkWell(
+                                          onTap: () {
+                                            mSetState(() {
+                                              if (_regionCodeSelects
+                                                  .contains(region.isocode)) {
+                                                _regionCodeSelects
+                                                    .remove(region.isocode);
+                                                _regionSelects.removeWhere(
+                                                    (reg) =>
+                                                        region.isocode ==
+                                                        reg.isocode);
+                                              } else {
+                                                _regionSelects.add(region);
+                                                _regionCodeSelects
+                                                    .add(region.isocode);
+                                              }
+                                            });
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 1),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: _regionCodeSelects
+                                                      .contains(region.isocode)
+                                                  ? Color.fromRGBO(
+                                                      255, 214, 12, 1)
+                                                  : Colors.white,
+                                            ),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 0, vertical: 10),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Text(region.name),
 //                                    Offstage(
 //                                      offstage: !_regionCodeSelects
 //                                          .contains(region.isocode),
@@ -248,25 +264,28 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 //                                        size: 12,
 //                                      ),
 //                                    )
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    }).toList(),
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
+                                ],
+                              ),
+                            );
+                          });
+                        },
+                      ).then((val) {
+                        setState(() {
+                          if (_regionSelects.length > 0) {
+                            currentCodition.productiveOrientations =
+                                _regionSelects;
+                          } else {
+                            currentCodition.productiveOrientations = null;
+                          }
+                          RequirementPoolBLoC.instance.clear();
                         });
-                      },
-                    ).then((val) {
-                      setState(() {
-                        if (_regionSelects.length > 0) {
-                          currentCodition.productiveOrientations = _regionSelects;
-                        } else {
-                          currentCodition.productiveOrientations = null;
-                        }
                       });
                     });
                   }),
@@ -655,23 +674,20 @@ class Logo extends StatelessWidget {
         child: CachedNetworkImage(
             imageUrl: '${order.belongTo.profilePicture.previewUrl()}',
             fit: BoxFit.cover,
-            placeholder: (context, url) =>
-                SpinKitRing(
+            placeholder: (context, url) => SpinKitRing(
                   color: Colors.black12,
                   lineWidth: 2,
                   size: 30,
                 ),
-            errorWidget: (context, url, error) =>
-                SpinKitRing(
+            errorWidget: (context, url, error) => SpinKitRing(
                   color: Colors.black12,
                   lineWidth: 2,
                   size: 30,
-                )
-        ),
+                )),
         margin: EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            ),
+          shape: BoxShape.circle,
+        ),
       );
     }
     return _logo;

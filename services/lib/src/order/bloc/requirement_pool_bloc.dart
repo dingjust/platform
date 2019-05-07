@@ -44,19 +44,20 @@ class RequirementPoolBLoC extends BLoCBase {
   Stream<FilterConditionEntry> get conditionStream =>
       conditionController.stream;
 
-  filterByCondition(RequirementFilterCondition conditions,bool isRecommend) async {
+  filterByCondition(
+      RequirementFilterCondition conditions, bool isRecommend) async {
     if (!lock) {
       lock = true;
       //重置参数
       reset();
-      Map data = generateConditionsMap(conditions,isRecommend);
+      Map data = generateConditionsMap(conditions, isRecommend);
       Response<Map<String, dynamic>> response;
       try {
-        if(isRecommend){
+        if (isRecommend) {
           response = await http$.post(OrderApis.allRecommendedOrders,
               data: data,
               queryParameters: {'page': currentPage, 'size': pageSize});
-        }else{
+        } else {
           response = await http$.post(OrderApis.allOrdersForFactory,
               data: data,
               queryParameters: {'page': currentPage, 'size': pageSize});
@@ -78,7 +79,8 @@ class RequirementPoolBLoC extends BLoCBase {
     }
   }
 
-  loadingMoreByCondition(RequirementFilterCondition conditions,bool isRecommend) async {
+  loadingMoreByCondition(
+      RequirementFilterCondition conditions, bool isRecommend) async {
     if (!lock) {
       lock = true;
 
@@ -87,15 +89,15 @@ class RequirementPoolBLoC extends BLoCBase {
         //通知显示已经到底部
         _bottomController.sink.add(true);
       } else {
-        Map data = generateConditionsMap(conditions,isRecommend);
+        Map data = generateConditionsMap(conditions, isRecommend);
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
-          if(isRecommend){
+          if (isRecommend) {
             response = await http$.post(OrderApis.allRecommendedOrders,
                 data: data,
                 queryParameters: {'page': currentPage, 'size': pageSize});
-          }else{
+          } else {
             response = await http$.post(OrderApis.allOrdersForFactory,
                 data: data,
                 queryParameters: {'page': currentPage, 'size': pageSize});
@@ -171,9 +173,10 @@ class RequirementPoolBLoC extends BLoCBase {
   }
 
   /// 生成查询条件信息
-  Map generateConditionsMap(RequirementFilterCondition conditions,bool isRecommend) {
+  Map generateConditionsMap(
+      RequirementFilterCondition conditions, bool isRecommend) {
     Map data = new Map();
-    if(isRecommend){
+    if (isRecommend) {
       data = {"private": 1};
     }
     // 计算时间范围
@@ -212,8 +215,14 @@ class RequirementPoolBLoC extends BLoCBase {
           conditions.categories.map((category) => category.code).toList();
     }
 
-    if(conditions.keyword!=null){
-      data['keyword']=conditions.keyword;
+    if (conditions.keyword != null) {
+      data['keyword'] = conditions.keyword;
+    }
+
+    if (conditions.productiveOrientations != null) {
+      data['productiveOrientations'] = conditions.productiveOrientations
+          .map((region) => region.isocode)
+          .toList();
     }
 
     return data;
@@ -236,8 +245,13 @@ class RequirementFilterCondition {
 
   String keyword;
 
-  RequirementFilterCondition(
-      {this.dateRange, this.machiningType, this.categories,this.keyword,this.productiveOrientations,});
+  RequirementFilterCondition({
+    this.dateRange,
+    this.machiningType,
+    this.categories,
+    this.keyword,
+    this.productiveOrientations,
+  });
 }
 
 enum RequirementOrderDateRange {

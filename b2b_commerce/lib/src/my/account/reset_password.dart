@@ -239,7 +239,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       showDialog(
           context: context,
           child: SimpleDialog(
-            title: Text('登陆失败'),
+            title: Text('登录失败'),
             children: <Widget>[
               Container(
                 padding: EdgeInsets.all(10),

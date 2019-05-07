@@ -57,7 +57,7 @@ class UserBLoC extends BLoCBase {
 
   Stream<String> get loginStream => _loginResultController.stream;
 
-  ///跳转登陆
+  ///跳转登录
   StreamController loginJumpController = StreamController<bool>.broadcast();
 
   Stream<bool> get loginJumpStream => loginJumpController.stream;
@@ -77,12 +77,12 @@ class UserBLoC extends BLoCBase {
           'client_secret': GlobalConfigs.B2B_CLIENT_SECRET
         }));
       } else {
-        _loginResultController.sink.add('账号不存在请注册后登陆');
+        _loginResultController.sink.add('账号不存在请注册后登录');
         return false;
       }
     } on DioError catch (e) {
       print(e);
-      //登陆错误回调
+      //登录错误回调
       _loginResultController.sink.add('密码错误请输入正确的密码');
     }
 
@@ -117,7 +117,7 @@ class UserBLoC extends BLoCBase {
         });
       }
 
-      //  记录登陆用户信息
+      //  记录登录用户信息
       if (remember) {
         LocalStorage.save(
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
