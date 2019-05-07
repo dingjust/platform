@@ -610,18 +610,18 @@ class RequirementPoolOrderItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(left: 10),
-          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-          decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 243, 243, 1),
-              borderRadius: BorderRadius.circular(10)),
-          child: Text(
-            "已认证",
-            style: TextStyle(
-                fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
-          ),
-        )
+        // Container(
+        //   margin: EdgeInsets.only(left: 10),
+        //   padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+        //   decoration: BoxDecoration(
+        //       color: Color.fromRGBO(255, 243, 243, 1),
+        //       borderRadius: BorderRadius.circular(10)),
+        //   child: Text(
+        //     "已认证",
+        //     style: TextStyle(
+        //         fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
+        //   ),
+        // )
       ],
     );
   }
