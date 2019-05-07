@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:services/services.dart' show UserBLoC, UserRepositoryImpl;
+import 'package:services/services.dart' show LoginResult, UserBLoC, UserRepositoryImpl;
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 import 'package:widgets/widgets.dart';
 
@@ -51,13 +51,30 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
+
+    bloc.loginStream.listen((result) {
+      Navigator.of(context).pop();
+      showDialog(
+          context: context,
+          child: SimpleDialog(
+            title: Text('登陆失败'),
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Text('${result}'),
+              ),
+            ],
+          ));
+    });
+
     return Material(
       child: Scaffold(
           key: _scaffoldKey,
           body: Form(
             key: _formKey,
             autovalidate: true,
-            child: _buildBody(context),
+            child: _buildBody(context,bloc),
           )),
     );
   }
@@ -320,24 +337,7 @@ class _LoginPageState extends State<LoginPage> {
         child: widget.logo);
   }
 
-  Widget _buildBody(BuildContext context) {
-    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
-
-    bloc.loginStream.listen((result) {
-      Navigator.of(context).pop();
-      showDialog(
-          context: context,
-          child: SimpleDialog(
-            title: Text('登陆失败'),
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Text('${result}'),
-              ),
-            ],
-          ));
-    });
-
+  Widget _buildBody(BuildContext context,UserBLoC bloc) {
     return Container(
       color: Colors.white,
       child: CustomScrollView(
@@ -402,9 +402,10 @@ class _LoginPageState extends State<LoginPage> {
               password: _passwordController.text,
               remember: _isRemember)
           .then((result) {
-        if (result) {
+        if (result==LoginResult.SUCCESS) {
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
-        } else {
+        } 
+        else if(result==LoginResult.DIO_ERROR){
           Navigator.of(context).pop();
         }
       });
@@ -415,9 +416,10 @@ class _LoginPageState extends State<LoginPage> {
               captcha: _smsCaptchaController.text,
               remember: _isRemember)
           .then((result) {
-        if (result) {
+        if (result==LoginResult.SUCCESS) {
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
-        } else {
+        } 
+        else if(result==LoginResult.DIO_ERROR){
           Navigator.of(context).pop();
         }
       });
