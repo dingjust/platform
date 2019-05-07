@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:services/services.dart' show UserBLoC;
+import 'package:services/services.dart' show UserBLoC, UserRepositoryImpl;
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 import 'package:widgets/widgets.dart';
 
@@ -174,7 +174,9 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: (_seconds == 0)
                 ? () {
                     setState(() {
-                      _startTimer();
+                      UserRepositoryImpl().sendCaptchaForLogin(_phoneController.text).then((a){
+                        _startTimer();
+                      });
                     });
                   }
                 : null,
@@ -372,7 +374,7 @@ class _LoginPageState extends State<LoginPage> {
                 color: Color.fromRGBO(255, 214, 12, 1),
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Text(
-                  '登陆',
+                  '登录',
                   style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ),
@@ -391,18 +393,34 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context) =>
           ProgressIndicatorFactory.buildDefaultProgressIndicator(),
     );
-    bloc
-        .login(
-            username: _phoneController.text,
-            password: _passwordController.text,
-            remember: _isRemember)
-        .then((result) {
-      if (result) {
-        Navigator.of(context).popUntil(ModalRoute.withName('/'));
-      } else {
-        Navigator.of(context).pop();
-      }
-    });
+    if(_isPasswordLogin){
+      bloc
+          .login(
+          username: _phoneController.text,
+          password: _passwordController.text,
+          remember: _isRemember)
+          .then((result) {
+        if (result) {
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        } else {
+          Navigator.of(context).pop();
+        }
+      });
+    }else{
+      bloc
+          .loginByCaptcha(
+          username: _phoneController.text,
+          captcha: _smsCaptchaController.text,
+          remember: _isRemember)
+          .then((result) {
+        if (result) {
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        } else {
+          Navigator.of(context).pop();
+        }
+      });
+    }
+
   }
 
   void showSnackBar(BuildContext context) {

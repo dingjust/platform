@@ -130,6 +130,77 @@ class UserBLoC extends BLoCBase {
     return false;
   }
 
+  //验证码登录
+  Future<bool> loginByCaptcha({String username, String captcha, bool remember}) async {
+    print(captcha);
+    Response loginResponse;
+    try {
+      //校验账号存在
+      bool exist = await UserRepositoryImpl().phoneExist(username);
+      if (exist != null && exist) {
+        loginResponse = await http$.post(
+            HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+//          'username': username,
+//          'password': password,
+          'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
+          'client_id': 'asm',
+          'client_secret': GlobalConfigs.B2B_CLIENT_SECRET,
+          'code':captcha,
+        }));
+      } else {
+        _loginResultController.sink.add('账号不存在请注册后登陆');
+        return false;
+      }
+    } on DioError catch (e) {
+      print(e);
+      //登陆错误回调
+      _loginResultController.sink.add('验证码错误请输入正确的验证码');
+    }
+
+    if (loginResponse != null && loginResponse.statusCode == 200) {
+      LoginResponse _response = LoginResponse.fromJson(loginResponse.data);
+
+      // 记录http token 信息
+      http$.updateAuthorization(_response.accessToken);
+
+      // 获取用户信息
+      Response infoResponse;
+      try {
+        infoResponse = await http$.get(UserApis.userInfo(username));
+      } on DioError catch (e) {
+        print(e);
+      }
+
+      if (infoResponse != null && infoResponse.statusCode == 200) {
+        _user = UserModel.fromJson(infoResponse.data);
+        _user.name = infoResponse.data['username'];
+        _user.status = UserStatus.ONLINE;
+      }
+
+      // 获取公司信息
+      if (_user.type == UserType.BRAND) {
+        UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+          _user.b2bUnit = brand;
+        });
+      } else if (_user.type == UserType.FACTORY) {
+        UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
+          _user.b2bUnit = factory;
+        });
+      }
+
+      //  记录登陆用户信息
+      if (remember) {
+        LocalStorage.save(
+            GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
+        LocalStorage.save(GlobalConfigs.USER_KEY, username);
+      }
+      _controller.sink.add(_user);
+      return true;
+    }
+
+    return false;
+  }
+
   Future<void> logout() async {
     _user = UserModel.empty();
     //  清理本地记录
