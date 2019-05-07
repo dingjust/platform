@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/my/account/register_info.dart';
-import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -168,7 +167,11 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           InputRow(
             leading: Container(
-              width: 45,
+              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+              child: Icon(
+                Icons.sms,
+                color: Colors.grey,
+              ),
             ),
             field: TextField(
               autofocus: false,
@@ -235,189 +238,6 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-
-  // Widget _buildInputArea() {
-  //   TextFormField _passwordField = TextFormField(
-  //       autofocus: false,
-  //       controller: _passwordController,
-  //       obscureText: _isPasswordHide,
-  //       decoration: InputDecoration(
-  //           hintText: '请输入密码',
-  //           errorStyle: TextStyle(fontSize: 0),
-  //           focusedErrorBorder: UnderlineInputBorder(
-  //               borderSide:
-  //                   BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-  //           errorBorder: UnderlineInputBorder(
-  //               borderSide:
-  //                   BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-  //           focusedBorder: UnderlineInputBorder(
-  //               borderSide:
-  //                   BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-  //           border: UnderlineInputBorder(
-  //               borderSide:
-  //                   BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-  //           suffix: FlatButton(
-  //             onPressed: () {},
-  //             child: Text(
-  //               '',
-  //             ),
-  //           )),
-  //       // 校验用户名
-  //       validator: (v) {
-  //         return v.trim().length > 0 ? null : '';
-  //       });
-
-  //   TextFormField _smsCaptchaField = TextFormField(
-  //       autofocus: false,
-  //       controller: _captchaController,
-  //       decoration: InputDecoration(
-  //         hintText: '请输入',
-  //         errorStyle: TextStyle(fontSize: 0),
-  //         focusedErrorBorder: UnderlineInputBorder(
-  //             borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-  //         errorBorder: UnderlineInputBorder(
-  //             borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-  //         focusedBorder: UnderlineInputBorder(
-  //             borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-  //         border: UnderlineInputBorder(
-  //             borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-  //       ),
-  //       // 校验用户名
-  //       validator: (v) {
-  //         return v.trim().length > 0 ? null : '';
-  //       });
-
-  //   //监听密码输入变动、刷新表单校验
-  //   _passwordController.addListener(() {
-  //     setState(() {});
-  //   });
-
-  //   return Container(
-  //     padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
-  //     child: Column(
-  //       children: <Widget>[
-  //         Row(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: <Widget>[
-  //             Container(
-  //               margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-  //               padding: EdgeInsets.only(top: 25),
-  //               child: Icon(
-  //                 Icons.phone_iphone,
-  //                 color: Colors.grey,
-  //               ),
-  //             ),
-  //             Expanded(
-  //               flex: 1,
-  //               child: TextFormField(
-  //                   autofocus: false,
-  //                   keyboardType: TextInputType.phone,
-  //                   controller: _phoneController,
-  //                   //只能输入数字
-  //                   inputFormatters: <TextInputFormatter>[
-  //                     WhitelistingTextInputFormatter.digitsOnly,
-  //                   ],
-  //                   decoration: InputDecoration(
-  //                       suffix: FlatButton(
-  //                         onPressed: () {
-  //                           setState(() {
-  //                             _phoneController.clear();
-  //                           });
-  //                         },
-  //                         child: Icon(
-  //                           Icons.clear,
-  //                           color: Colors.grey,
-  //                         ),
-  //                       ),
-  //                       hintText: '请输入手机号码',
-  //                       errorStyle: TextStyle(fontSize: 0),
-  //                       focusedErrorBorder: UnderlineInputBorder(
-  //                           borderSide: BorderSide(
-  //                               color: Color.fromRGBO(200, 200, 200, 1))),
-  //                       errorBorder: UnderlineInputBorder(
-  //                           borderSide: BorderSide(
-  //                               color: Color.fromRGBO(200, 200, 200, 1))),
-  //                       focusedBorder: UnderlineInputBorder(
-  //                           borderSide: BorderSide(
-  //                               color: Color.fromRGBO(200, 200, 200, 1))),
-  //                       border: UnderlineInputBorder(
-  //                           borderSide: BorderSide(
-  //                               color: Color.fromRGBO(200, 200, 200, 1)))),
-  //                   // 校验用户名
-  //                   validator: (v) {
-  //                     return v.trim().length > 0 ? null : '';
-  //                   }),
-  //             )
-  //           ],
-  //         ),
-  //         Row(
-  //           crossAxisAlignment: CrossAxisAlignment.end,
-  //           children: <Widget>[
-  //             Container(
-  //                 width: 25,
-  //                 margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-  //                 padding: EdgeInsets.only(top: 25),
-  //                 child: Container()),
-  //             Expanded(
-  //               flex: 1,
-  //               child: _smsCaptchaField,
-  //             ),
-  //             Container(
-  //               // width: 25,
-  //               margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-  //               padding: EdgeInsets.only(top: 25),
-  //               child: FlatButton(
-  //                 shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.circular(8)),
-  //                 onPressed: (_seconds == 0)
-  //                     ? () async {
-  //                         bool isExist = await validatePhone();
-  //                         if (!isExist) {
-  //                           UserRepositoryImpl()
-  //                               .sendCaptcha(_phoneController.text)
-  //                               .then((a) {
-  //                             _startTimer();
-  //                           });
-  //                         }
-  //                       }
-  //                     : null,
-  //                 child: Text(
-  //                   '$_verifyStr',
-  //                   style: TextStyle(color: Colors.black),
-  //                 ),
-  //                 color: Color.fromRGBO(255, 214, 12, 1),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         Row(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: <Widget>[
-  //             Container(
-  //                 margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-  //                 padding: EdgeInsets.only(top: 25),
-  //                 child: GestureDetector(
-  //                     onTap: () {
-  //                       setState(() {
-  //                         _isPasswordHide = !_isPasswordHide;
-  //                       });
-  //                     },
-  //                     child: Icon(
-  //                       _isPasswordHide
-  //                           ? B2BIcons.eye_not_see
-  //                           : Icons.remove_red_eye,
-  //                       color: Colors.black54,
-  //                     ))),
-  //             Expanded(
-  //               flex: 1,
-  //               child: _passwordField,
-  //             )
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildProtocolArea() {
     return Container(
