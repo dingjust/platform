@@ -156,7 +156,6 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
           ),
         ),
         onTap: (){
-          if(!isEditing && widget.company.contactPhone.length > 0)
           _selectActionButton(widget.company.contactPhone);
         },
       ),
@@ -241,7 +240,6 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
           ),
         ),
         onTap: (){
-          if (!isEditing && telController.text.length > 0)
           _selectActionButton(widget.company.phone);
         },
       ),
@@ -399,6 +397,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
 
   //拨打电话或发短信
   void _selectActionButton(String tel) async {
+    if(tel.length == 0)return;
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

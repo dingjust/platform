@@ -95,6 +95,7 @@ class CategorySelectState extends State<CategorySelect> {
                   widget.categorySelect.add(category);
                   _selectRights.clear();
                   _selectRights.add(category.code);
+                  Navigator.pop(context);
                 });
               }
             }
