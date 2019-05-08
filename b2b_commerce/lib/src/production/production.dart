@@ -222,7 +222,7 @@ class ProductionItem extends StatelessWidget {
         child: Align(
           alignment: Alignment.topLeft,
           child: Text(
-            '最近更新时间：' + DateFormatUtil.format(order.modifiedtime),
+            '最近更新时间：' + DateFormatUtil.format(order.modifiedTime),
             textAlign: TextAlign.start,
             style: TextStyle(fontSize: 14),
           ),

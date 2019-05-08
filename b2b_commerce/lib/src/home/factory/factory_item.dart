@@ -371,6 +371,7 @@ class Tag extends StatelessWidget {
     return Container(
       height: height,
       margin: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 2),
       child: Center(
         child: Text(
           label,

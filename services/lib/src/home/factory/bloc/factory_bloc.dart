@@ -47,8 +47,8 @@ class FactoryBLoC extends BLoCBase {
   //查询所有工厂列表
   filterByCondition(
     FactoryCondition factoryCondition, {
-    String condition,
-    String sort,
+    String condition = '',
+    String sort = '',
     String requirementCode,
   }) async {
     if (!lock) {
