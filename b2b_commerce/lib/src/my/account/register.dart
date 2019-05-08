@@ -210,30 +210,43 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           InputRow(
-              leading: Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isPasswordHide = !_isPasswordHide;
-                        });
-                      },
-                      child: Icon(
-                        _isPasswordHide
-                            ? B2BIcons.eye_not_see
-                            : Icons.remove_red_eye,
-                        color: Colors.black54,
-                      ))),
-              field: TextField(
-                autofocus: false,
-                obscureText: true,
-                onChanged: (value) {
-                  formValidate();
+            leading: Container(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                child: Container(
+                  child: Icon(
+                    Icons.lock,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+            field: TextField(
+              autofocus: false,
+              obscureText: _isPasswordHide,
+              onChanged: (value) {
+                formValidate();
+              },
+              controller: _passwordController,
+              decoration:
+                  InputDecoration(hintText: '请输入', border: InputBorder.none),
+            ),
+            surfix: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isPasswordHide = !_isPasswordHide;
+                  });
                 },
-                controller: _passwordController,
-                decoration:
-                    InputDecoration(hintText: '请输入', border: InputBorder.none),
-              )),
+                child: Container(
+                  margin: EdgeInsets.only(right: 20),
+                  child: Icon(
+                    _isPasswordHide
+                        ? B2BIcons.eye_not_see
+                        : Icons.remove_red_eye,
+                    color: Colors.black54,
+                  ),
+                )),
+          ),
         ],
       ),
     );
