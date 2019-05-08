@@ -26,9 +26,11 @@ class _GramWeightFieldState extends State<GramWeightField> {
     return TextFieldComponent(
       focusNode: _gramWeightFocusNode,
       controller: _gramWeightController,
-      inputType: TextInputType.number,
       leadingText: Text('重量',style: TextStyle(fontSize: 16,)),
-      hintText: '请输入重量',
+      hintText: '请输入重量（数字）',
+      inputFormatters: [
+        DecimalInputFormat(),
+      ],
     );
   }
 }

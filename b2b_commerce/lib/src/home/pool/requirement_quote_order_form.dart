@@ -265,11 +265,13 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                 style: TextStyle(
                   fontSize: 16,
                 )),
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
             isRequired: true,
-            hintText: '必填',
+            hintText: '必填（数字）',
             prefix: '￥',
             autofocus: false,
-            inputType: TextInputType.number,
             textAlign: TextAlign.right,
             controller: _unitPriceController,
           ),
@@ -329,10 +331,12 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   style: TextStyle(
                     fontSize: 16,
                   )),
-              hintText: '填写',
+              hintText: '填写（数字）',
               prefix: '￥',
+              inputFormatters: [
+                DecimalInputFormat(),
+              ],
               autofocus: false,
-              inputType: TextInputType.number,
               textAlign: TextAlign.right,
               controller: _fabricController,
             ),
@@ -347,10 +351,12 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   style: TextStyle(
                     fontSize: 16,
                   )),
-              hintText: '填写',
+              inputFormatters: [
+                DecimalInputFormat(),
+              ],
+              hintText: '填写（数字）',
               prefix: '￥',
               autofocus: false,
-              inputType: TextInputType.number,
               textAlign: TextAlign.right,
               controller: _excipientsController,
             ),
@@ -365,10 +371,12 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   style: TextStyle(
                     fontSize: 16,
                   )),
-              hintText: '填写',
+              inputFormatters: [
+                DecimalInputFormat(),
+              ],
+              hintText: '填写（数字）',
               prefix: '￥',
               autofocus: false,
-              inputType: TextInputType.number,
               textAlign: TextAlign.right,
               controller: _processingController,
             ),
@@ -383,10 +391,12 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   style: TextStyle(
                     fontSize: 16,
                   )),
-              hintText: '填写',
+              inputFormatters: [
+                DecimalInputFormat(),
+              ],
+              hintText: '填写（数字）',
               prefix: '￥',
               autofocus: false,
-              inputType: TextInputType.number,
               textAlign: TextAlign.right,
               controller: _otherController,
             ),
@@ -409,10 +419,12 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             style: TextStyle(
               fontSize: 16,
             )),
-        hintText: '填写',
+        inputFormatters: [
+          DecimalInputFormat(),
+        ],
+        hintText: '填写（数字）',
         prefix: '￥',
         autofocus: false,
-        inputType: TextInputType.number,
         textAlign: TextAlign.right,
         controller: _sampleController,
       ),

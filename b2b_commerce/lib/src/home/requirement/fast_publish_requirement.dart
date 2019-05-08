@@ -297,10 +297,12 @@ class _FastPublishRequirementState extends State<FastPublishRequirement> {
                 TextFieldComponent(
                   controller: _requirementNumController,
                   autofocus: true,
-                  inputType: TextInputType.number,
                   focusNode: focusNode,
-                  hintText: '请输入需求数量',
+                  hintText: '请输入需求数量（数字）',
                   padding: EdgeInsets.all(0),
+                  inputFormatters: [
+                    DecimalInputFormat(),
+                  ],
                 ),
               ],
             ),

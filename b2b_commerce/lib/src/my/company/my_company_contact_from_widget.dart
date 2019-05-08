@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -154,7 +156,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
           ),
         ),
         onTap: (){
-          if (!isEditing && phoneController.text.length > 0)
+          if(!isEditing && widget.company.contactPhone.length > 0)
           _selectActionButton(widget.company.contactPhone);
         },
       ),
@@ -163,37 +165,34 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
 
   Widget _buildContactAddress(BuildContext context){
     return Container(
+      padding: EdgeInsets.only(left: 15,right: 15,top: 20,bottom: 20),
       child: GestureDetector(
-        child: ListTile(
-          leading: Container(
-            child: Text(
-              '经营地址',
-              style: TextStyle(
-                fontSize: 16,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              width: 100,
+              child: Text(
+                '经营地址',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ),
             ),
-          ),
-          trailing : Container(
-            child: Text(
-              '${widget.company.contactAddress!=null && widget.company.contactAddress.details != null? widget.company.contactAddress.details:''}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey
+            Container(
+              width: MediaQueryData.fromWindow(window).size.width - 130,
+              child: Text(
+                '${widget.company.contactAddress!=null && widget.company.contactAddress.details != null? widget.company.contactAddress.details:''}',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey
+                ),
               ),
             ),
-          ),
+          ],
         ),
         onTap: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ContactAddressFormPage(
-                address: widget.company.contactAddress,
-              ),
-            ),
-          ).then((value){
-            addressModel = value;
-          });
+          copyToClipboard(widget.company.contactAddress.details,context);
         },
       ),
     );
@@ -433,28 +432,6 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
   copyToClipboard(final String text, BuildContext context) {
     if (text == null) return;
     Clipboard.setData(ClipboardData(text: text));
-    _neverCopyContent(context);
+    ShowDialogUtil.showSimapleDialog(context, '复制成功');
   }
-
-  Future<void> _neverCopyContent(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('消息'),
-          content: Text('复制成功'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
 }

@@ -228,13 +228,15 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           TextFieldComponent(
             focusNode: _quantityFocusNode,
             controller: _quantityController,
-            inputType: TextInputType.number,
             leadingText: Text('订单数量',
                 style: TextStyle(
                   fontSize: 16,
                 )),
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
             isRequired: true,
-            hintText: '填写',
+            hintText: '填写（数字）',
             style: TextStyle(
               color: Colors.grey,
               fontSize: 16,
@@ -249,7 +251,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 style: TextStyle(
                   fontSize: 16,
                 )),
-            hintText: '填写',
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
+            hintText: '填写（数字）',
             prefix: '￥',
             style: TextStyle(
               color: Colors.grey,
