@@ -267,7 +267,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
               },
               child: Container(
                 height: 188,
-                child: CarouselStackText(widget.factory.profiles),
+                child: _buildCarousel(),
               ),
             ),
           ),
@@ -305,7 +305,13 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
 
   //轮播图
   Widget _buildCarousel() {
-    return CarouselStackText(widget.factory.profiles,);
+    List<CompanyProfileModel> profiles = [];
+    widget.factory.profiles.forEach((profile){
+      if(profile.medias.isNotEmpty){
+        profiles.add(profile);
+      }
+    });
+    return CarouselStackText( profiles,);
   }
 
   // 发布需求按钮
