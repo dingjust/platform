@@ -23,6 +23,7 @@ class AppConstants with GlobalConfigs {
       return [
         // ios国际化
         const Locale('en', 'US'),
+        const Locale('zh', 'CN'),
       ];
     }
   }

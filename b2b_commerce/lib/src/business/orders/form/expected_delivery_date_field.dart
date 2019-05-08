@@ -54,7 +54,7 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
           showDatePicker(
             context: context,
             initialDate: widget.item.details?.expectedDeliveryDate ?? now,
-            firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+            firstDate: DateTime(2019),
             lastDate: DateTime(2999),
           ).then((value) {
             setState(() {

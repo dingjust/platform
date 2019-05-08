@@ -181,22 +181,17 @@ class _LoginPageState extends State<LoginPage> {
           _isPasswordLogin
               ? InputRow(
                   leading: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                      child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isPasswordHide = !_isPasswordHide;
-                            });
-                          },
-                          child: Icon(
-                            _isPasswordHide
-                                ? B2BIcons.eye_not_see
-                                : Icons.remove_red_eye,
-                            color: Colors.black54,
-                          ))),
+                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    child: Container(
+                      child: Icon(
+                        Icons.lock,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
                   field: TextField(
                     autofocus: false,
-                    obscureText: true,
+                    obscureText: _isPasswordHide,
                     onChanged: (value) {
                       formValidate();
                     },
@@ -204,17 +199,21 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: InputDecoration(
                         hintText: '请输入', border: InputBorder.none),
                   ),
-                  surfix: FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => widget.forgetPasswordPage));
-                    },
-                    child: Text(
-                      '忘记密码',
-                      style: TextStyle(color: Colors.black54, fontSize: 15),
-                    ),
-                  ),
-                )
+                  surfix: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isPasswordHide = !_isPasswordHide;
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 20),
+                        child: Icon(
+                          _isPasswordHide
+                              ? B2BIcons.eye_not_see
+                              : Icons.remove_red_eye,
+                          color: Colors.black54,
+                        ),
+                      )))
               : InputRow(
                   leading: Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
@@ -260,8 +259,18 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => widget.forgetPasswordPage));
+                },
+                child: Text(
+                  '忘记密码',
+                  style: TextStyle(color: Colors.black54, fontSize: 15),
+                ),
+              ),
               Row(
                 children: <Widget>[
                   Text(

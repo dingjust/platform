@@ -85,68 +85,73 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
   //构建收货信息UI
   Widget _buildDeliveryAddress() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Text(
-                  '收货地址',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
-                ),
-              )
-            ],
-          ),
-          ListTile(
-            leading: Icon(
-              B2BIcons.location,
-              color: Colors.black,
-            ),
-            title: Row(
+    return GestureDetector(
+      onTap: () {
+        selectDeliveryAddress();
+      },
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                widget.order.deliveryAddress == null ||
-                        widget.order.deliveryAddress.fullname == null
-                    ? Container()
-                    : Text(widget.order.deliveryAddress.fullname),
-                widget.order.deliveryAddress == null ||
-                        widget.order.deliveryAddress.cellphone == null
-                    ? Container()
-                    : Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: Text(widget.order.deliveryAddress.cellphone),
-                      )
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  child: Text(
+                    '收货地址',
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
+                )
               ],
             ),
-            subtitle: widget.order.deliveryAddress == null ||
-                    widget.order.deliveryAddress.region == null ||
-                    widget.order.deliveryAddress.city == null ||
-                    widget.order.deliveryAddress.cityDistrict == null ||
-                    widget.order.deliveryAddress.line1 == null
-                ? Container()
-                : Text(
-                    widget.order.deliveryAddress.region.name +
-                        widget.order.deliveryAddress.city.name +
-                        widget.order.deliveryAddress.cityDistrict.name +
-                        widget.order.deliveryAddress.line1,
-                    style: TextStyle(
-                      color: Colors.black,
-                    )),
-          ),
-          SizedBox(
-            child: Image.asset(
-              'temp/common/address_under_line.png',
-              package: 'assets',
-              fit: BoxFit.fitWidth,
+            ListTile(
+              leading: Icon(
+                B2BIcons.location,
+                color: Colors.black,
+              ),
+              title: Row(
+                children: <Widget>[
+                  widget.order.deliveryAddress == null ||
+                          widget.order.deliveryAddress.fullname == null
+                      ? Container()
+                      : Text(widget.order.deliveryAddress.fullname),
+                  widget.order.deliveryAddress == null ||
+                          widget.order.deliveryAddress.cellphone == null
+                      ? Container()
+                      : Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: Text(widget.order.deliveryAddress.cellphone),
+                        )
+                ],
+              ),
+              subtitle: widget.order.deliveryAddress == null ||
+                      widget.order.deliveryAddress.region == null ||
+                      widget.order.deliveryAddress.city == null ||
+                      widget.order.deliveryAddress.cityDistrict == null ||
+                      widget.order.deliveryAddress.line1 == null
+                  ? Container()
+                  : Text(
+                      widget.order.deliveryAddress.region.name +
+                          widget.order.deliveryAddress.city.name +
+                          widget.order.deliveryAddress.cityDistrict.name +
+                          widget.order.deliveryAddress.line1,
+                      style: TextStyle(
+                        color: Colors.black,
+                      )),
             ),
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
+            SizedBox(
+              child: Image.asset(
+                'temp/common/address_under_line.png',
+                package: 'assets',
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
       ),
     );
   }
@@ -359,7 +364,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             width: 120,
             child: FlatButton(
               color: Color.fromRGBO(255, 214, 12, 1),
-              onPressed: onPay,
+              onPressed: widget.order.deliveryAddress == null ? null : onPay,
               child: Text(
                 '支付',
                 style: TextStyle(fontSize: 18),
@@ -485,23 +490,26 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
   void initCheck() {
     checkOrder();
-    checkDeliveryAddress();
+    // checkDeliveryAddress();
   }
 
   //先确认订单是否已支付
   void checkOrder() async {
-    //成功，调用确认支付接口
-    String confirmResult = await WechatServiceImpl.instance
-        .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
-
+    String confirmResult;
+    try {
+      //先调用确认支付接口查看是否支付过
+      confirmResult = await WechatServiceImpl.instance
+          .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
+    } catch (e) {
+      print(e);
+    }
     if (confirmResult != null) {
       onPaymentSucess();
     }
   }
 
-  void checkDeliveryAddress() {
-    if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
-        widget.order.deliveryAddress == null) {
+  void selectDeliveryAddress() {
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       Navigator.push(
         context,
         MaterialPageRoute(

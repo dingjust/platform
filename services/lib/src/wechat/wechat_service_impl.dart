@@ -52,7 +52,7 @@ class WechatServiceImpl implements WechatService {
           timeStamp: prepayModel.timeStamp,
           sign: prepayModel.sign,
           signType: prepayModel.signType);
-          return 'success';
+      return 'success';
     } else {
       print('error get prepay');
       return null;
@@ -82,7 +82,6 @@ class WechatServiceImpl implements WechatService {
   }
 
   @override
-
   ///支付确认
   Future<String> paymentConfirm(OrderModel order,
       {PaymentFor paymentFor = PaymentFor.DEFAULT}) async {
@@ -108,7 +107,7 @@ class WechatServiceImpl implements WechatService {
 
     try {
       response = await http$.put(apiUrl);
-    } on DioError catch (e) {
+    } catch (e) {
       print(e);
     }
 

@@ -235,36 +235,42 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
 //              ),
 //            ),
           SliverToBoxAdapter(
-            child: InkWell(
-              onTap: () {
-                showMenu(
-                    context: context,
-                    items:[
-                      PopupMenuItem(
-                        child: GestureDetector(
-                          onTap: (){
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MyCompanyProfileFormPage(
-                                    widget.factory
-                                ),
+            child: Offstage(
+              offstage: widget.isFactoryDetail && !widget.factory.profiles.map((profile) => profile.medias.length > 0).toList().contains(true),
+              child: InkWell(
+                onTap: () {
+                  if(!widget.isFactoryDetail){
+                    showMenu(
+                        context: context,
+                        items:[
+                          PopupMenuItem(
+                            child: GestureDetector(
+                              onTap: (){
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MyCompanyProfileFormPage(
+                                        widget.factory
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                title: Text('更换轮播图'),
                               ),
-                            );
-                          },
-                          child: ListTile(
-                            title: Text('更换轮播图'),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                    position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-180)/2, 100, (MediaQueryData.fromWindow(window).size.width)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
-                );
-              },
-              child: Container(
-                height: 188,
-                child: CarouselStackText(widget.factory.profiles),
+                        ],
+                        position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-180)/2, 100, (MediaQueryData.fromWindow(window).size.width)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
+                    );
+                  }
+
+                },
+                child: Container(
+                  height: 188,
+                  child: _buildCarousel(),
+                ),
               ),
             ),
           ),
@@ -302,7 +308,13 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
 
   //轮播图
   Widget _buildCarousel() {
-    return CarouselStackText(widget.factory.profiles,);
+    List<CompanyProfileModel> profiles = [];
+    widget.factory.profiles.forEach((profile){
+      if(profile.medias.isNotEmpty){
+        profiles.add(profile);
+      }
+    });
+    return CarouselStackText( profiles,);
   }
 
   // 发布需求按钮

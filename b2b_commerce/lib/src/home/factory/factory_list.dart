@@ -38,14 +38,14 @@ class _FactoryPageState extends State<FactoryPage> {
   FactoryCondition factoryCondition;
 
   List<FilterConditionEntry> filterConditionEntries = <FilterConditionEntry>[
-    FilterConditionEntry(label: '综合', value: 'comprehensive', checked: true),
+    FilterConditionEntry(label: '综合', value: '', checked: true),
     FilterConditionEntry(label: '星级', value: 'starLevel'),
     FilterConditionEntry(label: '接单数', value: 'totalOrdersCount'),
   ];
 
   FilterConditionEntry currentCondition = FilterConditionEntry(
     label: '综合',
-    value: 'comprehensive',
+    value: '',
     checked: true,
   );
 

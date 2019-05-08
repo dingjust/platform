@@ -358,7 +358,7 @@ class BrandSecondMenuSection extends StatelessWidget {
         await ProductRepositoryImpl().majorCategories();
     List<LabelModel> labels = await UserRepositoryImpl().labels();
     List<LabelModel> conditionLabels =
-        labels.where((label) => label.name == '优质工厂').toList();
+        labels.where((label) => label.name == '优选工厂').toList();
     labels = labels
         .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
         .toList();

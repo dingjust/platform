@@ -260,7 +260,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day),
+        firstDate: DateTime(2019),
         lastDate: DateTime(2999)
     );
 
