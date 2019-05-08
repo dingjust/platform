@@ -239,7 +239,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       showDialog(
           context: context,
           child: SimpleDialog(
-            title: Text('登陆失败'),
+            title: Text('登录失败'),
             children: <Widget>[
               Container(
                 padding: EdgeInsets.all(10),
@@ -380,47 +380,6 @@ class PrefixText extends StatelessWidget {
         style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
       ),
       margin: EdgeInsets.only(right: 20),
-    );
-  }
-}
-
-class InputRow extends StatelessWidget {
-  final String label;
-
-  final TextField field;
-
-  final Widget surfix;
-
-  const InputRow({Key key, this.label, this.field, this.surfix})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 100,
-            margin: EdgeInsets.only(right: 20),
-            child: Text(
-              label,
-              style:
-                  TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: field,
-          ),
-          surfix ?? Container()
-        ],
-      ),
     );
   }
 }

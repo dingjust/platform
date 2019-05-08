@@ -140,9 +140,11 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
       leadingText: Text('定金金额',style: TextStyle(fontSize: 16,),),
       focusNode: _earnestMoneyFocusNode,
       controller: _earnestMoneyController,
-      inputType: TextInputType.number,
-      hintText: '请输入定金金额',
+      hintText: '请输入定金金额（数字）',
       prefix: '￥',
+      inputFormatters: [
+        DecimalInputFormat(),
+      ],
       onChanged: (value){
         earnestMoney = value;
       },
@@ -213,9 +215,11 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
       leadingText: Text('尾款金额',style: TextStyle(fontSize: 16,),),
       focusNode: _tailMoneyFocusNode,
       controller: _tailMoneyController,
-      inputType: TextInputType.number,
-      hintText: '请输入尾款金额',
+      hintText: '请输入尾款金额（数字）',
       prefix: '￥',
+      inputFormatters: [
+        DecimalInputFormat(),
+      ],
       onChanged: (value){
         tailMoney = value;
       },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
@@ -134,8 +135,10 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                 controller: _mobileNumberController,
                 focusNode: _mobileNumberFocusNode,
                 leadingText: Text('手机号码',style: TextStyle(fontSize: 16,)),
-                hintText: '请输入手机号码',
-                inputType: TextInputType.number,
+                hintText: '请输入手机号码（数字）',
+                inputFormatters: [
+                  WhitelistingTextInputFormatter.digitsOnly,
+                ],
                 onChanged: (value) {
                   widget.item.mobileNumber = value;
                 },

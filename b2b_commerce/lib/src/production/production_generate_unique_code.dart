@@ -1,4 +1,5 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -297,21 +298,9 @@ class _ProductionGenerateUniqueCodePageState
     Clipboard.setData(
         ClipboardData(text: text)
     );
-    _neverCopyContent(context);
+    ShowDialogUtil.showSimapleDialog(context, '复制成功');
   }
 
-  Future<void> _neverCopyContent(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('消息'),
-          content: Text('复制成功'),
-        );
-      },
-    );
-  }
 }
 
 class GenerateUniqueCodeItem extends StatelessWidget {

@@ -57,12 +57,12 @@ class UserBLoC extends BLoCBase {
 
   Stream<String> get loginStream => _loginResultController.stream;
 
-  ///跳转登陆
+  ///跳转登录
   StreamController loginJumpController = StreamController<bool>.broadcast();
 
   Stream<bool> get loginJumpStream => loginJumpController.stream;
 
-  Future<bool> login({String username, String password, bool remember}) async {
+  Future<LoginResult> login({String username, String password, bool remember}) async {
     Response loginResponse;
     try {
       //校验账号存在
@@ -77,14 +77,15 @@ class UserBLoC extends BLoCBase {
           'client_secret': GlobalConfigs.B2B_CLIENT_SECRET
         }));
       } else {
-        _loginResultController.sink.add('账号不存在请注册后登陆');
+        _loginResultController.sink.add('账号不存在请注册后登录');
+        return LoginResult.FAIL;
       }
-    } on DioError catch (e) {
+    } catch (e) {
       print(e);
-      //登陆错误回调
+      //登录错误回调
       _loginResultController.sink.add('密码错误请输入正确的密码');
+      return LoginResult.DIO_ERROR;
     }
-
     if (loginResponse != null && loginResponse.statusCode == 200) {
       LoginResponse _response = LoginResponse.fromJson(loginResponse.data);
 
@@ -116,6 +117,84 @@ class UserBLoC extends BLoCBase {
         });
       }
 
+      //  记录登录用户信息
+      if (remember) {
+        LocalStorage.save(
+            GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
+        LocalStorage.save(GlobalConfigs.USER_KEY, username);
+      }
+      _controller.sink.add(_user);
+      return LoginResult.SUCCESS;
+    }
+
+    return LoginResult.FAIL;
+  }
+
+  //验证码登录
+  Future<LoginResult> loginByCaptcha(
+      {String username, String captcha, bool remember}) async {
+    print(captcha);
+    Response loginResponse;
+    try {
+      //校验账号存在
+      bool exist = await UserRepositoryImpl().phoneExist(username);
+      if (exist != null && exist) {
+        loginResponse = await http$.post(
+            HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+          'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
+          'client_id': 'asm',
+          'client_secret': GlobalConfigs.B2B_CLIENT_SECRET,
+          'code': captcha,
+        }));
+      } else {
+        _loginResultController.sink.add('账号不存在请注册后登陆');
+        return LoginResult.FAIL;
+      }
+    } on DioError catch (e) {
+      print(e);
+      //登陆错误回调
+      _loginResultController.sink.add('验证码错误请输入正确的验证码');
+      return LoginResult.DIO_ERROR;
+    }
+
+    if (loginResponse != null && loginResponse.statusCode == 200) {
+      LoginResponse _response = LoginResponse.fromJson(loginResponse.data);
+
+      // 记录http token 信息
+      http$.updateAuthorization(_response.accessToken);
+
+      // 获取用户信息
+      Response infoResponse;
+      try {
+        infoResponse = await http$.get(UserApis.userInfo(username));
+      } on DioError catch (e) {
+        print(e);
+        //  清理本地记录
+        LocalStorage.remove(GlobalConfigs.REFRESH_TOKEN_KEY);
+        // 清除授权
+        http$.removeAuthorization();
+        //登陆错误回调
+        _loginResultController.sink.add('验证码错误请输入正确的验证码');
+        return LoginResult.DIO_ERROR;
+      }
+
+      if (infoResponse != null && infoResponse.statusCode == 200) {
+        _user = UserModel.fromJson(infoResponse.data);
+        _user.name = infoResponse.data['username'];
+        _user.status = UserStatus.ONLINE;
+      }
+
+      // 获取公司信息
+      if (_user.type == UserType.BRAND) {
+        UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+          _user.b2bUnit = brand;
+        });
+      } else if (_user.type == UserType.FACTORY) {
+        UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
+          _user.b2bUnit = factory;
+        });
+      }
+
       //  记录登陆用户信息
       if (remember) {
         LocalStorage.save(
@@ -123,10 +202,10 @@ class UserBLoC extends BLoCBase {
         LocalStorage.save(GlobalConfigs.USER_KEY, username);
       }
       _controller.sink.add(_user);
-      return true;
+      return LoginResult.SUCCESS;
     }
 
-    return false;
+    return LoginResult.FAIL;
   }
 
   Future<void> logout() async {
@@ -137,6 +216,7 @@ class UserBLoC extends BLoCBase {
     http$.removeAuthorization();
     _controller.sink.add(_user);
   }
+
 //
   void changeUserType(UserType userType) {
     _user.type = userType;
@@ -209,4 +289,15 @@ class UserBLoC extends BLoCBase {
     _loginResultController.close();
     loginJumpController.close();
   }
+}
+
+enum LoginResult{
+  ///登录成功
+  SUCCESS,
+
+  ///失败
+  FAIL,
+
+  ///接口调用失败
+  DIO_ERROR
 }

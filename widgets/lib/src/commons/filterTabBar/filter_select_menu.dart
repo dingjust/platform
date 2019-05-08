@@ -44,14 +44,15 @@ class _FilterSelectMenuState extends State<FilterSelectMenu> {
                         //多选
                         if (widget.multipeSelect) {
                           //全部
-                          if (entry.value == null) {
+                          if (entry.type == FilterConditionEntryType.ALL) {
                             widget.entries.forEach((entry) {
                               entry.checked = false;
                             });
                             entry.checked = true;
                           } else {
                             widget.entries
-                                .firstWhere((entry) => entry.value == null)
+                                .firstWhere((entry) =>
+                                    entry.type == FilterConditionEntryType.ALL)
                                 .checked = false;
                             entry.checked = !entry.checked;
                           }

@@ -41,129 +41,140 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        elevation: 0.5,
-        iconTheme: IconThemeData(color: Color.fromRGBO(36, 38, 41, 1)),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: const Text(
-          '注册',
-          style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
+        key: _scaffoldKey,
+        appBar: AppBar(
+          elevation: 0.5,
+          iconTheme: IconThemeData(color: Color.fromRGBO(36, 38, 41, 1)),
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: const Text(
+            '填写公司信息',
+            style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
+          ),
         ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(10.0),
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(bottom: 50),
-            padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
-            child: Column(
-              children: <Widget>[
-                InputRow(
-                  label: '公司名称（店铺名）',
-                  field: TextField(
-                    autofocus: false,
-                    onChanged: (value) {
-                      formValidate();
-                    },
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                        hintText: '请输入', border: InputBorder.none),
+        body: Container(
+          color: Colors.white,
+          child: ListView(
+            padding: const EdgeInsets.all(10.0),
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '您将注册${UserTypeLocalizedMap[UserBLoC.instance.currentUser.type]}',
+                    style: TextStyle(fontSize: 16, color: Colors.red),
                   ),
-                ),
-                InputRow(
-                    label: '联系人',
-                    field: TextField(
-                      autofocus: false,
-                      onChanged: (value) {
-                        formValidate();
-                      },
-                      controller: _contactPersonController,
-                      decoration: InputDecoration(
-                          hintText: '请输入', border: InputBorder.none),
-                    )),
-                InputRow(
-                    label: '联系方式',
-                    field: TextField(
-                      autofocus: false,
-                      onChanged: (value) {
-                        formValidate();
-                      },
-                      controller: _contactPhoneController,
-                      keyboardType: TextInputType.phone,
-                      //只能输入数字
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      decoration: InputDecoration(
-                          hintText: '请输入', border: InputBorder.none),
-                    )),
-                GestureDetector(
-                  onTap: _selectRegionCityAndDistrict,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                width: 0.5,
-                                color: Color.fromRGBO(200, 200, 200, 1)))),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: 100,
-                          margin: EdgeInsets.only(right: 20),
-                          child: Text(
-                            '经营地址',
-                            style: TextStyle(
-                                color: Color.fromRGBO(36, 38, 41, 1),
-                                fontSize: 18),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            districtModel != null
-                                ? '${districtModel.city.region.name}  ${districtModel.city.name} ${districtModel.name}'
-                                : '选择省市区',
-                            style: TextStyle(
-                                color: Color.fromRGBO(150, 150, 150, 1),
-                                fontSize: 18),
-                          ),
-                        ),
-                      ],
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 50),
+                padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
+                child: Column(
+                  children: <Widget>[
+                    InputRow(
+                      label: '公司名称（店铺名）',
+                      field: TextField(
+                        autofocus: false,
+                        onChanged: (value) {
+                          formValidate();
+                        },
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                            hintText: '请输入', border: InputBorder.none),
+                      ),
                     ),
-                  ),
+                    InputRow(
+                        label: '联系人',
+                        field: TextField(
+                          autofocus: false,
+                          onChanged: (value) {
+                            formValidate();
+                          },
+                          controller: _contactPersonController,
+                          decoration: InputDecoration(
+                              hintText: '请输入', border: InputBorder.none),
+                        )),
+                    InputRow(
+                        label: '联系方式',
+                        field: TextField(
+                          autofocus: false,
+                          onChanged: (value) {
+                            formValidate();
+                          },
+                          controller: _contactPhoneController,
+                          keyboardType: TextInputType.phone,
+                          //只能输入数字
+                          inputFormatters: <TextInputFormatter>[
+                            WhitelistingTextInputFormatter.digitsOnly,
+                          ],
+                          decoration: InputDecoration(
+                              hintText: '请输入', border: InputBorder.none),
+                        )),
+                    GestureDetector(
+                      onTap: _selectRegionCityAndDistrict,
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    width: 0.5,
+                                    color: Color.fromRGBO(200, 200, 200, 1)))),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              width: 100,
+                              margin: EdgeInsets.only(right: 20),
+                              child: Text(
+                                '经营地址',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(36, 38, 41, 1),
+                                    fontSize: 18),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                districtModel != null
+                                    ? '${districtModel.city.region.name}  ${districtModel.city.name} ${districtModel.name}'
+                                    : '选择省市区',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(150, 150, 150, 1),
+                                    fontSize: 18),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    InputRow(
+                        label: '详细地址',
+                        field: TextField(
+                          autofocus: false,
+                          onChanged: (value) {
+                            formValidate();
+                          },
+                          controller: _line1Controller,
+                          decoration: InputDecoration(
+                              hintText: '请输入', border: InputBorder.none),
+                        )),
+                  ],
                 ),
-                InputRow(
-                    label: '详细地址',
-                    field: TextField(
-                      autofocus: false,
-                      onChanged: (value) {
-                        formValidate();
-                      },
-                      controller: _line1Controller,
-                      decoration: InputDecoration(
-                          hintText: '请输入', border: InputBorder.none),
-                    )),
-              ],
-            ),
+              ),
+              RaisedButton(
+                onPressed: validate ? onSubmit : null,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  '注册',
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
+              ),
+            ],
           ),
-          RaisedButton(
-            onPressed: validate ? onSubmit : null,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            color: Color.fromRGBO(255, 214, 12, 1),
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              '注册',
-              style: TextStyle(color: Colors.black, fontSize: 18),
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   void formValidate() {

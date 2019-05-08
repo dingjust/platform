@@ -32,6 +32,12 @@ const UserTypeMap = {
   UserType.FACTORY: "FACTORY",
 };
 
+const UserTypeLocalizedMap = {
+  UserType.ANONYMOUS: "游客",
+  UserType.BRAND: "品牌端",
+  UserType.FACTORY: "工厂端",
+};
+
 enum UserStatus {
   ///在线
   ONLINE,

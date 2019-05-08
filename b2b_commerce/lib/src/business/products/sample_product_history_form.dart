@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -175,11 +176,13 @@ class SampleProductHistoryFormPageState
                       enabled: !_onlyRead,
                       focusNode: _quantityFocusNode,
                       controller: _quantityController,
-                      inputType: TextInputType.number,
                       leadingText: Text(_type == LendBorrowType.BORROW ? '借出数量' : '借入数量',style: TextStyle(fontSize: 16,)),
                       hintText:
                           _onlyRead ? '' : _type == LendBorrowType.BORROW ? '请输入借出数量' : '请输入借入数量',
                       leadingWidth: 100,
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 18),

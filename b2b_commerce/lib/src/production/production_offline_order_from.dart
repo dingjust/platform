@@ -593,9 +593,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       focusNode: _priceFocusNode,
       leadingText: Text('订单报价',style: TextStyle(fontSize: 16),),
       controller: _priceController,
-      inputType: TextInputType.number,
-      hintText: '请输入订单报价',
+      hintText: '请输入订单报价（数字）',
       prefix: '￥',
+      inputFormatters: [
+        DecimalInputFormat(),
+      ],
       dividerPadding: EdgeInsets.symmetric(horizontal: 0,),
       onChanged: (value){
         price = value;

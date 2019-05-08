@@ -7,6 +7,8 @@ abstract class UserApis {
 
   //发送短信验证码
   static get sendCaptcha => (phone) => '/{baseSiteId}/sms/captcha/$phone';
+  //发送登录用的验证码
+  static get sendCaptchaForLogin => (phone) => '/{baseSiteId}/sms/captcha/asm/B2B/$phone';
 
   //验证验证码是否正确
   static get validateCaptcha => '/{baseSiteId}/sms/validate';

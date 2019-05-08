@@ -9,6 +9,9 @@ abstract class UserRepository {
   //发送短信验证码
   Future<String> sendCaptcha(String phone);
 
+  //发送短信验证码
+  Future<String> sendCaptchaForLogin(String phone);
+
   //验证验证码是否正确
   Future<bool> validateCaptcha(String phone, String captcha);
 

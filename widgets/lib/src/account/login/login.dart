@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:services/services.dart' show UserBLoC;
+import 'package:services/services.dart'
+    show LoginResult, UserBLoC, UserRepositoryImpl;
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 import 'package:widgets/widgets.dart';
 
@@ -31,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   String _verifyStr = '获取验证码';
   int _seconds = 0;
   Timer _timer;
+  String phoneValidateStr = "";
 
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -40,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isRemember = true;
   bool _isPasswordHide = true;
   bool _isPasswordLogin = true;
+  bool validate = false;
 
   @override
   void initState() {
@@ -51,13 +54,30 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
+
+    bloc.loginStream.listen((result) {
+      Navigator.of(context).pop();
+      showDialog(
+          context: context,
+          child: SimpleDialog(
+            title: Text('登陆失败'),
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Text('${result}'),
+              ),
+            ],
+          ));
+    });
+
     return Material(
       child: Scaffold(
           key: _scaffoldKey,
           body: Form(
             key: _formKey,
             autovalidate: true,
-            child: _buildBody(context),
+            child: _buildBody(context, bloc),
           )),
     );
   }
@@ -89,29 +109,25 @@ class _LoginPageState extends State<LoginPage> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          // _isPasswordLogin?
           GestureDetector(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => widget.forgetPasswordPage));
+              setState(() {
+                _isPasswordLogin = !_isPasswordLogin;
+              });
             },
-            child: Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
-              child: Text(
-                '忘记密码',
-                style: TextStyle(color: Colors.red, fontSize: 15),
-              ),
+            child: Text(
+              _isPasswordLogin ? '验证码登陆' : '密码登陆',
+              style: TextStyle(fontSize: 15),
             ),
           ),
-          Container(),
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => widget.registerPage));
             },
             child: Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 20),
               child: Text(
                 '注册',
                 style: TextStyle(color: Colors.black, fontSize: 15),
@@ -124,76 +140,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildInputArea() {
-    TextFormField _passwordField = TextFormField(
-        autofocus: false,
-        controller: _passwordController,
-        obscureText: _isPasswordHide,
-        decoration: InputDecoration(
-            hintText: '请输入密码',
-            focusedErrorBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-            errorBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-            focusedBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-            border: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-            suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _isPasswordHide = !_isPasswordHide;
-                });
-              },
-              child: Icon(
-                _isPasswordHide ? B2BIcons.eye_not_see : Icons.remove_red_eye,
-                color: Colors.black54,
-              ),
-            )),
-        // 校验用户名
-        validator: (v) {
-          return v.trim().length > 0 ? null : '密码不能为空';
-        });
-
-    TextFormField _smsCaptchaField = TextFormField(
-        autofocus: false,
-        controller: _smsCaptchaController,
-        decoration: InputDecoration(
-          labelText: '验证码',
-          hintText: '请输入',
-          focusedErrorBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-          errorBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-          border: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-          suffixIcon: FlatButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            onPressed: (_seconds == 0)
-                ? () {
-                    setState(() {
-                      _startTimer();
-                    });
-                  }
-                : null,
-            color: Color.fromRGBO(255, 214, 12, 1),
-            child: Text(
-              '$_verifyStr',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ),
-        // 校验用户名
-        validator: (v) {
-          return v.trim().length > 0 ? null : '验证码不能为空';
-        });
-
     //监听密码输入变动、刷新表单校验
     _passwordController.addListener(() {
       setState(() {});
@@ -203,56 +149,119 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
       child: Column(
         children: <Widget>[
-          TextFormField(
+          InputRow(
+            leading: Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+              child: Icon(
+                Icons.phone_iphone,
+                color: Colors.grey,
+              ),
+            ),
+            field: TextField(
               autofocus: false,
+              onChanged: (value) async {
+                formValidate();
+              },
               keyboardType: TextInputType.phone,
-              controller: _phoneController,
-              maxLength: 11,
               //只能输入数字
               inputFormatters: <TextInputFormatter>[
                 WhitelistingTextInputFormatter.digitsOnly,
               ],
-              decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          _phoneController.clear();
-                        });
-                      }),
-                  hintText: '请输入手机号码',
-                  focusedErrorBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-                  errorBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1))),
-                  border: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromRGBO(200, 200, 200, 1)))),
-              // 校验用户名
-              validator: (v) {
-                return v.trim().length > 0 ? null : '手机号不能为空';
-              }),
-          _isPasswordLogin ? _passwordField : _smsCaptchaField,
+              controller: _phoneController,
+              decoration:
+                  InputDecoration(hintText: '请输入', border: InputBorder.none),
+            ),
+            surfix: Container(
+              child: Text(
+                phoneValidateStr,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ),
+          _isPasswordLogin
+              ? InputRow(
+                  leading: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                      child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isPasswordHide = !_isPasswordHide;
+                            });
+                          },
+                          child: Icon(
+                            _isPasswordHide
+                                ? B2BIcons.eye_not_see
+                                : Icons.remove_red_eye,
+                            color: Colors.black54,
+                          ))),
+                  field: TextField(
+                    autofocus: false,
+                    obscureText: true,
+                    onChanged: (value) {
+                      formValidate();
+                    },
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                        hintText: '请输入', border: InputBorder.none),
+                  ),
+                  surfix: FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => widget.forgetPasswordPage));
+                    },
+                    child: Text(
+                      '忘记密码',
+                      style: TextStyle(color: Colors.black54, fontSize: 15),
+                    ),
+                  ),
+                )
+              : InputRow(
+                  leading: Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    child: Icon(
+                      Icons.sms,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  field: TextField(
+                    autofocus: false,
+                    onChanged: (value) {
+                      formValidate();
+                    },
+                    keyboardType: TextInputType.phone,
+                    //只能输入数字
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly,
+                    ],
+                    controller: _smsCaptchaController,
+                    decoration: InputDecoration(
+                        hintText: '请输入', border: InputBorder.none),
+                  ),
+                  surfix: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    onPressed: (_seconds == 0)
+                        ? () async {
+                            bool legal = await validatePhone();
+                            if (legal) {
+                              UserRepositoryImpl()
+                                  .sendCaptchaForLogin(_phoneController.text)
+                                  .then((a) {
+                                _startTimer();
+                              });
+                            }
+                          }
+                        : null,
+                    child: Text(
+                      '$_verifyStr',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              // GestureDetector(
-              //   onTap: () {
-              //     setState(() {
-              //       _isPasswordLogin = !_isPasswordLogin;
-              //     });
-              //   },
-              //   child: Text(
-              //     _isPasswordLogin ? '短信验证码登陆' : '密码登陆',
-              //     style: TextStyle(
-              //         color: Color.fromRGBO(255, 214, 12, 1), fontSize: 15),
-              //   ),
-              // ),
               Row(
                 children: <Widget>[
                   Text(
@@ -279,82 +288,137 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildLogo() {
     return Container(
-        padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 20), child: widget.logo);
+        decoration: BoxDecoration(color: Color.fromRGBO(255, 214, 12, 1)),
+        padding: const EdgeInsets.fromLTRB(0, 60.0, 0, 20.0),
+        child: widget.logo);
   }
 
-  Widget _buildBody(BuildContext context) {
-    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
-
-    bloc.loginStream.listen((result) {
-      Navigator.pop(context);
-      showDialog(
-          context: context,
-          child: SimpleDialog(
-            title: Text('登陆失败'),
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Text('${result}'),
-              ),
-            ],
-          ));
-    });
-
+  Widget _buildBody(BuildContext context, UserBLoC bloc) {
     return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage(
-          'temp/login_background.png',
-          package: "assets",
-        ),
-        fit: BoxFit.fitWidth,
-      )),
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
-        children: <Widget>[
-          _buildLogo(),
-          _buildInputArea(),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: RaisedButton(
-              onPressed: (_formKey.currentState as FormState) == null
-                  ? null
-                  : (_formKey.currentState as FormState).validate()
-                      ? () {
-                          //加载条
-                          showDialog(
-                            context: context,
-                            builder: (context) => ProgressIndicatorFactory
-                                .buildDefaultProgressIndicator(),
-                          );
-                          bloc
-                              .login(
-                                  username: _phoneController.text,
-                                  password: _passwordController.text,
-                                  remember: _isRemember)
-                              .then((result) {
-                            if (result) {
-                              Navigator.of(context)
-                                  .popUntil(ModalRoute.withName('/'));
-                            }
-                          });
-                        }
-                      : null,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                '登陆',
-                style: TextStyle(color: Colors.black, fontSize: 18),
+      color: Colors.white,
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: 160.0,
+            pinned: true,
+            elevation: 0.5,
+            leading: Container(),
+            brightness: Brightness.light,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  _buildLogo(),
+                ],
               ),
             ),
           ),
-          _buildServiceRow()
+          SliverList(
+              delegate: SliverChildListDelegate([
+            _buildInputArea(),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: RaisedButton(
+                onPressed: (_formKey.currentState as FormState) == null
+                    ? null
+                    : (_formKey.currentState as FormState).validate()
+                        ? () {
+                            onLogin(bloc);
+                          }
+                        : null,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  '登录',
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
+              ),
+            ),
+            _buildServiceRow()
+          ])),
         ],
       ),
     );
+  }
+
+  void formValidate() {
+    setState(() {
+      if (_isPasswordLogin) {
+        validate = _phoneController.text.trim().length == 11 &&
+            _passwordController.text.trim().length > 0;
+      } else {
+        validate = _phoneController.text.trim().length == 11 &&
+            _smsCaptchaController.text.trim().length > 0;
+      }
+    });
+  }
+
+  Future<bool> validatePhone() async {
+    String result = "";
+    bool isExist = false;
+
+    if (_phoneController.text == '') {
+      result = '';
+    } else {
+      if (RegexUtil.isMobile(_phoneController.text)) {
+        bool exist =
+            await UserRepositoryImpl().phoneExist(_phoneController.text);
+
+        if (exist != null && exist) {
+          result = "";
+          isExist = true;
+        } else {
+          result = "账号不存在";
+        }
+      } else {
+        result = "输入正确手机号";
+      }
+    }
+
+    setState(() {
+      phoneValidateStr = result;
+    });
+
+    return isExist;
+  }
+
+  void onLogin(UserBLoC bloc) {
+    //加载条
+    showDialog(
+      context: context,
+      builder: (context) =>
+          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    );
+    if (_isPasswordLogin) {
+      bloc
+          .login(
+              username: _phoneController.text,
+              password: _passwordController.text,
+              remember: _isRemember)
+          .then((result) {
+        if (result == LoginResult.SUCCESS) {
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        } else if (result == LoginResult.DIO_ERROR) {
+          Navigator.of(context).pop();
+        }
+      });
+    } else {
+      bloc
+          .loginByCaptcha(
+              username: _phoneController.text,
+              captcha: _smsCaptchaController.text,
+              remember: _isRemember)
+          .then((result) {
+        if (result == LoginResult.SUCCESS) {
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        } else if (result == LoginResult.DIO_ERROR) {
+          Navigator.of(context).pop();
+        }
+      });
+    }
   }
 
   void showSnackBar(BuildContext context) {
@@ -378,5 +442,51 @@ class _LoginPageState extends State<LoginPage> {
         _phoneController.text = oldUserName;
       });
     }
+  }
+}
+
+class InputRow extends StatelessWidget {
+  final String label;
+
+  final Widget leading;
+
+  final TextField field;
+
+  final Widget surfix;
+
+  const InputRow({Key key, this.label, this.field, this.surfix, this.leading})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          label != null
+              ? Container(
+                  width: 100,
+                  margin: EdgeInsets.only(right: 20),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                        color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                  ),
+                )
+              : Container(),
+          leading != null ? leading : Container(),
+          Expanded(
+            flex: 1,
+            child: field,
+          ),
+          surfix ?? Container()
+        ],
+      ),
+    );
   }
 }

@@ -139,7 +139,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
                      builder: (_) {
                        return RequestDataLoadingPage(
                          requestCallBack: UserRepositoryImpl()
-                             .brandUpdateContact(widget.company),
+                             .brandUpdateContact(widget.company).then((a)=>Navigator.pop(context)),
                          outsideDismiss: false,
                          loadingText: '保存中。。。',
                          entrance: '00',
@@ -153,14 +153,13 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
                     builder: (_) {
                       return RequestDataLoadingPage(
                         requestCallBack: UserRepositoryImpl()
-                            .factoryUpdateContact(widget.company),
+                            .factoryUpdateContact(widget.company).then((a)=>Navigator.pop(context)),
                         loadingText: '保存中。。。',
                         entrance: '00',
                       );
                     }
                  );
               }
-
             }),
       ):null,
     );
@@ -536,28 +535,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
   copyToClipboard(final String text, BuildContext context) {
     if (text == null) return;
     Clipboard.setData(ClipboardData(text: text));
-    _neverCopyContent(context);
-  }
-
-  Future<void> _neverCopyContent(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('消息'),
-          content: Text('复制成功'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    ShowDialogUtil.showSimapleDialog(context, '复制成功');
   }
 
 }

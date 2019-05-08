@@ -17,7 +17,7 @@ class ProductFieldState extends State<ProductField> {
       children: <Widget>[
         ListTile(
           leading: Text(
-            '产品名称',
+            '标题',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
