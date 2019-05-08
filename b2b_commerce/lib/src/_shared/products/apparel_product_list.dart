@@ -87,6 +87,30 @@ class _ApparelProductListState extends State<ApparelProductList>{
                       child: Center(child: CircularProgressIndicator()),
                     );
                   }
+                  if (snapshot.data.length >= 0) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(top: 200),
+                          child: Image.asset(
+                            'temp/logo2.png',
+                            package: 'assets',
+                            width: 80,
+                            height: 80,
+                          ),
+                        ),
+                        Container(
+                            child: Text('您当前未有产品')
+                        ),
+                        Container(
+                          child: Text('请点击右下角创建产品'),
+                        )
+                      ],
+                    );
+                  }
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((product) {

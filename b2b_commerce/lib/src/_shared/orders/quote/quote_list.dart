@@ -236,6 +236,32 @@ class _QuoteListState extends State<QuoteList> {
 
                   return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                 }
+                if (snapshot.data.length >= 0) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: 200),
+                        child: Image.asset(
+                          'temp/logo2.png',
+                          package: 'assets',
+                          width: 80,
+                          height: 80,
+                        ),
+                      ),
+                      Container(
+                          child: Text(
+                            '没有相关订单数据',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          )
+                      ),
+                    ],
+                  );
+                }
                 if (snapshot.hasData) {
                   return Column(
                     children: snapshot.data.map((item) {
