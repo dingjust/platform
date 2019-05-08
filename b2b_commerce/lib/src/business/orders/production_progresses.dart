@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -484,65 +485,39 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   //确认完成按钮方法
   Future<void> _neverComplete(BuildContext context,ProductionProgressModel model) async {
-    dialogText = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('提示',
-            style: TextStyle(
-              fontSize: 16,
-            ),),
-          content: Text('当前阶段是否完成？'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                  '取消',
-                style: TextStyle(
-                    color: Colors.grey
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text(
-                  '确定',
-                style: TextStyle(
-                    color: Colors.black
-                ),
-              ),
-              onPressed: () async {
-                bool result = false;
-                Navigator.of(context).pop();
-                try {
-                  model.updateOnly = false;
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return RequestDataLoadingPage(
-                          requestCallBack: PurchaseOrderRepository().productionProgressUpload(
-                            order.code, model.id.toString(), model),
-                          outsideDismiss: false,
-                          loadingText: '保存中。。。',
-                          entrance: '',
-                        );
-                      }
-                  ).then((value){
-                    refreshData();
-                  });
-                } catch (e) {
-                print(e);
-                }
-              },
-            ),
-          ],
-        );
-      },
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+              submit(model);
+            },
+          );
+        }
     );
+  }
+
+  void submit(ProductionProgressModel model) {
+     showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoadingPage(
+            requestCallBack: PurchaseOrderRepository().productionProgressUpload(
+                order.code, model.id.toString(), model),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: 'createPurchaseOrder',
+          );
+        }
+    ).then((value){
+      refreshData();
+    });
   }
 
   Future<void> refreshData() async {
@@ -557,85 +532,48 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
 
-//生成Dialog控件
+//生成Dialog控件 输入数量
   Future<void> _neverSatisfied(BuildContext context,ProductionProgressModel model,String type) async {
-    dialogText = TextEditingController();
-    _dialogFocusNode = FocusNode();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入${type}'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextFieldComponent(
-                  textAlign: TextAlign.left,
-                  focusNode: _dialogFocusNode,
-                  controller: dialogText,
-                  autofocus: true,
-                  inputType: TextInputType.number,
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                  '取消',
-                style: TextStyle(
-                    color: Colors.grey
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text(
-                  '确定',
-                style: TextStyle(
-                    color: Colors.black
-                ),
-              ),
-              onPressed: () async {
-                bool result = false;
-                if(dialogText.text != null){
-                  print(dialogText.text);
-                  if(dialogText != null && dialogText.text != '') {
-                    model.quantity = int.parse(dialogText.text);
-                  }
-                  try {
-                    Navigator.of(context).pop();
-                    model.updateOnly = true;
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return RequestDataLoadingPage(
-                            requestCallBack: PurchaseOrderRepository().productionProgressUpload(
-                                order.code, model.id.toString(), model),
-                            outsideDismiss: false,
-                            loadingText: '保存中。。。',
-                            entrance: '',
-                          );
-                        }
-                    );
-                  } catch (e) {
-                    print(e);
-                  }
-                  setState(() {
-                    _blNumber = dialogText.text;
-                  });
-                }
-
-              },
-            ),
-          ],
-        );
-      },
-    );
+    TextEditingController inputController = TextEditingController();
+    inputController.text = model.quantity.toString();
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.INPUTS_DIALOG,
+            inputController1: inputController,
+            inputType1: TextInputType.number,
+            focusNode1: FocusNode(),
+          );
+        }
+    ).then((value){
+      if (value != null && value != '') {
+        model.quantity = int.parse(value);
+        try {
+          model.updateOnly = true;
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return RequestDataLoadingPage(
+                  requestCallBack: PurchaseOrderRepository()
+                      .productionProgressUpload(
+                      order.code, model.id.toString(), model),
+                  outsideDismiss: false,
+                  loadingText: '保存中。。。',
+                  entrance: '',
+                );
+              }
+          );
+        } catch (e) {
+          print(e);
+        }
+        setState(() {
+          _blNumber = value;
+        });
+      }
+    });
   }
 
   __neverShowMsg(String text) {
@@ -660,84 +598,47 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       );
   }
 
+  //输入备注
   Future<void> _neverRemarks(BuildContext context,ProductionProgressModel model,String type,String remarks) async {
-    dialogText =new TextEditingController();
-    _dialogFocusNode = FocusNode();
-    if (remarks != null) {
-      dialogText.text = remarks;
-    }else{
-      dialogText.text = '';
-    }
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入${type}'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextFieldComponent(
-                  textAlign: TextAlign.left,
-                  focusNode: _dialogFocusNode,
-                  controller: dialogText,
-                  autofocus: true,
-                  inputType: TextInputType.text,
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                '取消',
-                style: TextStyle(
-                    color: Colors.grey
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text(
-                  '确定',
-                style: TextStyle(
-                    color: Colors.black
-                ),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                if(dialogText.text != null){
-                  model.remarks = dialogText.text;
-                  try {
-                    model.updateOnly = true;
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return RequestDataLoadingPage(
-                            requestCallBack: PurchaseOrderRepository().productionProgressUpload(
-                                order.code, model.id.toString(), model),
-                            outsideDismiss: false,
-                            loadingText: '保存中。。。',
-                            entrance: '',
-                          );
-                        }
-                    );
-                  } catch (e) {
-                    print(e);
-                  }
-                  setState(() {
-                    _blNumber = dialogText.text;
-                  });
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+    TextEditingController inputController = TextEditingController();
+    inputController.text = model.remarks;
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.INPUTS_DIALOG,
+            inputController1: inputController,
+            focusNode1: FocusNode(),
+          );
+        }
+    ).then((value){
+      if (value != null && value != '') {
+        model.remarks = value;
+        try {
+          model.updateOnly = true;
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return RequestDataLoadingPage(
+                  requestCallBack: PurchaseOrderRepository()
+                      .productionProgressUpload(
+                      order.code, model.id.toString(), model),
+                  outsideDismiss: false,
+                  loadingText: '保存中。。。',
+                  entrance: '',
+                );
+              }
+          );
+        } catch (e) {
+          print(e);
+        }
+        setState(() {
+          _blNumber = value;
+        });
+      }
+    });
   }
 
 //打开日期选择器

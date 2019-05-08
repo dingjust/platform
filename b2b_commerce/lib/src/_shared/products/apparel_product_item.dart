@@ -104,7 +104,7 @@ class ApparelProductItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    item.name,
+                    '${item.name==null?'':item.name}',
                     style: TextStyle(
                       fontSize: 15,
                     ),
@@ -116,7 +116,7 @@ class ApparelProductItem extends StatelessWidget {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      '货号：' + item.skuID ?? '',
+                      '货号：${item.skuID==null?'':item.skuID}',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 12,

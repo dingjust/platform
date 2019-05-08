@@ -19,6 +19,7 @@ class RequestDataLoadingPage extends StatefulWidget {
   Future<void> callbackExecution;
   String entrance;
   String keyword;
+  String Function() onPress;
 
   RequestDataLoadingPage({
     Key key,
@@ -253,6 +254,25 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+
+class LoadingUtil {
+
+  static Future loadingDialog(BuildContext context,Future future,String loadingText,String entrance) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoadingPage(
+            requestCallBack: future,
+            outsideDismiss: false,
+            loadingText: loadingText,
+            entrance: entrance,
+          );
+        }
     );
   }
 }
