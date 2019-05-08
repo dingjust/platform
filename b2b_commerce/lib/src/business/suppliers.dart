@@ -266,6 +266,7 @@ class SuppliersItem extends StatelessWidget {
                   quoteModel: quoteModel,
                   purchaseOrder: purchaseOrderModel,
                   products: productsResponse.content,
+                  isFactoryDetail: true,
                 ),
           ),
         );
@@ -325,6 +326,7 @@ class BrandSuppliersItem extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => MyBrandPage(
                   supplierModel,
+                  isDetail: true,
                 ),
           ),
         );

@@ -18,9 +18,10 @@ import './company/my_company_contact_way.dart';
 
 /// 认证信息
 class MyBrandPage extends StatefulWidget {
-  MyBrandPage(this.brand);
+  MyBrandPage(this.brand,{this.isDetail = false});
 
   final BrandModel brand;
+  final bool isDetail;
 
   _MyBrandPageState createState() => _MyBrandPageState();
 }
@@ -49,6 +50,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
             MaterialPageRoute(
               builder: (context) => MyCompanyContactFromPage(
                 company:widget.brand,
+                isDetail: widget.isDetail,
               ),
             ),
           );

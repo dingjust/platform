@@ -454,6 +454,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       ShowDialogUtil.showSimapleDialog(context, '交货时间不可以为空');
       return;
     }
+    if(model.details.expectedDeliveryDate.isBefore(DateTime.now())){
+      ShowDialogUtil.showSimapleDialog(context, '交货时间不可比当前时间小');
+    }
     if (model.details.contactPerson == null &&
         model.details.contactPhone == null) {
       ShowDialogUtil.showSimapleDialog(context, '联系方式不可以为空');
