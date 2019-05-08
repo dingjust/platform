@@ -251,6 +251,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
         //此处
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        ChineseCupertinoLocalizations.delegate
       ],
       supportedLocales: AppConstants.supportedLocales(),
     );
