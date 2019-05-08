@@ -371,7 +371,7 @@ class _FactoryListViewState extends State<FactoryListView> {
                         .buildDefaultProgressIndicator(),
                   );
                 }
-                if (snapshot.data.length >= 0) {
+                if (snapshot.data.length <= 0) {
                   return Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
