@@ -235,39 +235,42 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
 //              ),
 //            ),
           SliverToBoxAdapter(
-            child: InkWell(
-              onTap: () {
-                if(!widget.isFactoryDetail){
-                  showMenu(
-                      context: context,
-                      items:[
-                        PopupMenuItem(
-                          child: GestureDetector(
-                            onTap: (){
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MyCompanyProfileFormPage(
-                                      widget.factory
+            child: Offstage(
+              offstage: widget.isFactoryDetail && !widget.factory.profiles.map((profile) => profile.medias.length > 0).toList().contains(true),
+              child: InkWell(
+                onTap: () {
+                  if(!widget.isFactoryDetail){
+                    showMenu(
+                        context: context,
+                        items:[
+                          PopupMenuItem(
+                            child: GestureDetector(
+                              onTap: (){
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MyCompanyProfileFormPage(
+                                        widget.factory
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            child: ListTile(
-                              title: Text('更换轮播图'),
+                                );
+                              },
+                              child: ListTile(
+                                title: Text('更换轮播图'),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                      position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-180)/2, 100, (MediaQueryData.fromWindow(window).size.width)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
-                  );
-                }
+                        ],
+                        position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-180)/2, 100, (MediaQueryData.fromWindow(window).size.width)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
+                    );
+                  }
 
-              },
-              child: Container(
-                height: 188,
-                child: _buildCarousel(),
+                },
+                child: Container(
+                  height: 188,
+                  child: _buildCarousel(),
+                ),
               ),
             ),
           ),
