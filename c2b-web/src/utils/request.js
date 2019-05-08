@@ -105,7 +105,7 @@ function requestBase(opt) {
             if (status != 401) {
                 // Toast.fail(`请求错误 ${status}`);
             } else {
-                Toast.info(`请重新登陆`);
+                Toast.info(`请重新登录`);
             }
 
             // 存在请求，但是服务器的返回一个状态码，它们都在2xx之外

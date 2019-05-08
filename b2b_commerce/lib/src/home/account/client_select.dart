@@ -24,7 +24,7 @@ class ClientSelectPage extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(left: 20),
                     child: Text(
-                      '请选择用户身份注册或登陆',
+                      '请选择用户身份注册或登录',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),

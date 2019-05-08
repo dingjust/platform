@@ -25,7 +25,7 @@ import 'src/production/index.dart';
 void main() async {
   debugInstrumentationEnabled = true;
 
-  // 初始化,检测是否有用户登陆信息
+  // 初始化,检测是否有用户登录信息
   await UserBLoC.instance.checkLocalUser();
 
   //头部状态栏阴影
@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
           initialData: UserBLoC.instance.currentUser,
           stream: UserBLoC.instance.stream,
           builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-            // 未登陆
+            // 未登录
             if (snapshot.data.type == UserType.ANONYMOUS) {
               return MaterialApp(
                 home: ClientSelectPage(),
@@ -116,7 +116,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     });
   }
 
-  //监听未登录接口调用跳转登陆页
+  //监听未登录接口调用跳转登录页
   void listenLogin() {
     UserBLoC.instance.loginJumpStream.listen((value) {
       if (true) {
