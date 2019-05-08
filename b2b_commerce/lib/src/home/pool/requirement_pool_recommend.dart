@@ -425,6 +425,30 @@ class OrdersListView extends StatelessWidget {
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }
+                  if (snapshot.data.length >= 0) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(top: 200),
+                          child: Image.asset(
+                            'temp/logo2.png',
+                            package: 'assets',
+                            width: 80,
+                            height: 80,
+                          ),
+                        ),
+                        Container(
+                            child: Text('您还没有收到推荐的需求')
+                        ),
+                        Container(
+                            child: Text('小钉正在拼命为您寻找')
+                        ),
+                      ],
+                    );
+                  }
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((item) {

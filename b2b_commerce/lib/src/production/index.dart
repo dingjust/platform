@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/home/account/login.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/production/production.dart';
 import 'package:b2b_commerce/src/production/production_filter.dart';
 import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
@@ -194,6 +195,30 @@ class ProductionListView extends StatelessWidget {
                       } else {
                         return LoginRemind();
                       }
+                    }
+                    if (snapshot.data.length >= 0) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(top: 200),
+                            child: Image.asset(
+                              'temp/logo2.png',
+                              package: 'assets',
+                              width: 80,
+                              height: 80,
+                            ),
+                          ),
+                          Container(
+                              child: Text('您尚无在生产中的订单')
+                          ),
+                          Container(
+                              child: Text('点击右下角添加订单')
+                          ),
+                        ],
+                      );
                     }
                     if (snapshot.hasData) {
                       return Column(

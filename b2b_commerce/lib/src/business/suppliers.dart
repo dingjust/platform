@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -101,6 +103,63 @@ class SuppliersList extends StatelessWidget {
                     bloc.filterfactories();
                     return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
+                  if (snapshot.data.length >= 0) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(top: 200),
+                          child: Image.asset(
+                            'temp/logo2.png',
+                            package: 'assets',
+                            width: 80,
+                            height: 80,
+                          ),
+                        ),
+                        Container(
+                            child: Text('您还没有合作商')
+                        ),
+                        Container(
+                          child: FlatButton(
+                            onPressed: () async {
+                              List<CategoryModel> categories =
+                              await ProductRepositoryImpl().majorCategories();
+                              List<LabelModel> labels = await UserRepositoryImpl().labels();
+                              labels = labels
+                                  .where((label) =>
+                              label.group == 'FACTORY' || label.group == 'PLATFORM')
+                                  .toList();
+                              if (categories != null && labels != null) {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(builder: (context) =>
+                                        FactoryPage(
+                                          FactoryCondition(
+                                              starLevel: 0,
+                                              adeptAtCategories: [],
+                                              labels: [],
+                                              cooperationModes: []),
+                                          route: '全部工厂',
+                                          categories: categories,
+                                          labels: labels,
+                                        ),
+                                    ), ModalRoute.withName('/'));
+                              }
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                            child: Text(
+                              '查看工厂',
+                              style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  }
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((supplierModel) {
@@ -170,6 +229,51 @@ class SuppliersList extends StatelessWidget {
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
                       child: ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.data.length >= 0) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(top: 200),
+                          child: Image.asset(
+                            'temp/logo2.png',
+                            package: 'assets',
+                            width: 80,
+                            height: 80,
+                          ),
+                        ),
+                        Container(
+                            child: Text('您还没有合作商')
+                        ),
+                        Container(
+                          child: FlatButton(
+                            onPressed: () async{
+                              await ProductRepositoryImpl()
+                                      .majorCategories()
+                                  .then((categories) {
+                                if (categories != null) {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(builder: (context) =>
+                                          RequirementPoolAllPage(categories: categories),
+                                      ), ModalRoute.withName('/'));
+                                }
+                              });
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                            child: Text(
+                              '查看最新需求',
+                              style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1),),
+                            ),
+                          ),
+                        )
+                      ],
                     );
                   }
                   if (snapshot.hasData) {

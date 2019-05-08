@@ -83,6 +83,8 @@ flutter:
   assets:
     - packages/assets/temp/lake.jpg
     - packages/assets/temp/login_logo.png
+    - packages/assets/temp/logo1.png
+    - packages/assets/temp/logo2.png
     - packages/assets/temp/picture.png
     - packages/assets/temp/pdf.png
     - packages/assets/temp/word.png
