@@ -234,10 +234,12 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           child: TextFieldComponent(
             focusNode: _costOfSamplesFocusNode,
             controller: _unitPriceController,
-            inputType: TextInputType.number,
             leadingText: Text('打样费',style: TextStyle(fontSize: 16,),),
-            hintText: '请输入打样费',
+            hintText: '请输入打样费（数字）',
             prefix: '￥',
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
             hideDivider: true,
             onChanged: (value){
               _countTotalPrice(value);

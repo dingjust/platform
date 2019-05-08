@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -179,26 +180,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
   copyToClipboard(final String text) {
     if (text == null) return;
     Clipboard.setData(ClipboardData(text: text));
-    _neverCopyContent(context);
+    ShowDialogUtil.showSimapleDialog(context, '复制成功');
   }
 
-  Future<void> _neverCopyContent(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return SimpleDialog(
-          title: const Text(
-            '提示',
-            style: const TextStyle(fontSize: 16),
-          ),
-          children: <Widget>[
-            SimpleDialogOption(
-              child: const Text('复制成功'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

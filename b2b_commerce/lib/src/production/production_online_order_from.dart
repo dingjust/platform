@@ -527,10 +527,12 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           TextFieldComponent(
             focusNode: _priceFocusNode,
             controller: _priceController,
-            inputType: TextInputType.number,
             leadingText: Text('订单报价',style: TextStyle(fontSize: 16,),),
             hideDivider: true,
             prefix: '￥',
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
             isRequired: true,
             onChanged: (value){
               setState(() {
@@ -575,11 +577,13 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
       child: TextFieldComponent(
         focusNode: _earnestMoneyFocusNode,
         controller: _earnestMoneyController,
-        inputType: TextInputType.number,
         leadingText: Text('定金',style: TextStyle(fontSize: 16,),),
-        hintText: '请输入定金',
+        hintText: '请输入定金（数字）',
         hideDivider: true,
         prefix: '￥',
+        inputFormatters: [
+          DecimalInputFormat(),
+        ],
         isRequired: true,
         onChanged: (value){
           setState(() {

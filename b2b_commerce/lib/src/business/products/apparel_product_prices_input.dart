@@ -74,9 +74,11 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
               controller: _minPriceController,
               autofocus: true,
               leadingText: Text('价格下限',style: TextStyle(fontSize: 16,)),
-              hintText: '请输入价格下限',
-              inputType: TextInputType.number,
+              hintText: '请输入价格下限（数字）',
               prefix: '￥',
+              inputFormatters: [
+                DecimalInputFormat(),
+              ],
             ),
           ),
           Container(
@@ -86,9 +88,11 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
               focusNode: _maxPriceFocusNode,
               controller: _maxPriceController,
               leadingText: Text('价格上限',style: TextStyle(fontSize: 16,)),
-              hintText: '请输入价格上限',
-              inputType: TextInputType.number,
+              hintText: '请输入价格上限（数字）',
               prefix: '￥',
+              inputFormatters: [
+                DecimalInputFormat(),
+              ],
             ),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -182,28 +183,8 @@ class _ContactFactoryPageState extends State<ContactFactoryPage>{
     Clipboard.setData(
         ClipboardData(text: text)
     );
-    _neverCopyContent(context);
+    ShowDialogUtil.showSimapleDialog(context, '复制成功');
   }
 
-  Future<void> _neverCopyContent(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('消息'),
-          content: Text('复制成功'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
 }

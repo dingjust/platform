@@ -210,11 +210,13 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   style: TextStyle(fontSize: 16,color: Colors.grey,),
                   focusNode: _priceFocusNode,
                   controller: _priceController,
-                  inputType: TextInputType.number,
                   leadingText: Text('供货价',style: TextStyle(fontSize: 16,)),
-                  hintText: '请输入供货价',
+                  hintText: '请输入供货价（数字）',
                   textInputAction: TextInputAction.next,
                   prefix: '￥',
+                  inputFormatters: [
+                    DecimalInputFormat(),
+                  ],
                   onChanged: (value) {
                     widget.item.price = ClassHandleUtil.removeSymbolRMBToDouble(value);
                   },
@@ -233,7 +235,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 controller: _gramWeightController,
 //                inputType: TextInputType.number,
                 leadingText: Text('重量（kg）',style: TextStyle(fontSize: 16,)),
-                hintText: '请输入重量',
+                hintText: '请输入重量（数字）',
                 inputFormatters: [
                   DecimalInputFormat(),
                 ],
