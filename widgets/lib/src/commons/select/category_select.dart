@@ -82,6 +82,9 @@ class CategorySelectState extends State<CategorySelect> {
                 _selectRights.remove(category.code);
                 widget.categorySelect.removeWhere(
                     (category1) => category1.code == category.code);
+                if(!_multiple){
+                  Navigator.pop(context);
+                }
               });
             } else {
               if (_multiple) {
