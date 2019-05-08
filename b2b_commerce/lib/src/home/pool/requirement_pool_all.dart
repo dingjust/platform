@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_search_delegate_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -513,9 +513,6 @@ class RequirementPoolOrderItem extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
         children: <Widget>[
-          ItemPicture(
-            order: order,
-          ),
           Expanded(
             flex: 1,
             child: Container(
@@ -539,42 +536,16 @@ class RequirementPoolOrderItem extends StatelessWidget {
 
   Widget _buildRow1() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Container(
-          width: 140,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Text(
-                  '${order.details.category?.name}',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 15, color: Color.fromRGBO(50, 50, 50, 1)),
-                ),
-              ),
-              Text(
-                '${order.details.expectedMachiningQuantity ?? 0}件',
-                style: TextStyle(
-                    fontSize: 15, color: Color.fromRGBO(255, 149, 22, 1)),
-              ),
-            ],
-          ),
+        Row(
+          children: _buildTag(order.labels ?? []),
         ),
-        order.details.maxExpectedPrice != null
-            ? RichText(
-                text: TextSpan(
-                    text: '￥',
-                    style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: '${order.details.maxExpectedPrice}',
-                          style: TextStyle(fontSize: 18))
-                    ]),
-              )
-            : Container()
+        Text(
+          '${order.details.productName ?? order.details.category?.name}',
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 18, color: Colors.black),
+        ),
       ],
     );
   }
@@ -583,10 +554,47 @@ class RequirementPoolOrderItem extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Text(
-          '交货日期: ${DateFormatUtil.formatYMD(order.details.expectedDeliveryDate)}',
-          style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
+        Expanded(
+          flex: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                child: Text(
+                  '${order.details.category?.name}',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 15, color: Colors.red),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                child: Text(
+                  '${order.details.expectedMachiningQuantity ?? 0}件',
+                  style: TextStyle(
+                      fontSize: 15, color: Color.fromRGBO(255, 149, 22, 1)),
+                ),
+              ),
+              // Text(
+              //   '${DateExpressUtil.express(order.modifiedTime)}',
+              //   style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
+              // ),
+            ],
+          ),
         ),
+        // order.details.maxExpectedPrice != null
+        //     ? RichText(
+        //         text: TextSpan(
+        //             text: '￥',
+        //             style: TextStyle(color: Color.fromRGBO(255, 45, 45, 1)),
+        //             children: <TextSpan>[
+        //               TextSpan(
+        //                   text: '${order.details.maxExpectedPrice}',
+        //                   style: TextStyle(fontSize: 18))
+        //             ]),
+        //       )
+        //     : Container(),
+
         GestureDetector(
           onTap: () async {
             QuoteModel newQuote =
@@ -604,6 +612,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
           child: Container(
             height: 25,
             width: 65,
+            margin: EdgeInsets.only(left: 50),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Color.fromRGBO(255, 214, 12, 1)),
@@ -623,12 +632,27 @@ class RequirementPoolOrderItem extends StatelessWidget {
           order: order,
         ),
         Expanded(
-          flex: 1,
-          child: Text(
-            '${order.belongTo.name}',
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
+            flex: 1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '${order.belongTo.name}',
+                  overflow: TextOverflow.ellipsis,
+                ),
+                order.belongTo.approvalStatus == ArticleApprovalStatus.approved
+                    ? Tag(
+                        label: '  已认证  ',
+                        color: Color.fromRGBO(255, 133, 148, 1),
+                        backgroundColor: Color.fromRGBO(255, 243, 243, 1),
+                      )
+                    : Container(),
+                Text(
+                  '${DateExpressUtil.express(order.modifiedTime)}',
+                  style: TextStyle(color: Color.fromRGBO(150, 150, 150, 1)),
+                ),
+              ],
+            )),
         // Container(
         //   margin: EdgeInsets.only(left: 10),
         //   padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
@@ -643,6 +667,18 @@ class RequirementPoolOrderItem extends StatelessWidget {
         // )
       ],
     );
+  }
+
+  List<Widget> _buildTag(List<LabelModel> labels) {
+    List<Widget> tags = [];
+    labels.where((label) => label.group == 'ORDER').forEach((label) {
+      tags.add(Tag(
+        label: '${label.name}',
+        color: Colors.black,
+        backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+      ));
+    });
+    return tags;
   }
 }
 
