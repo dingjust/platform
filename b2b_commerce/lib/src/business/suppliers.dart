@@ -103,7 +103,7 @@ class SuppliersList extends StatelessWidget {
                     bloc.filterfactories();
                     return ProgressIndicatorFactory.buildPaddedProgressIndicator();
                   }
-                  if (snapshot.data.length >= 0) {
+                  if (snapshot.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -231,7 +231,7 @@ class SuppliersList extends StatelessWidget {
                       child: ProgressIndicatorFactory.buildDefaultProgressIndicator(),
                     );
                   }
-                  if (snapshot.data.length >= 0) {
+                  if (snapshot.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,

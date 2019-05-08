@@ -196,7 +196,7 @@ class ProductionListView extends StatelessWidget {
                         return LoginRemind();
                       }
                     }
-                    if (snapshot.data.length >= 0) {
+                    if (snapshot.data.length <= 0) {
                       return Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,

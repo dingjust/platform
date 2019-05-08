@@ -87,7 +87,7 @@ class _ApparelProductListState extends State<ApparelProductList>{
                       child: Center(child: CircularProgressIndicator()),
                     );
                   }
-                  if (snapshot.data.length >= 0) {
+                  if (snapshot.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
