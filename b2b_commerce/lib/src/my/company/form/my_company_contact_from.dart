@@ -139,7 +139,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
                      builder: (_) {
                        return RequestDataLoadingPage(
                          requestCallBack: UserRepositoryImpl()
-                             .brandUpdateContact(widget.company),
+                             .brandUpdateContact(widget.company).then((a)=>Navigator.pop(context)),
                          outsideDismiss: false,
                          loadingText: '保存中。。。',
                          entrance: '00',
@@ -153,7 +153,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
                     builder: (_) {
                       return RequestDataLoadingPage(
                         requestCallBack: UserRepositoryImpl()
-                            .factoryUpdateContact(widget.company),
+                            .factoryUpdateContact(widget.company).then((a)=>Navigator.pop(context)),
                         loadingText: '保存中。。。',
                         entrance: '00',
                       );
