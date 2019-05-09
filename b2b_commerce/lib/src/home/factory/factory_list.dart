@@ -137,6 +137,7 @@ class _FactoryPageState extends State<FactoryPage> {
                               multiple: false,
                               verticalDividerOpacity: 1,
                               categorySelect: _categorySelected,
+                              categoryActionType: CategoryActionType.TO_POP,
                             ),
                           );
                         },
