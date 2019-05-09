@@ -492,9 +492,6 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-          //获取该工厂的现款产品
-          ProductsResponse productsResponse = await ProductRepositoryImpl()
-              .getProductsOfFactory({}, {'size': 3}, widget.model.belongTo.uid);
 
           //TODO跳转详细页
           Navigator.push(
@@ -502,7 +499,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               MaterialPageRoute(
                   builder: (context) => MyFactoryPage(
                         widget.model.belongTo,
-                        products: productsResponse.content,
+                        isFactoryDetail: true,
                       )));
         },
         child: Container(

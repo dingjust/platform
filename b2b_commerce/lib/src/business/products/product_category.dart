@@ -90,6 +90,15 @@ class CategorySelectPageState extends State<CategorySelectPage> {
           onJumpToProducts: _jumpToProducts,
         );
         break;
+      case CategoryActionType.TO_POP:
+        categorySelect = CategorySelect(
+          categories: widget.categories,
+          categorySelect: widget.minCategorySelect,
+          multiple: false,
+          hasButton: false,
+          categoryActionType: widget.categoryActionType,
+        );
+        break;
       default:
         categorySelect = CategorySelect(
           categories: widget.categories,
