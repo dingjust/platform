@@ -20,7 +20,8 @@ class SampleProductsPage extends StatelessWidget {
     var bloc = SampleProductBLoC.instance;
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses();
       }
@@ -39,7 +40,8 @@ class SampleProductsPage extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -52,11 +54,18 @@ class SampleProductsPage extends StatelessWidget {
           elevation: 0.5,
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SampleProductFormPage(item: model,isCreate: true,))),
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SampleProductFormPage(
+                        item: model,
+                        isCreate: true,
+                      ))),
           child: Icon(Icons.add),
         ),
-        body: SampleProductList(isHistoryCreate: isHistoryCreate,),
+        body: SampleProductList(
+          isHistoryCreate: isHistoryCreate,
+        ),
       ),
     );
   }
@@ -72,7 +81,8 @@ class SampleProductList extends StatelessWidget {
     var bloc = BLoCProvider.of<SampleProductBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses();
       }
@@ -91,7 +101,8 @@ class SampleProductList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -109,15 +120,21 @@ class SampleProductList extends StatelessWidget {
               StreamBuilder<List<SampleProductModel>>(
                 stream: bloc.stream,
                 // initialData: null,
-                builder: (BuildContext context, AsyncSnapshot<List<SampleProductModel>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<SampleProductModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByStatuses();
-                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                    return ProgressIndicatorFactory
+                        .buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((product) {
-                        return SampleProductItem(item: product,isDetail: true,isHistoryCreate: isHistoryCreate,);
+                        return SampleProductItem(
+                          item: product,
+                          isDetail: true,
+                          isHistoryCreate: isHistoryCreate,
+                        );
                       }).toList(),
                     );
                   } else if (snapshot.hasError) {
@@ -129,18 +146,22 @@ class SampleProductList extends StatelessWidget {
                 stream: bloc.bottomStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                  }
-                  return ScrolledToEndTips(hasContent: snapshot.data);
+                  // if (snapshot.data) {
+                  //   _scrollController.animateTo(_scrollController.offset - 70,
+                  //       duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                  // }
+                  return ScrolledToEndTips(
+                    hasContent: snapshot.data,
+                    scrollController: _scrollController,
+                  );
                 },
               ),
               StreamBuilder<bool>(
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                  return ProgressIndicatorFactory
+                      .buildPaddedOpacityProgressIndicator(
                     opacity: snapshot.data ? 1.0 : 0,
                   );
                 },
@@ -175,4 +196,3 @@ class SampleProductList extends StatelessWidget {
 //        });
 //  }
 //}
-

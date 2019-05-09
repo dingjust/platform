@@ -10,12 +10,15 @@ import './quote_item.dart';
 class RequirementQuoteDetailPage extends StatefulWidget {
   final RequirementOrderModel order;
 
-  const RequirementQuoteDetailPage({Key key, @required this.order}) : super(key: key);
+  const RequirementQuoteDetailPage({Key key, @required this.order})
+      : super(key: key);
 
-  _RequirementQuoteDetailPageState createState() => _RequirementQuoteDetailPageState();
+  _RequirementQuoteDetailPageState createState() =>
+      _RequirementQuoteDetailPageState();
 }
 
-class _RequirementQuoteDetailPageState extends State<RequirementQuoteDetailPage> {
+class _RequirementQuoteDetailPageState
+    extends State<RequirementQuoteDetailPage> {
   @override
   Widget build(BuildContext context) {
     GlobalKey _requirementQuoteDetailBLoCKey = GlobalKey();
@@ -37,7 +40,8 @@ class _RequirementQuoteDetailPageState extends State<RequirementQuoteDetailPage>
             order: widget.order,
             pageContext: context,
           ),
-          floatingActionButton: ScrollToTopButton<RequirementQuoteDetailBLoC>()),
+          floatingActionButton:
+              ScrollToTopButton<RequirementQuoteDetailBLoC>()),
     );
   }
 }
@@ -50,7 +54,8 @@ class QuotesListView extends StatelessWidget {
 
   ScrollController _scrollController = new ScrollController();
 
-  QuotesListView({Key key, @required this.order, @required this.pageContext}) : super(key: key);
+  QuotesListView({Key key, @required this.order, @required this.pageContext})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +66,8 @@ class QuotesListView extends StatelessWidget {
     }
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMore(order.code);
       }
@@ -80,7 +86,8 @@ class QuotesListView extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -91,60 +98,69 @@ class QuotesListView extends StatelessWidget {
         onRefresh: () async {
           bloc.refreshData(order.code);
         },
-        child:
-            ListView(physics: const AlwaysScrollableScrollPhysics(), controller: _scrollController, children: <Widget>[
-          StreamBuilder<List<QuoteModel>>(
-            stream: bloc.stream,
-            initialData: null,
-            builder: (BuildContext context, AsyncSnapshot<List<QuoteModel>> snapshot) {
-              if (snapshot.data == null) {
-                bloc.getData(order.code);
-                return ProgressIndicatorFactory.buildPaddedProgressIndicator();
-              }
-              if (snapshot.hasData) {
-                return Column(
-                  children: snapshot.data
-                      .map((quote) => Container(
-                            margin: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.white,
-                            ),
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: QuoteItem(
-                              model: quote,
-                              onRefresh: _handleRefresh,
-                              pageContext: pageContext,
-                            ),
-                          ))
-                      .toList(),
-                );
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-            },
-          ),
-          StreamBuilder<bool>(
-            stream: bloc.bottomStream,
-            initialData: false,
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              if (snapshot.data) {
-                _scrollController.animateTo(_scrollController.offset - 70,
-                    duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-              }
-              return ScrolledToEndTips(hasContent: snapshot.data);
-            },
-          ),
-          StreamBuilder<bool>(
-            stream: bloc.loadingStream,
-            initialData: false,
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-                opacity: snapshot.data ? 1.0 : 0,
-              );
-            },
-          ),
-        ]),
+        child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _scrollController,
+            children: <Widget>[
+              StreamBuilder<List<QuoteModel>>(
+                stream: bloc.stream,
+                initialData: null,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<QuoteModel>> snapshot) {
+                  if (snapshot.data == null) {
+                    bloc.getData(order.code);
+                    return ProgressIndicatorFactory
+                        .buildPaddedProgressIndicator();
+                  }
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: snapshot.data
+                          .map((quote) => Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.white,
+                                ),
+                                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                child: QuoteItem(
+                                  model: quote,
+                                  onRefresh: _handleRefresh,
+                                  pageContext: pageContext,
+                                ),
+                              ))
+                          .toList(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                },
+              ),
+              StreamBuilder<bool>(
+                stream: bloc.bottomStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  // if (snapshot.data) {
+                  //   _scrollController.animateTo(_scrollController.offset - 70,
+                  //       duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                  // }
+                  return ScrolledToEndTips(
+                    hasContent: snapshot.data,
+                    scrollController: _scrollController,
+                  );
+                },
+              ),
+              StreamBuilder<bool>(
+                stream: bloc.loadingStream,
+                initialData: false,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  return ProgressIndicatorFactory
+                      .buildPaddedOpacityProgressIndicator(
+                    opacity: snapshot.data ? 1.0 : 0,
+                  );
+                },
+              ),
+            ]),
       ),
     );
   }

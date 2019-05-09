@@ -440,12 +440,8 @@ class OrdersListView extends StatelessWidget {
                             height: 80,
                           ),
                         ),
-                        Container(
-                            child: Text('您还没有收到推荐的需求')
-                        ),
-                        Container(
-                            child: Text('小钉正在拼命为您寻找')
-                        ),
+                        Container(child: Text('您还没有收到推荐的需求')),
+                        Container(child: Text('小钉正在拼命为您寻找')),
                       ],
                     );
                   }
@@ -466,12 +462,15 @@ class OrdersListView extends StatelessWidget {
                 stream: bloc.bottomStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
-                  }
-                  return ScrolledToEndTips(hasContent: snapshot.data);
+                  // if (snapshot.data) {
+                  //   _scrollController.animateTo(_scrollController.offset - 70,
+                  //       duration: new Duration(milliseconds: 500),
+                  //       curve: Curves.easeOut);
+                  // }
+                  return ScrolledToEndTips(
+                    hasContent: snapshot.data,
+                    scrollController: _scrollController,
+                  );
                 },
               ),
               StreamBuilder<bool>(
