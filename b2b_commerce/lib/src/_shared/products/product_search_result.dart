@@ -10,9 +10,14 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductSearchResultPage extends StatefulWidget {
-  ProductSearchResultPage({Key key, this.keyword,this.isSelectOption,}) : super(key: key);
+  ProductSearchResultPage({
+    Key key,
+    this.keyword,
+    this.isSelectOption,
+  }) : super(key: key);
 
-  _ProductSearchResultPageState createState() => _ProductSearchResultPageState();
+  _ProductSearchResultPageState createState() =>
+      _ProductSearchResultPageState();
 
   String keyword;
   bool isSelectOption;
@@ -37,10 +42,11 @@ class _ProductSearchResultPageState extends State<ProductSearchResultPage> {
             color: Colors.grey[200],
             child: ProductListView(
               keyword: widget.keyword,
-              isSelectOption:widget.isSelectOption,
+              isSelectOption: widget.isSelectOption,
             ),
           ),
-          floatingActionButton: ScrollToTopButton<ApparelProductSearchResultBLoC>(),
+          floatingActionButton:
+              ScrollToTopButton<ApparelProductSearchResultBLoC>(),
         ));
   }
 }
@@ -51,19 +57,23 @@ class ProductListView extends StatefulWidget {
 
   ScrollController scrollController = new ScrollController();
 
-  ProductListView({Key key, @required this.keyword,this.isSelectOption,}) : super(key: key);
+  ProductListView({
+    Key key,
+    @required this.keyword,
+    this.isSelectOption,
+  }) : super(key: key);
 
   _ProductListViewState createState() => _ProductListViewState();
 }
 
-class _ProductListViewState extends State<ProductListView>{
-
+class _ProductListViewState extends State<ProductListView> {
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<ApparelProductSearchResultBLoC>(context);
 
     widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
+      if (widget.scrollController.position.pixels ==
+          widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMore(widget.keyword);
       }
@@ -82,7 +92,8 @@ class _ProductListViewState extends State<ProductListView>{
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        widget.scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        widget.scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -95,10 +106,12 @@ class _ProductListViewState extends State<ProductListView>{
             StreamBuilder<List<ApparelProductModel>>(
                 initialData: null,
                 stream: bloc.stream,
-                builder: (BuildContext context, AsyncSnapshot<List<ApparelProductModel>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.getData(widget.keyword);
-                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                    return ProgressIndicatorFactory
+                        .buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
@@ -108,7 +121,8 @@ class _ProductListViewState extends State<ProductListView>{
                           isSelectOption: widget.isSelectOption,
                           onPrdouctDeleting: () => _onProudctDeleting(product),
                           onPrdouctUpdating: () => _onProudctUpdating(product),
-                          onPrdouctProduction: () => _onProudctProduction(product),
+                          onPrdouctProduction: () =>
+                              _onProudctProduction(product),
                           onProductShlefing: () => _onProductShlefing(product),
                         );
                       }).toList(),
@@ -117,30 +131,34 @@ class _ProductListViewState extends State<ProductListView>{
                     return Text('${snapshot.error}');
                   }
                 }),
-                StreamBuilder<bool>(
-                  stream: bloc.bottomStream,
-                  initialData: false,
-                  builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                    if (snapshot.data) {
-                      widget.scrollController.animateTo(widget.scrollController.offset - 70,
-                          duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                    }
-
-                    return ScrolledToEndTips(hasContent: snapshot.data);
-                  },
-                ),
-                StreamBuilder<bool>(
-                  stream: bloc.loadingStream,
-                  initialData: false,
-                  builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                    return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(opacity: snapshot.data ? 1.0 : 0);
-                  },
-                ),
+            StreamBuilder<bool>(
+              stream: bloc.bottomStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                // if (snapshot.data) {
+                //   widget.scrollController.animateTo(widget.scrollController.offset - 70,
+                //       duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                // }
+                return ScrolledToEndTips(
+                  hasContent: snapshot.data,
+                  scrollController: widget.scrollController,
+                );
+              },
+            ),
+            StreamBuilder<bool>(
+              stream: bloc.loadingStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
+                        opacity: snapshot.data ? 1.0 : 0);
+              },
+            ),
           ],
         ));
   }
 
-  void _onProudctDeleting(ApparelProductModel product){
+  void _onProudctDeleting(ApparelProductModel product) {
     ShowDialogUtil.showAlertDialog(context, '是否要删除产品', () async {
       await ProductRepositoryImpl().delete(product.code);
       Navigator.of(context).pop();
@@ -154,44 +172,42 @@ class _ProductListViewState extends State<ProductListView>{
     });
   }
 
-  void _onProudctUpdating(ApparelProductModel product){
+  void _onProudctUpdating(ApparelProductModel product) {
     ProductRepositoryImpl().detail(product.code).then((product) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => BLoCProvider(
-            bloc: ApparelProductBLoC.instance,
-            child: ApparelProductFormPage(
-              item: product,
-              status: widget.keyword,
-            ),
-          ),
+                bloc: ApparelProductBLoC.instance,
+                child: ApparelProductFormPage(
+                  item: product,
+                  status: widget.keyword,
+                ),
+              ),
         ),
       );
     });
   }
-  void _onProudctProduction(ApparelProductModel product){
+
+  void _onProudctProduction(ApparelProductModel product) {
     // TODO: 带到产品，跳到需求页面
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => RequirementOrderFrom(
-              product: product,
-            )));
+                  product: product,
+                )));
   }
-  void _onProductShlefing(ApparelProductModel product){
+
+  void _onProductShlefing(ApparelProductModel product) {
     //TODO:产品上下架
-    if (product.approvalStatus ==
-        ArticleApprovalStatus.approved) {
+    if (product.approvalStatus == ArticleApprovalStatus.approved) {
       ProductRepositoryImpl().off(product.code).then((a) {
-        ApparelProductSearchResultBLoC.instance
-            .getData(widget.keyword);
+        ApparelProductSearchResultBLoC.instance.getData(widget.keyword);
       });
-    } else if (product.approvalStatus ==
-        ArticleApprovalStatus.unapproved) {
+    } else if (product.approvalStatus == ArticleApprovalStatus.unapproved) {
       ProductRepositoryImpl().on(product.code).then((a) {
-        ApparelProductSearchResultBLoC.instance
-            .getData(widget.keyword);
+        ApparelProductSearchResultBLoC.instance.getData(widget.keyword);
       });
     }
   }
