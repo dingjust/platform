@@ -33,10 +33,11 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
     super.initState();
   }
 
-  List<Widget> _createWidgets(String state){
+  List<Widget> _createWidgets(String state) {
     return [
       GestureDetector(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductsPage())),
+        onTap: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => SampleProductsPage())),
         child: Card(
           elevation: 0,
           margin: EdgeInsets.symmetric(vertical: 5),
@@ -69,7 +70,8 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
             }
           });
 
-          SampleProductHistoryBLoC.instance.filterByStatuses(state, _type.toString());
+          SampleProductHistoryBLoC.instance
+              .filterByStatuses(state, _type.toString());
         },
         child: Card(
           elevation: 0,
@@ -102,7 +104,6 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return BLoCProvider<SampleProductHistoryBLoC>(
       bloc: SampleProductHistoryBLoC.instance,
       child: Scaffold(
@@ -134,20 +135,29 @@ class SampleGarmentsPageState extends State<SampleGarmentsPage> {
               tabs: _states.map((status) {
                 return Tab(text: status.name);
               }).toList(),
-              labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black),
               isScrollable: false,
             ),
             body: TabBarView(
               children: _states.map((state) {
-                return SampleProductHistoryList(state.code,_type.toString(),_createWidgets(state.code));
+                return SampleProductHistoryList(
+                    state.code, _type.toString(), _createWidgets(state.code));
               }).toList(),
             ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductHistoryFormPage(model,isCreated: true,))),
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SampleProductHistoryFormPage(
+                        model,
+                        isCreated: true,
+                      ))),
         ),
       ),
     );
@@ -159,7 +169,7 @@ class SampleProductHistoryList extends StatelessWidget {
   String type;
   List<Widget> widgets;
 
-  SampleProductHistoryList(this.state,this.type,this.widgets);
+  SampleProductHistoryList(this.state, this.type, this.widgets);
 
   ScrollController _scrollController = new ScrollController();
 
@@ -169,9 +179,10 @@ class SampleProductHistoryList extends StatelessWidget {
     var bloc = BLoCProvider.of<SampleProductHistoryBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(state,type);
+        bloc.loadingMoreByStatuses(state, type);
       }
     });
 
@@ -188,7 +199,8 @@ class SampleProductHistoryList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -197,7 +209,7 @@ class SampleProductHistoryList extends StatelessWidget {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.filterByStatuses(state,type);
+            return await bloc.filterByStatuses(state, type);
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -206,10 +218,13 @@ class SampleProductHistoryList extends StatelessWidget {
               StreamBuilder<List<SampleBorrowReturnHistoryModel>>(
                 stream: bloc.stream,
                 // initialData: null,
-                builder: (BuildContext context, AsyncSnapshot<List<SampleBorrowReturnHistoryModel>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<SampleBorrowReturnHistoryModel>>
+                        snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByStatuses(state,type);
-                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                    bloc.filterByStatuses(state, type);
+                    return ProgressIndicatorFactory
+                        .buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     _widgets.clear();
@@ -217,7 +232,7 @@ class SampleProductHistoryList extends StatelessWidget {
                     _widgets.addAll(snapshot.data
                         .map((borrowHistory) => SampleProductHistoryItem(
                               item: borrowHistory,
-                      state: state,
+                              state: state,
                               type: type,
                             ))
                         .toList());
@@ -233,18 +248,22 @@ class SampleProductHistoryList extends StatelessWidget {
                 stream: bloc.bottomStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                  }
-                  return ScrolledToEndTips(hasContent: snapshot.data);
+                  // if (snapshot.data) {
+                  //   _scrollController.animateTo(_scrollController.offset - 70,
+                  //       duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                  // }
+                  return ScrolledToEndTips(
+                    hasContent: snapshot.data,
+                    scrollController: _scrollController,
+                  );
                 },
               ),
               StreamBuilder<bool>(
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                  return ProgressIndicatorFactory
+                      .buildPaddedOpacityProgressIndicator(
                     opacity: snapshot.data ? 1.0 : 0,
                   );
                 },

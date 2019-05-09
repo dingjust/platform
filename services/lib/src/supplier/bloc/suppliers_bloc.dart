@@ -27,15 +27,15 @@ class SuppliersBloc extends BLoCBase {
     _factories.clear();
     _factories.addAll(factoriesResponse.content);
     _factoryController.sink.add(_factories);
+    bottomController.sink.add(false);
   }
 
   filterbrands() async {
-    brandsResponse = await UserRepositoryImpl().brandSuppliers({
-      'keyword':''
-    });
+    brandsResponse = await UserRepositoryImpl().brandSuppliers({'keyword': ''});
     _brands.clear();
     _brands.addAll(brandsResponse.content);
     _brandController.sink.add(_brands);
+    bottomController.sink.add(false);
   }
 
   loadingMoreByFactories() async {

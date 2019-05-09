@@ -42,7 +42,8 @@ class ProductionListView extends StatelessWidget {
   ScrollController _scrollController = new ScrollController();
 
   ///当前选中条件
-  FilterConditionEntry currentCondition = FilterConditionEntry(label: '当前生产', value: 'comprehensive', checked: true);
+  FilterConditionEntry currentCondition = FilterConditionEntry(
+      label: '当前生产', value: 'comprehensive', checked: true);
 
   ProductionListView({Key key, @required this.keyword}) : super(key: key);
 
@@ -51,7 +52,8 @@ class ProductionListView extends StatelessWidget {
     var bloc = BLoCProvider.of<ProductionSearchResultBLoC>(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMore(keyword);
       }
@@ -70,7 +72,8 @@ class ProductionListView extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -83,10 +86,12 @@ class ProductionListView extends StatelessWidget {
             StreamBuilder<List<PurchaseOrderModel>>(
                 initialData: null,
                 stream: bloc.stream,
-                builder: (BuildContext context, AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.getData(keyword);
-                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                    return ProgressIndicatorFactory
+                        .buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
@@ -104,19 +109,23 @@ class ProductionListView extends StatelessWidget {
               stream: bloc.bottomStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  _scrollController.animateTo(_scrollController.offset - 70,
-                      duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                }
-
-                return ScrolledToEndTips(hasContent: snapshot.data);
+                // if (snapshot.data) {
+                //   _scrollController.animateTo(_scrollController.offset - 70,
+                //       duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                // }
+                return ScrolledToEndTips(
+                  hasContent: snapshot.data,
+                  scrollController: _scrollController,
+                );
               },
             ),
             StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(opacity: snapshot.data ? 1.0 : 0);
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
+                        opacity: snapshot.data ? 1.0 : 0);
               },
             ),
           ],

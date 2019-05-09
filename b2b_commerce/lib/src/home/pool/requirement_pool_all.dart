@@ -443,12 +443,15 @@ class OrdersListView extends StatelessWidget {
                 stream: bloc.bottomStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
-                  }
-                  return ScrolledToEndTips(hasContent: snapshot.data);
+                  // if (snapshot.data) {
+                  //   _scrollController.animateTo(_scrollController.offset - 70,
+                  //       duration: new Duration(milliseconds: 500),
+                  //       curve: Curves.easeOut);
+                  // }
+                  return ScrolledToEndTips(
+                    hasContent: snapshot.data,
+                    scrollController: _scrollController,
+                  );
                 },
               ),
               StreamBuilder<bool>(

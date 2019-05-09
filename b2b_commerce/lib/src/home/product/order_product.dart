@@ -223,12 +223,12 @@ class ProductsView extends StatelessWidget {
     });
 
     //监听是否已经到底
-    bloc.bottomStream.listen((isBottom) {
-      if (isBottom) {
-        _scrollController.animateTo(_scrollController.offset - 70,
-            duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-      }
-    });
+    // bloc.bottomStream.listen((isBottom) {
+    //   if (isBottom) {
+    //     _scrollController.animateTo(_scrollController.offset - 70,
+    //         duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+    //   }
+    // });
 
     //监听滚动事件，打印滚动位置
     _scrollController.addListener(() {

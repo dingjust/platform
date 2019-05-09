@@ -76,13 +76,13 @@ class CategorySelectState extends State<CategorySelect> {
           case CategoryActionType.TO_PRODUCTS:
             _handleJumpToProducts(category);
             break;
-          default:
+          case CategoryActionType.TO_POP:
             if (_selectRights.contains(category.code)) {
               setState(() {
                 _selectRights.remove(category.code);
                 widget.categorySelect.removeWhere(
                     (category1) => category1.code == category.code);
-                if(!_multiple){
+                if (!_multiple) {
                   Navigator.pop(context);
                 }
               });
@@ -99,6 +99,29 @@ class CategorySelectState extends State<CategorySelect> {
                   _selectRights.clear();
                   _selectRights.add(category.code);
                   Navigator.pop(context);
+                });
+              }
+            }
+            break;
+          default:
+            if (_selectRights.contains(category.code)) {
+              setState(() {
+                _selectRights.remove(category.code);
+                widget.categorySelect.removeWhere(
+                    (category1) => category1.code == category.code);
+              });
+            } else {
+              if (_multiple) {
+                setState(() {
+                  _selectRights.add(category.code);
+                  widget.categorySelect.add(category);
+                });
+              } else {
+                setState(() {
+                  widget.categorySelect.clear();
+                  widget.categorySelect.add(category);
+                  _selectRights.clear();
+                  _selectRights.add(category.code);
                 });
               }
             }
@@ -125,8 +148,8 @@ class CategorySelectState extends State<CategorySelect> {
                     width: 60,
                     height: 60,
                     margin: EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(243, 243, 243, 1)),
+                    decoration:
+                        BoxDecoration(color: Color.fromRGBO(243, 243, 243, 1)),
                     child: Icon(
                       B2BIcons.noPicture,
                       color: Color.fromRGBO(200, 200, 200, 1),
@@ -260,4 +283,7 @@ enum CategoryActionType {
 
   /// 跳转到产品列表
   TO_PRODUCTS,
+
+  /// 跳转上一页
+  TO_POP,
 }

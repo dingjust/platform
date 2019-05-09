@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:core/core.dart';
@@ -31,7 +32,8 @@ class _SuppliersPageState extends State<SuppliersPage> {
               B2BIcons.search,
               size: 20,
             ),
-            onPressed: () => showSearch(context: context, delegate: SuppliersSearchDelegate()),
+            onPressed: () => showSearch(
+                context: context, delegate: SuppliersSearchDelegate()),
           ),
         ],
       ),
@@ -53,7 +55,8 @@ class SuppliersList extends StatelessWidget {
     final bloc = SuppliersBlocProvider.of(context);
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         UserBLoC.instance.currentUser.type == UserType.BRAND
             ? bloc.loadingMoreByFactories()
@@ -74,7 +77,8 @@ class SuppliersList extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        _scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 
@@ -98,10 +102,12 @@ class SuppliersList extends StatelessWidget {
               StreamBuilder<List<FactoryModel>>(
                 stream: bloc.factoryStream,
                 initialData: null,
-                builder: (BuildContext context, AsyncSnapshot<List<FactoryModel>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<FactoryModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterfactories();
-                    return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                    return ProgressIndicatorFactory
+                        .buildPaddedProgressIndicator();
                   }
                   if (snapshot.data.length <= 0) {
                     return Column(
@@ -118,42 +124,47 @@ class SuppliersList extends StatelessWidget {
                             height: 80,
                           ),
                         ),
-                        Container(
-                            child: Text('您还没有合作商')
-                        ),
+                        Container(child: Text('您还没有合作商')),
                         Container(
                           child: FlatButton(
                             onPressed: () async {
                               List<CategoryModel> categories =
-                              await ProductRepositoryImpl().majorCategories();
-                              List<LabelModel> labels = await UserRepositoryImpl().labels();
+                                  await ProductRepositoryImpl()
+                                      .majorCategories();
+                              List<LabelModel> labels =
+                                  await UserRepositoryImpl().labels();
                               labels = labels
                                   .where((label) =>
-                              label.group == 'FACTORY' || label.group == 'PLATFORM')
+                                      label.group == 'FACTORY' ||
+                                      label.group == 'PLATFORM')
                                   .toList();
                               if (categories != null && labels != null) {
                                 Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(builder: (context) =>
-                                        FactoryPage(
-                                          FactoryCondition(
-                                              starLevel: 0,
-                                              adeptAtCategories: [],
-                                              labels: [],
-                                              cooperationModes: []),
-                                          route: '全部工厂',
-                                          categories: categories,
-                                          labels: labels,
-                                        ),
-                                    ), ModalRoute.withName('/'));
+                                    MaterialPageRoute(
+                                      builder: (context) => FactoryPage(
+                                            FactoryCondition(
+                                                starLevel: 0,
+                                                adeptAtCategories: [],
+                                                labels: [],
+                                                cooperationModes: []),
+                                            route: '全部工厂',
+                                            categories: categories,
+                                            labels: labels,
+                                          ),
+                                    ),
+                                    ModalRoute.withName('/'));
                               }
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
                             color: Color.fromRGBO(255, 214, 12, 1),
-                            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 15),
                             child: Text(
                               '查看工厂',
-                              style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                              style: TextStyle(
+                                  color: Color.fromRGBO(36, 38, 41, 1),
+                                  fontSize: 16),
                             ),
                           ),
                         )
@@ -177,28 +188,22 @@ class SuppliersList extends StatelessWidget {
                 stream: bloc.bottomStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                  }
-                  return snapshot.data
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                          child: Center(
-                            child: Text(
-                              "人家可是有底线的。。。",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        )
-                      : Container();
+                  // if (snapshot.data) {
+                  //   _scrollController.animateTo(_scrollController.offset - 70,
+                  //       duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                  // }
+                  return ScrolledToEndTips(
+                    hasContent: snapshot.data,
+                    scrollController: _scrollController,
+                  );
                 },
               ),
               StreamBuilder<bool>(
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                  return ProgressIndicatorFactory
+                      .buildPaddedOpacityProgressIndicator(
                     opacity: snapshot.data ? 1.0 : 0,
                   );
                 },
@@ -223,12 +228,14 @@ class SuppliersList extends StatelessWidget {
               StreamBuilder<List<BrandModel>>(
                 stream: bloc.brandStream,
                 initialData: null,
-                builder: (BuildContext context, AsyncSnapshot<List<BrandModel>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<BrandModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterbrands();
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
-                      child: ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+                      child: ProgressIndicatorFactory
+                          .buildDefaultProgressIndicator(),
                     );
                   }
                   if (snapshot.data.length <= 0) {
@@ -246,30 +253,34 @@ class SuppliersList extends StatelessWidget {
                             height: 80,
                           ),
                         ),
-                        Container(
-                            child: Text('您还没有合作商')
-                        ),
+                        Container(child: Text('您还没有合作商')),
                         Container(
                           child: FlatButton(
-                            onPressed: () async{
+                            onPressed: () async {
                               await ProductRepositoryImpl()
-                                      .majorCategories()
+                                  .majorCategories()
                                   .then((categories) {
                                 if (categories != null) {
                                   Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(builder: (context) =>
-                                          RequirementPoolAllPage(categories: categories),
-                                      ), ModalRoute.withName('/'));
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            RequirementPoolAllPage(
+                                                categories: categories),
+                                      ),
+                                      ModalRoute.withName('/'));
                                 }
                               });
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
                             color: Color.fromRGBO(255, 214, 12, 1),
-                            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 10),
                             child: Text(
                               '查看最新需求',
-                              style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1),),
+                              style: TextStyle(
+                                color: Color.fromRGBO(36, 38, 41, 1),
+                              ),
                             ),
                           ),
                         )
@@ -293,28 +304,22 @@ class SuppliersList extends StatelessWidget {
                 stream: bloc.bottomStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    _scrollController.animateTo(_scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                  }
-                  return snapshot.data
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-                          child: Center(
-                            child: Text(
-                              "人家可是有底线的。。。",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        )
-                      : Container();
+                  // if (snapshot.data) {
+                  //   _scrollController.animateTo(_scrollController.offset - 70,
+                  //       duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
+                  // }
+                  return ScrolledToEndTips(
+                    hasContent: snapshot.data,
+                    scrollController: _scrollController,
+                  );
                 },
               ),
               StreamBuilder<bool>(
                 stream: bloc.loadingStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                  return ProgressIndicatorFactory
+                      .buildPaddedOpacityProgressIndicator(
                     opacity: snapshot.data ? 1.0 : 0,
                   );
                 },
@@ -345,18 +350,21 @@ class SuppliersItem extends StatelessWidget {
       onTap: () async {
         //获取与该工厂最新的报价单
         QuoteModel quoteModel;
-        QuoteOrdersResponse quoteResponse = await QuoteOrderRepository().getQuotesByFactory(supplierModel.uid, {
+        QuoteOrdersResponse quoteResponse =
+            await QuoteOrderRepository().getQuotesByFactory(supplierModel.uid, {
           'size': 1,
         });
-        if (quoteResponse.content.length > 0) quoteModel = quoteResponse.content[0];
+        if (quoteResponse.content.length > 0)
+          quoteModel = quoteResponse.content[0];
 
         //获取与该工厂最新的生产订单
         PurchaseOrderModel purchaseOrderModel;
-        PurchaseOrdersResponse ordersResponse =
-            await PurchaseOrderRepository().getPurchaseOrdersByFactory(supplierModel.uid, {
+        PurchaseOrdersResponse ordersResponse = await PurchaseOrderRepository()
+            .getPurchaseOrdersByFactory(supplierModel.uid, {
           'size': 1,
         });
-        if (ordersResponse.content.length > 0) purchaseOrderModel = ordersResponse.content[0];
+        if (ordersResponse.content.length > 0)
+          purchaseOrderModel = ordersResponse.content[0];
 
         //获取该工厂的现款产品
         ProductsResponse productsResponse = await ProductRepositoryImpl()

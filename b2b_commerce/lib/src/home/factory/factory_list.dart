@@ -137,18 +137,19 @@ class _FactoryPageState extends State<FactoryPage> {
                               multiple: false,
                               verticalDividerOpacity: 1,
                               categorySelect: _categorySelected,
+                              categoryActionType: CategoryActionType.TO_POP,
                             ),
                           );
                         },
                       ).then((a) {
                         setState(() {
                           if (_categorySelected.isEmpty) {
-                            widget.factoryCondition.categories = null;
+                            factoryCondition.categories = null;
                           } else {
-                            widget.factoryCondition.adeptAtCategories = _categorySelected;
+                            factoryCondition.adeptAtCategories = _categorySelected;
                           }
                           FactoryBLoC.instance.filterByCondition(
-                            widget.factoryCondition,
+                            factoryCondition,
                             requirementCode: widget.requirementCode,
                           );
                         });
