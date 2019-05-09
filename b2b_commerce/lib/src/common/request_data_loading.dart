@@ -69,11 +69,11 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
         if(widget.entrance == 'createPurchaseOrder'){
           ProductionBLoC.instance.refreshData();
           PurchaseOrderBLoC.instance.refreshData('ALL');
-          if(value != null){
-            _requestMessage(context, '保存成功', value);
-          }else{
-            Navigator.of(context).pop();
-          }
+//          if(value != null){
+//            _requestMessage(context, '保存成功', value);
+//          }else{
+//            Navigator.of(context).pop(value);
+//          }
         }
 
         if(widget.entrance == 'purchaseOrders'){
@@ -86,17 +86,11 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
 
         if(widget.entrance == 'quoteOrder'){
           QuoteOrdersBLoC.instance.refreshData('ALL');
-          if(value != null){
-            _requestMessage(context, '保存成功', value);
-          }else{
-            Navigator.of(context).pop();
-          }
         }
 
         if(widget.entrance == 'proofingOrder'){
           ProofingOrdersBLoC.instance.refreshData('ALL');
           if(value != null){
-            _requestMessage(context, '保存成功', value);
           }else{
             Navigator.of(context).pop();
           }
@@ -153,11 +147,6 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
                   }
                   if(widget.entrance == 'quoteOrder'){
                     //查询明细
-                    QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(code);
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => QuoteOrderDetailPage(item: detailModel)),
-                        ModalRoute.withName('/'));
                   }
                   if(widget.entrance == 'proofingOrder'){
                     ProofingModel detailModel = await ProofingOrderRepository()

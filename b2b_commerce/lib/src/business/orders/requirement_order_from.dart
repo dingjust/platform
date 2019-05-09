@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -433,6 +434,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   /// 发布
   void onPublish(String factoryUid) async {
+    bool isSubmit = false;
     if (widget.isReview) {
       model.code = '';
     }
@@ -443,38 +445,53 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     model.remarks = _remarksController.text;
 
     if (model.details.category == null) {
-      ShowDialogUtil.showSimapleDialog(context, '产品品类不可以为空');
-      return;
-    }
-    if (model.details.expectedMachiningQuantity == null) {
-      ShowDialogUtil.showSimapleDialog(context, '订单数量不可以为空');
-      return;
-    }
-    if (model.details.expectedDeliveryDate == null) {
-      ShowDialogUtil.showSimapleDialog(context, '交货时间不可以为空');
-      return;
-    }
-    if(model.details.expectedDeliveryDate.isBefore(DateTime.now())){
-      ShowDialogUtil.showSimapleDialog(context, '交货时间不可比当前时间小');
-    }
-    if (model.details.contactPerson == null &&
+      isSubmit = _showValidateMsg(context, '产品品类不可以为空');
+    }else if (model.details.expectedMachiningQuantity == null) {
+      isSubmit = _showValidateMsg(context, '订单数量不可以为空');
+    }else if (model.details.expectedDeliveryDate == null) {
+      isSubmit = _showValidateMsg(context, '交货时间不可以为空');
+    }else if(model.details.expectedDeliveryDate.isBefore(DateTime.now())){
+      isSubmit = _showValidateMsg(context, '交货时间不可比当前时间小');
+    }else if (model.details.contactPerson == null &&
         model.details.contactPhone == null) {
-      ShowDialogUtil.showSimapleDialog(context, '联系方式不可以为空');
-      return;
+      isSubmit = _showValidateMsg(context, '联系方式不可以为空');
+    }else{
+      isSubmit = true;
+    }
+    if(isSubmit){
+      String code = await RequirementOrderRepository().publishNewRequirement(
+          model, factoryUid, factoryUid != null ? true : false);
+      if (code != null && code != '') {
+        model.code = code;
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => PublishRequirementSuccessDialog(
+                model: model,
+              ),
+            ),
+            ModalRoute.withName('/'));
+      }
     }
 
-    String code = await RequirementOrderRepository().publishNewRequirement(
-        model, factoryUid, factoryUid != null ? true : false);
-    if (code != null && code != '') {
-      model.code = code;
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => PublishRequirementSuccessDialog(
-                  model: model,
-                ),
-          ),
-          ModalRoute.withName('/'));
-    }
+  }
+
+  bool _showValidateMsg(BuildContext context,String message){
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context,String message) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            contentText2: '${message}',
+            outsideDismiss: true,
+          );
+        }
+    );
   }
 
   ///完善信息
