@@ -293,9 +293,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-          //获取该工厂的现款产品
-          ProductsResponse productsResponse = await ProductRepositoryImpl()
-              .getProductsOfFactory({}, {'size': 3}, pageItem.belongTo.uid);
 
           //TODO跳转详细页
           Navigator.push(
@@ -303,7 +300,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               MaterialPageRoute(
                   builder: (context) => MyFactoryPage(
                         pageItem.belongTo,
-                        products: productsResponse.content,
+                        isFactoryDetail: true,
                       )));
         },
         child: Container(

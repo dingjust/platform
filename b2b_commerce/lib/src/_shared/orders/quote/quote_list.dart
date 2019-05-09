@@ -37,16 +37,17 @@ class _QuoteListState extends State<QuoteList> {
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
 
     widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
+      if (widget.scrollController.position.pixels ==
+          widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        if(widget.companyUid != null && UserBLoC.instance.currentUser.type == UserType.FACTORY){
+        if (widget.companyUid != null &&
+            UserBLoC.instance.currentUser.type == UserType.FACTORY) {
           bloc.lodingMoreByCompany(widget.companyUid);
-        }else if(widget.keyword != null){
+        } else if (widget.keyword != null) {
           bloc.loadingMoreByKeyword(widget.keyword);
-        }else{
+        } else {
           bloc.loadingMoreByStatuses(widget.status.code);
         }
-
       }
     });
 
@@ -85,7 +86,8 @@ class _QuoteListState extends State<QuoteList> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: const Text('取消', style: const TextStyle(color: Colors.grey)),
+              child:
+                  const Text('取消', style: const TextStyle(color: Colors.grey)),
               onPressed: () => Navigator.of(context).pop(),
             ),
             FlatButton(
@@ -119,13 +121,16 @@ class _QuoteListState extends State<QuoteList> {
           title: const Text('是否确认?'),
           actions: <Widget>[
             FlatButton(
-              child: const Text('否', style: const TextStyle(color: Colors.grey)),
+              child:
+                  const Text('否', style: const TextStyle(color: Colors.grey)),
               onPressed: () => Navigator.of(context).pop(),
             ),
             FlatButton(
-              child: const Text('是', style: const TextStyle(color: Colors.black)),
+              child:
+                  const Text('是', style: const TextStyle(color: Colors.black)),
               onPressed: () async {
-                int statusCode = await QuoteOrderRepository().quoteApprove(model.code);
+                int statusCode =
+                    await QuoteOrderRepository().quoteApprove(model.code);
                 Navigator.of(context).pop();
                 if (statusCode == 200) {
                   // 触发刷新
@@ -161,24 +166,28 @@ class _QuoteListState extends State<QuoteList> {
 
   void _onProofingCreating(QuoteModel model) async {
     //查询明细
-    QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(model.code);
+    QuoteModel detailModel =
+        await QuoteOrderRepository().getQuoteDetails(model.code);
 
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => ProofingOrderForm(quoteModel: detailModel)),
+      MaterialPageRoute(
+          builder: (context) => ProofingOrderForm(quoteModel: detailModel)),
     );
   }
 
   void _onProductionOrderCreating(QuoteModel model) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ProductionOnlineOrderFrom(quoteModel: model)),
+      MaterialPageRoute(
+          builder: (context) => ProductionOnlineOrderFrom(quoteModel: model)),
     );
   }
 
   void _onQuoteAgain(QuoteModel model) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => RequirementQuoteOrderForm(model: model.requirementOrder, quoteModel: model),
+        builder: (context) => RequirementQuoteOrderForm(
+            model: model.requirementOrder, quoteModel: model),
       ),
     );
   }
@@ -186,11 +195,11 @@ class _QuoteListState extends State<QuoteList> {
   // 子组件刷新数据方法
   void _handleRefresh() {
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
-    if(widget.companyUid != null){
+    if (widget.companyUid != null) {
       bloc.getQuoteDataByCompany(widget.companyUid);
-    }else if(widget.keyword != null){
+    } else if (widget.keyword != null) {
       bloc.filterByKeyword(widget.keyword);
-    }else{
+    } else {
       bloc.refreshData(widget.status.code);
     }
   }
@@ -224,17 +233,19 @@ class _QuoteListState extends State<QuoteList> {
           children: <Widget>[
             StreamBuilder<List<QuoteModel>>(
               stream: bloc.stream,
-              builder: (BuildContext context, AsyncSnapshot<List<QuoteModel>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<QuoteModel>> snapshot) {
                 if (snapshot.data == null) {
-                  if(widget.companyUid != null){
+                  if (widget.companyUid != null) {
                     bloc.getQuoteDataByCompany(widget.companyUid);
-                  }else if(widget.keyword != null){
+                  } else if (widget.keyword != null) {
                     bloc.filterByKeyword(widget.keyword);
-                  }else{
+                  } else {
                     bloc.filterByStatuses(widget.status.code);
                   }
 
-                  return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                  return ProgressIndicatorFactory
+                      .buildPaddedProgressIndicator();
                 }
                 if (snapshot.data.length <= 0) {
                   return Column(
@@ -253,12 +264,11 @@ class _QuoteListState extends State<QuoteList> {
                       ),
                       Container(
                           child: Text(
-                            '没有相关订单数据',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          )
-                      ),
+                        '没有相关订单数据',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      )),
                     ],
                   );
                 }
@@ -271,7 +281,8 @@ class _QuoteListState extends State<QuoteList> {
                         onQuoteConfirming: () => _onQuoteConfirming(item),
                         onQuoteUpdating: () => _onQuoteUpdating(item),
                         onProofingCreating: () => _onProofingCreating(item),
-                        onProductionOrderCreating: () => _onProductionOrderCreating(item),
+                        onProductionOrderCreating: () =>
+                            _onProductionOrderCreating(item),
                         onQuoteAgain: () => _onQuoteAgain(item),
                       );
                     }).toList(),
@@ -285,21 +296,25 @@ class _QuoteListState extends State<QuoteList> {
               stream: bloc.bottomStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  widget.scrollController.animateTo(
-                    widget.scrollController.offset - 70,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
-                  );
-                }
-                return ScrolledToEndTips(hasContent: snapshot.data);
+                // if (snapshot.data) {
+                //   widget.scrollController.animateTo(
+                //     widget.scrollController.offset - 70,
+                //     duration: const Duration(milliseconds: 500),
+                //     curve: Curves.easeOut,
+                //   );
+                // }
+                return ScrolledToEndTips(
+                  hasContent: snapshot.data,
+                  scrollController: widget.scrollController,
+                );
               },
             ),
             StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
                   opacity: snapshot.data ? 1.0 : 0,
                 );
               },

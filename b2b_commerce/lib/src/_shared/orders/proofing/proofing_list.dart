@@ -10,7 +10,7 @@ import '../../../common/order_payment.dart';
 import '../../widgets/scrolled_to_end_tips.dart';
 
 class ProofingList extends StatefulWidget {
-  ProofingList({Key key, this.status,this.keyword}) : super(key: key);
+  ProofingList({Key key, this.status, this.keyword}) : super(key: key);
 
   final String keyword;
   final EnumModel status;
@@ -31,9 +31,9 @@ class _ProofingListState extends State<ProofingList> {
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        if(widget.keyword != null){
+        if (widget.keyword != null) {
           bloc.loadingMoreByKeyword(widget.keyword);
-        }else{
+        } else {
           bloc.loadingMoreByStatuses(widget.status.code);
         }
       }
@@ -180,9 +180,9 @@ class _ProofingListState extends State<ProofingList> {
   // 子组件刷新数据方法
   void _handleRefresh() {
     var bloc = BLoCProvider.of<ProofingOrdersBLoC>(context);
-    if(widget.keyword != null){
+    if (widget.keyword != null) {
       bloc.filterByKeyword(widget.keyword);
-    }else{
+    } else {
       bloc.refreshData(widget.status.code);
     }
   }
@@ -196,9 +196,9 @@ class _ProofingListState extends State<ProofingList> {
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: RefreshIndicator(
         onRefresh: () async {
-          if(widget.keyword != null){
+          if (widget.keyword != null) {
             return await bloc.filterByKeyword(widget.keyword);
-          }else{
+          } else {
             return await bloc.refreshData(widget.status.code);
           }
         },
@@ -211,9 +211,9 @@ class _ProofingListState extends State<ProofingList> {
               builder: (BuildContext context,
                   AsyncSnapshot<List<ProofingModel>> snapshot) {
                 if (snapshot.data == null) {
-                  if(widget.keyword != null){
+                  if (widget.keyword != null) {
                     bloc.filterByKeyword(widget.keyword);
-                  }else{
+                  } else {
                     bloc.filterByStatuses(widget.status.code);
                   }
                   return ProgressIndicatorFactory
@@ -236,12 +236,11 @@ class _ProofingListState extends State<ProofingList> {
                       ),
                       Container(
                           child: Text(
-                            '没有相关订单数据',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          )
-                      ),
+                        '没有相关订单数据',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      )),
                     ],
                   );
                 }
@@ -270,15 +269,17 @@ class _ProofingListState extends State<ProofingList> {
               stream: bloc.bottomStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  widget.scrollController.animateTo(
-                    widget.scrollController.offset - 70,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
-                  );
-                }
-
-                return ScrolledToEndTips(hasContent: snapshot.data);
+                // if (snapshot.data) {
+                //   widget.scrollController.animateTo(
+                //     widget.scrollController.offset - 70,
+                //     duration: const Duration(milliseconds: 500),
+                //     curve: Curves.easeOut,
+                //   );
+                // }
+                return ScrolledToEndTips(
+                  hasContent: snapshot.data,
+                  scrollController: widget.scrollController,
+                );
               },
             ),
             StreamBuilder<bool>(

@@ -7,7 +7,7 @@ import './purchase_order_list_item.dart';
 import '../../widgets/scrolled_to_end_tips.dart';
 
 class PurchaseOrderList extends StatefulWidget {
-  PurchaseOrderList({Key key, this.status,this.companyUid,this.keyword});
+  PurchaseOrderList({Key key, this.status, this.companyUid, this.keyword});
 
   final String keyword;
   final EnumModel status;
@@ -18,7 +18,8 @@ class PurchaseOrderList extends StatefulWidget {
   _PurchaseOrderListState createState() => _PurchaseOrderListState();
 }
 
-class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKeepAliveClientMixin {
+class _PurchaseOrderListState extends State<PurchaseOrderList>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
@@ -26,14 +27,14 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
     var bloc = BLoCProvider.of<PurchaseOrderBLoC>(context);
 
     widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
+      if (widget.scrollController.position.pixels ==
+          widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        if(widget.companyUid != null){
+        if (widget.companyUid != null) {
           bloc.lodingMoreByCompany(widget.companyUid);
-        }else{
+        } else {
           bloc.loadingMoreByStatuses(widget.status.code);
         }
-
       }
     });
 
@@ -50,7 +51,8 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
     bloc.returnToTopStream.listen((data) {
       // 返回到顶部时执行动画
       if (data) {
-        widget.scrollController.animateTo(.0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        widget.scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
   }
@@ -63,9 +65,9 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: RefreshIndicator(
         onRefresh: () async {
-          if(widget.companyUid != null){
+          if (widget.companyUid != null) {
             return await bloc.getPurchaseDataByCompany(widget.companyUid);
-          }else{
+          } else {
             return await bloc.refreshData(widget.status.code);
           }
         },
@@ -76,15 +78,17 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
             StreamBuilder<List<PurchaseOrderModel>>(
               stream: bloc.stream,
               // initialData: null,
-              builder: (BuildContext context, AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                 if (snapshot.data == null) {
-                  if(widget.companyUid != null){
+                  if (widget.companyUid != null) {
                     bloc.getPurchaseDataByCompany(widget.companyUid);
-                  }else{
+                  } else {
                     bloc.filterByStatuses(widget.status.code);
                   }
 
-                  return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                  return ProgressIndicatorFactory
+                      .buildPaddedProgressIndicator();
                 }
                 if (snapshot.data.length <= 0) {
                   return Column(
@@ -103,12 +107,11 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
                       ),
                       Container(
                           child: Text(
-                              '没有相关订单数据',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          )
-                      ),
+                        '没有相关订单数据',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      )),
                     ],
                   );
                 }
@@ -129,21 +132,25 @@ class _PurchaseOrderListState extends State<PurchaseOrderList> with AutomaticKee
               stream: bloc.bottomStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  widget.scrollController.animateTo(
-                    widget.scrollController.offset - 70,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
-                  );
-                }
-                return ScrolledToEndTips(hasContent: snapshot.data);
+                // if (snapshot.data) {
+                //   widget.scrollController.animateTo(
+                //     widget.scrollController.offset - 70,
+                //     duration: const Duration(milliseconds: 500),
+                //     curve: Curves.easeOut,
+                //   );
+                // }
+                return ScrolledToEndTips(
+                  hasContent: snapshot.data,
+                  scrollController: widget.scrollController,
+                );
               },
             ),
             StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
                   opacity: snapshot.data ? 1.0 : 0,
                 );
               },

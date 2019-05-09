@@ -9,8 +9,12 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ApparelProductList extends StatefulWidget {
-  ApparelProductList({Key key, this.status, this.isSelectOption,this.keyword,})
-      : super(key: key);
+  ApparelProductList({
+    Key key,
+    this.status,
+    this.isSelectOption,
+    this.keyword,
+  }) : super(key: key);
   final String status;
 
   //是否选择项
@@ -22,8 +26,7 @@ class ApparelProductList extends StatefulWidget {
   _ApparelProductListState createState() => _ApparelProductListState();
 }
 
-class _ApparelProductListState extends State<ApparelProductList>{
-
+class _ApparelProductListState extends State<ApparelProductList> {
   @override
   Widget build(BuildContext context) {
     print(widget.keyword);
@@ -60,9 +63,9 @@ class _ApparelProductListState extends State<ApparelProductList>{
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            if(widget.keyword == null){
+            if (widget.keyword == null) {
               return await bloc.filterByStatuses(widget.status);
-            }else{
+            } else {
               return await bloc.getData(widget.keyword);
             }
           },
@@ -76,9 +79,9 @@ class _ApparelProductListState extends State<ApparelProductList>{
                 builder: (BuildContext context,
                     AsyncSnapshot<List<ApparelProductModel>> snapshot) {
                   if (snapshot.data == null) {
-                    if(widget.keyword == null){
+                    if (widget.keyword == null) {
                       bloc.filterByStatuses(widget.status);
-                    }else{
+                    } else {
                       print('${widget.keyword}------------');
                       bloc.getData(widget.keyword);
                     }
@@ -102,9 +105,7 @@ class _ApparelProductListState extends State<ApparelProductList>{
                             height: 80,
                           ),
                         ),
-                        Container(
-                            child: Text('您当前未有产品')
-                        ),
+                        Container(child: Text('您当前未有产品')),
                         Container(
                           child: Text('请点击右下角创建产品'),
                         )
@@ -120,7 +121,8 @@ class _ApparelProductListState extends State<ApparelProductList>{
                           status: widget.status,
                           onPrdouctDeleting: () => _onProudctDeleting(product),
                           onPrdouctUpdating: () => _onProudctUpdating(product),
-                          onPrdouctProduction: () => _onProudctProduction(product),
+                          onPrdouctProduction: () =>
+                              _onProudctProduction(product),
                           onProductShlefing: () => _onProductShlefing(product),
                         );
                       }).toList(),
@@ -134,12 +136,15 @@ class _ApparelProductListState extends State<ApparelProductList>{
                 stream: bloc.bottomStream,
                 initialData: false,
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.data) {
-                    widget.scrollController.animateTo(widget.scrollController.offset - 70,
-                        duration: new Duration(milliseconds: 500),
-                        curve: Curves.easeOut);
-                  }
-                  return ScrolledToEndTips(hasContent: snapshot.data);
+                  // if (snapshot.data) {
+                  //   widget.scrollController.animateTo(widget.scrollController.offset - 70,
+                  //       duration: new Duration(milliseconds: 500),
+                  //       curve: Curves.easeOut);
+                  // }
+                  return ScrolledToEndTips(
+                    hasContent: snapshot.data,
+                    scrollController: widget.scrollController,
+                  );
                 },
               ),
               StreamBuilder<bool>(
@@ -162,7 +167,7 @@ class _ApparelProductListState extends State<ApparelProductList>{
         ));
   }
 
-  void _onProudctDeleting(ApparelProductModel product){
+  void _onProudctDeleting(ApparelProductModel product) {
     ShowDialogUtil.showAlertDialog(context, '是否要删除产品', () async {
       await ProductRepositoryImpl().delete(product.code);
       Navigator.of(context).pop();
@@ -172,56 +177,56 @@ class _ApparelProductListState extends State<ApparelProductList>{
           seconds: 2,
         ),
       ));
-      if(widget.keyword == null){
+      if (widget.keyword == null) {
         ApparelProductBLoC.instance.filterByStatuses(widget.status);
-      }else{
+      } else {
         ApparelProductBLoC.instance.getData(widget.keyword);
       }
     });
   }
 
-  void _onProudctUpdating(ApparelProductModel product){
+  void _onProudctUpdating(ApparelProductModel product) {
     ProductRepositoryImpl().detail(product.code).then((product) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => BLoCProvider(
-            bloc: ApparelProductBLoC.instance,
-            child: ApparelProductFormPage(
-              item: product,
-              status: widget.status,
-            ),
-          ),
+                bloc: ApparelProductBLoC.instance,
+                child: ApparelProductFormPage(
+                  item: product,
+                  status: widget.status,
+                ),
+              ),
         ),
       );
     });
   }
-  void _onProudctProduction(ApparelProductModel product){
+
+  void _onProudctProduction(ApparelProductModel product) {
     // TODO: 带到产品，跳到需求页面
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => RequirementOrderFrom(
-              product: product,
-            )));
+                  product: product,
+                )));
   }
-  void _onProductShlefing(ApparelProductModel product){
+
+  void _onProductShlefing(ApparelProductModel product) {
     //TODO:产品上下架
-    if (product.approvalStatus ==
-        ArticleApprovalStatus.approved) {
+    if (product.approvalStatus == ArticleApprovalStatus.approved) {
       ProductRepositoryImpl().off(product.code).then((a) {
-        if(widget.keyword == null){
+        if (widget.keyword == null) {
           ApparelProductBLoC.instance.filterByStatuses(widget.status);
-        }else{
+        } else {
           ApparelProductBLoC.instance.getData(widget.keyword);
         }
       });
-    } else if (product.approvalStatus ==
-        ArticleApprovalStatus.unapproved) {
+    } else if (product.approvalStatus == ArticleApprovalStatus.unapproved) {
       ProductRepositoryImpl().on(product.code).then((a) {
-        if(widget.keyword == null){
+        if (widget.keyword == null) {
           ApparelProductBLoC.instance.filterByStatuses(widget.status);
-        }else{
+        } else {
           ApparelProductBLoC.instance.getData(widget.keyword);
         }
       });

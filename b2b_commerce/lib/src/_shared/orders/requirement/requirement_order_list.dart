@@ -8,7 +8,8 @@ import '../../widgets/scrolled_to_end_tips.dart';
 
 /// 需求订单列表
 class RequirementOrderList extends StatefulWidget {
-  RequirementOrderList({Key key, @required this.status,this.keyword}) : super(key: key);
+  RequirementOrderList({Key key, @required this.status, this.keyword})
+      : super(key: key);
 
   final EnumModel status;
   final String keyword;
@@ -27,11 +28,12 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
     var bloc = BLoCProvider.of<RequirementOrderBLoC>(context);
 
     widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
+      if (widget.scrollController.position.pixels ==
+          widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        if(widget.keyword != null){
+        if (widget.keyword != null) {
           bloc.loadingMoreByKeyword(widget.keyword);
-        }else{
+        } else {
           bloc.loadingMoreByStatuses(widget.status.code);
         }
       }
@@ -77,14 +79,16 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
             StreamBuilder<List<RequirementOrderModel>>(
               stream: bloc.stream,
               // initialData: null,
-              builder: (BuildContext context, AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
                 if (snapshot.data == null) {
                   if (widget.keyword != null) {
                     bloc.filterByKeyword(widget.keyword);
                   } else {
                     bloc.filterByStatuses(widget.status.code);
                   }
-                  return ProgressIndicatorFactory.buildPaddedProgressIndicator();
+                  return ProgressIndicatorFactory
+                      .buildPaddedProgressIndicator();
                 }
                 if (snapshot.hasData) {
                   return Column(
@@ -101,22 +105,25 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
               stream: bloc.bottomStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  widget.scrollController.animateTo(
-                    widget.scrollController.offset - 70,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
-                  );
-                }
-
-                return ScrolledToEndTips(hasContent: snapshot.data);
+                // if (snapshot.data) {
+                //   widget.scrollController.animateTo(
+                //     widget.scrollController.offset - 70,
+                //     duration: const Duration(milliseconds: 500),
+                //     curve: Curves.easeOut,
+                //   );
+                // }
+                return ScrolledToEndTips(
+                  hasContent: snapshot.data,
+                  scrollController: widget.scrollController,
+                );
               },
             ),
             StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
                   opacity: snapshot.data ? 1.0 : 0,
                 );
               },

@@ -131,11 +131,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               label: '进厂',
               onTap: () async {
                 if(bloc.isBrandUser) {
-                  //获取该工厂的现款产品
-                  ProductsResponse productsResponse = await ProductRepositoryImpl()
-                      .getProductsOfFactory(
-                      {}, {'size': 3}, widget.product.belongTo.uid);
-
                   UserRepositoryImpl()
                       .getFactory(widget.product.belongTo.uid)
                       .then((factory) {
@@ -144,7 +139,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       MaterialPageRoute(
                         builder: (context) =>
                             MyFactoryPage(
-                              factory, products: productsResponse.content,),
+                              factory,
+                              isFactoryDetail: true,
+                            ),
                       ),
                     );
                   });

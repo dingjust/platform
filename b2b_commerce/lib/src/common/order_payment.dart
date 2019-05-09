@@ -323,7 +323,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('微信支付'),
+                    Text(
+                      '微信支付',
+                      style: TextStyle(fontSize: 16),
+                    ),
                     Icon(
                       B2BIcons.wechat,
                       size: 60,
@@ -335,7 +338,36 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               groupValue: paymentWay,
               value: "wechat",
               onChanged: (value) {
-                paymentWay = value;
+                setState(() {
+                  paymentWay = value;
+                });
+              },
+            ),
+            RadioListTile(
+              activeColor: Colors.blue,
+              title: Container(
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '支付宝',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Icon(
+                      B2BIcons.aliPay,
+                      size: 60,
+                      color: Color.fromRGBO(0, 160, 232, 1),
+                    ),
+                  ],
+                ),
+              ),
+              groupValue: paymentWay,
+              value: "aliPay",
+              onChanged: (value) {
+                setState(() {
+                  paymentWay = value;
+                });
               },
             )
           ],
@@ -377,6 +409,19 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPay() async {
+    switch (paymentWay) {
+      case 'wechat':
+        wechatPay();
+        break;
+      case 'aliPay':
+        aliPay();
+        break;
+      default:
+        wechatPay();
+    }
+  }
+
+  void wechatPay() async {
     //检查是否安装微信
     bool result = await WechatServiceImpl.instance.isWeChatInstalled();
 
@@ -417,6 +462,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         },
       );
     }
+  }
+
+  void aliPay() async {
+    AlipayService.pay();
   }
 
   void onPaymentError() {

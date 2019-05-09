@@ -1,0 +1,6 @@
+class AlipayConstants {
+  static const String appId = '2019042964340308';
+  static const String pid = '2088331442427794';
+  static const String rsa2Private =
+      'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlzN+yg0Kf4Wh1TEwJmR+Lx/ww3dD25YnIMMoXM1TQ39tg3n0AFwAElQPxlRtA3hirRASFcPaNoIYEyKJOeW8yuocmJL9jL21qTAoGlwqOX8aBKBd8aNoZcFMLguXoHWpqYQU5C7av3Ve3UWWjmj2hRizQOZNxdj+VBMlwXVY3zi/aYx2nHgzAk5mhJ+0RwZkSu7FcURLw8qM0YOC3mYe3zmsLGPzGYQCFWtTRX7AcO4BNtSV0cBAtz1BWbQFvmCz6kqzcP5dxB+t42i4ZWw2j4Tnz84EgeI6uWS5LiRU/X018PT2cgl91Bs+9IwjQKZBAbS/CoJK5VsIGKui+QeobQIDAQAB';
+}

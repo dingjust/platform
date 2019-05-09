@@ -59,6 +59,7 @@ dependencies:
   flutter_spinkit: ^3.1.0
   store_redirect: ^1.0.1
   # image_gallery_saver: ^1.1.0
+  # alipay_me: ^1.0.0
 
 dev_dependencies:
   flutter_test:
