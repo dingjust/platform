@@ -25,17 +25,17 @@ class ApparelProductFormPage extends StatefulWidget {
 }
 
 class ApparelProductFormState extends State<ApparelProductFormPage> {
-  final GlobalKey<FormState> _apparelProductForm = GlobalKey<FormState>();
+  GlobalKey<FormState> _apparelProductForm = GlobalKey<FormState>();
   FocusNode _nameFocusNode = FocusNode();
-  final TextEditingController _nameController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
   FocusNode _skuIDFocusNode = FocusNode();
-  final TextEditingController _skuIDController = TextEditingController();
+  TextEditingController _skuIDController = TextEditingController();
   FocusNode _brandFocusNode = FocusNode();
-  final TextEditingController _brandController = TextEditingController();
+  TextEditingController _brandController = TextEditingController();
   FocusNode _priceFocusNode = FocusNode();
   TextEditingController _priceController = TextEditingController();
   FocusNode _gramWeightFocusNode = FocusNode();
-  final TextEditingController _gramWeightController = TextEditingController();
+  TextEditingController _gramWeightController = TextEditingController();
 
   @override
   void initState() {
@@ -121,7 +121,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                         );
                       }
                   );
-                  widget.item = new ApparelProductModel();
+//                  widget.item = new ApparelProductModel();
                 } else {
                   showDialog(
                       context: context,
