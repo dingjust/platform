@@ -79,6 +79,7 @@ class CategoryFieldState extends State<CategoryField> {
                   multiple: false,
                   verticalDividerOpacity: 1,
                   categorySelect: _categorySelected,
+                  categoryActionType: CategoryActionType.TO_POP,
                 ),
               );
             },

@@ -43,6 +43,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
                 builder: (context) => CategorySelectPage(
                       minCategorySelect: _minCategorySelect,
                       categories: _categories,
+                      categoryActionType: CategoryActionType.TO_POP,
                     ),
               ),
             );
