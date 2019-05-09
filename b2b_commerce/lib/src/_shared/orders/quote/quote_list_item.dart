@@ -222,31 +222,25 @@ class QuoteListItem extends StatelessWidget {
                     size: 20,
                   ),
                   onTap: () async{
-                    //获取该工厂的现款产品
-                    ProductsResponse productsResponse = await ProductRepositoryImpl()
-                        .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
 
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
                               model.belongTo,
-                              products: productsResponse.content,
+                              isFactoryDetail: true,
                             )));
                   },
                 ),
                 FlatButton(
                   onPressed: () async{
-                    //获取该工厂的现款产品
-                    ProductsResponse productsResponse = await ProductRepositoryImpl()
-                        .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
 
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
                               model.belongTo,
-                              products: productsResponse.content,
+                              isFactoryDetail: true,
                             )));
                   },
                   shape: RoundedRectangleBorder(
@@ -287,31 +281,25 @@ class QuoteListItem extends StatelessWidget {
                     size: 20,
                   ),
                   onTap: () async{
-                    //获取该工厂的现款产品
-                    ProductsResponse productsResponse = await ProductRepositoryImpl()
-                        .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
 
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
                               model.belongTo,
-                              products: productsResponse.content,
+                              isFactoryDetail: true,
                             )));
                   },
                 ),
                 FlatButton(
                   onPressed: () async{
-                    //获取该工厂的现款产品
-                    ProductsResponse productsResponse = await ProductRepositoryImpl()
-                        .getProductsOfFactory({}, {'size': 3}, model.belongTo.uid);
 
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
                               model.belongTo,
-                              products: productsResponse.content,
+                              isFactoryDetail: true,
                             )));
                   },
                   shape: RoundedRectangleBorder(

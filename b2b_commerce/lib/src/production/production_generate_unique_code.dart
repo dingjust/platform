@@ -88,21 +88,21 @@ class _ProductionGenerateUniqueCodePageState
             margin: EdgeInsets.only(top: 20),
             child: Column(
               children: <Widget>[
-                Container(
-                  width: 180,
-                  child: FlatButton(
-                    color: Color.fromRGBO(255,214,12, 1),
-                    onPressed: () {
-                      _smsInvite();
-                    },
-                    child: Text(
-                      '短信邀请',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                  ),
-                ),
+//                Container(
+//                  width: 180,
+//                  child: FlatButton(
+//                    color: Color.fromRGBO(255,214,12, 1),
+//                    onPressed: () {
+//                      _smsInvite();
+//                    },
+//                    child: Text(
+//                      '短信邀请',
+//                      style: TextStyle(color: Colors.white),
+//                    ),
+//                    shape: RoundedRectangleBorder(
+//                        borderRadius: BorderRadius.all(Radius.circular(5))),
+//                  ),
+//                ),
 //                Container(
 //                  width: 180,
 //                  child: FlatButton(

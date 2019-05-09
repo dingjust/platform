@@ -320,9 +320,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildFactoryInfo(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        //获取该工厂的现款产品
-        ProductsResponse productsResponse = await ProductRepositoryImpl()
-            .getProductsOfFactory({}, {'size': 3}, order.belongTo.uid);
 
         //TODO跳转详细页
         Navigator.push(
@@ -330,7 +327,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             MaterialPageRoute(
                 builder: (context) => MyFactoryPage(
                       order.belongTo,
-                      products: productsResponse.content,
+                      isFactoryDetail: true,
                     )));
       },
       child: Container(

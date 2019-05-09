@@ -207,18 +207,20 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
                           children: <Widget>[
                             Container(
                               child: Text(
-                                '您当前登录账号为工厂端，与您选择的身份不匹配。',
+                                '${widget.contentText1}',
                               ),
                             ),
+                            widget.contentText2 != null && widget.contentText2 != ''?
                             Container(
                               margin: EdgeInsets.only(top: 10),
                               child: Text(
-                                '是否确认继续登录工厂端？',
+                                '${widget.contentText2}',
                                 style: TextStyle(
                                     color: Colors.red
                                 ),
                               ),
-                            )
+                            ):
+                                Container()
                           ],
                         ),
                       ),
@@ -384,10 +386,9 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
                               ),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(Radius.circular(15))),
-                              onPressed: () {
+                              onPressed: widget.confirmAction == null ? () {
                                 Navigator.of(context).pop();
-                                doSomething();
-                              }),
+                              } : widget.confirmAction),
                         ),
                       ),
                       decoration: BoxDecoration(
