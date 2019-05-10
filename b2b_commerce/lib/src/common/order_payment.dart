@@ -465,7 +465,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void aliPay() async {
-    AlipayService.pay();
+    // AlipayService.pay();
   }
 
   void onPaymentError() {

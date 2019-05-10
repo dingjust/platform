@@ -1,5 +1,5 @@
 import 'package:models/models.dart';
-import 'package:services/src/wechat/payment_for.dart';
+import 'package:services/src/payment/payment_for.dart';
 
 abstract class WechatService {
   ///调起微信支付

@@ -1,9 +1,13 @@
-///微信
-class WechatApis {
-  // === 支付 ===
-  /// 预付码
+///支付相关接口
+class PaymentApis {
+  /// 微信预付码
   static get wechatPrepay => (code) {
         return '/{baseSiteId}/checkout/multi/wechat/prepay/$code';
+      };
+
+  /// 支付宝预付码
+  static get alipayPrepay => (code) {
+        return '/{baseSiteId}/checkout/multi/alipay/prepay/$code';
       };
 
   /// 打样单----- 确认支付

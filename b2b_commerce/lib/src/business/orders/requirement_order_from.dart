@@ -25,18 +25,18 @@ class RequirementOrderFrom extends StatefulWidget {
   String factoryUid;
   ApparelProductModel product;
 
-  RequirementOrderModel order;
+  String code;
 
   bool isReview;
 
   RequirementOrderFrom(
-      {this.product, this.order, this.factoryUid, this.isReview: false});
+      {this.product, this.code, this.factoryUid, this.isReview: false});
 
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
 
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
-  RequirementOrderModel model;
+  RequirementOrderModel model = RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
   bool _isShowMore = true;
   DateTime selectDate = DateTime.now();
   FocusNode _nameFocusNode = FocusNode();
@@ -50,22 +50,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   @override
   void initState() {
-    model = RequirementOrderModel(
-        details: RequirementInfoModel(), attachments: []);
-    if (widget.order != null) {
-      model.details = widget.order.details;
-      _nameController.text = model.details.productName;
-      _quantityController.text = model.details.expectedMachiningQuantity.toString();
-      _remarksController.text = model.remarks;
-      _priceController.text = model.details.maxExpectedPrice.toString() == 'null' ? '0' : model.details.maxExpectedPrice.toString();
-      if (model.attachments == null) {
-        model.attachments = [];
-      }
-      if (model.details.pictures == null) {
-        model.details.pictures = [];
-      }
-    }
-
     if (widget.product != null) {
       model.details.category = widget.product.category;
       model.details.pictures = widget.product.images;
@@ -129,10 +113,47 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 })
           ],
         ),
-        body: Container(
+        body: widget.code != null ?
+        FutureBuilder(
+            future:  RequirementOrderRepository()
+                .getRequirementOrderDetail(widget.code),
+            builder: (context, snapshot) {
+              model = snapshot.data;
+
+              if(model == null){
+                model = RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
+              }
+
+              if (widget.code != null) {
+                _nameController.text = model.details.productName;
+                _quantityController.text = model.details.expectedMachiningQuantity.toString();
+                _remarksController.text = model.remarks;
+                _priceController.text = model.details.maxExpectedPrice.toString() == 'null' ? '0' : model.details.maxExpectedPrice.toString();
+                if (model.attachments == null) {
+                  model.attachments = [];
+                }
+                if (model.details.pictures == null) {
+                  model.details.pictures = [];
+                }
+              }
+
+              if (widget.product != null) {
+                model.details.category = widget.product.category;
+                model.details.pictures = widget.product.images;
+                if (widget.product?.category != null) {}
+              }
+
+              return Container(
+                child: ListView(
+                  children: <Widget>[
+                    _buildBody(context,model),
+                  ],
+                ),
+              );
+            }):Container(
           child: ListView(
             children: <Widget>[
-              _buildBody(context),
+              _buildBody(context,model),
             ],
           ),
         ),
@@ -143,9 +164,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           child: RaisedButton(
             color: Color.fromRGBO(255, 214, 12, 1),
             child: Text(
-              widget.order != null && widget.isReview == false
-                  ? '修改需求'
-                  : '确定发布',
+              widget.code != null && widget.isReview == false ? '修改需求' : '确定发布',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 18,
@@ -154,7 +173,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () {
-              widget.order != null && widget.isReview == false
+              widget.code != null && widget.isReview == false
                   ? onUpdate()
                   : onPublish(widget.factoryUid);
             },
@@ -162,21 +181,21 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         ));
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context,RequirementOrderModel model) {
     return Container(
       child: Center(
         child: Column(
           children: <Widget>[
-            _buildhead(context),
-            _buildHideBody(context),
-            _buildBottom(context),
+            _buildhead(context,model),
+            _buildHideBody(context,model),
+            _buildBottom(context,model),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildhead(BuildContext context) {
+  Widget _buildhead(BuildContext context,RequirementOrderModel model) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -276,7 +295,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     );
   }
 
-  Widget _buildBottom(BuildContext context) {
+  Widget _buildBottom(BuildContext context,RequirementOrderModel model) {
     return Container(
       margin: EdgeInsets.only(top: 20),
       color: Colors.white,
@@ -332,7 +351,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 ),
               ),
               EditableAttachments(
-                list: model.attachments,
+                list: model?.attachments ?? [],
                 maxNum: 5,
               )
             ],
@@ -342,7 +361,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     );
   }
 
-  Widget _buildHideBody(BuildContext context) {
+  Widget _buildHideBody(BuildContext context,RequirementOrderModel model) {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 20),
@@ -446,19 +465,19 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
     if (model.details.category == null) {
       isSubmit = _showValidateMsg(context, '产品品类不可以为空');
-    }else if (model.details.expectedMachiningQuantity == null) {
+    } else if (model.details.expectedMachiningQuantity == null) {
       isSubmit = _showValidateMsg(context, '订单数量不可以为空');
-    }else if (model.details.expectedDeliveryDate == null) {
+    } else if (model.details.expectedDeliveryDate == null) {
       isSubmit = _showValidateMsg(context, '交货时间不可以为空');
-    }else if(model.details.expectedDeliveryDate.isBefore(DateTime.now())){
+    } else if (model.details.expectedDeliveryDate.isBefore(DateTime.now())) {
       isSubmit = _showValidateMsg(context, '交货时间不可比当前时间小');
-    }else if (model.details.contactPerson == null &&
+    } else if (model.details.contactPerson == null &&
         model.details.contactPhone == null) {
       isSubmit = _showValidateMsg(context, '联系方式不可以为空');
-    }else{
+    } else {
       isSubmit = true;
     }
-    if(isSubmit){
+    if (isSubmit) {
       String code = await RequirementOrderRepository().publishNewRequirement(
           model, factoryUid, factoryUid != null ? true : false);
       if (code != null && code != '') {
@@ -466,21 +485,20 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => PublishRequirementSuccessDialog(
-                model: model,
-              ),
+                    model: model,
+                  ),
             ),
             ModalRoute.withName('/'));
       }
     }
-
   }
 
-  bool _showValidateMsg(BuildContext context,String message){
+  bool _showValidateMsg(BuildContext context, String message) {
     _validateMessage(context, '${message}');
     return false;
   }
 
-  Future<void> _validateMessage(BuildContext context,String message) async {
+  Future<void> _validateMessage(BuildContext context, String message) async {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -490,8 +508,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             contentText2: '${message}',
             outsideDismiss: true,
           );
-        }
-    );
+        });
   }
 
   ///完善信息
