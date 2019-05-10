@@ -2,12 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:models/models.dart';
-import 'package:services/src/api/wechat.dart';
+import 'package:services/src/api/payment.dart';
 import 'package:services/src/net/http_manager.dart';
-import 'package:services/src/wechat/payment_for.dart';
-import 'package:services/src/wechat/wechat_pay_helper.dart';
-import 'package:services/src/wechat/wechat_service.dart';
-import 'package:services/src/wechat/wechatpay_constants.dart';
+import 'package:services/src/payment/payment_for.dart';
+import 'package:services/src/payment/wechat/wechat_pay_helper.dart';
+import 'package:services/src/payment/wechat/wechat_service.dart';
+import 'package:services/src/payment/wechat/wechatpay_constants.dart';
 
 class WechatServiceImpl implements WechatService {
   // 工厂模式
@@ -92,15 +92,15 @@ class WechatServiceImpl implements WechatService {
     //按类型调用不同接口
     if (order is ProofingModel && paymentFor == PaymentFor.DEFAULT) {
       //打样单
-      apiUrl = WechatApis.proofingPaidConfirm(order.code);
+      apiUrl = PaymentApis.proofingPaidConfirm(order.code);
     } else if (order is PurchaseOrderModel &&
         paymentFor == PaymentFor.DEPOSIT) {
       //生产单-定金
-      apiUrl = WechatApis.purchaseDepositPaidConfirm(order.code);
+      apiUrl = PaymentApis.purchaseDepositPaidConfirm(order.code);
     } else if (order is PurchaseOrderModel &&
         paymentFor == PaymentFor.BALANCE) {
       //生产单-定金
-      apiUrl = WechatApis.purchaseBalancePaidConfirm(order.code);
+      apiUrl = PaymentApis.purchaseBalancePaidConfirm(order.code);
     } else {
       return null;
     }

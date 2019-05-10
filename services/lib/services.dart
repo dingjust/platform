@@ -2,7 +2,6 @@ library app_services;
 
 import 'dart:async';
 
-export 'src/alipay/alipay_service.dart';
 export 'src/api/apis.dart';
 export 'src/api/order.dart';
 export 'src/api/product.dart';
@@ -58,8 +57,8 @@ export 'src/user/repository/reports_repository.dart';
 export 'src/user/response/address_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
-export 'src/wechat/payment_for.dart';
-export 'src/wechat/wechat_service_impl.dart';
+export 'src/payment/payment_for.dart';
+export 'src/payment/wechat/wechat_service_impl.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

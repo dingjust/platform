@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:services/src/api/wechat.dart';
+import 'package:services/src/api/payment.dart';
 import 'package:services/src/net/http_manager.dart';
-import 'package:services/src/wechat/payment_for.dart';
+import 'package:services/src/payment/payment_for.dart';
 
 class WechatPayHelper {
   ///获取预支付信息
@@ -14,7 +14,7 @@ class WechatPayHelper {
     Response response;
     try {
       print(paymentFor.toString());
-      response = await http$.get(WechatApis.wechatPrepay(orderCode),
+      response = await http$.get(PaymentApis.wechatPrepay(orderCode),
           data: {"paymentFor": PaymentForEnumMap[paymentFor]});
     } on DioError catch (e) {
       print(e);
