@@ -54,6 +54,8 @@ class _FactoryPageState extends State<FactoryPage> {
   bool showCategoriesFilterMenu = false;
 
   String labText = '综合';
+  String _categorySelectText = '分类';
+  String _areaSelectText = '地区';
 
   List<CategoryModel> _category;
   List<CategoryModel> _categorySelected = [];
@@ -126,7 +128,7 @@ class _FactoryPageState extends State<FactoryPage> {
                         showMachineTypeFilterMenu = false;
                       });
                     }),
-                    FilterEntry('分类', () async{
+                    FilterEntry(_categorySelectText, () async{
                       _category = await ProductRepositoryImpl().cascadedCategories();
                       showModalBottomSheet(
                         context: context,
@@ -145,7 +147,9 @@ class _FactoryPageState extends State<FactoryPage> {
                         setState(() {
                           if (_categorySelected.isEmpty) {
                             factoryCondition.categories = null;
+                            _categorySelectText = '分类';
                           } else {
+                            _categorySelectText = _categorySelected[0].name;
                             factoryCondition.adeptAtCategories = _categorySelected;
                           }
                           FactoryBLoC.instance.filterByCondition(
@@ -158,7 +162,7 @@ class _FactoryPageState extends State<FactoryPage> {
                         showDateFilterMenu = false;
                       });
                     }),
-                    FilterEntry('地区', () {
+                    FilterEntry(_areaSelectText, () {
                       setState(() {
                         showDateFilterMenu = false;
                       });
@@ -178,6 +182,12 @@ class _FactoryPageState extends State<FactoryPage> {
                           );
                         }).then((a){
                           setState(() {
+                            if(_regionSelect.isocode != null){
+                              _areaSelectText = _regionSelect.name;
+                            }else{
+                              _areaSelectText = '地区';
+                            }
+
                             factoryCondition.productiveOrientations = _regionSelect;
                             factoryCondition.cities = _citySelects;
                             FactoryBLoC.instance.filterByCondition(

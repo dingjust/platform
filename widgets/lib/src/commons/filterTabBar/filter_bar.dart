@@ -142,9 +142,9 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
                                       style: TextStyle(
                                           fontSize: 14, color: Colors.black),
                                     ),
-                                    entry.label == '最新发布'
+                                    entry.label == '最新发布' || entry.label.contains('天内')
                                         ? Icon(Icons.keyboard_arrow_down)
-                                        : Container()
+                                        : Container(),
                                   ],
                                 ),
                               ))))
