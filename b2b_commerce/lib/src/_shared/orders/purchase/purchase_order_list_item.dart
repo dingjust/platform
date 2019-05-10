@@ -155,11 +155,11 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                   child:
                 UserBLoC.instance.currentUser.type == UserType.BRAND?
                   Text(
-                    '${widget.order.belongTo == null ? widget.order.companyOfSeller : widget.order.belongTo.name}',
+                    '${widget.order.belongTo == null ? widget.order.companyOfSeller !=null? widget.order.companyOfSeller:'': widget.order.belongTo.name}',
                     style: const TextStyle(fontSize: 16),
                   ):
                 Text(
-                  '${widget.order.purchaser == null ? widget.order.companyOfSeller : widget.order.purchaser.name}',
+                  '${widget.order.purchaser == null ? widget.order.companyOfSeller !=null? widget.order.companyOfSeller:'': widget.order.purchaser.name}',
                   style: const TextStyle(fontSize: 16),
                 ),
                 ),
@@ -606,7 +606,6 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                         ),
                       ),
                       onPressed: () async {
-
                         showDialog(
                             context: context,
                             barrierDismissible: false,
