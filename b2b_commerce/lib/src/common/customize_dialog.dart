@@ -151,8 +151,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
         type: MaterialType.transparency,
         child: Center(
           child: SizedBox(
-            width: 300.0,
-            height: 200.0,
+            width: widget.dialogWidth == null || widget.dialogWidth <300?300.0:widget.dialogWidth,
+            height: widget.dialogHeight == null || widget.dialogHeight <150?150.0:widget.dialogHeight,
             child: Container(
               decoration: ShapeDecoration(
                 color: Color(0xffffffff),
@@ -207,7 +207,9 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
                           children: <Widget>[
                             Container(
                               child: Text(
-                                '${widget.contentText1}',
+                                '${widget.contentText1 == null || widget.contentText1 == ''? '':widget.contentText1}',
+                                style: widget.contentTextStyle1 != null ?
+                                widget.contentTextStyle1:null,
                               ),
                             ),
                             widget.contentText2 != null && widget.contentText2 != ''?
@@ -215,9 +217,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
                               margin: EdgeInsets.only(top: 10),
                               child: Text(
                                 '${widget.contentText2}',
-                                style: TextStyle(
-                                    color: Colors.red
-                                ),
+                                style: widget.contentTextStyle2 != null  ?
+                                widget.contentTextStyle2:null,
                               ),
                             ):
                                 Container()

@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
@@ -993,10 +994,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         isSubmit = true;
       }
       if(isSubmit){
-//        String code = await PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder);
-//        if(code != null){
-//          result = true;
-//        }
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -1008,14 +1005,45 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 entrance: 'createPurchaseOrder',
               );
             }
-        );
+        ).then((value){
+          bool result = false;
+          if(value!=null){
+            result = true;
+          }
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialogPage(
+                  dialogType: DialogType.RESULT_DIALOG,
+                  failTips: '创建线下单失败',
+                  successTips: '创建线下单成功',
+                  callbackResult: result,
+                  confirmAction: (){
+                    Navigator.of(context).pop();
+                    getPurchaseOrderDetail(value);
+                  },
+                );
+              }
+          );
 
-//        _showMessage(context,result,'添加线下单',code);
+        });
       }
 
     }catch(e){
       print(e);
     }
+  }
+
+  void getPurchaseOrderDetail(String code) async{
+    if(code != null && code != ''){
+      PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) =>
+              PurchaseOrderDetailPage(order: model)
+          ), ModalRoute.withName('/'));
+    }
+
   }
 
   //打开日期选择器
@@ -1115,75 +1143,17 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return false;
   }
 
-  //保存后是否成功提示
-  void _showMessage(BuildContext context,bool result,String message,String code){
-    _requestMessage(context,result == true? '${message}成功' : '${message}失败',result,code);
-  }
-
   Future<void> _validateMessage(BuildContext context,String message) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return SimpleDialog(
-          title: const Text('提示',
-            style: TextStyle(
-              fontSize: 16
-            ),
-          ),
-          children: <Widget>[
-            SimpleDialogOption(
-              child: Text('${message}'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _requestMessage(BuildContext context,String message,bool result,String code) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('提示',
-            style: TextStyle(
-                fontSize: 16
-            ),),
-          content: SingleChildScrollView(
-              child: Text(
-                '${message}',
-                style: TextStyle(
-                  fontSize: 22,
-                ),
-              )
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                  '确定',
-                style: TextStyle(
-                  color: Colors.black
-                ),
-              ),
-              onPressed: () async {
-                if(code!= null){
-                  PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
-                  ProductionBLoC.instance.refreshData();
-                  result == true ?
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) =>
-                          PurchaseOrderDetailPage(order: model)
-                      ), ModalRoute.withName('/')) : null;
-                }else{
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
-        );
-      },
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            contentText2: '${message}',
+            outsideDismiss: true,
+          );
+        }
     );
   }
 

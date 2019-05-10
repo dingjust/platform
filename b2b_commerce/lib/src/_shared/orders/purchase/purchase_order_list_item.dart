@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -315,54 +316,24 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                             ),
                           ),
                           onPressed: () async {
-                            showDialog<void>(
-                              context: context,
-                              barrierDismissible:
-                              true, // user must tap button!
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text(
-                                    '提示',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  content: Text('是否要取消订单？'),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: Text(
-                                        '取消',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    FlatButton(
-                                      child: Text(
-                                        '确定',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      onPressed: () async {
-                                        Navigator.of(context).pop();
-                                        showDialog(
-                                            context: context,
-                                            barrierDismissible: false,
-                                            builder: (_) {
-                                              return RequestDataLoadingPage(
-                                                requestCallBack: PurchaseOrderRepository()
-                                                    .purchaseOrderCancelling(
-                                                    widget.order.code),
-                                                outsideDismiss: false,
-                                                loadingText: '正在取消。。。',
-                                                entrance: 'purchaseOrders',
-                                              );
-                                            }
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (_) {
+                                  return CustomizeDialogPage(
+                                    dialogType: DialogType.CONFIRM_DIALOG,
+                                    contentText2: '是否取消订单？',
+                                    contentTextStyle2: TextStyle(color: Colors.black),
+                                    isNeedConfirmButton: true,
+                                    isNeedCancelButton: true,
+                                    confirmAction: (){
+                                      Navigator.of(context).pop();
+                                      cancelOrder(widget.order.code);
+                                    },
+                                  );
+                                }
                             );
+
                           })
                           : Container()),
                 ),
@@ -1135,6 +1106,22 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
           ],
         );
       },
+    );
+  }
+
+  void cancelOrder(String code) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoadingPage(
+            requestCallBack: PurchaseOrderRepository()
+                .purchaseOrderCancelling(code),
+            outsideDismiss: false,
+            loadingText: '正在取消。。。',
+            entrance: 'purchaseOrders',
+          );
+        }
     );
   }
 

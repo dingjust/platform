@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -440,11 +442,16 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           Container(
               child: GestureDetector(
             child: ListTile(
-              leading: Text(
-                '确认交货日期',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
+              leading: RichText(text: TextSpan(
+                  text: '确认交货日期 ',
+                  style: TextStyle(color: Colors.black, fontSize: 15.0),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '* ',
+                        style: TextStyle(color: Colors.red)
+                    ),
+                  ]
+              ),
               ),
               trailing: quoteDate == null
                   ? Text(
@@ -566,39 +573,72 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
 
   void onSubmit() {
     if (_unitPriceController.text.isEmpty) {
-      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
-        SnackBar(
-          content: Text('请输入订单报价'),
-          duration: Duration(seconds: 1),
-        ),
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '请输入订单报价',
+              outsideDismiss: true,
+            );
+          }
+      );
+    } else if(quoteDate == null){
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '请选择交货日期',
+              outsideDismiss: true,
+            );
+          }
       );
     } else {
-      showDialog<void>(
-        context: context,
-        barrierDismissible: true, // user must tap button!
-        builder: (context) {
-          return AlertDialog(
-            title: Text('确定报价？'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  '取消',
-                  style: TextStyle(color: Colors.grey),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                child: Text('确定', style: TextStyle(color: Colors.black)),
-                onPressed: () async {
-                  await onSure();
-                },
-              ),
-            ],
-          );
-        },
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '是否提交报价？',
+              isNeedConfirmButton: true,
+              isNeedCancelButton: true,
+              dialogHeight: 200,
+              confirmAction: (){
+                onSure();
+              },
+            );
+          }
       );
+//      showDialog<void>(
+//        context: context,
+//        barrierDismissible: true, // user must tap button!
+//        builder: (context) {
+//          return AlertDialog(
+//            title: Text('确定报价？'),
+//            actions: <Widget>[
+//              FlatButton(
+//                child: Text(
+//                  '取消',
+//                  style: TextStyle(color: Colors.grey),
+//                ),
+//                onPressed: () {
+//                  Navigator.of(context).pop();
+//                },
+//              ),
+//              FlatButton(
+//                child: Text('确定', style: TextStyle(color: Colors.black)),
+//                onPressed: () async {
+//                  await onSure();
+//                },
+//              ),
+//            ],
+//          );
+//        },
+//      );
     }
   }
 
@@ -665,7 +705,29 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               entrance: 'quoteOrder',
             );
           }
-      );
+      ).then((value){
+        bool result = false;
+        if(value!=null){
+          result = true;
+        }
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialogPage(
+                dialogType: DialogType.RESULT_DIALOG,
+                failTips: '修改报价失败',
+                successTips: '修改报价成功',
+                callbackResult: result,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  getOrderDetail(value);
+                },
+              );
+            }
+        );
+
+      });
     } else {
       showDialog(
           context: context,
@@ -678,8 +740,41 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               entrance: 'quoteOrder',
             );
           }
-      );
+      ).then((value){
+        bool result = false;
+        if(value!=null){
+          result = true;
+        }
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialogPage(
+                dialogType: DialogType.RESULT_DIALOG,
+                failTips: '创建报价单失败',
+                successTips: '创建报价单成功',
+                callbackResult: result,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  getOrderDetail(value);
+                },
+              );
+            }
+        );
+
+      });
     }
+  }
+
+  void getOrderDetail(String code) async{
+    if(code != null && code != ''){
+      QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(code);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => QuoteOrderDetailPage(item: detailModel)),
+          ModalRoute.withName('/'));
+    }
+
   }
 
 }
