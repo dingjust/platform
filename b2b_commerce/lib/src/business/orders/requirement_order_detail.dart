@@ -759,14 +759,14 @@ class _RequirementOrderDetailPageState
   void onEdit() {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RequirementOrderFrom(
-              order: widget.order,
+              code: widget.order.code,
             )));
   }
 
   void onReview() {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RequirementOrderFrom(
-          order: widget.order,
+          code: widget.order.code,
           isReview: true,
         )));
   }
