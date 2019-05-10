@@ -66,6 +66,7 @@ class _FactoryPageState extends State<FactoryPage> {
 
   @override
   void initState() {
+
     if (widget.factoryCondition != null) {
       factoryCondition = widget.factoryCondition;
     } else {
@@ -75,8 +76,13 @@ class _FactoryPageState extends State<FactoryPage> {
           labels: [],
           cooperationModes: []);
     }
+    getCategories();
 
     super.initState();
+  }
+
+  getCategories()async{
+    _category = await ProductRepositoryImpl().cascadedCategories();
   }
 
   void changeCondition(FilterConditionEntry condition) {
@@ -129,7 +135,6 @@ class _FactoryPageState extends State<FactoryPage> {
                       });
                     }),
                     FilterEntry(_categorySelectText, () async{
-                      _category = await ProductRepositoryImpl().cascadedCategories();
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {

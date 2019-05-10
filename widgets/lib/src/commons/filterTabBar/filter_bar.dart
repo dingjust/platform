@@ -127,11 +127,13 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: widget.entries
-                      .map((entry) => Container(
+                      .map((entry) => GestureDetector(
+                      onTap: entry.onPressed,
+                      child: Container(
+                    color: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
                           // width: entry.label == '最新发布' ? 116 : (MediaQuery.of(context).size.width - 116)/3,
-                          child: GestureDetector(
-                              onTap: entry.onPressed,
-                              child: Container(
+                          child: Container(
                                 margin: EdgeInsets.symmetric(
                                     vertical: 15, horizontal: 10),
                                 child: Row(
