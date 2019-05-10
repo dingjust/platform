@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/products/form/prices_field.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -75,69 +76,57 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 style: TextStyle(),
               ),
               onPressed: () async {
-                if (widget.item.images == null || widget.item.images.length <= 0) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                            content: Text('请上传主图'),
-                          ));
-                  return;
-                } else if (widget.item.name == null)  {
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        content: Text('请输入产品名称'),
-                      ));
-                  return;
-                } else if (widget.item.skuID == null) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                            content: Text('请输入产品货号'),
-                          ));
-                  return;
-                } else if (widget.item.category == null) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                            content: Text('请输入产品类别'),
-                          ));
-                  return;
-                }
-                if (widget.item.attributes == null)
-                  widget.item.attributes = ApparelProductAttributesModel();
-                Navigator.pop(context);
-                if (widget.isCreate) {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return RequestDataLoadingPage(
-                          requestCallBack: ProductRepositoryImpl().create(widget.item),
-                          outsideDismiss: false,
-                          loadingText: '保存中。。。',
-                          entrance: 'apparelProduct',
-                          keyword: widget.keyword,
-                        );
-                      }
-                  );
-//                  widget.item = new ApparelProductModel();
-                } else {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return RequestDataLoadingPage(
-                          requestCallBack: ProductRepositoryImpl().update(widget.item),
-                          outsideDismiss: false,
-                          loadingText: '保存中。。。',
-                          entrance: 'apparelProduct',
-                          keyword: widget.keyword,
-                        );
-                      }
-                  );
-                }
+                bool isSubmit = false;
 
+                if (widget.item.images == null || widget.item.images.length <= 0) {
+                  isSubmit = _showValidateMsg(context, '请上传主图');
+                } else if (widget.item.name == null)  {
+                  isSubmit = _showValidateMsg(context, '请输入产品名称');
+                } else if (widget.item.skuID == null) {
+                  isSubmit = _showValidateMsg(context, '请输入产品货号');
+                } else if (widget.item.category == null) {
+                  isSubmit = _showValidateMsg(context, '请输入产品类别');
+                }else{
+                  isSubmit = true;
+                }
+                if (widget.item.attributes == null){
+                  widget.item.attributes = ApparelProductAttributesModel();
+                }
+                Navigator.pop(context);
+                if(isSubmit) {
+                  if (widget.isCreate) {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoadingPage(
+                            requestCallBack: ProductRepositoryImpl().create(
+                                widget.item),
+                            outsideDismiss: false,
+                            loadingText: '保存中。。。',
+                            entrance: 'apparelProduct',
+                            keyword: widget.keyword,
+                          );
+                        }
+                    );
+//                  widget.item = new ApparelProductModel();
+                  } else {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoadingPage(
+                            requestCallBack: ProductRepositoryImpl().update(
+                                widget.item),
+                            outsideDismiss: false,
+                            loadingText: '保存中。。。',
+                            entrance: 'apparelProduct',
+                            keyword: widget.keyword,
+                          );
+                        }
+                    );
+                  }
+                }
                 if(widget.keyword == null){
                   ApparelProductBLoC.instance.filterByStatuses(widget.status);
                 }else{
@@ -284,5 +273,25 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
     );
 //        }
 //        );
+  }
+
+  //非空提示
+  bool _showValidateMsg(BuildContext context,String message){
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context,String message) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            contentText2: '${message}',
+            outsideDismiss: true,
+          );
+        }
+    );
   }
 }

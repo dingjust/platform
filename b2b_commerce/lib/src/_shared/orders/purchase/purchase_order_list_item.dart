@@ -657,7 +657,39 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                     shape: const RoundedRectangleBorder(
                         borderRadius: const BorderRadius.all(Radius.circular(5))),
                     onPressed: () {
-                      _showDepositDialog(context, widget.order);
+                      TextEditingController con = new TextEditingController();
+                      TextEditingController con1 = new TextEditingController();
+                      TextEditingController con2 = new TextEditingController();
+                      FocusNode node = new FocusNode();
+                      FocusNode node1 = new FocusNode();
+                      FocusNode node2 = new FocusNode();
+                      con.text = widget.order.totalPrice.toString();
+                      con1.text = widget.order.deposit.toString();
+                      con2.text = widget.order.unitPrice.toString();
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return CustomizeDialogPage(
+                              dialogType: DialogType.PRICE_INPUT_DIALOG,
+                              outsideDismiss: false,
+                              inputController: con,
+                              inputController1: con1,
+                              inputController2: con2,
+                              focusNode: node,
+                              focusNode1: node1,
+                              focusNode2: node2,
+                            );
+                          }
+                      ).then((value){
+                        if(value != null && value != ''){
+                          String str = value;
+                          String deposit = str.substring(0,str.indexOf(','));
+                          String unitPrice = str.substring(str.indexOf(',')+1,str.length);
+                          _showDepositDialog(context, widget.order,deposit,unitPrice);
+                        }
+                      });
+
                     }),
             ),
           ),
@@ -1027,8 +1059,39 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
   }
 
   //打开修改定金金额弹框
-  void _showDepositDialog(BuildContext context, PurchaseOrderModel model) {
-    _neverUpdateDeposit(context, model);
+  void _showDepositDialog(BuildContext context, PurchaseOrderModel model,String depositText,String unitPriceText) {
+    double deposit = model.deposit;
+    double unit = model.unitPrice;
+    if(depositText != null){
+      if(depositText.indexOf('￥')!= 0){
+        deposit = double.parse(depositText.replaceAll('￥', ''));
+      }
+      if(unitPriceText.indexOf('￥')!= 0){
+        unit = double.parse(unitPriceText.replaceAll('￥', ''));
+      }
+    }
+    setState(() {
+      model.deposit = deposit;
+      model.unitPrice = unit;
+    });
+    model.skipPayBalance = false;
+    try {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoadingPage(
+              requestCallBack: PurchaseOrderRepository()
+                  .purchaseOrderDepositUpdate(model.code, model),
+              outsideDismiss: false,
+              loadingText: '保存中。。。',
+              entrance: '0',
+            );
+          }
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _showTips(BuildContext context, PurchaseOrderModel model) {

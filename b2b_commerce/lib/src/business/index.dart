@@ -92,57 +92,232 @@ class BrandSiteStatisticsSection extends StatelessWidget {
   }
 }
 
-class BrandMenusSection extends StatelessWidget {
-  Widget _buildOrderMenu() {
+class BrandOrderMenus extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          AdvanceMenu('订单管理', <AdvanceMenuItem>[
-            AdvanceMenuItem(MenuItemImage.requirementOrder, '需求订单',
-                AppRoutes.ROUTE_REQUIREMENT_ORDERS),
-            AdvanceMenuItem(
-                MenuItemImage.priceManage, '报价管理', AppRoutes.ROUTE_QUOTES),
-            AdvanceMenuItem(MenuItemImage.proofingOrder, '打样订单',
-                AppRoutes.ROUTE_PROOFING_ORDERS),
-            AdvanceMenuItem(MenuItemImage.purchaseOrder, '生产订单',
-                AppRoutes.ROUTE_PURCHASE_ORDERS),
-          ])
-        ],
-      ),
+      padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                  '订单管理',
+                style: TextStyle(
+                  fontSize: 16
+                ),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap:true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              crossAxisCount: 4,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: (1.3),
+              children: <Widget>[
+                buildChild(context,MenuItemImage.requirementOrder, '需求订单',
+                    AppRoutes.ROUTE_REQUIREMENT_ORDERS),
+                buildChild(context,MenuItemImage.priceManage, '报价管理',
+                    AppRoutes.ROUTE_QUOTES),
+                buildChild(context,MenuItemImage.proofingOrder, '打样订单',
+                    AppRoutes.ROUTE_PROOFING_ORDERS),
+                buildChild(context,MenuItemImage.purchaseOrder, '生产订单',
+                    AppRoutes.ROUTE_PURCHASE_ORDERS),
+              ],
+            )
+          ],
+        )
     );
   }
 
-  Widget _buildCompanyMenu() {
+  Widget buildChild(BuildContext context,Image image,String title,String routeTo){
+    return GestureDetector(
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              image,
+              Container(
+                margin: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Color.fromRGBO(100, 100, 100, 1),
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, routeTo);
+        });
+  }
+
+}
+
+class BrandMenusSection extends StatelessWidget {
+//  Widget _buildOrderMenu() {
+//    return Container(
+//      color: Colors.white,
+//      child: Row(
+//        children: <Widget>[
+//          AdvanceMenu('订单管理', <AdvanceMenuItem>[
+//            AdvanceMenuItem(MenuItemImage.requirementOrder, '需求订单',
+//                AppRoutes.ROUTE_REQUIREMENT_ORDERS),
+//            AdvanceMenuItem(
+//                MenuItemImage.priceManage, '报价管理', AppRoutes.ROUTE_QUOTES),
+//            AdvanceMenuItem(MenuItemImage.proofingOrder, '打样订单',
+//                AppRoutes.ROUTE_PROOFING_ORDERS),
+//            AdvanceMenuItem(MenuItemImage.purchaseOrder, '生产订单',
+//                AppRoutes.ROUTE_PURCHASE_ORDERS),
+//          ])
+//        ],
+//      ),
+//    );
+//  }
+//
+//  Widget _buildCompanyMenu() {
+//    return Container(
+//      color: Colors.white,
+//      child: Row(
+//        children: <Widget>[
+//          AdvanceMenu('店铺管理', <AdvanceMenuItem>[
+//            AdvanceMenuItem(
+//                MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
+//            // AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
+//            //     AppRoutes.ROUTE_EMPLOYEES),
+//            AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',
+//                AppRoutes.ROUTE_SUPPLIERS),
+//            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣借还',
+//                AppRoutes.ROUTE_SAMPLE_GARMENTS),
+//          ])
+//        ],
+//      ),
+//    );
+//  }
+
+  Widget _buildOrderMenu(BuildContext context) {
     return Container(
-      color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          AdvanceMenu('店铺管理', <AdvanceMenuItem>[
-            AdvanceMenuItem(
-                MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
-            // AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
-            //     AppRoutes.ROUTE_EMPLOYEES),
-            AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',
-                AppRoutes.ROUTE_SUPPLIERS),
-            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣借还',
-                AppRoutes.ROUTE_SAMPLE_GARMENTS),
-          ])
-        ],
-      ),
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                '订单管理',
+                style: TextStyle(
+                    fontSize: 16
+                ),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap:true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              crossAxisCount: 4,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: (1.3),
+              children: <Widget>[
+                buildChild(context,MenuItemImage.requirementOrder, '需求订单',
+                    AppRoutes.ROUTE_REQUIREMENT_ORDERS),
+                buildChild(context,MenuItemImage.priceManage, '报价管理',
+                    AppRoutes.ROUTE_QUOTES),
+                buildChild(context,MenuItemImage.proofingOrder, '打样订单',
+                    AppRoutes.ROUTE_PROOFING_ORDERS),
+                buildChild(context,MenuItemImage.purchaseOrder, '生产订单',
+                    AppRoutes.ROUTE_PURCHASE_ORDERS),
+              ],
+            )
+          ],
+        )
     );
+  }
+
+  Widget _buildCompanyMenu(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                '店铺管理',
+                style: TextStyle(
+                    fontSize: 16
+                ),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap:true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              crossAxisCount: 4,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: (1.3),
+              children: <Widget>[
+                buildChild(context,MenuItemImage.productFactory, '产品管理',
+                    AppRoutes.ROUTE_PRODUCTS),
+                buildChild(context,MenuItemImage.partnerFactory, '合作商管理',
+                    AppRoutes.ROUTE_SUPPLIERS),
+                buildChild(context,MenuItemImage.clothesManage, '样衣借还',
+                    AppRoutes.ROUTE_SAMPLE_GARMENTS),
+              ],
+            )
+          ],
+        )
+    );
+  }
+
+  Widget buildChild(BuildContext context,Image image,String title,String routeTo){
+    return GestureDetector(
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              image,
+              Container(
+                margin: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Color.fromRGBO(100, 100, 100, 1),
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, routeTo);
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
-        _buildOrderMenu(),
+        _buildOrderMenu(context),
         Container(
           height: 10,
           color: Color.fromRGBO(245, 245, 245, 1),
         ),
-        _buildCompanyMenu(),
+        _buildCompanyMenu(context),
       ]),
     );
   }
@@ -183,54 +358,157 @@ class FactorySiteStatisticsSection extends StatelessWidget {
 }
 
 class FactoryMenusSection extends StatelessWidget {
-  Widget _buildOrderMenu() {
+
+  Widget _buildOrderMenu(BuildContext context) {
     return Container(
-      color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          AdvanceMenu('订单管理', <AdvanceMenuItem>[
-            AdvanceMenuItem(
-                MenuItemImage.quoteFactory, '报价管理', AppRoutes.ROUTE_QUOTES),
-            AdvanceMenuItem(MenuItemImage.proofingOrder, '打样订单',
-                AppRoutes.ROUTE_PROOFING_ORDERS),
-            AdvanceMenuItem(MenuItemImage.purchaseOrder, '生产订单',
-                AppRoutes.ROUTE_PURCHASE_ORDERS),
-          ]),
-        ],
-      ),
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                '订单管理',
+                style: TextStyle(
+                    fontSize: 16
+                ),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap:true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              crossAxisCount: 4,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: (1.3),
+              children: <Widget>[
+                buildChild(context,MenuItemImage.priceManage, '报价管理',
+                    AppRoutes.ROUTE_QUOTES),
+                buildChild(context,MenuItemImage.proofingOrder, '打样订单',
+                    AppRoutes.ROUTE_PROOFING_ORDERS),
+                buildChild(context,MenuItemImage.purchaseOrder, '生产订单',
+                    AppRoutes.ROUTE_PURCHASE_ORDERS),
+              ],
+            )
+          ],
+        )
     );
   }
 
-  Widget _buildCompanyMenu() {
+  Widget _buildCompanyMenu(BuildContext context) {
     return Container(
-      color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          AdvanceMenu('工厂管理', <AdvanceMenuItem>[
-            // AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
-            //     AppRoutes.ROUTE_EMPLOYEES),
-            AdvanceMenuItem(
-                MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
-            AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',
-                AppRoutes.ROUTE_SUPPLIERS),
-            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣借还',
-                AppRoutes.ROUTE_SAMPLE_GARMENTS),
-          ])
-        ],
-      ),
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                '店铺管理',
+                style: TextStyle(
+                    fontSize: 16
+                ),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap:true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              crossAxisCount: 4,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: (1.3),
+              children: <Widget>[
+                buildChild(context,MenuItemImage.productFactory, '产品管理',
+                    AppRoutes.ROUTE_PRODUCTS),
+                buildChild(context,MenuItemImage.partnerFactory, '合作商管理',
+                    AppRoutes.ROUTE_SUPPLIERS),
+                buildChild(context,MenuItemImage.clothesManage, '样衣借还',
+                    AppRoutes.ROUTE_SAMPLE_GARMENTS),
+              ],
+            )
+          ],
+        )
     );
   }
+
+  Widget buildChild(BuildContext context,Image image,String title,String routeTo){
+    return GestureDetector(
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              image,
+              Container(
+                margin: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Color.fromRGBO(100, 100, 100, 1),
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, routeTo);
+        });
+  }
+
+//  Widget _buildOrderMenu() {
+//    return Container(
+//      color: Colors.white,
+//      child: Row(
+//        children: <Widget>[
+//          AdvanceMenu('订单管理', <AdvanceMenuItem>[
+//            AdvanceMenuItem(
+//                MenuItemImage.quoteFactory, '报价管理', AppRoutes.ROUTE_QUOTES),
+//            AdvanceMenuItem(MenuItemImage.proofingOrder, '打样订单',
+//                AppRoutes.ROUTE_PROOFING_ORDERS),
+//            AdvanceMenuItem(MenuItemImage.purchaseOrder, '生产订单',
+//                AppRoutes.ROUTE_PURCHASE_ORDERS),
+//          ]),
+//        ],
+//      ),
+//    );
+//  }
+//
+//  Widget _buildCompanyMenu() {
+//    return Container(
+//      color: Colors.white,
+//      child: Row(
+//        children: <Widget>[
+//          AdvanceMenu('工厂管理', <AdvanceMenuItem>[
+//            // AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
+//            //     AppRoutes.ROUTE_EMPLOYEES),
+//            AdvanceMenuItem(
+//                MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
+//            AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',
+//                AppRoutes.ROUTE_SUPPLIERS),
+//            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣借还',
+//                AppRoutes.ROUTE_SAMPLE_GARMENTS),
+//          ])
+//        ],
+//      ),
+//    );
+//  }
 
   @override
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
-        _buildOrderMenu(),
+        _buildOrderMenu(context),
         Container(
           height: 10,
           color: Color.fromRGBO(245, 245, 245, 1),
         ),
-        _buildCompanyMenu(),
+        _buildCompanyMenu(context),
       ]),
     );
   }

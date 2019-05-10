@@ -60,10 +60,14 @@ class CustomizeDialogPage extends StatefulWidget {
   TextStyle contentTextStyle1;
   //内容文本2字体样式
   TextStyle contentTextStyle2;
+  //只显示用
+  TextEditingController inputController;
   //输入框Controller 1
   TextEditingController inputController1;
   //输入框Controller 2
   TextEditingController inputController2;
+  //只显示用
+  FocusNode focusNode;
   //输入框焦点1
   FocusNode focusNode1;
   //输入框焦点2
@@ -102,6 +106,8 @@ class CustomizeDialogPage extends StatefulWidget {
     this.focusNode2,
     this.inputType1,
     this.inputType2,
+    this.inputController,
+    this.focusNode,
     })
       : super(key: key);
 
@@ -118,6 +124,12 @@ enum DialogType {
 
   // 输入框弹窗
   INPUTS_DIALOG,
+
+  //定金/单价修改弹窗
+  PRICE_INPUT_DIALOG,
+
+  //尾款修改弹窗
+  BALANCE_INPUT_DIALOG,
 
 }
 
@@ -140,6 +152,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
       return buildResultDialog(context);
     }else if(widget.dialogType == DialogType.INPUTS_DIALOG){
       return buildInputsDialog(context);
+    }else if(widget.dialogType == DialogType.PRICE_INPUT_DIALOG){
+      return buildManyInputsDialog(context);
+    }else if(widget.dialogType == DialogType.BALANCE_INPUT_DIALOG){
+      return buildManyInputsDialog(context);
     }
   }
 
@@ -546,7 +562,179 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
     );
   }
 
+  Widget buildManyInputsDialog(BuildContext context){
+    return GestureDetector(
+      onTap: widget.outsideDismiss ? _dismissDialog : null,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: SizedBox(
+            width: 300.0,
+            height: 280.0,
+            child: Container(
+              decoration: ShapeDecoration(
+                color: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: 30,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 5),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.fromLTRB(10, 10, 0, 5),
+                            child: Icon(
+                              Icons.edit,
+                              size: 30,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                '${widget.title == null || widget.title == ''
+                                    ? ''
+                                    : widget.title}',
+                                style: TextStyle(
 
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 5),
+//                        alignment: Alignment.topLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              alignment: Alignment.centerRight,
+                              child: TextFieldComponent(
+                                textAlign: TextAlign.left,
+                                focusNode: widget.focusNode,
+                                controller: widget.inputController,
+                                autofocus: false,
+                                inputType: widget.inputType1,
+                                hideDivider: true,
+                                enabled: false,
+                                prefix: '￥',
+                                leadingText: Text('订单总额：',style: TextStyle(fontSize: 16),),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerRight,
+                              child: TextFieldComponent(
+                                textAlign: TextAlign.left,
+                                focusNode: widget.focusNode1,
+                                controller: widget.inputController1,
+                                autofocus: true,
+                                inputType: TextInputType.number,
+                                hideDivider: true,
+                                isInputBorder: true,
+                                prefix: '￥',
+                                leadingText: Text('        定金：',style: TextStyle(fontSize: 16),),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerRight,
+                              child: TextFieldComponent(
+                                textAlign: TextAlign.left,
+                                focusNode: widget.focusNode2,
+                                controller: widget.inputController2,
+                                autofocus: false,
+                                inputType: TextInputType.number,
+                                hideDivider: true,
+                                isInputBorder: true,
+                                prefix: '￥',
+                                leadingText: Text('        单价：',style: TextStyle(fontSize: 16),),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                                child: FlatButton(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 55),
+                                    child: Text(
+                                      '${widget.cancelButtonText==null||widget.cancelButtonText==''?'取消':widget.cancelButtonText}',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    onPressed: (){
+                                      Navigator.of(context).pop();
+                                    }
+                                )
+                            ),
+                          ),
+                          Center(
+                            child: Container(
+                              child: FlatButton(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 55),
+                                  child: Text(
+                                    '${widget.confirmButtonText==null||widget.confirmButtonText==''?'确定':widget.confirmButtonText}',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15))),
+                                  onPressed: (){
+                                    Navigator.of(context).pop(widget.inputController1.text+','+widget.inputController2.text);
+                                  }
+                              ),
+                              decoration: BoxDecoration(
+                                  border: Border(left: BorderSide(
+                                      color: Colors.grey, width: 0.5))
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              top: BorderSide(color: Colors.grey, width: 0.5))
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
 
 

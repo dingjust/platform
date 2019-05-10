@@ -27,6 +27,7 @@ class TextFieldComponent extends StatefulWidget {
   List<TextInputFormatter> inputFormatters;
   final int maxLines;
   final int maxLength;
+  bool isInputBorder;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -54,6 +55,7 @@ class TextFieldComponent extends StatefulWidget {
     this.inputFormatters,
     this.maxLength,
     this.maxLines,
+    this.isInputBorder = false,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
@@ -140,7 +142,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
-                    border: InputBorder.none,
+                    border: widget.isInputBorder?UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey,width: 0.5)):InputBorder.none,
                     hintText: widget.hintText,
                     hintStyle: TextStyle(color: Colors.grey),
                   ),
