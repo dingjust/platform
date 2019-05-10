@@ -240,14 +240,14 @@ class EditColorSizeNumTable extends StatelessWidget {
         ),
       ])
     ];
-
-    data.forEach((entry) {
-      if (colorRowList[entry.model.color.code] == null) {
-        colorRowList[entry.model.color.code] = [];
-      }
-      colorRowList[entry.model.color.code].add(entry);
-    });
-
+    if(data != null) {
+      data.forEach((entry) {
+        if (colorRowList[entry.model.color.code] == null) {
+          colorRowList[entry.model.color.code] = [];
+        }
+        colorRowList[entry.model.color.code].add(entry);
+      });
+    }
     colorRowList.forEach((color, entries) {
       //构建尺码数量列
       List<TableRow> _sizeRowList = entries

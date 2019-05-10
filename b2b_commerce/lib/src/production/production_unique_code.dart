@@ -35,66 +35,79 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
         ),
         body: Container(
           color: Color.fromRGBO(245, 245, 245, 1),
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
           child: ListView(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                    padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-//                        Text(
-//                          '请输入唯一码',
-//                          style: TextStyle(
-//                              color: Color.fromRGBO(100, 100, 100, 1),
-//                              fontSize: 18),
-//                        ),
-                        TextField(
-                          autofocus: true,
-                          controller: _textEditingController,
-                          onChanged: (value){
-                            if (value.length > 7) {
-                              _textEditingController.text = controller.text;
-                            }else{
-                              controller.text = value;
-                            }
-                          },
-                          decoration: InputDecoration(
-                            hintText: '请输入7位唯一码',
-                              border: InputBorder.none,
-                              suffix: GestureDetector(
-                            child: FlatButton(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 20),
-                                child: Text(
-                                  '检索',
-                                  style: TextStyle(
-                                    color: Colors.black,
+                    child: Container(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              child:
+                              Container(
+                                padding: EdgeInsets.only(left: 10),
+                                child: TextField(
+                                  controller: _textEditingController,
+                                  autofocus: true,
+                                  onChanged: (value){
+                                    if(_textEditingController.text.length>7){
+                                      _textEditingController.text = controller.text;
+                                    }else{
+                                      controller.text = _textEditingController.text;
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: '请输入7位唯一码'
                                   ),
                                 ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(15))),
-                                onPressed: () async{
-                                  String unique = _textEditingController.text;
-                                  if(unique != null && unique != ''){
-                                    //请求参数
-                                    Map data = {
-                                      'salesApplications': unique,
-                                    };
-                                    Response<Map<String, dynamic>> response;
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(245, 245, 245, 1),
+                                    borderRadius: BorderRadius.circular(5)),
+                              )
+                          ),
+                          Container(
+                            child: FlatButton(
+                                padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 20),
+                                  child: Text(
+                                    '检索',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15))),
+                                  onPressed: () async{
+                                    String unique = _textEditingController.text;
+                                    if(unique != null && unique != ''){
 
-                                    PurchaseOrderModel _purchaseOrder = await PurchaseOrderRepository().getDetailsForUniqueCode(unique);
+                                      PurchaseOrderModel _purchaseOrder = await PurchaseOrderRepository().getDetailsForUniqueCode(unique);
 
-                                    if (_purchaseOrder != null) {
-                                      setState(() {
-                                        uniqueCodeEntry = _purchaseOrder;
-                                      });
+                                      if (_purchaseOrder != null) {
+                                        setState(() {
+                                          uniqueCodeEntry = _purchaseOrder;
+                                        });
+                                      }else{
+                                        showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (_) {
+                                              return CustomizeDialogPage(
+                                                dialogType: DialogType.RESULT_DIALOG,
+                                                failTips: '唯一码不正确',
+                                                callbackResult: false,
+                                              );
+                                            }
+                                        );
+                                      }
                                     }else{
                                       showDialog(
                                           context: context,
@@ -102,54 +115,55 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                           builder: (_) {
                                             return CustomizeDialogPage(
                                               dialogType: DialogType.RESULT_DIALOG,
-                                              failTips: '唯一码不正确',
+                                              failTips: '请输入唯一码',
                                               callbackResult: false,
                                             );
                                           }
                                       );
                                     }
-                                  }else{
-                                    showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (_) {
-                                          return CustomizeDialogPage(
-                                            dialogType: DialogType.RESULT_DIALOG,
-                                            failTips: '请输入唯一码',
-                                            callbackResult: false,
-                                          );
-                                        }
-                                    );
                                   }
-                                }
-                            ),
-                          )),
-                        )
-                      ],
-                    ),
+                              ),
+                          ),
+                        ],
+                      ),
+                    )
                   ),
                   uniqueCodeEntry == null
                       ? GestureDetector(
-                    child: Container(
-                      margin: EdgeInsets.only(top: 10),
-                      padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                      child: Center(
-                        child: Text(
-                          '没有唯一码？ 点击这里 >>',
-                          style: TextStyle(
-                            color: Colors.grey,
+                    onTap: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(top: 15),
+                          child: Text(
+                            '没有唯一码？',
+                            style:
+                            TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 15),
                           ),
                         ),
-                      ),
+                        Container(
+                          height: 25,
+                          margin: EdgeInsets.only(top: 15),
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProductionOfflineOrder()));
+                            },
+                            child: Text(
+                              '去创建',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    onTap: () {
-                      Navigator.push(
-                          context,MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductionOfflineOrder()
-                          )
-                      );
-                    },
                   )
                       : Container(
                     margin: EdgeInsets.only(top: 10),

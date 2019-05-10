@@ -515,7 +515,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
       queryReports();
     }
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -538,8 +538,11 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                     }
                   });
                 },
-                child:
-                    AllRequirementMenuItem(count: snapshot.data.ordersCount8),
+                child:Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+                  child: AllRequirementMenuItem(count: snapshot.data.ordersCount8),
+                ),
               );
             },
           ),
@@ -561,8 +564,12 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                     }
                   });
                 },
-                child: RecommendedRequirementMenuItem(
-                    count: snapshot.data.ordersCount9),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+                  color: Colors.white,
+                  child: RecommendedRequirementMenuItem(
+                      count: snapshot.data.ordersCount9),
+                ),
               );
             },
           ),
