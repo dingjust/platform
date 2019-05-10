@@ -126,6 +126,7 @@ class _FactoryPageState extends State<FactoryPage> {
               appBar: AppBar(
                 elevation: 0,
                 title: RequirementFilterBar(
+                  horizontalPadding: 20,
                   entries: [
                     FilterEntry('${labText}⇂', () {
                       setState(() {

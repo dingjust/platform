@@ -98,6 +98,7 @@ class RequirementFilterBar extends StatefulWidget
     this.color = const Color.fromRGBO(255, 214, 12, 1),
     this.action,
     this.entries,
+    this.horizontalPadding = 0,
   }) : super(key: key);
 
   _RequirementFilterBarState createState() => _RequirementFilterBarState();
@@ -107,6 +108,7 @@ class RequirementFilterBar extends StatefulWidget
   final Color unselectedColor;
   final Color color;
   final Widget action;
+  double horizontalPadding;
 
   final List<FilterEntry> entries;
 
@@ -131,7 +133,7 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
                       onTap: entry.onPressed,
                       child: Container(
                     color: Colors.white,
-                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
                           // width: entry.label == '最新发布' ? 116 : (MediaQuery.of(context).size.width - 116)/3,
                           child: Container(
                                 margin: EdgeInsets.symmetric(
