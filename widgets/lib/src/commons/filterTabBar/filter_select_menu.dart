@@ -77,7 +77,8 @@ class _FilterSelectMenuState extends State<FilterSelectMenu> {
                       widget.afterPressed(entry.label);
                     },
                     child: Container(
-                      padding: EdgeInsets.fromLTRB(40, 0, 20, 0),
+                      color: Colors.white,
+                      padding: EdgeInsets.fromLTRB(40, 10, 20, 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
