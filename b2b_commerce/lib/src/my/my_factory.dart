@@ -280,10 +280,12 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
               brightness: Brightness.dark,
               pinned: true,
               flexibleSpace: Scaffold(
+                backgroundColor: Colors.white,
                 appBar: TabBar(
                   controller: _tabController,
                   labelColor: Colors.black,
                   indicatorSize: TabBarIndicatorSize.label,
+                  indicatorPadding: EdgeInsets.only(left: 10,right: 10,top: 0,bottom: 10),
                   tabs: _states.map((status) {
                     return Tab(text: status.name);
                   }).toList(),
@@ -399,6 +401,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
             color: Colors.white,
             child: Column(
               children: <Widget>[
+                SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
                 InkWell(
                   onTap: () async {
                     // 加载条
