@@ -177,7 +177,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
       child: isEditing?
       Container(
         color: Colors.white,
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
         child: TextFieldComponent(
           padding: EdgeInsets.symmetric(vertical: 5),
           dividerPadding: EdgeInsets.only(),
@@ -223,7 +223,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
       Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
         child: TextFieldComponent(
           padding: EdgeInsets.symmetric(vertical: 5),
           dividerPadding: EdgeInsets.only(),
@@ -323,7 +323,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
       Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
         child: TextFieldComponent(
           padding: EdgeInsets.symmetric(vertical: 5),
           dividerPadding: EdgeInsets.only(),
@@ -372,7 +372,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
       Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
         child: TextFieldComponent(
           padding: EdgeInsets.symmetric(vertical: 5),
           dividerPadding: EdgeInsets.only(),
@@ -421,7 +421,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
       Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
         child: TextFieldComponent(
           padding: EdgeInsets.symmetric(vertical: 5),
           dividerPadding: EdgeInsets.only(),
@@ -471,7 +471,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage>{
         Container(
           color: Colors.white,
           margin: EdgeInsets.only(top: 10),
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: TextFieldComponent(
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),

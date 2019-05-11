@@ -7,18 +7,6 @@ import 'package:services/services.dart';
 class RequirementOrderRepository {
   /// 发布需求
   Future<String> publishNewRequirement(RequirementOrderModel form, String factoryUid , bool privacy) async {
-    print(form.details.category);
-    print(form.details.expectedMachiningQuantity);
-    print(form.details.expectedDeliveryDate);
-    print(form.details.contactPerson);
-    print(form.details.contactPhone);
-    RequirementOrderModel model = RequirementOrderModel(details: RequirementInfoModel());
-    model.details.category = form.details.category;
-    model.details.expectedMachiningQuantity = form.details.expectedMachiningQuantity;
-    model.details.expectedDeliveryDate = form.details.expectedDeliveryDate;
-    model.details.contactPerson = form.details.contactPerson;
-    model.details.contactPhone = form.details.contactPhone;
-    form = model;
     Response response;
     try {
       if(factoryUid != null){

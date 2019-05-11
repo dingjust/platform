@@ -84,6 +84,7 @@ class MyAppHomeDelegate extends StatefulWidget {
 class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   int _currentIndex = 0;
+  RequirementOrderModel requirementOrderModel;
 
   /// 处理底部导航
   void _handleNavigation(int index) {
@@ -130,10 +131,14 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   /// 发布需求
   void _onPublish(BuildContext context) {
+    requirementOrderModel = RequirementOrderModel(details: RequirementInfoModel(),attachments: []);
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RequirementOrderFrom(),
+        builder: (context) => RequirementOrderFrom(
+          isCreate: true,
+          order: requirementOrderModel,
+        ),
       ),
     );
   }

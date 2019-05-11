@@ -184,7 +184,7 @@ class _RequirementOrderDetailPageState
               ],
             ),
             Divider(
-              height: 1,
+              height: 0,
             ),
             Container(
               padding: EdgeInsets.all(15),
@@ -293,13 +293,6 @@ class _RequirementOrderDetailPageState
   }
 
   Widget _buildMain() {
-    String addressStr = "";
-
-    if (widget.order.details.productiveOrientations != null) {
-      widget.order.details.productiveOrientations.forEach((str) {
-        addressStr = "${addressStr} ${str.name}";
-      });
-    }
     return Container(
       color: Colors.white,
       padding: EdgeInsets.all(10),
@@ -309,6 +302,7 @@ class _RequirementOrderDetailPageState
           Column(children: [
             _buildEntries(),
           ]),
+          Divider(height: 0,),
           InfoRow(
             label: '期望价格',
             value: Text(
@@ -316,6 +310,7 @@ class _RequirementOrderDetailPageState
               style: TextStyle(color: Colors.red, fontSize: 16),
             ),
           ),
+          Divider(height: 0,),
           InfoRow(
             label: '加工类型',
             value: Text(
@@ -323,51 +318,83 @@ class _RequirementOrderDetailPageState
                   ? ''
                   : MachiningTypeLocalizedMap[
                       widget.order.details.machiningType],
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16,color: Colors.grey,),
             ),
           ),
+          Divider(height: 0,),
           InfoRow(
             label: '交货时间',
             value: Text(
               '${DateFormatUtil.formatYMD(widget.order.details.expectedDeliveryDate)}',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16,color: Colors.grey,),
             ),
           ),
+          Divider(height: 0,),
           InfoRow(
             label: '是否需要打样',
             value: Text(
               widget.order.details.proofingNeeded == null
                   ? ''
                   : widget.order.details.proofingNeeded ? '是' : '否',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16,color: Colors.grey,),
             ),
           ),
+          Divider(height: 0,),
           InfoRow(
             label: '是否提供样衣',
             value: Text(
               widget.order.details.samplesNeeded == null
                   ? ''
                   : widget.order.details.samplesNeeded ? '是' : '否',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16,color: Colors.grey,),
             ),
           ),
+          Divider(height: 0,),
           InfoRow(
             label: '生产地区',
-            value: Text(
-              '${addressStr}',
-              style: TextStyle(fontSize: 16),
+            value: GestureDetector(
+              onTap: () {
+                showDialog(
+                    context: (context),
+                    builder: (context) {
+                      return SimpleDialog(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: 10,
+                              right: 5,
+                            ),
+                            child: Text(
+                              widget.order.details?.productiveOrientations == null
+                                  ? '选取'
+                                  : formatAreaSelectsText(widget.order.details.productiveOrientations, widget.order.details.productiveOrientations.length),
+                              style: TextStyle(fontSize: 16,color: Colors.grey,),
+                            ),
+                          )
+                        ],
+                      );
+                    });
+              },
+              child: Text(
+                widget.order.details?.productiveOrientations == null
+                    ? '选取'
+                    : formatAreaSelectsText(widget.order.details.productiveOrientations, 2),
+                style: TextStyle(fontSize: 16,color: Colors.grey,),
+              ),
             ),
           ),
+          Divider(height: 0,),
           InfoRow(
             label: '是否开票',
             value: Text(
               widget.order.details.invoiceNeeded == null
                   ? ''
                   : widget.order.details.invoiceNeeded ? '是' : '否',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16,color: Colors.grey,),
             ),
             hasBottomBorder: false,
           ),
+          Divider(height: 0,),
         ],
       ),
     );
@@ -448,7 +475,7 @@ class _RequirementOrderDetailPageState
     }
 
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+      padding: EdgeInsets.fromLTRB(0, 5, 0, 15),
       child: Row(
         children: <Widget>[
           _pictureWidget,
@@ -555,7 +582,7 @@ class _RequirementOrderDetailPageState
             children: <Widget>[
               Text(
                 '附件',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
+                style: TextStyle(fontSize: 16),
               )
             ],
           ),
@@ -580,7 +607,7 @@ class _RequirementOrderDetailPageState
               children: <Widget>[
                 Text(
                   '备注',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(fontSize: 16),
                 )
               ],
             ),
@@ -759,15 +786,16 @@ class _RequirementOrderDetailPageState
   void onEdit() {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RequirementOrderFrom(
-              code: widget.order.code,
+              order: widget.order,
             )));
   }
 
   void onReview() {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RequirementOrderFrom(
-          code: widget.order.code,
+          order: widget.order,
           isReview: true,
+          isCreate: true,
         )));
   }
 
@@ -802,6 +830,26 @@ class _RequirementOrderDetailPageState
       },
     );
   }
+
+  //格式选中的地区（多选）
+  String formatAreaSelectsText(List<RegionModel> selects, int count) {
+    String text = '';
+
+    for (int i = 0; i < selects.length; i++) {
+      if (i > count - 1) {
+        text += '...';
+        break;
+      }
+
+      if (i == selects.length - 1) {
+        text += selects[i].name;
+      } else {
+        text += selects[i].name + '、';
+      }
+    }
+
+    return text;
+  }
 }
 
 class InfoRow extends StatelessWidget {
@@ -816,10 +864,6 @@ class InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
-      decoration: BoxDecoration(
-          border: hasBottomBorder
-              ? Border(bottom: BorderSide(width: 1, color: Colors.grey[300]))
-              : null),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

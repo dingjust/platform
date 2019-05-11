@@ -67,7 +67,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgets = [
+      SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
       _buildBrandBaseInfo(context),
+      SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
     ];
 
     //获取与该品牌最新的报价单
@@ -76,9 +78,11 @@ class _MyBrandPageState extends State<MyBrandPage> {
 //    _widgets.add(buildPurchaseOrderItem());
 
     _widgets.add(_buildBrandCertificate(context));
+    _widgets.add(SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),);
     _widgets.add(_buildBrandRegisterDate());
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('公司介绍'),
@@ -250,41 +254,40 @@ class _MyBrandPageState extends State<MyBrandPage> {
     );
   }
 
-  Card _buildBrandBaseInfo(BuildContext context) {
-    return Card(
-      elevation: 0,
-      margin: EdgeInsets.only(top: 10),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyBrandBaseFormPage(widget.brand)));
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 214, 12, 1),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text('编辑'),
+  Widget _buildBrandBaseInfo(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MyBrandBaseFormPage(widget.brand)));
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                  )
-                ],
-              ),
+                    child: Text('编辑'),
+                  ),
+                )
+              ],
             ),
-            Row(
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
               children: <Widget>[
                 widget.brand.profilePicture != null ?
                 Container(
@@ -361,54 +364,53 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   '品牌名称',
                   style: TextStyle(
-                    color: Colors.grey,
                     fontSize: 16,
                   ),
                 ),
                 Text(
                   '${widget.brand.brand ?? ''}',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16,color: Colors.grey),
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
+          ),
+          Divider(height:0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   '合作品牌',
                   style: TextStyle(
-                    color: Colors.grey,
                     fontSize: 16,
                   ),
                 ),
                 Text(
                   "${widget.brand.cooperativeBrand ?? ''}",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16,color: Colors.grey),
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
+          ),
+          Divider(height:0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   '产值规模',
                   style: TextStyle(
-                    color: Colors.grey,
                     fontSize: 16,
                   ),
                 ),
@@ -416,129 +418,153 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   widget.brand.scaleRange == null
                       ? ''
                       : ScaleRangesLocalizedMap[widget.brand.scaleRange],
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16,color: Colors.grey),
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
+          ),
+          Divider(height:0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   '优势类目',
                   style: TextStyle(
-                    color: Colors.grey,
                     fontSize: 16,
                   ),
                 ),
-                Text(
-                  formatCategorySelectText(widget.brand.adeptAtCategories),
-                  style: TextStyle(fontSize: 16),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: (context),
+                        builder: (context) {
+                          return SimpleDialog(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(
+                                  left: 10,
+                                  right: 5,
+                                ),
+                                child: Text(
+                                  formatCategoriesSelectText(
+                                      widget.brand.adeptAtCategories,
+                                      widget.brand.adeptAtCategories.length),
+                                  style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                                ),
+                              )
+                            ],
+                          );
+                        });
+                  },
+                  child: Text(
+                    formatCategoriesSelectText(
+                        widget.brand.adeptAtCategories, 2),
+                    style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                  ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
+          ),
+          Divider(height:0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   '风格',
                   style: TextStyle(
-                    color: Colors.grey,
                     fontSize: 16,
                   ),
                 ),
                 Text(
                   formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16,color: Colors.grey),
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
+          ),
+          Divider(height:0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   '年龄段',
                   style: TextStyle(
-                    color: Colors.grey,
                     fontSize: 16,
                   ),
                 ),
                 Text(
                   formatAgeRangesText(widget.brand.ageRanges),
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16,color: Colors.grey),
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
+          ),
+          Divider(height:0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   '春夏款价格端',
                   style: TextStyle(
-                    color: Colors.grey,
                     fontSize: 16,
                   ),
                 ),
                 Text(
                   formatPriceRangesText(widget.brand.priceRange1s),
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16,color: Colors.grey),
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
+          ),
+          Divider(height:0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   '秋冬款价格端',
                   style: TextStyle(
-                    color: Colors.grey,
                     fontSize: 16,
                   ),
                 ),
                 Text(
                   formatPriceRangesText(widget.brand.priceRange2s),
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16,color: Colors.grey),
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
+          ),
+          Divider(height:0),
+        ],
       ),
     );
   }
 
-  String formatCategorySelectText(List<CategoryModel> categorys) {
+  //格式化类别
+  String formatCategoriesSelectText(List<CategoryModel> categories, int count) {
     String text = '';
 
-    if (categorys != null) {
+    if (categories != null) {
       text = '';
-      for (int i = 0; i < categorys.length; i++) {
-        if (i > 1) {
+      for (int i = 0; i < categories.length; i++) {
+        if (i > count - 1) {
           text += '...';
           break;
         }
 
-        if (i == categorys.length - 1) {
-          text += categorys[i].name;
+        if (i == categories.length - 1) {
+          text += categories[i].name;
         } else {
-          text += categorys[i].name + '、';
+          text += categories[i].name + '、';
         }
       }
     }

@@ -111,7 +111,10 @@ class _SuppliersDetailState extends State<SuppliersDetail> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => RequirementOrderFrom(),
+            builder: (context) => RequirementOrderFrom(
+              order: RequirementOrderModel(details: RequirementInfoModel(),attachments: []),
+              isCreate: true,
+            ),
           ),
         );
       },

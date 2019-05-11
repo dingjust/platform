@@ -49,6 +49,7 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
       children: <Widget>[
         InkWell(
           onTap: () async{
+
             await ProductRepositoryImpl().colors().then((colors)=>_colors = colors);
             await ProductRepositoryImpl().sizes().then((sizes)=>_sizes = sizes);
 
