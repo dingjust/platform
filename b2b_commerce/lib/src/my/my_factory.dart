@@ -197,43 +197,6 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
         child: CustomScrollView(
           controller: _scrollController,
           slivers: <Widget>[
-//            SliverAppBar(
-////              pinned: true,
-//              flexibleSpace: FlexibleSpaceBar(
-//                background: Container(
-//                  height: 188,
-//                  child: GestureDetector(
-//                    onTap: () {
-//                      showMenu(
-//                          context: context,
-//                          items:[
-//                            PopupMenuItem(
-//                              child: GestureDetector(
-//                                onTap: (){
-//                                  Navigator.pop(context);
-//                                  Navigator.push(
-//                                    context,
-//                                    MaterialPageRoute(
-//                                      builder: (context) => MyCompanyProfileFormPage(
-//                                          widget.factory
-//                                      ),
-//                                    ),
-//                                  );
-//                                },
-//                                child: ListTile(
-//                                  title: Text('更换轮播图'),
-//                                ),
-//                              ),
-//                            ),
-//                          ],
-//                          position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-100)/2, (MediaQueryData.fromWindow(window).size.height-60)/2, (MediaQueryData.fromWindow(window).size.width-100)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
-//                      );
-//                    },
-//                    child: CarouselStackText(widget.factory.profiles),
-//                  ),
-//                ),
-//              ),
-//            ),
           SliverToBoxAdapter(
             child: Offstage(
               offstage: widget.isFactoryDetail && !widget.factory.profiles.map((profile) => profile.medias.length > 0).toList().contains(true),
@@ -280,10 +243,12 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
               brightness: Brightness.dark,
               pinned: true,
               flexibleSpace: Scaffold(
+                backgroundColor: Colors.white,
                 appBar: TabBar(
                   controller: _tabController,
                   labelColor: Colors.black,
                   indicatorSize: TabBarIndicatorSize.label,
+                  indicatorPadding: EdgeInsets.only(left: 10,right: 10,top: 0,bottom: 10),
                   tabs: _states.map((status) {
                     return Tab(text: status.name);
                   }).toList(),
@@ -336,6 +301,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
           MaterialPageRoute(
             builder: (context) => RequirementOrderFrom(
                   factoryUid: widget.factory.uid,
+                  isCreate: true,
                 ),
           ),
         );
@@ -399,6 +365,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
             color: Colors.white,
             child: Column(
               children: <Widget>[
+                SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
                 InkWell(
                   onTap: () async {
                     // 加载条

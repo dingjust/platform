@@ -54,6 +54,8 @@ class _FactoryPageState extends State<FactoryPage> {
   bool showCategoriesFilterMenu = false;
 
   String labText = '综合';
+  String _categorySelectText = '分类';
+  String _areaSelectText = '地区';
 
   List<CategoryModel> _category;
   List<CategoryModel> _categorySelected = [];
@@ -64,6 +66,7 @@ class _FactoryPageState extends State<FactoryPage> {
 
   @override
   void initState() {
+
     if (widget.factoryCondition != null) {
       factoryCondition = widget.factoryCondition;
     } else {
@@ -73,8 +76,13 @@ class _FactoryPageState extends State<FactoryPage> {
           labels: [],
           cooperationModes: []);
     }
+    getCategories();
 
     super.initState();
+  }
+
+  getCategories()async{
+    _category = await ProductRepositoryImpl().cascadedCategories();
   }
 
   void changeCondition(FilterConditionEntry condition) {
@@ -118,6 +126,7 @@ class _FactoryPageState extends State<FactoryPage> {
               appBar: AppBar(
                 elevation: 0,
                 title: RequirementFilterBar(
+                  horizontalPadding: 20,
                   entries: [
                     FilterEntry('${labText}⇂', () {
                       setState(() {
@@ -126,8 +135,7 @@ class _FactoryPageState extends State<FactoryPage> {
                         showMachineTypeFilterMenu = false;
                       });
                     }),
-                    FilterEntry('分类', () async{
-                      _category = await ProductRepositoryImpl().cascadedCategories();
+                    FilterEntry(_categorySelectText, () async{
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
@@ -145,7 +153,9 @@ class _FactoryPageState extends State<FactoryPage> {
                         setState(() {
                           if (_categorySelected.isEmpty) {
                             factoryCondition.categories = null;
+                            _categorySelectText = '分类';
                           } else {
+                            _categorySelectText = _categorySelected[0].name;
                             factoryCondition.adeptAtCategories = _categorySelected;
                           }
                           FactoryBLoC.instance.filterByCondition(
@@ -158,7 +168,7 @@ class _FactoryPageState extends State<FactoryPage> {
                         showDateFilterMenu = false;
                       });
                     }),
-                    FilterEntry('地区', () {
+                    FilterEntry(_areaSelectText, () {
                       setState(() {
                         showDateFilterMenu = false;
                       });
@@ -178,6 +188,12 @@ class _FactoryPageState extends State<FactoryPage> {
                           );
                         }).then((a){
                           setState(() {
+                            if(_regionSelect.isocode != null){
+                              _areaSelectText = _regionSelect.name;
+                            }else{
+                              _areaSelectText = '地区';
+                            }
+
                             factoryCondition.productiveOrientations = _regionSelect;
                             factoryCondition.cities = _citySelects;
                             FactoryBLoC.instance.filterByCondition(

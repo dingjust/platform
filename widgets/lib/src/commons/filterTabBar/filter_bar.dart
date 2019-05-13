@@ -98,6 +98,7 @@ class RequirementFilterBar extends StatefulWidget
     this.color = const Color.fromRGBO(255, 214, 12, 1),
     this.action,
     this.entries,
+    this.horizontalPadding = 0,
   }) : super(key: key);
 
   _RequirementFilterBarState createState() => _RequirementFilterBarState();
@@ -107,6 +108,7 @@ class RequirementFilterBar extends StatefulWidget
   final Color unselectedColor;
   final Color color;
   final Widget action;
+  double horizontalPadding;
 
   final List<FilterEntry> entries;
 
@@ -127,11 +129,13 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: widget.entries
-                      .map((entry) => Container(
+                      .map((entry) => GestureDetector(
+                      onTap: entry.onPressed,
+                      child: Container(
+                    color: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
                           // width: entry.label == '最新发布' ? 116 : (MediaQuery.of(context).size.width - 116)/3,
-                          child: GestureDetector(
-                              onTap: entry.onPressed,
-                              child: Container(
+                          child: Container(
                                 margin: EdgeInsets.symmetric(
                                     vertical: 15, horizontal: 10),
                                 child: Row(
@@ -142,9 +146,9 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
                                       style: TextStyle(
                                           fontSize: 14, color: Colors.black),
                                     ),
-                                    entry.label == '最新发布'
+                                    entry.label == '最新发布' || entry.label.contains('天内')
                                         ? Icon(Icons.keyboard_arrow_down)
-                                        : Container()
+                                        : Container(),
                                   ],
                                 ),
                               ))))

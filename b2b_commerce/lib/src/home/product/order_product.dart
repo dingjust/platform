@@ -32,6 +32,7 @@ class _ProductsPageState extends State<ProductsPage> {
   ];
 
   String _title = '看款下单';
+  String _textSelect = '全部品类';
 
   @override
   void initState() {
@@ -114,22 +115,33 @@ class _ProductsPageState extends State<ProductsPage> {
                     width: 150,
                     child: FlatButton(
                       onPressed: () async {
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => CategorySelectPage(
-                                  minCategorySelect:
-                                      productCondition.categories,
-                                  categories: cascadedCategories,
-                                  categoryActionType: CategoryActionType.none,
-                                  multiple: true,
-                                ),
-                          ),
-                        );
-                        if(widget.factoryUid == null){
-                          OrderByProductBLoc.instance.getData(productCondition);
-                        }else{
-                          OrderByProductBLoc.instance.getCashProducts(widget.factoryUid);
-                        }
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              child: CategorySelect(
+                                categories: cascadedCategories,
+                                multiple: false,
+                                verticalDividerOpacity: 1,
+                                categorySelect: productCondition.categories,
+                                categoryActionType: CategoryActionType.TO_POP,
+                              ),
+                            );
+                          },
+                        ).then((a) {
+                          setState(() {
+                            if(productCondition.categories.length > 0){
+                             _textSelect = productCondition.categories[0].name;
+                            }else{
+                              _textSelect = '全部品类';
+                            }
+                          });
+                          if(widget.factoryUid == null){
+                            OrderByProductBLoc.instance.getData(productCondition);
+                          }else{
+                            OrderByProductBLoc.instance.getCashProducts(widget.factoryUid);
+                          }
+                        });
                       },
                       child: Text(
                         '${generateCategoryStr()}',
@@ -175,7 +187,7 @@ class _ProductsPageState extends State<ProductsPage> {
         .replaceAll('[', '')
         .replaceAll(']', '');
     if (result.isEmpty) {
-      return '全部品类';
+      return _textSelect;
     } else {
       return result;
     }

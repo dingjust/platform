@@ -209,6 +209,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
         MaterialPageRoute(
             builder: (context) => RequirementOrderFrom(
                   product: product,
+                  isCreate: true,
                 )));
   }
 

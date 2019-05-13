@@ -196,6 +196,7 @@ class _ProductListViewState extends State<ProductListView> {
         MaterialPageRoute(
             builder: (context) => RequirementOrderFrom(
                   product: product,
+                  isCreate: true,
                 )));
   }
 

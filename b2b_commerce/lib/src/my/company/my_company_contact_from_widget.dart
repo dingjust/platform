@@ -47,23 +47,50 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: NeverScrollableScrollPhysics(),
+    return Column(
       children: <Widget>[
-        _buildContactPerson(context),
-        Divider(height: 1,),
-        _buildContactPhone(context),
-        Divider(height: 1,),
-        _buildContactAddress(context),
-        Divider(height: 1,),
-        _buildCellPhone(context),
-        Divider(height: 1,),
-        _buildEmail(context),
-        Divider(height: 1,),
-        _buildQQ(context),
-        Divider(height: 1,),
-        _buildWeChar(context),
-        Divider(height: 1,),
+        SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
+        ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            _buildContactPerson(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildContactPhone(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildContactAddress(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildCellPhone(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildEmail(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildQQ(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildWeChar(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+          ],
+        ),
       ],
     );
   }

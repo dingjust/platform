@@ -23,7 +23,7 @@ class MajorCategoryFieldState extends State<MajorCategoryField>{
   @override
   void initState() {
     ProductRepositoryImpl().majorCategories().then((categorys)=>_majorCategory = categorys);
-
+    _mojarEnumSelected = widget.item.details.majorCategory != null ? [EnumModel(widget.item.details.majorCategory.code, widget.item.details.majorCategory.name)] : [];
     // TODO: implement initState
     super.initState();
   }

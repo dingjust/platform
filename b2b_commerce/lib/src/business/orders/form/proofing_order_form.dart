@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -484,134 +485,211 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   void onCreate() {
     if (productEntries == null || product == null) {
-      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
-        SnackBar(
-          content: Text('请选择产品和数量'),
-          duration: Duration(seconds: 1),
-        ),
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '请选择产品和数量',
+              outsideDismiss: true,
+            );
+          }
       );
     } else if (totalQuantity == 0 || _unitPriceController.text == "") {
-      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
-        SnackBar(
-          content: Text('请填写打样费'),
-          duration: Duration(seconds: 1),
-        ),
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '请填写打样费',
+              outsideDismiss: true,
+            );
+          }
       );
     } else {
-      showDialog<void>(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        builder: (context) {
-          return AlertDialog(
-            title: Text('确定提交？'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('取消', style: TextStyle(color: Colors.grey)),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                child: Text(
-                  '确定',
-                  style: TextStyle(color: Colors.black),
-                ),
-                onPressed: () async {
-                  //拼装数据
-                  ProofingModel model = ProofingModel();
-                  model.entries = productEntries.where((entry) {
-                    return entry.controller.text != '';
-                  }).map((entry) {
-                    ApparelSizeVariantProductModel variantProduct = entry.model;
-                    variantProduct
-                      ..thumbnail = product.thumbnail
-                      ..thumbnails = product.thumbnails
-                      ..images = product.images;
-                    return ProofingEntryModel(
-                      quantity: int.parse(entry.controller.text),
-                      product: variantProduct,
-                    );
-                  }).toList();
-                  String unitPrice = _unitPriceController.text;
-                  if(unitPrice != null && unitPrice != ''){
-                    unitPrice = unitPrice.substring(unitPrice.indexOf('￥')+1,unitPrice.length);
-                  }
-                  model
-                    ..unitPrice = double.parse(unitPrice)
-                    ..totalPrice = totalPrice
-                    ..totalQuantity = totalQuantity
-                    ..remarks = remarks;
-                  Navigator.of(context).pop();
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return RequestDataLoadingPage(
-                          requestCallBack: ProofingOrderRepository()
-                              .proofingCreate(widget.quoteModel.code, model),
-                          outsideDismiss: false,
-                          loadingText: '保存中。。。',
-                          entrance: 'proofingOrder',
-                        );
-                      }
-                  );
-
-                },
-              ),
-            ],
-          );
-        },
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '是否保存该订单？',
+              isNeedCancelButton: true,
+              isNeedConfirmButton: true,
+              dialogHeight: 200,
+              outsideDismiss: false,
+              confirmAction: (){
+                Navigator.of(context).pop();
+                submitSave();
+              },
+              cancelAction: (){
+                Navigator.of(context).pop();
+              },
+            );
+          }
       );
     }
   }
 
   void onUpdate() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('确定修改？'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消', style: TextStyle(color: Colors.grey)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定', style: TextStyle(color: Colors.black)),
-              onPressed: () async {
-                //拼装数据
-                ProofingModel model = ProofingModel();
-                model
-                  ..code = widget.model.code
-                  ..unitPrice = double.parse(_unitPriceController.text)
-                  ..totalPrice = totalPrice
-                  ..remarks = remarks;
-                Navigator.of(context).pop();
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) {
-                      return RequestDataLoadingPage(
-                        requestCallBack: ProofingOrderRepository().proofingUpdate(model),
-                        outsideDismiss: false,
-                        loadingText: '保存中。。。',
-                        entrance: 'proofingOrder',
-                      );
-                    }
-                );
-              },
-            ),
-          ],
-        );
-      },
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            contentText2: '确定修改该订单吗？',
+            dialogHeight: 200,
+            outsideDismiss: false,
+            isNeedCancelButton: true,
+            isNeedConfirmButton: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+              submitUpdate();
+            },
+            cancelAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
     );
   }
 
+  void submitSave(){
+    //拼装数据
+    ProofingModel model = ProofingModel();
+    model.entries = productEntries.where((entry) {
+      return entry.controller.text != '';
+    }).map((entry) {
+      ApparelSizeVariantProductModel variantProduct = entry.model;
+      variantProduct
+        ..thumbnail = product.thumbnail
+        ..thumbnails = product.thumbnails
+        ..images = product.images;
+      return ProofingEntryModel(
+        quantity: int.parse(entry.controller.text),
+        product: variantProduct,
+      );
+    }).toList();
+    String unitPrice = _unitPriceController.text;
+    if(unitPrice != null && unitPrice != ''){
+      unitPrice = unitPrice.substring(unitPrice.indexOf('￥')+1,unitPrice.length);
+    }
+    model
+      ..unitPrice = double.parse(unitPrice)
+      ..totalPrice = totalPrice
+      ..totalQuantity = totalQuantity
+      ..remarks = remarks;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoadingPage(
+            requestCallBack: ProofingOrderRepository()
+                .proofingCreate(widget.quoteModel.code, model),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: '',
+          );
+        }
+    ).then((value){
+      bool result = false;
+      if(value!=null){
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '创建打样单失败',
+              successTips: '创建打样单成功',
+              callbackResult: result,
+              confirmAction: (){
+                Navigator.of(context).pop();
+                getOrderDetail(value);
+              },
+            );
+          }
+      );
+    });;
+  }
+
+  void submitUpdate(){
+    print(_unitPriceController.text);
+    ProofingModel model = ProofingModel();
+    model
+      ..code = widget.model.code
+      ..totalPrice = totalPrice
+      ..remarks = remarks;
+    if(_unitPriceController.text !=null && _unitPriceController.text != ''){
+      _unitPriceController.text = _unitPriceController.text.replaceAll('￥', '');
+      model.unitPrice = double.parse(_unitPriceController.text);
+    }
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoadingPage(
+            requestCallBack: ProofingOrderRepository().proofingUpdate(model),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: 'proofingOrder',
+          );
+        }
+    ).then((value){
+      bool result = false;
+      if(value!=null){
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '修改打样单失败',
+              successTips: '修改打样单成功',
+              callbackResult: result,
+              confirmAction: (){
+                Navigator.of(context).pop();
+                getOrderDetail(value);
+              },
+            );
+          }
+      );
+    });
+  }
+
+  void getOrderDetail(String code) async{
+    if (code != null && code != '') {
+    ProofingModel detailModel = await ProofingOrderRepository()
+        .proofingDetail(code);
+
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) =>
+              ProofingOrderDetailPage(model: detailModel)
+          ), ModalRoute.withName('/'));
+    }
+  }
+
+
   void onSampleNumTap() async {
     if (widget.update) {
+//      if (productEntries != null) {
+//        List<EditApparelSizeVariantProductEntry> returnEntries =
+//        await Navigator.of(context).push(MaterialPageRoute(
+//            builder: (context) => ProductSizeColorNum(
+//              editData: productEntries,
+//            )));
+//        if (returnEntries != null) {
+//          productEntries = returnEntries;
+//        }
+//      }
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ProductSizeColorNum(
                 update: true,
