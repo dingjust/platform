@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,13 +45,13 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         child: ListTile(
           leading: const Text(
             '客服电话',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+            style: const TextStyle(fontSize: 16,  color: Colors.grey),
           ),
           trailing: const Text(
             '020-81682620',
             style: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              
             ),
           ),
         ),
@@ -68,19 +69,18 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         child: ListTile(
           leading: Text(
             '客服微信',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+            style: const TextStyle(fontSize: 16,  color: Colors.grey),
           ),
           trailing: const Text(
             '',
             style: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              
             ),
           ),
         ),
       ),
       onTap: () {
-        copyToClipboard('13123465789');
       },
     );
   }
@@ -92,13 +92,13 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         child: ListTile(
           leading: const Text(
             '客服QQ',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+            style: const TextStyle(fontSize: 16,  color: Colors.grey),
           ),
           trailing: Text(
             '1498868394',
             style: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              
             ),
           ),
         ),
@@ -116,13 +116,13 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         child: ListTile(
           leading: Text(
             '客服邮箱',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+            style: const TextStyle(fontSize: 16,  color: Colors.grey),
           ),
           trailing: Text(
             'xiaoyongkuang@nbyjy.net',
             style: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              
             ),
           ),
         ),
@@ -180,7 +180,20 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
   copyToClipboard(final String text) {
     if (text == null) return;
     Clipboard.setData(ClipboardData(text: text));
-    ShowDialogUtil.showSimapleDialog(context, '复制成功');
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.RESULT_DIALOG,
+            successTips: '复制成功',
+            callbackResult: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
+    );
   }
 
 }

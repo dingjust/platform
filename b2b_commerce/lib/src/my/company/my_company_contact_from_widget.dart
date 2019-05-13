@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -307,7 +308,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
           ),
           trailing : Container(
             child: Text(
-              '${widget.company.email==null?'':widget.company.email}',
+              '${widget.company.email==null  || widget.company.email == 'xiaoyongkuang@nbyjy.net'?'':widget.company.email}',
               style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey
@@ -458,6 +459,20 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
   copyToClipboard(final String text, BuildContext context) {
     if (text == null) return;
     Clipboard.setData(ClipboardData(text: text));
-    ShowDialogUtil.showSimapleDialog(context, '复制成功');
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.RESULT_DIALOG,
+            successTips: '复制成功',
+            callbackResult: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
+    );
+//    ShowDialogUtil.showSimapleDialog(context, '复制成功');
   }
 }

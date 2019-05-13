@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -135,13 +137,23 @@ class AddressFormState extends State<AddressFormPage> {
               clipBehavior: Clip.antiAlias,
               materialTapTargetSize: MaterialTapTargetSize.padded,
               onPressed: () {
-                ShowDialogUtil.showAlertDialog(context, '是否要删除地址', (){
-                  Navigator.pop(context);
-                  AddressRepositoryImpl().delete(widget.address.id.toString()).then((a){
-                    Navigator.pop(context);
-                    AddressBLoC.instance.getAddressData();
-                  });
-                });
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return CustomizeDialogPage(
+                        dialogType: DialogType.CONFIRM_DIALOG,
+                        contentText2: '是否要删除地址？',
+                        isNeedConfirmButton: true,
+                        isNeedCancelButton: true,
+                        dialogHeight: 200,
+                        confirmAction: (){
+                          Navigator.pop(context);
+                          onSure();
+                        },
+                      );
+                    }
+                );
               }
           ),
         ),
@@ -159,26 +171,53 @@ class AddressFormState extends State<AddressFormPage> {
             onPressed: () async{
               if(_fullnameController.text == '' && _cellphoneController.text == ''){
                 showDialog(
-                    context: (context),
-                    builder: (context) => AlertDialog(
-                      content: Text('联系人和联系电话不可为空'),
-                    ));
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return CustomizeDialogPage(
+                        dialogType: DialogType.RESULT_DIALOG,
+                        failTips: '联系人和联系电话不可为空',
+                        callbackResult: false,
+                        confirmAction: (){
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }
+                );
                 return;
               }
               if(widget.address.region == null){
                 showDialog(
-                    context: (context),
-                    builder: (context) => AlertDialog(
-                      content: Text('省市区不可为空'),
-                    ));
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return CustomizeDialogPage(
+                        dialogType: DialogType.RESULT_DIALOG,
+                        failTips: '省市区不可为空',
+                        callbackResult: false,
+                        confirmAction: (){
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }
+                );
                 return;
               }
               if(_line1Controller.text == ''){
                 showDialog(
-                    context: (context),
-                    builder: (context) => AlertDialog(
-                      content: Text('详细地址不可为空'),
-                    ));
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return CustomizeDialogPage(
+                        dialogType: DialogType.RESULT_DIALOG,
+                        failTips: '详细地址不可为空',
+                        callbackResult: false,
+                        confirmAction: (){
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }
+                );
                 return;
               }
               widget.address.fullname = _fullnameController.text;
@@ -207,5 +246,23 @@ class AddressFormState extends State<AddressFormPage> {
         ),
       ),
     );
+  }
+  void onSure(){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoadingPage(
+            requestCallBack: AddressRepositoryImpl().delete(widget.address.id.toString()),
+            outsideDismiss: false,
+            loadingText: '删除。。。',
+            entrance: '',
+          );
+        }
+    ).then((value){
+      AddressBLoC.instance.addresses.clear();
+      AddressBLoC.instance.getAddressData();
+      Navigator.pop(context);
+    });
   }
 }
