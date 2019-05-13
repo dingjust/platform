@@ -491,6 +491,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         builder: (_) {
           return CustomizeDialogPage(
             dialogType: DialogType.CONFIRM_DIALOG,
+            dialogHeight: 200,
+            contentText2: '确定完成当前生产进度吗？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,
             confirmAction: (){
@@ -730,7 +732,84 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   //打开修改尾款金额弹框
   void _showBalanceDialog(BuildContext context,PurchaseOrderModel model){
-    _neverUpdateBalance(context,model);
+    TextEditingController con = new TextEditingController();
+    TextEditingController con1 = new TextEditingController();
+    TextEditingController con2 = new TextEditingController();
+    TextEditingController con3 = new TextEditingController();
+    FocusNode node = new FocusNode();
+    FocusNode node1 = new FocusNode();
+    FocusNode node2 = new FocusNode();
+    FocusNode node3 = new FocusNode();
+    con.text = widget.order.totalPrice.toString();
+    con1.text = widget.order.deposit.toString();
+    con2.text = widget.order.unitPrice.toString();
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.BALANCE_INPUT_DIALOG,
+            outsideDismiss: false,
+            inputController: con,
+            inputController1: con1,
+            inputController2: con2,
+            inputController3: con3,
+            focusNode: node,
+            focusNode1: node1,
+            focusNode2: node2,
+            focusNode3: node3,
+          );
+        }
+    ).then((value){
+      if(value != null && value != ''){
+        String str = value;
+        _updateBalance(context, widget.order,str);
+      }
+    });
+  }
+
+  void _updateBalance(BuildContext context,PurchaseOrderModel model,String balanceText) async {
+    bool result = false;
+    Navigator.of(context).pop();
+    if (balanceText != null && balanceText != '') {
+      double balance = double.parse(balanceText.replaceAll('￥', ''));
+      model.balance = balance;
+      model.skipPayBalance = false;
+      try {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoadingPage(
+                requestCallBack: PurchaseOrderRepository()
+                    .purchaseOrderBalanceUpdate(model.code, model),
+                outsideDismiss: false,
+                loadingText: '保存中。。。',
+                entrance: 'purchaseOrders',
+              );
+            }
+        ).then((value)async{
+          if(value) {
+            if (model.status ==
+                PurchaseOrderStatus.IN_PRODUCTION) {
+              try {
+                for (int i = 0; i < order.progresses.length; i++) {
+                  if (order.currentPhase == order.progresses[i].phase) {
+                    await PurchaseOrderRepository() .productionProgressUpload(order.code,
+                        order.progresses[i].id.toString(),
+                        order.progresses[i]);
+                  }
+                }
+              } catch (e) {
+                print(e);
+              }
+            }
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   //修改金额按钮方法
@@ -857,71 +936,64 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     );
   }
 
-  void _showTips(BuildContext context,PurchaseOrderModel model){
-    _neverJump(context,model);
+  Future<void> _showTips(BuildContext context, PurchaseOrderModel model) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            dialogHeight: 200,
+            contentText2: '是否无需付款直接跳过？',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+              _neverJump(context,widget.order);
+            },
+          );
+        }
+    );
   }
 
   //确认跳过按钮
-  Future<void> _neverJump(BuildContext context,PurchaseOrderModel model) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('提示',
-            style: TextStyle(
-              fontSize: 16,
-            ),),
-          content: Text('是否无需付款直接跳过？'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () async {
-                bool result = false;
-                model.balance = 0;
-                model.skipPayBalance = true;
-                Navigator.of(context).pop();
-                try {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return RequestDataLoadingPage(
-                          requestCallBack: PurchaseOrderRepository()
-                              .purchaseOrderBalanceUpdate(model.code, model),
-                          outsideDismiss: false,
-                          loadingText: '保存中。。。',
-                          entrance: 'purchaseOrders',
-                        );
-                      }
-                  );
-                  if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
-                    try {
-                      for(int i=0;i<order.progresses.length;i++){
-                        if(order.currentPhase == order.progresses[i].phase){
-                          result = await PurchaseOrderRepository().productionProgressUpload(order.code,order.progresses[i].id.toString(),order.progresses[i]);
-                        }
-                      }
-                    } catch (e) {
-                      print(e);
-                    }
-                  }
-                } catch (e) {
-                  print(e);
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> _neverJump(BuildContext context, PurchaseOrderModel model)  async {
+    model.balance = 0;
+    model.skipPayBalance = true;
+    try {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoadingPage(
+              requestCallBack: PurchaseOrderRepository()
+                  .purchaseOrderBalanceUpdate(model.code, model),
+              outsideDismiss: false,
+              loadingText: '保存中。。。',
+              entrance: 'purchaseOrders',
+            );
+          }
+      );
+      if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
+        try {
+          for (int i = 0; i < order.progresses.length; i++) {
+            if (order.currentPhase == order.progresses[i].phase) {
+              await PurchaseOrderRepository()
+                  .productionProgressUpload(
+                  order.code,
+                  order.progresses[i].id.toString(),
+                  order.progresses[i]);
+            }
+          }
+        } catch (e) {
+          print(e);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
   }
+
 
 }
 
