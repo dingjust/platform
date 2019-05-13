@@ -60,7 +60,6 @@ class ProofingOrderItem extends StatelessWidget {
         // // 查询明细
         // ProofingModel detailModel =
         //     await ProofingOrderRepository().proofingDetail(model.code);
-
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (context) => ProofingOrderDetailPage(

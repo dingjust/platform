@@ -363,7 +363,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 ),
               ),
               groupValue: paymentWay,
-              value: "aliPay",
+              value: "ali",
               onChanged: (value) {
                 setState(() {
                   paymentWay = value;
@@ -409,18 +409,42 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPay() async {
-    switch (paymentWay) {
-      case 'wechat':
-        checkOrder('wechat');
-        // wechatPay();
+    //先查询订单支付状态
+    String orderPaymentStatus = await checkOrder(paymentWay);
+
+    switch (orderPaymentStatus) {
+      //未支付
+      case 'ORDER_PAY_NOT':
+        mappingPayWay();
         break;
-      case 'aliPay':
-        checkOrder('ali');
-        // aliPay();
+      case 'ORDER_PAY_SUCCESS':
+        onPaymentSucess();
+        break;
+      case 'ORDER_PAY_FAIL':
+        onPaymentError();
+        break;
+      case 'ORDER_PAYING':
+        //TODO :
+        onPaymentError();
+        break;
+      case 'ORDER_INTERFACE_FAIL':
+        onPaymentError();
         break;
       default:
-        checkOrder('wechat');
-      // wechatPay();
+        mappingPayWay();
+    }
+  }
+
+  void mappingPayWay() {
+    switch (paymentWay) {
+      case 'wechat':
+        wechatPay();
+        break;
+      case 'ali':
+        aliPay();
+        break;
+      default:
+        wechatPay();
     }
   }
 
@@ -468,7 +492,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void aliPay() async {
-    AlipayServiceImpl.instance.pay(widget.order.code);
+    AlipayServiceImpl.instance
+        .pay(widget.order.code, paymentFor: widget.paymentFor);
   }
 
   void onPaymentError() {
@@ -545,8 +570,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     // checkDeliveryAddress();
   }
 
-  //先确认订单是否已支付
-  void checkOrder(String type) async {
+  //查询订单支付状态
+  Future<String> checkOrder(String type) async {
     String confirmResult;
     try {
       //先调用确认支付接口查看是否支付过
@@ -556,8 +581,9 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       print(e);
     }
     if (confirmResult != null) {
-      print(confirmResult);
-      onPaymentSucess();
+      return confirmResult;
+    } else {
+      return null;
     }
   }
 
