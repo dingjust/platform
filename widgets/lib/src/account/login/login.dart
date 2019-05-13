@@ -354,6 +354,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void formValidate() {
+    if (!RegexUtil.isMobile(_phoneController.text)) {
+      setState(() {
+        phoneValidateStr = '输入正确手机号';
+      });
+    } else {
+      setState(() {
+        phoneValidateStr = '';
+      });
+    }
     setState(() {
       if (_isPasswordLogin) {
         validate = _phoneController.text.trim().length == 11 &&
