@@ -32,9 +32,9 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       print('========Fluwx response');
       if (data.errCode == 0) {
         //成功，调用确认支付接口
-        String confirmResult = await WechatServiceImpl.instance
-            .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
-
+        String confirmResult = await OrderPaymentServiceImpl().paymentConfirm(
+            widget.order, 'wechat',
+            paymentFor: widget.paymentFor);
         if (confirmResult == null) {
           onPaymentError();
         } else {
@@ -411,13 +411,16 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   void onPay() async {
     switch (paymentWay) {
       case 'wechat':
-        wechatPay();
+        checkOrder('wechat');
+        // wechatPay();
         break;
       case 'aliPay':
-        aliPay();
+        checkOrder('ali');
+        // aliPay();
         break;
       default:
-        wechatPay();
+        checkOrder('wechat');
+      // wechatPay();
     }
   }
 
@@ -538,22 +541,22 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void initCheck() {
-    checkOrder();
+    // checkOrder();
     // checkDeliveryAddress();
   }
 
   //先确认订单是否已支付
-  void checkOrder() async {
+  void checkOrder(String type) async {
     String confirmResult;
     try {
       //先调用确认支付接口查看是否支付过
-      widget.order.code='PRF00001001';
-      confirmResult = await WechatServiceImpl.instance
-          .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
+      confirmResult = await OrderPaymentServiceImpl()
+          .paymentConfirm(widget.order, type, paymentFor: widget.paymentFor);
     } catch (e) {
       print(e);
     }
     if (confirmResult != null) {
+      print(confirmResult);
       onPaymentSucess();
     }
   }
