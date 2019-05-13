@@ -465,7 +465,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void aliPay() async {
-    // AlipayService.pay();
+    AlipayServiceImpl.instance.pay(widget.order.code);
   }
 
   void onPaymentError() {
@@ -547,6 +547,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     String confirmResult;
     try {
       //先调用确认支付接口查看是否支付过
+      widget.order.code='PRF00001001';
       confirmResult = await WechatServiceImpl.instance
           .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
     } catch (e) {

@@ -10,8 +10,8 @@ class PaymentApis {
         return '/{baseSiteId}/checkout/multi/alipay/prepay/$code';
       };
 
-  /// 打样单----- 确认支付
-  static get proofingPaidConfirm => (code) {
+    /// 打样单----- 确认支付
+    static get proofingPaidConfirm => (code) {
         return '/{baseSiteId}/orders/proofing/$code/paid';
       };
 
