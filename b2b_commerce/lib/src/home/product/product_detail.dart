@@ -78,8 +78,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             child: Text(
               '${widget.product.name}',
               style: TextStyle(
-                  color: Color.fromRGBO(50, 50, 50, 1),
-                  fontSize: 16,),
+                color: Color.fromRGBO(50, 50, 50, 1),
+                fontSize: 16,
+              ),
               overflow: TextOverflow.clip,
             ),
           ),
@@ -93,11 +94,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
                     children: <TextSpan>[
                       TextSpan(
-                          text: '${_minPrice[0]}.', style: TextStyle(fontSize: 25)),
+                          text: '${_minPrice[0]}.',
+                          style: TextStyle(fontSize: 25)),
                       TextSpan(text: '${_minPrice[1]}'),
                       TextSpan(text: '——￥'),
                       TextSpan(
-                          text: '${_maxPrice[0]}.', style: TextStyle(fontSize: 25)),
+                          text: '${_maxPrice[0]}.',
+                          style: TextStyle(fontSize: 25)),
                       TextSpan(text: '${_maxPrice[1]}')
                     ]),
               ),
@@ -130,15 +133,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             action: JumpTo(
               label: '进厂',
               onTap: () async {
-                if(bloc.isBrandUser) {
+                if (bloc.isBrandUser) {
                   UserRepositoryImpl()
                       .getFactory(widget.product.belongTo.uid)
                       .then((factory) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            MyFactoryPage(
+                        builder: (context) => MyFactoryPage(
                               factory,
                               isFactoryDetail: true,
                             ),
@@ -166,15 +168,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           FlatButton(
-              onPressed: (){
-                FastRequirementForm fastRequirementForm = new FastRequirementForm();
-                fastRequirementForm.product = widget.product.code;
-                fastRequirementForm.factoryUid = widget.product.belongTo.uid;
+              onPressed: () {
+                FastRequirementForm fastRequirementForm =
+                    new FastRequirementForm();
+                fastRequirementForm
+                  ..categories = [widget.product.category]
+                  ..product = widget.product.code
+                  ..factoryUid = widget.product.belongTo.uid;
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => RequirementDatePick(
-                      fastRequirementForm: fastRequirementForm,
-                      nowTime: DateTime.now(),
-                    )));
+                          fastRequirementForm: fastRequirementForm,
+                          nowTime: DateTime.now(),
+                        )));
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
@@ -248,13 +253,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消',style: TextStyle(color: Colors.grey),),
+              child: Text(
+                '取消',
+                style: TextStyle(color: Colors.grey),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定',style: TextStyle(color: Colors.black)),
+              child: Text('确定', style: TextStyle(color: Colors.black)),
               onPressed: () async {},
             ),
           ],
