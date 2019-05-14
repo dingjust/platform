@@ -27,7 +27,7 @@ dependencies:
   rxdart: ^0.20.0
   open_file: 1.1.1
   store_redirect: ^1.0.1
-  alipay_me: ^1.0.0
+#  alipay_me: ^1.0.0
 
 
 
