@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -69,67 +70,67 @@ class _ProofingListState extends State<ProofingList> {
 
   void _onProofingCanceling(ProofingModel model) {
     // 取消订单
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('确认取消？'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消', style: TextStyle(color: Colors.grey)),
-              onPressed: () {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            dialogHeight: 200,
+            contentText2: '是否取消订单？',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+              cancelOrder(model);
+            },
+          );
+        }
+    );
+  }
+
+  void cancelOrder(ProofingModel model) async{
+    String response = await ProofingOrderRepository()
+        .proofingCancelling(model.code);
+    if (response != null) {
+      _handleRefresh();
+      Navigator.of(context).pop();
+    } else {
+      Navigator.of(context).pop();
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '取消失败',
+              callbackResult: false,
+              confirmAction: (){
                 Navigator.of(context).pop();
               },
-            ),
-            FlatButton(
-              child: Text('确定', style: TextStyle(color: Colors.black)),
-              onPressed: () async {
-                String response = await ProofingOrderRepository()
-                    .proofingCancelling(model.code);
-                if (response != null) {
-                  _handleRefresh();
-                  Navigator.of(context).pop();
-                } else {
-                  Navigator.of(context).pop();
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[Text('取消失败')],
-                          ),
-                        ),
-                  );
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+            );
+          }
+      );
+    }
   }
 
   void _onProofingConfirmReceived(ProofingModel model) async {
     bool result = false;
     result = await ProofingOrderRepository().shipped(model.code);
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return SimpleDialog(
-          title: const Text(
-            '提示',
-            style: TextStyle(fontSize: 16),
-          ),
-          children: <Widget>[
-            SimpleDialogOption(
-              child: Text('${result ? '确认收货成功' : '确认收货失败'}'),
-            ),
-          ],
-        );
-      },
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.RESULT_DIALOG,
+            successTips: '确认收货成功',
+            failTips: '确认收货失败',
+            callbackResult: result,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
     );
     _handleRefresh();
   }
@@ -162,17 +163,20 @@ class _ProofingListState extends State<ProofingList> {
   void _onProofingConfirm(ProofingModel model) async {
     bool result =
         await ProofingOrderRepository().proofingConfirm(model.code, model);
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return SimpleDialog(
-          title: const Text('提示', style: const TextStyle(fontSize: 16)),
-          children: <Widget>[
-            SimpleDialogOption(child: Text('${result ? '确认成功' : '确认失败'}'))
-          ],
-        );
-      },
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.RESULT_DIALOG,
+            successTips: '确认成功',
+            failTips: '确认成功',
+            callbackResult: result,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
     );
     _handleRefresh();
   }

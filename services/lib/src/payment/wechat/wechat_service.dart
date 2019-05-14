@@ -11,6 +11,4 @@ abstract class WechatService {
   ///检测微信是否安装
   Future<bool> isWeChatInstalled();
 
-  ///确认支付结果
-  Future<String> paymentConfirm(OrderModel order);
 }

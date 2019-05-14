@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
                       } else {
                         widget.company.contactAddress = address;
                         widget.company.contactPhone = _phoneController.text == '' ? null : _phoneController.text;
-                        widget.company.email = _emailController.text == '' ? null : _emailController.text;
+                        widget.company.email = _emailController.text == '' || _emailController.text == 'xiaoyongkuang@nbyjy.net' ? null : _emailController.text;
                         widget.company.qq = _qqController.text == '' ? null : _qqController.text;
                         widget.company.wechat = _wechatController.text == '' ? null : _wechatController.text;
                         print(CompanyModel.toJson(widget.company));
@@ -288,7 +289,20 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
   copyToClipboard(final String text, BuildContext context) {
     if (text == null) return;
     Clipboard.setData(ClipboardData(text: text));
-    ShowDialogUtil.showSimapleDialog(context, '复制成功');
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.RESULT_DIALOG,
+            successTips: '复制成功',
+            callbackResult: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
+    );
   }
 
 }

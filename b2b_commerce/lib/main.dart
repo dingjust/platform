@@ -263,7 +263,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   }
 }
 
-/// 发布需求按钮
+/// 发布需求按钮·
 class PublishRequirementButton extends StatelessWidget {
   const PublishRequirementButton({
     Key key,

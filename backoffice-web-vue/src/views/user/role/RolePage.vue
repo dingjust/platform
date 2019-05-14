@@ -45,10 +45,10 @@
           return;
         }
 
-        this.fn.openSlider('员工：' + item.name, RoleDetailsPage, result);
+        this.fn.openSlider('角色：' + item.name, RoleDetailsPage, result);
       },
       onNew(formData) {
-        this.fn.openSlider('创建员工', RoleDetailsPage, formData);
+        this.fn.openSlider('创建角色', RoleDetailsPage, formData);
       },
     },
     data() {
