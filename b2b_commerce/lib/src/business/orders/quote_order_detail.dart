@@ -141,48 +141,45 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                widget.item.supplier?.profilePicture == null?
-                Container(
-                  margin: EdgeInsets.all(10),
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image:  AssetImage(
+                widget.item.supplier?.profilePicture == null
+                    ? Container(
+                        margin: EdgeInsets.all(10),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: AssetImage(
                                 'temp/picture.png',
                                 package: "assets",
                               ),
-                        fit: BoxFit.cover,
-                      )),
-                ):
-                Container(
-                  margin: EdgeInsets.all(10),
-                  width: 80,
-                  height: 80,
-                  child: CachedNetworkImage(
-                      width: 100,
-                      height: 100,
-                      imageUrl: '${widget.item.supplier.profilePicture
-                          .previewUrl()}',
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
-                          ),
-                      errorWidget: (context, url, error) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
-                          )
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+                              fit: BoxFit.cover,
+                            )),
+                      )
+                    : Container(
+                        margin: EdgeInsets.all(10),
+                        width: 80,
+                        height: 80,
+                        child: CachedNetworkImage(
+                            width: 100,
+                            height: 100,
+                            imageUrl:
+                                '${widget.item.supplier.profilePicture.previewUrl()}',
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => SpinKitRing(
+                                  color: Colors.black12,
+                                  lineWidth: 2,
+                                  size: 30,
+                                ),
+                            errorWidget: (context, url, error) => SpinKitRing(
+                                  color: Colors.black12,
+                                  lineWidth: 2,
+                                  size: 30,
+                                )),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                 Container(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +290,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-
           //TODO跳转详细页
           Navigator.push(
               context,
@@ -385,45 +381,43 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     return Row(
       children: <Widget>[
         pageItem.requirementOrder.details?.pictures != null &&
-            pageItem.requirementOrder.details.pictures.isNotEmpty ?
-        Container(
-          width: 80,
-          height: 80,
-          child: CachedNetworkImage(
-              width: 100,
-              height: 100,
-              imageUrl: '${pageItem.requirementOrder.details.pictures[0].previewUrl()}',
-              fit: BoxFit.cover,
-              placeholder: (context, url) =>
-                  SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30,
-                  ),
-              errorWidget: (context, url, error) =>
-                  SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30,
-                  )
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ):
-        Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: AssetImage(
+                pageItem.requirementOrder.details.pictures.isNotEmpty
+            ? Container(
+                width: 80,
+                height: 80,
+                child: CachedNetworkImage(
+                    width: 100,
+                    height: 100,
+                    imageUrl:
+                        '${pageItem.requirementOrder.details.pictures[0].previewUrl()}',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) => SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              )
+            : Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: AssetImage(
                         'temp/picture.png',
                         package: "assets",
                       ),
-                fit: BoxFit.cover,
-              )),
-        ),
+                      fit: BoxFit.cover,
+                    )),
+              ),
         Expanded(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
@@ -644,42 +638,42 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
       color: Colors.white,
       margin: EdgeInsets.only(top: 15),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: Text(
-                    '交货时间'),
+          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  child: Text('交货时间'),
+                ),
               ),
-            ),
-            Container(
-              child: Text(
-                  '${DateFormatUtil.formatYMD(pageItem.expectedDeliveryDate)}'),
-            )
-          ],
-        )
-      ),
+              Container(
+                child: Text(
+                    '${DateFormatUtil.formatYMD(pageItem.expectedDeliveryDate)}'),
+              )
+            ],
+          )),
     );
   }
 
   Widget _buildAttachment() {
-    return pageItem.attachments == null || pageItem.attachments.length <= 0 ? Container():Card(
-      elevation: 0,
-      margin: EdgeInsets.only(top: 15),
-      child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '附件',
-                style: TextStyle(color: Colors.grey),
-              ),
-              Attachments(list: pageItem.attachments),
-            ],
-          )),
-    );
+    return pageItem.attachments == null || pageItem.attachments.length <= 0
+        ? Container()
+        : Card(
+            elevation: 0,
+            margin: EdgeInsets.only(top: 15),
+            child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '附件',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Attachments(list: pageItem.attachments),
+                  ],
+                )),
+          );
   }
 
   Widget _buildRemark() {
@@ -759,162 +753,169 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           Container(
             height: 30,
             child: FlatButton(
-              color: Colors.grey,
+                color: Colors.grey,
                 onPressed: onUpdateQuote,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
                 child: Text(
                   '修改报价',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 )),
           ),
         ];
       } else if (pageItem.state == QuoteState.BUYER_APPROVED) {
         buttons = <Widget>[
-          pageItem.activeProofing == null ?
-          Container(
-            height: 30,
-            margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            child: FlatButton(
-                onPressed: onCreateProofings,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                color: Color.fromRGBO(255, 214, 12, 1),
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                child: Text(
-                  '创建打样订单',
-                  style: TextStyle(
-                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                )),
-          ):Container(
-            margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            height: 30,
-            child: FlatButton(
-              onPressed: () async{
-                QuoteModel quote = await QuoteOrderRepository().getQuoteDetails(pageItem.code);
-                if(quote.activeProofing?.code != null){
-                  //查询明细
-                  ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(quote.activeProofing.code);
-                  if (detailModel != null) {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) =>
-                            ProofingOrderDetailPage(model: detailModel)
-                        )
-                    );
-                  }
-                }else{
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: false, // user must tap button!
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('提示',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),),
-                        content: Text('该订单已被取消'),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text(
-                              '确定',
-                              style: TextStyle(
-                                  color: Colors.black
+          pageItem.activeProofing == null
+              ? Container(
+                  height: 30,
+                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  child: FlatButton(
+                      onPressed: onCreateProofings,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                      child: Text(
+                        '创建打样订单',
+                        style: TextStyle(
+                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                      )),
+                )
+              : Container(
+                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  height: 30,
+                  child: FlatButton(
+                    onPressed: () async {
+                      QuoteModel quote = await QuoteOrderRepository()
+                          .getQuoteDetails(pageItem.code);
+                      if (quote.activeProofing?.code != null) {
+                        //查询明细
+                        // ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(quote.activeProofing.code);
+                        // if (detailModel != null) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProofingOrderDetailPage(
+                                  quote.activeProofing.code,
+                                )));
+                        // }
+                      } else {
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                '提示',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                            onPressed: () async {
-                              QuoteOrdersBLoC().refreshData('ALL');
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
+                              content: Text('该订单已被取消'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text(
+                                    '确定',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  onPressed: () async {
+                                    QuoteOrdersBLoC().refreshData('ALL');
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
-                  );
-                }
-              },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              color: Colors.grey,
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '查看打样订单',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-          ),
-          pageItem.activePurchaseOrder == null ?
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            height: 30,
-            child: FlatButton(
-                onPressed: onCreateProduction,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                color: Color.fromRGBO(255, 214, 12, 1),
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                child: Text(
-                  '创建生产订单',
-                  style: TextStyle(
-                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                )),
-          ):Container(
-            margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            height: 30,
-            child: FlatButton(
-              onPressed: () async {
-                QuoteModel quote = await QuoteOrderRepository().getQuoteDetails(pageItem.code);
-                if (quote.activePurchaseOrder?.code != null) {
-                  PurchaseOrderModel purchase = await PurchaseOrderRepository()
-                      .getPurchaseOrderDetail(quote.activePurchaseOrder.code);
-                  if (purchase != null) {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) =>
-                            PurchaseOrderDetailPage(order: purchase)
-                        )
-                    );
-                  }
-                } else {
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: false, // user must tap button!
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('提示',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),),
-                        content: Text('该订单已被取消'),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text(
-                              '确定',
-                              style: TextStyle(
-                                  color: Colors.black
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    color: Colors.grey,
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                    child: Text(
+                      '查看打样订单',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
+          pageItem.activePurchaseOrder == null
+              ? Container(
+                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  height: 30,
+                  child: FlatButton(
+                      onPressed: onCreateProduction,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                      child: Text(
+                        '创建生产订单',
+                        style: TextStyle(
+                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                      )),
+                )
+              : Container(
+                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  height: 30,
+                  child: FlatButton(
+                    onPressed: () async {
+                      QuoteModel quote = await QuoteOrderRepository()
+                          .getQuoteDetails(pageItem.code);
+                      if (quote.activePurchaseOrder?.code != null) {
+                        PurchaseOrderModel purchase =
+                            await PurchaseOrderRepository()
+                                .getPurchaseOrderDetail(
+                                    quote.activePurchaseOrder.code);
+                        if (purchase != null) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  PurchaseOrderDetailPage(order: purchase)));
+                        }
+                      } else {
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                '提示',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                            onPressed: () async {
-                              QuoteOrdersBLoC().refreshData('ALL');
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
+                              content: Text('该订单已被取消'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text(
+                                    '确定',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  onPressed: () async {
+                                    QuoteOrdersBLoC().refreshData('ALL');
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
-                  );
-                }
-              },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              color: Colors.grey,
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '查看生产订单',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-          ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    color: Colors.grey,
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                    child: Text(
+                      '查看生产订单',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
         ];
-      } else if(pageItem.requirementOrder.status == RequirementOrderStatus.PENDING_QUOTE){
+      } else if (pageItem.requirementOrder.status ==
+          RequirementOrderStatus.PENDING_QUOTE) {
         buttons = [
           Container(
             height: 30,
@@ -966,17 +967,16 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('取消',style: TextStyle(
-                color: Colors.grey
-              ),),
+              child: Text(
+                '取消',
+                style: TextStyle(color: Colors.grey),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('确定',style: TextStyle(
-                  color: Colors.black
-              )),
+              child: Text('确定', style: TextStyle(color: Colors.black)),
               onPressed: () async {
                 int statusCode = await QuoteOrderRepository()
                     .quoteReject(pageItem.code, rejectController.text);
@@ -1004,17 +1004,13 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           title: Text('是否确认?'),
           actions: <Widget>[
             FlatButton(
-              child: Text('否',style: TextStyle(
-                  color: Colors.grey
-              )),
+              child: Text('否', style: TextStyle(color: Colors.grey)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('是',style: TextStyle(
-                  color: Colors.black
-              )),
+              child: Text('是', style: TextStyle(color: Colors.black)),
               onPressed: () async {
                 int statusCode =
                     await QuoteOrderRepository().quoteApprove(pageItem.code);
