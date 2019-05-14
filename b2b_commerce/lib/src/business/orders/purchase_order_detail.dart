@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/common/request_data_loading.dart';
@@ -1689,7 +1690,38 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   shape: const RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(5))),
                   onPressed: () {
-                    _showDepositDialog(context, widget.order);
+                    TextEditingController con = new TextEditingController();
+                    TextEditingController con1 = new TextEditingController();
+                    TextEditingController con2 = new TextEditingController();
+                    FocusNode node = new FocusNode();
+                    FocusNode node1 = new FocusNode();
+                    FocusNode node2 = new FocusNode();
+                    con.text = widget.order.totalPrice.toString();
+                    con1.text = widget.order.deposit.toString();
+                    con2.text = widget.order.unitPrice.toString();
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialogPage(
+                            dialogType: DialogType.PRICE_INPUT_DIALOG,
+                            outsideDismiss: false,
+                            inputController: con,
+                            inputController1: con1,
+                            inputController2: con2,
+                            focusNode: node,
+                            focusNode1: node1,
+                            focusNode2: node2,
+                          );
+                        }
+                    ).then((value){
+                      if(value != null && value != ''){
+                        String str = value;
+                        String deposit = str.substring(0,str.indexOf(','));
+                        String unitPrice = str.substring(str.indexOf(',')+1,str.length);
+                        _showDepositDialog(context, widget.order,deposit,unitPrice);
+                      }
+                    });
                   }),
             ),
           ),
@@ -2292,92 +2324,185 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   //打开修改尾款金额弹框
-  void _showBalanceDialog(BuildContext context, PurchaseOrderModel model) {
-    _neverUpdateBalance(context, model);
+  void _showBalanceDialog(BuildContext context,PurchaseOrderModel model){
+    TextEditingController con = new TextEditingController();
+    TextEditingController con1 = new TextEditingController();
+    TextEditingController con2 = new TextEditingController();
+    TextEditingController con3 = new TextEditingController();
+    FocusNode node = new FocusNode();
+    FocusNode node1 = new FocusNode();
+    FocusNode node2 = new FocusNode();
+    FocusNode node3 = new FocusNode();
+    con.text = widget.order.totalPrice.toString();
+    con1.text = widget.order.deposit.toString();
+    con2.text = widget.order.unitPrice.toString();
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.BALANCE_INPUT_DIALOG,
+            outsideDismiss: false,
+            inputController: con,
+            inputController1: con1,
+            inputController2: con2,
+            inputController3: con3,
+            focusNode: node,
+            focusNode1: node1,
+            focusNode2: node2,
+            focusNode3: node3,
+            jumpAction: (){
+              Navigator.of(context).pop();
+              _showTips(context, model);
+            },
+          );
+        }
+    ).then((value){
+      if(value != null && value != ''){
+        String str = value;
+        _updateBalance(context, widget.order,str);
+      }
+    });
+  }
+
+  void _updateBalance(BuildContext context,PurchaseOrderModel model,String balanceText) async {
+    bool result = false;
+    Navigator.of(context).pop();
+    if (balanceText != null && balanceText != '') {
+      double balance = double.parse(balanceText.replaceAll('￥', ''));
+      model.balance = balance;
+      model.skipPayBalance = false;
+      try {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoadingPage(
+                requestCallBack: PurchaseOrderRepository()
+                    .purchaseOrderBalanceUpdate(model.code, model),
+                outsideDismiss: false,
+                loadingText: '保存中。。。',
+                entrance: 'purchaseOrders',
+              );
+            }
+        ).then((value)async{
+          if(value) {
+            if (model.status ==
+                PurchaseOrderStatus.IN_PRODUCTION) {
+              try {
+                for (int i = 0; i < widget.order.progresses.length; i++) {
+                  if (widget.order.currentPhase == widget.order.progresses[i].phase) {
+                    await PurchaseOrderRepository() .productionProgressUpload(widget.order.code,
+                        widget.order.progresses[i].id.toString(),
+                        widget.order.progresses[i]);
+                  }
+                }
+              } catch (e) {
+                print(e);
+              }
+            }
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   //打开修改定金金额弹框
-  void _showDepositDialog(BuildContext context, PurchaseOrderModel model) {
-    _neverUpdateDeposit(context, model);
+  void _showDepositDialog(BuildContext context, PurchaseOrderModel model,String depositText,String unitPriceText) {
+    double deposit = model.deposit;
+    double unit = model.unitPrice;
+    if(depositText != null && depositText != ''){
+      if(depositText.indexOf('￥')!= 0){
+        deposit = double.parse(depositText.replaceAll('￥', ''));
+      }
+    }
+    if(unitPriceText != null && unitPriceText != ''){
+      if(unitPriceText.indexOf('￥')!= 0){
+        unit = double.parse(unitPriceText.replaceAll('￥', ''));
+      }
+    }
+    setState(() {
+      model.deposit = deposit;
+      model.unitPrice = unit;
+    });
+    model.skipPayBalance = false;
+    try {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoadingPage(
+              requestCallBack: PurchaseOrderRepository()
+                  .purchaseOrderDepositUpdate(model.code, model),
+              outsideDismiss: false,
+              loadingText: '保存中。。。',
+              entrance: '0',
+            );
+          }
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
-  void _showTips(BuildContext context, PurchaseOrderModel model) {
-    _neverComplete(context, model);
+  Future<void> _showTips(BuildContext context, PurchaseOrderModel model) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            dialogHeight: 200,
+            contentText2: '是否无需付款直接跳过？',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+              _neverComplete(context,widget.order);
+            },
+          );
+        }
+    );
   }
 
   //确认跳过按钮
-  Future<void> _neverComplete(
-      BuildContext context, PurchaseOrderModel model) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            '提示',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          content: Text('是否无需付款直接跳过？'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                '取消',
-                style: TextStyle(color: Colors.grey),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text(
-                '确定',
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () async {
-                bool result = false;
-                model.balance = 0;
-                model.skipPayBalance = true;
-                try {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return RequestDataLoadingPage(
-                          requestCallBack: PurchaseOrderRepository()
-                              .purchaseOrderBalanceUpdate(model.code, model),
-                          outsideDismiss: false,
-                          loadingText: '保存中。。。',
-                          entrance: 'purchaseOrders',
-                        );
-                      }
-                  );
-                  if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
-                    try {
-                      for (int i = 0; i < order.progresses.length; i++) {
-                        if (order.currentPhase == order.progresses[i].phase) {
-                          result = await PurchaseOrderRepository()
-                              .productionProgressUpload(
-                                  order.code,
-                                  order.progresses[i].id.toString(),
-                                  order.progresses[i]);
-                        }
-                      }
-                    } catch (e) {
-                      print(e);
-                    }
-                  }
-                } catch (e) {
-                  print(e);
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> _neverComplete(BuildContext context, PurchaseOrderModel model) async {
+    model.balance = 0;
+    model.skipPayBalance = true;
+    try {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoadingPage(
+              requestCallBack: PurchaseOrderRepository()
+                  .purchaseOrderBalanceUpdate(model.code, model),
+              outsideDismiss: false,
+              loadingText: '保存中。。。',
+              entrance: 'purchaseOrders',
+            );
+          }
+      );
+      if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
+        try {
+          for (int i = 0; i < order.progresses.length; i++) {
+            if (order.currentPhase == order.progresses[i].phase) {
+              await PurchaseOrderRepository()
+                  .productionProgressUpload(
+                  order.code,
+                  order.progresses[i].id.toString(),
+                  order.progresses[i]);
+            }
+          }
+        } catch (e) {
+          print(e);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _showMessage(BuildContext context, bool result, String message) {

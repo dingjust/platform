@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -102,19 +103,19 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
               if (list != null && list.isNotEmpty) {
                 _showLogisticsSelect(list);
               }else{
-                showDialog<void>(
-                  context: context,
-                  barrierDismissible: true, // user must tap button!
-                  builder: (context) {
-                    return SimpleDialog(
-                      title: const Text('提示'),
-                      children: <Widget>[
-                        SimpleDialogOption(
-                          child: Text('获取物流公司失败'),
-                        ),
-                      ],
-                    );
-                  },
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return CustomizeDialogPage(
+                        dialogType: DialogType.RESULT_DIALOG,
+                        failTips: '获取物流公司失败',
+                        callbackResult: false,
+                        confirmAction: (){
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }
                 );
               }
             },
@@ -208,19 +209,19 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                     }
 
                   }else{
-                    showDialog<void>(
-                      context: context,
-                      barrierDismissible: true, // user must tap button!
-                      builder: (context) {
-                        return SimpleDialog(
-                          title: const Text('提示'),
-                          children: <Widget>[
-                            SimpleDialogOption(
-                              child: Text('请选择物流公司和填写物流单号'),
-                            ),
-                          ],
-                        );
-                      },
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialogPage(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            failTips: '请选择物流公司和填写物流单号',
+                            callbackResult: false,
+                            confirmAction: (){
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        }
                     );
                   }
                 }

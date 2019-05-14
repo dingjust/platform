@@ -201,7 +201,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
               children: <Widget>[
                 FilterSelectMenu(
                   color: Color.fromRGBO(255, 214, 12, 1),
-                  height: showDateFilterMenu ? 150 : 0,
+                  height: showDateFilterMenu ? 200 : 0,
                   entries: dateRangeConditionEntries,
                   streamController:
                   RequirementPoolBLoC.instance.conditionController,
@@ -235,7 +235,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                 ),
                 FilterSelectMenu(
                   color: Color.fromRGBO(255, 214, 12, 1),
-                  height: showCategoriesFilterMenu ? 250 : 0,
+                  height: showCategoriesFilterMenu ? 350 : 0,
                   entries: categoriesConditionEntries,
                   multipeSelect: false,
                   streamController:

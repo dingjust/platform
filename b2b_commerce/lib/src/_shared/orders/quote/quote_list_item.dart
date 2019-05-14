@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -365,33 +366,23 @@ class QuoteListItem extends StatelessWidget {
                     );
                   }
                 }else{
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: false, // user must tap button!
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('提示',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),),
-                        content: Text('该订单已被取消'),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text(
-                              '确定',
-                              style: TextStyle(
-                                  color: Colors.black
-                              ),
-                            ),
-                            onPressed: () async {
-                              QuoteOrdersBLoC().refreshData('ALL');
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
+                  showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return CustomizeDialogPage(
+                              dialogType: DialogType.CONFIRM_DIALOG,
+                              dialogHeight: 200,
+                              contentText2: '该订单已被取消',
+                              isNeedConfirmButton: true,
+                              isNeedCancelButton: true,
+                              confirmAction: (){
+                                QuoteOrdersBLoC().refreshData('ALL');
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          }
                       );
-                    },
-                  );
                 }
               },
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -432,32 +423,22 @@ class QuoteListItem extends StatelessWidget {
                     );
                   }
                 } else {
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: false, // user must tap button!
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('提示',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),),
-                        content: Text('该订单已被取消'),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text(
-                              '确定',
-                              style: TextStyle(
-                                  color: Colors.black
-                              ),
-                            ),
-                            onPressed: () async {
-                              QuoteOrdersBLoC().refreshData('ALL');
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return CustomizeDialogPage(
+                          dialogType: DialogType.CONFIRM_DIALOG,
+                          dialogHeight: 200,
+                          contentText2: '该订单已被取消',
+                          isNeedConfirmButton: true,
+                          isNeedCancelButton: true,
+                          confirmAction: (){
+                            QuoteOrdersBLoC().refreshData('ALL');
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }
                   );
                 }
               },

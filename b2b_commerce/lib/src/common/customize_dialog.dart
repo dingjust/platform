@@ -15,6 +15,8 @@ import 'package:widgets/widgets.dart';
 typedef void ConfirmAction();
 //取消按钮点击动作
 typedef void CancelAction();
+//跳过的动作
+typedef void JumpAction();
 
 
 class CustomizeDialogPage extends StatefulWidget {
@@ -66,16 +68,22 @@ class CustomizeDialogPage extends StatefulWidget {
   TextEditingController inputController1;
   //输入框Controller 2
   TextEditingController inputController2;
+  //输入框Controller 3
+  TextEditingController inputController3;
   //只显示用
   FocusNode focusNode;
   //输入框焦点1
   FocusNode focusNode1;
   //输入框焦点2
   FocusNode focusNode2;
+  //输入框焦点3
+  FocusNode focusNode3;
   //输入类型1
   TextInputType inputType1;
   //输入类型2
   TextInputType inputType2;
+  //跳过的动作
+  JumpAction jumpAction;
 
   CustomizeDialogPage({
     Key key,
@@ -102,12 +110,15 @@ class CustomizeDialogPage extends StatefulWidget {
     this.contentText2,
     this.inputController1,
     this.inputController2,
+    this.inputController3,
     this.focusNode1,
     this.focusNode2,
+    this.focusNode3,
     this.inputType1,
     this.inputType2,
     this.inputController,
     this.focusNode,
+    this.jumpAction,
     })
       : super(key: key);
 
@@ -155,7 +166,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
     }else if(widget.dialogType == DialogType.PRICE_INPUT_DIALOG){
       return buildManyInputsDialog(context);
     }else if(widget.dialogType == DialogType.BALANCE_INPUT_DIALOG){
-      return buildManyInputsDialog(context);
+      return buildManyInputsBalanceDialog(context);
     }
   }
 
@@ -710,6 +721,12 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15))),
                                   onPressed: (){
+                                    if(widget.inputController1.text == ''){
+                                      widget.inputController1.text = '￥0';
+                                    }
+                                    if(widget.inputController2.text == ''){
+                                      widget.inputController2.text = '￥0';
+                                    }
                                     Navigator.of(context).pop(widget.inputController1.text+','+widget.inputController2.text);
                                   }
                               ),
@@ -736,6 +753,202 @@ class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
     );
   }
 
+  //尾款
+  Widget buildManyInputsBalanceDialog(BuildContext context){
+    return GestureDetector(
+      onTap: widget.outsideDismiss ? _dismissDialog : null,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: SizedBox(
+            width: 300.0,
+            height: 350.0,
+            child: Container(
+              decoration: ShapeDecoration(
+                color: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: 30,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 0, 5),
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 30,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            child: Container(
+                                margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                                child: Text(
+                                  '无需付款直接跳过 >>',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                            ),
+                            onTap: widget.jumpAction,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 5),
+//                        alignment: Alignment.topLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              alignment: Alignment.centerRight,
+                              child: TextFieldComponent(
+                                textAlign: TextAlign.left,
+                                focusNode: widget.focusNode,
+                                controller: widget.inputController,
+                                autofocus: false,
+                                inputType: widget.inputType1,
+                                hideDivider: true,
+                                enabled: false,
+                                prefix: '￥',
+                                leadingText: Text('订单总额：',style: TextStyle(fontSize: 16),),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerRight,
+                              child: TextFieldComponent(
+                                textAlign: TextAlign.left,
+                                focusNode: widget.focusNode1,
+                                controller: widget.inputController1,
+                                autofocus: false,
+                                inputType: TextInputType.number,
+                                hideDivider: true,
+                                enabled: false,
+                                prefix: '￥',
+                                leadingText: Text('已付定金：',style: TextStyle(fontSize: 16),),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerRight,
+                              child: TextFieldComponent(
+                                textAlign: TextAlign.left,
+                                focusNode: widget.focusNode2,
+                                controller: widget.inputController2,
+                                autofocus: false,
+                                inputType: TextInputType.number,
+                                hideDivider: true,
+                                enabled: false,
+                                prefix: '￥',
+                                leadingText: Text('应付尾款：',style: TextStyle(fontSize: 16),),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerRight,
+                              child: TextFieldComponent(
+                                textAlign: TextAlign.left,
+                                focusNode: widget.focusNode3,
+                                controller: widget.inputController3,
+                                autofocus: true,
+                                inputType: TextInputType.number,
+                                hintText: '请输入尾款金额',
+                                hideDivider: true,
+                                isInputBorder: true,
+                                prefix: '￥',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                                child: FlatButton(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 55),
+                                    child: Text(
+                                      '${widget.cancelButtonText==null||widget.cancelButtonText==''?'取消':widget.cancelButtonText}',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    onPressed: (){
+                                      Navigator.of(context).pop();
+                                    }
+                                )
+                            ),
+                          ),
+                          Center(
+                            child: Container(
+                              child: FlatButton(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 55),
+                                  child: Text(
+                                    '${widget.confirmButtonText==null||widget.confirmButtonText==''?'确定':widget.confirmButtonText}',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15))),
+                                  onPressed: (){
+                                    if(widget.inputController3.text == ''){
+                                      widget.inputController1.text = '￥0';
+                                    }
+                                    Navigator.of(context).pop(widget.inputController3.text);
+                                  }
+                              ),
+                              decoration: BoxDecoration(
+                                  border: Border(left: BorderSide(
+                                      color: Colors.grey, width: 0.5))
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              top: BorderSide(color: Colors.grey, width: 0.5))
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
 
   doSomething(){

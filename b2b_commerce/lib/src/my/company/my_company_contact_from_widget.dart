@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -47,23 +48,50 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: NeverScrollableScrollPhysics(),
+    return Column(
       children: <Widget>[
-        _buildContactPerson(context),
-        Divider(height: 1,),
-        _buildContactPhone(context),
-        Divider(height: 1,),
-        _buildContactAddress(context),
-        Divider(height: 1,),
-        _buildCellPhone(context),
-        Divider(height: 1,),
-        _buildEmail(context),
-        Divider(height: 1,),
-        _buildQQ(context),
-        Divider(height: 1,),
-        _buildWeChar(context),
-        Divider(height: 1,),
+        SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
+        ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            _buildContactPerson(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildContactPhone(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildContactAddress(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildCellPhone(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildEmail(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildQQ(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+            _buildWeChar(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(height: 0,),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -280,7 +308,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
           ),
           trailing : Container(
             child: Text(
-              '${widget.company.email==null?'':widget.company.email}',
+              '${widget.company.email==null  || widget.company.email == 'xiaoyongkuang@nbyjy.net'?'':widget.company.email}',
               style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey
@@ -431,6 +459,20 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
   copyToClipboard(final String text, BuildContext context) {
     if (text == null) return;
     Clipboard.setData(ClipboardData(text: text));
-    ShowDialogUtil.showSimapleDialog(context, '复制成功');
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialogPage(
+            dialogType: DialogType.RESULT_DIALOG,
+            successTips: '复制成功',
+            callbackResult: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
+    );
+//    ShowDialogUtil.showSimapleDialog(context, '复制成功');
   }
 }

@@ -25,18 +25,21 @@ class RequirementOrderFrom extends StatefulWidget {
   String factoryUid;
   ApparelProductModel product;
 
-  String code;
+  RequirementOrderModel order;
 
+  //是否新建
+  bool isCreate;
+  //是否重新发布
   bool isReview;
 
   RequirementOrderFrom(
-      {this.product, this.code, this.factoryUid, this.isReview: false});
+      {this.product, this.order, this.factoryUid, this.isReview: false,this.isCreate = false,});
 
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
 
 class _RequirementOrderFromState extends State<RequirementOrderFrom> {
-  RequirementOrderModel model = RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
+//  RequirementOrderModel model;
   bool _isShowMore = true;
   DateTime selectDate = DateTime.now();
   FocusNode _nameFocusNode = FocusNode();
@@ -50,10 +53,23 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   @override
   void initState() {
+    if (!widget.isCreate || widget.isReview) {
+//      model.details = widget.order.details;
+      _nameController.text = widget.order.details.productName;
+      _quantityController.text = widget.order.details.expectedMachiningQuantity.toString();
+      _remarksController.text = widget.order.remarks;
+      _priceController.text = widget.order.details.maxExpectedPrice.toString() == 'null' ? '0' : widget.order.details.maxExpectedPrice.toString();
+      if (widget.order.attachments == null) {
+        widget.order.attachments = [];
+      }
+      if (widget.order.details.pictures == null) {
+        widget.order.details.pictures = [];
+      }
+    }
+
     if (widget.product != null) {
-      model.details.category = widget.product.category;
-      model.details.pictures = widget.product.images;
-      if (widget.product?.category != null) {}
+      widget.order.details.category = widget.product.category;
+      widget.order.details.pictures = widget.product.images;
     }
 
     // TODO: implement initState
@@ -102,58 +118,21 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   widget.product = result;
                   if (result != null) {
                     setState(() {
-                      model.details.pictures = widget.product.images;
-                      model.details.productName = widget.product.name;
-                      model.details.productSkuID = widget.product.skuID;
+                      widget.order.details.pictures = widget.product.images;
+                      widget.order.details.productName = widget.product.name;
+                      widget.order.details.productSkuID = widget.product.skuID;
                       if (widget.product.category != null) {
-                        model.details.category = widget.product.category;
+                        widget.order.details.category = widget.product.category;
                       }
                     });
                   }
                 })
           ],
         ),
-        body: widget.code != null ?
-        FutureBuilder(
-            future:  RequirementOrderRepository()
-                .getRequirementOrderDetail(widget.code),
-            builder: (context, snapshot) {
-              model = snapshot.data;
-
-              if(model == null){
-                model = RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
-              }
-
-              if (widget.code != null) {
-                _nameController.text = model.details.productName;
-                _quantityController.text = model.details.expectedMachiningQuantity.toString();
-                _remarksController.text = model.remarks;
-                _priceController.text = model.details.maxExpectedPrice.toString() == 'null' ? '0' : model.details.maxExpectedPrice.toString();
-                if (model.attachments == null) {
-                  model.attachments = [];
-                }
-                if (model.details.pictures == null) {
-                  model.details.pictures = [];
-                }
-              }
-
-              if (widget.product != null) {
-                model.details.category = widget.product.category;
-                model.details.pictures = widget.product.images;
-                if (widget.product?.category != null) {}
-              }
-
-              return Container(
-                child: ListView(
-                  children: <Widget>[
-                    _buildBody(context,model),
-                  ],
-                ),
-              );
-            }):Container(
+        body: Container(
           child: ListView(
             children: <Widget>[
-              _buildBody(context,model),
+              _buildBody(context),
             ],
           ),
         ),
@@ -164,7 +143,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           child: RaisedButton(
             color: Color.fromRGBO(255, 214, 12, 1),
             child: Text(
-              widget.code != null && widget.isReview == false ? '修改需求' : '确定发布',
+              !widget.isCreate
+                  ? '修改需求'
+                  : '确认发布',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 18,
@@ -173,35 +154,33 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () {
-              widget.code != null && widget.isReview == false
-                  ? onUpdate()
-                  : onPublish(widget.factoryUid);
+              onPublish(widget.factoryUid);
             },
           ),
         ));
   }
 
-  Widget _buildBody(BuildContext context,RequirementOrderModel model) {
+  Widget _buildBody(BuildContext context) {
     return Container(
       child: Center(
         child: Column(
           children: <Widget>[
-            _buildhead(context,model),
-            _buildHideBody(context,model),
-            _buildBottom(context,model),
+            _buildhead(context),
+            _buildHideBody(context),
+            _buildBottom(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildhead(BuildContext context,RequirementOrderModel model) {
+  Widget _buildhead(BuildContext context) {
     return Container(
       color: Colors.white,
       child: Column(
         children: <Widget>[
           PicturesField(
-            model: model,
+            model: widget.order,
           ),
           GestureDetector(
             behavior: HitTestBehavior.translucent,
@@ -223,13 +202,13 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                       fontSize: 16,
                     ),
                     onChanged: (val) {
-                      model.details.productName = _nameController.text;
+                      widget.order.details.productName = _nameController.text;
                     },
                   )
                 : ProductField(widget.product),
           ),
           CategoryField(
-            model,
+            widget.order,
             product: widget.product,
           ),
           Padding(
@@ -238,7 +217,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               height: 0,
             ),
           ),
-          MajorCategoryField(model),
+          MajorCategoryField(widget.order),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Divider(
@@ -282,20 +261,20 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             ),
           ),
 //          MaxExpectedPriceField(model),
-          ExpectedDeliveryDateField(model),
+          ExpectedDeliveryDateField(widget.order),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Divider(
               height: 0,
             ),
           ),
-          ContactWayField(model),
+          ContactWayField(widget.order),
         ],
       ),
     );
   }
 
-  Widget _buildBottom(BuildContext context,RequirementOrderModel model) {
+  Widget _buildBottom(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 20),
       color: Colors.white,
@@ -351,7 +330,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 ),
               ),
               EditableAttachments(
-                list: model?.attachments ?? [],
+                list: widget.order.attachments,
                 maxNum: 5,
               )
             ],
@@ -361,42 +340,42 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     );
   }
 
-  Widget _buildHideBody(BuildContext context,RequirementOrderModel model) {
+  Widget _buildHideBody(BuildContext context) {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 20),
       child: Center(
         child: Column(
           children: <Widget>[
-            ProductionAreasField(model),
+            ProductionAreasField(widget.order),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Divider(
                 height: 0,
               ),
             ),
-            MachiningTypeField(model),
+            MachiningTypeField(widget.order),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Divider(
                 height: 0,
               ),
             ),
-            IsProofingField(model),
+            IsProofingField(widget.order),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Divider(
                 height: 0,
               ),
             ),
-            IsProvideSampleProductField(model),
+            IsProvideSampleProductField(widget.order),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Divider(
                 height: 0,
               ),
             ),
-            IsInvoiceField(model),
+            IsInvoiceField(widget.order),
           ],
         ),
       ),
@@ -455,50 +434,88 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   void onPublish(String factoryUid) async {
     bool isSubmit = false;
     if (widget.isReview) {
-      model.code = '';
+      widget.order.code = '';
     }
-    model.details.expectedMachiningQuantity =
+    widget.order.details.expectedMachiningQuantity =
         ClassHandleUtil.transInt(_quantityController.text);
-    model.details.maxExpectedPrice =
+    widget.order.details.maxExpectedPrice =
         ClassHandleUtil.removeSymbolRMBToDouble(_priceController.text);
-    model.remarks = _remarksController.text;
+    widget.order.remarks = _remarksController.text;
 
-    if (model.details.category == null) {
+    if (widget.order.details.category == null) {
       isSubmit = _showValidateMsg(context, '产品品类不可以为空');
-    } else if (model.details.expectedMachiningQuantity == null) {
+    }else if (widget.order.details.expectedMachiningQuantity == null) {
       isSubmit = _showValidateMsg(context, '订单数量不可以为空');
-    } else if (model.details.expectedDeliveryDate == null) {
+    }else if (widget.order.details.expectedDeliveryDate == null) {
       isSubmit = _showValidateMsg(context, '交货时间不可以为空');
-    } else if (model.details.expectedDeliveryDate.isBefore(DateTime.now())) {
+    }else if(widget.order.details.expectedDeliveryDate.isBefore(DateTime.now())){
       isSubmit = _showValidateMsg(context, '交货时间不可比当前时间小');
-    } else if (model.details.contactPerson == null &&
-        model.details.contactPhone == null) {
+    }else if (widget.order.details.contactPerson == null &&
+        widget.order.details.contactPhone == null) {
       isSubmit = _showValidateMsg(context, '联系方式不可以为空');
-    } else {
+    }else{
       isSubmit = true;
     }
-    if (isSubmit) {
-      String code = await RequirementOrderRepository().publishNewRequirement(
-          model, factoryUid, factoryUid != null ? true : false);
-      if (code != null && code != '') {
-        model.code = code;
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => PublishRequirementSuccessDialog(
-                    model: model,
+    if(isSubmit){
+      if(widget.isCreate){
+        String code = await RequirementOrderRepository().publishNewRequirement(
+            widget.order, factoryUid, factoryUid != null ? true : false);
+        if (code != null && code != '') {
+          widget.order.code = code;
+          //根据code查询明
+          RequirementOrderModel model =
+          await RequirementOrderRepository().getRequirementOrderDetail(code);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => PublishRequirementSuccessDialog(
+                  model: model,
+                ),
+              ),
+              ModalRoute.withName('/'));
+        }
+      }else{
+        String code = await RequirementOrderRepository().updateRequirement(widget.order);
+        if (code != null) {
+          //根据code查询明
+          RequirementOrderModel model =
+          await RequirementOrderRepository().getRequirementOrderDetail(code);
+
+          List<QuoteModel> quotes = await RequirementOrderRepository()
+              .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
+
+          if (model != null && quotes != null) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => RequirementOrderDetailPage(
+                    order: model,
+                    quotes: quotes,
                   ),
-            ),
-            ModalRoute.withName('/'));
+                ),
+                ModalRoute.withName('/'));
+          }
+        } else {
+          showDialog<void>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('更新失败'),
+              );
+            },
+          );
+        }
       }
+
+
     }
+
   }
 
-  bool _showValidateMsg(BuildContext context, String message) {
+  bool _showValidateMsg(BuildContext context,String message){
     _validateMessage(context, '${message}');
     return false;
   }
 
-  Future<void> _validateMessage(BuildContext context, String message) async {
+  Future<void> _validateMessage(BuildContext context,String message) async {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -508,39 +525,40 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             contentText2: '${message}',
             outsideDismiss: true,
           );
-        });
+        }
+    );
   }
 
   ///完善信息
-  void onUpdate() async {
-    String code = await RequirementOrderRepository().updateRequirement(model);
-    if (code != null) {
-      //根据code查询明
-      RequirementOrderModel model =
-          await RequirementOrderRepository().getRequirementOrderDetail(code);
-
-      List<QuoteModel> quotes = await RequirementOrderRepository()
-          .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
-
-      if (model != null && quotes != null) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => RequirementOrderDetailPage(
-                    order: model,
-                    quotes: quotes,
-                  ),
-            ),
-            ModalRoute.withName('/'));
-      }
-    } else {
-      showDialog<void>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('更新失败'),
-          );
-        },
-      );
-    }
-  }
+//  void onUpdate() async {
+//
+//    if (code != null) {
+//      //根据code查询明
+//      RequirementOrderModel model =
+//          await RequirementOrderRepository().getRequirementOrderDetail(code);
+//
+//      List<QuoteModel> quotes = await RequirementOrderRepository()
+//          .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
+//
+//      if (model != null && quotes != null) {
+//        Navigator.of(context).pushAndRemoveUntil(
+//            MaterialPageRoute(
+//              builder: (context) => RequirementOrderDetailPage(
+//                    order: model,
+//                    quotes: quotes,
+//                  ),
+//            ),
+//            ModalRoute.withName('/'));
+//      }
+//    } else {
+//      showDialog<void>(
+//        context: context,
+//        builder: (context) {
+//          return AlertDialog(
+//            title: Text('更新失败'),
+//          );
+//        },
+//      );
+//    }
+//  }
 }

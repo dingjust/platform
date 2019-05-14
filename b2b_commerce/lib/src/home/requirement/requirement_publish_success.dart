@@ -284,7 +284,7 @@ class _PublishRequirementSuccessDialogState
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => RequirementOrderFrom(
-                                code: widget.model.code,
+                                order: widget.model,
                               )),
                       ModalRoute.withName('/'));
                 },
