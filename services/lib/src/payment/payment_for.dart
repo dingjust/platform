@@ -33,10 +33,10 @@ enum PaymentStatus {
 }
 
 //
-const PaymentStatusMap = {
-  PaymentStatus.ORDER_PAY_NOT: "ORDER_PAY_NOT",
-  PaymentStatus.ORDER_PAY_SUCCESS: "ORDER_PAY_SUCCESS",
-  PaymentStatus.ORDER_PAY_FAIL: "ORDER_PAY_FAIL",
-  PaymentStatus.ORDER_PAYING: "ORDER_PAYING",
-  PaymentStatus.ORDER_INTERFACE_FAIL: "ORDER_INTERFACE_FAIL",
+const PaymentStatusMap = <String, PaymentStatus>{
+  "ORDER_PAY_NOT": PaymentStatus.ORDER_PAY_NOT,
+  "ORDER_PAY_SUCCESS": PaymentStatus.ORDER_PAY_SUCCESS,
+  "ORDER_PAY_FAIL": PaymentStatus.ORDER_PAY_FAIL,
+  "ORDER_PAYING": PaymentStatus.ORDER_PAYING,
+  "ORDER_INTERFACE_FAIL": PaymentStatus.ORDER_INTERFACE_FAIL,
 };

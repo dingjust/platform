@@ -32,6 +32,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       print('========Fluwx response');
       if (data.errCode == 0) {
         Future.delayed(const Duration(seconds: 1), () {
+          print('has wechat');
           afterPaid();
         });
       } else if (data.errCode == -1) {
@@ -409,22 +410,32 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     switch (orderPaymentStatus) {
       //未支付
       case 'ORDER_PAY_NOT':
+        print('1');
         mappingPayWay();
         break;
       case 'ORDER_PAY_SUCCESS':
+        print('2');
+
         onPaymentSucess();
         break;
       case 'ORDER_PAY_FAIL':
+        print('3');
+
         onPaymentError();
         break;
       case 'ORDER_PAYING':
         //TODO :
+        print('4');
         onPaymentPaying();
         break;
       case 'ORDER_INTERFACE_FAIL':
+        print('5');
+
         onPaymentError();
         break;
       default:
+        print('6');
+
         mappingPayWay();
     }
   }
@@ -636,25 +647,24 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   //支付后确认订单操作，延时1秒
   void afterPaid() async {
     String orderPaymentStatus = await checkOrder(paymentWay);
-    switch (orderPaymentStatus) {
-      case 'ORDER_PAY_NOT':
-        onPaymentPaying();
-        break;
-      case 'ORDER_PAY_SUCCESS':
-        onPaymentSucess();
-        break;
-      case 'ORDER_PAY_FAIL':
-        onPaymentError();
-        break;
-      case 'ORDER_PAYING':
-        //TODO :
-        onPaymentPaying();
-        break;
-      case 'ORDER_INTERFACE_FAIL':
-        onPaymentError();
-        break;
-      default:
-        onPaymentError();
+
+    PaymentStatus paymentStatus = PaymentStatusMap[orderPaymentStatus];
+
+    if (paymentStatus == PaymentStatus.ORDER_PAY_NOT) {
+      print('after 1');
+      onPaymentPaying();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_SUCCESS) {
+      print('after 2');
+      onPaymentSucess();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
+      print('after 3');
+      onPaymentError();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
+      print('after 4');
+      onPaymentPaying();
+    } else {
+      print('after 5');
+      onPaymentError();
     }
   }
 }
