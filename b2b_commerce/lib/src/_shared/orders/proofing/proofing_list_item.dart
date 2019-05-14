@@ -63,7 +63,7 @@ class ProofingOrderItem extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (context) => ProofingOrderDetailPage(
-                    code: model.code,
+                    model.code,
                   )),
         );
       },
