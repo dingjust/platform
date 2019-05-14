@@ -96,7 +96,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                 }
               }
           ),
-          title: Text(' '),
+          title: Text('图片详情'),
           elevation: 0.5,
           brightness: Brightness.light,
           centerTitle: true,

@@ -37,10 +37,21 @@ class ProductionItem extends StatelessWidget {
                 requestCallBack: PurchaseOrderRepository().getPurchaseOrderDetail(order.code),
                 outsideDismiss: false,
                 loadingText: '加载中。。。',
-                entrance: 'production',
+                entrance: '',
               );
             }
-        );
+        ).then((value){
+          if(value != null){
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) =>
+                  ProductionProgressesPage(
+                    order: value,
+                  ),
+            ),
+            );
+          }
+
+        });
 
       },
       child: Container(

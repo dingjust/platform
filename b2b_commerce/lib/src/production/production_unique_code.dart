@@ -19,13 +19,13 @@ class ProductionUniqueCodePage extends StatefulWidget {
 
 class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
   TextEditingController _textEditingController = TextEditingController();
+  TextEditingController controller = new TextEditingController();
 
   PurchaseOrderModel uniqueCodeEntry;
   String userType;
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = new TextEditingController();
     return Scaffold(
         appBar: AppBar(
           title: Text('导入唯一码'),
