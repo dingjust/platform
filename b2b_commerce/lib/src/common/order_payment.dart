@@ -31,15 +31,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     fluwx.responseFromPayment.listen((WeChatPaymentResponse data) async {
       print('========Fluwx response');
       if (data.errCode == 0) {
-        //成功，调用确认支付接口
-        String confirmResult = await WechatServiceImpl.instance
-            .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
-
-        if (confirmResult == null) {
-          onPaymentError();
-        } else {
-          onPaymentSucess();
-        }
+        Future.delayed(const Duration(seconds: 1), () {
+          print('has wechat');
+          afterPaid();
+        });
       } else if (data.errCode == -1) {
         onPaymentError();
       } else {
@@ -363,7 +358,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 ),
               ),
               groupValue: paymentWay,
-              value: "aliPay",
+              value: "ali",
               onChanged: (value) {
                 setState(() {
                   paymentWay = value;
@@ -409,11 +404,48 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPay() async {
+    //先查询订单支付状态
+    String orderPaymentStatus = await checkOrder(paymentWay);
+
+    switch (orderPaymentStatus) {
+      //未支付
+      case 'ORDER_PAY_NOT':
+        print('1');
+        mappingPayWay();
+        break;
+      case 'ORDER_PAY_SUCCESS':
+        print('2');
+
+        onPaymentSucess();
+        break;
+      case 'ORDER_PAY_FAIL':
+        print('3');
+
+        onPaymentError();
+        break;
+      case 'ORDER_PAYING':
+        //TODO :
+        print('4');
+        onPaymentPaying();
+        break;
+      case 'ORDER_INTERFACE_FAIL':
+        print('5');
+
+        onPaymentError();
+        break;
+      default:
+        print('6');
+
+        mappingPayWay();
+    }
+  }
+
+  void mappingPayWay() {
     switch (paymentWay) {
       case 'wechat':
         wechatPay();
         break;
-      case 'aliPay':
+      case 'ali':
         aliPay();
         break;
       default:
@@ -465,7 +497,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void aliPay() async {
-    // AlipayService.pay();
+    AlipayServiceImpl.instance
+        .pay(widget.order.code, paymentFor: widget.paymentFor);
   }
 
   void onPaymentError() {
@@ -481,6 +514,28 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
           actions: <Widget>[
             FlatButton(
               child: Text('重新支付', style: TextStyle(fontSize: 16)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onPaymentPaying() {
+    //错误
+    Navigator.of(context).pop();
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('支付处理中，请稍后重试', style: TextStyle(fontSize: 16)),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('返回', style: TextStyle(fontSize: 16)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -538,22 +593,24 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void initCheck() {
-    checkOrder();
+    // checkOrder();
     // checkDeliveryAddress();
   }
 
-  //先确认订单是否已支付
-  void checkOrder() async {
+  //查询订单支付状态
+  Future<String> checkOrder(String type) async {
     String confirmResult;
     try {
       //先调用确认支付接口查看是否支付过
-      confirmResult = await WechatServiceImpl.instance
-          .paymentConfirm(widget.order, paymentFor: widget.paymentFor);
+      confirmResult = await OrderPaymentServiceImpl()
+          .paymentConfirm(widget.order, type, paymentFor: widget.paymentFor);
     } catch (e) {
       print(e);
     }
     if (confirmResult != null) {
-      onPaymentSucess();
+      return confirmResult;
+    } else {
+      return null;
     }
   }
 
@@ -584,6 +641,30 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
           }
         }
       });
+    }
+  }
+
+  //支付后确认订单操作，延时1秒
+  void afterPaid() async {
+    String orderPaymentStatus = await checkOrder(paymentWay);
+
+    PaymentStatus paymentStatus = PaymentStatusMap[orderPaymentStatus];
+
+    if (paymentStatus == PaymentStatus.ORDER_PAY_NOT) {
+      print('after 1');
+      onPaymentPaying();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_SUCCESS) {
+      print('after 2');
+      onPaymentSucess();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
+      print('after 3');
+      onPaymentError();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
+      print('after 4');
+      onPaymentPaying();
+    } else {
+      print('after 5');
+      onPaymentError();
     }
   }
 }

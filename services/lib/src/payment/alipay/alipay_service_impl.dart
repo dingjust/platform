@@ -32,10 +32,18 @@ class AlipayServiceImpl implements AlipayService {
 
   @override
   Future<dynamic> pay(String orderCode, {PaymentFor paymentFor}) async {
+    var result;
     //通过Helper获取预支付信息
     String payInfo =
         await AlipayHelper.prepay(orderCode, paymentFor: paymentFor);
-    var result = await AlipayMe.pay(payInfo);
+    if (payInfo != null) {
+      result = await AlipayMe.pay(payInfo);
+    } else {
+      return null;
+    }
+    print('====');
+    print(result);
+    print('====');
     return result;
   }
 }

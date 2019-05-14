@@ -80,41 +80,4 @@ class WechatServiceImpl implements WechatService {
   Future<bool> isWeChatInstalled() async {
     return await fluwx.isWeChatInstalled() as bool;
   }
-
-  @override
-  ///支付确认
-  Future<String> paymentConfirm(OrderModel order,
-      {PaymentFor paymentFor = PaymentFor.DEFAULT}) async {
-    Response response;
-
-    String apiUrl;
-
-    //按类型调用不同接口
-    if (order is ProofingModel && paymentFor == PaymentFor.DEFAULT) {
-      //打样单
-      apiUrl = PaymentApis.proofingPaidConfirm(order.code);
-    } else if (order is PurchaseOrderModel &&
-        paymentFor == PaymentFor.DEPOSIT) {
-      //生产单-定金
-      apiUrl = PaymentApis.purchaseDepositPaidConfirm(order.code);
-    } else if (order is PurchaseOrderModel &&
-        paymentFor == PaymentFor.BALANCE) {
-      //生产单-定金
-      apiUrl = PaymentApis.purchaseBalancePaidConfirm(order.code);
-    } else {
-      return null;
-    }
-
-    try {
-      response = await http$.put(apiUrl);
-    } catch (e) {
-      print(e);
-    }
-
-    if (response != null && response.statusCode == 200) {
-      return "success";
-    } else {
-      return null;
-    }
-  }
 }

@@ -57,14 +57,14 @@ class ProofingOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        // 查询明细
-        ProofingModel detailModel =
-            await ProofingOrderRepository().proofingDetail(model.code);
-
+        // // 查询明细
+        // ProofingModel detailModel =
+        //     await ProofingOrderRepository().proofingDetail(model.code);
         Navigator.of(context).push(
           MaterialPageRoute(
-              builder: (context) =>
-                  ProofingOrderDetailPage(model: detailModel)),
+              builder: (context) => ProofingOrderDetailPage(
+                    code: model.code,
+                  )),
         );
       },
       child: Container(

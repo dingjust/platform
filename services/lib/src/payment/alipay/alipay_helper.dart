@@ -12,13 +12,14 @@ class AlipayHelper {
     Response response;
     try {
       print(paymentFor.toString());
-      response = await http$.get(PaymentApis.wechatPrepay(orderCode),
+      response = await http$.get(PaymentApis.alipayPrepay(orderCode),
           data: {"paymentFor": PaymentForEnumMap[paymentFor]});
     } on DioError catch (e) {
       print(e);
       return null;
     }
     if (response != null && response.statusCode == 200) {
+      print(response.data);
       return response.data;
     } else {
       return null;
