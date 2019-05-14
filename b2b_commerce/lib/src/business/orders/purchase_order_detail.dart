@@ -2545,24 +2545,19 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   copyToClipboard(final String text) {
     if (text != null) {
       Clipboard.setData(ClipboardData(text: text));
-      showDialog<void>(
-        context: context,
-        barrierDismissible: true, // user must tap button!
-        builder: (context) {
-          return SimpleDialog(
-            title: const Text(
-              '提示',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            children: <Widget>[
-              SimpleDialogOption(
-                child: Text('复制成功'),
-              ),
-            ],
-          );
-        },
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialogPage(
+              dialogType: DialogType.RESULT_DIALOG,
+              successTips: '复制成功',
+              callbackResult: true,
+              confirmAction: (){
+                Navigator.of(context).pop();
+              },
+            );
+          }
       );
     }
   }

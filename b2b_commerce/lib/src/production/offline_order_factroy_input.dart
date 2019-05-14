@@ -17,6 +17,7 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
   final TextEditingController _factoryController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  TextEditingController controller = TextEditingController();
   CompanyModel company = new CompanyModel();
 
   @override
@@ -116,6 +117,11 @@ class _OfflineOrderFactroyInputState extends State<OfflineOrderFactroyInput>{
               hintText: widget.model == null || widget.model.contactPhone == null ?'请输入联系电话':widget.model.contactPhone,
               inputType: TextInputType.phone,
               onChanged: (value) {
+                if(_phoneController.text.length>11){
+                  _phoneController.text = controller.text;
+                }else{
+                  controller.text = _phoneController.text;
+                }
                 setState(() {
                   company.contactPhone = value;
                 });
