@@ -37,7 +37,6 @@ void main() async {
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 
-  //
 
   //强制竖屏
   SystemChrome.setPreferredOrientations(
@@ -133,14 +132,15 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   /// 发布需求
   void _onPublish(BuildContext context) {
-    requirementOrderModel = RequirementOrderModel(details: RequirementInfoModel(),attachments: []);
+    requirementOrderModel =
+        RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => RequirementOrderFrom(
-          isCreate: true,
-          order: requirementOrderModel,
-        ),
+              isCreate: true,
+              order: requirementOrderModel,
+            ),
       ),
     );
   }

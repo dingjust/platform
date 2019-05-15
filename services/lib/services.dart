@@ -61,6 +61,7 @@ export 'src/payment/payment_for.dart';
 export 'src/payment/wechat/wechat_service_impl.dart';
 export 'src/payment/alipay/alipay_service_impl.dart';
 export 'src/payment/order_payment_service_impl.dart';
+export 'src/payment/alipay/alipay_response.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();
