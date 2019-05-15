@@ -26,7 +26,7 @@ class ProductRepositoryImpl extends ProductRepository{
   Future<ProductsResponse> getProductsOfFactories(dynamic data,Map<String,dynamic> params) async{
     Response response;
     try{
-      response = response = await http$.post(ProductApis.getProductsOfFactories,data: data,queryParameters: params);
+      response = await http$.post(ProductApis.getProductsOfFactories,data: data,queryParameters: params);
     } on DioError catch (e) {
       print(e);
     }
